@@ -1,6 +1,6 @@
 # KenSei Workshop
 
-Independent projects and browser tools. This directory is a separate project: it does not edit or import the original KenSei homepage, its styles, scripts or deployment settings. About Me opens the existing homepage in another tab. 3A3D also remains an independent external destination.
+This workspace root is the main KenSei tools platform. The secondary car website lives in projects/3A3D/ as an independent Git repository. Legacy personal-homepage source is no longer kept in this workspace; About Me still links to the existing online homepage.
 
 ## Build and preview
 
@@ -9,7 +9,7 @@ python build.py
 python -m http.server 8768 --bind 127.0.0.1 --directory dist
 ```
 
-Open http://127.0.0.1:8768. Deploy only `dist/`, or import this folder as a separate Vercel project. Do not select the parent folder as the new project's root. The included Vercel build needs Python 3; alternatively build locally and deploy the generated `dist` directly.
+Open http://127.0.0.1:8768. This workspace root is the main project root. Deploy only `dist/`, or select this root folder for the main Vercel project. The car website has its own deployment root: `projects/3A3D/`. The included Vercel build needs Python 3; alternatively build locally and deploy the generated `dist` directly.
 
 ## Pages and assets
 
@@ -35,6 +35,6 @@ Cloud items: favorites, manually saved text drafts, image presets, timer setting
 
 Draft updates detect previously saved remote changes and create a conflict copy. The first version does not support simultaneous collaborative editing. Settings use last successful save. Keep a local export before clearing browser storage.
 
-## Original projects
+## Secondary project and external links
 
-The default About Me URL comes from the link already present in 3A3D. Edit `personalUrl` in this new project's `config.js` if a different homepage address is intended. It does not modify the destination. The root folder's original files and the complete 3A3D project are outside this project's build output.
+The default About Me URL comes from the link already present in 3A3D. Edit `personalUrl` in this new project's `config.js` if a different homepage address is intended. It does not modify the destination. The old homepage files were moved out of this workspace. The complete car source remains in `projects/3A3D/`, excluded from main-site commits and build output. Use the car folder's own Git repository for car changes.

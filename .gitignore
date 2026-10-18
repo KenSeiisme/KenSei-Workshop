@@ -4,3 +4,4 @@ _qa/
 .env*
 .site-workflow/
 __pycache__/
+/projects/3A3D/
