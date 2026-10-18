@@ -11,9 +11,26 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
   fs.mkdirSync('_qa', { recursive: true });
   const browser = await playwright.chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'msedge', headless: true });
   try {
-    const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
     const page = await ctx.newPage();
     const errors = []; page.on('pageerror', e => errors.push(e.message));
+    await page.goto(base + '/');
+    const oldWorkspace = { items: [
+      { id: 'old-draft', type: 'draft', data: { name: 'Existing draft', text: 'Keep this saved text.' }, updated_at: '2026-10-01T00:00:00Z' },
+      { id: 'old-preset', type: 'preset', data: { name: 'Existing preset', width: 800, quality: 80, format: 'image/webp' }, updated_at: '2026-10-01T00:00:00Z' },
+      { id: 'favorite-image-studio', type: 'favorite', data: { slug: 'image-studio' }, updated_at: '2026-10-01T00:00:00Z' },
+      { id: 'old-session', type: 'session', data: { minutes: 15, completedAt: new Date().toISOString() }, updated_at: new Date().toISOString() }
+    ] };
+    await page.evaluate(value => localStorage.setItem('kensei-workshop:v1:guest', JSON.stringify(value)), oldWorkspace);
+    await page.goto(base + '/workspace/');
+    assert.equal(await page.locator('#draft-count').textContent(), '1');
+    assert.equal(await page.locator('#today-focus').textContent(), '15 min');
+    assert((await page.locator('#saved-presets').textContent()).includes('Existing preset'));
+    await page.locator('#saved-drafts a').click();
+    assert.equal(await page.locator('#text-input').inputValue(), 'Keep this saved text.');
+    assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('kensei-workshop:v1:guest'))), oldWorkspace);
+    await page.evaluate(() => localStorage.clear());
+    pass('Previously saved workspace data remains readable and unchanged');
     for (const width of [360, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 950 });
       for (const route of pages) {
@@ -26,7 +43,26 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
     }
     pass('11 pages at 4 viewport widths, no horizontal overflow');
     await page.goto(base + '/');
-    assert.equal(await page.locator('h1').textContent(), 'A place forideas to become.');
+    assert.equal(await page.locator('h1').textContent(), 'Useful tools.A little lessfriction.');
+    assert.equal(await page.locator('.project-card,.car-art').count(), 0);
+    assert.equal(await page.locator('.demo-example').count(), 2);
+    assert.deepEqual(await page.locator('#navigation a').allTextContents(), ['Home', 'Tools', 'Projects', 'About Me ↗']);
+    await page.getByRole('link', { name: 'Explore Tools', exact: true }).click();
+    assert.equal(new URL(page.url()).hash, '#toolbox');
+    const toolboxTop = await page.locator('#toolbox').evaluate(el => el.getBoundingClientRect().top);
+    assert(toolboxTop >= 80 && toolboxTop < 120, 'Toolbox heading should clear sticky navigation');
+    await page.locator('#tool-search').fill('image');
+    assert.equal(await page.locator('[data-tool-card]:visible').count(), 1);
+    await page.locator('[data-filter="text"]').click();
+    assert(await page.locator('#search-empty').isVisible());
+    await page.locator('[data-filter="all"]').click();
+    await page.locator('#tool-search').fill('');
+    await page.locator('[data-favorite="image-studio"]').click();
+    await page.goto(base + '/tools/');
+    assert.equal(await page.locator('[data-favorite="image-studio"]').getAttribute('aria-pressed'), 'true');
+    await page.locator('[data-favorite="image-studio"]').click();
+    await page.goto(base + '/');
+    pass('Tools-first homepage, navigation order, anchor offset and shared search/favorites');
     assert.equal(await page.locator('a[href="/about/"]').count(), 0);
     await page.screenshot({ path: '_qa/home-desktop.png', fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
