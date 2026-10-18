@@ -1,0 +1,6 @@
+node_modules/
+_qa/
+*.tar.gz
+.env*
+.site-workflow/
+__pycache__/
