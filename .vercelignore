@@ -1,0 +1,9 @@
+/.git/
+/.openai/
+/_qa/
+/projects/
+/tests/
+/supabase/
+/node_modules/
+*.tar.gz
+.env*

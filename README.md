@@ -38,3 +38,7 @@ Draft updates detect previously saved remote changes and create a conflict copy.
 ## Secondary project and external links
 
 The default About Me URL comes from the link already present in 3A3D. Edit `personalUrl` in this new project's `config.js` if a different homepage address is intended. It does not modify the destination. The old homepage files were moved out of this workspace. The complete car source remains in `projects/3A3D/`, excluded from main-site commits and build output. Use the car folder's own Git repository for car changes.
+
+## Production deployment
+
+The primary production URL is https://kensei-workshop.vercel.app/. Publish future updates to the existing Vercel project, not the earlier Sites copy. Supabase must allow this origin and `/auth/callback/`. The checked-in `dist/` includes the current public Supabase configuration. `.vercelignore` excludes the separate car project, QA artifacts, repository metadata and tests from CLI uploads. Vercel local project linking is excluded from Git.
