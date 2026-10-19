@@ -12,6 +12,8 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
   const browser = await playwright.chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'msedge', headless: true });
   try {
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+    // Local-tool regressions run without external auth; configured auth has its own tests.
+    await ctx.route('**/config.js', route => route.fulfill({ contentType: 'application/javascript', body: "window.KENSEI_CONFIG={personalUrl:'https://kensei-eta.vercel.app/',carUrl:'https://3a3d.vercel.app/'};" }));
     const page = await ctx.newPage();
     const errors = []; page.on('pageerror', e => errors.push(e.message));
     await page.goto(base + '/');
@@ -27,6 +29,8 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
     assert.equal(await page.locator('#today-focus').textContent(), '15 min');
     assert((await page.locator('#saved-presets').textContent()).includes('Existing preset'));
     await page.locator('#saved-drafts a').click();
+    await page.waitForLoadState('load');
+    await page.waitForFunction(() => document.querySelector('#text-input')?.value === 'Keep this saved text.');
     assert.equal(await page.locator('#text-input').inputValue(), 'Keep this saved text.');
     assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('kensei-workshop:v1:guest'))), oldWorkspace);
     await page.evaluate(() => localStorage.clear());
@@ -70,6 +74,7 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
     await page.locator('.menu-toggle').click();
     assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
     await page.locator('#navigation').getByRole('link', { name: 'Tools', exact: true }).click();
+    await page.waitForLoadState('load');
     await page.locator('#tool-search').fill('image');
     assert.equal(await page.locator('[data-tool-card]:visible').count(), 1);
     await page.locator('#tool-search').fill('nothing-at-all');
@@ -102,6 +107,8 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
     assert.equal(await page.locator('#draft-count').textContent(), '1');
     assert(await page.locator('#saved-drafts').textContent().then(t => t.includes('First idea <script>')));
     await page.locator('#saved-drafts a').click();
+    await page.waitForLoadState('load');
+    await page.waitForFunction(() => document.querySelector('#text-input')?.value === 'Hello world\n\nNext line');
     assert.equal(await page.locator('#text-input').inputValue(), 'Hello world\n\nNext line');
     pass('Text transforms, undo, stats, downloads, escaped draft save and reopen');
     await page.goto(base + '/tools/image-studio/');
@@ -121,6 +128,7 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
     await page.locator('#save-preset').click();
     await page.goto(base + '/workspace/');
     await page.locator('#saved-presets a').click();
+    await page.waitForLoadState('load');
     await page.locator('#image-file').setInputFiles({ name: 'second.png', mimeType: 'image/png', buffer: Buffer.from(imageBase64, 'base64') });
     await page.waitForFunction(() => !document.querySelector('#image-width').disabled);
     assert.equal(await page.locator('#image-width').inputValue(), '16');

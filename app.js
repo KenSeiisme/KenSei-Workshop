@@ -3,7 +3,7 @@
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
   const config = window.KENSEI_CONFIG || {};
-  let client = null, user = null, toastTimeout, storageWarning = false;
+  let client = null, user = null, toastTimeout, storageWarning = false, authReady = false, authStarting = false, cloudError = false;
   const tools = {
     'image-studio': { name: 'Image Studio', description: 'Compress, resize and convert an image.', category: 'Images' },
     'text-toolkit': { name: 'Text Toolkit', description: 'Give your words a little breathing room.', category: 'Text' },
@@ -61,11 +61,15 @@
   $$('[data-car]').forEach(a => { if (config.carUrl) a.href = config.carUrl; });
   $('.menu-toggle')?.addEventListener('click', e => { const open = $('#navigation').classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
   const dialog = $('#auth-dialog');
+  $('#google-login').disabled = true;
   function openAuth() {
     if (user) { location.href = '/workspace/'; return; }
     if (!config.supabaseUrl || !config.supabasePublishableKey) {
       $('#google-login').disabled = true;
       $('#auth-note').textContent = 'Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. You can use all tools and save to this device now.';
+    } else {
+      $('#google-login').disabled = !authReady || authStarting;
+      $('#auth-note').textContent = authReady ? 'Tools are always available without an account.' : 'Sign-in is connecting. If this takes a moment, close this window and try again.';
     }
     dialog.showModal();
   }
@@ -73,9 +77,16 @@
   $('.dialog-close').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', e => { if (e.target === dialog) { const r = dialog.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close(); } });
   $('#google-login').addEventListener('click', async () => {
-    if (!client) { toast('Account service is not ready. Please try again.'); return; }
-    const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + '/auth/callback/' } });
-    if (error) toast('Could not start Google sign-in. Please try again.');
+    if (!client || !authReady || authStarting) return;
+    authStarting = true; $('#google-login').disabled = true;
+    $('#auth-note').textContent = 'Opening Google sign-in…';
+    try {
+      const { error } = await client.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + '/auth/callback/' } });
+      if (error) throw error;
+    } catch {
+      $('#auth-note').textContent = 'Could not open Google sign-in. Please try again.';
+      toast('Could not start Google sign-in. Please try again.');
+    } finally { authStarting = false; $('#google-login').disabled = !authReady; }
   });
   async function initAuth() {
     if (!config.supabaseUrl || !config.supabasePublishableKey) {
@@ -84,18 +95,23 @@
     }
     try {
       const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
-      client = createClient(config.supabaseUrl, config.supabasePublishableKey, { auth: { flowType: 'pkce' } });
+      client = createClient(config.supabaseUrl, config.supabasePublishableKey, { auth: { flowType: 'pkce', detectSessionInUrl: false } });
       const callback = location.pathname.startsWith('/auth/callback');
       if (callback) {
         const params = new URLSearchParams(location.search);
+        // 回调 code 只由这里交换一次，避免 SDK 自动处理后再次交换。
+        const code = params.get('code');
+        history.replaceState(null, '', location.pathname);
         if (params.get('error')) throw new Error('Sign-in was cancelled or could not be completed.');
-        if (params.get('code')) { const { error } = await client.auth.exchangeCodeForSession(params.get('code')); if (error) throw error; }
+        if (code) { const { error } = await client.auth.exchangeCodeForSession(code); if (error) throw error; }
       }
       const { data, error } = await client.auth.getSession(); if (error) throw error;
       user = data.session?.user || null;
+      authReady = true; $('#google-login').disabled = false;
+      $('#auth-note').textContent = 'Tools are always available without an account.';
       if (user) {
         $('[data-auth-label]').textContent = 'Workspace';
-        await loadCloud();
+        try { await loadCloud(); } catch { cloudError = true; renderWorkspace(); toast('Signed in, but cloud data could not be loaded. Please refresh to retry.'); }
         if (callback) location.replace('/workspace/');
       } else if (callback) $('#callback-status').textContent = 'No active session. Try signing in again.';
       client.auth.onAuthStateChange((event, session) => {
@@ -105,7 +121,12 @@
           user = null; location.replace('/workspace/');
         }
       });
-    } catch (e) { toast('Cloud connection unavailable. Local tools still work.'); if ($('#callback-status')) $('#callback-status').textContent = e.message || 'Sign-in failed. Please try again.'; }
+    } catch (e) {
+      authReady = !!client; $('#google-login').disabled = !authReady;
+      $('#auth-note').textContent = authReady ? 'Sign-in could not be completed. Please try Google sign-in again.' : 'Sign-in is unavailable right now. Refresh the page to try again. Local tools still work.';
+      toast('Sign-in connection unavailable. Local tools still work.');
+      if ($('#callback-status')) $('#callback-status').textContent = 'Sign-in could not be completed. Please use Sign in to try again.';
+    }
   }
   let filter = 'all';
   function filterTools() {
@@ -277,8 +298,8 @@
   function renderWorkspace() {
     if (!$('#favorite-tools')) return;
     const banner = $('#workspace-account');
-    if (user) banner.innerHTML = `<div><strong>Your connected workspace</strong><p>${escape(user.email)} · Cloud saves enabled</p></div><span class="small-tag">Connected</span>`;
-    else banner.innerHTML = '<div><strong>On this device</strong><p>Local saves work now. Sign in when cloud access is configured to sync between devices.</p></div><button class="button secondary" id="workspace-login">Sign in with Google ↗</button>';
+    if (user) banner.innerHTML = `<div><strong>Your connected workspace</strong><p>${escape(user.email)} · ${cloudError ? 'Cloud data could not be loaded. Refresh to retry.' : 'Cloud saves enabled'}</p></div><span class="small-tag">${cloudError ? 'Sync unavailable' : 'Connected'}</span>`;
+    else banner.innerHTML = '<div><strong>On this device</strong><p>Your local saves stay on this device. Sign in with Google to sync new saves across devices.</p></div><button class="button secondary" id="workspace-login">Sign in with Google ↗</button>';
     $('#workspace-login')?.addEventListener('click', openAuth); $('#sign-out').hidden = !user;
     const drafts = items('draft'), presets = items('preset'), sessions = items('session').sort((a,b) => b.data.completedAt.localeCompare(a.data.completedAt));
     const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(), week = today - 6 * 86400000;
