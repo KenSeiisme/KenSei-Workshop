@@ -133,8 +133,8 @@ $("#image-process").onclick = async () => {
     q = +quality.value / 100;
   busy(true);
   try {
-    const pica = await library("pica.js", "pica"),
-      scaler = pica();
+    let scaler = null,
+      browserResize = false;
     for (let i = 0; i < files.length; i++) {
       if (job !== generation) break;
       $("#image-result").textContent =
@@ -148,24 +148,61 @@ $("#image-process").onclick = async () => {
           );
         if (targetHeight > 12000 || targetWidth * targetHeight > 40000000)
           throw new Error("Target image is too large. Reduce the width.");
-        const source = document.createElement("canvas"),
-          canvas = document.createElement("canvas");
-        source.width = img.width;
-        source.height = img.height;
-        const ctx = source.getContext("2d");
-        if (mime === "image/jpeg") {
-          ctx.fillStyle = "#fff";
-          ctx.fillRect(0, 0, source.width, source.height);
-        }
-        ctx.drawImage(img, 0, 0);
+        const canvas = document.createElement("canvas");
         canvas.width = targetWidth;
         canvas.height = targetHeight;
-        let blob;
+        let blob,
+          source = null;
         try {
-          await scaler.resize(source, canvas);
+          const ctx = canvas.getContext("2d");
+          if (!ctx)
+            throw new Error(
+              "This browser could not create an image. Try smaller dimensions or another browser.",
+            );
+          const drawNative = () => {
+            ctx.clearRect(0, 0, targetWidth, targetHeight);
+            if (mime === "image/jpeg") {
+              ctx.fillStyle = "#fff";
+              ctx.fillRect(0, 0, targetWidth, targetHeight);
+            }
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+          };
+          // 原尺寸转换不需要读取像素；受限环境使用浏览器原生缩放。
+          if (
+            (targetWidth === img.width && targetHeight === img.height) ||
+            browserResize
+          ) {
+            drawNative();
+          } else {
+            try {
+              scaler ||= (await library("pica.js", "pica"))();
+              source = document.createElement("canvas");
+              source.width = img.width;
+              source.height = img.height;
+              const inputContext = source.getContext("2d");
+              if (mime === "image/jpeg") {
+                inputContext.fillStyle = "#fff";
+                inputContext.fillRect(0, 0, source.width, source.height);
+              }
+              inputContext.drawImage(img, 0, 0);
+              await scaler.resize(source, canvas);
+            } catch {
+              browserResize = true;
+              drawNative();
+            }
+          }
           blob = await canvasBlob(canvas, mime, q);
+        } catch (e) {
+          if (e.name === "SecurityError")
+            throw new Error(
+              "This browser blocked image export. Check this site's image permissions or try another browser.",
+            );
+          throw e;
         } finally {
-          source.width = source.height = canvas.width = canvas.height = 0;
+          if (source) source.width = source.height = 0;
+          canvas.width = canvas.height = 0;
         }
         if (job !== generation) break;
         const ext =
@@ -193,8 +230,16 @@ $("#image-process").onclick = async () => {
         );
       }
     }
+    const completed = job === generation;
+    const outcome = !completed
+      ? "Cancelled"
+      : results.length === files.length
+        ? "Done"
+        : results.length
+          ? "Partially completed"
+          : "Processing failed";
     $("#image-result").textContent =
-      `${job === generation ? "Done" : "Cancelled"} · ${results.length} of ${files.length} images ready.`;
+      `${outcome} · ${results.length} of ${files.length} images ready.${completed && results.length < files.length ? " Check the messages below and retry." : ""}`;
     if (results.length) {
       const first = results[0];
       $("#image-download").href = first.url;
