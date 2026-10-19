@@ -9,7 +9,7 @@ python build.py
 python -m http.server 8768 --bind 127.0.0.1 --directory dist
 ```
 
-Open http://127.0.0.1:8768. This workspace root is the main project root. Deploy only `dist/`, or select this root folder for the main Vercel project. The car website has its own deployment root: `projects/3A3D/`. The included Vercel build needs Python 3; alternatively build locally and deploy the generated `dist` directly.
+Open [http://127.0.0.1:8768](https://kensei-workshop.vercel.app/). This workspace root is the main project root. Deploy only `dist/`, or select this root folder for the main Vercel project. The car website has its own deployment root: `projects/3A3D/`. The included Vercel build needs Python 3; alternatively build locally and deploy the generated `dist` directly.
 
 ## Pages and assets
 
