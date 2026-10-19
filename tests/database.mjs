@@ -2,9 +2,7 @@ import { PGlite } from "@electric-sql/pglite";
 import fs from "node:fs/promises";
 import assert from "node:assert/strict";
 const db = new PGlite();
-await db.exec(
-  `create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema public,auth to anon,authenticated;grant execute on function auth.uid() to anon,authenticated;`,
-);
+await db.exec((await import("./db-fixture.cjs")).bootstrap);
 for (const file of (
   await fs.readdir(new URL("../supabase/migrations/", import.meta.url))
 ).sort())
@@ -16,7 +14,7 @@ for (const file of (
   );
 const a = "11111111-1111-4111-8111-111111111111",
   b = "22222222-2222-4222-8222-222222222222";
-await db.query("insert into auth.users values($1),($2)", [a, b]);
+await db.query("insert into auth.users(id) values($1),($2)", [a, b]);
 const as = async (role, id, fn) => {
   await db.exec(
     `set role ${role};select set_config('request.jwt.claim.sub','${id || ""}',false);`,
@@ -230,6 +228,7 @@ assert.deepEqual(Object.keys(board.top[0]).sort(), [
   "accuracy",
   "achieved_at",
   "nickname",
+  "public_id",
   "rank",
   "speed",
 ]);
@@ -256,7 +255,7 @@ assert.equal(result.speed, 80);
 for (let i = 0; i < 55; i++) {
   const user = op(),
     session = op();
-  await db.query("insert into auth.users values($1)", [user]);
+  await db.query("insert into auth.users(id) values($1)", [user]);
   await db.query(
     "insert into public.typing_profiles(user_id,nickname) values($1,$2)",
     [user, "Tester_" + i],

@@ -31,7 +31,7 @@ Local tools, favorites, drafts, image presets and focus history work without cre
 4. Put the Supabase project URL and **publishable / anon key** in `config.js`, then rebuild. That public key is safe only with the included row-level policies enabled.
 5. Test real Google login, logout, cross-device saves and two-account isolation before announcing cloud support. Configure the Google OAuth audience for the intended users.
 
-Cloud items: favorites, manually saved text drafts, image presets, timer settings and completed sessions. Images are never uploaded. Local guest text is never automatically uploaded on login. The active timer is device/tab-local; completed records can sync. Workspace data can be exported as JSON.
+Cloud items: favorites, manually saved text drafts, image presets, timer settings and completed sessions. File-tool inputs are never uploaded; avatar uploads are explicit profile saves. Local guest text is never automatically uploaded on login. The active timer is device/tab-local; completed records can sync. Workspace data can be exported as JSON.
 
 Draft updates detect previously saved remote changes and create a conflict copy. The first version does not support simultaneous collaborative editing. Settings use last successful save. Keep a local export before clearing browser storage.
 
@@ -64,10 +64,20 @@ Publish by pushing branch `KenSei-Workshop` to GitHub. The existing Vercel GitHu
 
 Answer Book includes 64 original bilingual answers. Optional questions never enter saved records. Decision options use rejection-sampled cryptographic random indexes and Fisher-Yates grouping. Wheel results are selected before animation; reduced-motion and unavailable-canvas paths still return text results.
 
-Ranked uses server-assigned versioned passages and 60-second sessions. `finish_typing_test` accepts committed typed text rather than a score, checks ownership/time/replay/length, and calculates positional accuracy and WPM/CPM. Scores below 95% accuracy are excluded. RPCs expose the best score per account/current language version, Top 50, and an authenticated personal rank. Public output has no account IDs, emails, Google names or raw input. Start requests are limited to one per 65 seconds and 30 per hour. This is a casual board, not strong anti-cheat; scripts and automated input cannot be fully excluded by browser code.
+Ranked uses server-assigned versioned passages and 60-second sessions. `finish_typing_test` accepts committed typed text rather than a score, checks ownership/time/replay/length, and calculates positional accuracy and WPM/CPM. Scores below 95% accuracy are excluded. RPCs expose the best score per account/current language version, Top 50, and an authenticated personal rank. Public output has no Auth account IDs, emails or raw input. Public names now initialize from Google and can be edited in Profile. Start requests are limited to one per 65 seconds and 30 per hour. This is a casual board, not strong anti-cheat; scripts and automated input cannot be fully excluded by browser code.
 
 Device checks attach temporary event listeners only while active. Leaving a panel, losing test focus or hiding the page stops detection. The mouse test consumes scrolling only inside its active test area.
 
 Run `node tests/database.mjs` for PostgreSQL security/scoring tests and `node tests/second-batch.cjs` against the preview for browser/database integration. The latter uses a local PostgreSQL engine with a mocked auth boundary; real production RPC permissions are separately verified by the rolled-back SQL smoke test. The default new-tool preview URL is port 8793; use `TEST_BASE_URL` to override. Original regression suites cover all eight existing tools and the canvas privacy fallback.
 
 Network speed testing remains research only. See `docs/network-speedtest-feasibility.md` for traffic, compatibility and Cloudflare reporting considerations.
+
+## Public typing and profiles
+
+Typing Sprint opens in Public · Ranked mode. Guests can select Practice · Private without signing in. A Public start opens Google sign-in and returns to the typing page without starting the timer automatically. OAuth keeps the existing callback URL and accepts only allowlisted same-origin return paths.
+
+`typing_profiles` now backs the account profile as well as rankings. Initialization reads the authenticated account's Google display name and avatar metadata once. Existing chosen names and subsequent edits are retained. Names support 2–32 characters including spaces; initial collisions receive a random four-character suffix. Profile edits are manual and only changed fields are submitted. Best scores retain their account link when a name changes. The public profile URL uses a separate stable public UUID, never the Auth user UUID.
+
+The `avatars` bucket is public for display and accepts WebP files up to 2 MB. Avatar inputs accept JPG/PNG/WebP up to 5 MB and 40 MP, are center-cropped to 512×512 WebP in the browser, and upload only on Save. Paths are namespaced by public profile ID; Storage RLS checks the authenticated owner. Failed saves retain the prepared avatar and reuse any uploaded path when retried. A previous uploaded avatar is deleted only after a successful profile update. Google avatar load failures use an initial-letter fallback. Profile names, avatars, biographies and current-version qualifying best scores are public; emails, tool files and private workspace records remain private.
+
+Run `node tests/profiles-database.mjs` and `node tests/profiles.cjs` (with `TEST_BASE_URL` pointing to the preview). Browser integration uses an actual local PostgreSQL engine and Storage RLS, with mocked authentication and file transport. `supabase/verify-profiles.sql` verifies production permissions and profile RPCs inside a rollback. The personal Google consent flow requires the user's own interaction and is not automated.

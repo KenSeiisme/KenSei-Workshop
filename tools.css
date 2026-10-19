@@ -371,6 +371,166 @@ legend {
 .diff-characters span {
   display: inline;
 }
+.account-controls {
+  position: relative;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.account-controls .sign-button {
+  margin-left: 0;
+  max-width: 230px;
+}
+[data-auth-label] {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 210px;
+  padding: 8px;
+  background: #211b28;
+  border: 1px solid #4d3d59;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px #0008;
+  z-index: 60;
+}
+.account-menu a,
+.account-menu button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  text-align: left;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #ede4f4;
+  font: inherit;
+  cursor: pointer;
+}
+.account-menu a:hover,
+.account-menu button:hover,
+.account-menu a:focus-visible,
+.account-menu button:focus-visible {
+  background: #3c2c47;
+}
+.avatar-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #493156;
+  color: #f4e7ff;
+  font-weight: 600;
+}
+.avatar-badge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-small {
+  width: 30px;
+  height: 30px;
+  font-size: 14px;
+}
+.avatar-large {
+  width: 112px;
+  height: 112px;
+  font-size: 42px;
+}
+.profile-page {
+  max-width: 1000px;
+}
+.profile-editor,
+.public-profile {
+  padding: 32px;
+}
+.profile-avatar-row,
+.public-profile-heading {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.profile-avatar-row > div,
+.public-profile-heading > div {
+  min-width: 0;
+}
+.profile-visibility-note {
+  padding: 16px;
+  border: 1px solid #493654;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #c9b8d5;
+}
+.public-profile-heading h2 {
+  font-size: 32px;
+  margin: 0 0 12px;
+  overflow-wrap: anywhere;
+}
+#public-bio {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.profile-scores {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+.profile-scores .panel {
+  padding: 24px;
+}
+.profile-scores strong {
+  display: block;
+  font-size: 36px;
+  margin: 14px 0;
+}
+.profile-scores p {
+  font-size: 14px;
+  color: #b1a6b9;
+}
+.typing-account {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.typing-account > span:not(.avatar-badge) {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 600px) {
+  .account-controls .sign-button {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  [data-auth-label] {
+    max-width: 70px;
+  }
+  .profile-editor,
+  .public-profile {
+    padding: 20px;
+  }
+  .profile-avatar-row,
+  .public-profile-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .profile-scores {
+    grid-template-columns: 1fr;
+  }
+  .public-profile-heading h2 {
+    font-size: 26px;
+  }
+}
 /* 第二批工具沿用既有面板、按钮与粉紫配色。 */
 .history-panel {
   margin-top: 28px;

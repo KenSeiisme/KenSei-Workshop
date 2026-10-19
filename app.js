@@ -9,7 +9,8 @@
     storageWarning = false,
     authReady = false,
     authStarting = false,
-    cloudError = false;
+    cloudError = false,
+    profile = null;
   const tools = window.KENSEI_TOOLS || {};
   const key = () => "kensei-workshop:v1:" + (user?.id || "guest");
   const emptyData = () => ({ items: [] });
@@ -166,21 +167,90 @@
     const open = $("#navigation").classList.toggle("open");
     e.currentTarget.setAttribute("aria-expanded", String(open));
   });
+  function renderAccount() {
+    const signed = !!user,
+      toggle = $("#account-toggle");
+    if (!toggle) return;
+    $("[data-auth-label]").textContent = signed
+      ? profile?.nickname || "Account"
+      : "Sign in";
+    $("[data-account-avatar]").hidden = !signed;
+    $(".user-dot", toggle).hidden = signed;
+    $("[data-account-chevron]").textContent = signed ? "▾" : "↗";
+    toggle.setAttribute("aria-expanded", "false");
+    $("#account-menu").hidden = true;
+    $("#account-public-profile").hidden = !profile;
+    if (profile) {
+      $("#account-public-profile").href = "/profile/?id=" + profile.public_id;
+      import("/tool-scripts/profile-service.js").then((module) =>
+        module.paintAvatar($("[data-account-avatar]"), profile),
+      );
+    } else $("[data-account-avatar]").textContent = "K";
+  }
+  document.addEventListener("click", (e) => {
+    const root = $("#account-controls");
+    if (root && !root.contains(e.target)) {
+      $("#account-menu").hidden = true;
+      $("#account-toggle").setAttribute("aria-expanded", "false");
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (
+      e.key === "Escape" &&
+      $("#account-menu") &&
+      !$("#account-menu").hidden
+    ) {
+      $("#account-menu").hidden = true;
+      $("#account-toggle").setAttribute("aria-expanded", "false");
+      $("#account-toggle").focus();
+    }
+  });
   const dialog = $("#auth-dialog");
   $("#google-login").disabled = true;
-  function openAuth() {
+  const returnKey = "kensei-workshop:auth-return";
+  function safeReturn(value) {
+    try {
+      const url = new URL(value, location.origin);
+      return url.origin === location.origin &&
+        ["/tools/typing-sprint/", "/profile/", "/workspace/"].includes(
+          url.pathname,
+        )
+        ? url.pathname + url.search
+        : "/workspace/";
+    } catch {
+      return "/workspace/";
+    }
+  }
+  let authReturn = safeReturn(location.pathname + location.search);
+  function consumeReturn() {
+    try {
+      const item = JSON.parse(sessionStorage.getItem(returnKey));
+      sessionStorage.removeItem(returnKey);
+      if (item && Date.now() - item.at < 1800000) return safeReturn(item.path);
+    } catch {}
+    return "/workspace/";
+  }
+  function openAuth(returnTo) {
+    if (typeof returnTo === "string") authReturn = safeReturn(returnTo);
     if (user) {
-      location.href = "/workspace/";
+      const menu = $("#account-menu");
+      if (menu) {
+        menu.hidden = !menu.hidden;
+        $("#account-toggle").setAttribute(
+          "aria-expanded",
+          String(!menu.hidden),
+        );
+      }
       return;
     }
     if (!config.supabaseUrl || !config.supabasePublishableKey) {
       $("#google-login").disabled = true;
       $("#auth-note").textContent =
-        "Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. You can use all tools and save to this device now.";
+        "Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. Local tools and private practice work without an account.";
     } else {
       $("#google-login").disabled = !authReady || authStarting;
       $("#auth-note").textContent = authReady
-        ? "Tools are always available without an account."
+        ? "Local tools and Typing Practice are available without an account."
         : "Sign-in is connecting. If this takes a moment, close this window and try again.";
     }
     dialog.showModal();
@@ -205,6 +275,12 @@
     $("#google-login").disabled = true;
     $("#auth-note").textContent = "Opening Google sign-in…";
     try {
+      try {
+        sessionStorage.setItem(
+          returnKey,
+          JSON.stringify({ path: authReturn, at: Date.now() }),
+        );
+      } catch {}
       const { error } = await client.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo: location.origin + "/auth/callback/" },
@@ -271,9 +347,14 @@
       authReady = true;
       $("#google-login").disabled = false;
       $("#auth-note").textContent =
-        "Tools are always available without an account.";
+        "Local tools and Typing Practice are available without an account.";
       if (user) {
-        $("[data-auth-label]").textContent = "Workspace";
+        renderAccount();
+        import("/tool-scripts/profile-service.js")
+          .then((module) => module.ensureProfile())
+          .catch(() => {
+            renderAccount();
+          });
         try {
           await loadCloud();
         } catch {
@@ -283,12 +364,13 @@
             "Signed in, but cloud data could not be loaded. Please refresh to retry.",
           );
         }
-        if (callback) location.replace("/workspace/");
+        if (callback) location.replace(consumeReturn());
       } else if (callback)
         $("#callback-status").textContent =
           "No active session. Try signing in again.";
       client.auth.onAuthStateChange((event, session) => {
         if (session?.user && session.user.id !== user?.id) {
+          profile = null;
           user = session.user;
           location.replace(location.pathname + location.search);
           return;
@@ -300,6 +382,7 @@
             sessionStorage.removeItem(oldKey + ":active-timer");
           } catch {}
           user = null;
+          profile = null;
           location.replace("/workspace/");
         }
       });
@@ -805,7 +888,7 @@
       }),
     );
   }
-  $("#sign-out")?.addEventListener("click", async () => {
+  async function signOut() {
     if (!client) return;
     const oldKey = key();
     const { error } = await client.auth.signOut();
@@ -818,8 +901,12 @@
       sessionStorage.removeItem(oldKey + ":active-timer");
     } catch {}
     user = null;
+    profile = null;
     location.replace("/workspace/");
-  });
+  }
+  $("#sign-out")?.addEventListener("click", signOut);
+  $("#account-sign-out")?.addEventListener("click", signOut);
+
   $("#export-data")?.addEventListener("click", () =>
     downloadText(
       JSON.stringify(read(), null, 2),
@@ -839,6 +926,18 @@
     toast,
     escape,
     ready: false,
+    openAuth,
+    get profile() {
+      return profile;
+    },
+    setProfile(value, owner) {
+      if (user?.id !== owner) return;
+      profile = value;
+      renderAccount();
+      window.dispatchEvent(
+        new CustomEvent("profile-updated", { detail: value }),
+      );
+    },
     get user() {
       return user;
     },
@@ -863,6 +962,10 @@
   if (document.querySelector("#private-workspace"))
     import("/tool-scripts/private-workspace.js").catch(() =>
       toast("Saved history could not load. Reload to retry."),
+    );
+  if (document.querySelector("#profile-page"))
+    import("/tool-scripts/profile.js").catch(() =>
+      toast("Profile files could not load. Reload to retry."),
     );
   initAuth().finally(() => {
     window.KenseiWorkspace.ready = true;

@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /workspace/
 Disallow: /auth/
+Disallow: /profile/

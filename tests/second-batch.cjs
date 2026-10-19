@@ -10,12 +10,10 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
 (async () => {
   const { PGlite } = await import("@electric-sql/pglite"),
     db = new PGlite();
-  await db.exec(
-    `create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key);create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;grant usage on schema public,auth to anon,authenticated;`,
-  );
+  await db.exec(require("./db-fixture.cjs").bootstrap);
   for (const file of fs.readdirSync("supabase/migrations").sort())
     await db.exec(fs.readFileSync("supabase/migrations/" + file, "utf8"));
-  await db.query("insert into auth.users values($1),($2)", [A, B]);
+  await db.query("insert into auth.users(id) values($1),($2)", [A, B]);
   const browser = await chromium.launch({ channel: "msedge", headless: true }),
     errors = [],
     results = [],
@@ -365,6 +363,7 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
       "Chinese IME, positional scoring, timed Practice and local history",
       async () => {
         await typing.clock.install();
+        await typing.locator("#typing-mode").selectOption("practice");
         await typing.locator("#typing-language").selectOption("zh");
         await typing.locator("#typing-start").click();
         const text = "清晨的光";
@@ -430,12 +429,10 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
       async () => {
         const p = await open(signed, "typing-sprint");
         await p.locator("#typing-mode").selectOption("ranked");
-        await p.locator("#typing-nickname").fill("WorkshopRunner");
-        await p.locator("#typing-save-nickname").click();
         await p.waitForFunction(() =>
           document
-            .querySelector("#typing-status")
-            .textContent.includes("WorkshopRunner"),
+            .querySelector("#typing-player")
+            .textContent.includes("Playing as"),
         );
         await p.clock.install();
         await p.locator("#typing-start").click();
@@ -465,7 +462,7 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
         await p.waitForSelector("#leaderboard-rows tr");
         assert.match(
           await p.locator("#leaderboard-rows").textContent(),
-          /WorkshopRunner/,
+          /Member_/,
         );
         assert(
           !(await p.locator("#leaderboard-rows").textContent()).includes("@"),

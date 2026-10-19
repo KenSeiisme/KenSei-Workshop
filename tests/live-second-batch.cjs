@@ -112,6 +112,9 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
       };
       return {
         board: await call("rpc/get_typing_leaderboard", { language: "en" }),
+        publicProfile: await call("rpc/get_public_profile", {
+          profile_id: crypto.randomUUID(),
+        }),
         private: await call("answer_history?select=id,data"),
         start: await call("rpc/start_typing_test", { language: "en" }),
         finish: await call("rpc/finish_typing_test", {
@@ -121,12 +124,19 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
       };
     });
     assert.equal(apiResults.board.status, 200);
+    assert.equal(apiResults.publicProfile.status, 200);
+    assert.equal(apiResults.publicProfile.text, "null");
     for (const key of ["private", "start", "finish"])
       assert(
         [401, 403].includes(apiResults[key].status),
         key + " must reject anonymous access",
       );
     assert(!/user_id|email|typedText/.test(apiResults.board.text));
+    assert.equal(await p.locator("#typing-mode").inputValue(), "ranked");
+    await p.locator("#typing-start").click();
+    assert(await p.locator("#auth-dialog").isVisible());
+    await p.keyboard.press("Escape");
+    await p.locator("#typing-mode").selectOption("practice");
     await p.clock.install();
     await p.locator("#typing-start").click();
     await p.locator("#typing-input").fill("Morning light");
@@ -152,6 +162,20 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
         .then((x) => x.includes("Production smoke test")),
     );
     checks.push("Production Workspace opens both new local history sections");
+    await p.goto(base + "/profile/", { waitUntil: "domcontentloaded" });
+    await p.waitForSelector("#profile-login:not([hidden])");
+    assert(await p.locator("#profile-form").isHidden());
+    await p.goto(base + "/profile/?id=invalid", {
+      waitUntil: "domcontentloaded",
+    });
+    await p.waitForFunction(
+      () =>
+        document.querySelector("#profile-status").textContent ===
+        "Profile not found.",
+    );
+    checks.push(
+      "Public is default, Google sign-in entry works, and anonymous profile pages are available",
+    );
     assert.deepEqual(errors, []);
     assert(
       !uploads.some((x) => x.body?.includes("DO NOT UPLOAD THIS QUESTION")),
@@ -160,6 +184,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
       uploads.every(
         (x) =>
           x.url.includes("/rpc/get_typing_leaderboard") ||
+          x.url.includes("/rpc/get_public_profile") ||
           x.url.includes("/rpc/start_typing_test") ||
           x.url.includes("/rpc/finish_typing_test"),
       ),

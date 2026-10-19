@@ -16,7 +16,8 @@
     "vendor": "node scripts/vendor.mjs",
     "build": "python build.py",
     "test": "node tests/verify.cjs && node tests/image-studio.cjs && node tests/tools.cjs && node tests/limits.cjs && node tests/ocr-lifecycle.cjs && node tests/auth.cjs",
-    "test:second-batch": "node tests/database.mjs && node tests/second-batch.cjs"
+    "test:second-batch": "node tests/database.mjs && node tests/second-batch.cjs",
+    "test:profiles": "node tests/profiles-database.mjs && node tests/profiles.cjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

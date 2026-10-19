@@ -2,11 +2,11 @@ import { $, api, esc, toast } from "./common.js";
 import { practiceTexts } from "./sprint-content.js";
 import { scoreText } from "./sprint-core.js";
 import { ready } from "./personal-store.js";
+import { ensureProfile, paintAvatar } from "./profile-service.js";
 let run = null,
   interval,
   committed = "",
   composing = false,
-  nickname = "",
   boardToken = 0;
 const language = () => $("#typing-language").value,
   actor = () => api.user?.id || "guest";
@@ -79,7 +79,7 @@ async function board() {
     $("#leaderboard-version").textContent =
       `${lang === "zh" ? "中文" : "English"} · text version ${data.version || "—"} · 60 seconds · 95% accuracy required`;
     const row = (x) =>
-      `<tr><td>${Number(x.rank)}</td><td>${esc(x.nickname)}</td><td>${Number(x.speed).toFixed(1)}</td><td>${Number(x.accuracy).toFixed(2)}%</td><td>${esc(new Date(x.achieved_at).toLocaleDateString())}</td></tr>`;
+      `<tr><td>${Number(x.rank)}</td><td>${x.public_id ? `<a class="text-link" href="/profile/?id=${encodeURIComponent(x.public_id)}">${esc(x.nickname)}</a>` : esc(x.nickname)}</td><td>${Number(x.speed).toFixed(1)}</td><td>${Number(x.accuracy).toFixed(2)}%</td><td>${esc(new Date(x.achieved_at).toLocaleDateString())}</td></tr>`;
     $("#leaderboard-rows").innerHTML = (data.top || []).map(row).join("");
     $("#leaderboard-status").textContent = data.top?.length
       ? ""
@@ -88,7 +88,7 @@ async function board() {
       ? `Your rank: #${data.me.rank} · ${data.me.speed} ${lang === "zh" ? "CPM" : "WPM"} · ${data.me.accuracy}%`
       : api.user
         ? "Your rank will appear after a qualifying Ranked test."
-        : "Sign in to set a public nickname and join Ranked.";
+        : "Sign in to join Public with your Google profile name.";
   } catch {
     if (token === boardToken) {
       $("#leaderboard-rows").innerHTML = "";
@@ -98,61 +98,43 @@ async function board() {
     }
   }
 }
+function player() {
+  $("#typing-account").hidden = !api.user;
+  if (api.profile) {
+    $("#typing-player").textContent = "Playing as " + api.profile.nickname;
+    paintAvatar($("#typing-avatar"), api.profile);
+  } else $("#typing-player").textContent = "Your profile is connecting…";
+}
 async function mode() {
   const ranked = $("#typing-mode").value === "ranked";
-  $("#nickname-panel").hidden = !ranked;
+  if (!run)
+    $("#typing-start").textContent =
+      ranked && !api.user ? "Sign in to start →" : "Start 60-second test →";
+  player();
   $("#typing-status").textContent = ranked
     ? api.user
-      ? nickname
-        ? "Playing as " + nickname + ". Only qualifying scores appear publicly."
-        : "Choose your public nickname before starting Ranked."
-      : "Sign in with Google using the navigation to enter Ranked. Practice needs no account."
-    : "Practice is saved only on this device.";
-  if (ranked && api.user && !nickname) {
+      ? "Your qualifying best score will appear publicly. Your profile can be changed at any time."
+      : "Sign in to join the public leaderboard, or select Practice for a private test."
+    : "Practice stays on this device and never enters the public leaderboard.";
+  if (api.user) {
     try {
-      const { data, error } = await api.client
-        .from("typing_profiles")
-        .select("nickname")
-        .eq("user_id", api.user.id)
-        .maybeSingle();
-      if (!error && data) {
-        nickname = data.nickname;
-        $("#typing-nickname").value = nickname;
+      await ensureProfile();
+      player();
+    } catch {
+      if (ranked && !run)
         $("#typing-status").textContent =
-          "Playing as " +
-          nickname +
-          ". Only qualifying scores appear publicly.";
-      }
-    } catch {}
+          "Your profile could not connect. Start again to retry, or select Practice.";
+    }
   }
 }
-$("#typing-save-nickname").addEventListener("click", async () => {
-  if (!api.user) {
-    toast("Sign in to choose a public nickname.");
-    return;
-  }
-  try {
-    nickname = await rpc("set_typing_nickname", {
-      nickname: $("#typing-nickname").value.trim(),
-    });
-    toast("Public nickname saved.");
-    mode();
-    board();
-  } catch (e) {
-    toast(e.message || "Nickname could not be saved.");
-  }
-});
+window.addEventListener("profile-updated", player);
 $("#typing-start").addEventListener("click", async () => {
   if (run) return;
   const ranked = $("#typing-mode").value === "ranked",
     lang = language(),
     owner = actor();
   if (ranked && !api.user) {
-    toast("Sign in to enter Ranked, or choose Practice.");
-    return;
-  }
-  if (ranked && !nickname) {
-    toast("Save a public nickname before starting Ranked.");
+    api.openAuth("/tools/typing-sprint/");
     return;
   }
   $("#typing-start").disabled = true;
@@ -160,6 +142,8 @@ $("#typing-start").addEventListener("click", async () => {
     ? "Starting a server session…"
     : "Starting practice…";
   try {
+    if (ranked) await ensureProfile();
+    if (actor() !== owner) throw new Error("Account changed. Please reload.");
     const session = ranked
       ? await rpc("start_typing_test", { language: lang })
       : { text: practiceTexts[lang], duration: 60 };
