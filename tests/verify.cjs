@@ -266,6 +266,7 @@ function pass(name) {
       "Text transforms, undo, stats, downloads, escaped draft save and reopen",
     );
     await page.goto(base + "/tools/image-studio/");
+    await page.waitForSelector('[data-ready="true"]');
     const imageBase64 = await page.evaluate(() => {
       const c = document.createElement("canvas");
       c.width = 32;
