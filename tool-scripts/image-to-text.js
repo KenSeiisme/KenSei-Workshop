@@ -31,7 +31,11 @@ $("#ocr-file").onchange = async (e) => {
   }
 };
 function stop() {
-  worker?.terminate();
+  if (worker) {
+    worker.onmessage = null;
+    worker.onerror = null;
+    worker.terminate();
+  }
   worker = null;
   busy(false);
 }
@@ -46,7 +50,9 @@ $("#ocr-run").onclick = () => {
   busy(true);
   status("Loading recognition engine and selected language packs…");
   worker = new Worker("/tool-scripts/ocr-worker.js");
+  const currentWorker = worker;
   worker.onmessage = ({ data }) => {
+    if (worker !== currentWorker) return;
     if (data.progress) {
       const m = data.progress;
       status(
@@ -74,6 +80,7 @@ $("#ocr-run").onclick = () => {
   };
   worker.onerror = (e) => {
     e.preventDefault();
+    if (worker !== currentWorker) return;
     stop();
     status(
       "Recognition failed. Tool files could not load. Check your connection and retry.",
