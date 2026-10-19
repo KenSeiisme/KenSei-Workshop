@@ -315,6 +315,7 @@ function pass(name) {
     await page.goto(base + "/workspace/");
     await page.locator("#saved-presets a").click();
     await page.waitForLoadState("load");
+    await page.waitForSelector('[data-ready="true"]');
     await page.locator("#image-file").setInputFiles({
       name: "second.png",
       mimeType: "image/png",
