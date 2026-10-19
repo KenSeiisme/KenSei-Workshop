@@ -1,0 +1,373 @@
+/* Shared tool surfaces inherit the existing Workshop palette. */
+.tool-form h2,
+.editor-pane h2,
+.pdf-layout h2 {
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+.tool-form label {
+  display: block;
+  font-size: 12px;
+  color: #d7cddd;
+  margin: 14px 0;
+}
+.tool-form label > input:not([type="checkbox"]):not([type="color"]),
+.tool-form label > select,
+.tool-form label > textarea {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+}
+.tool-form input[type="color"] {
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  height: 42px;
+  padding: 4px;
+  cursor: pointer;
+}
+.tool-form .check-label,
+.check-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  margin: 12px 0;
+}
+input[type="checkbox"] {
+  accent-color: #d5afe8;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-block: 20px;
+}
+.file-button {
+  position: relative;
+  cursor: pointer;
+}
+.file-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+.file-button:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+.qr-preview {
+  display: grid;
+  place-items: center;
+  min-height: 290px;
+  width: 100%;
+  color: var(--muted);
+  font-size: 13px;
+  overflow: hidden;
+}
+.qr-preview svg,
+.qr-preview canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.editor-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+.editor-pane {
+  min-width: 0;
+}
+.editor-pane textarea {
+  display: block;
+  width: 100%;
+  min-height: 370px;
+  resize: vertical;
+  font:
+    13px/1.85 ui-monospace,
+    Consolas,
+    monospace;
+  tab-size: 2;
+}
+.markdown-preview {
+  min-height: 370px;
+  font-size: 14px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.markdown-preview h1 {
+  font-size: 30px;
+}
+.markdown-preview h2 {
+  font-size: 24px;
+}
+.markdown-preview h3 {
+  font-size: 20px;
+}
+.markdown-preview > * + * {
+  margin-top: 16px;
+}
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 24px;
+}
+.markdown-preview pre {
+  background: #100d14;
+  padding: 15px;
+  white-space: pre-wrap;
+  border-radius: 6px;
+}
+.markdown-preview code {
+  color: #e0c4ee;
+}
+.markdown-preview a {
+  color: #dbb6ee;
+  text-decoration: underline;
+}
+.markdown-preview table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  max-width: 100%;
+}
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid #ffffff25;
+  padding: 6px 12px;
+}
+.markdown-preview blockquote {
+  border-left: 3px solid #b494c5;
+  padding-left: 15px;
+  color: var(--muted);
+}
+.blocked-image {
+  color: #9d8ca8;
+  font-size: 12px;
+}
+.job-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  min-height: 64px;
+  margin-block: 10px;
+}
+.error-text {
+  color: #f1a6b5 !important;
+}
+.diff-output {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    13px/1.9 ui-monospace,
+    Consolas,
+    monospace;
+  min-height: 120px;
+}
+.diff-added {
+  background: #90d9ad15;
+  color: #b7ebc8;
+}
+.diff-removed {
+  background: #ee94a315;
+  color: #f5b0bd;
+  text-decoration: line-through;
+}
+.diff-output span {
+  display: block;
+}
+.compare-options {
+  margin-top: 22px;
+}
+.compare-options .action-row {
+  margin-block: 8px;
+}
+.ocr-preview {
+  max-height: 260px;
+  max-width: 100%;
+  object-fit: contain;
+  margin-top: 20px;
+  border-radius: 6px;
+}
+fieldset {
+  border: 1px solid #ffffff1c;
+  padding: 16px 20px;
+  margin-block: 20px;
+  border-radius: 8px;
+}
+legend {
+  font-size: 12px;
+  color: var(--muted);
+  padding-inline: 6px;
+}
+.pdf-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 22px;
+}
+.pdf-layout > section {
+  min-width: 0;
+}
+.pdf-page-list {
+  max-height: 660px;
+  overflow: auto;
+  margin-top: 18px;
+}
+.pdf-page-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid #ffffff12;
+}
+.pdf-page-row label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-size: 13px;
+}
+.pdf-page-row label span {
+  min-width: 0;
+}
+.pdf-page-row small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.page-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.page-actions button {
+  border: 1px solid #ffffff1b;
+  background: transparent;
+  color: #dac0e6;
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 11px;
+}
+.pdf-preview-panel canvas {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 700px;
+  margin: 20px auto 0;
+  background: white;
+}
+.tool-form .small {
+  margin-top: 12px;
+}
+.image-stage img {
+  max-width: 100%;
+}
+.batch-results {
+  margin-top: 22px;
+}
+.batch-results .saved-row {
+  margin-bottom: 10px;
+}
+.batch-results .saved-row > div {
+  min-width: 0;
+}
+.credits-list {
+  padding-left: 22px;
+  color: var(--muted);
+  line-height: 2;
+}
+.credits-list a {
+  color: #d5b2e5;
+  text-decoration: underline;
+}
+.credits-list li {
+  margin-block: 10px;
+}
+.footer-inner > div {
+  flex-wrap: wrap;
+}
+@media (max-width: 1050px) {
+  .tools-controls {
+    align-items: flex-start;
+  }
+  .tools-controls .filter-bar {
+    gap: 3px;
+  }
+  .filter {
+    padding: 8px 11px;
+  }
+}
+@media (max-width: 760px) {
+  [data-tool="pdf-toolkit"] .form-row {
+    grid-template-columns: 1fr;
+  }
+  .editor-split,
+  .pdf-layout {
+    grid-template-columns: 1fr;
+  }
+  .form-row {
+    gap: 12px;
+  }
+  .editor-pane textarea {
+    min-height: 280px;
+  }
+  .tool-form .action-row .button {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+  .pdf-page-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .page-actions {
+    margin-left: auto;
+  }
+  .qr-preview {
+    min-height: 230px;
+  }
+  .tool-form label {
+    font-size: 11px;
+  }
+  .editor-pane h2 {
+    font-size: 20px;
+  }
+  .pdf-page-list {
+    max-height: 450px;
+  }
+  .footer-inner > div {
+    justify-content: flex-start;
+    gap: 14px;
+  }
+  .job-status {
+    align-items: flex-start;
+  }
+  .job-status p {
+    overflow-wrap: anywhere;
+  }
+}
+.diff-characters span {
+  display: inline;
+}

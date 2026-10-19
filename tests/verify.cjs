@@ -55,7 +55,7 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
     assert.equal(new URL(page.url()).hash, '#toolbox');
     const toolboxTop = await page.locator('#toolbox').evaluate(el => el.getBoundingClientRect().top);
     assert(toolboxTop >= 80 && toolboxTop < 120, 'Toolbox heading should clear sticky navigation');
-    await page.locator('#tool-search').fill('image');
+    await page.locator('#tool-search').fill('batch compress');
     assert.equal(await page.locator('[data-tool-card]:visible').count(), 1);
     await page.locator('[data-filter="text"]').click();
     assert(await page.locator('#search-empty').isVisible());
@@ -75,13 +75,13 @@ function pass(name) { checks.push(name); console.log('PASS ' + name); }
     assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
     await page.locator('#navigation').getByRole('link', { name: 'Tools', exact: true }).click();
     await page.waitForLoadState('load');
-    await page.locator('#tool-search').fill('image');
+    await page.locator('#tool-search').fill('batch compress');
     assert.equal(await page.locator('[data-tool-card]:visible').count(), 1);
     await page.locator('#tool-search').fill('nothing-at-all');
     assert(await page.locator('#search-empty').isVisible());
     await page.locator('#tool-search').fill('');
     await page.locator('[data-filter="text"]').click();
-    assert.equal(await page.locator('[data-tool-card]:visible').count(), 1);
+    assert.equal(await page.locator('[data-tool-card]:visible').count(), 3);
     await page.locator('[data-favorite="text-toolkit"]').click();
     assert.equal(await page.locator('[data-favorite="text-toolkit"]').getAttribute('aria-pressed'), 'true');
     pass('Mobile navigation, combined tool filtering and favorites');

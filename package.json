@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "diff": "9.0.0",
+    "fflate": "0.8.3",
+    "markdown-it": "15.0.3",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "6.4.299",
+    "pica": "10.0.3",
+    "qr-code-styling": "1.9.2",
+    "tesseract.js": "7.0.0"
+  },
+  "name": "kensei-workshop",
+  "private": true,
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "build": "python build.py",
+    "test": "node tests/verify.cjs && node tests/tools.cjs && node tests/limits.cjs && node tests/auth.cjs"
+  },
+  "devDependencies": {
+    "jsqr": "1.4.0",
+    "prettier": "3.9.10"
+  }
+}

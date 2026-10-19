@@ -42,3 +42,18 @@ The default About Me URL comes from the link already present in 3A3D. Edit `pers
 ## Production deployment
 
 The primary production URL is https://kensei-workshop.vercel.app/. Publish future updates to the existing Vercel project, not the earlier Sites copy. Supabase must allow this origin and `/auth/callback/`. The checked-in `dist/` includes the current public Supabase configuration. `.vercelignore` excludes the separate car project, QA artifacts, repository metadata and tests from CLI uploads. Vercel local project linking is excluded from Git.
+
+
+## Browser tool collection
+
+Eight tools share `tools.json`: Image Studio (batch), QR Studio, PDF Toolkit, Text Toolkit, Markdown Studio, Text Compare, Image to Text, and Focus Timer. Page interfaces are in `tool_views.py`; processing is split into lazy-loaded `tool-scripts/` modules.
+
+All file processing runs in the browser. Only explicit workspace saves use Supabase. QR presets exclude content, credentials and logos. Existing untyped drafts and presets stay compatible. No database migration is required.
+
+`vendor/` contains the pinned browser libraries, workers, WASM and four OCR models, so production builds need only `python3 build.py`. To regenerate dependencies, run `pnpm install --frozen-lockfile --ignore-scripts` and `node scripts/vendor.mjs`. `model-lock.json` pins the OCR model commit and SHA-256 hashes. Licenses are included and linked from `/credits/`.
+
+Limits: image batches 20 files / 100 MB, 20 MB and 40 MP per image; PDFs 50 MB / 200 pages; OCR one image, with selected English, Simplified Chinese, Traditional Chinese and Malay models. PDF splitting accepts `1-3;4-5` groups, or creates one PDF per selected page when blank. PDF arrangement and extraction use the current displayed page order.
+
+Validation: run `python scripts/serve.py 8769`, then run `node tests/verify.cjs`, `node tests/tools.cjs` and `node tests/auth.cjs`. New tool tests use real PDF/QR/image outputs and actual local OCR models.
+
+Publish by pushing branch `KenSei-Workshop` to GitHub. The existing Vercel GitHub integration deploys it automatically; no manual Vercel deployment is needed.

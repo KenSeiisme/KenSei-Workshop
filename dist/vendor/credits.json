@@ -1,0 +1,42 @@
+[
+  {
+    "name": "pica",
+    "version": "10.0.3",
+    "license": "MIT"
+  },
+  {
+    "name": "fflate",
+    "version": "0.8.3",
+    "license": "MIT"
+  },
+  {
+    "name": "qr-code-styling",
+    "version": "1.9.2",
+    "license": "MIT"
+  },
+  {
+    "name": "pdf-lib",
+    "version": "1.17.1",
+    "license": "MIT"
+  },
+  {
+    "name": "pdfjs-dist",
+    "version": "6.4.299",
+    "license": "Apache-2.0"
+  },
+  {
+    "name": "markdown-it",
+    "version": "15.0.3",
+    "license": "MIT"
+  },
+  {
+    "name": "diff",
+    "version": "9.0.0",
+    "license": "BSD-3-Clause"
+  },
+  {
+    "name": "tesseract.js",
+    "version": "7.0.0",
+    "license": "Apache-2.0"
+  }
+]

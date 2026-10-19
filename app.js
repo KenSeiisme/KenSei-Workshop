@@ -4,11 +4,7 @@
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
   const config = window.KENSEI_CONFIG || {};
   let client = null, user = null, toastTimeout, storageWarning = false, authReady = false, authStarting = false, cloudError = false;
-  const tools = {
-    'image-studio': { name: 'Image Studio', description: 'Compress, resize and convert an image.', category: 'Images' },
-    'text-toolkit': { name: 'Text Toolkit', description: 'Give your words a little breathing room.', category: 'Text' },
-    'focus-timer': { name: 'Focus Timer', description: 'A little space for your next idea.', category: 'Productivity' }
-  };
+  const tools = window.KENSEI_TOOLS || {};
   const key = () => 'kensei-workshop:v1:' + (user?.id || 'guest');
   const emptyData = () => ({ items: [] });
   function read() { try { return JSON.parse(localStorage.getItem(key())) || emptyData(); } catch { return emptyData(); } }
@@ -143,79 +139,6 @@
   }));
   $('#tool-search')?.addEventListener('input', filterTools);
 
-  // 图片始终在浏览器内处理，不发送到云端。
-  function initImage() {
-    if (!$('#image-file')) return;
-    let original = null, baseName = 'image', sourceUrl = null, outputUrl = null, version = 0, presetWidth = null;
-    const w = $('#image-width'), h = $('#image-height'), format = $('#image-format'), quality = $('#image-quality');
-    const invalidate = () => { version++; $('#image-download').hidden = true; $('#image-result').textContent = ''; if (outputUrl) { URL.revokeObjectURL(outputUrl); outputUrl = null; } };
-    async function load(file) {
-      if (!file) return;
-      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) { toast('Choose a JPG, PNG or WebP image.'); return; }
-      if (file.size > 20 * 1024 * 1024) { toast('Choose an image smaller than 20 MB.'); return; }
-      const nextUrl = URL.createObjectURL(file), img = new Image();
-      try {
-        img.src = nextUrl; await img.decode();
-        if (img.naturalWidth * img.naturalHeight > 40000000) throw new Error('Please use an image under 40 megapixels.');
-        if (sourceUrl) URL.revokeObjectURL(sourceUrl); sourceUrl = nextUrl;
-        original = { img, width: img.naturalWidth, height: img.naturalHeight, size: file.size };
-        baseName = file.name.replace(/\.[^.]+$/, '') || 'image';
-        w.value = presetWidth || original.width;
-        h.value = presetWidth ? Math.max(1, Math.round(presetWidth * original.height / original.width)) : original.height;
-        w.disabled = h.disabled = false;
-        $('#image-preview').src = sourceUrl; $('#dropzone').hidden = true; $('.image-stage').hidden = false;
-        $('#image-info').textContent = `${file.name} · ${original.width} × ${original.height} · ${size(file.size)}`;
-        $('#image-process').disabled = false; invalidate();
-      } catch (e) { URL.revokeObjectURL(nextUrl); toast(e.message === 'Please use an image under 40 megapixels.' ? e.message : 'This image could not be opened. Try another file.'); }
-    }
-    function size(bytes) { return bytes < 1024 * 1024 ? `${(bytes / 1024).toFixed(1)} KB` : `${(bytes / 1024 / 1024).toFixed(2)} MB`; }
-    $('#image-file').addEventListener('change', e => load(e.target.files[0]));
-    $('#change-image').addEventListener('click', () => { $('#image-file').value = ''; $('#image-file').click(); });
-    ['dragenter', 'dragover'].forEach(e => $('#dropzone').addEventListener(e, ev => { ev.preventDefault(); $('#dropzone').classList.add('drag-over'); }));
-    ['dragleave', 'drop'].forEach(e => $('#dropzone').addEventListener(e, ev => { ev.preventDefault(); $('#dropzone').classList.remove('drag-over'); if (e === 'drop') load(ev.dataTransfer.files[0]); }));
-    w.addEventListener('input', () => { if (original && +w.value > 0) h.value = Math.max(1, Math.round(+w.value * original.height / original.width)); invalidate(); });
-    h.addEventListener('input', () => { if (original && +h.value > 0) w.value = Math.max(1, Math.round(+h.value * original.width / original.height)); invalidate(); });
-    function formatChanged() {
-      quality.disabled = format.value === 'image/png';
-      $('#format-note').textContent = format.value === 'image/png' ? 'PNG is lossless. Quality does not apply; output may be larger.' : format.value === 'image/jpeg' ? 'Transparent areas will use a white background.' : 'WebP balances size and image quality.';
-      invalidate();
-    }
-    format.addEventListener('change', formatChanged);
-    quality.addEventListener('input', () => { $('#quality-value').value = quality.value + '%'; invalidate(); });
-    $('#image-process').addEventListener('click', async () => {
-      if (!original) return;
-      const width = +w.value, height = +h.value;
-      if (!Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1 || width > 12000 || height > 12000 || width * height > 40000000) { toast('Use whole dimensions from 1–12,000 px, up to 40 megapixels.'); return; }
-      const taskVersion = ++version; const button = $('#image-process'); button.disabled = true; button.textContent = 'Processing…';
-      try {
-        const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (format.value === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height); }
-        ctx.drawImage(original.img, 0, 0, width, height);
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, format.value, +quality.value / 100));
-        if (!blob) throw new Error('No output');
-        if (taskVersion !== version) return;
-        if (outputUrl) URL.revokeObjectURL(outputUrl); outputUrl = URL.createObjectURL(blob);
-        const ext = ({ 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' })[blob.type] || 'png';
-        const diff = (1 - blob.size / original.size) * 100;
-        $('#image-result').textContent = `${width} × ${height} · ${size(original.size)} → ${size(blob.size)} · ${Math.abs(diff).toFixed(0)}% ${diff >= 0 ? 'smaller' : 'larger'}`;
-        $('#image-download').href = outputUrl; $('#image-download').download = baseName + '-kensei.' + ext; $('#image-download').hidden = false;
-        canvas.width = canvas.height = 0;
-      } catch { toast('Could not process this image. Try smaller dimensions.'); }
-      finally { button.disabled = false; button.textContent = 'Process image →'; }
-    });
-    $('#save-preset').addEventListener('click', async () => {
-      const name = prompt('Name this image preset:', 'My image preset'); if (!name?.trim()) return;
-      const width = +w.value || null;
-      if (width && (!Number.isInteger(width) || width < 1 || width > 12000)) { toast('Enter a valid width before saving.'); return; }
-      try { await saveItem('preset', { name: name.trim().slice(0, 100), width, format: format.value, quality: +quality.value }); toast(user ? 'Preset synced.' : 'Preset saved on this device.'); } catch { toast('Preset could not be saved. Try again.'); }
-    });
-    const presetId = new URLSearchParams(location.search).get('preset');
-    const applyPreset = () => { const p = items('preset').find(x => x.id === presetId)?.data; if (p) { format.value = p.format; quality.value = p.quality; $('#quality-value').value = p.quality + '%'; presetWidth = p.width; formatChanged(); if (p.width) { w.value = p.width; toast('Preset loaded. Its target width will be applied to your image.'); } } };
-    applyPreset(); window.addEventListener('workspace-ready', applyPreset);
-    window.addEventListener('beforeunload', () => { if (sourceUrl) URL.revokeObjectURL(sourceUrl); if (outputUrl) URL.revokeObjectURL(outputUrl); });
-  }
-
   function downloadText(text, name, type = 'text/plain;charset=utf-8') { const url = URL.createObjectURL(new Blob([text], { type })); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 2000); }
   function initText() {
     const input = $('#text-input'); if (!input) return;
@@ -242,12 +165,12 @@
       const name = $('#draft-name').value.trim(); if (!name) { $('#draft-name').focus(); toast('Give your draft a name first.'); return; }
       if (!input.value.trim()) { toast('Add some text before saving.'); return; }
       const button = $('#save-draft'); button.disabled = true;
-      try { const item = await saveItem('draft', { name, text: input.value }, draftId || uid(), savedAt); draftId = item.id; savedAt = item.updated_at; dirty = false; $('#draft-state').textContent = user ? 'Saved and synced to your workspace.' : 'Saved to your workspace on this device.'; toast('Draft saved.'); }
+      try { const item = await saveItem('draft', { tool: 'text-toolkit', name, text: input.value }, draftId || uid(), savedAt); draftId = item.id; savedAt = item.updated_at; dirty = false; $('#draft-state').textContent = user ? 'Saved and synced to your workspace.' : 'Saved to your workspace on this device.'; toast('Draft saved.'); }
       catch { $('#draft-state').textContent = 'Save failed. Your text is still here; please retry.'; toast('Could not save. Your text has been kept on this page.'); }
       finally { button.disabled = false; }
     });
     const requestedDraft = new URLSearchParams(location.search).get('draft');
-    const loadDraft = () => { if (dirty) return; const item = items('draft').find(x => x.id === requestedDraft); if (item) { draftId = item.id; savedAt = item.updated_at; input.value = item.data.text; $('#draft-name').value = item.data.name; $('#draft-state').textContent = 'Saved draft loaded. Changes need to be saved.'; stats(); } };
+    const loadDraft = () => { if (dirty) return; const item = items('draft').find(x => x.id === requestedDraft && (x.data.tool || 'text-toolkit') === 'text-toolkit'); if (item) { draftId = item.id; savedAt = item.updated_at; input.value = item.data.text; $('#draft-name').value = item.data.name; $('#draft-state').textContent = 'Saved draft loaded. Changes need to be saved.'; stats(); } };
     loadDraft(); window.addEventListener('workspace-ready', loadDraft);
     window.addEventListener('beforeunload', e => { if (dirty && input.value) { e.preventDefault(); e.returnValue = ''; } });
     stats();
@@ -308,8 +231,8 @@
     $('#draft-count').textContent = drafts.length;
     $('#favorite-tools').innerHTML = items('favorite').filter(x => tools[x.data.slug]).map(x => { const t = tools[x.data.slug]; return `<article class="tool-card"><div class="tool-card-top"><span class="small-tag">${t.category}</span><button class="text-link" data-delete="${escape(x.id)}">Remove</button></div><a href="/tools/${x.data.slug}/"><h3>${t.name} ↗</h3></a><p>${t.description}</p></article>`; }).join('') || '<p class="muted small">Star a tool to keep it close. <a class="text-link" href="/tools/">Explore tools →</a></p>';
     function row(item, detail, action) { return `<div class="saved-row"><div><strong>${escape(item.data.name || detail)}</strong><p>${escape(item.data.name ? detail : new Date(item.data.completedAt).toLocaleString())}${item.data.pending ? ' · Saved locally, sync pending' : ''}</p></div><div class="saved-actions">${action}<button data-delete="${escape(item.id)}">Delete</button></div></div>`; }
-    $('#saved-drafts').innerHTML = drafts.map(x => row(x, x.data.text.slice(0,90), `<a class="text-link" href="/tools/text-toolkit/?draft=${encodeURIComponent(x.id)}">Open →</a>`)).join('') || '<p class="muted small">Your next good idea can start in Text Toolkit.</p>';
-    $('#saved-presets').innerHTML = presets.map(x => row(x, `${x.data.format.replace('image/','').toUpperCase()} · ${x.data.quality}% quality${x.data.width ? ' · '+x.data.width+' px wide' : ''}`, `<a class="text-link" href="/tools/image-studio/?preset=${encodeURIComponent(x.id)}">Use →</a>`)).join('') || '<p class="muted small">Save a favorite image setup in Image Studio.</p>';
+    $('#saved-drafts').innerHTML = drafts.map(x => row(x, `${tools[x.data.tool || 'text-toolkit']?.name || 'Text Toolkit'} · ${x.data.text.slice(0,90)}`, `<a class="text-link" href="/tools/${['text-toolkit','markdown-studio','image-to-text'].includes(x.data.tool) ? x.data.tool : 'text-toolkit'}/?draft=${encodeURIComponent(x.id)}">Open →</a>`)).join('') || '<p class="muted small">Your next good idea can start in Text Toolkit.</p>';
+    $('#saved-presets').innerHTML = presets.map(x => row(x, x.data.tool === 'qr-studio' ? `QR appearance · ${x.data.size} px` : `${x.data.format.replace('image/','').toUpperCase()} · ${x.data.quality}% quality${x.data.width ? ' · '+x.data.width+' px wide' : ''}`, `<a class="text-link" href="/tools/${x.data.tool === 'qr-studio' ? 'qr-studio' : 'image-studio'}/?preset=${encodeURIComponent(x.id)}">Use →</a>`)).join('') || '<p class="muted small">Save a favorite image setup in Image Studio.</p>';
     $('#saved-sessions').innerHTML = sessions.slice(0,30).map(x => row(x, `${x.data.minutes} minutes of focus`, x.data.pending && user ? `<button data-retry-session="${escape(x.id)}">Retry sync</button>` : '')).join('') || '<p class="muted small">Complete a focus session to see it here.</p>';
     $$('[data-delete]').forEach(b => b.addEventListener('click', async () => { const item = read().items.find(x => x.id === b.dataset.delete); if (item?.type === 'draft' && !confirm('Delete this saved draft?')) return; try { await removeItem(b.dataset.delete); toast('Removed.'); } catch { toast('Could not delete. Please try again.'); } }));
     $$('[data-retry-session]').forEach(b => b.addEventListener('click', async () => { const x = read().items.find(x => x.id === b.dataset.retrySession); if (!x) return; try { await saveItem('session', { ...x.data, pending: false }, x.id); renderWorkspace(); toast('Session synced.'); } catch { toast('Still unable to sync. Please retry later.'); } }));
@@ -322,6 +245,15 @@
   });
   $('#export-data')?.addEventListener('click', () => downloadText(JSON.stringify(read(), null, 2), 'kensei-workspace.json', 'application/json'));
   window.addEventListener('storage', e => { if (e.key === key()) { updateFavorites(); renderWorkspace(); } });
-  bindFavorites(); renderWorkspace(); initImage(); initText(); initTimer();
+  window.KenseiWorkspace = { items, saveItem, toast, escape };
+  bindFavorites(); renderWorkspace(); initText(); initTimer();
+  const slug = document.querySelector('[data-tool]')?.dataset.tool;
+  if (slug && !['text-toolkit', 'focus-timer'].includes(slug)) {
+    import('/tool-scripts/' + slug + '.js').then(() => {
+      document.querySelector('[data-tool]').dataset.ready = 'true';
+    }).catch(() => {
+      toast('Tool files could not load. Reload this page to retry.');
+    });
+  }
   initAuth().finally(() => window.dispatchEvent(new Event('workspace-ready')));
 })();
