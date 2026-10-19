@@ -69,7 +69,7 @@
     "Answer Book",
     "A question. A quiet possibility.",
     "Draw original English and Chinese answers, turn another page and revisit your history.",
-    "Fun"
+    "Utilities"
   ],
   [
     "decision-studio",
@@ -77,7 +77,7 @@
     "Decision Studio",
     "Make a little room for possibility.",
     "Spin a wheel, draw without repeats or create balanced random groups. Autosave your schemes.",
-    "Fun"
+    "Utilities"
   ],
   [
     "typing-sprint",
@@ -94,5 +94,45 @@
     "See what your device is saying.",
     "Check your screen, keyboard and mouse with temporary tests you control.",
     "Testing"
+  ],
+  [
+    "network-test",
+    "network",
+    "Network Test",
+    "A clearer picture of your connection.",
+    "Measure download, upload, latency and jitter with a full Cloudflare connection test.",
+    "Testing"
+  ],
+  [
+    "zip-studio",
+    "archive",
+    "ZIP Studio",
+    "A little less scattered.",
+    "Pack files into a ZIP, inspect an archive and download checked files locally.",
+    "Utilities"
+  ],
+  [
+    "color-studio",
+    "palette",
+    "Color Studio",
+    "Find colors that work together.",
+    "Convert colors, build a palette, preview gradients and check text contrast.",
+    "Images"
+  ],
+  [
+    "unit-converter",
+    "ruler",
+    "Unit Converter",
+    "Same amount. A different perspective.",
+    "Convert everyday units, from temperature and distance to volume and storage.",
+    "Utilities"
+  ],
+  [
+    "password-generator",
+    "key",
+    "Password Generator",
+    "A fresh start for your next sign-in.",
+    "Generate a random password on your device, with the length and characters you choose.",
+    "Utilities"
   ]
 ]

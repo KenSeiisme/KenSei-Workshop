@@ -1,0 +1,36 @@
+"""Daily tools; games will have a separate catalog and route family."""
+
+VIEWS = {
+'network-test': '''
+<div class="studio-grid"><section class="panel tool-form">
+<h2>Your connection, measured</h2><p>Full Test measures your connection to Cloudflare, not every website or your ISP's advertised maximum.</p>
+<div class="notice-box"><strong>Uses real internet data</strong><p>Up to 500 MB of test payload, plus network overhead. Cloudflare receives your connection IP. Extra measurement and result reporting are disabled. Nothing is sent to your KenSei account.</p></div>
+<div class="action-row"><button id="network-start" class="button primary">Start test →</button><button id="network-cancel" class="button secondary" disabled>Cancel</button></div>
+<p id="network-status" class="muted small" role="status" aria-live="polite">Ready. No test traffic until you start.</p><progress id="network-progress" max="100" value="0" aria-label="Test progress"></progress>
+<p class="muted small">Stops if you hide or leave this page, or after 120 seconds. Missing measurements are shown as unavailable, never zero.</p></section>
+<section class="panel"><h2>Full Test</h2><div class="metric-grid" id="network-metrics"></div><p id="network-reason" class="muted small"></p><button id="network-copy" class="button secondary" disabled>Copy results</button><textarea id="network-result" class="copy-output" aria-label="Results to copy" readonly hidden></textarea></section></div>
+<section class="panel daily-history"><div class="section-heading"><h2>On this device</h2><button id="network-clear" class="text-link">Clear history</button></div><p class="muted small">The last 20 completed tests. Available only in this browser.</p><div id="network-history"></div></section>
+''',
+'zip-studio': '''
+<div class="studio-grid"><section class="panel tool-form"><h2>Pack your files</h2>
+<label>Files to pack<input id="zip-files" type="file" multiple data-lock></label><p class="muted small">Up to 100 files · 100 MB total. Original file names are kept; duplicate names receive a suffix.</p><div id="zip-selected" class="file-summary"></div>
+<label>Archive name<input id="zip-name" value="kensei-files.zip" maxlength="100" data-lock></label><button id="zip-pack" class="button primary" data-lock>Create ZIP & download ↓</button></section>
+<section class="panel tool-form"><h2>Look inside a ZIP</h2><label>ZIP archive<input id="zip-open" type="file" accept=".zip,application/zip" data-lock></label>
+<p class="muted small">100 MB archive · 2,000 entries · 500 MB total expanded content. Encrypted, unsupported and damaged archives are rejected.</p><div id="zip-entries" class="zip-entries"></div></section></div>
+<div class="job-status"><p id="tool-status" role="status" class="muted small" aria-live="polite">Files stay on this device.</p><button id="cancel-job" class="button secondary" hidden>Cancel</button></div><progress id="zip-progress" max="100" value="0" aria-label="Archive progress"></progress>
+''',
+'color-studio': '''
+<div class="studio-grid"><section class="panel tool-form"><h2>One color, three ways</h2><label>Color<input id="color-picker" type="color" value="#d6afe8"></label>
+<label>HEX<input id="color-hex" value="#d6afe8" maxlength="9" spellcheck="false"></label><label>RGB<input id="color-rgb" value="214, 175, 232" spellcheck="false"></label><label>HSL<input id="color-hsl" spellcheck="false"></label><p id="color-status" class="muted small" role="status"></p><button id="color-copy" class="button secondary">Copy HEX</button><textarea id="color-copy-output" class="copy-output" readonly aria-label="Color text to copy" hidden></textarea></section>
+<section class="panel tool-form"><h2>Readable together</h2><div class="form-row"><label>Text<input id="contrast-fg" type="color" value="#21152d"></label><label>Background<input id="contrast-bg" type="color" value="#d6afe8"></label></div><div id="contrast-preview" class="contrast-preview">A little more clarity.<br><small>Sample text</small></div><p id="contrast-result" role="status"></p><p class="muted small">WCAG AA: 4.5:1 for normal text, 3:1 for large text. The pass/fail decision uses the unrounded ratio.</p></section></div>
+<section class="panel daily-history"><div class="section-heading"><h2>Five colors, your way</h2><button id="palette-generate" class="button secondary">Generate unlocked colors</button></div><div id="palette" class="palette-grid"></div></section>
+<section class="panel tool-form daily-history"><h2>A softer transition</h2><div class="form-row"><label>From<input id="gradient-from" type="color" value="#d6afe8"></label><label>To<input id="gradient-to" type="color" value="#ef9bb7"></label><label>Angle<input id="gradient-angle" type="number" min="0" max="360" value="135"></label></div><div id="gradient-preview" class="gradient-preview"></div><label>CSS<textarea id="gradient-css" class="copy-output" readonly></textarea></label><button id="gradient-copy" class="button secondary">Copy CSS</button></section>
+''',
+'unit-converter': '''
+<div class="panel tool-form converter-panel"><h2>A different unit. The same amount.</h2><label>Category<select id="unit-category"></select></label><div class="conversion-grid"><label>Value<input id="unit-value" type="text" inputmode="decimal" value="1" maxlength="80" spellcheck="false"></label><label>From<select id="unit-from"></select></label><button id="unit-swap" class="button secondary" aria-label="Swap units">⇄</button><label>To<select id="unit-to"></select></label></div><label>Result<input id="unit-result" class="unit-result" readonly></label><p id="unit-status" class="muted small" role="status"></p><button id="unit-copy" class="button primary">Copy result</button><p class="muted small">Storage uses explicit decimal (kB = 1,000 B) and binary (KiB = 1,024 B) units. US and Imperial volumes are labeled separately. No live currency rates.</p></div>
+''',
+'password-generator': '''
+<div class="panel tool-form converter-panel"><h2>A fresh password, just for you.</h2><label>Password length (8–64)<input id="password-length" type="number" min="8" max="64" value="20"></label><fieldset class="password-options"><legend>Characters to include</legend><label class="check-label"><input id="password-upper" type="checkbox" checked>Uppercase A–Z</label><label class="check-label"><input id="password-lower" type="checkbox" checked>Lowercase a–z</label><label class="check-label"><input id="password-digits" type="checkbox" checked>Numbers 0–9</label><label class="check-label"><input id="password-symbols" type="checkbox" checked>Symbols</label><label class="check-label"><input id="password-ambiguous" type="checkbox">Exclude look-alike characters (I, l, 1, O, 0)</label></fieldset>
+<label>Your password<input id="password-output" class="password-output" readonly autocomplete="off" autocapitalize="none" spellcheck="false"></label><div class="action-row"><button id="password-generate" class="button primary">Generate again</button><button id="password-copy" class="button secondary">Copy password</button></div><p id="password-status" class="muted small" role="status"></p><p class="muted small">Generated using your browser's cryptographic random source. Never saved or uploaded. Copy it to your own password manager; copying places it on your device clipboard.</p></div>
+'''
+}

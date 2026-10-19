@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@cloudflare/speedtest':
+        specifier: 1.14.2
+        version: 1.14.2
       diff:
         specifier: 9.0.0
         version: 9.0.0
@@ -47,6 +50,10 @@ importers:
         version: 3.9.10
 
 packages:
+
+  '@cloudflare/speedtest@1.14.2':
+    resolution: {integrity: sha512-K+G83dURKEWqLMxClKOivqbbbzI06C0Dk0WsccqSeIGWOkMhw/SnVIGaQ9qaNV2vu/H/b5ahPIJQWx+g35mZ8Q==}
+    engines: {node: '>=18'}
 
   '@electric-sql/pglite@0.5.10':
     resolution: {integrity: sha512-tXc/25U3ulOkiRQuTFdwIv+JhBqtMdAF7Gvo6CfZZWtSB4+hgC4Wr2vwK5ngvvN5PJfAAEGIsfyCVy1JhCOBYw==}
@@ -470,6 +477,8 @@ packages:
     resolution: {integrity: sha512-+J9RrgTKOmlxFSDHo0pI1xM6BLVUv+o0ZT9ANtCxGkjIVCCUdx9alUF8Gm+dGLKbkkkidWIHFDZHDMpfITt4+w==}
 
 snapshots:
+
+  '@cloudflare/speedtest@1.14.2': {}
 
   '@electric-sql/pglite@0.5.10': {}
 

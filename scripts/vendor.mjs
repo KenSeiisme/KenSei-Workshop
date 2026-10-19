@@ -24,6 +24,7 @@ async function cp(pkg, source, target) {
 }
 await cp("pica", "dist/pica.min.js", "pica.js");
 await cp("fflate", "umd/index.js", "fflate.js");
+await cp("@cloudflare/speedtest", "dist/speedtest.js", "speedtest.js");
 await cp("qr-code-styling", "lib/qr-code-styling.js", "qr-code-styling.js");
 await cp("pdf-lib", "dist/pdf-lib.min.js", "pdf-lib.js");
 await cp(
@@ -100,6 +101,7 @@ for (const pkg of [
   "diff",
   "tesseract.js",
   "spin-wheel",
+  "@cloudflare/speedtest",
 ]) {
   const dir = pkg === "pdfjs-dist" ? pdfRoot : resolveRoot(pkg),
     manifest = JSON.parse(
@@ -110,6 +112,9 @@ for (const pkg of [
   );
   if (!license) throw new Error("Missing license: " + pkg);
   await fs.mkdir(path.join(out, "licenses"), { recursive: true });
+  await fs.mkdir(path.dirname(path.join(out, "licenses", pkg + ".txt")), {
+    recursive: true,
+  });
   await fs.copyFile(
     path.join(dir, license),
     path.join(out, "licenses", pkg + ".txt"),

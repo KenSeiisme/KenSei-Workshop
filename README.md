@@ -46,7 +46,7 @@ The primary production URL is https://kensei-workshop.vercel.app/. Publish futur
 
 ## Browser tool collection
 
-Twelve tools share `tools.json`: Image Studio (batch), QR Studio, PDF Toolkit, Text Toolkit, Markdown Studio, Text Compare, Image to Text, Focus Timer, Answer Book, Decision Studio, Typing Sprint and Device Check. Page interfaces are in `tool_views.py` and `batch_two_views.py`; processing is split into lazy-loaded `tool-scripts/` modules.
+Seventeen tools share `tools.json`: Image Studio (batch), QR Studio, PDF Toolkit, Text Toolkit, Markdown Studio, Text Compare, Image to Text, Focus Timer, Answer Book, Decision Studio, Typing Sprint, Device Check, Network Test, ZIP Studio, Color Studio, Unit Converter and Password Generator. Page interfaces are in `tool_views.py` and `batch_two_views.py`; processing is split into lazy-loaded `tool-scripts/` modules.
 
 All file processing runs in the browser. Existing tools use explicit workspace saves. Answer Book and Decision Studio automatically save new or edited signed-in records privately to Supabase. Their guest history is never automatically uploaded. QR presets exclude content, credentials and logos. Existing untyped drafts and presets stay compatible. Apply the SQL files in `supabase/migrations/` in filename order; they do not alter existing workspace items. `supabase/verify-second-batch.sql` exercises the production permission and scoring surface inside a rolled-back transaction.
 
@@ -70,7 +70,7 @@ Device checks attach temporary event listeners only while active. Leaving a pane
 
 Run `node tests/database.mjs` for PostgreSQL security/scoring tests and `node tests/second-batch.cjs` against the preview for browser/database integration. The latter uses a local PostgreSQL engine with a mocked auth boundary; real production RPC permissions are separately verified by the rolled-back SQL smoke test. The default new-tool preview URL is port 8793; use `TEST_BASE_URL` to override. Original regression suites cover all eight existing tools and the canvas privacy fallback.
 
-Network speed testing remains research only. See `docs/network-speedtest-feasibility.md` for traffic, compatibility and Cloudflare reporting considerations.
+Network speed testing now uses a bounded, explicitly started Cloudflare test. See `docs/network-speedtest-feasibility.md` for traffic, compatibility and Cloudflare reporting considerations.
 
 ## Public typing and profiles
 
@@ -81,3 +81,13 @@ Typing Sprint opens in Public · Ranked mode. Guests can select Practice · Priv
 The `avatars` bucket is public for display and accepts WebP files up to 2 MB. Avatar inputs accept JPG/PNG/WebP up to 5 MB and 40 MP, are center-cropped to 512×512 WebP in the browser, and upload only on Save. Paths are namespaced by public profile ID; Storage RLS checks the authenticated owner. Failed saves retain the prepared avatar and reuse any uploaded path when retried. A previous uploaded avatar is deleted only after a successful profile update. Google avatar load failures use an initial-letter fallback. Profile names, avatars, biographies and current-version qualifying best scores are public; emails, tool files and private workspace records remain private.
 
 Run `node tests/profiles-database.mjs` and `node tests/profiles.cjs` (with `TEST_BASE_URL` pointing to the preview). Browser integration uses an actual local PostgreSQL engine and Storage RLS, with mocked authentication and file transport. `supabase/verify-profiles.sql` verifies production permissions and profile RPCs inside a rollback. The personal Google consent flow requires the user's own interaction and is not automated.
+
+## Daily tools and future games
+
+The five daily tools use the existing catalog and lazy modules. Answer Book and Decision Studio are Utilities; Typing Sprint stays Text. Future games belong to a separate catalog, /games/<slug>/ routes and game scripts. No empty Games page or navigation is shipped before the first game. Games must not be added to tools.json or tool search.
+
+Network Test pins @cloudflare/speedtest 1.14.2. An isolated same-origin iframe runs the engine, with no auto-start, no measurement/result logging, no cookies and no packet-loss/TURN testing. Its fetch guard allows only Cloudflare __down/__up, validates payload sizes and debits every attempt against 500,000,000 bytes. The adaptive schedule sums to 488,900,000 bytes; HTTP overhead is extra. Hide, leave, cancel and 120-second timeout stop the engine and destroy the runner. Only completed usable tests enter the device-only last-20 history. No Supabase schema change.
+
+ZIP processing uses a terminable worker and fflate 0.8.3. Archive metadata is checked before streaming decompression validates actual expanded bytes, size and CRC. Input is capped at 100 MB; packs at 100 files; reads at 2,000 entries and 500 MB expanded. Encryption, ZIP64, multi-volume, unsafe paths and unsupported methods are rejected with a reselection path. UI lists filenames as text.
+
+Colors, unit inputs and passwords are not saved. Password generation uses unbiased cryptographic samples and rejection sampling to ensure selected categories; clipboard failures select the visible output for manual copy. Run test:daily and existing regression suites before pushing the GitHub deployment branch.

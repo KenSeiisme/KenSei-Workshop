@@ -1,6 +1,6 @@
-# Network speed test: research only
+# Network speed test: historical feasibility review
 
-No speed-test page, measurement traffic or speed-test dependency is included in this release.
+This was the second-batch research record. It is superseded by the third-batch Network Test implementation at /tools/network-test/. See README daily tools and docs/daily-tools-validation.md for the bounded traffic, reporting controls and verification of the shipped integration. Recommendations below describe the earlier deferred release.
 
 The MIT [Cloudflare Speedtest engine](https://github.com/cloudflare/speedtest) is a plausible later option. It measures a connection to Cloudflare's edge, rather than guaranteeing an ISP-wide speed. Its normal browser engine downloads and uploads test data; this is not a purely local tool and consumes user bandwidth. The payload schedule must be measured and capped before selecting a mobile-friendly preset. Do not promise a fixed traffic cost before configuring and measuring that schedule.
 
