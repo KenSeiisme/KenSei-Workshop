@@ -38,5 +38,10 @@
     "name": "tesseract.js",
     "version": "7.0.0",
     "license": "Apache-2.0"
+  },
+  {
+    "name": "spin-wheel",
+    "version": "5.0.2",
+    "license": "MIT"
   }
 ]

@@ -81,14 +81,16 @@ function pass(s) {
   }
   try {
     await page.goto(base + "/");
-    assert.equal(await page.locator("[data-tool-card]").count(), 8);
+    assert.equal(await page.locator("[data-tool-card]").count(), 12);
     assert.equal(await page.locator(".project-card").count(), 0);
     for (const [category, count] of [
       ["images", 2],
-      ["text", 3],
+      ["text", 4],
       ["documents", 1],
       ["utilities", 1],
       ["productivity", 1],
+      ["fun", 2],
+      ["testing", 1],
     ]) {
       await page.locator(`[data-filter="${category}"]`).click();
       assert.equal(
@@ -96,7 +98,7 @@ function pass(s) {
         count,
       );
     }
-    pass("Eight shared tools and all five category filters");
+    pass("Twelve shared tools and all seven category filters");
     for (const width of [360, 768, 1440]) {
       await page.setViewportSize({ width, height: 950 });
       for (const slug of slugs) {

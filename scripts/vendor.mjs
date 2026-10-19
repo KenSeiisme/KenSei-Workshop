@@ -32,6 +32,7 @@ await cp(
   "markdown-it.js",
 );
 await cp("diff", "libesm", "diff");
+await cp("spin-wheel", "dist/spin-wheel-esm.js", "spin-wheel.js");
 const pdfRoot = path.dirname(require.resolve("pdfjs-dist/package.json"));
 for (const folder of ["build", "cmaps", "standard_fonts", "wasm"])
   await fs.cp(path.join(pdfRoot, folder), path.join(out, "pdfjs", folder), {
@@ -98,6 +99,7 @@ for (const pkg of [
   "markdown-it",
   "diff",
   "tesseract.js",
+  "spin-wheel",
 ]) {
   const dir = pkg === "pdfjs-dist" ? pdfRoot : resolveRoot(pkg),
     manifest = JSON.parse(

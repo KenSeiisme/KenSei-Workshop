@@ -62,5 +62,37 @@
     "A little space to focus.",
     "Find your rhythm with a simple, adjustable Pomodoro timer.",
     "Productivity"
+  ],
+  [
+    "answer-book",
+    "book",
+    "Answer Book",
+    "A question. A quiet possibility.",
+    "Draw original English and Chinese answers, turn another page and revisit your history.",
+    "Fun"
+  ],
+  [
+    "decision-studio",
+    "wheel",
+    "Decision Studio",
+    "Make a little room for possibility.",
+    "Spin a wheel, draw without repeats or create balanced random groups. Autosave your schemes.",
+    "Fun"
+  ],
+  [
+    "typing-sprint",
+    "keyboard",
+    "Typing Sprint",
+    "Find your rhythm, one word at a time.",
+    "Practice English or Chinese typing for 60 seconds, or join the public Ranked leaderboard.",
+    "Text"
+  ],
+  [
+    "device-check",
+    "monitor",
+    "Device Check",
+    "See what your device is saying.",
+    "Check your screen, keyboard and mouse with temporary tests you control.",
+    "Testing"
   ]
 ]

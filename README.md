@@ -6,10 +6,10 @@ This workspace root is the main KenSei tools platform. The secondary car website
 
 ```powershell
 python build.py
-python -m http.server 8768 --bind 127.0.0.1 --directory dist
+python scripts/serve.py 8768
 ```
 
-Open [http://127.0.0.1:8768](https://kensei-workshop.vercel.app/). This workspace root is the main project root. Deploy only `dist/`, or select this root folder for the main Vercel project. The car website has its own deployment root: `projects/3A3D/`. The included Vercel build needs Python 3; alternatively build locally and deploy the generated `dist` directly.
+Open [http://127.0.0.1:8768](http://127.0.0.1:8768). This workspace root is the main project root. Deploy only `dist/`, or select this root folder for the main Vercel project. The car website has its own deployment root: `projects/3A3D/`. The included Vercel build needs Python 3; alternatively build locally and deploy the generated `dist` directly.
 
 ## Pages and assets
 
@@ -23,7 +23,7 @@ Project covers are graphic compositions, labeled on detail pages; they are not c
 
 ## Google login and cloud sync
 
-Local tools, favorites, drafts, image presets and focus history work without credentials. Cloud login is deliberately disabled until the following setup is complete; there is no fake login or simulated cloud save.
+Local tools, favorites, drafts, image presets and focus history work without credentials. The production Supabase URL and public key are configured. The setup below documents the required project settings; secrets stay outside this repository.
 
 1. Create a separate Supabase project for this new site and run `supabase/schema.sql`.
 2. Create a Google OAuth web client. Use Supabase's displayed callback URL as Google's authorized redirect URI, then enter the client ID and secret in Supabase's Google provider settings. Never put the Google secret or Supabase service-role key in this repository.
@@ -46,9 +46,9 @@ The primary production URL is https://kensei-workshop.vercel.app/. Publish futur
 
 ## Browser tool collection
 
-Eight tools share `tools.json`: Image Studio (batch), QR Studio, PDF Toolkit, Text Toolkit, Markdown Studio, Text Compare, Image to Text, and Focus Timer. Page interfaces are in `tool_views.py`; processing is split into lazy-loaded `tool-scripts/` modules.
+Twelve tools share `tools.json`: Image Studio (batch), QR Studio, PDF Toolkit, Text Toolkit, Markdown Studio, Text Compare, Image to Text, Focus Timer, Answer Book, Decision Studio, Typing Sprint and Device Check. Page interfaces are in `tool_views.py` and `batch_two_views.py`; processing is split into lazy-loaded `tool-scripts/` modules.
 
-All file processing runs in the browser. Only explicit workspace saves use Supabase. QR presets exclude content, credentials and logos. Existing untyped drafts and presets stay compatible. No database migration is required.
+All file processing runs in the browser. Existing tools use explicit workspace saves. Answer Book and Decision Studio automatically save new or edited signed-in records privately to Supabase. Their guest history is never automatically uploaded. QR presets exclude content, credentials and logos. Existing untyped drafts and presets stay compatible. Apply the SQL files in `supabase/migrations/` in filename order; they do not alter existing workspace items. `supabase/verify-second-batch.sql` exercises the production permission and scoring surface inside a rolled-back transaction.
 
 `vendor/` contains the pinned browser libraries, workers, WASM and four OCR models, so production builds need only `python3 build.py`. To regenerate dependencies, run `pnpm install --frozen-lockfile --ignore-scripts` and `node scripts/vendor.mjs`. `model-lock.json` pins the OCR model commit and SHA-256 hashes. Licenses are included and linked from `/credits/`.
 
@@ -57,3 +57,17 @@ Limits: image batches 20 files / 100 MB, 20 MB and 40 MP per image; PDFs 50 MB /
 Validation: run `python scripts/serve.py 8769`, then run `node tests/verify.cjs`, `node tests/tools.cjs` and `node tests/auth.cjs`. New tool tests use real PDF/QR/image outputs and actual local OCR models.
 
 Publish by pushing branch `KenSei-Workshop` to GitHub. The existing Vercel GitHub integration deploys it automatically; no manual Vercel deployment is needed.
+
+## Second-batch data and leaderboard
+
+`personal-store.js` keeps account-specific local records and a persistent idempotent retry queue. Every new private RPC includes an expected account ID; an in-flight request cannot save an old account's content to a new account. Schemes save after 500ms of editing. Save conflicts create a copy, whose ID becomes the next edit target. Records use private `answer_history` and `decision_schemes` tables; paginated reads include deletion tombstones so old caches cannot resurrect records. Existing workspace data is unchanged.
+
+Answer Book includes 64 original bilingual answers. Optional questions never enter saved records. Decision options use rejection-sampled cryptographic random indexes and Fisher-Yates grouping. Wheel results are selected before animation; reduced-motion and unavailable-canvas paths still return text results.
+
+Ranked uses server-assigned versioned passages and 60-second sessions. `finish_typing_test` accepts committed typed text rather than a score, checks ownership/time/replay/length, and calculates positional accuracy and WPM/CPM. Scores below 95% accuracy are excluded. RPCs expose the best score per account/current language version, Top 50, and an authenticated personal rank. Public output has no account IDs, emails, Google names or raw input. Start requests are limited to one per 65 seconds and 30 per hour. This is a casual board, not strong anti-cheat; scripts and automated input cannot be fully excluded by browser code.
+
+Device checks attach temporary event listeners only while active. Leaving a panel, losing test focus or hiding the page stops detection. The mouse test consumes scrolling only inside its active test area.
+
+Run `node tests/database.mjs` for PostgreSQL security/scoring tests and `node tests/second-batch.cjs` against the preview for browser/database integration. The latter uses a local PostgreSQL engine with a mocked auth boundary; real production RPC permissions are separately verified by the rolled-back SQL smoke test. The default new-tool preview URL is port 8793; use `TEST_BASE_URL` to override. Original regression suites cover all eight existing tools and the canvas privacy fallback.
+
+Network speed testing remains research only. See `docs/network-speedtest-feasibility.md` for traffic, compatibility and Cloudflare reporting considerations.

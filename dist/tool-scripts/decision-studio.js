@@ -1,0 +1,263 @@
+import { $, api, esc, toast } from "./common.js";
+import { randomIndex, shuffle } from "./sprint-core.js";
+import * as store from "./personal-store.js";
+import { historyView, decisionRow } from "./history-view.js";
+let id = null,
+  owner = null,
+  saveTimer,
+  wheel = null,
+  Wheel = null,
+  busy = false,
+  dirty = false,
+  drawn = new Set(),
+  generation = 0;
+const fields = [
+  "#decision-name",
+  "#decision-options",
+  "#decision-mode",
+  "#decision-no-repeat",
+  "#decision-group-count",
+];
+const actor = () => api.user?.id || "guest";
+const options = () =>
+  $("#decision-options")
+    .value.split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+function data() {
+  const list = options(),
+    name = $("#decision-name").value.trim();
+  if (!name || name.length > 100)
+    throw new Error("Give this scheme a name (up to 100 characters).");
+  if (
+    !list.length ||
+    list.length > 200 ||
+    list.some((x) => Array.from(x).length > 200)
+  )
+    throw new Error("Use 1–200 options, up to 200 characters each.");
+  if (new Set(list).size !== list.length)
+    throw new Error("Use unique options so every option has an equal chance.");
+  const count = +$("#decision-group-count").value;
+  if (
+    $("#decision-mode").value === "groups" &&
+    (!Number.isInteger(count) || count < 1 || count > list.length)
+  )
+    throw new Error("Choose between 1 and " + list.length + " groups.");
+  return {
+    name,
+    options: list,
+    mode: $("#decision-mode").value,
+    noRepeat: $("#decision-no-repeat").checked,
+    groupCount: count,
+  };
+}
+function save() {
+  clearTimeout(saveTimer);
+  if (!dirty || owner !== actor()) return;
+  try {
+    const value = data();
+    id = store.put("decision", value, id || crypto.randomUUID()).id;
+    history.replaceState(null, "", "?scheme=" + id);
+    dirty = false;
+    $("#decision-save-state").textContent = store.saveState();
+  } catch (e) {
+    $("#decision-save-state").textContent = "Not saved · " + e.message;
+  }
+}
+function mode() {
+  const v = $("#decision-mode").value;
+  $("#no-repeat-row").hidden = v !== "draw";
+  $("#group-count-row").hidden = v !== "groups";
+  $("#decision-wheel-shell").hidden = v !== "wheel";
+  $("#decision-reset").hidden = v !== "draw";
+}
+function redraw() {
+  wheel?.remove();
+  wheel = null;
+  try {
+    if (!Wheel) return;
+    const list = options();
+    if (!list.length || list.length > 200) return;
+    const canvas = document.createElement("canvas");
+    if (!canvas.getContext("2d")) throw new Error();
+    wheel = new Wheel($("#decision-wheel"), {
+      items: list.map((label) => ({ label, weight: 1 })),
+      isInteractive: false,
+      itemBackgroundColors: ["#d6b6ec", "#a88cc3", "#efc6db", "#b9bce8"],
+      itemLabelColors: ["#21152d"],
+      lineColor: "#21152d",
+      lineWidth: 1,
+      itemLabelFontSizeMax: 22,
+      pointerAngle: 0,
+    });
+  } catch {
+    wheel?.remove();
+    wheel = null;
+    $("#decision-note").textContent =
+      "Wheel drawing is unavailable. Your random choice still works as text.";
+  }
+}
+function edit() {
+  dirty = true;
+  $("#decision-save-state").textContent = "Saving on this device…";
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 500);
+  drawn.clear();
+  generation++;
+  wheel?.stop();
+  busy = false;
+  $("#decision-run").disabled = false;
+  mode();
+  redraw();
+}
+fields.forEach((s) => $(s).addEventListener("input", edit));
+function reopen(record) {
+  clearTimeout(saveTimer);
+  id = record?.id || null;
+  const d = record?.data || {
+    name: "A new choice",
+    options: ["Tea", "Coffee", "Water"],
+    mode: "wheel",
+    noRepeat: false,
+    groupCount: 2,
+  };
+  $("#decision-name").value = d.name;
+  $("#decision-options").value = d.options.join("\n");
+  $("#decision-mode").value = d.mode;
+  $("#decision-no-repeat").checked = d.noRepeat;
+  $("#decision-group-count").value = d.groupCount;
+  dirty = false;
+  drawn.clear();
+  generation++;
+  wheel?.stop();
+  busy = false;
+  $("#decision-run").disabled = false;
+  $("#decision-result").textContent = "Your next possibility starts here.";
+  mode();
+  redraw();
+}
+historyView("decision", $("#decision-history"), decisionRow);
+$("#decision-history").addEventListener("click", (e) => {
+  const a = e.target.closest("a");
+  if (!a) return;
+  e.preventDefault();
+  save();
+  const row = store
+    .records("decision")
+    .find((x) => x.id === new URL(a.href).searchParams.get("scheme"));
+  if (row) {
+    reopen(row);
+    history.replaceState(null, "", "?scheme=" + row.id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+$("#decision-new").addEventListener("click", () => {
+  save();
+  reopen(null);
+  history.replaceState(null, "", location.pathname);
+  dirty = true;
+  save();
+});
+$("#decision-reset").addEventListener("click", () => {
+  drawn.clear();
+  $("#decision-note").textContent = "Draw pool reset.";
+});
+$("#decision-run").addEventListener("click", async () => {
+  if (busy) return;
+  let d;
+  try {
+    d = data();
+  } catch (e) {
+    toast(e.message);
+    return;
+  }
+  if (!id) dirty = true;
+  save();
+  const result = $("#decision-result");
+  $("#decision-note").textContent = "";
+  if (d.mode === "groups") {
+    const list = shuffle(d.options),
+      groups = Array.from({ length: d.groupCount }, () => []);
+    list.forEach((v, i) => groups[i % groups.length].push(v));
+    result.innerHTML = groups
+      .map(
+        (g, i) =>
+          `<div class="decision-group"><h3>Group ${i + 1}</h3><ul>${g.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`,
+      )
+      .join("");
+    return;
+  }
+  const candidates = d.options
+    .map((label, index) => ({ label, index }))
+    .filter((x) => d.mode !== "draw" || !d.noRepeat || !drawn.has(x.index));
+  if (!candidates.length) {
+    result.textContent =
+      "Every option has been drawn. Reset the pool to draw again.";
+    return;
+  }
+  const winner = candidates[randomIndex(candidates.length)];
+  if (d.mode === "draw") {
+    if (d.noRepeat) drawn.add(winner.index);
+    result.textContent = winner.label;
+    $("#decision-note").textContent = d.noRepeat
+      ? `${d.options.length - drawn.size} options remain.`
+      : "Every option had an equal chance.";
+    return;
+  }
+  const token = ++generation;
+  busy = true;
+  $("#decision-run").disabled = true;
+  result.textContent = "Turning possibilities…";
+  if (wheel && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    try {
+      await new Promise((resolve) => {
+        let timer;
+        wheel.onRest = () => {
+          clearTimeout(timer);
+          resolve();
+        };
+        wheel.spinToItem(winner.index, 2600, true, 2, 1);
+        timer = setTimeout(resolve, 3000);
+      });
+    } catch {}
+  }
+  if (token !== generation) return;
+  result.textContent = winner.label;
+  busy = false;
+  $("#decision-run").disabled = false;
+});
+window.addEventListener("personal-conflict", (e) => {
+  if (id === e.detail.from) {
+    id = e.detail.to;
+    history.replaceState(null, "", "?scheme=" + id);
+  }
+});
+window.addEventListener("pagehide", save);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) save();
+});
+store.subscribe(() => {
+  if (!dirty) $("#decision-save-state").textContent = store.saveState();
+});
+await store.ready;
+owner = actor();
+try {
+  ({ Wheel } = await import("/vendor/spin-wheel.js"));
+} catch {
+  $("#decision-note").textContent =
+    "Wheel artwork could not load. Text choices remain available.";
+}
+await store.loadPage("decision", true);
+const requested = new URLSearchParams(location.search).get("scheme");
+let found = store.records("decision").find((x) => x.id === requested);
+while (requested && !found && store.hasMore("decision")) {
+  if (!(await store.loadPage("decision"))) break;
+  found = store.records("decision").find((x) => x.id === requested);
+}
+reopen(found);
+fields.forEach((s) => ($(s).disabled = false));
+$("#decision-new").disabled = false;
+$("#decision-save-state").textContent = store.saveState();
+if (requested && !found)
+  $("#decision-note").textContent =
+    "That scheme is not available in this workspace.";
