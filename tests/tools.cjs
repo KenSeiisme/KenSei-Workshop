@@ -443,7 +443,10 @@ function pass(s) {
     );
     const retry = await retryContext.newPage();
     retry.on("pageerror", (e) => errors.push(e.message));
-    await retry.goto(base + "/tools/image-to-text/");
+    await retry.goto(base + "/tools/image-to-text/", {
+      waitUntil: "domcontentloaded",
+      timeout: 60000,
+    });
     await retry.locator('[data-ready="true"]').waitFor();
     await retry.locator("#ocr-file").setInputFiles({
       name: "retry.png",

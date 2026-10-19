@@ -21,7 +21,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     const page = await context.newPage(),
       errors = [];
     page.on("pageerror", (e) => errors.push(e.message));
-    await page.goto(base + "/tools/image-to-text/");
+    await page.goto(base + "/tools/image-to-text/", {
+      waitUntil: "domcontentloaded",
+      timeout: 60000,
+    });
     await page.locator('[data-ready="true"]').waitFor();
     const fixture = Buffer.from(
       await page.evaluate(() => {
@@ -38,13 +41,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       }),
       "base64",
     );
-    await page
-      .locator("#ocr-file")
-      .setInputFiles({
-        name: "sample.png",
-        mimeType: "image/png",
-        buffer: fixture,
-      });
+    await page.locator("#ocr-file").setInputFiles({
+      name: "sample.png",
+      mimeType: "image/png",
+      buffer: fixture,
+    });
     await page.waitForFunction(() =>
       document
         .querySelector("#tool-status")
