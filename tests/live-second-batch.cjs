@@ -20,7 +20,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     checks = [];
   try {
     await p.goto(base + "/tools/", { waitUntil: "domcontentloaded" });
-    assert.equal(await p.locator("[data-tool-card]").count(), 21);
+    assert.equal(await p.locator("[data-tool-card]").count(), 25);
     for (const slug of [
       "answer-book",
       "decision-studio",

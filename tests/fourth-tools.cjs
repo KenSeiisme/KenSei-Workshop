@@ -91,7 +91,7 @@ const pass = (x) => {
       }
     }
     await p.goto(base + "/tools/");
-    assert.equal(await p.locator("[data-tool-card]").count(), 21);
+    assert.equal(await p.locator("[data-tool-card]").count(), 25);
     await p.locator('[data-filter="audio"]').click();
     assert.equal(await p.locator("[data-tool-card]:visible").count(), 1);
     await p.fill("#tool-search", "audio");
@@ -99,7 +99,7 @@ const pass = (x) => {
     await p.goto(base + "/workspace/");
     assert.ok(await p.locator('a[href="/tools/audio-studio/"]').count());
     pass(
-      "21-tool catalog, Audio category, favorites and mobile/tablet/desktop layouts",
+      "25-tool catalog, Audio category, favorites and mobile/tablet/desktop layouts",
     );
     await open("time-studio");
     await p.fill("#time-from", "America/New_York");

@@ -48,7 +48,7 @@ const pass = (s) => {
     for (const width of [360, 768, 1440]) {
       await p.setViewportSize({ width, height: 1000 });
       await p.goto(base + "/tools/");
-      assert.equal(await p.locator("[data-tool-card]").count(), 21);
+      assert.equal(await p.locator("[data-tool-card]").count(), 25);
       assert.equal(await p.locator('[data-filter="fun"]').count(), 0);
       assert.equal(
         await p.getByRole("link", { name: "Games", exact: true }).count(),
@@ -71,7 +71,7 @@ const pass = (s) => {
     await p.goto(base + "/workspace/");
     assert.ok(await p.getByRole("link", { name: /Network Test/ }).count());
     pass(
-      "21 shared tools, search, favorites, Utilities classification and 3 responsive widths",
+      "25 shared tools, search, favorites, Utilities classification and 3 responsive widths",
     );
 
     await open("unit-converter");

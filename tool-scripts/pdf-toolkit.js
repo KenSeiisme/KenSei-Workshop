@@ -11,6 +11,9 @@ import {
   download,
   zip,
 } from "./common.js";
+import { metadata, enhancedPdf } from "./pdf-enhancements.js";
+let enhancedBytes = null,
+  outputTask = null;
 let sources = [],
   pages = [],
   images = [],
@@ -45,6 +48,11 @@ function previewDocument(source) {
 }
 function mode() {
   const pictures = operation.value === "images";
+  const enhanced = ["stamp", "metadata"].includes(operation.value);
+  fileInput.multiple = !enhanced;
+  $("#pdf-stamp-settings").hidden = operation.value !== "stamp";
+  $("#pdf-metadata-settings").hidden = operation.value !== "metadata";
+  $("#pdf-enhanced-actions").hidden = !enhanced;
   fileInput.accept = pictures
     ? "image/jpeg,image/png,image/webp"
     : "application/pdf";
@@ -53,8 +61,12 @@ function mode() {
   $("#pdf-help").textContent = pictures
     ? "Choose images in their intended page order. Each image becomes one fitted A4 page."
     : "Choose PDFs to merge, or one PDF to organize. Page numbers below refer to the current order. Ranges: 1-3,5. Split groups: 1-3;4-5 (leave blank for one file per page).";
+  if (enhanced)
+    $("#pdf-help").textContent =
+      "Choose one PDF. Reorder or rotate pages below. Stamps affect selected pages; document-information cleanup applies to the whole output.";
 }
 operation.onchange = () => {
+  clearEnhanced();
   revision++;
   busy(false);
   releaseSources();
@@ -112,6 +124,7 @@ function render() {
   );
 }
 async function preview(p) {
+  clearEnhanced();
   const token = ++previewGeneration;
   try {
     const s = sources[p.source];
@@ -138,6 +151,7 @@ async function preview(p) {
 fileInput.onchange = async (e) => {
   const list = [...e.target.files];
   if (!list.length) return;
+  clearEnhanced();
   if (list.reduce((n, f) => n + f.size, 0) > 50 * 1048576)
     return status("Choose files totaling no more than 50 MB.", true);
   const token = ++revision;
@@ -145,6 +159,8 @@ fileInput.onchange = async (e) => {
   status("Opening files…");
   try {
     await dependencies();
+    if (["stamp", "metadata"].includes(operation.value) && list.length !== 1)
+      throw Error("Choose one PDF for this operation.");
     const nextSources = [],
       nextPages = [];
     if (operation.value === "images") {
@@ -168,7 +184,7 @@ fileInput.onchange = async (e) => {
         const bytes = new Uint8Array(await f.arrayBuffer());
         let doc, documentPages;
         try {
-          doc = await lib.PDFDocument.load(bytes);
+          doc = await lib.PDFDocument.load(bytes, { updateMetadata: false });
           documentPages = doc.getPages();
           if (!documentPages.length)
             throw new Error("PDF has no readable pages");
@@ -199,6 +215,9 @@ fileInput.onchange = async (e) => {
       pages = nextPages;
       images = [];
       render();
+      $("#pdf-metadata").textContent = nextSources.length
+        ? JSON.stringify(metadata(nextSources[0].doc), null, 2)
+        : "";
       if (pages.length) await preview(pages[0]);
     }
     if (token === revision)
@@ -249,6 +268,15 @@ $("#pdf-run").onclick = async () => {
   status("Preparing output…");
   try {
     await dependencies();
+    if (["stamp", "metadata"].includes(operation.value)) {
+      await prepareEnhanced(token, false);
+      if (token === revision && enhancedBytes)
+        download(
+          new Blob([enhancedBytes], { type: "application/pdf" }),
+          "kensei-" + operation.value + ".pdf",
+        );
+      return;
+    }
     if (operation.value === "images") {
       if (!images.length) throw new Error("Choose images first.");
       const out = await lib.PDFDocument.create();
@@ -357,4 +385,111 @@ $("#pdf-run").onclick = async () => {
   } finally {
     if (token === revision) busy(false);
   }
+};
+function clearEnhanced() {
+  enhancedBytes = null;
+  $("#pdf-output-download").disabled = true;
+  outputTask?.destroy().catch(() => {});
+  outputTask = null;
+}
+$("#pdf-pages").addEventListener("click", (e) => {
+  if (!e.target.closest("[data-preview]")) clearEnhanced();
+});
+$("#pdf-pages").addEventListener("change", clearEnhanced);
+for (const id of [
+  "pdf-ranges",
+  "pdf-add-numbers",
+  "pdf-number-start",
+  "pdf-number-position",
+  "pdf-watermark",
+  "pdf-watermark-size",
+  "pdf-watermark-opacity",
+  "pdf-watermark-color",
+])
+  $("#" + id).addEventListener("input", clearEnhanced);
+async function prepareEnhanced(token, show) {
+  if (sources.length !== 1 || !pages.length)
+    throw Error("Choose one PDF first.");
+  clearEnhanced();
+  const selected = ranges($("#pdf-ranges").value);
+  if (operation.value === "stamp" && !selected.length)
+    throw Error("Select at least one page to stamp.");
+  const bytes = await enhancedPdf(
+    lib,
+    sources[0],
+    pages,
+    selected,
+    operation.value,
+    {
+      numbers: $("#pdf-add-numbers").checked,
+      start: Number($("#pdf-number-start").value),
+      position: $("#pdf-number-position").value,
+      text: $("#pdf-watermark").value,
+      size: Number($("#pdf-watermark-size").value),
+      opacity: Number($("#pdf-watermark-opacity").value) / 100,
+      color: $("#pdf-watermark-color").value,
+    },
+    () => token === revision,
+    status,
+  );
+  if (token !== revision) return;
+  if (show) {
+    outputTask = pdfjs.getDocument({
+      data: bytes.slice(),
+      cMapUrl: "/vendor/pdfjs/cmaps/",
+      cMapPacked: true,
+      standardFontDataUrl: "/vendor/pdfjs/standard_fonts/",
+      wasmUrl: "/vendor/pdfjs/wasm/",
+      isEvalSupported: false,
+    });
+    const doc = await outputTask.promise,
+      index =
+        operation.value === "stamp"
+          ? Math.max(
+              0,
+              pages.findIndex((p) => p.id === selected[0].id),
+            )
+          : 0,
+      page = await doc.getPage(index + 1),
+      v = page.getViewport({ scale: 1 }),
+      viewport = page.getViewport({
+        scale: Math.min(1.3, 900 / v.width, 1200 / v.height),
+      }),
+      canvas = document.createElement("canvas");
+    canvas.width = Math.ceil(viewport.width);
+    canvas.height = Math.ceil(viewport.height);
+    const context = canvas.getContext("2d");
+    if (!context) throw Error("Output preview is unavailable in this browser.");
+    await page.render({ canvasContext: context, viewport }).promise;
+    if (token !== revision) return;
+    canvas.id = "pdf-preview";
+    canvas.setAttribute("aria-label", "Actual output PDF preview");
+    $("#pdf-preview").replaceWith(canvas);
+  }
+  enhancedBytes = bytes;
+  $("#pdf-output-download").disabled = false;
+  status(
+    show
+      ? "Actual output preview ready. Download the previewed PDF to keep it."
+      : "PDF ready. Files stayed on this device.",
+  );
+}
+$("#pdf-output-preview").onclick = async () => {
+  const token = ++revision;
+  busy(true);
+  try {
+    await dependencies();
+    await prepareEnhanced(token, true);
+  } catch (e) {
+    if (token === revision) status(e.message, true);
+  } finally {
+    if (token === revision) busy(false);
+  }
+};
+$("#pdf-output-download").onclick = () => {
+  if (enhancedBytes)
+    download(
+      new Blob([enhancedBytes], { type: "application/pdf" }),
+      "kensei-" + operation.value + ".pdf",
+    );
 };

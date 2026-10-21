@@ -1,3 +1,4 @@
+import "./image-editor.js";
 import {
   $,
   $$,

@@ -166,5 +166,37 @@
     "Make your data easier to read.",
     "Validate and format JSON, preview CSV tables and convert between flat JSON and CSV.",
     "Text"
+  ],
+  [
+    "flashcards",
+    "cards",
+    "Flashcards",
+    "A little more memorable.",
+    "Create bilingual learning cards, review mastery and sync private decks across devices.",
+    "Productivity"
+  ],
+  [
+    "calculator-studio",
+    "calculator",
+    "Calculator Studio",
+    "Make room for the numbers.",
+    "Calculate scientific expressions, fractions and percentages with DEG or RAD angles.",
+    "Utilities"
+  ],
+  [
+    "file-check",
+    "check",
+    "File Check",
+    "The same file, down to the last byte.",
+    "Calculate SHA-256 / SHA-512, compare checksums and find matching selected files.",
+    "Utilities"
+  ],
+  [
+    "subtitle-studio",
+    "text",
+    "Subtitle Studio",
+    "Words, at the right moment.",
+    "Edit SRT and WebVTT, shift timing and preview subtitles with your local video.",
+    "Text"
   ]
 ]

@@ -3,9 +3,11 @@
     "@cloudflare/speedtest": "1.14.2",
     "@js-temporal/polyfill": "0.5.1",
     "@mediabunny/mp3-encoder": "1.61.6",
+    "cropperjs": "2.3.1",
     "diff": "9.0.0",
     "fflate": "0.8.3",
     "markdown-it": "15.0.3",
+    "mathjs": "15.2.0",
     "mediabunny": "1.61.6",
     "papaparse": "5.7.0",
     "pdf-lib": "1.17.1",
@@ -26,7 +28,8 @@
     "test:second-batch": "node tests/database.mjs && node tests/second-batch.cjs",
     "test:profiles": "node tests/profiles-database.mjs && node tests/profiles.cjs",
     "test:daily": "node tests/daily-core.mjs && node tests/daily-tools.cjs && node tests/zip-guards.cjs && node tests/network-guards.cjs",
-    "test:fourth": "node tests/fourth-core.mjs && node tests/fourth-tools.cjs && node tests/fourth-boundaries.cjs && node tests/network-dashboard.cjs"
+    "test:fourth": "node tests/fourth-core.mjs && node tests/fourth-tools.cjs && node tests/fourth-boundaries.cjs && node tests/network-dashboard.cjs",
+    "test:fifth": "node tests/fifth-core.mjs && node tests/fifth-database.mjs && node tests/fifth-tools.cjs && node tests/fifth-sync.cjs && node tests/fifth-boundaries.cjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",
