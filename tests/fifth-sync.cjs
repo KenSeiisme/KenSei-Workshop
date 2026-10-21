@@ -238,10 +238,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
       put(tab, payload("Tab right")),
     ]);
     fail = false;
-    await Promise.all([
-      p.evaluate(() => cardStore.flush()),
-      tab.evaluate(() => cardStore.flush()),
-    ]);
+    // One tab drains both persisted queues; the other must refresh its failure state.
+    await tab.evaluate(() => cardStore.flush());
     await synced(p);
     await synced(tab);
     assert.equal(

@@ -51,7 +51,7 @@ async function disk(scope, value) {
 function notify(s) {
   if (active === s) listeners.forEach((fn) => fn());
 }
-async function persist(s, fn) {
+async function persist(s, fn, broadcast = true) {
   try {
     const database = await db();
     await new Promise((resolve, reject) => {
@@ -77,7 +77,9 @@ async function persist(s, fn) {
         );
     });
     s.localError = "";
-    channel?.postMessage({ scope: s.scope });
+    if (!s.state.queue.length && s.failure.includes("Sync failed"))
+      s.failure = "";
+    if (broadcast) channel?.postMessage({ scope: s.scope });
   } catch (e) {
     s.localError = e.message;
     notify(s);
@@ -158,11 +160,11 @@ export const saveState = () =>
     : active?.state.queue.length
       ? "Saved on this device · Pending sync"
       : "Saved · Synced");
-async function change(s, fn) {
+async function change(s, fn, broadcast = true) {
   const next = s.chain
     .catch(() => {})
     .then(async () => {
-      await persist(s, fn);
+      await persist(s, fn, broadcast);
       notify(s);
     });
   s.chain = next;
@@ -410,12 +412,9 @@ channel &&
   (channel.onmessage = async ({ data }) => {
     if (data.scope !== account()) return;
     const s = await session();
-    if (s.flushing || s.state.queue.length) return;
-    const fresh = await disk(s.scope);
-    if (fresh) {
-      s.state = fresh;
-      notify(s);
-    }
+    if (s.flushing) return;
+    // 从同一事务队列刷新，保留已落盘的本机操作且不回广播。
+    await change(s, () => {}, false).catch(() => {});
   });
 window.addEventListener("workspace-ready", () =>
   ready()
