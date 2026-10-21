@@ -1,15 +1,21 @@
 {
   "dependencies": {
     "@cloudflare/speedtest": "1.14.2",
+    "@js-temporal/polyfill": "0.5.1",
+    "@mediabunny/mp3-encoder": "1.61.6",
     "diff": "9.0.0",
     "fflate": "0.8.3",
     "markdown-it": "15.0.3",
+    "mediabunny": "1.61.6",
+    "papaparse": "5.7.0",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.4.299",
     "pica": "10.0.3",
     "qr-code-styling": "1.9.2",
     "spin-wheel": "5.0.2",
-    "tesseract.js": "7.0.0"
+    "tesseract.js": "7.0.0",
+    "uplot": "1.6.32",
+    "wavesurfer.js": "8.0.3"
   },
   "name": "kensei-workshop",
   "private": true,
@@ -19,10 +25,12 @@
     "test": "node tests/verify.cjs && node tests/image-studio.cjs && node tests/tools.cjs && node tests/limits.cjs && node tests/ocr-lifecycle.cjs && node tests/auth.cjs",
     "test:second-batch": "node tests/database.mjs && node tests/second-batch.cjs",
     "test:profiles": "node tests/profiles-database.mjs && node tests/profiles.cjs",
-    "test:daily": "node tests/daily-core.mjs && node tests/daily-tools.cjs && node tests/zip-guards.cjs && node tests/network-guards.cjs"
+    "test:daily": "node tests/daily-core.mjs && node tests/daily-tools.cjs && node tests/zip-guards.cjs && node tests/network-guards.cjs",
+    "test:fourth": "node tests/fourth-core.mjs && node tests/fourth-tools.cjs && node tests/fourth-boundaries.cjs && node tests/network-dashboard.cjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",
+    "esbuild": "0.28.2",
     "jsqr": "1.4.0",
     "prettier": "3.9.10"
   }

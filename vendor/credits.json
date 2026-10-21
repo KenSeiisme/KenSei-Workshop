@@ -48,5 +48,35 @@
     "name": "@cloudflare/speedtest",
     "version": "1.14.2",
     "license": "MIT"
+  },
+  {
+    "name": "@js-temporal/polyfill",
+    "version": "0.5.1",
+    "license": "ISC"
+  },
+  {
+    "name": "uplot",
+    "version": "1.6.32",
+    "license": "MIT"
+  },
+  {
+    "name": "wavesurfer.js",
+    "version": "8.0.3",
+    "license": "BSD-3-Clause"
+  },
+  {
+    "name": "mediabunny",
+    "version": "1.61.6",
+    "license": "MPL-2.0"
+  },
+  {
+    "name": "@mediabunny/mp3-encoder",
+    "version": "1.61.6",
+    "license": "MPL-2.0"
+  },
+  {
+    "name": "papaparse",
+    "version": "5.7.0",
+    "license": "MIT"
   }
 ]

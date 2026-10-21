@@ -200,7 +200,7 @@ function pass(name) {
     assert(await page.locator("#search-empty").isVisible());
     await page.locator("#tool-search").fill("");
     await page.locator('[data-filter="text"]').click();
-    assert.equal(await page.locator("[data-tool-card]:visible").count(), 4);
+    assert.equal(await page.locator("[data-tool-card]:visible").count(), 5);
     await page.locator('[data-favorite="text-toolkit"]').click();
     assert.equal(
       await page

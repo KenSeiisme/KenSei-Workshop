@@ -200,3 +200,5 @@ await fs.writeFile(
 console.log(
   "Prepared local browser libraries and four pinned OCR language packs.",
 );
+
+await import("./vendor-fourth.mjs");

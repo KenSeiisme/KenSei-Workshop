@@ -26,7 +26,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8795";
     r.fulfill({ contentType: "text/javascript", body: fake }),
   );
   await c.route("https://speed.cloudflare.com/**", (r) => {
-    requests.push(r.request().url());
+    if (new URL(r.request().url()).pathname !== "/meta")
+      requests.push(r.request().url());
     return r.fulfill({
       body: "",
       headers: {

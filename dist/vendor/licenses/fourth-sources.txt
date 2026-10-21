@@ -1,0 +1,11 @@
+Unmodified upstream source for the pinned browser dependencies:
+Mediabunny and MP3 extension 1.61.6: https://github.com/Vanilagy/mediabunny/tree/v1.61.6
+MP3 encoder build instructions and bridge source: https://github.com/Vanilagy/mediabunny/tree/v1.61.6/packages/mp3-encoder
+LAME 3.100 source: https://sourceforge.net/projects/lame/files/lame/3.100/
+LAME license: https://lame.sourceforge.io/license.txt
+Mediabunny modules use MPL-2.0; their embedded LAME encoder uses LGPL. Sources and upstream build instructions are provided in the sources archive.
+The archive includes unmodified src, packages, scripts, shared code and root build files; unrelated demo/test media are omitted.
+Temporal: https://github.com/js-temporal/temporal-polyfill
+WaveSurfer: https://github.com/katspaugh/wavesurfer.js
+uPlot: https://github.com/leeoniya/uPlot
+Papa Parse: https://github.com/mholt/PapaParse

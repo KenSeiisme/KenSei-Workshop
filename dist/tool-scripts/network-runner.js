@@ -1,4 +1,5 @@
 import { NETWORK_BUDGET, NETWORK_MEASUREMENTS } from "./network-config.js";
+import { summarize } from "./network-stats.js";
 const id = location.hash.slice(1),
   parentOrigin = location.origin;
 const emit = (type, data = {}) =>
@@ -8,8 +9,16 @@ let used = 0,
   engine,
   stopped = false,
   started = false;
+let metaUsed = false,
+  metaController = null,
+  connection = {},
+  startTime = 0,
+  startEpoch = 0,
+  lastPublish = 0;
+const attempts = { download: 0, upload: 0, requests: 0, rateLimits: 0 };
 function stop() {
   stopped = true;
+  metaController?.abort();
   engine?.pause();
 }
 // 只修改隔离 iframe 的 fetch，不影响登录、工作区或其他工具。
@@ -19,6 +28,21 @@ window.fetch = (input, options = {}) => {
     location.href,
   );
   const method = (options.method || "GET").toUpperCase();
+  if (
+    url.origin === "https://speed.cloudflare.com" &&
+    url.pathname === "/meta" &&
+    !url.search &&
+    method === "GET" &&
+    !metaUsed &&
+    !stopped
+  ) {
+    metaUsed = true;
+    return originalFetch(input, {
+      ...options,
+      credentials: "omit",
+      cache: "no-store",
+    });
+  }
   if (
     url.origin !== "https://speed.cloudflare.com" ||
     !["/__down", "/__up"].includes(url.pathname) ||
@@ -48,28 +72,95 @@ window.fetch = (input, options = {}) => {
     return Promise.reject(new Error("Test payload budget reached."));
   }
   used += bytes;
+  attempts[url.pathname === "/__up" ? "upload" : "download"] += bytes;
+  attempts.requests++;
   emit("traffic", { used });
   return originalFetch(input, {
     ...options,
     credentials: "omit",
     cache: "no-store",
+  }).then((response) => {
+    if (response.status === 429) attempts.rateLimits++;
+    return response;
   });
 };
-const metric = (getter, scale = 1) => {
-  const value = engine.results[getter]();
-  return typeof value === "number" && Number.isFinite(value) && value >= 0
-    ? value / scale
-    : null;
-};
 function metrics() {
-  return {
-    download: metric("getDownloadBandwidth", 1e6),
-    upload: metric("getUploadBandwidth", 1e6),
-    latency: metric("getUnloadedLatency"),
-    jitter: metric("getUnloadedJitter"),
-    downloadLatency: metric("getDownLoadedLatency"),
-    uploadLatency: metric("getUpLoadedLatency"),
+  return snapshot().metrics;
+}
+function snapshot() {
+  const rawDown = engine.results.getDownloadBandwidthPoints(),
+    rawUp = engine.results.getUploadBandwidthPoints();
+  const speeds = (points) =>
+    points
+      .filter((p) => p.duration >= 10 && Number.isFinite(p.bps) && p.bps > 0)
+      .map((p) => ({
+        t: Math.max(0, (new Date(p.measTime).getTime() - startEpoch) / 1000),
+        mbps: p.bps / 1e6,
+        bytes: p.bytes,
+        duration: p.duration,
+      }))
+      .sort((a, b) => a.t - b.t);
+  const clean = (list) =>
+    list.filter((n) => typeof n === "number" && Number.isFinite(n) && n >= 0);
+  const samples = {
+    download: speeds(rawDown),
+    upload: speeds(rawUp),
+    idle: clean(engine.results.getUnloadedLatencyPoints()),
+    downLatency: clean(engine.results.getDownLoadedLatencyPoints()),
+    upLatency: clean(engine.results.getUpLoadedLatencyPoints()),
   };
+  const stats = summarize(samples);
+  return {
+    metrics: {
+      download: stats.download.p90,
+      upload: stats.upload.p90,
+      latency: stats.idle.median,
+      jitter: stats.idle.jitter,
+      downloadLatency: stats.down.median,
+      uploadLatency: stats.up.median,
+    },
+    samples,
+    stats,
+    elapsed: Math.max(0, (performance.now() - startTime) / 1000),
+    traffic: {
+      attemptedDownload: attempts.download,
+      attemptedUpload: attempts.upload,
+      requests: attempts.requests,
+      rateLimits: attempts.rateLimits,
+      completedDownload: rawDown.reduce((s, p) => s + p.bytes, 0),
+      completedUpload: rawUp.reduce((s, p) => s + p.bytes, 0),
+    },
+  };
+}
+async function readConnection() {
+  metaController = new AbortController();
+  const timer = setTimeout(() => metaController.abort(), 5000);
+  try {
+    const r = await fetch("https://speed.cloudflare.com/meta", {
+      signal: metaController.signal,
+    });
+    if (!r.ok) throw Error("Metadata unavailable");
+    const text = await r.text();
+    if (text.length > 16000) throw Error("Metadata too large");
+    const d = JSON.parse(text),
+      value = (s) => (typeof s === "string" ? s.slice(0, 150) : "");
+    connection = {
+      ip: value(d.clientIp),
+      organization: value(d.asOrganization),
+      asn: d.asn === undefined ? "" : String(d.asn).slice(0, 20),
+      country: value(d.country),
+      city: value(d.city),
+      node: value(d.colo?.iata),
+      nodeCity: value(d.colo?.city),
+      protocol: value(d.httpProtocol),
+    };
+  } catch {
+    connection = {};
+  } finally {
+    clearTimeout(timer);
+    metaController = null;
+  }
+  if (!stopped) emit("connection", { connection });
 }
 window.addEventListener("message", async (event) => {
   if (
@@ -85,8 +176,12 @@ window.addEventListener("message", async (event) => {
   }
   if (event.data.type !== "start" || started) return;
   started = true;
+  startTime = performance.now();
+  startEpoch = Date.now();
   try {
     const { default: SpeedTest } = await import("/vendor/speedtest.js");
+    if (stopped) return;
+    await readConnection();
     if (stopped) return;
     engine = new SpeedTest({
       autoStart: false,
@@ -104,7 +199,10 @@ window.addEventListener("message", async (event) => {
         progress: (measurementId / NETWORK_MEASUREMENTS.length) * 100,
       });
     engine.onResultsChange = () => {
-      if (!stopped) emit("metrics", { metrics: metrics() });
+      if (!stopped && performance.now() - lastPublish >= 100) {
+        lastPublish = performance.now();
+        emit("metrics", snapshot());
+      }
     };
     engine.onError = (message, status) => {
       if (!stopped) {
@@ -120,6 +218,7 @@ window.addEventListener("message", async (event) => {
     engine.onFinish = () => {
       if (stopped) return;
       const result = metrics();
+      const details = snapshot();
       stop();
       if (result.download === null || result.upload === null)
         emit("error", {
@@ -132,6 +231,7 @@ window.addEventListener("message", async (event) => {
           metrics: result,
           used,
           date: new Date().toISOString(),
+          ...details,
         });
     };
     engine.play();

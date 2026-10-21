@@ -948,3 +948,250 @@ progress {
     flex-wrap: wrap;
   }
 }
+/* Visual network diagnostics and fourth-batch local tools. */
+.network-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+}
+.network-top > * {
+  min-width: 0;
+}
+.speed-panel {
+  background: radial-gradient(ellipse at 50% 5%, #35223e 0%, #1b1721 70%);
+  text-align: center;
+}
+.speed-gauge {
+  width: min(100%, 370px);
+  height: auto;
+  margin: 12px auto 0;
+  display: block;
+  overflow: visible;
+}
+.gauge-track,
+.gauge-arc {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+.gauge-track {
+  stroke: #3e3247;
+}
+.gauge-arc {
+  stroke: #ef9bb7;
+  transition: stroke-dasharray 0.3s ease;
+}
+.speed-gauge text {
+  fill: #f3edf6;
+  font-family: inherit;
+}
+#gauge-value {
+  font-size: 43px;
+  font-weight: 650;
+}
+#gauge-unit {
+  font-size: 15px;
+  fill: #bdabc8;
+}
+.speed-panel .action-row {
+  justify-content: center;
+}
+.compact-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #c8bacf;
+  font-size: 13px;
+  min-width: 0;
+}
+.compact-label select {
+  max-width: 240px;
+  min-width: 85px;
+}
+.network-runtime {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: #ad9eb8;
+}
+.connection-grid {
+  display: grid;
+  grid-template-columns: minmax(90px, auto) minmax(0, 1fr);
+  gap: 12px 18px;
+  margin: 24px 0;
+  font-size: 14px;
+}
+.connection-grid dt {
+  color: #aa99b7;
+}
+.connection-grid dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.network-chart {
+  min-height: 300px;
+  width: 100%;
+  min-width: 0;
+}
+.chart-panel {
+  min-width: 0;
+}
+.chart-panel .uplot {
+  color: #d1c3dd;
+  font-size: 11px;
+}
+.chart-panel .u-legend {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0;
+}
+.table-scroll {
+  overflow: auto;
+  max-width: 100%;
+  min-width: 0;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 12px 0;
+  text-align: left;
+}
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid #3a2e42;
+  padding: 12px;
+  vertical-align: top;
+  max-width: 320px;
+  overflow-wrap: anywhere;
+}
+.data-table th {
+  color: #c8accf;
+  font-weight: 550;
+  white-space: nowrap;
+}
+.data-table td {
+  color: #ded3e4;
+}
+.data-editor {
+  width: 100%;
+  min-height: 300px;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.world-clocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 16px;
+}
+.world-clocks strong {
+  font-size: 1.7rem;
+}
+.world-clocks .text-link {
+  margin-top: 10px;
+}
+.large-result {
+  font-size: 2rem;
+  color: #d6afe8;
+}
+.rename-preview {
+  max-height: 780px;
+  overflow: auto;
+}
+.rename-row {
+  border-bottom: 1px solid #3a2e42;
+  padding: 12px 0;
+  display: grid;
+  gap: 8px;
+}
+.rename-row > p {
+  margin: 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.rename-row > input {
+  width: 100%;
+  min-width: 0;
+  font-family: monospace;
+  font-size: 13px;
+}
+.rename-row > div {
+  display: flex;
+  gap: 18px;
+}
+.rename-row small {
+  color: #c6b1d1;
+}
+.input-error {
+  border-color: #ef9bb7 !important;
+}
+.audio-wave {
+  min-height: 150px;
+  padding: 12px 0;
+  overflow: hidden;
+}
+.audio-controls {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  align-items: end;
+}
+.audio-controls > * {
+  min-width: 0;
+}
+.audio-controls select {
+  width: 100%;
+}
+#data-table {
+  max-height: 600px;
+}
+#data-table .data-table {
+  table-layout: auto;
+}
+#network-comparison {
+  margin: 18px 0;
+}
+@media (max-width: 900px) {
+  .network-top {
+    grid-template-columns: 1fr;
+  }
+  .audio-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .impact-grid {
+    grid-template-columns: 1fr;
+  }
+  .connection-grid {
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .audio-controls {
+    grid-template-columns: 1fr;
+  }
+  .compact-label {
+    flex-wrap: wrap;
+  }
+  .compact-label select {
+    max-width: 100%;
+  }
+  .network-top .panel {
+    padding: 20px;
+  }
+  .speed-gauge {
+    max-width: 300px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gauge-arc {
+    transition: none;
+  }
+}

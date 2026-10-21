@@ -134,5 +134,37 @@
     "A fresh start for your next sign-in.",
     "Generate a random password on your device, with the length and characters you choose.",
     "Utilities"
+  ],
+  [
+    "time-studio",
+    "timer",
+    "Time Studio",
+    "A little closer, across time zones.",
+    "World clocks, time-zone conversion, calendar date differences and local countdowns.",
+    "Productivity"
+  ],
+  [
+    "file-renamer",
+    "archive",
+    "File Renamer",
+    "A fresh name for every file.",
+    "Preview batch names, add numbering and download renamed copies as a ZIP.",
+    "Utilities"
+  ],
+  [
+    "audio-studio",
+    "audio",
+    "Audio Studio",
+    "Keep the part you need.",
+    "Preview a waveform, trim audio, adjust volume and export MP3 or WAV locally.",
+    "Audio"
+  ],
+  [
+    "data-studio",
+    "data",
+    "Data Studio",
+    "Make your data easier to read.",
+    "Validate and format JSON, preview CSV tables and convert between flat JSON and CSV.",
+    "Text"
   ]
 ]
