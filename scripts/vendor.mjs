@@ -204,3 +204,5 @@ console.log(
 await import("./vendor-fourth.mjs");
 
 await import("./vendor-fifth.mjs");
+
+await import("./vendor-sixth.mjs");

@@ -127,3 +127,16 @@ Image Studio retains its batch interface and canvas-read fallback. A separate si
 PDF Toolkit adds single-PDF page-number/watermark and information-cleanup operations, preserving its existing operations and 50 MB / 200-page limits. Actual output previews can be downloaded. Stamps affect selected pages, follow displayed order and account for rotation; unselected pages remain in the output. Information cleanup removes the standard Info object and document/page XMP references and streams. Other annotations, attachments and embedded objects are outside its scope. Stamping preserves original document information.
 
 Apply migrations in order and run supabase/verify-flashcards.sql in a rolled-back transaction to verify production permissions without retaining test records. Run test:fifth with TEST_BASE_URL pointed at the preview, then the original suites. See [fifth-batch validation](docs/fifth-batch-validation.md). Publish through the existing GitHub branch and Vercel integration.
+
+
+## Sixth batch: planning, whiteboards and capture
+
+The shared catalog now contains 28 tools. Study Planner and Whiteboard are Productivity tools; Screen Recorder is a Utility. QR Studio adds a local image/camera Scan tab and Audio Studio adds microphone recording. Games remain separate.
+
+Study plans use a fixed IANA time zone, dated weekly courses, assignment/exam deadlines and JSON backups. Whiteboard embeds pinned Excalidraw 0.18.1 with React/ReactDOM 19.3.1 in a lazy module, including local font files and license notices. Only vector drawings/text are supported; images, links, external embeds, collaboration and AI features are disabled. PNG, SVG and editable .excalidraw exports run locally.
+
+Both tools save to IndexedDB before syncing private account records. Guest records require an explicit Copy to account action. New private tables and existing RPC kinds `planner` / `whiteboard` use account guards, revision checks, conflict copies, empty deletion tombstones and idempotent operation IDs. Retry receipts preserve the original acknowledgement revision without retaining record content, so an acknowledgement lost after commit cannot silently overwrite subsequent remote edits. Workspace opens, renames, deletes, clears and exports both record types. Plan records are limited to 1 MB and boards to 2 MB; unfinished edits remain recoverable and exportable locally.
+
+Screen Recorder uses the browser's native MediaRecorder format with optional shared audio and microphone mixing. It requests up to 1080p/30fps and displays actual settings; active recording stops at 10 minutes or 250 MB. Switching windows does not stop screen capture. Microphone recording keeps Audio Studio's five-minute/50 MB/128 MB decoded PCM limits. Capture starts only after user action, releases tracks on exit, and never uploads or automatically stores recordings. QR scanning uses pinned jsQR 1.4.0 and only opens HTTP(S) results after a click.
+
+Build with `python build.py`; preview on Windows with `python scripts/serve.py 8799` so ES modules/WASM get correct MIME types. Set `TEST_BASE_URL=http://127.0.0.1:8799` and run `pnpm run test:sixth`. Full release evidence and browser limitations are recorded in `docs/sixth-batch-validation.md`. Push the existing GitHub branch to deploy through the existing Vercel integration.

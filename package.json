@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@cloudflare/speedtest": "1.14.2",
+    "@excalidraw/excalidraw": "0.18.1",
     "@js-temporal/polyfill": "0.5.1",
     "@mediabunny/mp3-encoder": "1.61.6",
     "cropperjs": "2.3.1",
@@ -14,10 +15,13 @@
     "pdfjs-dist": "6.4.299",
     "pica": "10.0.3",
     "qr-code-styling": "1.9.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "spin-wheel": "5.0.2",
     "tesseract.js": "7.0.0",
     "uplot": "1.6.32",
-    "wavesurfer.js": "8.0.3"
+    "wavesurfer.js": "8.0.3",
+    "jsqr": "1.4.0"
   },
   "name": "kensei-workshop",
   "private": true,
@@ -29,12 +33,12 @@
     "test:profiles": "node tests/profiles-database.mjs && node tests/profiles.cjs",
     "test:daily": "node tests/daily-core.mjs && node tests/daily-tools.cjs && node tests/zip-guards.cjs && node tests/network-guards.cjs",
     "test:fourth": "node tests/fourth-core.mjs && node tests/fourth-tools.cjs && node tests/fourth-boundaries.cjs && node tests/network-dashboard.cjs",
-    "test:fifth": "node tests/fifth-core.mjs && node tests/fifth-database.mjs && node tests/fifth-tools.cjs && node tests/fifth-sync.cjs && node tests/fifth-boundaries.cjs"
+    "test:fifth": "node tests/fifth-core.mjs && node tests/fifth-database.mjs && node tests/fifth-tools.cjs && node tests/fifth-sync.cjs && node tests/fifth-boundaries.cjs",
+    "test:sixth": "node tests/sixth-database.mjs && node tests/sixth-retry-revision.mjs && node tests/sixth-planner.mjs && node tests/sixth-whiteboard-core.mjs && node tests/sixth-media-core.mjs && node tests/sixth-planner.cjs && node tests/sixth-whiteboard.cjs && node tests/sixth-media.cjs && node tests/sixth-sync.cjs planner && node tests/sixth-sync.cjs whiteboard && node tests/sixth-pages-sync.cjs planner && node tests/sixth-pages-sync.cjs whiteboard"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",
     "esbuild": "0.28.2",
-    "jsqr": "1.4.0",
     "prettier": "3.9.10"
   }
 }

@@ -254,6 +254,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
     pass("simultaneous tabs preserve both pending queues and deck records");
     await p.evaluate(() => cardStore.remove(cardStore.rows()[0].id));
     await p.evaluate(() => cardStore.flush());
+    await synced(p);
     await q.evaluate(() => cardStore.load(true));
     const activeIds = (
       await db.query(

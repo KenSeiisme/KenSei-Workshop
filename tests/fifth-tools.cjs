@@ -67,10 +67,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
   }
   try {
     await p.goto(base + "/tools/");
-    assert.equal(await p.locator("[data-tool-card]").count(), 25);
+    assert.equal(await p.locator("[data-tool-card]").count(), 28);
     for (const [filter, count] of [
-      ["utilities", 9],
-      ["productivity", 3],
+      ["utilities", 10],
+      ["productivity", 5],
       ["text", 6],
     ]) {
       await p.locator('[data-filter="' + filter + '"]').click();

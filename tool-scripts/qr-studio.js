@@ -9,6 +9,7 @@ import {
   status,
   download,
 } from "./common.js";
+import "./qr-scan.js";
 let logo = "",
   qr = null;
 const type = $("#qr-type");

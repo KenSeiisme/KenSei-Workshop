@@ -12,7 +12,7 @@
     "qr",
     "QR Studio",
     "A small code. A useful connection.",
-    "Create QR codes for links, text and Wi-Fi, with your own colors and logo.",
+    "Generate QR codes or scan local images and your camera, entirely on your device.",
     "Utilities"
   ],
   [
@@ -156,7 +156,7 @@
     "audio",
     "Audio Studio",
     "Keep the part you need.",
-    "Preview a waveform, trim audio, adjust volume and export MP3 or WAV locally.",
+    "Record your microphone, trim audio and export MP3 or WAV on your device.",
     "Audio"
   ],
   [
@@ -198,5 +198,29 @@
     "Words, at the right moment.",
     "Edit SRT and WebVTT, shift timing and preview subtitles with your local video.",
     "Text"
+  ],
+  [
+    "study-planner",
+    "book",
+    "Study Planner",
+    "A little structure for your week.",
+    "Plan weekly classes, assignments and exams with private account sync.",
+    "Productivity"
+  ],
+  [
+    "whiteboard",
+    "image",
+    "Whiteboard",
+    "Give your ideas some space.",
+    "Draw, connect and sketch ideas on privately synced whiteboards.",
+    "Productivity"
+  ],
+  [
+    "screen-recorder",
+    "monitor",
+    "Screen Recorder",
+    "Show it, as it happens.",
+    "Record your screen with optional audio, then preview and download locally.",
+    "Utilities"
   ]
 ]

@@ -1,4 +1,11 @@
 import { $, busy, status, download, size } from "./common.js";
+import {
+  AUDIO_TYPES,
+  makeRecording,
+  stopTracks,
+  mediaError,
+  clockText,
+} from "./media-capture.js";
 let buffer = null,
   name = "audio",
   wave = null,
@@ -147,10 +154,7 @@ function finish(message, error = false) {
   controls();
   if (message) status(message, error);
 }
-$("#audio-file").onchange = async (e) => {
-  const file = e.target.files[0];
-  e.target.value = "";
-  if (!file) return;
+async function loadAudio(file, recordedDuration = null) {
   stopPlayback();
   const token = ++job;
   busy(true);
@@ -164,7 +168,7 @@ $("#audio-file").onchange = async (e) => {
     const metadata = new Audio();
     metadata.preload = "metadata";
     metadata.src = nextUrl;
-    const duration = await new Promise((resolve, reject) => {
+    let duration = await new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         metadata.removeAttribute("src");
         reject(Error("This audio format could not be read. Try MP3 or WAV."));
@@ -181,6 +185,9 @@ $("#audio-file").onchange = async (e) => {
     metadata.removeAttribute("src");
     metadata.load();
     if (token !== job) return;
+    // MediaRecorder 的 WebM 可能没有最终 duration metadata；只对本站录制使用实测时长回退。
+    if (!Number.isFinite(duration) && Number.isFinite(recordedDuration))
+      duration = recordedDuration;
     if (!Number.isFinite(duration) || duration <= 0 || duration > 300.05)
       throw Error("Choose audio up to five minutes long.");
     status("Decoding on this device…");
@@ -218,8 +225,10 @@ $("#audio-file").onchange = async (e) => {
       " Hz decoded · " +
       size(file.size);
     await waveform(file, token);
-    if (token === job)
+    if (token === job) {
       finish("Audio ready. Drag or enter a selection; export as MP3 or WAV.");
+      return true;
+    }
   } catch (error) {
     if (token === job) finish(error.message, true);
   } finally {
@@ -229,6 +238,12 @@ $("#audio-file").onchange = async (e) => {
       controls();
     }
   }
+  return false;
+}
+$("#audio-file").onchange = async (e) => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (file) await loadAudio(file);
 };
 $("#audio-play").onclick = async () => {
   try {
@@ -301,6 +316,7 @@ $("#audio-export").onclick = async () => {
       if (data.type === "error") finish(data.message, true);
       if (data.type === "complete") {
         download(data.blob, name + "-selection." + format);
+        recordingUnsaved = false;
         finish(
           data.clipped
             ? "Export ready. Some samples clipped at the output limit; lower volume for more headroom."
@@ -354,3 +370,244 @@ window.addEventListener("pagehide", (event) => {
   }
 });
 controls();
+
+let microphoneStream = null,
+  microphoneContext = null,
+  levelFrame = null,
+  microphoneRecorder = null,
+  recordPending = false,
+  recordingState = "idle",
+  recordingGeneration = 0,
+  recordedFile = null,
+  recordedSeconds = null,
+  recordedUrl = null,
+  recordingUnsaved = false;
+if ($("#audio-record-start")) {
+  const recordStatus = (text, error = false) => {
+    $("#audio-record-status").textContent = text;
+    $("#audio-record-status").classList.toggle("error-text", error);
+  };
+  function recordingControls() {
+    $("#audio-record-start").disabled =
+      recordPending ||
+      recordingState !== "idle" ||
+      !navigator.mediaDevices?.getUserMedia ||
+      !globalThis.MediaRecorder;
+    $("#audio-record-pause").disabled = !["recording", "paused"].includes(
+      recordingState,
+    );
+    $("#audio-record-stop").disabled = !["recording", "paused"].includes(
+      recordingState,
+    );
+    $("#audio-record-pause").textContent =
+      recordingState === "paused" ? "Resume" : "Pause";
+    $("#audio-record-retry").disabled =
+      recordPending || recordingState !== "idle" || !recordedFile;
+  }
+  function releaseMicrophone() {
+    stopTracks(microphoneStream);
+    microphoneStream = null;
+    cancelAnimationFrame(levelFrame);
+    levelFrame = null;
+    microphoneContext?.close().catch(() => {});
+    microphoneContext = null;
+    $("#audio-record-level").value = 0;
+  }
+  function clearRecording() {
+    if (recordedUrl) URL.revokeObjectURL(recordedUrl);
+    recordedUrl = null;
+    recordedFile = null;
+    recordedSeconds = null;
+    const preview = $("#audio-record-preview");
+    preview.pause();
+    preview.removeAttribute("src");
+    preview.load();
+    $("#audio-record-recovery").hidden = true;
+  }
+  async function openRecording() {
+    if (!recordedFile) return;
+    $("#audio-record-retry").disabled = true;
+    const okay = await loadAudio(recordedFile, recordedSeconds);
+    recordStatus(
+      okay
+        ? "Recording ready in the editor. Select a region and export to keep it."
+        : "The editor could not decode this recording. Your original remains available below; download it or retry the editor.",
+      !okay,
+    );
+    recordingControls();
+  }
+  $("#audio-record-start").onclick = async () => {
+    if (recordPending || recordingState !== "idle") return;
+    if (
+      recordingUnsaved &&
+      !confirm(
+        "Discard the recording you have not downloaded and record again?",
+      )
+    )
+      return;
+    stopPlayback();
+    clearRecording();
+    const token = ++recordingGeneration;
+    recordPending = true;
+    busy(true);
+    $("#cancel-job").hidden = true;
+    recordingControls();
+    recordStatus(
+      "Allow microphone access to begin. Nothing is recorded until access is granted…",
+    );
+    let incoming = null;
+    try {
+      incoming = await navigator.mediaDevices.getUserMedia({
+        audio: { channelCount: { ideal: 1 }, sampleRate: { ideal: 44100 } },
+        video: false,
+      });
+      if (token !== recordingGeneration) {
+        stopTracks(incoming);
+        return;
+      }
+      microphoneStream = incoming;
+      try {
+        microphoneContext = new AudioContext();
+        if (microphoneContext.state === "suspended")
+          await microphoneContext.resume();
+        if (token !== recordingGeneration) {
+          releaseMicrophone();
+          return;
+        }
+        const analyser = microphoneContext.createAnalyser();
+        analyser.fftSize = 256;
+        microphoneContext.createMediaStreamSource(incoming).connect(analyser);
+        const data = new Float32Array(analyser.fftSize);
+        const tick = () => {
+          if (!microphoneStream) return;
+          analyser.getFloatTimeDomainData(data);
+          let sum = 0;
+          for (const value of data) sum += value * value;
+          $("#audio-record-level").value =
+            recordingState === "paused"
+              ? 0
+              : Math.min(1, Math.sqrt(sum / data.length) * 4);
+          levelFrame = requestAnimationFrame(tick);
+        };
+        tick();
+      } catch {
+        microphoneContext?.close().catch(() => {});
+        microphoneContext = null;
+      }
+      microphoneRecorder = makeRecording(incoming, {
+        types: AUDIO_TYPES,
+        maxSeconds: 300,
+        maxBytes: 50000000,
+        onTick({ seconds }) {
+          $("#audio-record-time").textContent = clockText(seconds);
+        },
+        onState(next) {
+          recordingState = next;
+          recordingControls();
+        },
+        async onComplete(blob, detail) {
+          releaseMicrophone();
+          microphoneRecorder = null;
+          busy(false);
+          controls();
+          const extension = blob.type.includes("mp4")
+            ? "m4a"
+            : blob.type.includes("ogg")
+              ? "ogg"
+              : "webm";
+          recordedFile = new File(
+            [blob],
+            `recording-${new Date().toISOString().replace(/[:.]/g, "-")}.${extension}`,
+            { type: blob.type },
+          );
+          recordedSeconds = Math.max(0.001, detail.seconds);
+          recordedUrl = URL.createObjectURL(blob);
+          $("#audio-record-preview").src = recordedUrl;
+          $("#audio-record-recovery").hidden = false;
+          $("#audio-record-time").textContent = clockText(detail.seconds);
+          recordingUnsaved = true;
+          recordStatus(
+            `${detail.reason}. Opening ${size(blob.size)} in the editor…`,
+          );
+          await openRecording();
+        },
+        onError(error) {
+          releaseMicrophone();
+          microphoneRecorder = null;
+          recordingState = "idle";
+          busy(false);
+          controls();
+          recordingUnsaved = false;
+          recordStatus(mediaError(error), true);
+          recordingControls();
+        },
+      });
+      microphoneRecorder.start();
+      recordingUnsaved = true;
+      $("#audio-record-time").textContent = "00:00";
+      recordStatus(
+        "Recording from your microphone. Stop to edit and export your clip.",
+      );
+    } catch (error) {
+      if (token !== recordingGeneration) {
+        stopTracks(incoming);
+        return;
+      }
+      microphoneRecorder?.dispose();
+      microphoneRecorder = null;
+      releaseMicrophone();
+      recordingState = "idle";
+      recordingUnsaved = false;
+      busy(false);
+      controls();
+      recordStatus(mediaError(error), true);
+    } finally {
+      if (token === recordingGeneration) {
+        recordPending = false;
+        recordingControls();
+      }
+    }
+  };
+  $("#audio-record-stop").onclick = () =>
+    microphoneRecorder?.stop("Stopped by you");
+  $("#audio-record-pause").onclick = () => {
+    if (microphoneRecorder?.state === "paused") {
+      microphoneRecorder.resume();
+      recordStatus("Recording resumed.");
+    } else if (microphoneRecorder?.state === "recording") {
+      microphoneRecorder.pause();
+      recordStatus(
+        "Paused. Microphone access remains active; the five-minute elapsed limit still applies.",
+      );
+    }
+  };
+  $("#audio-record-download").onclick = () => {
+    if (!recordedFile) return;
+    download(recordedFile, recordedFile.name);
+    recordingUnsaved = false;
+    recordStatus(
+      "Original recording download requested. You can still edit it below.",
+    );
+  };
+  $("#audio-record-retry").onclick = openRecording;
+  window.addEventListener("beforeunload", (event) => {
+    if (recordingUnsaved || recordPending || recordingState !== "idle") {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  });
+  window.addEventListener("pagehide", () => {
+    recordingGeneration++;
+    microphoneRecorder?.dispose();
+    microphoneRecorder = null;
+    releaseMicrophone();
+    recordPending = false;
+    recordingState = "idle";
+    recordingControls();
+  });
+  if (!navigator.mediaDevices?.getUserMedia || !globalThis.MediaRecorder)
+    recordStatus(
+      "Microphone recording is unavailable in this browser. You can still open an audio file below.",
+    );
+  recordingControls();
+}

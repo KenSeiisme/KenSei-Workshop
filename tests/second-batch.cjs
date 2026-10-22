@@ -83,13 +83,13 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
   try {
     const guest = await context();
     await check(
-      "25 tools, filters, favorites and responsive layouts",
+      "28 tools, filters, favorites and responsive layouts",
       async () => {
         const p = await guest.newPage();
         await p.goto(base + "/tools/", { waitUntil: "domcontentloaded" });
-        assert.equal(await p.locator("[data-tool-card]").count(), 25);
+        assert.equal(await p.locator("[data-tool-card]").count(), 28);
         for (const [cat, count] of [
-          ["utilities", 9],
+          ["utilities", 10],
           ["testing", 2],
           ["text", 6],
         ]) {
@@ -116,6 +116,7 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
           ]) {
             const t = await open(guest, slug);
             await t.setViewportSize({ width, height: 900 });
+            await t.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
             assert(
               await t.evaluate(
                 () => document.documentElement.scrollWidth <= innerWidth + 1,
