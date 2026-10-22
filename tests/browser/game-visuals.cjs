@@ -101,7 +101,20 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     }
     await p.goto(base + "/games/");
     await p.waitForSelector("#game-saves .game-empty-state");
-    for (const width of [320, 360, 768, 1440]) await fit(width, "directory");
+    for (const width of [320, 360, 768, 1440]) {
+      await fit(width, "directory");
+      assert(
+        await p.evaluate(() => {
+          const caption = document
+            .querySelector(".games-art-caption")
+            .getBoundingClientRect();
+          return [...document.querySelectorAll(".games-hero-tile")].every(
+            (el) => el.getBoundingClientRect().bottom < caption.top,
+          );
+        }),
+        `hero art overlaps caption at ${width}`,
+      );
+    }
     await p.click('a[href="#games-library"]');
     await p.waitForTimeout(250);
     assert(
