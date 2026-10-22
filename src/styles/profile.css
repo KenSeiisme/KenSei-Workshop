@@ -1,0 +1,543 @@
+.profile-page.is-public-profile {
+  max-width: 1120px;
+  padding-top: 48px;
+}
+.profile-page #profile-status:empty {
+  display: none;
+}
+.profile-page .public-profile {
+  padding: 0;
+}
+.public-profile [data-game-theme="2048"] {
+  --game-accent: #d6b5ed;
+  --game-tint: #d6b5ed12;
+}
+.public-profile [data-game-theme="minesweeper"] {
+  --game-accent: #aebff4;
+  --game-tint: #aebff412;
+}
+.public-profile [data-game-theme="snake"] {
+  --game-accent: #b2dfc9;
+  --game-tint: #b2dfc912;
+}
+.public-profile [data-game-theme="memory-match"] {
+  --game-accent: #efbdd9;
+  --game-tint: #efbdd912;
+}
+.public-profile-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid #d6b5ed24;
+  border-radius: 20px;
+  padding: 40px;
+  background:
+    radial-gradient(ellipse at top right, #b188cc18, transparent 60%),
+    linear-gradient(120deg, #211a29, #19161f);
+}
+.public-profile-orbit {
+  position: absolute;
+  z-index: -1;
+  width: 340px;
+  height: 340px;
+  right: -80px;
+  top: -130px;
+  border: 1px solid #d6b5ed16;
+  border-radius: 50%;
+}
+.public-profile-orbit:after {
+  content: "";
+  position: absolute;
+  inset: 25px;
+  border: 1px dashed #d6b5ed12;
+  border-radius: 50%;
+}
+.public-profile .public-profile-heading {
+  align-items: center;
+  gap: 26px;
+}
+.public-profile #public-avatar {
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+  border-radius: 26px;
+  border: 1px solid #e8c5f93d;
+  box-shadow: 0 8px 32px #0004;
+  font: 500 40px var(--display);
+  background: linear-gradient(135deg, #6b507b, #34253f);
+  color: #f5ddff;
+}
+.public-profile-identity {
+  min-width: 0;
+}
+.public-profile-identity .eyebrow {
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  color: #c4a9d4;
+}
+.public-profile .public-profile-identity h1 {
+  font-size: clamp(30px, 4vw, 46px);
+  margin: 12px 0;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+}
+.public-profile #public-bio {
+  color: #b7a8c2;
+  font-size: 13px;
+  max-width: 650px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.public-profile #public-edit-profile {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 11px;
+}
+.public-profile-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  border-top: 1px solid #ffffff0e;
+  margin-top: 30px;
+  padding-top: 24px;
+}
+.public-profile-summary > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.public-profile-summary strong {
+  color: #e7ccf6;
+  font: 500 24px var(--display);
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+.public-profile-summary span {
+  color: #ab98b7;
+  font-size: 11px;
+}
+.public-record-section {
+  margin-top: 40px;
+}
+.profile-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.profile-section-heading h2 {
+  font-size: 30px;
+  margin-top: 10px;
+}
+.profile-section-heading .eyebrow {
+  font-size: 8px;
+}
+.profile-section-heading > a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+}
+.profile-section-note {
+  font-size: 12px;
+  color: #a899b4;
+  line-height: 1.9;
+  margin-bottom: 22px;
+  max-width: 650px;
+}
+.profile-game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.profile-game-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid #ffffff12;
+  border-radius: 16px;
+  background:
+    radial-gradient(ellipse at top right, var(--game-tint), transparent 70%),
+    #1a171f;
+  overflow: hidden;
+}
+.profile-game-card header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 24px 0;
+}
+.profile-game-card header > div {
+  min-width: 0;
+}
+.profile-game-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border: 1px solid #ffffff0c;
+  border-radius: 12px;
+  color: var(--game-accent);
+  background: var(--game-tint);
+}
+.profile-game-icon svg {
+  width: 25px;
+  height: 25px;
+}
+.profile-game-card h3 {
+  font-size: 22px;
+  margin-top: 5px;
+  letter-spacing: -0.04em;
+}
+.profile-game-card header .eyebrow {
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  color: #a797b2;
+}
+.profile-record-mark {
+  align-self: start;
+  margin-left: auto;
+  padding: 4px 8px;
+  border-radius: 20px;
+  border: 1px solid #ffffff12;
+  color: var(--game-accent);
+  font-size: 9px;
+  white-space: nowrap;
+}
+.profile-featured-score {
+  padding: 25px 24px 22px;
+  position: relative;
+}
+.profile-featured-score:after {
+  content: "";
+  position: absolute;
+  top: 34px;
+  right: 30px;
+  width: 90px;
+  height: 90px;
+  border: 1px solid var(--game-tint);
+  border-radius: 50%;
+  box-shadow: 0 0 0 14px #ffffff02;
+  pointer-events: none;
+}
+.profile-difficulty {
+  color: #b6a7c3;
+  font-size: 11px;
+}
+.profile-score-value {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+.profile-game-card .profile-score-value strong,
+.public-profile .profile-typing-card .profile-score-value strong {
+  display: inline;
+  font: 500 clamp(36px, 4vw, 48px) var(--display);
+  letter-spacing: -0.06em;
+  color: var(--game-accent, #d6b5ed);
+  margin: 0;
+  line-height: 1.2;
+}
+.profile-score-value > span {
+  color: #ae9cbb;
+  font-size: 11px;
+}
+.profile-featured-score > p {
+  color: #c7b7d2;
+  font-size: 12px;
+  margin-top: 6px;
+}
+.profile-featured-score > time {
+  display: block;
+  color: #9f8eab;
+  font-size: 10px;
+  margin-top: 8px;
+}
+.profile-game-other-scores {
+  padding: 0 24px 20px;
+}
+.profile-game-extra {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #ffffff0c;
+  padding: 12px 0;
+}
+.profile-game-extra > div {
+  min-width: 0;
+}
+.profile-game-extra > div > span {
+  display: block;
+  font-size: 11px;
+  color: #cec0d8;
+}
+.profile-game-extra small {
+  display: block;
+  font-size: 9px;
+  color: #a18eae;
+  margin-top: 4px;
+  line-height: 1.7;
+}
+.profile-game-extra > strong {
+  font: 500 18px var(--display);
+  color: var(--game-accent);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+.profile-game-extra > strong > span {
+  display: block;
+  font: 9px var(--font);
+  color: #aa99b6;
+  margin-top: 4px;
+}
+.profile-game-card footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  margin-top: auto;
+  border-top: 1px solid #ffffff0b;
+  background: #0000000d;
+}
+.profile-game-card footer > span {
+  font-size: 9px;
+  color: #a28eaf;
+}
+.profile-game-card footer > a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+  font-size: 11px;
+  color: var(--game-accent);
+}
+.profile-game-card footer > a > span {
+  font-size: 17px;
+}
+.profile-score-empty {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  padding: 24px;
+  min-height: 185px;
+}
+.profile-score-empty > span {
+  font: 36px var(--display);
+  color: #766780;
+}
+.profile-score-empty > strong {
+  font: 500 17px var(--display);
+  color: #c6b4d1;
+  margin: 5px 0 8px;
+  letter-spacing: -0.025em;
+}
+.profile-score-empty > p {
+  color: #a392af;
+  font-size: 11px;
+}
+.no-score .profile-record-mark {
+  color: #ab98b8;
+}
+.public-profile .profile-scores {
+  margin-top: 22px;
+  gap: 20px;
+}
+.profile-typing-card {
+  min-width: 0;
+  border: 1px solid #ffffff12;
+  border-radius: 16px;
+  background: #1a171f;
+  padding: 24px;
+}
+.profile-typing-language {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 22px;
+}
+.profile-typing-language > span {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ffffff0d;
+  border-radius: 11px;
+  font: 500 20px var(--display);
+  color: #d8c3e9;
+  background: #d6b5ed0b;
+}
+.profile-typing-language h3 {
+  font-size: 21px;
+  margin-top: 5px;
+}
+.profile-typing-language .eyebrow {
+  font-size: 7px;
+  letter-spacing: 0.13em;
+}
+.public-profile .profile-typing-card > p {
+  font-size: 10px;
+  color: #a593b2;
+  margin-top: 12px;
+  line-height: 1.8;
+}
+.profile-typing-card b {
+  font-weight: 400;
+  color: #c7b3d7;
+}
+.profile-public-note {
+  text-align: center;
+  font-size: 11px;
+  color: #9b88a7;
+  line-height: 1.8;
+  margin-top: 28px;
+}
+@media (max-width: 760px) {
+  .profile-page.is-public-profile {
+    padding-top: 28px;
+  }
+  .public-profile-hero {
+    padding: 25px;
+  }
+  .public-profile .public-profile-heading {
+    gap: 20px;
+  }
+  .public-profile #public-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 22px;
+  }
+  .public-profile-summary {
+    gap: 20px;
+  }
+  .public-profile-summary > div {
+    gap: 10px;
+  }
+  .public-profile-summary span {
+    font-size: 10px;
+  }
+  .profile-game-grid {
+    gap: 15px;
+  }
+  .profile-game-card header {
+    padding: 20px 18px 0;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .profile-game-card .profile-record-mark {
+    margin-left: 0;
+  }
+  .profile-game-card h3 {
+    font-size: 20px;
+  }
+  .profile-featured-score {
+    padding: 22px 18px;
+  }
+  .profile-game-other-scores {
+    padding-inline: 18px;
+  }
+  .profile-game-card footer {
+    padding-inline: 18px;
+  }
+  .profile-game-extra {
+    align-items: start;
+  }
+}
+@media (max-width: 600px) {
+  .public-profile-hero {
+    padding: 24px 20px;
+    border-radius: 15px;
+  }
+  .public-profile .public-profile-heading {
+    flex-direction: column;
+    align-items: start;
+  }
+  .public-profile-identity .eyebrow {
+    font-size: 7px;
+    letter-spacing: 0.1em;
+  }
+  .public-profile #public-bio {
+    font-size: 12px;
+  }
+  .public-profile-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 22px;
+    padding-top: 20px;
+  }
+  .public-profile-summary > div {
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+  }
+  .public-profile-summary strong {
+    font-size: 23px;
+  }
+  .public-profile-summary span {
+    font-size: 9px;
+  }
+  .public-record-section {
+    margin-top: 30px;
+  }
+  .profile-section-heading {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .profile-section-heading h2 {
+    font-size: 27px;
+  }
+  .profile-section-note {
+    font-size: 11px;
+    margin-bottom: 18px;
+  }
+  .profile-game-grid,
+  .public-profile .profile-scores {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .profile-game-card header {
+    padding: 20px 18px 0;
+    flex-wrap: nowrap;
+  }
+  .profile-game-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+  }
+  .profile-game-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .profile-game-card h3 {
+    font-size: 19px;
+  }
+  .profile-game-card .profile-record-mark {
+    margin-left: auto;
+    font-size: 8px;
+    padding: 3px 6px;
+  }
+  .profile-game-extra small {
+    font-size: 9px;
+  }
+  .profile-game-extra > strong {
+    font-size: 17px;
+  }
+  .profile-typing-card {
+    padding: 22px;
+  }
+  .profile-public-note {
+    font-size: 10px;
+    text-align: left;
+  }
+}

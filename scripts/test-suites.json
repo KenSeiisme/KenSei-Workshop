@@ -57,6 +57,7 @@
     ["tests/unit/games-core.mjs"],
     ["tests/unit/games-edge.mjs"],
     ["tests/database/games-database.mjs"],
-    ["tests/browser/games.cjs"]
+    ["tests/browser/games.cjs"],
+    ["tests/browser/game-visuals.cjs"]
   ]
 }

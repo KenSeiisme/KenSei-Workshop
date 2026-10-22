@@ -147,7 +147,9 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     for (const path of [
       "app.js",
       "games.css",
+      "profile.css",
       "game-scripts/engine.js",
+      "game-scripts/presentation.js",
       "game-scripts/games.js",
       "game-scripts/session-client.js",
       "tool-scripts/record-store.js",

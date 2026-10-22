@@ -1,6 +1,13 @@
 import { $, api, esc, canvasBlob } from "./common.js";
 import { ready } from "./personal-store.js";
 import { ensureProfile, profileRPC, paintAvatar } from "./profile-service.js";
+import {
+  GAMES,
+  gameIcon,
+  scoreParts,
+  scoreDetail,
+  scoreDate,
+} from "/game-scripts/presentation.js";
 const requested = new URLSearchParams(location.search).get("id");
 let original = null,
   owner = null,
@@ -34,6 +41,40 @@ function fill(profile) {
   avatarKind = profile.avatar_kind;
   paintAvatar($("#profile-avatar"), profile);
 }
+function renderPublicScores(profile) {
+  const games = (profile.game_best_scores || []).filter(
+    (r) => GAMES[r.game]?.modes[r.difficulty],
+  );
+  $("#public-game-count").textContent =
+    `${new Set(games.map((r) => r.game)).size} / ${Object.keys(GAMES).length}`;
+  $("#public-typing-count").textContent =
+    `${["en", "zh"].filter((lang) => profile.best_scores?.some((r) => r.language === lang)).length} / 2`;
+  // 固定容器每次替换，重试不会重复追加成绩；不同难度各自展示。
+  $("#public-game-scores").innerHTML = Object.entries(GAMES)
+    .map(([slug, game]) => {
+      const rows = Object.keys(game.modes)
+        .map((d) => games.find((r) => r.game === slug && r.difficulty === d))
+        .filter(Boolean);
+      const featured =
+        rows.find((r) => r.difficulty === game.default) || rows[0];
+      const result = featured && scoreParts(featured, slug);
+      const extra = rows
+        .filter((r) => r !== featured)
+        .map((r) => {
+          const parts = scoreParts(r, slug);
+          return `<div class="profile-game-extra"><div><span>${esc(game.modes[r.difficulty].label)}</span><small>${esc(scoreDetail(r, slug))} · ${esc(scoreDate(r.achieved_at))}</small></div><strong>${esc(parts.value)} <span>${parts.unit}</span></strong></div>`;
+        })
+        .join("");
+      return `<article class="profile-game-card ${featured ? "has-score" : "no-score"}" data-game-theme="${slug}"><header><span class="profile-game-icon">${gameIcon(slug)}</span><div><span class="eyebrow">${slug === "snake" ? "ARCADE" : "PUZZLE"}</span><h3>${esc(game.name)}</h3></div><span class="profile-record-mark">${featured ? "Public best" : "Not ranked"}</span></header>${featured ? `<div class="profile-featured-score"><span class="profile-difficulty">${esc(game.modes[featured.difficulty].label)}</span><div class="profile-score-value"><strong>${esc(result.value)}</strong><span>${result.unit}</span></div><p>${esc(scoreDetail(featured, slug))}</p><time datetime="${esc(featured.achieved_at)}">${esc(scoreDate(featured.achieved_at))}</time></div>${extra ? `<div class="profile-game-other-scores">${extra}</div>` : ""}` : `<div class="profile-score-empty"><span aria-hidden="true">—</span><strong>A little room for a first best.</strong><p>No qualifying Public result yet.</p></div>`}<footer><span>${featured ? `${rows.length} ranked ${rows.length === 1 ? "mode" : "modes"} · rules v${Number(featured.version)}` : "A new challenge is waiting"}</span><a href="/games/${slug}/" aria-label="Play ${esc(game.name)}">Play game <span aria-hidden="true">↗</span></a></footer></article>`;
+    })
+    .join("");
+  $("#public-best-scores").innerHTML = ["en", "zh"]
+    .map((lang) => {
+      const score = profile.best_scores?.find((x) => x.language === lang);
+      return `<section class="profile-typing-card"><div class="profile-typing-language"><span>${lang === "en" ? "Aa" : "字"}</span><div><span class="eyebrow">60-SECOND PUBLIC SPRINT</span><h3>${lang === "en" ? "English" : "中文"}</h3></div></div><div class="profile-score-value"><strong>${score ? Number(score.speed).toFixed(1) : "—"}</strong><span>${lang === "en" ? "WPM" : "CPM"}</span></div><p>${score ? `<b>${Number(score.accuracy).toFixed(2)}% accuracy</b> · ${esc(scoreDate(score.achieved_at))} · text v${Number(score.version)}` : "No qualifying current-version score yet."}</p></section>`;
+    })
+    .join("");
+}
 async function load() {
   $("#profile-retry").hidden = true;
   message("Loading profile…");
@@ -60,35 +101,9 @@ async function load() {
       $("#public-name").textContent = p.nickname;
       $("#public-bio").textContent = p.bio || "A little room for a new story.";
       paintAvatar($("#public-avatar"), p);
-      $("#public-best-scores").innerHTML = ["en", "zh"]
-        .map((lang) => {
-          const score = p.best_scores.find((x) => x.language === lang);
-          return `<section class="panel"><span class="eyebrow">${lang === "en" ? "ENGLISH · WPM" : "中文 · CPM"}</span><strong>${score ? Number(score.speed).toFixed(1) : "—"}</strong><p>${score ? `${Number(score.accuracy).toFixed(2)}% accuracy · ${esc(new Date(score.achieved_at).toLocaleDateString())} · text v${Number(score.version)}` : "No qualifying current-version score yet."}</p></section>`;
-        })
-        .join("");
-      if (p.game_best_scores?.length) {
-        const section = document.createElement("section");
-        section.className = "panel";
-        const heading = document.createElement("h2");
-        heading.textContent = "Game bests";
-        section.append(heading);
-        for (const score of p.game_best_scores) {
-          const row = document.createElement("p"),
-            link = document.createElement("a");
-          link.href = "/games/" + encodeURIComponent(score.game) + "/";
-          link.textContent = score.game + " · " + score.difficulty;
-          row.append(link);
-          const result =
-            score.game === "memory-match"
-              ? `${score.moves} attempts · ${(score.elapsed_ms / 1000).toFixed(2)} s`
-              : score.game === "minesweeper"
-                ? `${(score.elapsed_ms / 1000).toFixed(2)} s`
-                : `${score.score} pts`;
-          row.append(document.createTextNode(" — " + result));
-          section.append(row);
-        }
-        $("#public-best-scores").after(section);
-      }
+      renderPublicScores(p);
+      $("#profile-page").classList.add("is-public-profile");
+      $("#profile-heading").closest(".page-intro").hidden = true;
       if (api.user) {
         ensureProfile()
           .then(

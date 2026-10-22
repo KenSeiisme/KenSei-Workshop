@@ -16,6 +16,7 @@ import {
   validateSave,
 } from "./engine.js";
 import { sessionCall, pendingResult } from "./session-client.js";
+import { gameIcon } from "./presentation.js";
 
 const $ = (s) => document.querySelector(s),
   store = createRecordStore("game", validateSave, { syncDelay: 500 });
@@ -149,6 +150,10 @@ function slotId(slug, mode) {
   return `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`;
 }
 function readyUI() {
+  if (!active) {
+    root.dataset.runState = "ready";
+    $("#game-run-label").textContent = "Ready to play";
+  }
   const row = store
     .rows()
     .filter(
@@ -189,8 +194,22 @@ function draw() {
     selected = document.activeElement?.dataset.cell,
     hadFocus = board.contains(document.activeElement);
   board.dataset.active = String(running);
-  if (game === "2048")
-    board.innerHTML = `<div class="board-2048">${active.board.map((n) => `<div class="tile" data-level="${Math.min(12, Math.log2(n) || 0)}" aria-label="${n || "Empty"}">${n || ""}</div>`).join("")}</div>`;
+  root.dataset.runState = running
+    ? "playing"
+    : active.status === "playing"
+      ? "paused"
+      : "complete";
+  $("#game-run-label").textContent = running
+    ? `${publicSession ? "Public" : "Private"} · Playing`
+    : active.status === "playing"
+      ? "Private · Paused"
+      : "Game complete";
+  if (game === "2048") {
+    const previous = [...board.querySelectorAll(".tile")].map((el) =>
+      Number(el.dataset.value),
+    );
+    board.innerHTML = `<div class="board-2048">${active.board.map((n, i) => `<div class="tile ${n && n !== previous[i] ? "is-new" : ""}" data-value="${n}" data-level="${Math.min(12, Math.log2(n) || 0)}" aria-label="${n || "Empty"}">${n || ""}</div>`).join("")}</div>`;
+  }
   if (game === "minesweeper") {
     const m = rules(game, active.difficulty),
       seen = new Set(active.revealed),
@@ -204,7 +223,7 @@ function draw() {
       .map((n, i) => {
         const open = seen.has(i),
           mine = active.status === "lost" && n === -1;
-        return `<button data-cell="${i}" tabindex="${i === Number(selected || 0) ? 0 : -1}" class="${open ? "open" : ""} ${mine ? "mine" : ""}" aria-label="Row ${Math.floor(i / m.w) + 1}, column ${(i % m.w) + 1}: ${mine ? "mine" : open ? `${n} neighboring mines` : flags.has(i) ? "flagged" : "covered"}">${mine ? "✹" : flags.has(i) ? "⚑" : open ? n || "" : ""}</button>`;
+        return `<button data-cell="${i}" data-number="${open ? n : ""}" tabindex="${i === Number(selected || 0) ? 0 : -1}" class="${open ? "open" : ""} ${mine ? "mine" : ""} ${flags.has(i) ? "flagged" : ""}" aria-label="Row ${Math.floor(i / m.w) + 1}, column ${(i % m.w) + 1}: ${mine ? "mine" : open ? `${n} neighboring mines` : flags.has(i) ? "flagged" : "covered"}">${mine ? "✹" : flags.has(i) ? "⚑" : open ? n || "" : ""}</button>`;
       })
       .join("")}</div></div>`;
     board.querySelector(".mines-viewport").scrollTo(scrollX, scrollY);
@@ -221,9 +240,12 @@ function draw() {
       pause("Canvas is unavailable. Enable canvas drawing to play Snake.");
       return;
     }
-    ctx.fillStyle = "#18131f";
+    const ground = ctx.createLinearGradient(0, 0, 460, 460);
+    ground.addColorStop(0, "#192620");
+    ground.addColorStop(1, "#111a17");
+    ctx.fillStyle = ground;
     ctx.fillRect(0, 0, 460, 460);
-    ctx.strokeStyle = "#261e2d";
+    ctx.strokeStyle = "#b2dfc90a";
     for (let n = 0; n <= 460; n += 23) {
       ctx.beginPath();
       ctx.moveTo(n, 0);
@@ -233,11 +255,41 @@ function draw() {
       ctx.stroke();
     }
     active.body.forEach((n, i) => {
-      ctx.fillStyle = i ? "#af8dc5" : "#e6c6f9";
-      ctx.fillRect((n % 20) * 23 + 2, Math.floor(n / 20) * 23 + 2, 19, 19);
+      ctx.fillStyle = i
+        ? `hsl(153 30% ${Math.max(42, 73 - i * 1.4)}%)`
+        : "#d0f3df";
+      ctx.beginPath();
+      ctx.roundRect(
+        (n % 20) * 23 + 1.5,
+        Math.floor(n / 20) * 23 + 1.5,
+        20,
+        20,
+        i ? 5 : 7,
+      );
+      ctx.fill();
+      if (!i) {
+        const x = (n % 20) * 23 + 11.5,
+          y = Math.floor(n / 20) * 23 + 11.5;
+        const dx = [0, 1, 0, -1][active.dir],
+          dy = [-1, 0, 1, 0][active.dir];
+        ctx.fillStyle = "#193b2b";
+        for (const side of [-1, 1]) {
+          ctx.beginPath();
+          ctx.arc(
+            x + dx * 4 - dy * side * 4,
+            y + dy * 4 + dx * side * 4,
+            1.8,
+            0,
+            Math.PI * 2,
+          );
+          ctx.fill();
+        }
+      }
     });
     if (active.food >= 0) {
       ctx.fillStyle = "#edb9c8";
+      ctx.shadowColor = "#efbdd9";
+      ctx.shadowBlur = 14;
       ctx.beginPath();
       ctx.arc(
         (active.food % 20) * 23 + 11.5,
@@ -247,6 +299,7 @@ function draw() {
         Math.PI * 2,
       );
       ctx.fill();
+      ctx.shadowBlur = 0;
     }
   }
   if (game === "memory-match") {
@@ -255,7 +308,7 @@ function draw() {
       .map((n, i) => {
         const matched = active.matched.includes(i),
           up = matched || active.faceUp.includes(i);
-        return `<button class="memory-card ${matched ? "matched" : up ? "face-up" : ""}" data-cell="${i}" aria-label="Card ${i + 1}: ${up ? `shape ${n + 1}${matched ? ", matched" : ""}` : "face down"}" aria-pressed="${up}">${up ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">${SHAPES[n]}</svg>` : "?"}</button>`;
+        return `<button class="memory-card ${matched ? "matched" : up ? "face-up" : ""}" data-cell="${i}" aria-label="Card ${i + 1}: ${up ? `shape ${n + 1}${matched ? ", matched" : ""}` : "face down"}" aria-pressed="${up}">${up ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">${SHAPES[n]}</svg>${matched ? '<span class="memory-match-check" aria-hidden="true">✓</span>' : ""}` : '<span class="memory-back" aria-hidden="true"><span>✦</span></span>'}</button>`;
       })
       .join("")}</div>`;
   }
@@ -589,8 +642,8 @@ async function leaderboard() {
     if (error) throw error;
     if (difficulty() !== mode) return;
     dest.innerHTML = data.top.length
-      ? `<table><caption>${esc(rules(game, mode).label)} · rules v${Number(data.version)}</caption><thead><tr><th>#</th><th>Player</th><th>Result</th></tr></thead><tbody>${data.top.map((r) => `<tr><td>${Number(r.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(r.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(r.public_id)}" aria-hidden="true"></span>${esc(r.nickname)}</a><small>${esc(new Date(r.achieved_at).toLocaleDateString())}</small></td><td>${esc(displayResult(r, game))}</td></tr>`).join("")}</tbody></table>`
-      : "<p>No verified results yet. Make the first little mark.</p>";
+      ? `<table><caption>${esc(rules(game, mode).label)} · rules v${Number(data.version)}</caption><thead><tr><th>#</th><th>Player</th><th>Result</th></tr></thead><tbody>${data.top.map((r) => `<tr data-rank="${Number(r.rank)}"><td>${Number(r.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(r.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(r.public_id)}" aria-hidden="true"></span>${esc(r.nickname)}</a><small>${esc(new Date(r.achieved_at).toLocaleDateString())}</small></td><td>${esc(displayResult(r, game))}</td></tr>`).join("")}</tbody></table>`
+      : `<div class="game-empty-state">${gameIcon(game)}<strong>A spot for your first best.</strong><p>No verified results yet. Complete a Public game to make the first little mark.</p></div>`;
     for (const row of data.top)
       paintAvatar(
         dest.querySelector(`[data-game-avatar="${CSS.escape(row.public_id)}"]`),
@@ -616,7 +669,7 @@ async function renderSaves() {
             `<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? " · conflict copy" : ""}</strong><small>Private · ${esc(new Date(r.updated_at).toLocaleString())} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
         )
         .join("")
-    : "<p>No unfinished games yet. Pick something below.</p>";
+    : '<div class="game-empty-state"><strong>A fresh start is a good start.</strong><p>No unfinished games yet. Pick a game above; your Private progress will appear here.</p></div>';
   $("#games-more").hidden = !store.hasMore();
   saveLine();
   $("#games-copy-guest").hidden =
