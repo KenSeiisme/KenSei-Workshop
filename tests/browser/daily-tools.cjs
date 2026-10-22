@@ -71,7 +71,7 @@ const pass = (s) => {
     await p.goto(base + "/workspace/");
     assert.ok(await p.getByRole("link", { name: /Network Test/ }).count());
     pass(
-      "25 shared tools, search, favorites, Utilities classification and 3 responsive widths",
+      "28 shared tools, search, favorites, Utilities classification and 3 responsive widths",
     );
 
     await open("unit-converter");
@@ -354,6 +354,7 @@ const pass = (s) => {
     });
     assert.match(await p.textContent("#network-status"), /hidden/);
     await p.evaluate(() => delete document.hidden);
+    await p.getByText("Completed tests & comparison", {exact:true}).click();
     await p
       .locator("#network-history .saved-row")
       .getByRole("button", { name: "Delete", exact: true })

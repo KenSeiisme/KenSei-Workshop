@@ -96,7 +96,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
       }
     }
     pass(
-      "25 shared tools, updated categories and six interfaces at mobile/tablet/desktop widths",
+      "28 shared tools, updated categories and six interfaces at mobile/tablet/desktop widths",
     );
     await open("calculator-studio");
     await p.fill("#calc-expression", "0.1+0.2");
@@ -260,6 +260,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
     await p.waitForTimeout(150);
     await p.fill("#edit-width", "128");
     await p.selectOption("#edit-format", "image/png");
+    await p.getByText("Watermark settings", {exact:true}).click();
     await p.fill("#edit-watermark", "KenSei 中文");
     await p.click("#edit-rotate");
     await p.fill("#edit-width", "128");

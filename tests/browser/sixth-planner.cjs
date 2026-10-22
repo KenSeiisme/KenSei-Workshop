@@ -72,6 +72,7 @@ fs.mkdirSync(output, { recursive: true });
     assert.equal(await page.inputValue("#planner-zone"), "Asia/Kuala_Lumpur");
     const originalId = new URL(page.url()).searchParams.get("id");
     assert.ok(originalId);
+    await page.click("#planner-course-new");
     await page.fill("#planner-course-title", "Programming 编程");
     await page.fill("#planner-course-start", "2026-10-19");
     await page.fill("#planner-course-end", "2026-11-30");
@@ -88,6 +89,7 @@ fs.mkdirSync(output, { recursive: true });
       2,
     );
     assert.equal(await page.locator("#planner-week .planner-event").count(), 2);
+    await page.click("#planner-task-new");
     await page.fill("#planner-task-title", "Assignment 报告");
     await page.selectOption("#planner-task-course", {
       label: "Programming 编程",

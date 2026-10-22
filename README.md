@@ -48,6 +48,7 @@ pnpm build
 pnpm test:structure
 pnpm test:unit
 pnpm test:database
+pnpm test:experience
 
 # 浏览器测试需要先运行上面的预览服务器。
 $env:TEST_BASE_URL = 'http://127.0.0.1:8769'
@@ -81,3 +82,11 @@ pnpm test:browser
 `projects/3A3D` 是独立项目，不会进入主站部署。未来 Games 使用独立目录和路由，目前没有创建空游戏入口。
 
 更多说明见 [项目结构](docs/project-structure.md)、[各批验收](docs/validation/) 和 [历史说明](docs/history/pre-organization-readme.md)。
+
+## 统一的工具体验
+
+全部 28 个工具共用页头、Help、状态反馈及响应式交互；通用布局和各工具适配分别维护。手机上的编辑标签切换保留输入，长历史和进阶设置可展开。
+
+七个文字编辑工具可自行开启 `Remember on this device`，默认关闭。恢复副本存放在独立 IndexedDB，与 Workspace 草稿和账号同步分离；每个工具、每个身份保留最近三次编辑会话，每份最多 2 MB。恢复需要主动选择，保存草稿时另存新副本；关闭开关会清除此身份在当前工具的恢复记录。
+
+恢复不会保存密码、QR/Wi-Fi 内容、临时问题、打字输入、文件对象或媒体，也不会自动上传。验收说明见 [工具体验](docs/validation/tool-experience.md)。

@@ -143,6 +143,7 @@ const pass = (x) => {
         buffer: Buffer.from("keep original B"),
       },
     ]);
+    await p.getByText("Rename rules", {exact:true}).click();
     await p.fill("#rename-find", "DSC");
     await p.fill("#rename-replace", "Photo");
     await p.check("#rename-number");

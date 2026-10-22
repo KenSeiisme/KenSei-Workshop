@@ -70,6 +70,15 @@ function process(kind, action, file = null) {
         "kensei-data." + (kind === "json" ? "json" : "csv"),
         kind === "json" ? "application/json" : "text/csv;charset=utf-8",
       );
+    window.dispatchEvent(new Event("tool-content-changed"));
+    if (data.action === "to-csv" || data.action === "to-json")
+      window.dispatchEvent(
+        new CustomEvent("tool-show-tab", {
+          detail: {
+            selector: data.action === "to-csv" ? "#data-csv" : "#data-json",
+          },
+        }),
+      );
     status(
       "Done." +
         (data.escaped

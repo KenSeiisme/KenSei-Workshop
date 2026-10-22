@@ -103,7 +103,7 @@ $("#calc-run").onclick = () => {
   }, 15000);
 };
 $("#calc-expression").onkeydown = (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
     e.preventDefault();
     $("#calc-run").click();
   }

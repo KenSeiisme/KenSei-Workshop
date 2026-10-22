@@ -113,7 +113,13 @@ $("#check-run").onclick = () => {
   worker.postMessage({ files, algorithm: $("#check-algorithm").value });
 };
 $("#check-expected").oninput = comparison;
-$("#check-algorithm").onchange = comparison;
+$("#check-algorithm").onchange = () => {
+  comparison();
+  if (results.length) {
+    $("#check-download").disabled = true;
+    status("Settings changed. Check files again to update the result.");
+  }
+};
 $("#check-download").onclick = () =>
   downloadText(
     JSON.stringify({ version: 1, files: results }, null, 2),

@@ -47,5 +47,10 @@
     ["tests/browser/sixth-sync.cjs", "whiteboard"],
     ["tests/browser/sixth-pages-sync.cjs", "planner"],
     ["tests/browser/sixth-pages-sync.cjs", "whiteboard"]
+  ],
+  "experience": [
+    ["tests/browser/tool-experience.cjs"],
+    ["tests/browser/local-recovery.cjs"],
+    ["tests/browser/tool-feedback.cjs"]
   ]
 }

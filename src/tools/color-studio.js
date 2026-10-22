@@ -8,6 +8,7 @@ import {
   randomIndex,
 } from "./daily-core.js";
 function paint(rgb) {
+  $("#color-status").classList.remove("error-text");
   const hex = hexColor(rgb),
     hsl = rgbToHsl(rgb);
   $("#color-picker").value = $("#color-hex").value = hex;
@@ -62,6 +63,7 @@ $("#color-copy").onclick = () => {
     copy(out);
   } catch (e) {
     $("#color-status").textContent = e.message;
+    $("#color-status").classList.add("error-text");
   }
 };
 function checkContrast() {

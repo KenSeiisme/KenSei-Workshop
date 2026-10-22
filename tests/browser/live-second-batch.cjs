@@ -48,6 +48,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     await p.waitForSelector('[data-ready="true"]');
     await p.locator("#answer-question").fill("DO NOT UPLOAD THIS QUESTION");
     await p.locator("#answer-draw").click();
+    await p.getByText("Answer history", {exact:true}).click();
     await p.waitForSelector("#answer-history .saved-row");
     assert(
       !(await p.evaluate(() =>

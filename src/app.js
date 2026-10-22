@@ -36,6 +36,7 @@
     }
   }
   function toast(message) {
+    window.dispatchEvent(new CustomEvent("tool-toast", { detail: message }));
     const node = $(".toast");
     node.textContent = message;
     node.hidden = false;
@@ -446,6 +447,7 @@
       savedAt = null,
       dirty = false;
     const setDirty = () => {
+      window.dispatchEvent(new Event("tool-content-changed"));
       dirty = true;
       $("#draft-state").textContent =
         "Unsaved changes · your text is still on this page.";
@@ -564,6 +566,11 @@
       } finally {
         button.disabled = false;
       }
+    });
+    window.addEventListener("tool-recovery-restored", () => {
+      draftId = null;
+      savedAt = null;
+      dirty = true;
     });
     const requestedDraft = new URLSearchParams(location.search).get("draft");
     const loadDraft = () => {
@@ -950,9 +957,14 @@
   initText();
   initTimer();
   const slug = document.querySelector("[data-tool]")?.dataset.tool;
-  if (slug && !["text-toolkit", "focus-timer"].includes(slug)) {
-    import("/tool-scripts/" + slug + ".js")
-      .then(() => {
+  if (slug) {
+    const loaded = ["text-toolkit", "focus-timer"].includes(slug)
+      ? Promise.resolve()
+      : import("/tool-scripts/" + slug + ".js");
+    loaded
+      .then(async () => {
+        const ui = await import("/tool-scripts/tool-ui.js");
+        await ui.initToolUI();
         document.querySelector("[data-tool]").dataset.ready = "true";
       })
       .catch(() => {

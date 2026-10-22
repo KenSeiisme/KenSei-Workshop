@@ -15,6 +15,7 @@ let cues = [],
 const video = $("#sub-video"),
   pageSize = 50;
 function draw() {
+  window.dispatchEvent(new Event("tool-content-changed"));
   const list = $("#sub-list");
   list.replaceChildren();
   const sorted = [...cues].sort((a, b) => a.start - b.start);
@@ -23,7 +24,12 @@ function draw() {
     b.className = "saved-row sub-cue";
     b.textContent =
       formatTime(c.start) + " → " + formatTime(c.end) + " · " + c.text;
+    b.dataset.cueId = c.id;
+    b.setAttribute("aria-current", String(selected === c.id));
     b.onclick = () => {
+      document
+        .querySelectorAll(".sub-cue")
+        .forEach((n) => n.setAttribute("aria-current", String(n === b)));
       selected = c.id;
       $("#sub-start").value = formatTime(c.start);
       $("#sub-end").value = formatTime(c.end);
@@ -179,3 +185,16 @@ window.addEventListener("pagehide", () => {
   video.pause();
 });
 draw();
+
+export function recoveryData() {
+  return cues.length ? serialize(cues, "vtt") : "";
+}
+export function restoreRecovery(text) {
+  if (typeof text !== "string") throw Error("Invalid subtitle recovery copy.");
+  const next = text ? parseSubtitles(text) : [];
+  cues = next;
+  selected = null;
+  page = 0;
+  dirty = true;
+  draw();
+}

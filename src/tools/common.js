@@ -1,3 +1,4 @@
+import { feedback, stateFor } from "./tool-state.js";
 export const $ = (s, root = document) => root.querySelector(s);
 export const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 export const api = window.KenseiWorkspace;
@@ -92,6 +93,7 @@ export function canvasBlob(canvas, type = "image/png", quality = 0.9) {
   );
 }
 export function status(text, error = false) {
+  feedback(stateFor(text, error), text);
   const n = $("#tool-status");
   if (n) {
     n.textContent = text;
@@ -99,6 +101,10 @@ export function status(text, error = false) {
   }
 }
 export function busy(value) {
+  document
+    .querySelector("[data-tool]")
+    ?.setAttribute("aria-busy", String(value));
+  if (value) feedback("working", "Processing on this device…");
   $$("[data-lock]").forEach((n) => {
     if (value) {
       if (!n.hasAttribute("data-was-disabled"))
@@ -119,7 +125,11 @@ export async function copy(input) {
   } catch {
     input.focus();
     input.select();
-    toast("Text selected. Press Ctrl+C to copy.");
+    toast(
+      input.type === "password"
+        ? "Clipboard unavailable. Choose Show password, then select and copy it manually."
+        : "Text selected. Press Ctrl+C to copy.",
+    );
   }
 }
 // 旧草稿没有 tool 字段，继续由 Text Toolkit 读取。
@@ -130,6 +140,7 @@ export function draftEditor(tool, input, render = () => {}) {
   const name = $("#draft-name"),
     state = $("#draft-state");
   const changed = () => {
+    window.dispatchEvent(new Event("tool-content-changed"));
     dirty = true;
     state.textContent = "Unsaved changes · save when you are ready.";
     render();
@@ -172,7 +183,9 @@ export function draftEditor(tool, input, render = () => {}) {
       id = item.id;
       savedAt = item.updated_at;
       dirty = false;
-      state.textContent = "Saved to your workspace.";
+      state.textContent = api.user
+        ? "Saved and synced to your workspace."
+        : "Saved to your workspace on this device.";
       toast("Draft saved.");
     } catch {
       state.textContent =
@@ -180,6 +193,11 @@ export function draftEditor(tool, input, render = () => {}) {
     } finally {
       e.target.disabled = false;
     }
+  });
+  window.addEventListener("tool-recovery-restored", () => {
+    id = null;
+    savedAt = null;
+    changed();
   });
   load();
   window.addEventListener("workspace-ready", load);

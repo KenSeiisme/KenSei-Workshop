@@ -21,10 +21,23 @@ const w = $("#image-width"),
   h = $("#image-height"),
   format = $("#image-format"),
   quality = $("#image-quality");
+function fileState(index, state) {
+  window.dispatchEvent(
+    new CustomEvent("tool-file-state", {
+      detail: { tool: "image-studio", index, state },
+    }),
+  );
+}
 function clearResults() {
+  fileState(-1, "Waiting");
   generation++;
   results.forEach((x) => URL.revokeObjectURL(x.url));
   results = [];
+  const summary = document.querySelector("#image-batch-summary");
+  if (summary) {
+    delete summary.dataset.measured;
+    summary.textContent = "Select images and process to see results.";
+  }
   $("#batch-results").replaceChildren();
   $("#image-download").hidden = $("#image-zip").hidden = true;
   $("#image-result").textContent = "";
@@ -112,6 +125,7 @@ quality.oninput = () => {
 };
 $("#cancel-job").onclick = () => {
   generation++;
+  fileState(-1, "Cancelled");
   $("#image-result").textContent =
     "Cancelled. Finished images remain available.";
 };
@@ -140,6 +154,7 @@ $("#image-process").onclick = async () => {
       if (job !== generation) break;
       $("#image-result").textContent =
         `Processing ${i + 1} of ${files.length}…`;
+      fileState(i, "Processing");
       try {
         const img = await image(files[i]),
           targetWidth = width,
@@ -218,13 +233,22 @@ $("#image-process").onclick = async () => {
               ext,
           ),
           url = URL.createObjectURL(blob);
-        results.push({ name, blob, url });
+        results.push({ name, blob, url, sourceSize: files[i].size });
+        const summary = document.querySelector("#image-batch-summary");
+        if (summary) {
+          const inputBytes = results.reduce((n, r) => n + r.sourceSize, 0),
+            outputBytes = results.reduce((n, r) => n + r.blob.size, 0);
+          summary.dataset.measured = "true";
+          summary.textContent = `${results.length} image(s) ready · ${size(inputBytes)} → ${size(outputBytes)} · ${outputBytes <= inputBytes ? "saved" : "increased by"} ${size(Math.abs(inputBytes - outputBytes))}. Per-image dimensions and errors are below.`;
+        }
         const diff = (1 - blob.size / files[i].size) * 100;
         $("#batch-results").insertAdjacentHTML(
           "beforeend",
           `<div class="saved-row"><div><strong>${esc(files[i].name)}</strong><p>${targetWidth} × ${targetHeight} · ${size(files[i].size)} → ${size(blob.size)} · ${Math.abs(diff).toFixed(0)}% ${diff >= 0 ? "smaller" : "larger"}</p></div><a class="text-link" href="${url}" download="${esc(name)}">Download ↓</a></div>`,
         );
+        fileState(i, "Complete");
       } catch (e) {
+        fileState(i, "Failed");
         $("#batch-results").insertAdjacentHTML(
           "beforeend",
           `<div class="saved-row error-text">${esc(files[i].name)}: ${esc(e.message)}</div>`,

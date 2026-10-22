@@ -15,10 +15,12 @@ function update() {
     $("#unit-result").value = Number(result.toPrecision(12)).toString();
     $("#unit-status").textContent = "Rounded to 12 significant digits.";
     $("#unit-copy").disabled = false;
+    $("#unit-status").classList.remove("error-text");
   } catch (e) {
     $("#unit-result").value = "";
     $("#unit-status").textContent = e.message;
     $("#unit-copy").disabled = true;
+    $("#unit-status").classList.add("error-text");
   }
 }
 cat.onchange = () => {

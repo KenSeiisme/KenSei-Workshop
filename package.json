@@ -41,7 +41,8 @@
     "test:database": "node scripts/test.mjs database",
     "test:browser": "node scripts/test.mjs browser",
     "test:all": "node scripts/test.mjs all",
-    "test:live": "node tests/browser/live-second-batch.cjs"
+    "test:live": "node tests/browser/live-second-batch.cjs",
+    "test:experience": "node scripts/test.mjs experience"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

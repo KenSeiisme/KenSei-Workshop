@@ -50,7 +50,7 @@ function pass(s) {
   });
   async function go(slug) {
     await page.goto(base + "/tools/" + slug + "/");
-    await page.locator('[data-ready="true"]').waitFor();
+    await page.locator('[data-ready="true"]').waitFor().catch(error => { throw Error("Tool startup: " + slug + " · " + errors.join(" | ") + " · " + error.message); });
   }
   async function downloaded(action) {
     const [d] = await Promise.all([page.waitForEvent("download"), action()]);
@@ -229,7 +229,7 @@ function pass(s) {
     await page.waitForFunction(
       () =>
         document.querySelector("#draft-state").textContent ===
-        "Saved to your workspace.",
+        "Saved to your workspace on this device.",
     );
     const html = await downloaded(() => page.locator("#markdown-html").click());
     assert(html.bytes.toString().includes("&lt;script&gt;"));
@@ -404,7 +404,7 @@ function pass(s) {
     await page.waitForFunction(
       () =>
         document.querySelector("#draft-state").textContent ===
-        "Saved to your workspace.",
+        "Saved to your workspace on this device.",
     );
     d = await downloaded(() => page.locator("#ocr-download").click());
     assert.match(d.bytes.toString(), /Selamat/);

@@ -86,6 +86,7 @@ const legacy = {
     await p.goto(base + "/tools/network-test/");
     await p.waitForSelector('[data-ready="true"]');
     assert.equal(requests.length, 0);
+    await require("../support/tool-controls.cjs").expand(p, "Completed tests & comparison");
     await p.getByRole("button", { name: "View", exact: true }).click();
     assert.match(
       await p.textContent("#network-samples"),
@@ -160,6 +161,7 @@ const legacy = {
     );
     await p.click("#network-copy");
     assert.ok(!(await p.inputValue("#network-result")).includes(IP));
+    await require("../support/tool-controls.cjs").expand(p, "Completed tests & comparison");
     await p.click("#network-compare");
     assert.match(await p.textContent("#network-comparison"), /Second − first/);
     for (const width of [360, 768, 1440]) {
@@ -202,6 +204,7 @@ const legacy = {
     q.on("pageerror", (e) => fallbackErrors.push(e.message));
     await q.goto(base + "/tools/network-test/");
     await q.waitForSelector('[data-ready="true"]');
+    await require("../support/tool-controls.cjs").expand(q, "Completed tests & comparison");
     await q.getByRole("button", { name: "View", exact: true }).click();
     await q.waitForTimeout(500);
     assert.match(await q.textContent("#network-speed-chart"), /unavailable/i);

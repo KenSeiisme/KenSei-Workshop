@@ -73,6 +73,7 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
       waitUntil: "domcontentloaded",
     });
     await p.waitForSelector('[data-ready="true"]');
+    if (slug === "answer-book") await p.getByText("Answer history", {exact:true}).click();
     return p;
   }
   async function check(label, fn) {

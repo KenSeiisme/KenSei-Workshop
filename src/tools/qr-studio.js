@@ -11,7 +11,20 @@ import {
 } from "./common.js";
 import "./qr-scan.js";
 let logo = "",
+  qr = null,
+  revision = 0;
+function invalidateOutput() {
+  revision++;
   qr = null;
+  $("#qr-png").disabled = $("#qr-svg").disabled = true;
+  status("Inputs changed. Generate again to update the preview.");
+}
+for (const input of document.querySelectorAll(
+  "#qr-generate-panel input,#qr-generate-panel textarea,#qr-generate-panel select",
+)) {
+  input.addEventListener("input", invalidateOutput);
+  input.addEventListener("change", invalidateOutput);
+}
 const type = $("#qr-type");
 function fields() {
   $$("[data-qr-section]").forEach(
@@ -66,14 +79,16 @@ $("#qr-logo").onchange = async (e) => {
 $("#qr-remove-logo").onclick = () => {
   logo = "";
   $("#qr-logo").value = "";
-  status("Logo removed. Generate again to update the preview.");
+  invalidateOutput();
 };
 $("#qr-generate").onclick = async (e) => {
   e.target.disabled = true;
+  const job = ++revision;
   try {
     const data = payload(),
       width = +$("#qr-size").value;
     const Constructor = await library("qr-code-styling.js", "QRCodeStyling");
+    if (job !== revision) return;
     if ($("#qr-dark").value === $("#qr-light").value)
       throw new Error("Choose different foreground and background colors.");
     const next = new Constructor({
@@ -91,6 +106,7 @@ $("#qr-generate").onclick = async (e) => {
     $("#qr-preview").replaceChildren();
     next.append($("#qr-preview"));
     qr = next;
+    window.dispatchEvent(new Event("tool-output-current"));
     $("#qr-png").disabled = $("#qr-svg").disabled = false;
     status("Ready. Scan the code to check it before sharing.");
   } catch (e) {
@@ -129,6 +145,7 @@ function loadPreset() {
       .items("preset")
       .find((x) => x.id === id && x.data.tool === "qr-studio")?.data;
   if (p) {
+    invalidateOutput();
     $("#qr-dark").value = p.dark;
     $("#qr-light").value = p.light;
     $("#qr-size").value = p.size;
