@@ -2,7 +2,7 @@ import { build } from "esbuild";
 import fs from "node:fs/promises";
 import path from "node:path";
 const root = path.resolve(import.meta.dirname, ".."),
-  out = path.join(root, "vendor");
+  out = path.join(root, "src", "vendor");
 for (const [file, contents] of Object.entries({
   "math.js": 'export {create,all} from "mathjs";',
   "cropper.js": 'export {default} from "cropperjs";',

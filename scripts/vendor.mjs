@@ -6,7 +6,7 @@ import { gzipSync, gunzipSync } from "node:zlib";
 import crypto from "node:crypto";
 const require = createRequire(import.meta.url);
 const root = path.resolve(import.meta.dirname, ".."),
-  out = path.join(root, "vendor");
+  out = path.join(root, "src", "vendor");
 await fs.mkdir(out, { recursive: true });
 const resolveRoot = (name) => {
   let p = path.dirname(require.resolve(name));
@@ -51,7 +51,7 @@ for (const name of await fs.readdir(core))
       path.join(core, name),
       path.join(out, "tesseract/core", name),
     );
-const modelLockPath = path.join(root, "model-lock.json");
+const modelLockPath = path.join(root, "data", "model-lock.json");
 let modelLock = {};
 try {
   modelLock = JSON.parse(await fs.readFile(modelLockPath, "utf8"));

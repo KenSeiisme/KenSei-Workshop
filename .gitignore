@@ -7,3 +7,8 @@ __pycache__/
 /projects/3A3D/
 /.vercel/
 .vercel
+
+# Rebuilt locally and on Vercel; source lives in src/ and data/.
+/dist/
+/supabase/.temp/
+/.openai/

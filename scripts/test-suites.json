@@ -1,0 +1,51 @@
+{
+  "base": [
+    ["tests/browser/verify.cjs"],
+    ["tests/browser/image-studio.cjs"],
+    ["tests/browser/tools.cjs"],
+    ["tests/browser/limits.cjs"],
+    ["tests/browser/ocr-lifecycle.cjs"],
+    ["tests/browser/auth.cjs"]
+  ],
+  "second-batch": [
+    ["tests/database/database.mjs"],
+    ["tests/browser/second-batch.cjs"]
+  ],
+  "profiles": [
+    ["tests/database/profiles-database.mjs"],
+    ["tests/browser/profiles.cjs"]
+  ],
+  "daily": [
+    ["tests/unit/daily-core.mjs"],
+    ["tests/browser/daily-tools.cjs"],
+    ["tests/browser/zip-guards.cjs"],
+    ["tests/browser/network-guards.cjs"]
+  ],
+  "fourth": [
+    ["tests/unit/fourth-core.mjs"],
+    ["tests/browser/fourth-tools.cjs"],
+    ["tests/browser/fourth-boundaries.cjs"],
+    ["tests/browser/network-dashboard.cjs"]
+  ],
+  "fifth": [
+    ["tests/unit/fifth-core.mjs"],
+    ["tests/database/fifth-database.mjs"],
+    ["tests/browser/fifth-tools.cjs"],
+    ["tests/browser/fifth-sync.cjs"],
+    ["tests/browser/fifth-boundaries.cjs"]
+  ],
+  "sixth": [
+    ["tests/database/sixth-database.mjs"],
+    ["tests/database/sixth-retry-revision.mjs"],
+    ["tests/unit/sixth-planner.mjs"],
+    ["tests/unit/sixth-whiteboard-core.mjs"],
+    ["tests/unit/sixth-media-core.mjs"],
+    ["tests/browser/sixth-planner.cjs"],
+    ["tests/browser/sixth-whiteboard.cjs"],
+    ["tests/browser/sixth-media.cjs"],
+    ["tests/browser/sixth-sync.cjs", "planner"],
+    ["tests/browser/sixth-sync.cjs", "whiteboard"],
+    ["tests/browser/sixth-pages-sync.cjs", "planner"],
+    ["tests/browser/sixth-pages-sync.cjs", "whiteboard"]
+  ]
+}

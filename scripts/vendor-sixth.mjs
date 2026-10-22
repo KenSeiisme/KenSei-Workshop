@@ -4,7 +4,7 @@ import { build } from "esbuild";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url),
   root = path.resolve(import.meta.dirname, ".."),
-  out = path.join(root, "vendor"),
+  out = path.join(root, "src", "vendor"),
   board = path.join(out, "whiteboard");
 await fs.mkdir(board, { recursive: true });
 const result = await build({

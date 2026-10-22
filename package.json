@@ -7,6 +7,7 @@
     "cropperjs": "2.3.1",
     "diff": "9.0.0",
     "fflate": "0.8.3",
+    "jsqr": "1.4.0",
     "markdown-it": "15.0.3",
     "mathjs": "15.2.0",
     "mediabunny": "1.61.6",
@@ -20,25 +21,32 @@
     "spin-wheel": "5.0.2",
     "tesseract.js": "7.0.0",
     "uplot": "1.6.32",
-    "wavesurfer.js": "8.0.3",
-    "jsqr": "1.4.0"
+    "wavesurfer.js": "8.0.3"
   },
   "name": "kensei-workshop",
   "private": true,
   "scripts": {
     "vendor": "node scripts/vendor.mjs",
     "build": "python build.py",
-    "test": "node tests/verify.cjs && node tests/image-studio.cjs && node tests/tools.cjs && node tests/limits.cjs && node tests/ocr-lifecycle.cjs && node tests/auth.cjs",
-    "test:second-batch": "node tests/database.mjs && node tests/second-batch.cjs",
-    "test:profiles": "node tests/profiles-database.mjs && node tests/profiles.cjs",
-    "test:daily": "node tests/daily-core.mjs && node tests/daily-tools.cjs && node tests/zip-guards.cjs && node tests/network-guards.cjs",
-    "test:fourth": "node tests/fourth-core.mjs && node tests/fourth-tools.cjs && node tests/fourth-boundaries.cjs && node tests/network-dashboard.cjs",
-    "test:fifth": "node tests/fifth-core.mjs && node tests/fifth-database.mjs && node tests/fifth-tools.cjs && node tests/fifth-sync.cjs && node tests/fifth-boundaries.cjs",
-    "test:sixth": "node tests/sixth-database.mjs && node tests/sixth-retry-revision.mjs && node tests/sixth-planner.mjs && node tests/sixth-whiteboard-core.mjs && node tests/sixth-media-core.mjs && node tests/sixth-planner.cjs && node tests/sixth-whiteboard.cjs && node tests/sixth-media.cjs && node tests/sixth-sync.cjs planner && node tests/sixth-sync.cjs whiteboard && node tests/sixth-pages-sync.cjs planner && node tests/sixth-pages-sync.cjs whiteboard"
+    "test": "node scripts/test.mjs base",
+    "test:second-batch": "node scripts/test.mjs second-batch",
+    "test:profiles": "node scripts/test.mjs profiles",
+    "test:daily": "node scripts/test.mjs daily",
+    "test:fourth": "node scripts/test.mjs fourth",
+    "test:fifth": "node scripts/test.mjs fifth",
+    "test:sixth": "node scripts/test.mjs sixth",
+    "preview": "python scripts/serve.py 8769",
+    "test:structure": "python scripts/verify-structure.py",
+    "test:unit": "node scripts/test.mjs unit",
+    "test:database": "node scripts/test.mjs database",
+    "test:browser": "node scripts/test.mjs browser",
+    "test:all": "node scripts/test.mjs all",
+    "test:live": "node tests/browser/live-second-batch.cjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",
     "esbuild": "0.28.2",
+    "playwright": "1.62.1",
     "prettier": "3.9.10"
   }
 }

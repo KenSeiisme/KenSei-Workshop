@@ -3,7 +3,7 @@ from pathlib import Path
 import io
 import tarfile
 
-archive = Path(__file__).resolve().parents[1] / "vendor/sources/mediabunny-1.61.6.tgz"
+archive = Path(__file__).resolve().parents[1] / "src/vendor/sources/mediabunny-1.61.6.tgz"
 payload = archive.read_bytes()
 with tarfile.open(fileobj=io.BytesIO(payload), mode="r:gz") as upstream:
     members = upstream.getmembers()

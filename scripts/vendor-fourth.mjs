@@ -6,7 +6,7 @@ import { createRequire } from "node:module";
 import { execFileSync } from "node:child_process";
 const require = createRequire(import.meta.url),
   root = path.resolve(import.meta.dirname, ".."),
-  out = path.join(root, "vendor");
+  out = path.join(root, "src", "vendor");
 const bundles = {
   "temporal.js": 'export {Temporal} from "@js-temporal/polyfill";',
   "uplot.js": 'export {default} from "uplot";',
