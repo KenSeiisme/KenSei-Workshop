@@ -1,6 +1,6 @@
 import { api } from "./common.js";
 export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
-  if (!["planner", "whiteboard"].includes(kind))
+  if (!["planner", "whiteboard", "game"].includes(kind))
     throw Error("Unknown private record kind.");
   const sessions = new Map(),
     listeners = new Set(),
@@ -93,7 +93,17 @@ export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
     let timer;
     try {
       return await Promise.race([
-        api.client.rpc(name, args),
+        api.client.rpc(
+          kind === "game"
+            ? {
+                get_private_records: "get_game_saves",
+                get_private_record: "get_game_save",
+                save_private_record: "save_game_save",
+                clear_private_records: "clear_game_saves",
+              }[name] || name
+            : name,
+          args,
+        ),
         new Promise(
           (_, reject) =>
             (timer = setTimeout(

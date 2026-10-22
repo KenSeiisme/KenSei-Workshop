@@ -1,9 +1,7 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
   { zipSync, unzipSync } = require("fflate");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8795";
 const slugs = [
     "network-test",
@@ -19,7 +17,10 @@ const pass = (s) => {
 };
 (async () => {
   fs.mkdirSync("_qa", { recursive: true });
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true }),
+  const browser = await chromium.launch({
+      channel: process.env.BROWSER_CHANNEL || "msedge",
+      headless: true,
+    }),
     ctx = await browser.newContext(),
     errors = [],
     uploads = [];
@@ -50,10 +51,7 @@ const pass = (s) => {
       await p.goto(base + "/tools/");
       assert.equal(await p.locator("[data-tool-card]").count(), 28);
       assert.equal(await p.locator('[data-filter="fun"]').count(), 0);
-      assert.equal(
-        await p.getByRole("link", { name: "Games", exact: true }).count(),
-        0,
-      );
+      assert.equal(await p.locator('#navigation a[href="/games/"]').count(), 1);
       for (const slug of slugs) {
         await open(slug);
         assert.ok(
@@ -354,7 +352,7 @@ const pass = (s) => {
     });
     assert.match(await p.textContent("#network-status"), /hidden/);
     await p.evaluate(() => delete document.hidden);
-    await p.getByText("Completed tests & comparison", {exact:true}).click();
+    await p.getByText("Completed tests & comparison", { exact: true }).click();
     await p
       .locator("#network-history .saved-row")
       .getByRole("button", { name: "Delete", exact: true })

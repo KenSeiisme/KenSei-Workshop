@@ -66,6 +66,29 @@ async function load() {
           return `<section class="panel"><span class="eyebrow">${lang === "en" ? "ENGLISH · WPM" : "中文 · CPM"}</span><strong>${score ? Number(score.speed).toFixed(1) : "—"}</strong><p>${score ? `${Number(score.accuracy).toFixed(2)}% accuracy · ${esc(new Date(score.achieved_at).toLocaleDateString())} · text v${Number(score.version)}` : "No qualifying current-version score yet."}</p></section>`;
         })
         .join("");
+      if (p.game_best_scores?.length) {
+        const section = document.createElement("section");
+        section.className = "panel";
+        const heading = document.createElement("h2");
+        heading.textContent = "Game bests";
+        section.append(heading);
+        for (const score of p.game_best_scores) {
+          const row = document.createElement("p"),
+            link = document.createElement("a");
+          link.href = "/games/" + encodeURIComponent(score.game) + "/";
+          link.textContent = score.game + " · " + score.difficulty;
+          row.append(link);
+          const result =
+            score.game === "memory-match"
+              ? `${score.moves} attempts · ${(score.elapsed_ms / 1000).toFixed(2)} s`
+              : score.game === "minesweeper"
+                ? `${(score.elapsed_ms / 1000).toFixed(2)} s`
+                : `${score.score} pts`;
+          row.append(document.createTextNode(" — " + result));
+          section.append(row);
+        }
+        $("#public-best-scores").after(section);
+      }
       if (api.user) {
         ensureProfile()
           .then(

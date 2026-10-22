@@ -979,6 +979,10 @@
     import("/tool-scripts/profile.js").catch(() =>
       toast("Profile files could not load. Reload to retry."),
     );
+  if (document.querySelector("[data-game], [data-games-directory]"))
+    import("/game-scripts/games.js").catch(() =>
+      toast("Game files could not load. Reload this page to retry."),
+    );
   initAuth().finally(() => {
     window.KenseiWorkspace.ready = true;
     window.dispatchEvent(new Event("workspace-ready"));

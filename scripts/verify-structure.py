@@ -26,11 +26,15 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
     assert len({tool[0] for tool in tools}) == len(tools)
     for slug, *_ in tools:
         assert (output / "tools" / slug / "index.html").is_file(), slug
+    games = json.loads((ROOT / "data/games.json").read_text(encoding="utf-8"))
+    for game in games:
+        assert (output / "games" / game["slug"] / "index.html").is_file()
+    assert (output / "games/index.html").is_file()
     for name in ("app.js", "config.js"):
         assert digest(SOURCE / name) == digest(output / name), name
     for path in (SOURCE / "styles").glob("*.css"):
         assert digest(path) == digest(output / path.name), path.name
-    for source, public in (("assets", "assets"), ("tools", "tool-scripts"), ("vendor", "vendor")):
+    for source, public in (("assets", "assets"), ("tools", "tool-scripts"), ("games", "game-scripts"), ("vendor", "vendor")):
         for path in (SOURCE / source).rglob("*"):
             if not path.is_file() or "__pycache__" in path.parts or path.name.endswith((".pyc", ".tar.gz")):
                 continue

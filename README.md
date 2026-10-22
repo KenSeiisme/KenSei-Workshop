@@ -1,6 +1,6 @@
 # KenSei Workshop
 
-以浏览器工具为主的平台，目前提供 **28 个工具**。
+以浏览器工具为主的平台，目前提供 **28 个工具**，并有独立的 **4 款小游戏**栏目。
 
 - 正式网站：https://kensei-workshop.vercel.app/
 - GitHub 分支：`KenSei-Workshop`
@@ -15,6 +15,7 @@ KenSei Workshop/
 │  ├─ config.js         可公开的站点与 Supabase 配置
 │  ├─ assets/           图片、图标
 │  ├─ styles/           网站及工具样式
+│  ├─ games/            四款游戏、共享规则和账号存档界面
 │  ├─ tools/            各工具脚本、worker、同步模块
 │  ├─ views/            Python 页面片段与工具界面
 │  └─ vendor/           固定版本第三方脚本、OCR 模型、WASM、许可证
@@ -90,3 +91,7 @@ pnpm test:browser
 七个文字编辑工具可自行开启 `Remember on this device`，默认关闭。恢复副本存放在独立 IndexedDB，与 Workspace 草稿和账号同步分离；每个工具、每个身份保留最近三次编辑会话，每份最多 2 MB。恢复需要主动选择，保存草稿时另存新副本；关闭开关会清除此身份在当前工具的恢复记录。
 
 恢复不会保存密码、QR/Wi-Fi 内容、临时问题、打字输入、文件对象或媒体，也不会自动上传。验收说明见 [工具体验](docs/validation/tool-experience.md)。
+
+## Games
+
+游戏目录、玩法、存档及服务端验收说明见 [docs/games.md](docs/games.md)。游戏规则在浏览器和 Supabase Edge 共用，发布前运行 pnpm test:games；现有 Vercel 仍由 GitHub push 自动构建。

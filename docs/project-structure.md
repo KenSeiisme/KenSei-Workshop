@@ -10,6 +10,8 @@
 | `src/styles/*.css`                | `/<样式文件名>.css`               |
 | `src/assets/`                     | `/assets/`                        |
 | `src/tools/`                      | `/tool-scripts/`                  |
+| `src/games/`                      | `/game-scripts/`
+| `data/games.json`                | 独立 Games 目录与四款游戏路由
 | `src/vendor/`                     | `/vendor/`                        |
 | `data/tools.json`                 | 工具卡片、路由和 `/tools-data.js` |
 | `src/views/` + `scripts/build.py` | 各页面 HTML                       |
@@ -47,3 +49,5 @@
 - `projects/3A3D` 不纳入主站源码整理，独立仓库保持原样。
 
 整理后先在空目录构建，逐一比较了现有 **872 个公开文件**：没有缺失、新增或内容变化。`pnpm test:structure` 可再次检查空目录构建、全部工具路由、完整的公开资源复制，以及输出中没有内部源码或私密配置文件。
+
+游戏独立于工具目录和 Workspace；共享规则、账号存档及 Edge 发布流程见 [games.md](games.md)。

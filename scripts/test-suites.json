@@ -52,5 +52,11 @@
     ["tests/browser/tool-experience.cjs"],
     ["tests/browser/local-recovery.cjs"],
     ["tests/browser/tool-feedback.cjs"]
+  ],
+  "games": [
+    ["tests/unit/games-core.mjs"],
+    ["tests/unit/games-edge.mjs"],
+    ["tests/database/games-database.mjs"],
+    ["tests/browser/games.cjs"]
   ]
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "2048",
+    "name": "2048",
+    "description": "Slide, merge and find a little room for one more tile.",
+    "category": "Puzzle",
+    "preview": "2048"
+  },
+  {
+    "slug": "minesweeper",
+    "name": "Minesweeper",
+    "description": "Read the numbers. Trust your flags. Clear a careful path.",
+    "category": "Puzzle",
+    "preview": "mines"
+  },
+  {
+    "slug": "snake",
+    "name": "Snake",
+    "description": "One more bite, one less corner. A familiar little challenge.",
+    "category": "Arcade",
+    "preview": "snake"
+  },
+  {
+    "slug": "memory-match",
+    "name": "Memory Match",
+    "description": "A few familiar shapes. A little more attention.",
+    "category": "Puzzle",
+    "preview": "memory"
+  }
+]

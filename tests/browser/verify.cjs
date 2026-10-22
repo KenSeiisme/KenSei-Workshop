@@ -147,6 +147,7 @@ function pass(name) {
     assert.deepEqual(await page.locator("#navigation a").allTextContents(), [
       "Home",
       "Tools",
+      "Games",
       "Projects",
       "About Me ↗",
     ]);
