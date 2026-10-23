@@ -182,10 +182,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
   try {
     await p.goto(`${base}/games/`);
     await p.waitForSelector("[data-game-card]");
-    assert.equal(await p.locator("[data-game-card]").count(), 10);
+    assert.equal(await p.locator("[data-game-card]").count(), 12);
     for (const [filter, count] of [
       ["puzzle", 6],
-      ["arcade", 2],
+      ["arcade", 4],
       ["board", 2],
     ]) {
       await p.click(`[data-game-filter="${filter}"]`);
@@ -249,7 +249,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     assert.equal(await p.inputValue("#game-mode"), "private");
     assert.ok(await p.locator(".sudoku-notes").count());
     console.log(
-      "PASS ten-game catalog, six guest idle pages, legacy save compatibility and Sudoku notes/hint/undo/explicit Private restore",
+      "PASS twelve-game catalog, six guest idle pages, legacy save compatibility and Sudoku notes/hint/undo/explicit Private restore",
     );
 
     const account = await context(A),
@@ -317,7 +317,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     );
     await q.goto(`${base}/profile/?id=${publicProfile.public_id}`);
     await q.waitForSelector("#public-profile:not([hidden])");
-    assert.equal(await q.locator(".profile-game-card").count(), 8);
+    assert.equal(await q.locator(".profile-game-card").count(), 9);
     assert.equal(
       await q
         .locator('.profile-game-card[data-game-theme="sudoku"].has-score')
@@ -347,7 +347,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       fullPage: true,
     });
     console.log(
-      "PASS Public Nonogram server replay, rank, and eight ranked-only Profile cards with new result links",
+      "PASS Public Nonogram server replay, rank, and nine ranked-only Profile cards with new result links",
     );
 
     await open(p, "nonogram");

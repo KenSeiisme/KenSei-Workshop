@@ -1,6 +1,6 @@
 # KenSei Workshop
 
-以浏览器工具为主的平台，目前提供 **28 个工具**，并有独立的 **10 款小游戏**栏目；其中 8 款支持公开榜，四子棋和黑白棋仅供私人游玩。
+以浏览器工具为主的平台，目前提供 **28 个工具**，并有独立的 **12 款小游戏**栏目；其中 9 款支持公开榜及 30 项成就。四子棋、黑白棋为私人游戏，Pong 为好友在线邀请房。
 
 - 正式网站：https://kensei-workshop.vercel.app/
 - GitHub 分支：`KenSei-Workshop`
@@ -15,7 +15,7 @@ KenSei Workshop/
 │  ├─ config.js         可公开的站点与 Supabase 配置
 │  ├─ assets/           图片、图标
 │  ├─ styles/           网站及工具样式
-│  ├─ games/            十款游戏、共享规则和账号存档界面
+│  ├─ games/            十二款游戏、共享规则、成就和账号存档界面
 │  ├─ tools/            各工具脚本、worker、同步模块
 │  ├─ views/            Python 页面片段与工具界面
 │  └─ vendor/           固定版本第三方脚本、OCR 模型、WASM、许可证
@@ -55,6 +55,7 @@ pnpm test:experience
 $env:TEST_BASE_URL = 'http://127.0.0.1:8769'
 pnpm test:games
 pnpm test:games-expansion
+pnpm test:arcade-next
 pnpm test:browser
 # 或运行所有测试：pnpm test:all
 ```
@@ -82,7 +83,7 @@ pnpm test:browser
 
 `.env.local` 保留在本机根目录，禁止提交；`src/config.js` 只包含可公开的配置。私人草稿、学习计划和白板按账号隔离；录屏、录音和扫码内容只在浏览器处理。Google 登录、公开 Profile 和打字榜继续使用现有 Supabase 项目。
 
-`projects/3A3D` 是独立项目，不会进入主站部署。Games 已使用独立目录和 `/games/` 路由，提供十款游戏、私人存档与八款游戏的公开榜；不进入工具搜索或 Workspace。
+`projects/3A3D` 是独立项目，不会进入主站部署。Games 使用独立目录和 `/games/` 路由；普通私人对局保存到 Games，Pong 房间只临时保留，不进入工具搜索、Workspace 或 Continue playing。成就与个人统计只计算服务器确认的有效 Public 结果。
 
 更多说明见 [项目结构](docs/project-structure.md)、[各批验收](docs/validation/) 和 [历史说明](docs/history/pre-organization-readme.md)。
 

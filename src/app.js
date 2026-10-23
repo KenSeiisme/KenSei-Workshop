@@ -979,6 +979,10 @@
     import("/tool-scripts/profile.js").catch(() =>
       toast("Profile files could not load. Reload to retry."),
     );
+  if (document.querySelector("[data-pong]"))
+    import("/game-scripts/pong.js").catch(() =>
+      toast("Pong files could not load. Reload to retry."),
+    );
   if (document.querySelector("[data-game], [data-games-directory]"))
     import("/game-scripts/games.js").catch(() =>
       toast("Game files could not load. Reload this page to retry."),

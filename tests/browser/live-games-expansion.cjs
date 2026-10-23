@@ -118,7 +118,7 @@ const slugs = [
   try {
     await page.goto(base + "/games/");
     await page.waitForSelector('[data-games-directory][data-ready="true"]');
-    assert.equal(await page.locator("[data-game-card]").count(), 10);
+    assert.equal(await page.locator("[data-game-card]").count(), 12);
     await page.click('[data-game-filter="board"]');
     assert.equal(await page.locator("[data-game-card]:visible").count(), 2);
     for (const slug of slugs) {
@@ -349,7 +349,7 @@ const slugs = [
       assert.match(publicId, /^[0-9a-f-]{36}$/i);
       await page.goto(`${base}/profile/?id=${encodeURIComponent(publicId)}`);
       await page.waitForSelector("#public-profile:not([hidden])");
-      assert.equal(await page.locator(".profile-game-card").count(), 8);
+      assert.equal(await page.locator(".profile-game-card").count(), 9);
       for (const slug of slugs.slice(0, 4))
         assert.equal(
           await page
@@ -369,10 +369,10 @@ const slugs = [
       );
       assert.match(
         await page.locator("#public-game-count").innerText(),
-        /\/ 8$/,
+        /\/ 9$/,
       );
       console.log(
-        "PASS live existing public Profile: eight ranked-game cards, four new game links, no private board matches.",
+        "PASS live existing public Profile: nine ranked-game cards, four new game links, no private board matches.",
       );
     } else
       console.log(

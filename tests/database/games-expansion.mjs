@@ -195,8 +195,8 @@ for (const game of ["connect-four", "reversi"]) {
     );
   }
 }
-assert.equal(Object.keys(GAMES).length, 10);
-assert.equal(Object.keys(GAMES).filter(isRanked).length, 8);
+assert.equal(Object.keys(GAMES).length, 11);
+assert.equal(Object.keys(GAMES).filter(isRanked).length, 9);
 await as("authenticated", a, () =>
   assert.rejects(
     () => db.query("select * from workshop_private.game_results"),
@@ -217,7 +217,14 @@ const complete = async (
   user,
   game,
   difficulty,
-  { score = 0, moves = 1, duration = 10000, max_tile = 0, won = true } = {},
+  {
+    score = 0,
+    moves = 1,
+    duration = 10000,
+    max_tile = 0,
+    won = true,
+    lines = 0,
+  } = {},
 ) => {
   // Move completed fixture sessions outside the per-minute start window.
   await db.query(
@@ -230,7 +237,13 @@ const complete = async (
   );
   return admin("finish", user, {
     session_id: session.id,
-    metrics: { score, moves, max_tile, won },
+    metrics: {
+      score,
+      moves,
+      max_tile,
+      won,
+      ...(game === "block-drop" ? { lines } : {}),
+    },
   });
 };
 const leaderboard = (game, difficulty, user = a) =>
@@ -290,6 +303,7 @@ for (const game of ["2048", "minesweeper", "snake", "memory-match"])
     score: ["2048", "snake"].includes(game) ? 100 : 0,
     max_tile: game === "2048" ? 32 : 0,
   });
+await complete(a, "block-drop", "classic", { score: 500, lines: 10 });
 for (const game of Object.keys(GAMES).filter(isRanked)) {
   const difficulty = ["sudoku", "nonogram"].includes(game)
     ? "easy"
@@ -305,7 +319,7 @@ const profile = await rpc(
   "anon",
   null,
 );
-assert.equal(profile.game_best_scores.length, 8);
+assert.equal(profile.game_best_scores.length, 9);
 assert.deepEqual(
   new Set(profile.game_best_scores.map((entry) => entry.game)),
   new Set(Object.keys(GAMES).filter(isRanked)),
@@ -358,6 +372,6 @@ assert.equal(
 assert.ok(!JSON.stringify(board).match(/"(user_id|state|seed|events|email)":/));
 
 console.log(
-  "PASS expansion DB: six private saves/RLS, retries/conflicts/account isolation, private-only boards, wins-only puzzles, Block/Brick ordering, idempotence, eight public game bests and old-score compatibility.",
+  "PASS expansion DB: six private saves/RLS, retries/conflicts/account isolation, private-only boards, wins-only puzzles, Block/Brick ordering, idempotence, nine public game bests and old-score compatibility.",
 );
 await db.close();

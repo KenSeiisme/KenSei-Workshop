@@ -222,7 +222,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     );
     await p.goto(base + "/profile/?id=" + id);
     await p.waitForSelector('#profile-page[data-ready="true"]');
-    assert.equal(await p.locator("#public-game-count").innerText(), "4 / 8");
+    assert.equal(await p.locator("#public-game-count").innerText(), "4 / 9");
     assert.equal(await p.locator("#public-typing-count").innerText(), "2 / 2");
     assert.equal(await p.locator(".profile-game-card.has-score").count(), 4);
     assert.equal(await p.locator(".profile-game-extra").count(), 3);
@@ -255,7 +255,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await p.waitForFunction(
       () => document.querySelector("#profile-status").textContent === "",
     );
-    assert.equal(await p.locator(".profile-game-card").count(), 8);
+    assert.equal(await p.locator(".profile-game-card").count(), 9);
     await p.evaluate(() => {
       window.__publicFixture = {
         ...window.__publicFixture,
@@ -269,9 +269,9 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await p.click("#profile-retry");
     await p.waitForFunction(
       () =>
-        document.querySelector("#public-game-count").textContent === "0 / 8",
+        document.querySelector("#public-game-count").textContent === "0 / 9",
     );
-    assert.equal(await p.locator(".profile-game-card.no-score").count(), 8);
+    assert.equal(await p.locator(".profile-game-card.no-score").count(), 9);
     assert.equal(await p.locator("#public-bio img").count(), 0);
     for (const width of [320, 360, 768, 1440])
       await fit(width, "empty and long-name profile");

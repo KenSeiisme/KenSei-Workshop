@@ -3,6 +3,9 @@ import { GAMES, timeScored } from "./engine.js";
 // 名称与难度取自同一份规则；这里只格式化展示，不改变计分。
 export { GAMES };
 const paths = {
+  "block-drop":
+    '<path d="M9 3h6v6H9zM3 9h6v6H3zM9 9h6v6H9zM15 9h6v6h-6zM3 20h18"/><path d="m11 17 1 2 1-2"/>',
+  pong: '<path d="M3 7v10M21 7v10M12 3v3m0 3v3m0 3v3m0 3v1"/><circle cx="16" cy="10" r="2"/>',
   sudoku:
     '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18M6 5v2m6 4v2m6 4v2"/>',
   nonogram:
@@ -22,6 +25,8 @@ export function gameIcon(game) {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[game] || paths["2048"]}</svg>`;
 }
 export function scoreParts(row, game) {
+  if (game === "block-drop" && row.difficulty === "sprint")
+    return { value: (row.elapsed_ms / 1000).toFixed(2), unit: "seconds" };
   if (timeScored(game))
     return { value: (row.elapsed_ms / 1000).toFixed(2), unit: "seconds" };
   if (game === "memory-match")
@@ -29,6 +34,8 @@ export function scoreParts(row, game) {
   return { value: Number(row.score).toLocaleString(), unit: "points" };
 }
 export function scoreDetail(row, game) {
+  if (game === "block-drop")
+    return `${Number(row.lines || row.summary?.lines || 0).toLocaleString()} lines cleared`;
   if (game === "2048")
     return `Largest tile · ${Number(row.max_tile).toLocaleString()}`;
   if (game === "memory-match")

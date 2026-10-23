@@ -1,8 +1,10 @@
 import { createPuzzleUI } from "./puzzle-ui.js";
 import { createArcadeUI } from "./arcade-ui.js";
 import { createBoardUI } from "./board-ui.js";
+import { createDropUI } from "./block-drop-ui.js";
 
 export function createExtraUI(context) {
+  if (context.game === "block-drop") return createDropUI(context);
   if (["sudoku", "nonogram"].includes(context.game))
     return createPuzzleUI(context);
   if (["block-puzzle", "brick-breaker"].includes(context.game))

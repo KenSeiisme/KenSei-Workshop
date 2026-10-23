@@ -47,7 +47,8 @@
     "games:edge": "node scripts/build-games-edge.mjs",
     "test:games-expansion": "node scripts/test.mjs games-expansion",
     "test:game-neon": "node scripts/test.mjs game-neon",
-    "games:record": "node scripts/record-game-demo.cjs"
+    "games:record": "node scripts/record-game-demo.cjs",
+    "test:arcade-next": "node scripts/test.mjs arcade-next"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

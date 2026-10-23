@@ -1,5 +1,6 @@
 import { patchMarkup } from "/game-scripts/dom.js";
 import { mountEffects, revealGameCards } from "/game-scripts/effects.js";
+import { renderPublicAchievements } from "/game-scripts/achievements.js";
 mountEffects();
 import { $, api, esc, canvasBlob } from "./common.js";
 import { ready } from "./personal-store.js";
@@ -45,6 +46,13 @@ function fill(profile) {
   paintAvatar($("#profile-avatar"), profile);
 }
 function renderPublicScores(profile) {
+  renderPublicAchievements(
+    $("#public-game-achievements"),
+    profile.game_achievements || [],
+  );
+  if ($("#public-achievements-count"))
+    $("#public-achievements-count").textContent =
+      `${(profile.game_achievements || []).length} / 30`;
   const games = (profile.game_best_scores || []).filter(
     (r) => GAMES[r.game]?.ranked && GAMES[r.game]?.modes[r.difficulty],
   );

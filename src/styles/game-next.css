@@ -1,0 +1,496 @@
+[data-game-theme="block-drop"] {
+  --game-accent: #91d9f0;
+  --game-glow: 145, 217, 240;
+}
+[data-game-theme="pong"] {
+  --game-accent: #f2c68c;
+  --game-glow: 242, 198, 140;
+}
+.drop-stage {
+  display: grid;
+  grid-template-columns: minmax(50px, 1fr) minmax(120px, 240px) minmax(
+      50px,
+      1fr
+    );
+  gap: 16px;
+  max-width: 510px;
+  margin: auto;
+  align-items: start;
+}
+.drop-well {
+  position: relative;
+  border: 1px solid #91d9f04d;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 0 0 40px #91d9f00a;
+}
+.drop-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1/2;
+  max-height: 65vh;
+}
+.drop-hold,
+.drop-next {
+  min-width: 0;
+  text-align: center;
+}
+.drop-stage h3 {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 8px 0 12px;
+}
+.drop-stage kbd {
+  font-size: 0.65rem;
+}
+.drop-hold p {
+  font-size: 0.65rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.drop-hold-empty {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.drop-mini {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: min(100%, 72px);
+  aspect-ratio: 1;
+  margin: 0 auto 8px;
+  gap: 2px;
+  align-content: center;
+}
+.drop-mini i {
+  aspect-ratio: 1;
+}
+.drop-mini .filled {
+  background: var(--drop-color);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 2px #ffffff4d,
+    inset 0 -2px #0003;
+}
+.drop-next dl {
+  margin: 14px 0;
+}
+.drop-next dt {
+  color: var(--muted);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.drop-next dd {
+  margin: 2px 0 14px;
+  font-size: 1.3rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--game-accent);
+}
+.drop-target {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.drop-touch {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 7px;
+  touch-action: none;
+}
+.drop-touch button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  background: #211d2b;
+  color: var(--text);
+  border: 1px solid #ffffff24;
+  border-radius: 9px;
+  font: inherit;
+  touch-action: none;
+}
+.drop-touch button:active {
+  background: #91d9f033;
+}
+.drop-touch button:focus-visible {
+  outline: 2px solid var(--game-accent);
+  outline-offset: 3px;
+}
+.drop-touch button:disabled {
+  opacity: 0.45;
+}
+.drop-clear-effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.drop-clear-effects i {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 5%;
+  background: #eaffff;
+  box-shadow: 0 0 24px #91d9f0;
+  transform-origin: center;
+}
+.mini-drop {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  width: 120px;
+  gap: 4px;
+  transform: rotate(-8deg);
+}
+.mini-drop span {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: #91d9f018;
+}
+.mini-drop [data-value="1"] {
+  background: #91d9f0;
+  box-shadow:
+    inset 0 3px #fff4,
+    0 0 14px #91d9f033;
+}
+.game-card[data-demo="playing"] .mini-drop {
+  animation: drop-demo 1s ease-out both;
+}
+@keyframes drop-demo {
+  from {
+    transform: translateY(-12px) rotate(-8deg);
+  }
+  to {
+    transform: translateY(8px) rotate(-8deg);
+  }
+}
+.game-achievements {
+  margin-block: 24px;
+}
+.game-achievements summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.milestone-list,
+.achievement-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+.achievement-grid {
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+}
+.milestone-card {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 15px;
+  background: #ffffff03;
+  min-width: 0;
+}
+.milestone-card.is-unlocked {
+  border-color: #d4b4ed66;
+  background: linear-gradient(130deg, #d4b4ed10, transparent);
+}
+.milestone-badge {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #d4b4ed12;
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+.is-unlocked .milestone-badge {
+  color: #f3d394;
+  background: linear-gradient(130deg, #f3d39425, #d4b4ed20);
+}
+.milestone-card h3 {
+  font-size: 0.9rem;
+  margin: 0 0 5px;
+}
+.milestone-card p,
+.milestone-card time,
+.milestone-card small {
+  font-size: 0.74rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+.milestone-card progress {
+  width: 100%;
+  height: 5px;
+  margin-top: 10px;
+  accent-color: #d4b4ed;
+}
+.milestone-card .milestone-live {
+  color: #f3d394;
+}
+.game-progress-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+.game-progress-stats strong {
+  display: block;
+  font-size: clamp(1.7rem, 5vw, 2.5rem);
+  color: #d4b4ed;
+}
+.game-progress-stats span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.game-progress-status {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.game-progress-error button {
+  margin-top: 10px;
+}
+.achievement-notice {
+  border: 1px solid #f3d39466;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 14px;
+  background: #f3d3940c;
+  color: #f3d394;
+}
+.public-achievements summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.public-achievements {
+  margin: 30px 0;
+}
+.pong-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  gap: 24px;
+  align-items: start;
+}
+.pong-player-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+.pong-player {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+}
+.pong-player:last-child {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.pong-player strong {
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.pong-score {
+  font-size: clamp(2rem, 7vw, 3.4rem);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pong-score span {
+  color: var(--muted);
+  font-size: 1.1rem;
+  padding-inline: 8px;
+}
+.pong-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  height: auto;
+  border: 1px solid #f2c68c55;
+  border-radius: 14px;
+  touch-action: none;
+  background: #101019;
+  max-width: 100%;
+}
+.pong-stage {
+  position: relative;
+}
+.pong-stage-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  pointer-events: none;
+  background: #11101566;
+  border-radius: 14px;
+}
+.pong-stage-overlay strong {
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
+  color: #f2c68c;
+}
+.pong-stage-overlay p {
+  color: var(--text);
+  font-size: 0.85rem;
+}
+.pong-room-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.pong-room-form {
+  display: grid;
+  gap: 14px;
+}
+.pong-room-form input {
+  width: 100%;
+  box-sizing: border-box;
+}
+.pong-connection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin: 14px 0;
+}
+.pong-invite {
+  overflow-wrap: anywhere;
+  font-family: monospace;
+  font-size: 1.2rem;
+  letter-spacing: 0.12em;
+  color: #f2c68c;
+}
+.pong-room-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.pong-room-message {
+  min-height: 2.5em;
+  margin: 15px 0;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.pong-mobile-hint {
+  display: none;
+}
+.pong-facts {
+  padding-left: 18px;
+  font-size: 0.84rem;
+  color: var(--muted);
+  line-height: 1.9;
+}
+@media (max-width: 900px) {
+  .pong-layout {
+    grid-template-columns: 1fr;
+  }
+  .pong-room-form {
+    max-width: 600px;
+  }
+  .pong-mobile-hint {
+    display: block;
+  }
+  .drop-stage {
+    gap: 10px;
+  }
+}
+@media (max-width: 420px) {
+  .drop-stage {
+    grid-template-columns: 42px minmax(100px, 1fr) 42px;
+    gap: 7px;
+  }
+  .drop-mini {
+    gap: 1px;
+  }
+  .drop-hold p {
+    font-size: 0.58rem;
+  }
+  .drop-stage h3 {
+    font-size: 0.6rem;
+    letter-spacing: 0.02em;
+  }
+  .drop-stage kbd {
+    display: none;
+  }
+  .drop-touch {
+    gap: 5px;
+  }
+  .drop-touch button {
+    padding: 6px;
+    min-width: 44px;
+  }
+  .game-progress-stats {
+    gap: 8px;
+  }
+  .game-progress-stats span {
+    font-size: 0.65rem;
+  }
+  .pong-player-row {
+    gap: 8px;
+  }
+  .pong-player {
+    gap: 5px;
+  }
+  .pong-player .avatar-badge {
+    width: 26px;
+    height: 26px;
+  }
+  .pong-player strong {
+    font-size: 0.75rem;
+  }
+  .pong-score span {
+    padding-inline: 4px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-card[data-demo="playing"] .mini-drop {
+    animation: none;
+  }
+}
+html[data-game-effects="off"] .game-card[data-demo="playing"] .mini-drop,
+html[data-game-effects="reduced"] .game-card[data-demo="playing"] .mini-drop {
+  animation: none;
+}
+.pong-player .avatar-badge {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #d6b5ed1a;
+  color: #d6b5ed;
+}
+@media (max-width: 420px) {
+  .pong-player .avatar-badge {
+    flex-basis: 26px;
+    width: 26px;
+    height: 26px;
+  }
+}
+
+.game-card[data-demo="playing"][data-game-theme="pong"] .game-cover svg circle {
+  animation: pong-demo 1s ease-in-out both;
+}
+@keyframes pong-demo {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-64px, 35px);
+  }
+}

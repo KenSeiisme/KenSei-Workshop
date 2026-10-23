@@ -1,6 +1,7 @@
 import * as puzzles from "./puzzle-engine.js";
 import * as arcade from "./arcade-engine.js";
 import * as boards from "./board-engine.js";
+import * as drop from "./block-drop-engine.js";
 // 浏览器与服务端共用规则；此文件不访问 DOM、网络或时钟。
 export const VERSION = 1;
 export const GAMES = {
@@ -52,15 +53,18 @@ export const GAMES = {
   ...puzzles.CONFIG,
   ...arcade.CONFIG,
   ...boards.CONFIG,
+  ...drop.CONFIG,
 };
 function extension(game) {
-  return puzzles.CONFIG[game]
-    ? puzzles
-    : arcade.CONFIG[game]
-      ? arcade
-      : boards.CONFIG[game]
-        ? boards
-        : null;
+  return drop.CONFIG[game]
+    ? drop
+    : puzzles.CONFIG[game]
+      ? puzzles
+      : arcade.CONFIG[game]
+        ? arcade
+        : boards.CONFIG[game]
+          ? boards
+          : null;
 }
 export const isRanked = (game) => GAMES[game]?.ranked === true;
 export const timeScored = (game) =>
@@ -68,6 +72,7 @@ export const timeScored = (game) =>
 export const needsWin = (game) =>
   ["minesweeper", "memory-match", "sudoku", "nonogram"].includes(game);
 export { advanceBrick } from "./arcade-engine.js";
+export { advanceDrop } from "./block-drop-engine.js";
 export function rules(game, difficulty) {
   const mode = GAMES[game]?.modes[difficulty];
   if (!mode) throw Error("Unknown game or difficulty.");
@@ -376,6 +381,15 @@ export function replay(
   format = "legacy",
 ) {
   if (!isRanked(game)) throw Error("This game supports Private play only.");
+  if (game === "block-drop")
+    return drop.replayDrop(
+      difficulty,
+      seed,
+      events,
+      finalTick,
+      durationMs,
+      format,
+    );
   if (game === "brick-breaker")
     return arcade.replayBrick(
       difficulty,

@@ -68,5 +68,19 @@
     "description": "A quiet move can turn the board. Play the computer or a friend beside you.",
     "category": "Board",
     "preview": "reversi"
+  },
+  {
+    "slug": "block-drop",
+    "name": "Block Drop",
+    "description": "Find your stack rhythm. Clear a line, chase forty, hold your next move.",
+    "category": "Arcade",
+    "preview": "block-drop"
+  },
+  {
+    "slug": "pong",
+    "name": "Pong",
+    "description": "Invite a friend. Share a rally. A private online room for two.",
+    "category": "Arcade",
+    "preview": "pong"
   }
 ]

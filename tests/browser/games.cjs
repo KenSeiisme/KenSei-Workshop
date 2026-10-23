@@ -135,7 +135,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
   try {
     await p.goto(base + "/games/");
     await p.waitForSelector("[data-game-card]");
-    assert.equal(await p.locator("[data-game-card]").count(), 10);
+    assert.equal(await p.locator("[data-game-card]").count(), 12);
     await p.fill("#game-search", "snake");
     assert.equal(await p.locator("[data-game-card]:visible").count(), 1);
     await p.fill("#game-search", "");

@@ -11,4 +11,12 @@ create table storage.objects(id uuid primary key default gen_random_uuid(),bucke
 alter table storage.objects enable row level security;
 grant usage on schema storage to anon,authenticated;
 grant select,insert,update,delete on storage.objects to authenticated;
+create schema realtime;
+create table realtime.messages(id bigint generated always as identity primary key,topic text,extension text,payload jsonb);
+alter table realtime.messages enable row level security;
+create function realtime.topic() returns text language sql stable as $$select coalesce(current_setting('realtime.topic',true),'')$$;
+grant usage on schema realtime to authenticated;
+grant execute on function realtime.topic() to authenticated;
+grant select,insert on realtime.messages to authenticated;
+grant usage,select on sequence realtime.messages_id_seq to authenticated;
 `;

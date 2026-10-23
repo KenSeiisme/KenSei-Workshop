@@ -11,6 +11,7 @@ import {
   apply,
   advanceSnake,
   advanceBrick,
+  advanceDrop,
   isRanked,
   timeScored,
   needsWin,
@@ -25,6 +26,8 @@ import { createExtraUI } from "./new-game-ui.js";
 import { createGamePresenter } from "./motion.js";
 import { patchMarkup } from "./dom.js";
 import { mountEffects, bindCardDemos } from "./effects.js";
+import { INPUTS as DROP_INPUTS } from "./block-drop-engine.js";
+import { mountAchievements } from "./achievements.js";
 mountEffects();
 
 const $ = (s) => document.querySelector(s),
@@ -61,6 +64,7 @@ let running = false,
   audio,
   player;
 const presenter = game ? createGamePresenter(root, game) : null;
+const milestones = mountAchievements(game);
 const avatarSignatures = new WeakMap();
 const isBoard = () => game && !isRanked(game);
 const undoable = () =>
@@ -109,6 +113,13 @@ function snapshot() {
 }
 function better(a, b, slug) {
   if (!b) return true;
+  if (slug === "block-drop") {
+    if (a.difficulty === "sprint") return a.elapsed_ms < b.elapsed_ms;
+    return (
+      a.score > b.score ||
+      (a.score === b.score && (a.lines || 0) > (b.lines || 0))
+    );
+  }
   if (slug === "memory-match")
     return (
       a.moves < b.moves || (a.moves === b.moves && a.elapsed_ms < b.elapsed_ms)
@@ -133,13 +144,24 @@ function priorBest(slug, mode) {
 function bestResult(s, time) {
   if (!isRanked(s.game)) return null;
   const old = priorBest(s.game, s.difficulty),
-    now = { ...metrics(s), elapsed_ms: Math.max(1, Math.round(time)) };
-  if (s.status === "playing" || (needsWin(s.game) && s.status !== "won"))
+    now = {
+      ...metrics(s),
+      ...(s.game === "block-drop" ? { difficulty: s.difficulty } : {}),
+      elapsed_ms: Math.max(1, Math.round(time)),
+    };
+  if (
+    s.status === "playing" ||
+    ((needsWin(s.game) ||
+      (s.game === "block-drop" && s.difficulty === "sprint")) &&
+      s.status !== "won")
+  )
     return old;
   return better(now, old, s.game) ? now : old;
 }
 function displayResult(row, slug) {
   if (!row) return "—";
+  if (slug === "block-drop" && (row.difficulty || difficulty()) === "sprint")
+    return `${(row.elapsed_ms / 1000).toFixed(2)} s`;
   if (timeScored(slug)) return `${(row.elapsed_ms / 1000).toFixed(2)} s`;
   if (slug === "memory-match")
     return `${row.moves} attempts · ${(row.elapsed_ms / 1000).toFixed(1)} s`;
@@ -334,6 +356,7 @@ function draw(reason = "view", event = null) {
     game,
   );
   presenter.commit(active);
+  milestones.update(active, !!publicSession);
 }
 function beep() {
   if (!sound) return;
@@ -418,6 +441,7 @@ async function submit() {
         : result.reason || "Not eligible for the public board",
     );
     await leaderboard();
+    await milestones.accepted(result, submitted.body.session_id);
   } catch (e) {
     status(
       e.message +
@@ -460,6 +484,7 @@ async function finish() {
         events,
         final_tick: active.ticks || 0,
         ...(game === "brick-breaker" ? { events_format: "paddle-v1" } : {}),
+        ...(game === "block-drop" ? { events_format: "block-drop-v1" } : {}),
       },
     };
     publicSession = null;
@@ -483,7 +508,14 @@ function frame(now) {
     return;
   }
   ui?.frame?.(now);
-  if (game === "brick-breaker") {
+  if (game === "block-drop") {
+    const tick = Math.floor((elapsed() * 60) / 1000);
+    if (tick > active.ticks) {
+      advanceDrop(active, tick);
+      draw();
+      queueSave();
+    }
+  } else if (game === "brick-breaker") {
     const tick = Math.min(18000, Math.floor((elapsed() * 60) / 1000));
     if (tick > active.ticks) {
       advanceBrick(active, tick);
@@ -543,7 +575,11 @@ function action(event) {
   if (!apply(active, e)) return false;
   if (publicSession) {
     events.push(
-      game === "brick-breaker" ? [e.tick, e.type === "launch" ? -1 : e.x] : e,
+      game === "block-drop"
+        ? [e.tick, DROP_INPUTS.indexOf(e.input)]
+        : game === "brick-breaker"
+          ? [e.tick, e.type === "launch" ? -1 : e.x]
+          : e,
     );
     if (events.length >= 20000) downgrade("The replay limit was reached.");
   }
