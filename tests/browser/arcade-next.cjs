@@ -249,8 +249,20 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
           .querySelector("#pong-room-state")
           .textContent.includes("Paused"),
       );
+    await host.evaluate(() => {
+      window.__qaPongClock = performance.now.bind(performance);
+      Object.defineProperty(performance, "now", {
+        configurable: true,
+        value: () => window.__qaPongClock() + 32,
+      });
+    });
     await host.click("#pong-ready");
     await guest.click("#pong-ready");
+    await host.waitForTimeout(200);
+    await host.evaluate(() => {
+      delete performance.now;
+      delete window.__qaPongClock;
+    });
     await host.waitForFunction(() =>
       document
         .querySelector("#pong-room-state")

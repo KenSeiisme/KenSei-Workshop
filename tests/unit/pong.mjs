@@ -3,7 +3,12 @@ import {
   createPong,
   advancePong,
   validPongState,
+  pongTickAt,
 } from "../../src/games/pong-engine.js";
+assert.equal(pongTickAt(1200, 1200, 10000.7, 10000.2), 1200);
+assert.equal(pongTickAt(1203, 1200, 10000, 10008), 1203);
+assert.equal(pongTickAt(1200, 1200, 10000, 11000), 1320);
+assert.equal(pongTickAt(71999, 71999, 0, 1000), 72000);
 for (const hz of [30, 60, 120, 144]) {
   const s = createPong(42);
   for (let f = 1; f <= hz * 20; f++)

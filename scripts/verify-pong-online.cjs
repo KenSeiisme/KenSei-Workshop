@@ -66,7 +66,15 @@ async function join(host, guest) {
     );
   return roomInfo(host);
 }
-async function ready(pair) {
+async function ready(pair, checkResumeClock = false) {
+  if (checkResumeClock)
+    await pair[0].evaluate(() => {
+      window.__qaPongClock = performance.now.bind(performance);
+      Object.defineProperty(performance, "now", {
+        configurable: true,
+        value: () => window.__qaPongClock() + 32,
+      });
+    });
   for (const p of pair)
     await p.locator("#pong-ready").waitFor({ state: "visible" });
   await Promise.all(pair.map((p) => p.click("#pong-ready")));
@@ -76,6 +84,13 @@ async function ready(pair) {
         .querySelector("#pong-room-state")
         .textContent.includes("Playing"),
     );
+  if (checkResumeClock) {
+    await pair[0].waitForTimeout(200);
+    await pair[0].evaluate(() => {
+      delete performance.now;
+      delete window.__qaPongClock;
+    });
+  }
 }
 async function main() {
   const raw = await new Promise((resolve, reject) => {
@@ -247,8 +262,10 @@ async function main() {
     await p.waitForFunction(() =>
       document.querySelector("#pong-room-state").textContent.includes("Paused"),
     );
-  await ready(pages.slice(0, 2));
-  check("Pause and mutual Ready resume over actual channels");
+  await ready(pages.slice(0, 2), true);
+  check(
+    "Pause and mutual Ready resume over actual channels, including sub-frame clock ordering",
+  );
   for (const p of [pages[0], pages[2]]) await p.click("#pong-leave");
   // Verify the deployed JWT gateway + bundled Block Drop engine without creating a score.
   const run = await api(

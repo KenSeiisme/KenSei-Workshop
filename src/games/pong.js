@@ -5,6 +5,7 @@ import {
   createPong,
   advancePong,
   validPongState,
+  pongTickAt,
   PONG,
 } from "./pong-engine.js";
 mountEffects();
@@ -535,10 +536,7 @@ function frame(now) {
     const dir = (keys.has("down") ? 1 : 0) - (keys.has("up") ? 1 : 0);
     target = Math.max(0, Math.min(1024, target + dir * 1250 * dt));
     if (host()) {
-      const tick = Math.min(
-          72000,
-          baseTicks + Math.floor(((now - runAt) * 120) / 1000),
-        ),
+      const tick = pongTickAt(state.ticks, baseTicks, runAt, now),
         score = state.score.join();
       advancePong(state, tick, target, remoteTarget);
       if (score !== state.score.join())

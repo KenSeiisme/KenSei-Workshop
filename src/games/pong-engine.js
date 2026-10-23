@@ -10,6 +10,14 @@ export const PONG = Object.freeze({
   maxTicks: 72000,
 });
 const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+// 恢复的 performance.now() 可能晚于本帧的 rAF 时间戳；逻辑 tick 只能前进。
+export function pongTickAt(currentTick, baseTick, startedAt, frameAt) {
+  const elapsed = Math.max(0, frameAt - startedAt);
+  return Math.min(
+    PONG.maxTicks,
+    Math.max(currentTick, baseTick + Math.floor((elapsed * PONG.fps) / 1000)),
+  );
+}
 function random(s) {
   let x = s.rng >>> 0;
   x ^= x << 13;
