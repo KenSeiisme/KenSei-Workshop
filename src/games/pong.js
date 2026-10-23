@@ -1,6 +1,7 @@
 import { api, esc } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import { mountEffects, effectsMode } from "./effects.js";
+import { mountAudio, unlockAudio, stopAudio, playCue } from "./audio.js";
 import {
   createPong,
   advancePong,
@@ -9,9 +10,12 @@ import {
   PONG,
 } from "./pong-engine.js";
 mountEffects();
+mountAudio();
 const $ = (s) => document.querySelector(s),
   root = $("[data-pong]"),
   canvas = $(".pong-canvas");
+const roomForm = $(".pong-join-panel");
+if (roomForm) $(".pong-player-row").before(roomForm);
 const clock = (t) =>
   `${Math.floor(t / 60)
     .toString()
@@ -19,6 +23,7 @@ const clock = (t) =>
     .toString()
     .padStart(2, "0")}`;
 let clientId;
+let endCueRound = -1;
 try {
   clientId =
     sessionStorage.getItem("kensei-pong-tab-v1") || crypto.randomUUID();
@@ -74,6 +79,7 @@ function overlay(title, note = "") {
   $("#pong-overlay-note").textContent = note;
 }
 function renderRoom() {
+  root.dataset.pongState = room?.status || "ready";
   const live = room && !["closed", "interrupted"].includes(room.status);
   $("#pong-create").disabled = busy || !!live;
   $("#pong-join").disabled = busy || !!live;
@@ -203,8 +209,10 @@ function installRoom(next) {
   const wasRunning = room?.status === "playing",
     oldRound = round;
   room = next;
+  if (wasRunning && next.status === "paused") stopAudio();
   roomOwner = api.user?.id;
   if (next.round !== oldRound) {
+    endCueRound = -1;
     round = next.round;
     state = round ? createPong(Number(next.seed)) : null;
     remoteState = null;
@@ -216,6 +224,7 @@ function installRoom(next) {
     lastEcho = 0;
   }
   if (next.status === "playing" && !wasRunning) {
+    if (next.round !== oldRound) playCue("serve");
     baseTicks = state?.ticks || 0;
     runAt = performance.now();
     interruptedAt = 0;
@@ -293,6 +302,23 @@ function receive(role, payload) {
     }
   }
   if (payload.kind === "state" && !host() && validPongState(payload.state)) {
+    if (remoteState && remoteState.score.join() !== payload.state.score.join())
+      playCue("point");
+    if (payload.state.status !== "playing" && endCueRound !== room.round) {
+      endCueRound = room.round;
+      playCue(
+        payload.state.status === "draw"
+          ? "draw"
+          : payload.state.winner === 2
+            ? "win"
+            : "loss",
+      );
+    } else if (
+      remoteState &&
+      remoteState.ball.vx * payload.state.ball.vx < 0 &&
+      (payload.state.ball.x < 80 || payload.state.ball.x > 880)
+    )
+      playCue("paddle");
     previousRemote = remoteState;
     previousAt = remoteAt;
     remoteState = payload.state;
@@ -383,6 +409,7 @@ function disconnect(clear = true) {
   if (clear) lastHeard = 0;
 }
 function connectionLost() {
+  stopAudio();
   if (!room || ["closed", "interrupted"].includes(room.status)) return;
   if (!interruptedAt) interruptedAt = performance.now();
   connected = false;
@@ -397,6 +424,8 @@ function connectionLost() {
   renderRoom();
 }
 async function operation(action, extra = {}) {
+  if (action === "ready") unlockAudio();
+  if (["pause", "leave", "interrupt"].includes(action)) stopAudio();
   if (busy) return;
   if (!api.user) {
     api.openAuth(location.pathname + location.search);
@@ -537,11 +566,28 @@ function frame(now) {
     target = Math.max(0, Math.min(1024, target + dir * 1250 * dt));
     if (host()) {
       const tick = pongTickAt(state.ticks, baseTicks, runAt, now),
-        score = state.score.join();
+        score = state.score.join(),
+        previousVX = state.ball.vx;
       advancePong(state, tick, target, remoteTarget);
+      if (
+        previousVX * state.ball.vx < 0 &&
+        (state.ball.x < 80 || state.ball.x > 880)
+      )
+        playCue("paddle");
+      if (score !== state.score.join()) playCue("point");
       if (score !== state.score.join())
         tell("state", { state, status: room.status, t0: now, echo: lastEcho });
       if (state.status !== "playing") {
+        if (endCueRound !== room.round) {
+          endCueRound = room.round;
+          playCue(
+            state.status === "draw"
+              ? "draw"
+              : state.winner === 1
+                ? "win"
+                : "loss",
+          );
+        }
         tell("state", { state, status: "finished", t0: now, echo: lastEcho });
         operation("finish");
       }

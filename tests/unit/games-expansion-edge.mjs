@@ -7,13 +7,13 @@ import {
   GAMES,
   metrics,
   replay,
+  advanceBrick,
 } from "../../src/games/engine.js";
 import { solution } from "../../src/games/puzzle-engine.js";
 import {
   availablePlacements,
   SHAPES,
   BRICK,
-  advanceBrick,
 } from "../../src/games/arcade-engine.js";
 
 await build({
@@ -77,7 +77,11 @@ const start = async (game, difficulty = GAMES[game].default) => {
   await db.query(
     "update workshop_private.game_sessions set started_at=clock_timestamp()-interval '2 minutes' where status<>'active'",
   );
-  const response = await call("start", { game, difficulty });
+  const response = await call("start", {
+    game,
+    difficulty,
+    rules_version: game === "brick-breaker" ? 2 : 1,
+  });
   assert.equal(response.status, 200, JSON.stringify(response.data));
   return response.data;
 };
@@ -89,7 +93,11 @@ const age = (session, duration) =>
 
 for (const game of ["connect-four", "reversi"])
   for (const difficulty of Object.keys(GAMES[game].modes)) {
-    const response = await call("start", { game, difficulty });
+    const response = await call("start", {
+      game,
+      difficulty,
+      rules_version: game === "brick-breaker" ? 2 : 1,
+    });
     assert.equal(response.status, 400);
     assert.match(response.data.error, /Private/);
   }
@@ -204,7 +212,7 @@ assert.equal(
       session_id: session.id,
       events: [[0, -1]],
       final_tick: BRICK.maxTicks,
-      events_format: "paddle-v1",
+      events_format: "paddle-v2",
     })
   ).status,
   400,
@@ -238,7 +246,7 @@ for (const bad of [
     (
       await call("finish", {
         session_id: session.id,
-        events_format: "paddle-v1",
+        events_format: "paddle-v2",
         ...bad,
       })
     ).status,
@@ -252,7 +260,7 @@ assert.equal(
         session_id: session.id,
         events: [[0, -1]],
         final_tick: BRICK.maxTicks,
-        events_format: "paddle-v1",
+        events_format: "paddle-v2",
       },
       "aaa.userB.ccc",
     )
@@ -269,7 +277,7 @@ response = await call("finish", {
   session_id: session.id,
   events: [[0, -1]],
   final_tick: BRICK.maxTicks,
-  events_format: "paddle-v1",
+  events_format: "paddle-v2",
   score: 99999999,
   won: true,
 });
@@ -285,7 +293,7 @@ assert.deepEqual(
       session_id: session.id,
       events: [],
       final_tick: 0,
-      events_format: "paddle-v1",
+      events_format: "paddle-v2",
       score: 99999999,
     })
   ).data,
@@ -304,7 +312,7 @@ assert.throws(
       Array.from({ length: 20001 }, () => [0, -1]),
       18000,
       300000,
-      "paddle-v1",
+      "paddle-v2",
     ),
   /replay|limits/i,
 );

@@ -470,16 +470,24 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       "actual canvas contains painted game content",
     );
     await p.click(".brick-launch");
-    await p.locator(".brick-paddle-slider").evaluate((el) => {
-      el.value = "160";
-      el.dispatchEvent(new Event("input", { bubbles: true }));
+    await p.locator(".brick-canvas").evaluate((canvas) => {
+      const rect = canvas.getBoundingClientRect(),
+        worldX = 46 + (160 / 1024) * (640 - 92);
+      canvas.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          pointerType: "mouse",
+          clientX: rect.left + (rect.width * worldX) / 640,
+          clientY: rect.top + rect.height * 0.8,
+        }),
+      );
     });
     record = await waitSave(
       p,
       "brick-breaker",
       (r) => r.state.ticks > 30 && r.state.paddle === 160,
     );
-    assert.equal(record.state.ball.launched, true);
+    assert.equal(record.state.balls[0].launched, true);
     await p.waitForTimeout(1100);
     assert.notEqual(await p.locator("#game-clock").innerText(), "00:00");
     await p.click("#game-pause");
@@ -494,7 +502,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       fullPage: true,
     });
     console.log(
-      "PASS Brick Breaker painted canvas, launch, quantized slider control, advancing clock, pause and resume",
+      "PASS Brick Breaker painted canvas, launch, direct pointer control, advancing clock, pause and resume",
     );
 
     const beforeBoardSessions = calls.filter(

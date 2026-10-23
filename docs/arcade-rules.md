@@ -1,4 +1,4 @@
-# Arcade rules · version 1
+# Versioned arcade rules
 
 `arcade-engine.js` is shared by the browser and Edge. It has no DOM, wall-clock or network dependency. Keep the v1 catalog, seeded xorshift32 stream and fixed-point rules stable when adding future versions.
 
@@ -10,6 +10,8 @@
 - Refill only after all three shapes have been used. A run ends when none of its remaining shapes can fit. `canPlace` and `availablePlacements` support click, keyboard and drag previews using these same rules.
 
 ## Brick Breaker
+
+### Legacy v1
 
 - World: 640×480, ball radius 6; three original finite brick patterns, three lives shared across all stages, ten points per brick. Completing all three stages wins; losing all lives or reaching tick 18,000 ends the run. Later stages increase ball speed; no powerups or infinite levels.
 - The engine advances at exactly 60 steps per second. Ball positions and velocities use integer fixed-point units (`BRICK.scale = 1024`). Collision detection sweeps a ball center against radius-expanded brick/paddle bounds and wall planes. Corner ties reflect both axes; a removed brick scores once. Rendering can run at any refresh rate without changing these steps.
@@ -24,13 +26,24 @@
 
 Local `arcade-games.mjs` checks all three stage transitions, corner collisions, life loss, render grouping, bounds and forged replay attempts. Its worst-path 18,000-step physics fixture leaves every brick in the collision search for the entire run; final deployment must additionally verify the actual Edge CPU duration.
 
+### Current Brick Breaker v2
+
+`brick-v2-engine.js` preserves the v1 module unchanged and reuses its fixed-point world and finite stage layouts. A separate seeded stream selects three distinct live power bricks per stage, one per type. Stable ball IDs, brick index order and drop IDs resolve simultaneous hits once. Powerup choices, pickups, expiration ticks and balls belong to canonical state; particles, sounds and interpolation do not.
+
+- Multiball rotates the earliest surviving launched ball by ±20 degrees into up to two extra balls, capped at three. At the cap it reports Max balls without points.
+- Wide Paddle changes width from 92 to 138 for 720 ticks; Slow Ball applies a 0.75 movement factor for 480 ticks. Same-type pickups refresh expiration without stacking. Drops fall two world pixels per tick and activate only on paddle contact.
+- Individual lost balls do not cost lives. Losing the final ball removes one shared life and resets all drops/buffs to an attached ball. Stage clear resets them before awaiting manual launch. The last cleared brick takes precedence over a same-tick loss. Three lives, three stages, five minutes and ten points per brick remain unchanged.
+- New logs use `paddle-v2`; v1/v2 formats cannot be interchanged. Replay uses the stored session version. Versioned save slots and local bests retain legacy counterparts. Other games stay v1.
+
+`brick-v2.mjs` covers seeded assignment, split/cap, refresh/expiry, last-ball loss, simultaneous hits, stage cleanup, 30/60/120/144Hz grouping, versioned saves/replay and a three-ball 18,000-tick worst case.
+
 ## Temporary Edge runtime benchmark
 
 Run `node scripts/benchmark-games-edge.mjs` to create the ignored `_qa/games-session/benchmark.ts`. The helper bundles the actual canonical handler and game engines, removing only the handler's original listener before adding the temporary wrapper. It reads no keys, generates no secret and never deploys.
 
 The deployment operator must replace the single token placeholder **in memory** with a random token of at least 32 characters, retain gateway `verify_jwt: true`, and invoke `POST /games-session/__bounded_replay_check` with a valid project JWT and the matching `x-replay-check` header. An unreplaced placeholder cannot enable the benchmark. Other paths and unmatched requests use the unchanged normal handler.
 
-The bounded route generates a legitimate seeded three-stage game, replays it through the canonical public dispatcher, and optionally measures all 18,000 fixed steps with every brick retained as a collision candidate. It returns only the score, win status, counts, payload byte size and timing summaries. Generation checks a 900ms budget; optional steps stop at a 1,500ms total budget. No state, event sequence, token or account data is returned. Timing values are wall-clock measurements; platform CPU logs provide the independent CPU evidence.
+The bounded route generates a legitimate seeded v2 three-stage game, replays it through the canonical public dispatcher, and optionally measures all 18,000 fixed steps with three balls and every brick retained as a collision candidate. It returns only the score, win status, counts, payload byte size and timing summaries. Generation checks a 900ms budget; optional steps stop at a 1,500ms total budget. No state, event sequence, token or account data is returned. Timing values are wall-clock measurements; platform CPU logs provide the independent CPU evidence.
 
 Immediately after the check, rebuild with `node scripts/build-games-edge.mjs` and restore the normal `_qa/games-session/index.ts` deployment with JWT checks enabled. Confirm the temporary path is no longer available and normal unauthenticated requests remain rejected. Never commit generated benchmark bundles or credentials.
 

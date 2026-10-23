@@ -133,6 +133,11 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     for (const game of ["2048", "minesweeper", "snake", "memory-match"]) {
       await p.goto(base + `/games/${game}/`);
       await p.waitForSelector('[data-game][data-ready="true"]');
+      assert.equal(
+        await p.locator("#game-rank-panel").evaluate((n) => n.open),
+        false,
+      );
+      await p.locator("#game-rank-panel>summary").click();
       await p.waitForSelector("#game-leaderboard tbody tr");
       assert.equal(
         await p.locator("#game-run-label").innerText(),

@@ -1,4 +1,10 @@
-import { VERSION, rules, replay, isRanked } from "../../../src/games/engine.js";
+import {
+  gameVersion,
+  supportsVersion,
+  rules,
+  replay,
+  isRanked,
+} from "../../../src/games/engine.js";
 
 const ORIGINS = new Set(["https://kensei-workshop.vercel.app"]);
 const MAX_BYTES = 524288;
@@ -100,6 +106,15 @@ export function makeHandler(
       }
       if (action === "start") {
         rules(body.game, body.difficulty);
+        if ((body.rules_version ?? 1) !== gameVersion(body.game))
+          return send(
+            {
+              error:
+                "Game rules changed. Reload this page before starting Public.",
+              code: "RULES_UPDATE_REQUIRED",
+            },
+            409,
+          );
         if (!isRanked(body.game))
           throw Error("This game supports Private play only.");
         const seed = crypto.getRandomValues(new Uint32Array(1))[0] || 1;
@@ -108,6 +123,7 @@ export function makeHandler(
             game: body.game,
             difficulty: body.difficulty,
             seed,
+            rules_version: gameVersion(body.game),
           }),
         );
       }
@@ -119,7 +135,7 @@ export function makeHandler(
         return send({ error: "Unknown game action." }, 404);
       const session = await admin("read", { session_id: body.session_id });
       if (session.status === "completed") return send(session.result);
-      if (session.version !== VERSION)
+      if (!supportsVersion(session.game, session.version))
         throw Error("This game uses unsupported rules. Continue privately.");
       const duration = Date.now() - Date.parse(session.started_at);
       const result = replay(
@@ -130,6 +146,7 @@ export function makeHandler(
         body.final_tick,
         duration,
         body.events_format || "legacy",
+        session.version,
       );
       const finished = await admin("finish", {
         session_id: session.id,

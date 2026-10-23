@@ -8,7 +8,7 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const entry = String.raw`
 import { makeHandler } from "./supabase/functions/games-session/index.ts";
 import { replay } from "./src/games/engine.js";
-import { create, apply, advanceBrick, BRICK } from "./src/games/arcade-engine.js";
+import { create, apply, advanceBrick, BRICK, paddleWidth } from "./src/games/brick-v2-engine.js";
 
 const normal = makeHandler((key) => Deno.env.get(key));
 const token = "__BENCH_TOKEN__";
@@ -23,29 +23,31 @@ export function runBoundedReplayCheck() {
     if (s.ticks % 600 === 0 && performance.now() - started > 900)
       throw Error("Replay generation exceeded the temporary benchmark time budget.");
     if (s.ticks % 2 === 0) {
-      const x = Math.max(0, Math.min(1024, Math.round((s.ball.x / BRICK.scale - 46) / 548 * 1024)));
+      const ball = s.balls.filter(b=>b.launched).sort((a,b)=>(b.vy>0?b.y:-1)-(a.vy>0?a.y:-1))[0] || s.balls[0];
+      const width = paddleWidth(s);
+      const x = Math.max(0, Math.min(1024, Math.round((ball.x / BRICK.scale - width/2) / (640-width) * 1024)));
       if (x !== s.paddle && apply(s, { type: "paddle", tick: s.ticks, x })) events.push([s.ticks, x]);
     }
-    if (!s.ball.launched && apply(s, { type: "launch", tick: s.ticks })) events.push([s.ticks, -1]);
+    if (!s.balls.some(b=>b.launched) && apply(s, { type: "launch", tick: s.ticks })) events.push([s.ticks, -1]);
     advanceBrick(s, s.ticks + 1);
   }
   const generatedAt = performance.now();
   if (s.status !== "won" || s.stage !== 2 || s.score !== 980 || events.length > 9003)
     throw Error("Canonical three-stage replay fixture did not complete as expected.");
-  const result = replay("brick-breaker", "classic", seed, events, s.ticks, s.ticks * 1000 / 60, "paddle-v1");
+  const result = replay("brick-breaker", "classic", seed, events, s.ticks, s.ticks * 1000 / 60, "paddle-v2", 2);
   const replayedAt = performance.now();
   if (!result.won || result.score !== s.score || result.moves !== s.moves)
     throw Error("Canonical replay result differs from the generated game.");
   const bytes = new TextEncoder().encode(JSON.stringify({
     session_id: "00000000-0000-4000-8000-000000000000",
-    events_format: "paddle-v1", events, final_tick: s.ticks,
+    events_format: "paddle-v2", events, final_tick: s.ticks,
   })).byteLength;
   if (bytes > 524288) throw Error("Canonical replay exceeded the request size limit.");
   // 最大候选砖块始终保留；此项测试固定步长上界，不将构造状态当作公开成绩。
   let worst_ms = null, worst_ticks = 0, worst_skipped = null;
   if (replayedAt - started < 1000) {
     const worst = create("brick-breaker", "classic", seed);
-    worst.ball = { x: 320 * BRICK.scale, y: 300 * BRICK.scale, vx: 5 * BRICK.scale, vy: 0, launched: true };
+    worst.balls = [260,300,340].map(y => ({ id: worst.nextBallId++, x: 320 * BRICK.scale, y: y * BRICK.scale, vx: 5 * BRICK.scale, vy: 0, launched: true }));
     const worstStarted = performance.now();
     while (worst.ticks < BRICK.maxTicks) {
       if (performance.now() - started > 1500) {
@@ -58,10 +60,10 @@ export function runBoundedReplayCheck() {
     worst_ticks = worst.ticks;
   } else worst_skipped = "Optional fixed-step benchmark skipped to respect the temporary request budget.";
   return {
-    version: 1, game: "brick-breaker", score: result.score, won: result.won,
+    version: 2, game: "brick-breaker", score: result.score, won: result.won,
     ticks: s.ticks, events: events.length, bytes,
     generate_ms: round(generatedAt - started), replay_ms: round(replayedAt - generatedAt),
-    worst_ms, worst_ticks, ...(worst_skipped ? { worst_skipped } : {}),
+    worst_ms, worst_ticks, worst_balls: 3, ...(worst_skipped ? { worst_skipped } : {}),
     total_ms: round(performance.now() - started),
   };
 }

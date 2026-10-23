@@ -161,7 +161,7 @@ export function createGamePresenter(root, game) {
         spin: (Math.random() - 0.5) * 8,
         color: palette[i % palette.length],
         start: now,
-        life: celebrate ? 900 + Math.random() * 300 : 350 + Math.random() * 250,
+        life: celebrate ? 700 + Math.random() * 300 : 250 + Math.random() * 200,
       });
     }
     root.dataset.particles = String(particles.length);
@@ -435,10 +435,26 @@ export function createGamePresenter(root, game) {
           : "Computer wins"
       : won
         ? "Challenge cleared"
-        : "Run complete";
+        : game === "brick-breaker"
+          ? state.reason === "timeout"
+            ? "Time’s up"
+            : "Out of lives"
+          : game === "minesweeper"
+            ? "Mine found"
+            : "Run complete";
     root.querySelector("#game-result-title").textContent = draw
       ? "An even match"
       : winner;
+    panel.dataset.outcome = draw
+      ? "draw"
+      : boardGame
+        ? state.difficulty === "local" ||
+          state.winner === (state.humanSide || 1)
+          ? "won"
+          : "lost"
+        : won
+          ? "won"
+          : "lost";
     root.querySelector("#game-result-value").textContent =
       boardGame && game === "reversi"
         ? `${state.counts[0]} : ${state.counts[1]}`
@@ -450,7 +466,11 @@ export function createGamePresenter(root, game) {
             ? root.querySelector("#game-clock").textContent
             : root.querySelector("#game-score").textContent;
     root.querySelector("#game-result-time").textContent =
-      root.querySelector("#game-clock").textContent;
+      game === "brick-breaker"
+        ? [Math.floor(state.ticks / 3600), Math.floor(state.ticks / 60) % 60]
+            .map((n) => String(n).padStart(2, "0"))
+            .join(":")
+        : root.querySelector("#game-clock").textContent;
     root.querySelector("#game-result-best").textContent = boardGame
       ? "Private match"
       : `Local best · ${root.querySelector("#game-best").textContent}`;
@@ -663,6 +683,9 @@ export function createGamePresenter(root, game) {
           25,
         );
     } else if (game === "brick-breaker") {
+      const ball = state.balls?.[0] || state.ball;
+      const priorBall =
+        before.balls?.find((b) => b.id === ball?.id) || before.ball;
       if (state.stage === before.stage)
         changes(before.bricks, state.bricks)
           .filter((i) => !state.bricks[i])
@@ -678,36 +701,14 @@ export function createGamePresenter(root, game) {
               9,
             ),
           );
-      if (
-        state.ball.vy < 0 &&
-        before.ball.vy > 0 &&
-        state.ball.y / BRICK.scale > 390
-      ) {
+      if (ball?.vy < 0 && priorBall?.vy > 0 && ball.y / BRICK.scale > 390) {
         burst(
-          world(
-            brickCanvas,
-            state.ball.x / BRICK.scale,
-            BRICK.paddleY,
-            640,
-            480,
-          ),
+          world(brickCanvas, ball.x / BRICK.scale, BRICK.paddleY, 640, 480),
           10,
         );
       }
-      if (
-        state.ball.vy < 0 &&
-        before.ball.vy > 0 &&
-        state.ball.y / BRICK.scale > 390
-      )
-        ring(
-          world(
-            brickCanvas,
-            state.ball.x / BRICK.scale,
-            BRICK.paddleY,
-            640,
-            480,
-          ),
-        );
+      if (ball?.vy < 0 && priorBall?.vy > 0 && ball.y / BRICK.scale > 390)
+        ring(world(brickCanvas, ball.x / BRICK.scale, BRICK.paddleY, 640, 480));
       if (state.lives < before.lives) {
         floatText(
           `${state.lives} ${state.lives === 1 ? "LIFE" : "LIVES"} LEFT`,
@@ -715,6 +716,20 @@ export function createGamePresenter(root, game) {
           true,
         );
         pulse(board.querySelector(".brick-lives"));
+      }
+      if ((state.pickups || 0) > (before.pickups || 0)) {
+        floatText(state.lastPickup, center(brickCanvas), true);
+        if (ball)
+          ring(
+            world(
+              brickCanvas,
+              ball.x / BRICK.scale,
+              ball.y / BRICK.scale,
+              640,
+              480,
+            ),
+          );
+        burst(center(brickCanvas), 18);
       }
       if (state.stage > before.stage) {
         floatText(
@@ -818,9 +833,20 @@ export function createGamePresenter(root, game) {
           ? clamp((now - interpolation.start) / (1000 / 60))
           : 1;
     const ball =
-      old && t < 1 ? interpolatePoint(old.ball, state.ball, t) : state.ball;
+      state.version === 2
+        ? null
+        : old && t < 1
+          ? interpolatePoint(old.ball, state.ball, t)
+          : state.ball;
+    const balls = state.balls?.map((b) => {
+      const previous = old?.balls?.find((p) => p.id === b.id);
+      return previous && t < 1
+        ? { ...b, ...interpolatePoint(previous, b, t) }
+        : b;
+    });
     return paintBrickBoard(canvasNode, state, {
       ball,
+      balls,
       full: effectsMode() === "full",
       now,
     });

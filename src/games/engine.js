@@ -2,6 +2,7 @@ import * as puzzles from "./puzzle-engine.js";
 import * as arcade from "./arcade-engine.js";
 import * as boards from "./board-engine.js";
 import * as drop from "./block-drop-engine.js";
+import * as brickV2 from "./brick-v2-engine.js";
 // 浏览器与服务端共用规则；此文件不访问 DOM、网络或时钟。
 export const VERSION = 1;
 export const GAMES = {
@@ -55,23 +56,31 @@ export const GAMES = {
   ...boards.CONFIG,
   ...drop.CONFIG,
 };
-function extension(game) {
-  return drop.CONFIG[game]
-    ? drop
-    : puzzles.CONFIG[game]
-      ? puzzles
-      : arcade.CONFIG[game]
-        ? arcade
-        : boards.CONFIG[game]
-          ? boards
-          : null;
+export const gameVersion = (game) => (game === "brick-breaker" ? 2 : 1);
+export const supportsVersion = (game, version) =>
+  !!GAMES[game] &&
+  (version === 1 || (game === "brick-breaker" && version === 2));
+function extension(game, version = gameVersion(game)) {
+  return game === "brick-breaker" && version === 2
+    ? brickV2
+    : drop.CONFIG[game]
+      ? drop
+      : puzzles.CONFIG[game]
+        ? puzzles
+        : arcade.CONFIG[game]
+          ? arcade
+          : boards.CONFIG[game]
+            ? boards
+            : null;
 }
 export const isRanked = (game) => GAMES[game]?.ranked === true;
 export const timeScored = (game) =>
   ["minesweeper", "sudoku", "nonogram"].includes(game);
 export const needsWin = (game) =>
   ["minesweeper", "memory-match", "sudoku", "nonogram"].includes(game);
-export { advanceBrick } from "./arcade-engine.js";
+export function advanceBrick(state, tick) {
+  return (state.version === 2 ? brickV2 : arcade).advanceBrick(state, tick);
+}
 export { advanceDrop } from "./block-drop-engine.js";
 export function rules(game, difficulty) {
   const mode = GAMES[game]?.modes[difficulty];
@@ -98,11 +107,13 @@ function spawn(s) {
   if (empty.length)
     s.board[empty[random(s, empty.length)]] = random(s, 10) < 9 ? 2 : 4;
 }
-export function create(game, difficulty, seed) {
+export function create(game, difficulty, seed, version = gameVersion(game)) {
   const mode = rules(game, difficulty);
+  if (!supportsVersion(game, version)) throw Error("Unsupported game rules.");
   if (!Number.isInteger(seed) || seed <= 0 || seed > 4294967295)
     throw Error("Invalid random seed.");
-  if (extension(game)) return extension(game).create(game, difficulty, seed);
+  if (extension(game, version))
+    return extension(game, version).create(game, difficulty, seed);
   const s = {
     game,
     difficulty,
@@ -280,7 +291,8 @@ export function settleMemory(s, time) {
 export function apply(s, e) {
   if (s.status !== "playing" || !e || typeof e !== "object") return false;
   const m = rules(s.game, s.difficulty);
-  if (extension(s.game)) return extension(s.game).apply(s, e);
+  if (extension(s.game, s.version))
+    return extension(s.game, s.version).apply(s, e);
   if (s.game === "2048")
     return e.type === "move" && [0, 1, 2, 3].includes(e.dir)
       ? move2048(s, e.dir)
@@ -363,7 +375,8 @@ export function apply(s, e) {
   return false;
 }
 export function metrics(s) {
-  if (extension(s.game)) return extension(s.game).metrics(s);
+  if (extension(s.game, s.version))
+    return extension(s.game, s.version).metrics(s);
   return {
     score: s.score,
     moves: s.moves,
@@ -379,7 +392,9 @@ export function replay(
   finalTick = 0,
   durationMs = 0,
   format = "legacy",
+  version = gameVersion(game),
 ) {
+  if (!supportsVersion(game, version)) throw Error("Unsupported game rules.");
   if (!isRanked(game)) throw Error("This game supports Private play only.");
   if (game === "block-drop")
     return drop.replayDrop(
@@ -391,7 +406,7 @@ export function replay(
       format,
     );
   if (game === "brick-breaker")
-    return arcade.replayBrick(
+    return (version === 2 ? brickV2 : arcade).replayBrick(
       difficulty,
       seed,
       events,
@@ -440,7 +455,7 @@ export function validateSave(data) {
     !s ||
     s.game !== game ||
     s.difficulty !== difficulty ||
-    s.version !== VERSION ||
+    !supportsVersion(game, s.version) ||
     ![
       "playing",
       "won",
@@ -449,7 +464,7 @@ export function validateSave(data) {
     ].includes(s.status)
   )
     throw Error("This save uses unsupported game rules.");
-  create(game, difficulty, s.seed);
+  create(game, difficulty, s.seed, s.version);
   if (
     ![s.score, s.moves, s.rng].every(
       (v) => Number.isSafeInteger(v) && v >= 0,
@@ -458,7 +473,7 @@ export function validateSave(data) {
     data.elapsed < 0
   )
     throw Error("Invalid game save.");
-  if (extension(game)) extension(game).validate(s);
+  if (extension(game, s.version)) extension(game, s.version).validate(s);
   if (
     boards.CONFIG[game] &&
     s.humanSide !== undefined &&

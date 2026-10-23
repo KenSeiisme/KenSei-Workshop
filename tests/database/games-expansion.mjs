@@ -310,7 +310,7 @@ for (const game of Object.keys(GAMES).filter(isRanked)) {
     : GAMES[game].default;
   const data = await leaderboard(game, difficulty);
   assert.ok(data.me);
-  assert.equal(data.version, 1);
+  assert.equal(data.version, game === "brick-breaker" ? 2 : 1);
 }
 const profileId = (await leaderboard("2048", "classic")).me.public_id;
 const profile = await rpc(

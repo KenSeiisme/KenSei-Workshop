@@ -134,7 +134,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
   };
   try {
     await p.goto(base + "/games/");
-    await p.waitForSelector("[data-game-card]");
+    await p.waitForSelector("[data-games-directory][data-ready=true]");
     assert.equal(await p.locator("[data-game-card]").count(), 12);
     await p.fill("#game-search", "snake");
     assert.equal(await p.locator("[data-game-card]:visible").count(), 1);
@@ -271,6 +271,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     failSync = true;
     await q.selectOption("#game-mode", "private");
     await q.click("#game-start");
+    await q.locator(".game-save-panel>summary").click();
     await q.waitForTimeout(1400);
     assert.match(
       await q.locator("#game-save-status").innerText(),
@@ -525,7 +526,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await blockedPage.waitForTimeout(600);
     assert.equal(await blockedPage.locator(".tile").count(), 16);
     assert.match(
-      await blockedPage.locator("#game-save-status").innerText(),
+      await blockedPage.locator("#game-save-status").textContent(),
       /Save failed/,
     );
     await blockedPage.goto(base + "/games/");
@@ -550,6 +551,6 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await db.close();
   }
 })().catch((e) => {
-  console.error(e.message);
+  console.error(e.stack || e.message);
   process.exitCode = 1;
 });

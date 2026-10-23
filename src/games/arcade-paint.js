@@ -1,4 +1,8 @@
 import { BRICK, brickRect, paddleCenter } from "./arcade-engine.js";
+import {
+  paddleWidth,
+  paddleCenter as enhancedCenter,
+} from "./brick-v2-engine.js";
 
 // 仅负责画面，不推进逻辑；刷新率不会影响球速或成绩。
 export function paintBrick(canvas, state, view = {}) {
@@ -58,49 +62,76 @@ export function paintBrick(canvas, state, view = {}) {
     ctx.fill();
     ctx.fillStyle = "#ffffff35";
     ctx.fillRect(x + 6, y + 3, bw - 12, 1.5);
+    const kind = state.powerBricks?.[i];
+    if (kind) {
+      ctx.strokeStyle = "#fff8e8";
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(x + 1.5, y + 1.5, bw - 3, bh - 3);
+      ctx.fillStyle = "#222133";
+      ctx.font = "bold 12px system-ui";
+      ctx.textAlign = "center";
+      ctx.fillText(["", "×3", "↔", "¾"][kind], x + bw / 2, y + 13);
+    }
   }
-  const px = paddleCenter(state) / q - BRICK.paddleWidth / 2;
+  const pw = state.version === 2 ? paddleWidth(state) : BRICK.paddleWidth;
+  const px =
+    (state.version === 2 ? enhancedCenter(state) : paddleCenter(state)) / q -
+    pw / 2;
   ctx.save();
   ctx.shadowColor = "#c2a6ef";
   ctx.shadowBlur = 18;
-  const paddle = ctx.createLinearGradient(px, 0, px + BRICK.paddleWidth, 0);
+  const paddle = ctx.createLinearGradient(px, 0, px + pw, 0);
   paddle.addColorStop(0, "#bda0e9");
   paddle.addColorStop(0.5, "#e9d9ff");
   paddle.addColorStop(1, "#bda0e9");
   ctx.fillStyle = paddle;
   ctx.beginPath();
-  ctx.roundRect(px, BRICK.paddleY, BRICK.paddleWidth, BRICK.paddleHeight, 6);
+  ctx.roundRect(px, BRICK.paddleY, pw, BRICK.paddleHeight, 6);
   ctx.fill();
   ctx.restore();
-  const b = { ...state.ball, ...view.ball },
-    bx = b.x / q,
-    by = b.y / q;
-  if (view.full !== false && b.launched && state.status === "playing") {
-    const tail = ctx.createLinearGradient(
-      bx - (b.vx / q) * 5,
-      by - (b.vy / q) * 5,
-      bx,
-      by,
-    );
-    tail.addColorStop(0, "#a0dfcd00");
-    tail.addColorStop(1, "#a0dfcda0");
-    ctx.strokeStyle = tail;
-    ctx.lineWidth = 5;
-    ctx.lineCap = "round";
+  for (const drop of state.drops || []) {
+    const x = drop.x / q,
+      y = drop.y / q;
+    ctx.fillStyle = ["", "#a1edce", "#d2b2f0", "#97cfee"][drop.kind];
     ctx.beginPath();
-    ctx.moveTo(bx - (b.vx / q) * 5, by - (b.vy / q) * 5);
-    ctx.lineTo(bx, by);
-    ctx.stroke();
+    ctx.roundRect(x - 13, y - 10, 26, 20, 7);
+    ctx.fill();
+    ctx.fillStyle = "#181625";
+    ctx.font = "bold 13px system-ui";
+    ctx.textAlign = "center";
+    ctx.fillText(["", "×3", "↔", "¾"][drop.kind], x, y + 5);
   }
-  ctx.save();
-  ctx.shadowColor = "#a5f3d9";
-  ctx.shadowBlur = 18;
-  ctx.fillStyle = "#e5fff7";
-  ctx.beginPath();
-  ctx.arc(bx, by, BRICK.radius, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.restore();
-  if (!b.launched && state.status === "playing") {
+  const balls = view.balls || state.balls || [{ ...state.ball, ...view.ball }];
+  for (const b of balls) {
+    const bx = b.x / q,
+      by = b.y / q;
+    if (view.full !== false && b.launched && state.status === "playing") {
+      const tail = ctx.createLinearGradient(
+        bx - (b.vx / q) * 5,
+        by - (b.vy / q) * 5,
+        bx,
+        by,
+      );
+      tail.addColorStop(0, "#a0dfcd00");
+      tail.addColorStop(1, "#a0dfcda0");
+      ctx.strokeStyle = tail;
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(bx - (b.vx / q) * 5, by - (b.vy / q) * 5);
+      ctx.lineTo(bx, by);
+      ctx.stroke();
+    }
+    ctx.save();
+    ctx.shadowColor = "#a5f3d9";
+    ctx.shadowBlur = 18;
+    ctx.fillStyle = state.slowUntil > state.ticks ? "#b4ddff" : "#e5fff7";
+    ctx.beginPath();
+    ctx.arc(bx, by, BRICK.radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  if (balls[0] && !balls[0].launched && state.status === "playing") {
     ctx.textAlign = "center";
     ctx.fillStyle = "#d9cdea";
     ctx.font = "14px system-ui, sans-serif";

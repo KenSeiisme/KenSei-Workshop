@@ -56,6 +56,7 @@ $env:TEST_BASE_URL = 'http://127.0.0.1:8769'
 pnpm test:games
 pnpm test:games-expansion
 pnpm test:arcade-next
+pnpm test:game-experience
 pnpm test:browser
 # 或运行所有测试：pnpm test:all
 ```

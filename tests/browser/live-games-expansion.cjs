@@ -198,16 +198,24 @@ const slugs = [
     await page.click("#game-start");
     await page.waitForSelector(".brick-canvas:not([hidden])");
     await page.click("[data-brick-launch]");
-    await page.locator(".brick-paddle-slider").evaluate((slider) => {
-      slider.value = "160";
-      slider.dispatchEvent(new Event("input", { bubbles: true }));
+    await page.locator(".brick-canvas").evaluate((canvas) => {
+      const rect = canvas.getBoundingClientRect(),
+        worldX = 46 + (160 / 1024) * (640 - 92);
+      canvas.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          pointerType: "mouse",
+          clientX: rect.left + (rect.width * worldX) / 640,
+          clientY: rect.top + rect.height * 0.8,
+        }),
+      );
     });
     record = await waitSave(
       "brick-breaker",
       (row) =>
         row.state.ticks > 30 &&
         row.state.paddle === 160 &&
-        row.state.ball.launched,
+        row.state.balls[0].launched,
     );
     const pausedBrick = await pauseAndRestore("brick-breaker", record);
     record = await waitSave(
@@ -223,7 +231,7 @@ const slugs = [
       await page.locator(".brick-canvas").getAttribute("height"),
       "480",
     );
-    assert.equal(await page.inputValue(".brick-paddle-slider"), "160");
+    assert.equal(await page.locator(".brick-paddle-slider").count(), 0);
     await page.click("#game-pause");
     console.log(
       "PASS live guest Sudoku notes/digits, Nonogram fill, Block placement/scoring and Brick launch/paddle/ticks; all four restore local progress after reload.",
@@ -319,7 +327,7 @@ const slugs = [
       assert.equal(response.status(), 200, `${game}: real public leaderboard`);
       const board = await response.json();
       assert.ok(Array.isArray(board.top));
-      assert.equal(board.version, 1);
+      assert.equal(board.version, game === "brick-breaker" ? 2 : 1);
       assert.equal(board.me, null);
       assert.ok(
         !JSON.stringify(board).match(/"(user_id|state|seed|events|email)":/),

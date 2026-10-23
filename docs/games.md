@@ -33,9 +33,9 @@ Guests default to Private. Signed-in players default to Public for new ranked-ca
 
 `games-session` exposes `/start`, `/finish` and `/abandon`. JWT verification remains enabled, and the handler additionally checks the current user with Supabase Auth. Only server credentials can call `games_admin`; clients cannot write ranked scores. Each account has one active Public session, 12 starts per minute, a two-hour expiry, a 20,000-action replay limit and a 512 KB request limit. Replays are verified transiently, not stored in the database. Completed responses are idempotent. These casual boards do not prevent automated solving.
 
-Existing request formats remain compatible. Brick Breaker uses `events_format: "paddle-v1"`, compact `[tick, x]` controls (quantized paddle position 0–1024, `-1` for launch) and `final_tick`. Its verifier caps simulation at 18,000 ticks, corresponding to five minutes at 60 Hz. Public timing is server-verified.
+Rule versions are selected per game: Brick Breaker now starts at v2; every other game remains v1. Start requests send `rules_version`; outdated Brick clients receive a refresh response before a session is created. Finish always replays the stored session version. Brick Breaker uses `paddle-v2` for new runs and retains `paddle-v1` for old in-flight sessions, with compact `[tick, x]` controls (normalized position 0–1024, `-1` for launch) and `final_tick`. Both cap simulation at 18,000 ticks. See [versioned arcade rules](arcade-rules.md).
 
-`get_game_leaderboard(game, difficulty)` is anonymous-safe and returns current-version Top 50 plus the caller's own best rank. Profile retains typing `best_scores` and returns `game_best_scores` for nine ranked games. Results resolve current profile names and avatars; private progress, room membership and board matches are never returned publicly.
+`get_game_leaderboard(game, difficulty)` keeps its signature and returns current-version Top 50 plus the caller's rank. `get_game_leaderboard_history(game,difficulty,rules_version)` exposes the read-only archive. Profile retains typing `best_scores` and current `game_best_scores`, adding `game_legacy_best_scores` under Previous rules. Counts deduplicate game identifiers across both versions. Old scores, unlock dates and cumulative verified counts remain intact. Legacy saves retain v1 and separate save slots, without silent conversion. Private progress and room membership never appear publicly.
 
 ## Block Drop and milestones
 
@@ -58,6 +58,14 @@ The host advances native 120Hz physics; the peer interpolates received snapshots
 Run `pnpm test:games`, `pnpm test:games-expansion` and `pnpm test:arcade-next` against a local preview. Unit/database tests cover deterministic rules, replay, ownership, milestones and rank ordering. Automated browser fixtures exercise actual controls and the bundled Edge handler with isolated PostgreSQL; their Broadcast bridge is separate from real-service verification. The production operator additionally runs the explicitly approved real-WebSocket check above without creating public scores. See the [Block Drop/Pong validation record](validation/2026-10-23-arcade-next.md).
 
 Build the Edge artifact from `supabase/functions/games-session/index.ts` with esbuild, `bundle: true`, `format: esm`, target `es2022`; the canonical rules are bundled once. Apply and verify migrations before deploying `games-session`, then push the existing GitHub branch and verify the Vercel production URL. Never place server credentials in static files. A successful push alone does not verify the live website.
+
+## Board-first experience and sound
+
+`game-experience.css` centers the stable board and keeps HUD/active controls together. Saved progress, Milestones, leaderboards and Help start folded below; save state remains visible in the progress summary. Brick Breaker has direct pointer/touch movement, focused keyboard controls and mobile buttons, without a paddle slider. V2 shows ball count, falling powerups and timed buffs.
+
+`audio.js` synthesizes Web Audio cues independently of rules and Effects. Defaults are on at 35%, unlocked only by Start, Ready, resume or sound controls. `kensei-game-audio-v1` remembers mute/volume across games and tabs. Import, previews and page load stay silent; pause, navigation and hidden pages stop voices. At most eight voices and per-cue cooldowns bound collision noise. No audio assets or music are fetched. Result/verification updates never wait for decorative effects.
+
+Run `pnpm test:game-experience` for versioned replay, audio, database and browser regression. See the [experience validation record](validation/2026-10-23-game-experience.md).
 
 ## Neon presentation
 

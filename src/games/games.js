@@ -1,3 +1,4 @@
+import { mountAudio, unlockAudio, stopAudio, observeAudio } from "./audio.js";
 import { api, esc } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import {
@@ -6,7 +7,7 @@ import {
 } from "/tool-scripts/record-store.js";
 import {
   GAMES,
-  VERSION,
+  gameVersion,
   create,
   apply,
   advanceSnake,
@@ -29,11 +30,28 @@ import { mountEffects, bindCardDemos } from "./effects.js";
 import { INPUTS as DROP_INPUTS } from "./block-drop-engine.js";
 import { mountAchievements } from "./achievements.js";
 mountEffects();
+mountAudio();
 
 const $ = (s) => document.querySelector(s),
   store = createRecordStore("game", validateSave, { syncDelay: 500 });
 const root = $("[data-game]"),
   game = root?.dataset.game;
+// 折叠进度面板仍显示保存状态，失败信息与重试入口留在原区域。
+if (game) {
+  const source = $("#game-save-status"),
+    summary = document.createElement("small");
+  summary.className = "game-save-summary";
+  $(".game-save-panel>summary").append(summary);
+  const update = () => {
+    summary.textContent = source.textContent;
+  };
+  new MutationObserver(update).observe(source, {
+    childList: true,
+    characterData: true,
+    subtree: true,
+  });
+  update();
+}
 const owner = () => api.user?.id || "guest";
 const clock = (ms) =>
   `${Math.floor(ms / 60000)
@@ -60,8 +78,7 @@ let running = false,
   lastClock = 0,
   busy = false,
   mineMode = "reveal",
-  sound = false,
-  audio,
+  audioSnapshot = null,
   player;
 const presenter = game ? createGamePresenter(root, game) : null;
 const milestones = mountAchievements(game);
@@ -132,11 +149,15 @@ function better(a, b, slug) {
     (slug === "2048" && a.score === b.score && a.max_tile > b.max_tile)
   );
 }
-function priorBest(slug, mode) {
+function priorBest(slug, mode, version = active?.version || gameVersion(slug)) {
   return store
     .rows()
     .filter(
-      (x) => x.data.game === slug && x.data.difficulty === mode && x.data.best,
+      (x) =>
+        x.data.game === slug &&
+        x.data.difficulty === mode &&
+        x.data.state.version === version &&
+        x.data.best,
     )
     .map((x) => x.data.best)
     .reduce((b, a) => (better(a, b, slug) ? a : b), null);
@@ -194,8 +215,9 @@ async function persist() {
 function queueSave() {
   if (!saveTimer) saveTimer = setTimeout(persist, 500);
 }
-function slotId(slug, mode) {
+function slotId(slug, mode, version = gameVersion(slug)) {
   const n =
+    (version === 2 ? 1000 : 0) +
     Object.keys(GAMES).indexOf(slug) * 10 +
     Object.keys(GAMES[slug].modes).indexOf(mode) +
     1;
@@ -248,6 +270,8 @@ const SHAPES = [
 ];
 function draw(reason = "view", event = null) {
   if (!active) return;
+  observeAudio(audioSnapshot, active, event || {});
+  audioSnapshot = structuredClone(active);
   presenter.prepare(active, { running, reason, event });
   const board = $("#game-board"),
     selected = document.activeElement?.dataset.cell,
@@ -340,12 +364,19 @@ function draw(reason = "view", event = null) {
             ? `${active.revealed.filter((i) => active.board[i] !== -1).length} / ${active.board.length - rules(game, active.difficulty).mines}`
             : active.score.toLocaleString();
   if ($("#game-hint")) $("#game-hint").disabled = !!publicSession || !running;
-  $("#game-clock").textContent = clock(elapsed());
+  $("#game-clock").textContent = clock(
+    game === "brick-breaker" ? Math.max(0, 300000 - elapsed()) : elapsed(),
+  );
   $("#game-pause").disabled = !running;
   if ($("#game-undo"))
     $("#game-undo").disabled = !undo || !!publicSession || !running;
   $("#game-start").textContent =
-    active.status === "playing" ? "Restart game" : "Play again →";
+    active.status === "playing" ? "Restart" : "Play again →";
+  $("#game-start").classList.toggle("primary", active.status !== "playing");
+  $("#game-start").classList.toggle("secondary", active.status === "playing");
+  $("#game-run-label").dataset.rulesVersion = String(active.version);
+  if (game === "brick-breaker")
+    $("#game-clock").previousElementSibling.textContent = "Time left";
   $("#game-settings-change").hidden = active.status !== "playing";
   $("#game-mode").disabled = $("#game-difficulty").disabled =
     active.status === "playing";
@@ -358,21 +389,6 @@ function draw(reason = "view", event = null) {
   presenter.commit(active);
   milestones.update(active, !!publicSession);
 }
-function beep() {
-  if (!sound) return;
-  try {
-    audio ||= new (window.AudioContext || window.webkitAudioContext)();
-    const o = audio.createOscillator(),
-      g = audio.createGain();
-    o.frequency.value = 520;
-    g.gain.setValueAtTime(0.035, audio.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.08);
-    o.connect(g);
-    g.connect(audio.destination);
-    o.start();
-    o.stop(audio.currentTime + 0.08);
-  } catch {}
-}
 function downgrade(reason) {
   if (!publicSession) return;
   const id = publicSession.id;
@@ -383,6 +399,7 @@ function downgrade(reason) {
   status(`${reason} This run is now Private and can continue.`);
 }
 function pause(reason = "Paused.") {
+  stopAudio();
   if (!running) return;
   accumulated = elapsed();
   running = false;
@@ -405,6 +422,8 @@ function pause(reason = "Paused.") {
   persist();
 }
 function resume() {
+  unlockAudio();
+  audioSnapshot = null;
   if (!active || active.status !== "playing" || running) return;
   presenter.reset(active);
   $("#game-overlay").hidden = true;
@@ -463,7 +482,6 @@ async function finish() {
   cancelAnimationFrame(frameId);
   ui?.stop();
   draw();
-  beep();
   status(
     isBoard()
       ? ui.resultText()
@@ -483,7 +501,9 @@ async function finish() {
         session_id: publicSession.id,
         events,
         final_tick: active.ticks || 0,
-        ...(game === "brick-breaker" ? { events_format: "paddle-v1" } : {}),
+        ...(game === "brick-breaker"
+          ? { events_format: active.version === 2 ? "paddle-v2" : "paddle-v1" }
+          : {}),
         ...(game === "block-drop" ? { events_format: "block-drop-v1" } : {}),
       },
     };
@@ -531,7 +551,6 @@ function frame(now) {
       advanceSnake(active, tick);
       draw();
       queueSave();
-      if (active.score > oldScore) beep();
     }
   } else if (
     game === "memory-match" &&
@@ -544,7 +563,9 @@ function frame(now) {
   }
   presenter.frame(now);
   if (now - lastClock > 200) {
-    $("#game-clock").textContent = clock(elapsed());
+    $("#game-clock").textContent = clock(
+      game === "brick-breaker" ? Math.max(0, 300000 - elapsed()) : elapsed(),
+    );
     lastClock = now;
   }
   if (active.status !== "playing") {
@@ -586,13 +607,14 @@ function action(event) {
   if (!event.computer) undo = old;
   draw("action", e);
   queueSave();
-  if (game !== "snake") beep();
+
   if (game === "2048" && Math.max(...active.board) >= 2048 && priorMax < 2048)
     status("2048 reached! Keep playing until no moves remain.");
   if (active.status !== "playing") finish();
   return true;
 }
 async function start() {
+  unlockAudio();
   if (busy) return;
   if (pending) {
     status("Retry the pending Public result before starting another run.");
@@ -627,11 +649,16 @@ async function start() {
     if (mode === "public") {
       await ensureProfile();
       status("Starting a verified Public session…");
-      nextSession = await sessionCall("start", { game, difficulty: diff });
-      if (nextSession.version !== VERSION)
+      nextSession = await sessionCall("start", {
+        game,
+        difficulty: diff,
+        rules_version: gameVersion(game),
+      });
+      if (nextSession.version !== gameVersion(game))
         throw Error("Game rules changed. Reload this page before starting.");
       seed = Number(nextSession.seed);
     }
+    audioSnapshot = null;
     active = create(game, diff, seed);
     if (isBoard()) active.humanSide = Number($("#game-human-side").value);
     publicSession = nextSession;
@@ -699,6 +726,7 @@ async function restore() {
 async function leaderboard() {
   if (!game || !isRanked(game)) return;
   const mode = difficulty(),
+    boardVersion = $("#game-board-version")?.value || "current",
     dest = $("#game-leaderboard"),
     note = $("#game-leaderboard-status");
   note.textContent = "Loading leaderboard…";
@@ -717,12 +745,24 @@ async function leaderboard() {
   try {
     if (!api.client)
       throw Error("Leaderboard service unavailable. Private play still works.");
-    const { data, error } = await api.client.rpc("get_game_leaderboard", {
-      game,
-      difficulty: mode,
-    });
+    const { data, error } = await api.client.rpc(
+      boardVersion === "current"
+        ? "get_game_leaderboard"
+        : "get_game_leaderboard_history",
+      {
+        game,
+        difficulty: mode,
+        ...(boardVersion === "current"
+          ? {}
+          : { rules_version: Number(boardVersion) }),
+      },
+    );
     if (error) throw error;
-    if (difficulty() !== mode) return;
+    if (
+      difficulty() !== mode ||
+      ($("#game-board-version")?.value || "current") !== boardVersion
+    )
+      return;
     patchMarkup(
       dest,
       data.top.length
@@ -742,7 +782,7 @@ async function leaderboard() {
     $("#game-my-rank").innerHTML = data.me
       ? `<p class="game-my-result">Your rank: #${Number(data.me.rank)} · ${esc(displayResult(data.me, game))}</p>`
       : '<p class="muted">No qualifying Public result for this difficulty yet.</p>';
-    note.textContent = "Current rules · Top 50 · one best result per player.";
+    note.textContent = `${boardVersion === "current" ? "Current rules" : "Previous rules · archived"} · Top 50 · one best result per player.`;
   } catch {
     note.textContent =
       "Leaderboard could not load. Use Refresh to retry; Private play is available.";
@@ -756,7 +796,7 @@ async function renderSaves() {
     ? rows
         .map(
           (r) =>
-            `<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? " · conflict copy" : ""}</strong><small>Private · ${esc(new Date(r.updated_at).toLocaleString())} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
+            `<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? " · conflict copy" : ""}</strong><small>${r.data.game === "brick-breaker" && r.data.state.version === 1 ? "Legacy rules · v1 · " : ""}Private · ${esc(new Date(r.updated_at).toLocaleString())} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
         )
         .join("")
     : '<div class="game-empty-state"><strong>A fresh start is a good start.</strong><p>No unfinished games yet. Pick a game above; your Private progress will appear here.</p></div>';
@@ -902,10 +942,13 @@ function bindGame() {
     saveLine();
   };
   $("#game-board-refresh").onclick = leaderboard;
+  if ($("#game-board-version")) $("#game-board-version").onchange = leaderboard;
+  const report = $("#game-result");
+  if (report) $(".game-board-shell").append(report);
   const narrow = matchMedia("(max-width: 760px)");
   const rankPanel = $("#game-rank-panel");
   const fitSide = () => {
-    if (rankPanel) rankPanel.open = !narrow.matches;
+    if (rankPanel) rankPanel.open = false;
   };
   fitSide();
   narrow.addEventListener("change", fitSide);
@@ -920,12 +963,6 @@ function bindGame() {
   };
   $("#game-help-dialog .dialog-close").onclick = () =>
     $("#game-help-dialog").close();
-  $("#game-sound").onclick = () => {
-    sound = !sound;
-    $("#game-sound").textContent = sound ? "Sound on" : "Sound off";
-    $("#game-sound").setAttribute("aria-pressed", String(sound));
-    if (sound) beep();
-  };
   if ($("#game-undo"))
     $("#game-undo").onclick = () => {
       if (!undo || publicSession || !running) return;
@@ -1045,7 +1082,7 @@ function bindGame() {
   window.addEventListener("pagehide", () => {
     pause("The game page was left.");
     persist();
-    audio?.close().catch(() => {});
+    stopAudio();
   });
   window.addEventListener("offline", () => {
     if (publicSession) pause("The connection was interrupted.");

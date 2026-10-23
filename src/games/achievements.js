@@ -1,6 +1,7 @@
 import { api, esc } from "/tool-scripts/common.js";
 import { ACHIEVEMENTS, liveValue } from "./achievement-catalog.js";
 import { patchMarkup } from "./dom.js";
+import { playCue } from "./audio.js";
 export { ACHIEVEMENTS };
 export function achievementCard(def, unlocked, progress = 0, live = 0) {
   const date = unlocked?.unlocked_at;
@@ -147,6 +148,7 @@ export function mountAchievements(game = null) {
       );
       for (const r of unlocked) shown.add(`${sessionId}:${r.achievement_id}`);
       if (unlocked.length && panel) {
+        playCue("milestone");
         let note = panel.querySelector(".achievement-notice");
         if (!note) {
           note = document.createElement("p");
