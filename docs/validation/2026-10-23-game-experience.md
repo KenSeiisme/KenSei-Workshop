@@ -31,4 +31,8 @@ Automatic approval rejected replacing the production function with a temporary s
 
 ## Frontend release
 
-GitHub push and canonical Vercel verification are recorded below after deployment. A pushed commit alone is not live verification.
+- Code commit `f7956d86a2a550774b986c4831368640ccb1488b` pushed to the existing `KenSei-Workshop` branch. The connected Vercel check reports success: [deployment](https://vercel.com/kenseiismes-projects/kensei-workshop/A2wgZ16ZX88q6g3ZrfkLU4JSHcbZ).
+- At 2026-10-23T15:30:28.085Z, the canonical `https://kensei-workshop.vercel.app/` served all twelve ready game pages and all 28 tool routes. Seven changed runtime assets matched local SHA-256 values exactly.
+- Unmocked production browser checks passed v2 launch/direct controls, pause and explicit restore, v1 archived leaderboard, remembered mute, public Profile with nine ranked cards, 320/360/768/1440px layout, guest Continue playing and actual computer-worker matches. No account mutations or uncaught errors occurred.
+- Production `games-session` is canonical version 7, ACTIVE, JWT verification enabled; the temporary benchmark endpoint was never installed. Its remaining performance-check limitation is recorded above.
+- Four disposable QA users and their profiles, rooms, memberships, sessions and results were all verified removed. The original independent car project was unchanged.
