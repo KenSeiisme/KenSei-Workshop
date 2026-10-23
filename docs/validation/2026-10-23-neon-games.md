@@ -29,4 +29,10 @@ Representative artifacts remain ignored local files: `_qa/neon-animation-demo.we
 
 ## Publication
 
-Pending final source push and Vercel automatic deployment. Production acceptance runs the real anonymous game suites, checks exact new asset hashes and inspects the canonical Games/public Profile pages. Local passes alone do not establish that the new visuals are live.
+Published implementation commit `d1c381287c28abf832f093f998a087039713dce3` to the existing `KenSei-Workshop` branch. Vercel automatic deployment reported success. Acceptance used `https://kensei-workshop.vercel.app/`.
+
+- Both real anonymous live game suites passed: ten routes and actual play, local saves/restoration, real computer Workers, read-only public boards, existing public Profile and zero guest save/Public uploads. Unauthenticated Public start remains rejected.
+- The live release check matched new `game-neon.css`, `dom.js`, `effects.js`, `motion.js`, `motion-state.js` and the other release assets to local SHA-256 hashes.
+- A production animation probe created real moving 2048 overlays, verified their removal after completion, then changed Effects without altering the board or run state.
+- All 28 existing tool routes returned HTTP 200. Home remains tools-first with independent game search; no fresh full output verification of every unchanged tool is claimed.
+- Canonical Games/Brick/public Profile captures were inspected, including a 320px public Profile. Synthetic Public score tests remained isolated fixtures; production acceptance created no accounts or ranked scores.
