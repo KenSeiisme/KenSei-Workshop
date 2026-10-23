@@ -135,12 +135,12 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
   try {
     await p.goto(base + "/games/");
     await p.waitForSelector("[data-game-card]");
-    assert.equal(await p.locator("[data-game-card]").count(), 4);
+    assert.equal(await p.locator("[data-game-card]").count(), 10);
     await p.fill("#game-search", "snake");
     assert.equal(await p.locator("[data-game-card]:visible").count(), 1);
     await p.fill("#game-search", "");
     await p.click('[data-game-filter="puzzle"]');
-    assert.equal(await p.locator("[data-game-card]:visible").count(), 3);
+    assert.equal(await p.locator("[data-game-card]:visible").count(), 6);
     await open(p, "2048");
     assert.equal(await p.inputValue("#game-mode"), "private");
     assert.equal(await p.locator(".tile").count(), 0);
@@ -519,6 +519,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       /Save failed/,
     );
     await blockedPage.goto(base + "/games/");
+    await blockedPage.waitForSelector(
+      '[data-games-directory][data-ready="true"]',
+    );
     await blockedPage.fill("#game-search", "snake");
     assert.equal(
       await blockedPage.locator("[data-game-card]:visible").count(),

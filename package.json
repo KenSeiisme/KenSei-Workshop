@@ -44,7 +44,8 @@
     "test:live": "node tests/browser/live-second-batch.cjs",
     "test:experience": "node scripts/test.mjs experience",
     "test:games": "node scripts/test.mjs games",
-    "games:edge": "node scripts/build-games-edge.mjs"
+    "games:edge": "node scripts/build-games-edge.mjs",
+    "test:games-expansion": "node scripts/test.mjs games-expansion"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

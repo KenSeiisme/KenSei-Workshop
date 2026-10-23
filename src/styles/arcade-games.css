@@ -1,0 +1,276 @@
+.games-page[data-game-theme="block-puzzle"] {
+  --game-accent: #bdacee;
+  --game-tint: #bdacee18;
+  --game-ink: #2e2344;
+}
+.games-page[data-game-theme="brick-breaker"] {
+  --game-accent: #b2dfd3;
+  --game-tint: #b2dfd318;
+  --game-ink: #1c3934;
+}
+.games-page .arcade-board {
+  width: 100%;
+  min-width: 0;
+}
+.games-page .block-puzzle-board {
+  max-width: 500px;
+  margin: auto;
+}
+.games-page .block-instruction,
+.games-page .brick-situation {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #bcb1cb;
+  font-size: 12px;
+  margin: 0 0 16px;
+}
+.games-page .block-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 5px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid #bdacee24;
+  background: linear-gradient(145deg, #181421, #211c2b);
+  box-shadow: inset 0 2px 15px #0002;
+}
+.games-page .block-cell {
+  position: relative;
+  padding: 0;
+  min-height: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid #bdacee0b;
+  border-radius: 5px;
+  background: #302838;
+  box-shadow: inset 0 1px 3px #0002;
+  touch-action: manipulation;
+}
+.games-page .block-cell.is-filled {
+  background: linear-gradient(145deg, #d8c0fa, #ad8ddb);
+  border-color: #e2cef866;
+  box-shadow:
+    inset 0 2px 1px #ffffff3a,
+    0 2px 2px #0003;
+}
+.games-page .block-cell.is-filled span {
+  position: absolute;
+  inset: 5px;
+  border: 1px solid #ffffff20;
+  border-radius: 2px;
+}
+.games-page .block-cell.is-preview {
+  background: #a9ddc380;
+  border: 2px dashed #c5f0df;
+}
+.games-page .block-cell.is-invalid-preview {
+  background: #db9cb560;
+  border: 2px dashed #f1b6c9;
+}
+.games-page .block-cell.is-invalid-preview:after {
+  content: "×";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #ffe0e9;
+  font-size: 20px;
+  line-height: 1;
+}
+.games-page .block-cell:focus-visible {
+  z-index: 1;
+  outline-offset: 2px;
+}
+.games-page .block-tray {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 20px;
+}
+.games-page .block-piece {
+  min-width: 0;
+  min-height: 112px;
+  border: 1px solid #bdacee1f;
+  border-radius: 12px;
+  padding: 12px 5px 10px;
+  background: #221d2b;
+  color: #b7a7cc;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  touch-action: none;
+}
+.games-page .block-piece.is-selected {
+  border-color: #d5bdf5;
+  background: #bdacee16;
+  box-shadow: 0 0 0 1px #d5bdf51c;
+  color: #f0e0ff;
+}
+.games-page .block-piece small {
+  font-size: 11px;
+}
+.games-page .block-piece-art {
+  display: grid;
+  grid-template-columns: repeat(var(--piece-width), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--piece-height), minmax(0, 1fr));
+  gap: 2px;
+  width: calc(var(--piece-width) * 14px);
+  height: calc(var(--piece-height) * 14px);
+}
+.games-page .block-piece-art i {
+  min-width: 0;
+  border-radius: 2px;
+}
+.games-page .block-piece-art .is-part {
+  background: linear-gradient(145deg, #d8c0fa, #ad8ddb);
+  box-shadow: inset 0 1px #ffffff50;
+}
+.games-page .block-piece.is-used {
+  border-style: dashed;
+  background: transparent;
+  opacity: 0.5;
+}
+.games-page .block-piece.is-used > span {
+  font-size: 24px;
+}
+.games-page .arcade-control-note {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #a99ab9;
+  margin: 16px 0 0;
+  text-align: center;
+}
+.games-page .brick-breaker-board {
+  max-width: 640px;
+  margin: auto;
+}
+.games-page .brick-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4/3;
+  height: auto;
+  border: 1px solid #c4a8e02b;
+  border-radius: 14px;
+  touch-action: none;
+  box-shadow: 0 12px 30px #0003;
+}
+.games-page .brick-controller {
+  display: flex;
+  align-items: end;
+  gap: 18px;
+  margin-top: 20px;
+}
+.games-page .brick-slider-label {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+  font-size: 12px;
+  color: #b8a9c8;
+}
+.games-page .brick-paddle-slider {
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  padding: 0;
+  accent-color: #d5bdf5;
+}
+.games-page .brick-launch {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.games-page .brick-limit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  color: #aa9dba;
+  font-size: 11px;
+}
+.games-page .brick-limit progress {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  height: 5px;
+  flex: 1;
+  appearance: none;
+  border: 0;
+  border-radius: 99px;
+  overflow: hidden;
+  background: #362b40;
+  color: #b8decf;
+}
+.games-page .brick-limit progress::-webkit-progress-bar {
+  background: #362b40;
+}
+.games-page .brick-limit progress::-webkit-progress-value {
+  background: linear-gradient(90deg, #bdacee, #b2dfd3);
+  border-radius: 99px;
+}
+.games-page .brick-limit progress::-moz-progress-bar {
+  background: #b2dfd3;
+  border-radius: 99px;
+}
+.games-page .brick-time-left {
+  white-space: nowrap;
+}
+.games-page .brick-unavailable {
+  padding: 24px;
+  border: 1px solid #e6a8be66;
+  background: #e6a8be12;
+  border-radius: 12px;
+  color: #f0c1d1;
+}
+@media (max-width: 600px) {
+  .games-page .block-grid {
+    gap: 4px;
+    padding: 7px;
+    border-radius: 12px;
+  }
+  .games-page .block-cell {
+    border-radius: 4px;
+  }
+  .games-page .block-cell.is-filled span {
+    inset: 3px;
+  }
+  .games-page .block-tray {
+    gap: 7px;
+    padding-top: 14px;
+  }
+  .games-page .block-piece {
+    min-height: 100px;
+    border-radius: 10px;
+  }
+  .games-page .block-piece-art {
+    width: calc(var(--piece-width) * 12px);
+    height: calc(var(--piece-height) * 12px);
+  }
+  .games-page .brick-controller {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .games-page .brick-slider-label {
+    flex-basis: 100%;
+  }
+  .games-page .brick-launch {
+    width: 100%;
+  }
+  .games-page .block-instruction,
+  .games-page .brick-situation {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .games-page .block-piece {
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+  }
+}

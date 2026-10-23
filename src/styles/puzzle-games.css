@@ -1,0 +1,322 @@
+.games-page .puzzle-stage {
+  width: 100%;
+  min-width: 0;
+  max-width: 560px;
+  margin-inline: auto;
+}
+.games-page .puzzle-grid-row {
+  display: contents;
+}
+.games-page .puzzle-summary {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 18px;
+  color: #aaa4b8;
+  font-size: 13px;
+}
+.games-page .puzzle-summary strong {
+  color: #eee6f7;
+  font-weight: 650;
+}
+.games-page .puzzle-conflict-summary {
+  color: #ffb5c7;
+}
+.games-page .sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  width: 100%;
+  max-width: 468px;
+  margin-inline: auto;
+  background: #42354f;
+  border: 2px solid #ad87c2;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 14px 40px #08060f40;
+}
+.games-page .sudoku-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid #3e354a;
+  border-bottom: 1px solid #3e354a;
+  border-radius: 0;
+  background: #201b2a;
+  color: #d9b3f6;
+  font-family: inherit;
+  font-size: clamp(17px, 3vw, 27px);
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+.games-page .sudoku-cell:nth-child(9n) {
+  border-right: 0;
+}
+.games-page .sudoku-cell.box-right {
+  border-right: 2px solid #a180b9;
+}
+.games-page .sudoku-cell.box-bottom {
+  border-bottom: 2px solid #a180b9;
+}
+.games-page .sudoku-cell.is-related {
+  background: #2b2237;
+}
+.games-page .sudoku-cell.is-given {
+  color: #efedf5;
+  font-weight: 650;
+}
+.games-page .sudoku-cell.is-selected {
+  background: #624575;
+  color: #fff;
+  box-shadow: inset 0 0 0 2px #e3b6f4;
+  z-index: 1;
+}
+.games-page .sudoku-cell.is-conflict {
+  color: #ffc2ca;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.games-page .sudoku-cell.is-conflict::after {
+  content: "!";
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.games-page .sudoku-notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 2px;
+  color: #c8b7db;
+  font-size: clamp(7px, 1.25vw, 11px);
+  line-height: 1;
+}
+.games-page .sudoku-notes span {
+  text-align: center;
+}
+.games-page .puzzle-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+.games-page .puzzle-controls button {
+  min-height: 44px;
+  min-width: 80px;
+}
+.games-page .puzzle-controls [aria-pressed="true"] {
+  border-color: #d8adee;
+  background: #483253;
+  color: #fff;
+}
+.games-page .puzzle-notes-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+.games-page .puzzle-notes-toggle span {
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: #bba1cc22;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.games-page .sudoku-number-pad {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  max-width: 468px;
+  margin-inline: auto;
+  gap: 5px;
+}
+.games-page .sudoku-number-pad button {
+  min-width: 0;
+  min-height: 44px;
+  padding: 0;
+  background: #2d2338;
+  border: 1px solid #725280;
+  color: #ead9f8;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.games-page .puzzle-key-help {
+  margin: 14px 0 0;
+  color: #a9a2b5;
+  font-size: 12px;
+  line-height: 1.65;
+  text-align: left;
+}
+.games-page .nonogram-mode {
+  margin-top: 0;
+}
+.games-page .nonogram-viewport {
+  overflow: auto;
+  max-width: 100%;
+  max-height: 620px;
+  padding-bottom: 10px;
+  overscroll-behavior: contain;
+  scrollbar-color: #a57cbc #211b2b;
+  scrollbar-width: auto;
+  touch-action: pan-x pan-y;
+  border-radius: 8px;
+}
+.games-page .nonogram-grid {
+  --nonogram-cell: 30px;
+  display: grid;
+  grid-template-columns: var(--row-clue-width) repeat(
+      var(--nonogram-size),
+      var(--nonogram-cell)
+    );
+  grid-template-rows: var(--col-clue-height) repeat(
+      var(--nonogram-size),
+      var(--nonogram-cell)
+    );
+  width: max-content;
+  min-width: 0;
+  margin-inline: auto;
+  border: 1px solid #7d618e;
+  background: #251e30;
+  isolation: isolate;
+}
+.games-page .nonogram-corner {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  background: #2d2239;
+  color: #bea9ce;
+  font-size: 11px;
+  border-right: 2px solid #9270a4;
+  border-bottom: 2px solid #9270a4;
+}
+.games-page .nonogram-col-clue,
+.games-page .nonogram-row-clue {
+  position: sticky;
+  display: flex;
+  justify-content: end;
+  gap: 3px;
+  background: #2d2239;
+  color: #ebe1f3;
+  padding: 5px;
+  font:
+    650 12px/1.05 ui-monospace,
+    monospace;
+}
+.games-page .nonogram-col-clue {
+  top: 0;
+  z-index: 3;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid #483452;
+  border-bottom: 2px solid #9270a4;
+}
+.games-page .nonogram-row-clue {
+  left: 0;
+  z-index: 2;
+  flex-direction: row;
+  align-items: center;
+  border-right: 2px solid #9270a4;
+  border-bottom: 1px solid #483452;
+}
+.games-page .nonogram-col-clue.is-complete,
+.games-page .nonogram-row-clue.is-complete {
+  color: #a3dec9;
+  background: #243338;
+}
+.games-page .nonogram-col-clue i,
+.games-page .nonogram-row-clue i {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  color: #a3dec9;
+  font-size: 8px;
+  font-style: normal;
+}
+.games-page .nonogram-cell {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid #544260;
+  border-bottom: 1px solid #544260;
+  border-radius: 0;
+  background: #f1eaf6;
+  color: #776583;
+  line-height: 1;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.games-page .nonogram-cell.is-filled {
+  background: #b88ad2;
+  box-shadow: inset 0 0 0 2px #a475c0;
+}
+.games-page .nonogram-cell.is-crossed {
+  font-size: 23px;
+  background: #e4dbe9;
+}
+.games-page .nonogram-cell.is-selected {
+  outline: 2px solid #e98ad0;
+  outline-offset: -3px;
+}
+.games-page .nonogram-cell.group-left {
+  border-left: 2px solid #8a6a9d;
+}
+.games-page .nonogram-cell.group-top {
+  border-top: 2px solid #8a6a9d;
+}
+.games-page .sudoku-cell:focus-visible,
+.games-page .nonogram-cell:focus-visible {
+  outline: 3px solid #f7b5e8;
+  outline-offset: -3px;
+  z-index: 1;
+}
+.games-page .sudoku-number-pad button:focus-visible,
+.games-page .puzzle-controls button:focus-visible,
+.games-page .nonogram-viewport:focus-visible {
+  outline: 3px solid #eeb4e4;
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .games-page .sudoku-number-pad {
+    grid-template-columns: repeat(5, minmax(44px, 1fr));
+    max-width: 300px;
+  }
+  .games-page .sudoku-cell {
+    font-size: clamp(16px, 5vw, 24px);
+  }
+  .games-page .sudoku-notes {
+    font-size: clamp(7px, 2vw, 10px);
+  }
+  .games-page .nonogram-grid {
+    --nonogram-cell: 29px;
+  }
+  .games-page .puzzle-summary {
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .games-page .sudoku-number-pad button,
+  .games-page .puzzle-controls button {
+    transition:
+      background 0.15s,
+      border-color 0.15s;
+  }
+}

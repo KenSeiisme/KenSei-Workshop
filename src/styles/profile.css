@@ -541,3 +541,20 @@
     text-align: left;
   }
 }
+
+.public-profile [data-game-theme="sudoku"] {
+  --game-accent: #c7baf3;
+  --game-tint: #c7baf312;
+}
+.public-profile [data-game-theme="nonogram"] {
+  --game-accent: #b5d8dd;
+  --game-tint: #b5d8dd12;
+}
+.public-profile [data-game-theme="block-puzzle"] {
+  --game-accent: #e5c5a6;
+  --game-tint: #e5c5a612;
+}
+.public-profile [data-game-theme="brick-breaker"] {
+  --game-accent: #e6afd4;
+  --game-tint: #e6afd412;
+}

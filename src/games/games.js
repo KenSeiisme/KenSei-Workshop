@@ -10,6 +10,10 @@ import {
   create,
   apply,
   advanceSnake,
+  advanceBrick,
+  isRanked,
+  timeScored,
+  needsWin,
   settleMemory,
   metrics,
   rules,
@@ -17,6 +21,7 @@ import {
 } from "./engine.js";
 import { sessionCall, pendingResult } from "./session-client.js";
 import { gameIcon } from "./presentation.js";
+import { createExtraUI } from "./new-game-ui.js";
 
 const $ = (s) => document.querySelector(s),
   store = createRecordStore("game", validateSave, { syncDelay: 500 });
@@ -51,6 +56,24 @@ let running = false,
   sound = false,
   audio,
   player;
+const isBoard = () => game && !isRanked(game);
+const undoable = () =>
+  ["2048", "sudoku", "nonogram", "connect-four", "reversi"].includes(game);
+const ui = game
+  ? createExtraUI({
+      game,
+      getState: () => active,
+      isRunning: () => running && owner() === player,
+      isPublic: () => !!publicSession,
+      act: action,
+      redraw: draw,
+      queueSave,
+      announce: statusMessage,
+    })
+  : null;
+function statusMessage(message) {
+  status(message);
+}
 const elapsed = () => accumulated + (running ? performance.now() - started : 0);
 const status = (message) => {
   if ($("#game-status")) $("#game-status").textContent = message;
@@ -83,7 +106,9 @@ function better(a, b, slug) {
     return (
       a.moves < b.moves || (a.moves === b.moves && a.elapsed_ms < b.elapsed_ms)
     );
-  if (slug === "minesweeper") return a.elapsed_ms < b.elapsed_ms;
+  if (timeScored(slug)) return a.elapsed_ms < b.elapsed_ms;
+  if (slug === "brick-breaker" && a.score === b.score)
+    return a.elapsed_ms < b.elapsed_ms;
   return (
     a.score > b.score ||
     (slug === "2048" && a.score === b.score && a.max_tile > b.max_tile)
@@ -99,18 +124,16 @@ function priorBest(slug, mode) {
     .reduce((b, a) => (better(a, b, slug) ? a : b), null);
 }
 function bestResult(s, time) {
+  if (!isRanked(s.game)) return null;
   const old = priorBest(s.game, s.difficulty),
     now = { ...metrics(s), elapsed_ms: Math.max(1, Math.round(time)) };
-  if (
-    s.status === "playing" ||
-    (["minesweeper", "memory-match"].includes(s.game) && s.status !== "won")
-  )
+  if (s.status === "playing" || (needsWin(s.game) && s.status !== "won"))
     return old;
   return better(now, old, s.game) ? now : old;
 }
 function displayResult(row, slug) {
   if (!row) return "—";
-  if (slug === "minesweeper") return `${(row.elapsed_ms / 1000).toFixed(2)} s`;
+  if (timeScored(slug)) return `${(row.elapsed_ms / 1000).toFixed(2)} s`;
   if (slug === "memory-match")
     return `${row.moves} attempts · ${(row.elapsed_ms / 1000).toFixed(1)} s`;
   return `${Number(row.score).toLocaleString()} pts`;
@@ -150,6 +173,8 @@ function slotId(slug, mode) {
   return `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`;
 }
 function readyUI() {
+  if ($("#game-human-side"))
+    $("#game-human-side").closest("label").hidden = difficulty() === "local";
   if (!active) {
     root.dataset.runState = "ready";
     $("#game-run-label").textContent = "Ready to play";
@@ -172,7 +197,9 @@ function readyUI() {
   $("#game-mode-note").textContent =
     $("#game-mode").value === "public"
       ? "Public · sign-in required; completed uninterrupted runs submit automatically."
-      : "Private · pause, undo where available, and continue saved progress.";
+      : isBoard()
+        ? "Private · play a computer opponent or take turns on this device. Progress saves automatically."
+        : "Private · pause, undo where available, and continue saved progress.";
 }
 const SHAPES = [
   '<path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>',
@@ -312,22 +339,41 @@ function draw() {
       })
       .join("")}</div>`;
   }
+  if (ui && ui.render(board) === false && running) {
+    pause("Drawing is unavailable. Try another browser to play this game.");
+    return;
+  }
   if (hadFocus && selected !== undefined)
     board
       .querySelector(`[data-cell="${selected}"]`)
       ?.focus({ preventScroll: true });
-  $("#game-score-label").textContent =
-    game === "memory-match"
-      ? "Attempts"
-      : game === "minesweeper"
-        ? "Safe squares"
-        : "Score";
-  $("#game-score").textContent =
-    game === "memory-match"
-      ? active.moves
-      : game === "minesweeper"
-        ? `${active.revealed.filter((i) => active.board[i] !== -1).length} / ${active.board.length - rules(game, active.difficulty).mines}`
-        : active.score.toLocaleString();
+  $("#game-score-label").textContent = isBoard()
+    ? "Current turn"
+    : game === "sudoku"
+      ? "Filled cells"
+      : game === "nonogram"
+        ? "Filled squares"
+        : game === "memory-match"
+          ? "Attempts"
+          : game === "minesweeper"
+            ? "Safe squares"
+            : "Score";
+  $("#game-score").textContent = isBoard()
+    ? active.status === "playing"
+      ? `Player ${active.turn}`
+      : active.winner === 0
+        ? "Draw"
+        : `Player ${active.winner}`
+    : game === "sudoku"
+      ? `${active.board.filter(Boolean).length} / 81`
+      : game === "nonogram"
+        ? active.board.filter((n) => n === 1).length
+        : game === "memory-match"
+          ? active.moves
+          : game === "minesweeper"
+            ? `${active.revealed.filter((i) => active.board[i] !== -1).length} / ${active.board.length - rules(game, active.difficulty).mines}`
+            : active.score.toLocaleString();
+  if ($("#game-hint")) $("#game-hint").disabled = !!publicSession || !running;
   $("#game-clock").textContent = clock(elapsed());
   $("#game-pause").disabled = !running;
   if ($("#game-undo"))
@@ -337,6 +383,8 @@ function draw() {
   $("#game-settings-change").hidden = active.status !== "playing";
   $("#game-mode").disabled = $("#game-difficulty").disabled =
     active.status === "playing";
+  if ($("#game-human-side"))
+    $("#game-human-side").disabled = active.status === "playing";
   $("#game-best").textContent = displayResult(
     bestResult(active, elapsed()),
     game,
@@ -371,6 +419,7 @@ function pause(reason = "Paused.") {
   accumulated = elapsed();
   running = false;
   cancelAnimationFrame(frameId);
+  ui?.stop();
   const wasPublic = !!publicSession;
   downgrade(reason);
   $("#game-overlay").hidden = false;
@@ -430,28 +479,36 @@ async function finish() {
   accumulated = elapsed();
   running = false;
   cancelAnimationFrame(frameId);
+  ui?.stop();
   draw();
   beep();
   status(
-    active.status === "won"
-      ? "Complete. Nicely played."
-      : game === "2048"
-        ? "No moves remain. Your game is complete."
-        : "Game over. Ready for another try?",
+    isBoard()
+      ? ui.resultText()
+      : active.status === "won"
+        ? "Complete. Nicely played."
+        : game === "2048"
+          ? "No moves remain. Your game is complete."
+          : "Game over. Ready for another try?",
   );
-  await persist();
+  // 先锁定本局提交，防止本机写入期间重新开局丢失已完成的 Public 结果。
+  let completed = null;
   if (publicSession && player === owner()) {
-    pending = {
+    completed = pending = {
       game,
       owner: owner(),
       body: {
         session_id: publicSession.id,
         events,
         final_tick: active.ticks || 0,
+        ...(game === "brick-breaker" ? { events_format: "paddle-v1" } : {}),
       },
     };
     publicSession = null;
-    await pendingResult(game, pending).catch((e) => status(e.message));
+  }
+  await persist();
+  if (completed && pending === completed && owner() === completed.owner) {
+    await pendingResult(game, completed).catch((e) => status(e.message));
     await submit();
   }
 }
@@ -466,7 +523,15 @@ function frame(now) {
     pause("Public session time limit reached.");
     return;
   }
-  if (game === "snake") {
+  ui?.frame?.(now);
+  if (game === "brick-breaker") {
+    const tick = Math.min(18000, Math.floor((elapsed() * 60) / 1000));
+    if (tick > active.ticks) {
+      advanceBrick(active, tick);
+      draw();
+      queueSave();
+    }
+  } else if (game === "snake") {
     const tick = Math.floor(
       (elapsed() * rules(game, active.difficulty).rate) / 1000,
     );
@@ -497,29 +562,39 @@ function frame(now) {
   frameId = requestAnimationFrame(frame);
 }
 function action(event) {
-  if (!running || busy || !active) return;
-  const old = game === "2048" ? structuredClone(active) : null;
+  if (!running || busy || !active || owner() !== player) return false;
+  if (
+    isBoard() &&
+    active.difficulty !== "local" &&
+    !event.computer &&
+    active.turn !== (active.humanSide || 1)
+  )
+    return false;
+  const priorMax = game === "2048" ? Math.max(...active.board) : 0;
+  const old =
+    undoable() && !publicSession && !event.computer
+      ? structuredClone(active)
+      : null;
   const e = {
     ...event,
     t: Math.floor(elapsed()),
     ...(game === "snake" ? { tick: active.ticks } : {}),
   };
-  if (!apply(active, e)) return;
+  if (!apply(active, e)) return false;
   if (publicSession) {
-    events.push(e);
+    events.push(
+      game === "brick-breaker" ? [e.tick, e.type === "launch" ? -1 : e.x] : e,
+    );
     if (events.length >= 20000) downgrade("The replay limit was reached.");
   }
-  undo = old;
+  if (!event.computer) undo = old;
   draw();
   queueSave();
   if (game !== "snake") beep();
-  if (
-    game === "2048" &&
-    Math.max(...active.board) >= 2048 &&
-    Math.max(...old.board) < 2048
-  )
+  if (game === "2048" && Math.max(...active.board) >= 2048 && priorMax < 2048)
     status("2048 reached! Keep playing until no moves remain.");
   if (active.status !== "playing") finish();
+  return true;
 }
 async function start() {
   if (busy) return;
@@ -538,7 +613,8 @@ async function start() {
     running = false;
     cancelAnimationFrame(frameId);
   }
-  const mode = $("#game-mode").value,
+  ui?.reset();
+  const mode = isBoard() ? "private" : $("#game-mode").value,
     diff = difficulty();
   downgrade("The previous run was restarted.");
   $("#game-mode").value = mode;
@@ -560,6 +636,7 @@ async function start() {
       seed = Number(nextSession.seed);
     }
     active = create(game, diff, seed);
+    if (isBoard()) active.humanSide = Number($("#game-human-side").value);
     publicSession = nextSession;
     events = [];
     undo = null;
@@ -609,6 +686,9 @@ async function restore() {
     publicSession = null;
     events = [];
     undo = null;
+    ui?.reset();
+    if ($("#game-human-side"))
+      $("#game-human-side").value = String(active.humanSide || 1);
     $("#game-difficulty").value = data.difficulty;
     $("#game-mode").value = "private";
     $("#game-restore").hidden = true;
@@ -619,7 +699,7 @@ async function restore() {
   }
 }
 async function leaderboard() {
-  if (!game) return;
+  if (!game || !isRanked(game)) return;
   const mode = difficulty(),
     dest = $("#game-leaderboard"),
     note = $("#game-leaderboard-status");
@@ -627,11 +707,15 @@ async function leaderboard() {
   $("#game-board-note").textContent =
     game === "memory-match"
       ? "Fewer attempts, then faster completion."
-      : game === "minesweeper"
-        ? "Completed wins · fastest time first."
+      : timeScored(game)
+        ? "Completed puzzles · fastest time first."
         : game === "2048"
           ? "Highest score, then largest tile."
-          : "Highest score for this speed.";
+          : game === "brick-breaker"
+            ? "Most points, then faster completion."
+            : game === "block-puzzle"
+              ? "Most points · each cleared line adds 10."
+              : "Highest score for this speed.";
   try {
     if (!api.client)
       throw Error("Leaderboard service unavailable. Private play still works.");
@@ -700,6 +784,9 @@ async function initDirectory() {
     }
     filter();
   });
+  // 载入模块前已经输入的搜索词也要生效；目录筛选不依赖 IndexedDB。
+  filter();
+  $("[data-games-directory]").dataset.ready = "true";
   $("#games-sync").onclick = guard(async () => {
     await store.flush();
     await store.load(true);
@@ -750,7 +837,9 @@ function bindGame() {
     .map(([id, m]) => `<option value="${id}">${esc(m.label)}</option>`)
     .join("");
   $("#game-difficulty").value = GAMES[game].default;
-  $("#game-mode").value = api.user ? "public" : "private";
+  $("#game-mode").value = api.user && isRanked(game) ? "public" : "private";
+  $("#game-best").parentElement.hidden = isBoard();
+  if ($("#game-hint")) $("#game-hint").onclick = () => ui?.hint();
   $("#game-start").onclick = start;
   $("#game-pause").onclick = () => pause();
   $("#game-resume").onclick = resume;
@@ -765,12 +854,14 @@ function bindGame() {
       return;
     pause("Game settings were opened.");
     await persist();
+    ui?.reset();
     active = null;
     activeId = null;
     undo = null;
     lastWritten = "";
     $("#game-overlay").hidden = true;
     $("#game-mode").disabled = $("#game-difficulty").disabled = false;
+    if ($("#game-human-side")) $("#game-human-side").disabled = false;
     $("#game-settings-change").hidden = true;
     $("#game-start").textContent = "Start game →";
     $("#game-board").innerHTML =
@@ -819,6 +910,7 @@ function bindGame() {
   if ($("#game-undo"))
     $("#game-undo").onclick = () => {
       if (!undo || publicSession || !running) return;
+      ui?.stop();
       active = undo;
       undo = null;
       draw();
@@ -842,6 +934,7 @@ function bindGame() {
     };
   const board = $("#game-board");
   board.onclick = (e) => {
+    if (ui?.handleClick(e)) return;
     const b = e.target.closest("[data-cell]");
     if (!b) return;
     const index = Number(b.dataset.cell);
@@ -866,6 +959,7 @@ function bindGame() {
   };
   board.onkeydown = (e) => {
     if (e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (ui?.handleKey(e)) return;
     if (e.key === "Escape" && running) {
       e.preventDefault();
       pause();
@@ -923,6 +1017,7 @@ function bindGame() {
     });
   });
   board.addEventListener("pointercancel", () => (pointer = null));
+  ui?.bind?.(board);
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) pause("The page went into the background.");
   });

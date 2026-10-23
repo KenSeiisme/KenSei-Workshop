@@ -1,4 +1,4 @@
-import { VERSION, rules, replay } from "../../../src/games/engine.js";
+import { VERSION, rules, replay, isRanked } from "../../../src/games/engine.js";
 
 const ORIGINS = new Set(["https://kensei-workshop.vercel.app"]);
 const MAX_BYTES = 524288;
@@ -100,6 +100,8 @@ export function makeHandler(
       }
       if (action === "start") {
         rules(body.game, body.difficulty);
+        if (!isRanked(body.game))
+          throw Error("This game supports Private play only.");
         const seed = crypto.getRandomValues(new Uint32Array(1))[0] || 1;
         return send(
           await admin("start", {
@@ -127,6 +129,7 @@ export function makeHandler(
         body.events,
         body.final_tick,
         duration,
+        body.events_format || "legacy",
       );
       const finished = await admin("finish", {
         session_id: session.id,

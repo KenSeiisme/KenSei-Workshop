@@ -1385,3 +1385,127 @@
     scroll-behavior: auto;
   }
 }
+
+/* New games share the same cards, controls and quiet accent system. */
+[data-game-theme="sudoku"] {
+  --game-accent: #c7baf3;
+  --game-tint: #c7baf318;
+  --game-ink: #282039;
+}
+[data-game-theme="nonogram"] {
+  --game-accent: #b5d8dd;
+  --game-tint: #b5d8dd18;
+  --game-ink: #193238;
+}
+[data-game-theme="block-puzzle"] {
+  --game-accent: #e5c5a6;
+  --game-tint: #e5c5a618;
+  --game-ink: #39291e;
+}
+[data-game-theme="brick-breaker"] {
+  --game-accent: #e6afd4;
+  --game-tint: #e6afd418;
+  --game-ink: #3c2236;
+}
+[data-game-theme="connect-four"] {
+  --game-accent: #c0bff1;
+  --game-tint: #c0bff118;
+  --game-ink: #272439;
+}
+[data-game-theme="reversi"] {
+  --game-accent: #b2dfc9;
+  --game-tint: #b2dfc918;
+  --game-ink: #19362a;
+}
+.mini-extra {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(4, 31px);
+  gap: 5px;
+  transform: rotate(-6deg);
+}
+.mini-extra > span {
+  display: grid;
+  place-items: center;
+  height: 31px;
+  border: 1px solid #ffffff17;
+  border-radius: 5px;
+  background: #ffffff06;
+  color: var(--game-accent);
+  font: 500 18px var(--display);
+}
+.mini-sudoku {
+  grid-template-columns: repeat(3, 43px);
+  gap: 4px;
+}
+.mini-sudoku > span {
+  height: 43px;
+  background: #473857;
+  color: #e5d5fa;
+}
+.mini-nonogram {
+  grid-template-columns: repeat(5, 25px);
+  gap: 3px;
+}
+.mini-nonogram > span {
+  height: 25px;
+  font-size: 0;
+  border-radius: 3px;
+}
+.mini-nonogram > [data-value="■"] {
+  background: #b5d8dd;
+  box-shadow: 0 0 16px #b5d8dd15;
+}
+.mini-block-puzzle > [data-value="■"] {
+  background: #d2b69b;
+  font-size: 0;
+  box-shadow: inset 0 2px 0 #ffffff25;
+}
+.mini-connect-four {
+  grid-template-columns: repeat(7, 20px);
+  gap: 4px;
+  background: #c0bff112;
+  padding: 8px;
+  border: 1px solid #c0bff126;
+  border-radius: 8px;
+}
+.mini-connect-four > span {
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0;
+}
+.mini-connect-four > [data-value="●"] {
+  background: #efbdd9;
+}
+.mini-reversi > span {
+  border-radius: 4px;
+  font-size: 25px;
+  color: #e9e7ed;
+}
+.mini-reversi > [data-value="●"] {
+  color: #b3bac6;
+  background: #263c33;
+}
+.game-metrics:has(> div[hidden]) {
+  grid-template-columns: 1fr 1fr;
+}
+.game-private-info h2 {
+  margin: 14px 0;
+  font-size: 30px;
+}
+.game-private-info p {
+  color: #b5a5c0;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.game-settings:has(#game-human-side) > label:last-child {
+  grid-column: 1 / -1;
+}
+@media (max-width: 600px) {
+  .games-page .tools-controls {
+    flex-wrap: wrap;
+  }
+  .games-page .filter-bar {
+    flex-wrap: wrap;
+  }
+}

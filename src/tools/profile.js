@@ -43,14 +43,15 @@ function fill(profile) {
 }
 function renderPublicScores(profile) {
   const games = (profile.game_best_scores || []).filter(
-    (r) => GAMES[r.game]?.modes[r.difficulty],
+    (r) => GAMES[r.game]?.ranked && GAMES[r.game]?.modes[r.difficulty],
   );
   $("#public-game-count").textContent =
-    `${new Set(games.map((r) => r.game)).size} / ${Object.keys(GAMES).length}`;
+    `${new Set(games.map((r) => r.game)).size} / ${Object.values(GAMES).filter((g) => g.ranked).length}`;
   $("#public-typing-count").textContent =
     `${["en", "zh"].filter((lang) => profile.best_scores?.some((r) => r.language === lang)).length} / 2`;
   // 固定容器每次替换，重试不会重复追加成绩；不同难度各自展示。
   $("#public-game-scores").innerHTML = Object.entries(GAMES)
+    .filter(([, game]) => game.ranked)
     .map(([slug, game]) => {
       const rows = Object.keys(game.modes)
         .map((d) => games.find((r) => r.game === slug && r.difficulty === d))
@@ -65,7 +66,7 @@ function renderPublicScores(profile) {
           return `<div class="profile-game-extra"><div><span>${esc(game.modes[r.difficulty].label)}</span><small>${esc(scoreDetail(r, slug))} · ${esc(scoreDate(r.achieved_at))}</small></div><strong>${esc(parts.value)} <span>${parts.unit}</span></strong></div>`;
         })
         .join("");
-      return `<article class="profile-game-card ${featured ? "has-score" : "no-score"}" data-game-theme="${slug}"><header><span class="profile-game-icon">${gameIcon(slug)}</span><div><span class="eyebrow">${slug === "snake" ? "ARCADE" : "PUZZLE"}</span><h3>${esc(game.name)}</h3></div><span class="profile-record-mark">${featured ? "Public best" : "Not ranked"}</span></header>${featured ? `<div class="profile-featured-score"><span class="profile-difficulty">${esc(game.modes[featured.difficulty].label)}</span><div class="profile-score-value"><strong>${esc(result.value)}</strong><span>${result.unit}</span></div><p>${esc(scoreDetail(featured, slug))}</p><time datetime="${esc(featured.achieved_at)}">${esc(scoreDate(featured.achieved_at))}</time></div>${extra ? `<div class="profile-game-other-scores">${extra}</div>` : ""}` : `<div class="profile-score-empty"><span aria-hidden="true">—</span><strong>A little room for a first best.</strong><p>No qualifying Public result yet.</p></div>`}<footer><span>${featured ? `${rows.length} ranked ${rows.length === 1 ? "mode" : "modes"} · rules v${Number(featured.version)}` : "A new challenge is waiting"}</span><a href="/games/${slug}/" aria-label="Play ${esc(game.name)}">Play game <span aria-hidden="true">↗</span></a></footer></article>`;
+      return `<article class="profile-game-card ${featured ? "has-score" : "no-score"}" data-game-theme="${slug}"><header><span class="profile-game-icon">${gameIcon(slug)}</span><div><span class="eyebrow">${esc(game.category.toUpperCase())}</span><h3>${esc(game.name)}</h3></div><span class="profile-record-mark">${featured ? "Public best" : "Not ranked"}</span></header>${featured ? `<div class="profile-featured-score"><span class="profile-difficulty">${esc(game.modes[featured.difficulty].label)}</span><div class="profile-score-value"><strong>${esc(result.value)}</strong><span>${result.unit}</span></div><p>${esc(scoreDetail(featured, slug))}</p><time datetime="${esc(featured.achieved_at)}">${esc(scoreDate(featured.achieved_at))}</time></div>${extra ? `<div class="profile-game-other-scores">${extra}</div>` : ""}` : `<div class="profile-score-empty"><span aria-hidden="true">—</span><strong>A little room for a first best.</strong><p>No qualifying Public result yet.</p></div>`}<footer><span>${featured ? `${rows.length} ranked ${rows.length === 1 ? "mode" : "modes"} · rules v${Number(featured.version)}` : "A new challenge is waiting"}</span><a href="/games/${slug}/" aria-label="Play ${esc(game.name)}">Play game <span aria-hidden="true">↗</span></a></footer></article>`;
     })
     .join("");
   $("#public-best-scores").innerHTML = ["en", "zh"]

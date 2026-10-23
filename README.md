@@ -1,6 +1,6 @@
 # KenSei Workshop
 
-以浏览器工具为主的平台，目前提供 **28 个工具**，并有独立的 **4 款小游戏**栏目。
+以浏览器工具为主的平台，目前提供 **28 个工具**，并有独立的 **10 款小游戏**栏目；其中 8 款支持公开榜，四子棋和黑白棋仅供私人游玩。
 
 - 正式网站：https://kensei-workshop.vercel.app/
 - GitHub 分支：`KenSei-Workshop`
@@ -15,11 +15,11 @@ KenSei Workshop/
 │  ├─ config.js         可公开的站点与 Supabase 配置
 │  ├─ assets/           图片、图标
 │  ├─ styles/           网站及工具样式
-│  ├─ games/            四款游戏、共享规则和账号存档界面
+│  ├─ games/            十款游戏、共享规则和账号存档界面
 │  ├─ tools/            各工具脚本、worker、同步模块
 │  ├─ views/            Python 页面片段与工具界面
 │  └─ vendor/           固定版本第三方脚本、OCR 模型、WASM、许可证
-├─ data/                工具目录和 OCR 模型版本锁定
+├─ data/                工具、游戏目录和 OCR 模型版本锁定
 ├─ scripts/             构建、预览、依赖打包和测试入口
 ├─ tests/               unit / database / browser / support
 ├─ supabase/            数据库 schema / migrations / checks
@@ -53,6 +53,8 @@ pnpm test:experience
 
 # 浏览器测试需要先运行上面的预览服务器。
 $env:TEST_BASE_URL = 'http://127.0.0.1:8769'
+pnpm test:games
+pnpm test:games-expansion
 pnpm test:browser
 # 或运行所有测试：pnpm test:all
 ```
@@ -80,7 +82,7 @@ pnpm test:browser
 
 `.env.local` 保留在本机根目录，禁止提交；`src/config.js` 只包含可公开的配置。私人草稿、学习计划和白板按账号隔离；录屏、录音和扫码内容只在浏览器处理。Google 登录、公开 Profile 和打字榜继续使用现有 Supabase 项目。
 
-`projects/3A3D` 是独立项目，不会进入主站部署。未来 Games 使用独立目录和路由，目前没有创建空游戏入口。
+`projects/3A3D` 是独立项目，不会进入主站部署。Games 已使用独立目录和 `/games/` 路由，提供十款游戏、私人存档与八款游戏的公开榜；不进入工具搜索或 Workspace。
 
 更多说明见 [项目结构](docs/project-structure.md)、[各批验收](docs/validation/) 和 [历史说明](docs/history/pre-organization-readme.md)。
 
@@ -94,4 +96,4 @@ pnpm test:browser
 
 ## Games
 
-游戏目录、玩法、存档及服务端验收说明见 [docs/games.md](docs/games.md)。游戏规则在浏览器和 Supabase Edge 共用，发布前运行 pnpm test:games；现有 Vercel 仍由 GitHub push 自动构建。
+游戏目录、玩法、存档及服务端验收说明见 [docs/games.md](docs/games.md)。游戏规则在浏览器和 Supabase Edge 共用，发布前运行 `pnpm test:games` 和 `pnpm test:games-expansion`；现有 Vercel 仍由 GitHub push 自动构建。

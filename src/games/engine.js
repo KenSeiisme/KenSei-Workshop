@@ -1,13 +1,20 @@
+import * as puzzles from "./puzzle-engine.js";
+import * as arcade from "./arcade-engine.js";
+import * as boards from "./board-engine.js";
 // 浏览器与服务端共用规则；此文件不访问 DOM、网络或时钟。
 export const VERSION = 1;
 export const GAMES = {
   2048: {
     name: "2048",
+    category: "Puzzle",
+    ranked: true,
     default: "classic",
     modes: { classic: { label: "Classic · 4 × 4" } },
   },
   minesweeper: {
     name: "Minesweeper",
+    category: "Puzzle",
+    ranked: true,
     default: "beginner",
     modes: {
       beginner: { label: "Beginner · 9 × 9", w: 9, h: 9, mines: 10 },
@@ -22,6 +29,8 @@ export const GAMES = {
   },
   snake: {
     name: "Snake",
+    category: "Arcade",
+    ranked: true,
     default: "normal",
     modes: {
       slow: { label: "Slow · 6 cells/s", rate: 6 },
@@ -31,6 +40,8 @@ export const GAMES = {
   },
   "memory-match": {
     name: "Memory Match",
+    category: "Puzzle",
+    ranked: true,
     default: "normal",
     modes: {
       easy: { label: "Easy · 6 pairs", pairs: 6, cols: 4 },
@@ -38,7 +49,25 @@ export const GAMES = {
       hard: { label: "Hard · 12 pairs", pairs: 12, cols: 6 },
     },
   },
+  ...puzzles.CONFIG,
+  ...arcade.CONFIG,
+  ...boards.CONFIG,
 };
+function extension(game) {
+  return puzzles.CONFIG[game]
+    ? puzzles
+    : arcade.CONFIG[game]
+      ? arcade
+      : boards.CONFIG[game]
+        ? boards
+        : null;
+}
+export const isRanked = (game) => GAMES[game]?.ranked === true;
+export const timeScored = (game) =>
+  ["minesweeper", "sudoku", "nonogram"].includes(game);
+export const needsWin = (game) =>
+  ["minesweeper", "memory-match", "sudoku", "nonogram"].includes(game);
+export { advanceBrick } from "./arcade-engine.js";
 export function rules(game, difficulty) {
   const mode = GAMES[game]?.modes[difficulty];
   if (!mode) throw Error("Unknown game or difficulty.");
@@ -68,6 +97,7 @@ export function create(game, difficulty, seed) {
   const mode = rules(game, difficulty);
   if (!Number.isInteger(seed) || seed <= 0 || seed > 4294967295)
     throw Error("Invalid random seed.");
+  if (extension(game)) return extension(game).create(game, difficulty, seed);
   const s = {
     game,
     difficulty,
@@ -245,6 +275,7 @@ export function settleMemory(s, time) {
 export function apply(s, e) {
   if (s.status !== "playing" || !e || typeof e !== "object") return false;
   const m = rules(s.game, s.difficulty);
+  if (extension(s.game)) return extension(s.game).apply(s, e);
   if (s.game === "2048")
     return e.type === "move" && [0, 1, 2, 3].includes(e.dir)
       ? move2048(s, e.dir)
@@ -327,6 +358,7 @@ export function apply(s, e) {
   return false;
 }
 export function metrics(s) {
+  if (extension(s.game)) return extension(s.game).metrics(s);
   return {
     score: s.score,
     moves: s.moves,
@@ -341,7 +373,19 @@ export function replay(
   events,
   finalTick = 0,
   durationMs = 0,
+  format = "legacy",
 ) {
+  if (!isRanked(game)) throw Error("This game supports Private play only.");
+  if (game === "brick-breaker")
+    return arcade.replayBrick(
+      difficulty,
+      seed,
+      events,
+      finalTick,
+      durationMs,
+      format,
+    );
+  if (format !== "legacy") throw Error("Unsupported replay format.");
   if (
     !Array.isArray(events) ||
     events.length > 20000 ||
@@ -383,7 +427,12 @@ export function validateSave(data) {
     s.game !== game ||
     s.difficulty !== difficulty ||
     s.version !== VERSION ||
-    !["playing", "won", "lost"].includes(s.status)
+    ![
+      "playing",
+      "won",
+      "lost",
+      ...(boards.CONFIG[game] ? ["draw"] : []),
+    ].includes(s.status)
   )
     throw Error("This save uses unsupported game rules.");
   create(game, difficulty, s.seed);
@@ -395,6 +444,13 @@ export function validateSave(data) {
     data.elapsed < 0
   )
     throw Error("Invalid game save.");
+  if (extension(game)) extension(game).validate(s);
+  if (
+    boards.CONFIG[game] &&
+    s.humanSide !== undefined &&
+    ![1, 2].includes(s.humanSide)
+  )
+    throw Error("Invalid player side in saved game.");
   const ints = (a, max, length) =>
     Array.isArray(a) &&
     a.length <= length &&

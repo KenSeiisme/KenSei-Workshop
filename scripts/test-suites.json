@@ -59,5 +59,13 @@
     ["tests/database/games-database.mjs"],
     ["tests/browser/games.cjs"],
     ["tests/browser/game-visuals.cjs"]
+  ],
+  "games-expansion": [
+    ["tests/unit/puzzle-games.mjs"],
+    ["tests/unit/arcade-games.mjs"],
+    ["tests/unit/board-games.mjs"],
+    ["tests/unit/games-expansion-edge.mjs"],
+    ["tests/database/games-expansion.mjs"],
+    ["tests/browser/games-expansion.cjs"]
   ]
 }

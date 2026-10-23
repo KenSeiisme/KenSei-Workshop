@@ -126,7 +126,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     assert.equal(await p.locator("[data-game-card]:visible").count(), 1);
     await p.fill("#game-search", "");
     await p.click('[data-game-filter="puzzle"]');
-    assert.equal(await p.locator("[data-game-card]:visible").count(), 3);
+    assert.equal(await p.locator("[data-game-card]:visible").count(), 6);
     await p.click('[data-game-filter="all"]');
     await shot("games-visual-directory", 1440);
     checks.push("directory search, filters, anchor and four responsive sizes");
@@ -222,7 +222,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     );
     await p.goto(base + "/profile/?id=" + id);
     await p.waitForSelector('#profile-page[data-ready="true"]');
-    assert.equal(await p.locator("#public-game-count").innerText(), "4 / 4");
+    assert.equal(await p.locator("#public-game-count").innerText(), "4 / 8");
     assert.equal(await p.locator("#public-typing-count").innerText(), "2 / 2");
     assert.equal(await p.locator(".profile-game-card.has-score").count(), 4);
     assert.equal(await p.locator(".profile-game-extra").count(), 3);
@@ -255,7 +255,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await p.waitForFunction(
       () => document.querySelector("#profile-status").textContent === "",
     );
-    assert.equal(await p.locator(".profile-game-card").count(), 4);
+    assert.equal(await p.locator(".profile-game-card").count(), 8);
     await p.evaluate(() => {
       window.__publicFixture = {
         ...window.__publicFixture,
@@ -269,9 +269,9 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await p.click("#profile-retry");
     await p.waitForFunction(
       () =>
-        document.querySelector("#public-game-count").textContent === "0 / 4",
+        document.querySelector("#public-game-count").textContent === "0 / 8",
     );
-    assert.equal(await p.locator(".profile-game-card.no-score").count(), 4);
+    assert.equal(await p.locator(".profile-game-card.no-score").count(), 8);
     assert.equal(await p.locator("#public-bio img").count(), 0);
     for (const width of [320, 360, 768, 1440])
       await fit(width, "empty and long-name profile");

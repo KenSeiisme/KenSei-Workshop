@@ -26,5 +26,47 @@
     "description": "A few familiar shapes. A little more attention.",
     "category": "Puzzle",
     "preview": "memory"
+  },
+  {
+    "slug": "sudoku",
+    "name": "Sudoku",
+    "description": "A little logic, one number at a time. Notes, hints and three difficulties.",
+    "category": "Puzzle",
+    "preview": "sudoku"
+  },
+  {
+    "slug": "nonogram",
+    "name": "Nonogram",
+    "description": "Follow the clues. Fill the squares. Reveal a little pixel picture.",
+    "category": "Puzzle",
+    "preview": "nonogram"
+  },
+  {
+    "slug": "block-puzzle",
+    "name": "Block Puzzle",
+    "description": "Find a place for every shape. Fill a line and make a little space.",
+    "category": "Puzzle",
+    "preview": "block-puzzle"
+  },
+  {
+    "slug": "brick-breaker",
+    "name": "Brick Breaker",
+    "description": "Keep the ball in play. Three stages, three lives, one more bounce.",
+    "category": "Arcade",
+    "preview": "brick-breaker"
+  },
+  {
+    "slug": "connect-four",
+    "name": "Connect Four",
+    "description": "Four in a row, a move ahead. Play the computer or share a screen.",
+    "category": "Board",
+    "preview": "connect-four"
+  },
+  {
+    "slug": "reversi",
+    "name": "Reversi",
+    "description": "A quiet move can turn the board. Play the computer or a friend beside you.",
+    "category": "Board",
+    "preview": "reversi"
   }
 ]
