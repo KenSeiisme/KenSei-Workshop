@@ -31,4 +31,10 @@ Representative artifacts are `_qa/games-expansion-{sudoku,connect-four}-1440.png
 
 ## Static publication status
 
-**Pending:** final GitHub push, Vercel automatic deployment, and canonical production-site verification. Local passes and the deployed verifier do not establish that the new static pages are live. The release owner must record the final commit and verify the production catalog, six new routes, assets, representative play/restore controls and public Profile after deployment.
+- Pushed implementation commit `42e9898d86c5f9fb552520220c30c8ebbfa5ab30` to the existing `KenSei-Workshop` branch. Vercel's automatic deployment reported success; acceptance used `https://kensei-workshop.vercel.app/`.
+- Both `tests/browser/live-games.cjs` and `tests/browser/live-games-expansion.cjs` passed against the canonical site with real anonymous sessions and APIs. The former also matched the deployed game modules, styles, Profile, shared save modules and retained 2048 notice to local SHA-256 hashes.
+- Verified all ten game pages, actual guest play in all six new games, explicit reload recovery, real AI Worker output, local two-player moves, Continue playing and an existing public Profile with eight ranked-game cards. The original four games also passed play and restore checks.
+- Read-only production checks passed for all eight public leaderboards and rejected leaderboard requests for the two Private board games. An unauthenticated Public start returned HTTP 401. Guest play generated no save uploads or Public submissions, and public RPCs returned no private save, seed, replay or email fields.
+- All 28 existing tool routes returned HTTP 200. Home remains tools-first; Games has a separate catalog and search. Production mobile layout checks passed, including the existing public Profile at 320px.
+- Visually inspected production directory, game and Profile captures in `_qa/expansion-production-*.png`. A final copy-only polish replaces duplicate board-card mode badges with the computer difficulty count; gameplay and service code are unchanged.
+- Publication verification did not create production accounts or scores or claim a human Google consent flow.
