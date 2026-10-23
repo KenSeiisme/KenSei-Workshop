@@ -1,3 +1,4 @@
+import { patchMarkup } from "./dom.js";
 import { solution } from "./puzzle-engine.js";
 
 const SUDOKU_DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -224,7 +225,7 @@ export function createPuzzleUI(ctx) {
               ]
                 .filter(Boolean)
                 .join(" ");
-              return `<button type="button" class="${classes}" data-puzzle-cell="${index}" role="gridcell" tabindex="${index === selected ? 0 : -1}" aria-selected="${index === selected}" aria-label="Row ${y + 1}, column ${x + 1}, ${value === 1 ? "filled" : value === 2 ? "marked empty" : "unknown"}">${value === 2 ? '<span aria-hidden="true">×</span>' : ""}</button>`;
+              return `<button type="button" class="${classes}" data-puzzle-cell="${index}" role="gridcell" tabindex="${index === selected ? 0 : -1}" aria-selected="${index === selected}" aria-label="Row ${y + 1}, column ${x + 1}, ${value === 1 ? "filled" : value === 2 ? "marked empty" : "unknown"}">${value === 2 ? '<span class="nonogram-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5L19 19"/><path d="M19 5L5 19"/></svg></span>' : ""}</button>`;
             },
           ).join("")}</div>`,
       )
@@ -246,10 +247,12 @@ export function createPuzzleUI(ctx) {
     const scroll = viewport
       ? [viewport.scrollLeft, viewport.scrollTop]
       : [0, 0];
-    element.innerHTML =
+    patchMarkup(
+      element,
       current.game === "sudoku"
         ? renderSudoku(current)
-        : renderNonogram(current);
+        : renderNonogram(current),
+    );
     const nextViewport = element.querySelector(".nonogram-viewport");
     if (nextViewport) {
       nextViewport.scrollLeft = scroll[0];

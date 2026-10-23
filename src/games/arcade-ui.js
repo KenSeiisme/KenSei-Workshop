@@ -1,3 +1,4 @@
+import { patchMarkup } from "./dom.js";
 import { SHAPES, BRICK, canPlace } from "./arcade-engine.js";
 import { paintBrick } from "./arcade-paint.js";
 
@@ -52,17 +53,20 @@ export function createArcadeUI(ctx) {
     const preview = previewCells(s, hover),
       valid = hover !== null && canPlace(s, selected, hover);
     board.classList.add("arcade-board", "block-puzzle-board");
-    board.innerHTML = `<div class="block-instruction"><span>${s.board.filter(Boolean).length} / 64 cells filled</span><span>${s.cleared} lines cleared</span></div><div class="block-grid" role="group" aria-label="8 by 8 block puzzle board">${s.board.map((filled, i) => `<button type="button" data-block-cell="${i}" class="block-cell${filled ? " is-filled" : ""}${preview.has(i) ? (valid ? " is-preview" : " is-invalid-preview") : ""}" tabindex="${i === cursor ? "0" : "-1"}" aria-label="Row ${Math.floor(i / 8) + 1}, column ${(i % 8) + 1}, ${filled ? "occupied" : "empty"}" aria-disabled="${!playing(ctx) || !!filled}">${filled ? '<span aria-hidden="true"></span>' : ""}</button>`).join("")}</div><div class="block-tray" role="group" aria-label="Choose a piece; use 1, 2 or 3 on the keyboard">${s.hand
-      .map((id, slot) => {
-        if (id === null)
-          return `<button type="button" class="block-piece is-used" data-block-slot="${slot}" disabled aria-label="Piece ${slot + 1} already used"><span aria-hidden="true">✓</span><small>Placed</small></button>`;
-        const item = SHAPES[id],
-          cells = new Set(item.cells.map(([x, y]) => y * item.w + x));
-        return `<button type="button" class="block-piece${selected === slot ? " is-selected" : ""}" data-block-slot="${slot}" aria-pressed="${selected === slot}" aria-label="Piece ${slot + 1}: ${item.cells.length} cells, ${item.w} wide by ${item.h} tall" ${playing(ctx) ? "" : "disabled"}><span class="block-piece-art" style="--piece-width:${item.w};--piece-height:${item.h}" aria-hidden="true">${Array.from({ length: item.w * item.h }, (_, i) => `<i${cells.has(i) ? ' class="is-part"' : ""}></i>`).join("")}</span><small>Piece ${slot + 1}</small></button>`;
-      })
-      .join(
-        "",
-      )}</div><p class="arcade-control-note">Choose a piece, then tap a square. Drag to place, or use 1–3, arrow keys and Enter.</p>`;
+    patchMarkup(
+      board,
+      `<div class="block-instruction"><span>${s.board.filter(Boolean).length} / 64 cells filled</span><span>${s.cleared} lines cleared</span></div><div class="block-grid" role="group" aria-label="8 by 8 block puzzle board">${s.board.map((filled, i) => `<button type="button" data-block-cell="${i}" class="block-cell${filled ? " is-filled" : ""}${preview.has(i) ? (valid ? " is-preview" : " is-invalid-preview") : ""}" tabindex="${i === cursor ? "0" : "-1"}" aria-label="Row ${Math.floor(i / 8) + 1}, column ${(i % 8) + 1}, ${filled ? "occupied" : "empty"}" aria-disabled="${!playing(ctx) || !!filled}">${filled ? '<span aria-hidden="true"></span>' : ""}</button>`).join("")}</div><div class="block-tray" role="group" aria-label="Choose a piece; use 1, 2 or 3 on the keyboard">${s.hand
+        .map((id, slot) => {
+          if (id === null)
+            return `<button type="button" class="block-piece is-used" data-block-slot="${slot}" disabled aria-label="Piece ${slot + 1} already used"><span aria-hidden="true">✓</span><small>Placed</small></button>`;
+          const item = SHAPES[id],
+            cells = new Set(item.cells.map(([x, y]) => y * item.w + x));
+          return `<button type="button" class="block-piece${selected === slot ? " is-selected" : ""}" data-block-slot="${slot}" aria-pressed="${selected === slot}" aria-label="Piece ${slot + 1}: ${item.cells.length} cells, ${item.w} wide by ${item.h} tall" ${playing(ctx) ? "" : "disabled"}><span class="block-piece-art" style="--piece-width:${item.w};--piece-height:${item.h}" aria-hidden="true">${Array.from({ length: item.w * item.h }, (_, i) => `<i${cells.has(i) ? ' class="is-part"' : ""}></i>`).join("")}</span><small>Piece ${slot + 1}</small></button>`;
+        })
+        .join(
+          "",
+        )}</div><p class="arcade-control-note">Choose a piece, then tap a square. Drag to place, or use 1–3, arrow keys and Enter.</p>`,
+    );
     board.scrollTop = scrollTop;
     board.scrollLeft = scrollLeft;
     if (focusedCell !== null && focusedCell !== undefined)
@@ -123,7 +127,9 @@ export function createArcadeUI(ctx) {
     const canvas = board.querySelector(".brick-canvas");
     let supported = false;
     try {
-      supported = paintBrick(canvas, s);
+      supported = ctx.paintBrick
+        ? ctx.paintBrick(canvas, s)
+        : paintBrick(canvas, s);
     } catch {
       supported = false;
     }

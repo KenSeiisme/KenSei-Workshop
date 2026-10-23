@@ -67,5 +67,6 @@
     ["tests/unit/games-expansion-edge.mjs"],
     ["tests/database/games-expansion.mjs"],
     ["tests/browser/games-expansion.cjs"]
-  ]
+  ],
+  "game-neon": [["tests/unit/game-motion.mjs"], ["tests/browser/game-neon.cjs"]]
 }

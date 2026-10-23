@@ -97,3 +97,5 @@ pnpm test:browser
 ## Games
 
 游戏目录、玩法、存档及服务端验收说明见 [docs/games.md](docs/games.md)。游戏规则在浏览器和 Supabase Edge 共用，发布前运行 `pnpm test:games` 和 `pnpm test:games-expansion`；现有 Vercel 仍由 GitHub push 自动构建。
+
+Games 使用独立的霓虹舞台与动画表现层；`Effects: Auto / Reduced / Off` 仅在本机保存偏好，Auto 遵循系统减少动态效果设置。新增的 `pnpm test:game-neon` 检查动画、节点稳定性、输入一致性及响应式布局；详情见 [霓虹游戏验收](docs/validation/2026-10-23-neon-games.md)。

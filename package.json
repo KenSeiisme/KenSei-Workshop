@@ -45,7 +45,9 @@
     "test:experience": "node scripts/test.mjs experience",
     "test:games": "node scripts/test.mjs games",
     "games:edge": "node scripts/build-games-edge.mjs",
-    "test:games-expansion": "node scripts/test.mjs games-expansion"
+    "test:games-expansion": "node scripts/test.mjs games-expansion",
+    "test:game-neon": "node scripts/test.mjs game-neon",
+    "games:record": "node scripts/record-game-demo.cjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

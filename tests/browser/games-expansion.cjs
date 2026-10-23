@@ -366,10 +366,12 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       dragB = await p.locator('[data-puzzle-cell="19"]').boundingBox();
     await p.mouse.move(dragA.x + dragA.width / 2, dragA.y + dragA.height / 2);
     await p.mouse.down();
+    const documentScrollBeforeDrag = await p.evaluate(() => scrollY);
     await p.mouse.move(dragB.x + dragB.width / 2, dragB.y + dragB.height / 2, {
       steps: 1,
     });
     await p.mouse.up();
+    assert.equal(await p.evaluate(() => scrollY), documentScrollBeforeDrag);
     record = await waitSave(p, "nonogram", (r) =>
       r.state.board.slice(15, 20).every((v) => v === 1),
     );
@@ -529,6 +531,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       await q.locator(`[data-drop="${column}"]`).first().click();
     assert.match(await q.locator(".board-turn").innerText(), /Player 1 wins/);
     assert.equal(await pieces(q, 1), 4);
+    await q.locator("#game-setup > summary").click();
     await q.selectOption("#game-difficulty", "ai-easy");
     await q.selectOption("#game-human-side", "1");
     await q.click("#game-start");

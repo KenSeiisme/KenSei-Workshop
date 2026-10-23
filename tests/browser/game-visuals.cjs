@@ -178,7 +178,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
         const pair = cards.flatMap((n, i) => (n === 0 ? [i] : []));
         for (const i of pair) await p.click(`[data-cell="${i}"]`);
         await p.click(`[data-cell="${cards.findIndex((n) => n === 1)}"]`);
-        assert.equal(await p.locator(".memory-match-check").count(), 2);
+        assert.equal(await p.locator(".memory-match-check:visible").count(), 2);
         assert.equal(await p.locator(".memory-card.face-up").count(), 1);
       }
       if (game === "minesweeper") {
@@ -197,7 +197,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
         assert.equal(await p.locator(".tile").count(), 16);
         assert.equal(
           await p
-            .locator(".tile.is-new")
+            .locator('.tile:not([data-value="0"])')
             .first()
             .evaluate((el) => getComputedStyle(el).animationName),
           "none",

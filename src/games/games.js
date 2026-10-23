@@ -22,6 +22,10 @@ import {
 import { sessionCall, pendingResult } from "./session-client.js";
 import { gameIcon } from "./presentation.js";
 import { createExtraUI } from "./new-game-ui.js";
+import { createGamePresenter } from "./motion.js";
+import { patchMarkup } from "./dom.js";
+import { mountEffects, bindCardDemos } from "./effects.js";
+mountEffects();
 
 const $ = (s) => document.querySelector(s),
   store = createRecordStore("game", validateSave, { syncDelay: 500 });
@@ -56,6 +60,8 @@ let running = false,
   sound = false,
   audio,
   player;
+const presenter = game ? createGamePresenter(root, game) : null;
+const avatarSignatures = new WeakMap();
 const isBoard = () => game && !isRanked(game);
 const undoable = () =>
   ["2048", "sudoku", "nonogram", "connect-four", "reversi"].includes(game);
@@ -69,6 +75,7 @@ const ui = game
       redraw: draw,
       queueSave,
       announce: statusMessage,
+      paintBrick: (canvas, state) => presenter.paintBrick(canvas, state),
     })
   : null;
 function statusMessage(message) {
@@ -176,6 +183,8 @@ function readyUI() {
   if ($("#game-human-side"))
     $("#game-human-side").closest("label").hidden = difficulty() === "local";
   if (!active) {
+    presenter.reset();
+    if ($("#game-setup")) $("#game-setup").open = true;
     root.dataset.runState = "ready";
     $("#game-run-label").textContent = "Ready to play";
   }
@@ -215,8 +224,9 @@ const SHAPES = [
   '<path d="M4 17 9 5l6 14 5-12"/>',
   '<path d="M4 12c0-11 16-11 16 0s-16 11-16 0M8 12h8"/>',
 ];
-function draw() {
+function draw(reason = "view", event = null) {
   if (!active) return;
+  presenter.prepare(active, { running, reason, event });
   const board = $("#game-board"),
     selected = document.activeElement?.dataset.cell,
     hadFocus = board.contains(document.activeElement);
@@ -231,113 +241,47 @@ function draw() {
     : active.status === "playing"
       ? "Private · Paused"
       : "Game complete";
-  if (game === "2048") {
-    const previous = [...board.querySelectorAll(".tile")].map((el) =>
-      Number(el.dataset.value),
-    );
-    board.innerHTML = `<div class="board-2048">${active.board.map((n, i) => `<div class="tile ${n && n !== previous[i] ? "is-new" : ""}" data-value="${n}" data-level="${Math.min(12, Math.log2(n) || 0)}" aria-label="${n || "Empty"}">${n || ""}</div>`).join("")}</div>`;
-  }
+  if (game === "2048") presenter.render2048(board, active);
   if (game === "minesweeper") {
     const m = rules(game, active.difficulty),
       seen = new Set(active.revealed),
       flags = new Set(active.flags);
     $("#mine-count").textContent =
       `${m.mines} mines · ${flags.size} flags · ${m.mines - flags.size} remaining`;
-    const scroll = board.querySelector(".mines-viewport"),
-      scrollX = scroll?.scrollLeft || 0,
-      scrollY = scroll?.scrollTop || 0;
-    board.innerHTML = `<div class="mines-viewport" tabindex="0" aria-label="Scrollable minefield"><div class="mines-grid" style="grid-template-columns:repeat(${m.w},32px)">${active.board
-      .map((n, i) => {
-        const open = seen.has(i),
-          mine = active.status === "lost" && n === -1;
-        return `<button data-cell="${i}" data-number="${open ? n : ""}" tabindex="${i === Number(selected || 0) ? 0 : -1}" class="${open ? "open" : ""} ${mine ? "mine" : ""} ${flags.has(i) ? "flagged" : ""}" aria-label="Row ${Math.floor(i / m.w) + 1}, column ${(i % m.w) + 1}: ${mine ? "mine" : open ? `${n} neighboring mines` : flags.has(i) ? "flagged" : "covered"}">${mine ? "✹" : flags.has(i) ? "⚑" : open ? n || "" : ""}</button>`;
-      })
-      .join("")}</div></div>`;
-    board.querySelector(".mines-viewport").scrollTo(scrollX, scrollY);
+    patchMarkup(
+      board,
+      `<div class="mines-viewport" tabindex="0" aria-label="Scrollable minefield"><div class="mines-grid" style="grid-template-columns:repeat(${m.w},32px)">${active.board
+        .map((n, i) => {
+          const open = seen.has(i),
+            mine = active.status === "lost" && n === -1;
+          return `<button data-cell="${i}" data-number="${open ? n : ""}" tabindex="${i === Number(selected || 0) ? 0 : -1}" class="${open ? "open" : ""} ${mine ? "mine" : ""} ${flags.has(i) ? "flagged" : ""}" aria-label="Row ${Math.floor(i / m.w) + 1}, column ${(i % m.w) + 1}: ${mine ? "mine" : open ? `${n} neighboring mines` : flags.has(i) ? "flagged" : "covered"}">${mine ? "✹" : flags.has(i) ? "⚑" : open ? n || "" : ""}</button>`;
+        })
+        .join("")}</div></div>`,
+    );
   }
   if (game === "snake") {
-    let canvas = board.querySelector("canvas");
-    if (!canvas) {
-      board.innerHTML =
-        '<canvas class="snake-board" width="460" height="460" role="img" aria-label="Snake board. Use direction controls to move."></canvas>';
-      canvas = board.querySelector("canvas");
-    }
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
+    if (!board.querySelector("canvas"))
+      patchMarkup(
+        board,
+        '<canvas class="snake-board" width="460" height="460" role="img" aria-label="Snake board. Use direction controls to move."></canvas>',
+      );
+    if (!presenter.paintSnake(board.querySelector("canvas"), active)) {
       pause("Canvas is unavailable. Enable canvas drawing to play Snake.");
       return;
-    }
-    const ground = ctx.createLinearGradient(0, 0, 460, 460);
-    ground.addColorStop(0, "#192620");
-    ground.addColorStop(1, "#111a17");
-    ctx.fillStyle = ground;
-    ctx.fillRect(0, 0, 460, 460);
-    ctx.strokeStyle = "#b2dfc90a";
-    for (let n = 0; n <= 460; n += 23) {
-      ctx.beginPath();
-      ctx.moveTo(n, 0);
-      ctx.lineTo(n, 460);
-      ctx.moveTo(0, n);
-      ctx.lineTo(460, n);
-      ctx.stroke();
-    }
-    active.body.forEach((n, i) => {
-      ctx.fillStyle = i
-        ? `hsl(153 30% ${Math.max(42, 73 - i * 1.4)}%)`
-        : "#d0f3df";
-      ctx.beginPath();
-      ctx.roundRect(
-        (n % 20) * 23 + 1.5,
-        Math.floor(n / 20) * 23 + 1.5,
-        20,
-        20,
-        i ? 5 : 7,
-      );
-      ctx.fill();
-      if (!i) {
-        const x = (n % 20) * 23 + 11.5,
-          y = Math.floor(n / 20) * 23 + 11.5;
-        const dx = [0, 1, 0, -1][active.dir],
-          dy = [-1, 0, 1, 0][active.dir];
-        ctx.fillStyle = "#193b2b";
-        for (const side of [-1, 1]) {
-          ctx.beginPath();
-          ctx.arc(
-            x + dx * 4 - dy * side * 4,
-            y + dy * 4 + dx * side * 4,
-            1.8,
-            0,
-            Math.PI * 2,
-          );
-          ctx.fill();
-        }
-      }
-    });
-    if (active.food >= 0) {
-      ctx.fillStyle = "#edb9c8";
-      ctx.shadowColor = "#efbdd9";
-      ctx.shadowBlur = 14;
-      ctx.beginPath();
-      ctx.arc(
-        (active.food % 20) * 23 + 11.5,
-        Math.floor(active.food / 20) * 23 + 11.5,
-        7,
-        0,
-        Math.PI * 2,
-      );
-      ctx.fill();
-      ctx.shadowBlur = 0;
     }
   }
   if (game === "memory-match") {
     const m = rules(game, active.difficulty);
-    board.innerHTML = `<div class="memory-grid" style="grid-template-columns:repeat(${m.cols},minmax(0,1fr))">${active.cards
-      .map((n, i) => {
-        const matched = active.matched.includes(i),
-          up = matched || active.faceUp.includes(i);
-        return `<button class="memory-card ${matched ? "matched" : up ? "face-up" : ""}" data-cell="${i}" aria-label="Card ${i + 1}: ${up ? `shape ${n + 1}${matched ? ", matched" : ""}` : "face down"}" aria-pressed="${up}">${up ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">${SHAPES[n]}</svg>${matched ? '<span class="memory-match-check" aria-hidden="true">✓</span>' : ""}` : '<span class="memory-back" aria-hidden="true"><span>✦</span></span>'}</button>`;
-      })
-      .join("")}</div>`;
+    patchMarkup(
+      board,
+      `<div class="memory-grid" style="grid-template-columns:repeat(${m.cols},minmax(0,1fr))">${active.cards
+        .map((n, i) => {
+          const matched = active.matched.includes(i),
+            up = matched || active.faceUp.includes(i);
+          return `<button class="memory-card ${matched ? "matched" : up ? "face-up" : ""}" data-cell="${i}" aria-label="Card ${i + 1}: ${up ? `shape ${n + 1}${matched ? ", matched" : ""}` : "face down"}" aria-pressed="${up}"><span class="memory-inner" aria-hidden="true"><span class="memory-face memory-back"><span>✦</span></span><span class="memory-face memory-front"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${SHAPES[n]}</svg><span class="memory-match-check">✓</span></span></span></button>`;
+        })
+        .join("")}</div>`,
+    );
   }
   if (ui && ui.render(board) === false && running) {
     pause("Drawing is unavailable. Try another browser to play this game.");
@@ -389,6 +333,7 @@ function draw() {
     bestResult(active, elapsed()),
     game,
   );
+  presenter.commit(active);
 }
 function beep() {
   if (!sound) return;
@@ -420,6 +365,7 @@ function pause(reason = "Paused.") {
   running = false;
   cancelAnimationFrame(frameId);
   ui?.stop();
+  presenter.reset(active);
   const wasPublic = !!publicSession;
   downgrade(reason);
   $("#game-overlay").hidden = false;
@@ -437,6 +383,7 @@ function pause(reason = "Paused.") {
 }
 function resume() {
   if (!active || active.status !== "playing" || running) return;
+  presenter.reset(active);
   $("#game-overlay").hidden = true;
   started = performance.now();
   lastFrame = started;
@@ -451,6 +398,7 @@ async function submit() {
   busy = true;
   $("#game-submit-retry").hidden = true;
   status("Verifying your completed Public run…");
+  presenter.setSubmission("verifying", "Verifying Public result…");
   const submitted = pending;
   try {
     const result = await sessionCall("finish", submitted.body);
@@ -463,11 +411,21 @@ async function submit() {
         : result.reason ||
             "Game complete. This result did not qualify for the public board.",
     );
+    presenter.setSubmission(
+      result.qualified ? "verified" : "unqualified",
+      result.qualified
+        ? "Verified · Public result accepted"
+        : result.reason || "Not eligible for the public board",
+    );
     await leaderboard();
   } catch (e) {
     status(
       e.message +
         " Your result is retained; retry submission or keep it Private.",
+    );
+    presenter.setSubmission(
+      "failed",
+      "Submission failed · result retained for retry",
     );
     $("#game-submit-retry").hidden = false;
     $("#game-submit-discard").hidden = false;
@@ -505,6 +463,7 @@ async function finish() {
       },
     };
     publicSession = null;
+    presenter.setSubmission("verifying", "Verifying Public result…");
   }
   await persist();
   if (completed && pending === completed && owner() === completed.owner) {
@@ -551,6 +510,7 @@ function frame(now) {
     draw();
     queueSave();
   }
+  presenter.frame(now);
   if (now - lastClock > 200) {
     $("#game-clock").textContent = clock(elapsed());
     lastClock = now;
@@ -588,7 +548,7 @@ function action(event) {
     if (events.length >= 20000) downgrade("The replay limit was reached.");
   }
   if (!event.computer) undo = old;
-  draw();
+  draw("action", e);
   queueSave();
   if (game !== "snake") beep();
   if (game === "2048" && Math.max(...active.board) >= 2048 && priorMax < 2048)
@@ -614,6 +574,7 @@ async function start() {
     cancelAnimationFrame(frameId);
   }
   ui?.reset();
+  presenter.reset();
   const mode = isBoard() ? "private" : $("#game-mode").value,
     diff = difficulty();
   downgrade("The previous run was restarted.");
@@ -687,6 +648,7 @@ async function restore() {
     events = [];
     undo = null;
     ui?.reset();
+    presenter.reset(active);
     if ($("#game-human-side"))
       $("#game-human-side").value = String(active.humanSide || 1);
     $("#game-difficulty").value = data.difficulty;
@@ -725,14 +687,22 @@ async function leaderboard() {
     });
     if (error) throw error;
     if (difficulty() !== mode) return;
-    dest.innerHTML = data.top.length
-      ? `<table><caption>${esc(rules(game, mode).label)} · rules v${Number(data.version)}</caption><thead><tr><th>#</th><th>Player</th><th>Result</th></tr></thead><tbody>${data.top.map((r) => `<tr data-rank="${Number(r.rank)}"><td>${Number(r.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(r.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(r.public_id)}" aria-hidden="true"></span>${esc(r.nickname)}</a><small>${esc(new Date(r.achieved_at).toLocaleDateString())}</small></td><td>${esc(displayResult(r, game))}</td></tr>`).join("")}</tbody></table>`
-      : `<div class="game-empty-state">${gameIcon(game)}<strong>A spot for your first best.</strong><p>No verified results yet. Complete a Public game to make the first little mark.</p></div>`;
-    for (const row of data.top)
-      paintAvatar(
-        dest.querySelector(`[data-game-avatar="${CSS.escape(row.public_id)}"]`),
-        row.profile,
+    patchMarkup(
+      dest,
+      data.top.length
+        ? `<table><caption>${esc(rules(game, mode).label)} · rules v${Number(data.version)}</caption><thead><tr><th>#</th><th>Player</th><th>Result</th></tr></thead><tbody>${data.top.map((r) => `<tr data-player-id="${esc(r.public_id)}" data-rank="${Number(r.rank)}" class="${data.me?.public_id === r.public_id ? "is-me" : ""}"><td>${Number(r.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(r.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(r.public_id)}" data-preserve aria-hidden="true"></span>${esc(r.nickname)}</a><small>${esc(new Date(r.achieved_at).toLocaleDateString())}</small></td><td>${esc(displayResult(r, game))}</td></tr>`).join("")}</tbody></table>`
+        : `<div class="game-empty-state">${gameIcon(game)}<strong>A spot for your first best.</strong><p>No verified results yet. Complete a Public game to make the first little mark.</p></div>`,
+    );
+    for (const row of data.top) {
+      const avatar = dest.querySelector(
+        `[data-game-avatar="${CSS.escape(row.public_id)}"]`,
       );
+      const signature = JSON.stringify(row.profile);
+      if (avatarSignatures.get(avatar) !== signature) {
+        paintAvatar(avatar, row.profile);
+        avatarSignatures.set(avatar, signature);
+      }
+    }
     $("#game-my-rank").innerHTML = data.me
       ? `<p class="game-my-result">Your rank: #${Number(data.me.rank)} · ${esc(displayResult(data.me, game))}</p>`
       : '<p class="muted">No qualifying Public result for this difficulty yet.</p>';
@@ -762,6 +732,7 @@ async function renderSaves() {
 async function initDirectory() {
   if (directoryBound) return;
   directoryBound = true;
+  bindCardDemos();
   let category = "all";
   const filter = () => {
     let count = 0;
@@ -855,6 +826,7 @@ function bindGame() {
     pause("Game settings were opened.");
     await persist();
     ui?.reset();
+    presenter.reset();
     active = null;
     activeId = null;
     undo = null;
@@ -881,6 +853,10 @@ function bindGame() {
       return;
     await pendingResult(game, null, true);
     pending = null;
+    presenter.setSubmission(
+      "private",
+      "Public submission discarded · kept Private",
+    );
     $("#game-submit-retry").hidden = $("#game-submit-discard").hidden = true;
     status("Public submission discarded. Your Private result remains saved.");
   };
@@ -890,6 +866,13 @@ function bindGame() {
     saveLine();
   };
   $("#game-board-refresh").onclick = leaderboard;
+  const narrow = matchMedia("(max-width: 760px)");
+  const rankPanel = $("#game-rank-panel");
+  const fitSide = () => {
+    if (rankPanel) rankPanel.open = !narrow.matches;
+  };
+  fitSide();
+  narrow.addEventListener("change", fitSide);
   $("#game-difficulty").onchange = () => {
     readyUI();
     leaderboard();
@@ -912,6 +895,7 @@ function bindGame() {
       if (!undo || publicSession || !running) return;
       ui?.stop();
       active = undo;
+      presenter.reset(active);
       undo = null;
       draw();
       queueSave();
@@ -935,6 +919,7 @@ function bindGame() {
   const board = $("#game-board");
   board.onclick = (e) => {
     if (ui?.handleClick(e)) return;
+    if (!["memory-match", "minesweeper"].includes(game)) return;
     const b = e.target.closest("[data-cell]");
     if (!b) return;
     const index = Number(b.dataset.cell);

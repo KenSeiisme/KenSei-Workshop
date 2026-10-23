@@ -40,3 +40,11 @@ Existing request formats remain compatible. Brick Breaker uses `events_format: "
 Run `pnpm test:games` and `pnpm test:games-expansion` against a local preview. The unit and database tests cover deterministic rules, replay, ownership and rank ordering. Browser tests exercise actual controls and Public sessions against the real bundled Edge handler with isolated PostgreSQL fixtures; they do not use production members or create production scores. See the [2026-10-23 validation record](validation/2026-10-23-games-expansion.md).
 
 Build the Edge artifact from `supabase/functions/games-session/index.ts` with esbuild, `bundle: true`, `format: esm`, target `es2022`; the canonical rules are bundled once. Apply and verify migrations before deploying `games-session`, then push the existing GitHub branch and verify the Vercel production URL. Never place server credentials in static files. A successful push alone does not verify the live website.
+
+## Neon presentation
+
+The game stage and public game record use `game-neon.css`. The client-only presenter keeps before/after snapshots and transient visual mappings separate from canonical state. DOM reconciliation retains cells, cards, focus and scroll; canvas interpolation reads the fixed-step state and never advances it. Timers, scoring, session replays and save formats remain authoritative and unchanged.
+
+`Effects: Auto / Reduced / Off` uses the local key `kensei-game-effects-v1`, shared across game/Profile pages and browser tabs. Auto follows the system reduced-motion preference. Pause, restart, undo, navigation, backgrounding and preference changes cancel decorative animation. A restored game does not replay old celebration effects.
+
+Run `pnpm test:game-neon` in addition to game regressions. Set `RECORD_GAME_VIDEO=1` to produce an ignored demonstration video after installing Playwright's optional FFmpeg encoder. See the [neon validation record](validation/2026-10-23-neon-games.md) for coverage and evidence.

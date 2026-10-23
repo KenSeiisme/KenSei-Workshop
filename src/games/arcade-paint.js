@@ -1,7 +1,7 @@
 import { BRICK, brickRect, paddleCenter } from "./arcade-engine.js";
 
 // 仅负责画面，不推进逻辑；刷新率不会影响球速或成绩。
-export function paintBrick(canvas, state) {
+export function paintBrick(canvas, state, view = {}) {
   const ctx = canvas?.getContext("2d");
   if (!ctx) return false;
   if (canvas.width !== BRICK.width) canvas.width = BRICK.width;
@@ -72,15 +72,23 @@ export function paintBrick(canvas, state) {
   ctx.roundRect(px, BRICK.paddleY, BRICK.paddleWidth, BRICK.paddleHeight, 6);
   ctx.fill();
   ctx.restore();
-  const b = state.ball,
+  const b = { ...state.ball, ...view.ball },
     bx = b.x / q,
     by = b.y / q;
-  if (b.launched && state.status === "playing") {
-    ctx.strokeStyle = "#a0dfcd40";
-    ctx.lineWidth = 6;
+  if (view.full !== false && b.launched && state.status === "playing") {
+    const tail = ctx.createLinearGradient(
+      bx - (b.vx / q) * 5,
+      by - (b.vy / q) * 5,
+      bx,
+      by,
+    );
+    tail.addColorStop(0, "#a0dfcd00");
+    tail.addColorStop(1, "#a0dfcda0");
+    ctx.strokeStyle = tail;
+    ctx.lineWidth = 5;
     ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.moveTo(bx - (b.vx / q) * 2.5, by - (b.vy / q) * 2.5);
+    ctx.moveTo(bx - (b.vx / q) * 5, by - (b.vy / q) * 5);
     ctx.lineTo(bx, by);
     ctx.stroke();
   }

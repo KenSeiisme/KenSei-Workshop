@@ -1,3 +1,4 @@
+import { patchMarkup } from "./dom.js";
 import { legalMoves, reversiFlips } from "./board-engine.js";
 
 // 棋类只负责棋盘、焦点和电脑任务；保存及开局流程由通用控制器负责。
@@ -222,7 +223,10 @@ export function createBoardUI(ctx) {
           ? "Choose a column. Discs fall to the lowest empty space."
           : `${legal.length} legal ${legal.length === 1 ? "move" : "moves"}. Hover or focus a marked square to preview flips.`
         : "Start a new game to play again.";
-    board.innerHTML = `<div class="board-native ${connect ? "connect-native" : "reversi-native"}"><div class="board-players">${playerChips}</div><p class="board-turn" role="status">${turnText}</p>${!connect && s.passCount === 1 ? `<p class="board-pass-notice">${label(s, s.lastSkipped)} has no legal move. ${label(s, s.turn)} plays again.</p>` : ""}<div class="board-grid ${connect ? "connect-grid" : "reversi-grid"}" role="group" aria-label="${connect ? "Seven column, six row Connect Four board" : "Eight by eight Reversi board"}">${cells}</div><p class="board-input-note">${note}</p>${failure ? '<div class="board-ai-error"><p>The computer move did not finish. Your position is unchanged.</p><button type="button" class="button secondary" data-board-retry>Retry computer move</button></div>' : ""}</div>`;
+    patchMarkup(
+      board,
+      `<div class="board-native ${connect ? "connect-native" : "reversi-native"}"><div class="board-players">${playerChips}</div><p class="board-turn" role="status">${turnText}</p>${!connect && s.passCount === 1 ? `<p class="board-pass-notice">${label(s, s.lastSkipped)} has no legal move. ${label(s, s.turn)} plays again.</p>` : ""}<div class="board-grid ${connect ? "connect-grid" : "reversi-grid"}" role="group" aria-label="${connect ? "Seven column, six row Connect Four board" : "Eight by eight Reversi board"}">${cells}</div><p class="board-input-note">${note}</p>${failure ? '<div class="board-ai-error"><p>The computer move did not finish. Your position is unchanged.</p><button type="button" class="button secondary" data-board-retry>Retry computer move</button></div>' : ""}</div>`,
+    );
     bind(board);
     if (hadFocus) {
       const target = board.querySelector(`[data-board-cell="${focusIndex}"]`);

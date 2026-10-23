@@ -203,6 +203,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       document.querySelector("#game-my-rank").textContent.includes("rank: #1"),
     );
     assert.match(await q.locator("#game-score").innerText(), /^8$/);
+    assert.equal(
+      await q.locator("#game-result-public").getAttribute("data-submission"),
+      "verified",
+    );
     await q.goto(
       base +
         "/profile/?id=" +
@@ -211,7 +215,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     );
     await q.waitForSelector("#public-profile:not([hidden])");
     await q.waitForFunction(() =>
-      document.body.textContent.includes("Game bests"),
+      document.body.textContent.includes("Personal bests"),
     );
     console.log(
       "PASS logged-in Public default, complete matching game, actual server replay, automatic score and Profile game best",
@@ -342,6 +346,12 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       for (let i = 0; i < s.cards.length; i++)
         if (s.cards[i] === pair) await bpage.click(`[data-cell="${i}"]`);
     await bpage.waitForSelector("#game-submit-retry:not([hidden])");
+    assert.equal(
+      await bpage
+        .locator("#game-result-public")
+        .getAttribute("data-submission"),
+      "failed",
+    );
     await bpage.reload();
     await bpage.waitForSelector("[data-game][data-ready=true]");
     await bpage.waitForSelector("#game-submit-retry:not([hidden])");
