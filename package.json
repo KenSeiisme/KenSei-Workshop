@@ -26,6 +26,8 @@
   "name": "kensei-workshop",
   "private": true,
   "scripts": {
+    "format": "node scripts/format.mjs --write",
+    "format:check": "node scripts/format.mjs --check",
     "vendor": "node scripts/vendor.mjs",
     "build": "python build.py",
     "test": "node scripts/test.mjs base",

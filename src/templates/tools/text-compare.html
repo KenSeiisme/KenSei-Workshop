@@ -1,0 +1,70 @@
+<div class="editor-split">
+  <section class="panel editor-pane">
+    <h2><label for="compare-left">Original text</label></h2>
+    <textarea
+      id="compare-left"
+      data-lock
+      maxlength="100000"
+      spellcheck="false"
+      placeholder="Paste the original…"
+    ></textarea
+    ><label class="button secondary small-button file-button"
+      >Import .txt<input
+        id="compare-file-left"
+        data-lock
+        type="file"
+        accept=".txt,text/plain"
+    /></label>
+  </section>
+  <section class="panel editor-pane">
+    <h2><label for="compare-right">Updated text</label></h2>
+    <textarea
+      id="compare-right"
+      data-lock
+      maxlength="100000"
+      spellcheck="false"
+      placeholder="Paste the updated version…"
+    ></textarea
+    ><label class="button secondary small-button file-button"
+      >Import .txt<input
+        id="compare-file-right"
+        data-lock
+        type="file"
+        accept=".txt,text/plain"
+    /></label>
+  </section>
+</div>
+<div class="panel tool-form compare-options">
+  <div class="action-row">
+    <label
+      >Compare by<select id="compare-mode" data-lock>
+        <option value="lines">Lines</option>
+        <option value="characters">Characters</option>
+      </select></label
+    ><label class="check-label"
+      ><input type="checkbox" id="compare-case" data-lock />Ignore case</label
+    ><label class="check-label"
+      ><input type="checkbox" id="compare-space" data-lock />Normalize
+      whitespace</label
+    >
+  </div>
+  <div class="action-row">
+    <button id="compare-run" class="button primary" data-lock>
+      Compare texts →</button
+    ><button id="compare-swap" class="button secondary" data-lock>
+      Swap sides</button
+    ><button id="compare-download" class="button secondary" disabled>
+      Download .diff
+    </button>
+  </div>
+</div>
+${job_status}
+<p class="muted small">
+  + Added · − Removed. Ignored differences are normalized in the displayed
+  result and export.
+</p>
+<pre
+  id="compare-output"
+  class="panel diff-output"
+  aria-label="Text differences"
+></pre>

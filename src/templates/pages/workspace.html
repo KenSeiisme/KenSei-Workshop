@@ -1,0 +1,44 @@
+<section class="container page-section">
+  ${intro}
+  <div class="workspace-banner" id="workspace-account">
+    <div>
+      <strong>On this device</strong>
+      <p>Local saves work now. Connect your account to sync between devices.</p>
+    </div>
+    <button class="button secondary" data-sign-in>Sign in with Google ↗</button>
+  </div>
+  <div class="workspace-stats">
+    <div class="panel">
+      <span>Focused today</span><strong id="today-focus">0 min</strong>
+    </div>
+    <div class="panel">
+      <span>Last 7 days</span><strong id="week-focus">0 min</strong>
+    </div>
+    <div class="panel">
+      <span>Saved drafts</span><strong id="draft-count">0</strong>
+    </div>
+  </div>
+  <section class="workspace-section">
+    <h2>Favorite tools</h2>
+    <div class="tools-grid" id="favorite-tools"></div>
+  </section>
+  <section class="workspace-section">
+    <h2>Saved drafts</h2>
+    <div id="saved-drafts" class="saved-list"></div>
+  </section>
+  <section class="workspace-section">
+    <h2>Saved tool presets</h2>
+    <div id="saved-presets" class="saved-list"></div>
+  </section>
+  <section class="workspace-section">
+    <h2>Recent focus sessions</h2>
+    <div id="saved-sessions" class="saved-list"></div>
+  </section>
+  <div id="private-workspace">
+    ${answer_history}${decision_history}${flashcards}${planner_and_whiteboards}
+  </div>
+  <div class="workspace-footer">
+    <button id="sign-out" class="button secondary" hidden>Sign out</button
+    ><button id="export-data" class="text-link">Export my workspace ↓</button>
+  </div>
+</section>

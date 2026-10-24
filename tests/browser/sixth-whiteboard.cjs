@@ -1,11 +1,12 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
-  {
-    chromium,
-  } = require("../support/browser.cjs");
+  { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798";
 (async () => {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true }),
+  const browser = await chromium.launch({
+      channel: process.env.BROWSER_CHANNEL || "msedge",
+      headless: true,
+    }),
     context = await browser.newContext({
       viewport: { width: 1440, height: 1000 },
       acceptDownloads: true,

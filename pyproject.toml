@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+required-version = "26.10.1"
+extend-exclude = '''
+/(
+  _qa
+  |dist
+  |node_modules
+  |projects
+  |src/vendor
+)/
+'''

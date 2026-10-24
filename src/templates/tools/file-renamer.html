@@ -1,0 +1,85 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>A fresh name for every file</h2>
+    <label
+      >Files<input id="rename-files" type="file" multiple data-lock
+    /></label>
+    <p class="muted small">
+      Up to 100 files · 100 MB total. Only the downloaded ZIP has new names;
+      originals remain untouched.
+    </p>
+    <div class="form-row">
+      <label>Prefix<input id="rename-prefix" maxlength="80" data-lock /></label
+      ><label
+        >Suffix<input id="rename-suffix" maxlength="80" data-lock
+      /></label>
+    </div>
+    <div class="form-row">
+      <label
+        >Find in base name<input
+          id="rename-find"
+          maxlength="100"
+          data-lock /></label
+      ><label
+        >Replace with<input id="rename-replace" maxlength="100" data-lock
+      /></label>
+    </div>
+    <label
+      >Case<select id="rename-case" data-lock>
+        <option value="keep">Keep original case</option>
+        <option value="lower">Lowercase</option>
+        <option value="upper">Uppercase</option>
+      </select></label
+    ><label class="check-label"
+      ><input id="rename-number" type="checkbox" data-lock />Add numbering
+      before the base name</label
+    >
+    <div class="form-row">
+      <label
+        >Start<input
+          id="rename-start"
+          type="number"
+          min="0"
+          max="999999999"
+          value="1"
+          data-lock /></label
+      ><label
+        >Digits<input
+          id="rename-digits"
+          type="number"
+          min="1"
+          max="9"
+          value="3"
+          data-lock
+      /></label>
+    </div>
+    <label
+      >Order<select id="rename-order" data-lock>
+        <option value="input">Selection order</option>
+        <option value="name">File name A–Z</option>
+      </select></label
+    ><button id="rename-download" class="button primary" data-lock disabled>
+      Download renamed ZIP ↓
+    </button>
+    <p class="muted small">
+      Extensions are kept. Replacement is literal and case-sensitive. Conflicts
+      and invalid portable names must be resolved before export.
+    </p>
+  </section>
+  <section class="panel">
+    <h2>Before → after</h2>
+    <div id="rename-preview" class="rename-preview"></div>
+  </section>
+</div>
+<div class="job-status">
+  <p id="tool-status" class="muted small" role="status">
+    Select files to preview names.
+  </p>
+  <button id="cancel-job" class="button secondary" hidden>Cancel</button>
+</div>
+<progress
+  id="rename-progress"
+  max="100"
+  value="0"
+  aria-label="ZIP progress"
+></progress>

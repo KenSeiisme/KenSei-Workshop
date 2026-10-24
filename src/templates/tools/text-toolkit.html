@@ -1,0 +1,44 @@
+<div class="text-stats">
+  <div><strong id="stat-characters">0</strong><span>Characters</span></div>
+  <div><strong id="stat-words">0</strong><span>Words</span></div>
+  <div><strong id="stat-lines">0</strong><span>Lines</span></div>
+  <div><strong id="stat-reading">0 min</strong><span>Reading time</span></div>
+</div>
+<section class="panel text-panel">
+  <div class="editor-toolbar">
+    <div>
+      <button data-transform="upper">UPPERCASE</button
+      ><button data-transform="lower">lowercase</button
+      ><button data-transform="title">Title Case</button
+      ><button data-transform="clean">Clean spaces</button
+      ><button id="text-undo" disabled>↶ Undo</button>
+    </div>
+    <button id="text-clear">Clear</button>
+  </div>
+  <label class="sr-only" for="text-input">Text to edit</label
+  ><textarea
+    id="text-input"
+    placeholder="A thought, a paragraph, a rough first draft. Start here…"
+    maxlength="100000"
+  ></textarea>
+  <div class="editor-bottom">
+    <span id="draft-state" class="muted small"
+      >Processed in your browser. Save a draft when you’re ready.</span
+    >
+    <div>
+      <button class="button secondary small-button" id="text-download">
+        Download .txt</button
+      ><button class="button secondary small-button" id="text-copy">
+        Copy text
+      </button>
+    </div>
+  </div>
+</section>
+<div class="draft-controls">
+  <label class="sr-only" for="draft-name">Draft name</label
+  ><input
+    id="draft-name"
+    maxlength="100"
+    placeholder="Give this draft a name"
+  /><button class="button primary" id="save-draft">Save draft</button>
+</div>

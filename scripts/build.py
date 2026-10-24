@@ -1,178 +1,439 @@
 """Build only this independent project's dist directory."""
+
 from pathlib import Path
 import json
 import shutil
 import sys
 import argparse
 
-if hasattr(sys.stdout, 'reconfigure'):
-    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'src'
+SOURCE = ROOT / "src"
+SITE = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
 sys.dont_write_bytecode = True
-sys.path.insert(0, str(SOURCE / 'views'))
+sys.path.insert(0, str(SOURCE / "views"))
+from template_renderer import render_template
 from tool_experience import heading as tool_heading
 from profile_view import PROFILE_VIEW
 from file_tools import VIEWS
-from interactive_tools import VIEWS as SECOND_VIEWS, history
-VIEWS.update(SECOND_VIEWS)
+from interactive_tools import VIEWS as INTERACTIVE_VIEWS, history
 from daily_tools import VIEWS as DAILY_VIEWS
-VIEWS.update(DAILY_VIEWS)
-from media_data_tools import VIEWS as FOURTH_VIEWS
-VIEWS.update(FOURTH_VIEWS)
-from study_file_tools import VIEWS as FIFTH_VIEWS, WORKSPACE as FLASH_WORKSPACE
-VIEWS.update(FIFTH_VIEWS)
-from image_editor import EDITOR, PANEL, PDF_SETTINGS
+from media_data_tools import VIEWS as MEDIA_DATA_VIEWS
+from study_file_tools import VIEWS as STUDY_FILE_VIEWS, WORKSPACE as FLASHCARD_WORKSPACE
+from image_editor import EDITOR, PANEL
 from planner_view import VIEW as PLANNER_VIEW
 from whiteboard_view import VIEW as WHITEBOARD_VIEW
 from capture_views import SCREEN_VIEW, augment_qr, augment_audio
-from workspace_sections import WORKSPACE as SIXTH_WORKSPACE
-VIEWS.update({"study-planner": PLANNER_VIEW, "whiteboard": WHITEBOARD_VIEW, "screen-recorder": SCREEN_VIEW})
+from workspace_sections import WORKSPACE as PLANNER_WORKSPACE
+
+# 后面的工具视图优先，保持既有的目录合并顺序。
+for views in (INTERACTIVE_VIEWS, DAILY_VIEWS, MEDIA_DATA_VIEWS, STUDY_FILE_VIEWS):
+    VIEWS.update(views)
+VIEWS.update(
+    {
+        "study-planner": PLANNER_VIEW,
+        "whiteboard": WHITEBOARD_VIEW,
+        "screen-recorder": SCREEN_VIEW,
+    }
+)
 VIEWS["qr-studio"] = augment_qr(VIEWS["qr-studio"])
 VIEWS["audio-studio"] = augment_audio(VIEWS["audio-studio"])
 
-parser = argparse.ArgumentParser(description='Build the KenSei Workshop static site.')
-parser.add_argument('--output', type=Path, default=ROOT / 'dist', help='Output directory (default: dist).')
+parser = argparse.ArgumentParser(description="Build the KenSei Workshop static site.")
+parser.add_argument(
+    "--output",
+    type=Path,
+    default=ROOT / "dist",
+    help="Output directory (default: dist).",
+)
 OUT = parser.parse_args().output.resolve()
 OUT.mkdir(parents=True, exist_ok=True)
-for name in ('app.js', 'config.js'):
+for name in ("app.js", "config.js"):
     shutil.copy2(SOURCE / name, OUT / name)
-for path in (SOURCE / 'styles').glob('*.css'):
+for path in (SOURCE / "styles").glob("*.css"):
     shutil.copy2(path, OUT / path.name)
-shutil.copytree(SOURCE / 'assets', OUT / 'assets', dirs_exist_ok=True)
+shutil.copytree(SOURCE / "assets", OUT / "assets", dirs_exist_ok=True)
 
 # 源码归类不改变公开资源网址，现有链接和浏览器存档继续可用。
-for source, public in (('tools', 'tool-scripts'), ('games', 'game-scripts'), ('vendor', 'vendor')):
-    shutil.copytree(SOURCE / source, OUT / public, dirs_exist_ok=True,
-                    ignore=shutil.ignore_patterns('__pycache__', '*.pyc', '*.tar.gz'))
+for source, public in (
+    ("tools", "tool-scripts"),
+    ("games", "game-scripts"),
+    ("vendor", "vendor"),
+):
+    shutil.copytree(
+        SOURCE / source,
+        OUT / public,
+        dirs_exist_ok=True,
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.tar.gz"),
+    )
 
 ICONS = {
-    'cards': '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',
-    'calculator': '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M7 6h10M7 11h2M13 11h4M7 16h2M13 16h4"/>',
-    'check': '<path d="M6 2h8l4 4v16H6zM9 13l2 2 4-5"/>',
-    'audio': '<path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 10v4"/>',
-    'data': '<path d="M8 3H5v7l-3 2 3 2v7h3M16 3h3v7l3 2-3 2v7h-3M10 9h4M10 15h4"/>',
-    'network': '<path d="M2 8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8 16a5 5 0 0 1 8 0"/><circle cx="12" cy="20" r="1"/>',
-    'archive': '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M10 3h4v3h-4v3h4v3h-4v5h4v-3h-4"/>',
-    'palette': '<circle cx="8" cy="8" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="18" cy="12" r="1"/><path d="M12 22C0 22 0 2 12 2s13 13 4 13h-3c-5 0 5 7-1 7Z"/>',
-    'ruler': '<path d="m3 16 13-13 5 5L8 21zM7 12l3 3M11 8l3 3M15 4l3 3"/>',
-    'key': '<circle cx="8" cy="8" r="5"/><path d="m12 12 9 9M16 16l3-3M19 19l3-3"/>',
-
-    'image': '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
-    'text': '<path d="M4 5h16M12 5v15M8 20h8M4 5v3M20 5v3"/>',
-    'timer': '<circle cx="12" cy="13" r="8"/><path d="M12 9v5l3 2M9 2h6M12 2v3m6 2 2-2"/>',
-    'arrow': '<path d="M5 12h14m-6-6 6 6-6 6"/>',
-    'star': '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/>',
-    'book': '<path d="M12 5v16M12 5C8 2 4 3 2 4v15c4-2 7-1 10 2 3-3 6-4 10-2V4c-4-2-7-1-10 1Z"/>',
-    'wheel': '<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"/>',
-    'keyboard': '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M5 9h2m3 0h2m3 0h3M5 13h2m3 0h2m3 0h3M7 16h10"/>',
-    'monitor': '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M12 17v4M7 21h10"/>',
-    'grid': '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+    "cards": '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',
+    "calculator": '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M7 6h10M7 11h2M13 11h4M7 16h2M13 16h4"/>',
+    "check": '<path d="M6 2h8l4 4v16H6zM9 13l2 2 4-5"/>',
+    "audio": '<path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 10v4"/>',
+    "data": '<path d="M8 3H5v7l-3 2 3 2v7h3M16 3h3v7l3 2-3 2v7h-3M10 9h4M10 15h4"/>',
+    "network": '<path d="M2 8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8 16a5 5 0 0 1 8 0"/><circle cx="12" cy="20" r="1"/>',
+    "archive": '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M10 3h4v3h-4v3h4v3h-4v5h4v-3h-4"/>',
+    "palette": '<circle cx="8" cy="8" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="18" cy="12" r="1"/><path d="M12 22C0 22 0 2 12 2s13 13 4 13h-3c-5 0 5 7-1 7Z"/>',
+    "ruler": '<path d="m3 16 13-13 5 5L8 21zM7 12l3 3M11 8l3 3M15 4l3 3"/>',
+    "key": '<circle cx="8" cy="8" r="5"/><path d="m12 12 9 9M16 16l3-3M19 19l3-3"/>',
+    "image": '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
+    "text": '<path d="M4 5h16M12 5v15M8 20h8M4 5v3M20 5v3"/>',
+    "timer": '<circle cx="12" cy="13" r="8"/><path d="M12 9v5l3 2M9 2h6M12 2v3m6 2 2-2"/>',
+    "arrow": '<path d="M5 12h14m-6-6 6 6-6 6"/>',
+    "star": '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/>',
+    "book": '<path d="M12 5v16M12 5C8 2 4 3 2 4v15c4-2 7-1 10 2 3-3 6-4 10-2V4c-4-2-7-1-10 1Z"/>',
+    "wheel": '<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"/>',
+    "keyboard": '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M5 9h2m3 0h2m3 0h3M5 13h2m3 0h2m3 0h3M7 16h10"/>',
+    "monitor": '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M12 17v4M7 21h10"/>',
+    "grid": '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
 }
+
+
 def icon(name):
     return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[name]}</svg>'
 
-TOOLS = json.loads((ROOT / 'data/tools.json').read_text(encoding='utf-8'))
-(OUT / 'tools-data.js').write_text('window.KENSEI_TOOLS=' + json.dumps({t[0]: {'name':t[2], 'description':t[4], 'category':t[5]} for t in TOOLS}, ensure_ascii=False) + ';', encoding='utf-8')
+
+TOOLS = json.loads((ROOT / "data/tools.json").read_text(encoding="utf-8"))
+(OUT / "tools-data.js").write_text(
+    "window.KENSEI_TOOLS="
+    + json.dumps(
+        {t[0]: {"name": t[2], "description": t[4], "category": t[5]} for t in TOOLS},
+        ensure_ascii=False,
+    )
+    + ";",
+    encoding="utf-8",
+)
 for glyph, path in {
-    'qr': '<path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 19h2v2h-2zM19 13h2v3M13 19v2"/>',
-    'pdf': '<path d="M6 2h8l4 4v16H6zM14 2v5h4M9 12h6M9 16h6"/>',
-    'markdown': '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M5 15V9l3 3 3-3v6M14 12l3 3 3-3M17 9v6"/>',
-    'compare': '<path d="M8 3v18M16 3v18M3 7h8M13 17h8M3 11h4M17 13h4"/>',
-    'ocr': '<path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5M7 8h10M12 8v9M9 17h6"/>'
+    "qr": '<path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 19h2v2h-2zM19 13h2v3M13 19v2"/>',
+    "pdf": '<path d="M6 2h8l4 4v16H6zM14 2v5h4M9 12h6M9 16h6"/>',
+    "markdown": '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M5 15V9l3 3 3-3v6M14 12l3 3 3-3M17 9v6"/>',
+    "compare": '<path d="M8 3v18M16 3v18M3 7h8M13 17h8M3 11h4M17 13h4"/>',
+    "ocr": '<path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5M7 8h10M12 8v9M9 17h6"/>',
 }.items():
     ICONS[glyph] = path
 
-PROJECTS = [('3a3d', '3A3D', 'Automotive, thoughtfully explored.', 'An automotive showcase built around car culture, visual discovery and detailed specifications.', 'Web', 'HTML / CSS / JavaScript'), ('salon-system', 'Salon Management System', 'Structure behind the service.', 'A C++ coursework project exploring how software can support salon operations.', 'Software', 'C++ / Console application'), ('ai-art', 'AI Art Gallery', 'An exploration in imagination.', 'A collection of visual experiments with local AI and image generation.', 'Creative', 'Local AI / Digital art')]
+PROJECTS = [
+    (
+        "3a3d",
+        "3A3D",
+        "Automotive, thoughtfully explored.",
+        "An automotive showcase built around car culture, visual discovery and detailed specifications.",
+        "Web",
+        "HTML / CSS / JavaScript",
+    ),
+    (
+        "salon-system",
+        "Salon Management System",
+        "Structure behind the service.",
+        "A C++ coursework project exploring how software can support salon operations.",
+        "Software",
+        "C++ / Console application",
+    ),
+    (
+        "ai-art",
+        "AI Art Gallery",
+        "An exploration in imagination.",
+        "A collection of visual experiments with local AI and image generation.",
+        "Creative",
+        "Local AI / Digital art",
+    ),
+]
+
 
 def project_art(slug, large=False):
-    if slug == '3a3d':
-        return '<div class="project-art car-art"><span class="art-top">3A3D <small>DRIVEN BY OBSESSION</small></span><span class="ghost-type">RX–7</span><img src="/assets/mazda.png" alt="Mazda RX-7 side profile" width="800" height="450"/><span class="art-bottom">JAPANESE ICONS <span>01 / 03</span></span></div>'
-    if slug == 'salon-system':
-        return '<div class="project-art code-art"><div class="terminal"><div class="terminal-bar"><i></i><i></i><i></i><span>salon.cpp</span></div><pre><span class="code-purple">class</span> Salon {\n  <span class="code-dim">// A little order, by design.</span>\n  appointments;\n  customers;\n  services;\n};<span class="cursor">▌</span></pre></div><span class="art-label">ILLUSTRATIVE COVER · C++</span></div>'
-    return '<div class="project-art art-art"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="orb orb-three"></div><span class="creative-type">Beyond<br/><em>the ordinary.</em></span><span class="art-label">GENERATIVE STUDIES · GRAPHIC COVER</span></div>'
+    if slug == "3a3d":
+        return render_template("projects/art-3a3d.html")
+    if slug == "salon-system":
+        return render_template("projects/art-salon.html")
+    return render_template("projects/art-ai.html")
+
 
 def project_card(p, featured=False):
     slug, name, title, desc, cat, stack = p
-    return f'<article class="project-card {"featured" if featured else ""}" data-category="{cat.lower()}"><a href="/projects/{slug}/" class="project-cover" aria-label="Explore {name}">{project_art(slug)}</a><div class="project-copy"><div class="eyebrow">{cat} <span>PROJECT</span></div><a class="project-title" href="/projects/{slug}/"><h3>{name}</h3><span>↗</span></a><p>{desc}</p><span class="stack-label">{stack}</span></div></article>'
+    return render_template(
+        "projects/card.html",
+        content="featured" if featured else "",
+        lower=cat.lower(),
+        slug=slug,
+        name=name,
+        project_art=project_art(slug),
+        cat=cat,
+        slug_2=slug,
+        name_2=name,
+        desc=desc,
+        stack=stack,
+    )
+
 
 def tool_card(t):
     slug, glyph, name, title, desc, cat = t
-    return f'<article class="tool-card" data-tool-card data-search="{name.lower()} {desc.lower()} {cat.lower()}" data-category="{cat.lower()}"><div class="tool-card-top"><span class="tool-icon {glyph}">{icon(glyph)}</span><button class="favorite icon-button" data-favorite="{slug}" aria-label="Favorite {name}" aria-pressed="false">{icon("star")}</button></div><a href="/tools/{slug}/"><h3>{name} <span>↗</span></h3></a><p>{desc}</p><div class="tool-bottom"><span class="small-tag">{cat}</span><a href="/tools/{slug}/" class="text-link">Open tool {icon("arrow")}</a></div></article>'
+    return render_template(
+        "site/tool-card.html",
+        lower=name.lower(),
+        lower_2=desc.lower(),
+        lower_3=cat.lower(),
+        lower_4=cat.lower(),
+        glyph=glyph,
+        icon=icon(glyph),
+        slug=slug,
+        name=name,
+        icon_star=icon("star"),
+        slug_2=slug,
+        name_2=name,
+        desc=desc,
+        cat=cat,
+        slug_3=slug,
+        icon_arrow=icon("arrow"),
+    )
+
 
 def header(active):
-    nav = ''.join('<a href="' + url + '"' + (' aria-current="page"' if active == label else '') + '>' + label + '</a>' for label, url in [('Home','/'),('Tools','/tools/'),('Games','/games/'),('Projects','/projects/')])
-    return f'<a class="skip-link" href="#main">Skip to content</a><header class="header"><div class="container nav-wrap"><a class="brand" href="/" aria-label="KenSei home"><span class="brand-symbol">k<span>✳</span></span>KenSei<span class="brand-dot">.</span></a><nav aria-label="Main navigation" id="navigation">{nav}<a data-personal href="https://kensei-eta.vercel.app/" target="_blank" rel="noopener">About Me <span class="external-mark">↗</span></a></nav><div class="account-controls" id="account-controls"><button class="sign-button" data-sign-in id="account-toggle" aria-expanded="false" aria-controls="account-menu"><span class="user-dot"></span><span class="avatar-badge avatar-small" data-account-avatar hidden></span><span data-auth-label>Sign in</span><span data-account-chevron>↗</span></button><div class="account-menu" id="account-menu" hidden><a href="/workspace/">Workspace</a><a href="/profile/">My Profile</a><a href="/profile/" id="account-public-profile" hidden>Public Profile</a><button id="account-sign-out">Sign out</button></div></div><button class="menu-toggle icon-button" aria-label="Toggle navigation" aria-controls="navigation" aria-expanded="false">☰</button></div></header>'
+    nav = "".join(
+        '<a href="'
+        + url
+        + '"'
+        + (' aria-current="page"' if active == label else "")
+        + ">"
+        + label
+        + "</a>"
+        for label, url in [
+            ("Home", "/"),
+            ("Tools", "/tools/"),
+            ("Games", "/games/"),
+            ("Projects", "/projects/"),
+        ]
+    )
+    return render_template("site/header.html", nav=nav)
 
-def layout(title, content, active='Home', desc='Useful browser tools for images, text and focus. No installation or account needed. Built by KenSei.'):
-    game_css = '<link rel="stylesheet" href="/games.css"><link rel="stylesheet" href="/puzzle-games.css"><link rel="stylesheet" href="/arcade-games.css"><link rel="stylesheet" href="/board-games.css">' if 'games-page' in content else ''
-    profile_css = '<link rel="stylesheet" href="/profile.css">' if 'id="profile-page"' in content else ''
+
+def layout(
+    title,
+    content,
+    active="Home",
+    desc="Useful browser tools for images, text and focus. No installation or account needed. Built by KenSei.",
+):
+    game_css = (
+        '<link rel="stylesheet" href="/games.css"><link rel="stylesheet" href="/puzzle-games.css"><link rel="stylesheet" href="/arcade-games.css"><link rel="stylesheet" href="/board-games.css">'
+        if "games-page" in content
+        else ""
+    )
+    profile_css = (
+        '<link rel="stylesheet" href="/profile.css">'
+        if 'id="profile-page"' in content
+        else ""
+    )
     if game_css or profile_css:
         profile_css += '<link rel="stylesheet" href="/game-neon.css"><link rel="stylesheet" href="/game-next.css"><link rel="stylesheet" href="/game-experience.css">'
-    tool_css = '<link rel="stylesheet" href="/tool-experience.css">' if 'data-tool=' in content else ''
-    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title} — KenSei</title><meta name="description" content="{desc}"><meta name="theme-color" content="#111015"><meta property="og:title" content="{title} — KenSei"><meta property="og:description" content="{desc}"><meta property="og:type" content="website"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/tools.css"><link rel="stylesheet" href="/planner.css"><link rel="stylesheet" href="/whiteboard.css"><link rel="stylesheet" href="/media.css">{tool_css}{game_css}{profile_css}<script src="/config.js" defer></script><script src="/tools-data.js" defer></script><script src="/app.js" defer></script></head><body>{header(active)}<main id="main">{content}</main><footer class="footer"><div class="container footer-inner"><a class="brand" href="/">KenSei<span class="brand-dot">.</span></a><p>A small corner of the internet, made with care.</p><div><a href="/tools/">Tools</a><a href="/games/">Games</a><a href="/projects/">Projects</a><a href="/privacy/">Privacy</a><a href="/credits/">Open-source credits</a><a data-personal href="https://kensei-eta.vercel.app/" target="_blank" rel="noopener">About Me ↗</a><span>© 2026 KenSei</span></div></div></footer><div class="toast" role="status" aria-live="polite" hidden></div><dialog id="auth-dialog"><button class="dialog-close icon-button" aria-label="Close dialog">×</button><div class="eyebrow">YOUR SPACE, EVERYWHERE</div><h2>A little more personal.</h2><p>Sign in to keep your workspace together and join Public typing and games. Your Google name and avatar initialize your public profile, which you can edit anytime.</p><button class="button primary google-button" id="google-login"><b>G</b> Continue with Google</button><p class="muted small" id="auth-note">Local tools, Typing Practice and Private games are available without an account.</p></dialog><noscript><div class="noscript">Enable JavaScript to use interactive tools. Project pages and navigation remain available.</div></noscript></body></html>'''
+    tool_css = (
+        '<link rel="stylesheet" href="/tool-experience.css">'
+        if "data-tool=" in content
+        else ""
+    )
+    return render_template(
+        "site/layout.html",
+        google_site_verification=SITE["google_site_verification"],
+        title=title,
+        description=desc,
+        tool_css=tool_css,
+        game_css=game_css,
+        profile_css=profile_css,
+        header=header(active),
+        content=content,
+    )
+
 
 def tool_directory():
     # 首页与目录共用工具数据和交互标记。
-    return f'''<div class="tools-controls"><label class="search-box"><span aria-hidden="true">⌕</span><input id="tool-search" type="search" placeholder="Find a tool…" aria-label="Search tools"></label><div class="filter-bar" data-filter-group="tools"><button class="filter active" data-filter="all" aria-pressed="true">All</button><button class="filter" data-filter="images" aria-pressed="false">Images</button><button class="filter" data-filter="text" aria-pressed="false">Text</button><button class="filter" data-filter="documents" aria-pressed="false">Documents</button><button class="filter" data-filter="utilities" aria-pressed="false">Utilities</button><button class="filter" data-filter="productivity" aria-pressed="false">Productivity</button><button class="filter" data-filter="testing" aria-pressed="false">Testing</button><button class="filter" data-filter="audio" aria-pressed="false">Audio</button></div></div><div class="tools-grid">{''.join(tool_card(t) for t in TOOLS)}</div><p id="search-empty" class="empty-state" role="status" hidden>No tools found. Try another search.</p><div class="privacy-line"><span aria-hidden="true">◈</span> File processing stays on your device. Network Test connects to Cloudflare; Public typing verifies input with Supabase.</div>'''
+    return render_template(
+        "site/tool-directory.html", tool_cards="".join((tool_card(t) for t in TOOLS))
+    )
 
-home = f'''<section class="hero container tools-hero"><div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> THE KENSEI TOOLBOX</div><h1>Useful tools.<br/>A little less<br/><em>friction.</em></h1><p>Work with files, colors and everyday tasks,<br class="desktop-only"/> check your connection, and find your rhythm. Simple tools, ready when you are.</p><div class="hero-actions"><a href="#toolbox" class="button primary">Explore Tools {icon('arrow')}</a><a href="/workspace/" class="button secondary">Open Workspace {icon('grid')}</a></div><div class="hero-footnote"><span class="tiny-cross">✳</span> Less busywork. More room for your next idea.</div></div><div class="tool-demo-scene" aria-label="Illustrative examples of the three browser tools"><div class="demo-scene-label"><span class="live-dot"></span> A GLIMPSE INSIDE <span>ILLUSTRATIVE EXAMPLES</span></div><div class="demo-image demo-window"><div class="window-bar"><span class="window-dots">● ● ●</span><span>IMAGE STUDIO</span><span>↗</span></div><div class="demo-image-body"><div class="demo-landscape"><div class="demo-sun"></div><div class="demo-mountain"></div><span>SAMPLE IMAGE</span></div><div class="demo-file"><span>landscape.png</span><span>2.4 MB <b>→</b> <strong>480 KB</strong></span></div><div class="demo-progress"><span></span></div><div class="demo-status"><span>◈ A little lighter.</span><span>80% smaller · example</span></div></div></div><div class="demo-text demo-window"><div class="demo-title"><span class="tool-icon text">{icon('text')}</span><span>Text Toolkit</span><span class="demo-example">EXAMPLE</span></div><div class="demo-text-before">a little more clarity</div><div class="demo-text-arrow">↓ TITLE CASE</div><div class="demo-text-after">A Little More Clarity<span>▌</span></div><div class="demo-text-footer">4 words <span>·</span> 20 characters</div></div><div class="demo-focus demo-window"><div class="demo-title"><span class="focus-dot"></span><span>Focus Timer</span><span class="demo-example">EXAMPLE</span></div><div class="demo-time">24<span>:</span>59</div><div class="demo-focus-footer"><span>ONE THING AT A TIME</span><span class="demo-pause" aria-hidden="true">Ⅱ</span></div></div><span class="demo-spark" aria-hidden="true">✳</span></div></section><section id="toolbox" class="tools-section home-toolbox"><div class="container section"><div class="section-heading"><div><div class="eyebrow">YOUR EVERYDAY TOOLBOX</div><h2>What can we make easier<span class="accent">?</span></h2><p>Pick a tool and get straight to it.</p></div><a href="/tools/" class="text-link">All tools {icon('arrow')}</a></div>{tool_directory()}</div></section><section class="container workspace-promo"><div><div class="eyebrow">A SPACE OF YOUR OWN</div><h2>Pick up where you left off.</h2><p>Your saved drafts, favorite tools and moments of focus. All in one place.</p></div><a class="button secondary" href="/workspace/">Open Workspace {icon('arrow')}</a><span class="promo-decoration" aria-hidden="true">✳</span></section>'''
+
+home = render_template(
+    "pages/home.html",
+    icon_arrow=icon("arrow"),
+    icon_grid=icon("grid"),
+    icon_text=icon("text"),
+    tool_directory=tool_directory(),
+)
+
 
 def page_intro(label, title, desc):
     return f'<div class="page-intro"><div class="eyebrow">{label}</div><h1>{title}<span class="accent">.</span></h1><p>{desc}</p></div>'
 
-pages = {'': ('Useful tools for everyday things', home, 'Home')}
-pages['projects'] = ('Projects', f'<section class="container page-section">{page_intro("THE PROJECT SHELF", "Ideas, made tangible", "Websites, software and creative experiments. Each one starts with a little curiosity.")}<div class="filter-bar" data-filter-group="projects"><button class="filter active" data-filter="all" aria-pressed="true">All projects</button><button class="filter" data-filter="web" aria-pressed="false">Web</button><button class="filter" data-filter="software" aria-pressed="false">Software</button><button class="filter" data-filter="creative" aria-pressed="false">Creative</button></div><div class="projects-grid listing-projects">{"".join(project_card(p) for p in PROJECTS)}</div></section>', 'Projects')
-pages['tools'] = ('Tools', f'<section class="container page-section">{page_intro("THE EVERYDAY TOOLBOX", "A little help goes a long way", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{tool_directory()}</section>', 'Tools')
 
-image_ui = '''<div class="studio-grid"><section class="panel image-input"><label class="dropzone" id="dropzone"><input id="image-file" type="file" accept="image/jpeg,image/png,image/webp"><span class="upload-icon">↥</span><strong>Drop an image here</strong><span>or click to choose a file</span><small>JPG, PNG or WebP · up to 20 MB</small></label><div class="image-stage" hidden><img id="image-preview" alt="Selected image preview"><button id="change-image" class="button secondary small-button">Choose another image</button></div><p id="image-info" class="muted small">Your image stays on this device.</p></section><section class="panel settings-panel"><h2>Make it yours</h2><label>Width <span>px</span><input type="number" id="image-width" min="1" max="12000" disabled></label><label>Height <span>px · aspect ratio locked</span><input type="number" id="image-height" min="1" max="12000" disabled></label><label>Output format<select id="image-format"><option value="image/webp">WebP</option><option value="image/jpeg">JPG · white background</option><option value="image/png">PNG · lossless</option></select></label><label>Quality <output id="quality-value">80%</output><input type="range" id="image-quality" min="10" max="100" value="80"></label><p id="format-note" class="muted small">WebP balances size and image quality.</p><button class="button primary full-width" id="image-process" disabled>Process image →</button><p id="image-result" role="status" class="muted small"></p><a id="image-download" class="button secondary full-width" hidden download>Download image ↓</a><button class="text-link" id="save-preset">Save these settings</button></section></div>'''
-text_ui = '''<div class="text-stats"><div><strong id="stat-characters">0</strong><span>Characters</span></div><div><strong id="stat-words">0</strong><span>Words</span></div><div><strong id="stat-lines">0</strong><span>Lines</span></div><div><strong id="stat-reading">0 min</strong><span>Reading time</span></div></div><section class="panel text-panel"><div class="editor-toolbar"><div><button data-transform="upper">UPPERCASE</button><button data-transform="lower">lowercase</button><button data-transform="title">Title Case</button><button data-transform="clean">Clean spaces</button><button id="text-undo" disabled>↶ Undo</button></div><button id="text-clear">Clear</button></div><label class="sr-only" for="text-input">Text to edit</label><textarea id="text-input" placeholder="A thought, a paragraph, a rough first draft. Start here…" maxlength="100000"></textarea><div class="editor-bottom"><span id="draft-state" class="muted small">Processed in your browser. Save a draft when you’re ready.</span><div><button class="button secondary small-button" id="text-download">Download .txt</button><button class="button secondary small-button" id="text-copy">Copy text</button></div></div></section><div class="draft-controls"><label class="sr-only" for="draft-name">Draft name</label><input id="draft-name" maxlength="100" placeholder="Give this draft a name"><button class="button primary" id="save-draft">Save draft</button></div>'''
-timer_ui = '''<section class="panel timer-panel"><div class="timer-modes"><button data-mode="focus" class="active" aria-pressed="true">Focus</button><button data-mode="short" aria-pressed="false">Short break</button><button data-mode="long" aria-pressed="false">Long break</button></div><div class="timer-ring"><div><span class="eyebrow" id="timer-label">TIME FOR YOUR NEXT IDEA</span><span id="timer-display" role="timer" aria-label="25 minutes remaining">25:00</span><span id="timer-round">Session 1 of 4</span></div></div><div class="timer-actions"><button class="button primary" id="timer-start">Start focus</button><button class="button secondary" id="timer-reset">↶ Reset</button></div><p class="muted small">One thing at a time is enough.</p><details class="timer-settings"><summary>Adjust your rhythm</summary><div><label>Focus (min)<input id="duration-focus" type="number" min="1" max="120" value="25"></label><label>Short break<input id="duration-short" type="number" min="1" max="60" value="5"></label><label>Long break<input id="duration-long" type="number" min="1" max="60" value="15"></label></div><button class="button secondary small-button" id="timer-save-settings">Save settings</button></details></section><p class="timer-caption" id="timer-summary">Completed focus sessions appear in your workspace.</p>'''
-image_ui = image_ui.replace('id="image-file" type="file"', 'id="image-file" type="file" multiple data-lock')
-image_ui = image_ui.replace('Drop an image here', 'Drop up to 20 images here').replace('or click to choose a file', 'or click to choose files').replace('JPG, PNG or WebP · up to 20 MB', 'JPG, PNG or WebP · 20 MB each · 100 MB total')
-image_ui = image_ui.replace('px · aspect ratio locked', 'px · first image ratio; each image keeps its own ratio')
-for identifier in ('image-width', 'image-height', 'image-format', 'image-quality', 'image-process', 'change-image'):
-    image_ui = image_ui.replace('id="' + identifier + '"', 'id="' + identifier + '" data-lock')
+pages = {"": ("Useful tools for everyday things", home, "Home")}
+pages["projects"] = (
+    "Projects",
+    render_template(
+        "pages/projects.html",
+        intro=page_intro(
+            "THE PROJECT SHELF",
+            "Ideas, made tangible",
+            "Websites, software and creative experiments. Each one starts with a little curiosity.",
+        ),
+        project_cards="".join((project_card(p) for p in PROJECTS)),
+    ),
+    "Projects",
+)
+pages["tools"] = (
+    "Tools",
+    f'<section class="container page-section">{page_intro("THE EVERYDAY TOOLBOX", "A little help goes a long way", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{tool_directory()}</section>',
+    "Tools",
+)
+
+image_ui = render_template("tools/image-studio/batch.html")
+text_ui = render_template("tools/text-toolkit.html")
+timer_ui = render_template("tools/focus-timer.html")
+
+
 image_ui += '<button id="cancel-job" class="button secondary" hidden>Cancel</button><button id="image-zip" class="button secondary" hidden>Download all as ZIP ↓</button><div id="batch-results" class="batch-results" aria-live="polite"></div>'
-image_ui = EDITOR + '<div id="image-batch-mode">' + image_ui + '</div>' + PANEL
-VIEWS['pdf-toolkit'] = VIEWS['pdf-toolkit'].replace('<option value="export">PDF to PNG / JPG</option>', '<option value="export">PDF to PNG / JPG</option><option value="stamp">Page numbers / watermark</option><option value="metadata">View / clear document information</option>').replace('<div class="action-row"><button id="pdf-run"', PDF_SETTINGS + '<div class="action-row"><button id="pdf-run"')
-interfaces = {'image-studio': image_ui, 'text-toolkit': text_ui, 'focus-timer': timer_ui, **VIEWS}
+image_ui = EDITOR + '<div id="image-batch-mode">' + image_ui + "</div>" + PANEL
+
+interfaces = {
+    "image-studio": image_ui,
+    "text-toolkit": text_ui,
+    "focus-timer": timer_ui,
+    **VIEWS,
+}
 for t in TOOLS:
     ui = interfaces[t[0]]
     slug, glyph, name, title, desc, cat = t
-    pages['tools/'+slug] = (name, f'<section class="container page-section tool-page" data-tool="{slug}">{tool_heading(t, icon("star"))}{ui}</section>', 'Tools')
+    pages["tools/" + slug] = (
+        name,
+        f'<section class="container page-section tool-page" data-tool="{slug}">{tool_heading(t, icon("star"))}{ui}</section>',
+        "Tools",
+    )
 
 details = {
- '3a3d': ('An independent automotive showcase', '3A3D brings automotive browsing into a visual, editorial experience. The project combines a shared design system with a structured vehicle catalog.', ['Vehicle and brand discovery', 'Search, filtering and sorting', 'Reusable templates and catalog data'], 'HTML, CSS, JavaScript and a Python static-page generator.', 'https://3a3d.vercel.app/', 'Launch website', 'Car imagery from the existing project. This cover is a graphic composition, not a screenshot.'),
- 'salon-system': ('A software coursework project', 'An exploration of C++ and system design through a salon management application. The repository is the source of truth for implementation details.', ['Console application structure', 'Salon operations as a software domain', 'Coursework source available on GitHub'], 'C++. Explore the source for implementation and assignment context.', 'https://github.com/KenSeiisme/Programming-Assignment', 'View source code', 'Illustrative cover. The code graphic is not a screenshot of the application.'),
- 'ai-art': ('Experiments in local AI', 'A space for exploring image generation, composition and visual direction. The artwork collection lives on Pixiv as a separate creative destination.', ['Image-generation experiments', 'Creative direction and composition', 'An external artwork collection'], 'Local AI and digital image creation.', 'https://www.pixiv.net/users/43759201/artworks', 'View on Pixiv', 'Abstract graphic cover. Browse Pixiv to see the actual artworks.'),
+    "3a3d": (
+        "An independent automotive showcase",
+        (
+            "3A3D brings automotive browsing into a visual, editorial experience. "
+            "The project combines a shared design system with a structured vehicle "
+            "catalog."
+        ),
+        [
+            "Vehicle and brand discovery",
+            "Search, filtering and sorting",
+            "Reusable templates and catalog data",
+        ],
+        "HTML, CSS, JavaScript and a Python static-page generator.",
+        "https://3a3d.vercel.app/",
+        "Launch website",
+        "Car imagery from the existing project. This cover is a graphic composition, not a screenshot.",
+    ),
+    "salon-system": (
+        "A software coursework project",
+        (
+            "An exploration of C++ and system design through a salon management "
+            "application. The repository is the source of truth for implementation "
+            "details."
+        ),
+        [
+            "Console application structure",
+            "Salon operations as a software domain",
+            "Coursework source available on GitHub",
+        ],
+        "C++. Explore the source for implementation and assignment context.",
+        "https://github.com/KenSeiisme/Programming-Assignment",
+        "View source code",
+        "Illustrative cover. The code graphic is not a screenshot of the application.",
+    ),
+    "ai-art": (
+        "Experiments in local AI",
+        (
+            "A space for exploring image generation, composition and visual "
+            "direction. The artwork collection lives on Pixiv as a separate "
+            "creative destination."
+        ),
+        [
+            "Image-generation experiments",
+            "Creative direction and composition",
+            "An external artwork collection",
+        ],
+        "Local AI and digital image creation.",
+        "https://www.pixiv.net/users/43759201/artworks",
+        "View on Pixiv",
+        "Abstract graphic cover. Browse Pixiv to see the actual artworks.",
+    ),
 }
 for p in PROJECTS:
     slug, name, title, desc, cat, stack = p
     subtitle, overview, highlights, tech, url, cta, note = details[slug]
-    pages['projects/'+slug] = (name, f'<article class="container page-section project-detail"><a href="/projects/" class="back-link">← All projects</a><div class="detail-heading"><div><div class="eyebrow">{cat.upper()} / PROJECT NOTES</div><h1>{name}</h1><p>{subtitle}</p></div><a class="button primary" {"data-car" if slug=="3a3d" else ""} href="{url}" target="_blank" rel="noopener">{cta} ↗</a></div>{project_art(slug, True)}<p class="cover-note">{note}</p><div class="detail-columns"><section><h2>The idea</h2><p>{overview}</p><h2>What it explores</h2><ul>{"".join("<li>"+x+"</li>" for x in highlights)}</ul></section><aside class="panel"><div class="eyebrow">BUILT WITH</div><p>{tech}</p><div class="eyebrow">BY KENSEI</div><p>Part of an ongoing collection of projects and experiments.</p></aside></div></article>', 'Projects')
+    pages["projects/" + slug] = (
+        name,
+        render_template(
+            "pages/project-detail.html",
+            category=cat.upper(),
+            name=name,
+            subtitle=subtitle,
+            car_attribute="data-car" if slug == "3a3d" else "",
+            url=url,
+            cta=cta,
+            project_art=project_art(slug, True),
+            note=note,
+            overview=overview,
+            highlights="".join(("<li>" + x + "</li>" for x in highlights)),
+            tech=tech,
+        ),
+        "Projects",
+    )
 
-pages['workspace'] = ('Your workspace', f'<section class="container page-section">{page_intro("YOUR OWN LITTLE CORNER", "Pick up where you left off", "Your favorites, saved words and moments of focus.")}<div class="workspace-banner" id="workspace-account"><div><strong>On this device</strong><p>Local saves work now. Connect your account to sync between devices.</p></div><button class="button secondary" data-sign-in>Sign in with Google ↗</button></div><div class="workspace-stats"><div class="panel"><span>Focused today</span><strong id="today-focus">0 min</strong></div><div class="panel"><span>Last 7 days</span><strong id="week-focus">0 min</strong></div><div class="panel"><span>Saved drafts</span><strong id="draft-count">0</strong></div></div><section class="workspace-section"><h2>Favorite tools</h2><div class="tools-grid" id="favorite-tools"></div></section><section class="workspace-section"><h2>Saved drafts</h2><div id="saved-drafts" class="saved-list"></div></section><section class="workspace-section"><h2>Saved tool presets</h2><div id="saved-presets" class="saved-list"></div></section><section class="workspace-section"><h2>Recent focus sessions</h2><div id="saved-sessions" class="saved-list"></div></section><div id="private-workspace">{history("answer", "Answer Book history", "workspace-answers")}{history("decision", "Decision schemes", "workspace-decisions")}{FLASH_WORKSPACE}{SIXTH_WORKSPACE}</div><div class="workspace-footer"><button id="sign-out" class="button secondary" hidden>Sign out</button><button id="export-data" class="text-link">Export my workspace ↓</button></div></section>', 'Workspace')
-pages['profile'] = ('Profile', PROFILE_VIEW, 'Workspace')
-pages['auth/callback'] = ('Signing in', '<section class="container page-section"><div class="page-intro"><div class="eyebrow">YOUR WORKSPACE</div><h1>Bringing you back.</h1><p id="callback-status">Completing sign-in…</p><a class="button secondary" href="/workspace/">Go to workspace →</a></div></section>', 'Workspace')
-pages['privacy'] = ('Privacy', '<article class="container page-section prose"><div class="eyebrow">A LITTLE TRANSPARENCY</div><h1>Your work stays yours.</h1><h2>Browser tools</h2><p>Image, PDF, ZIP, QR, Markdown, color, unit conversion, text comparison and OCR processing happen in your browser. ZIP contents are checked and extracted locally; archive files are never uploaded. Password Generator uses cryptographic randomness and does not save, log or upload generated passwords. Copying a password places it on your device clipboard. Images, PDF files, QR content, Wi-Fi passwords and logos are not uploaded or saved to your workspace. QR appearance presets contain only colors and size. OCR downloads only the language packs you choose, and caches them in your browser. Existing text tools send text to cloud storage only when you explicitly save a signed-in draft. Answer Book and Decision Studio automatically save new or edited records: locally first, then privately to your signed-in account. Answer Book questions are never saved. Guest history is not automatically uploaded when you sign in.</p><h2>Network Test</h2><p>Network Test is an online measurement, started only by you. Your browser downloads and uploads synthetic test data directly to Cloudflare, which receives your connection IP and handles requests under its own privacy policy. A Full Test schedules 488.9 MB of payload at most; all attempts including retries share a 500 MB payload budget, with protocol overhead additional. Extra per-measurement and final-result reporting are disabled. The test stops when cancelled, hidden, left or timed out. The last 20 completed results, valid sample curves, connection organization and approximate region are stored only in this browser and can be deleted or cleared; they are never synced to your account. A small Cloudflare /meta request runs once after Start for connection details. Full IP is masked by default, exists only on the current page and is excluded from history, logs and every report. Exported PNG/CSV/JSON reports exclude full IP. Old summary-only history remains readable. Measurements describe your connection to Cloudflare, not every internet destination.</p><h2>Time, audio and data tools</h2><p>Time Studio uses your device clock and browser time-zone data. Clock settings and named countdowns stay on this device; it does not provide background alarms. File Renamer downloads renamed ZIP copies without changing originals. Audio files, waveform samples, exported audio, JSON and CSV inputs are processed locally. Audio is never saved or uploaded. JSON and CSV are not uploaded; optional text recovery can retain selected editor text on this device when enabled. MP3 encoding runs locally using a vendored encoder and WASM. CSV downloads escape spreadsheet formula cells and explain any escaping.</p><h2>Learning cards and local utilities</h2><p>Learning cards and review mastery are stored in IndexedDB on this device. Signed-in card decks sync privately to your account; guest decks are not automatically uploaded. Private decks are excluded from public profiles. Conflicts retain copies, and deleted cloud decks keep empty synchronization tombstones. Calculator history stays on this device. File checksums, subtitle files and local preview videos are processed here without uploads. Download subtitle edits before leaving. PDF information cleanup covers the standard Info dictionary and document/page XMP only.</p><h2>Study plans and whiteboards</h2><p>Plans and vector whiteboards save first in IndexedDB and sync privately when signed in. Guest records are copied to an account only through Copy to account. Sync queues are isolated by account; conflicting edits retain a copy. Whiteboards do not embed files or external pages. Workspace provides deletion and backups.</p><h2>Recording and QR scanning</h2><p>Screen recording, microphone recording and QR scanning start only after your action and device permission. Camera frames, scanned content and recordings stay on this page, are never uploaded or added to history, and must be downloaded to keep. Stopping or leaving releases capture devices. Screen recording continues when switching windows. Shared audio and recording formats depend on your browser. QR links open only when you choose.</p><h2>Local workspace</h2><p>Favorites, presets, saved drafts, timer settings and completed focus sessions are stored in this browser. Clearing browser storage removes local data. Use the workspace export to keep a backup.</p><h2>Optional account</h2><p>When configured, Google sign-in is provided through Supabase. Account identity and private items are stored with Supabase, with access limited to your account. Your Google display name and avatar initialize your public profile on first sign-in. Existing chosen names and later profile edits are retained. Profile names, avatars and biographies are public; your email and tool histories stay private. The application requests basic profile and email information, not access to your Google files.</p><h2>Typing and device tests</h2><p>Typing Practice scores stay in this browser. Ranked sends your completed input to Supabase to calculate a score; raw typed text is not retained. Public is the default typing mode and requires sign-in; Practice remains local and can be selected without an account. Qualifying best scores publish your current public name, speed, accuracy and date, with a link to your public profile. Uploaded avatars are the only images sent to profile storage, after you explicitly save them; file-tool inputs are never uploaded. Avatars are center-cropped and re-encoded in the browser, then stored publicly in Supabase Storage. Google avatars may be loaded from Google, and can be replaced or removed in Profile. English and Chinese use separate versioned boards. Device tests run only when started, stop when you leave their test area, and never save or upload key or mouse events.</p><h2>Optional local recovery</h2><p>Remember on this device is off by default and enabled separately for each supported tool and account. It stores only selected editor text and settings in IndexedDB on this browser, with up to three recent editing sessions and 2 MB per copy. Restore or discard dated copies explicitly. Recovery is separate from Workspace saves and is never automatically synced. Passwords, QR and Wi-Fi content, Answer Book questions, typing input, file objects and media are excluded. Turning recovery off clears this tool’s copies for the current identity. Existing private autosave records keep their original behavior.</p><h2>Your controls</h2><p>Delete or clear private histories in Workspace, export each history, or sign out. Autosave caches and retry queues are isolated by account. Conflicting scheme edits are kept as separate copies. Deleted cloud records retain an empty-content tombstone for sync; minimal retry receipts contain no saved record content. Signing out hides account data on this device. The platform does not add advertising trackers.</p><h2>External destinations</h2><p>About Me, 3A3D, GitHub and Pixiv are independent websites with their own privacy policies.</p></article>', 'Privacy')
-pages['404'] = ('Page not found', '<section class="container page-section"><div class="page-intro"><div class="eyebrow">404 / A SMALL DETOUR</div><h1>This idea isn’t here.</h1><p>The page may have moved. There’s plenty more to explore.</p><a href="/" class="button primary">Back to the workshop →</a></div></section>', 'Home')
-credits = json.loads((SOURCE / 'vendor/credits.json').read_text(encoding='utf-8'))
-credit_list = ''.join(f'<li><strong>{x["name"]} {x["version"]}</strong> · {x["license"]} · <a href="/vendor/licenses/{x["name"]}.txt">License</a></li>' for x in credits)
-pages['credits'] = ('Open-source credits', '<article class="container page-section prose"><div class="eyebrow">BUILT TOGETHER</div><h1>Open-source credits.</h1><p>These projects power the Workshop. The newer games, including Block Drop and online Pong, puzzle generators, computer opponents and board artwork use original native code and assets. Their licenses and copyright notices are included below.</p><ul class="credits-list">' + credit_list + '<li>Tesseract.js Core · Apache-2.0 · <a href="/vendor/licenses/tesseract.js-core.txt">License</a></li><li>Tesseract fast language models · Apache-2.0 · <a href="/vendor/licenses/tessdata-fast.txt">License</a></li></ul><p><a href="/vendor/licenses/bundled-notices.txt">Bundled dependency notices</a></p><p>Mediabunny and its MP3 extension use MPL-2.0; embedded LAME uses LGPL. <a href="/vendor/licenses/fourth-sources.txt">Pinned source and build information</a> · <a href="/vendor/sources/mediabunny-1.61.6.tgz">Mediabunny sources</a> · <a href="/vendor/sources/lame-3.100.tgz">LAME sources</a> · <a href="/vendor/sources/lame-license.txt">LAME license</a>.</p><p>Whiteboard uses Excalidraw and React. <a href="/vendor/licenses/sixth-notices.txt">Whiteboard dependency notices</a> · <a href="/vendor/licenses/excalidraw-fonts.txt">Local whiteboard font licenses</a>.</p><p>Files are processed in your browser. <a href="/privacy/">Read our privacy notes →</a></p></article>', 'Tools')
+pages["workspace"] = (
+    "Your workspace",
+    render_template(
+        "pages/workspace.html",
+        intro=page_intro(
+            "YOUR OWN LITTLE CORNER",
+            "Pick up where you left off",
+            "Your favorites, saved words and moments of focus.",
+        ),
+        answer_history=history("answer", "Answer Book history", "workspace-answers"),
+        decision_history=history("decision", "Decision schemes", "workspace-decisions"),
+        flashcards=FLASHCARD_WORKSPACE,
+        planner_and_whiteboards=PLANNER_WORKSPACE,
+    ),
+    "Workspace",
+)
+pages["profile"] = ("Profile", PROFILE_VIEW, "Workspace")
+pages["auth/callback"] = (
+    "Signing in",
+    render_template("pages/auth-callback.html"),
+    "Workspace",
+)
+pages["privacy"] = ("Privacy", render_template("pages/privacy.html"), "Privacy")
+pages["404"] = ("Page not found", render_template("pages/404.html"), "Home")
+credits = json.loads((SOURCE / "vendor/credits.json").read_text(encoding="utf-8"))
+credit_list = "".join(
+    f'<li><strong>{x["name"]} {x["version"]}</strong> · {x["license"]} · <a href="/vendor/licenses/{x["name"]}.txt">License</a></li>'
+    for x in credits
+)
+pages["credits"] = (
+    "Open-source credits",
+    render_template("pages/credits.html", credit_list=credit_list),
+    "Tools",
+)
 
 from games_view import directory as game_directory, game_page
-GAMES = json.loads((ROOT / 'data/games.json').read_text(encoding='utf-8'))
-pages['games'] = ('Games', game_directory(GAMES), 'Games')
+
+GAMES = json.loads((ROOT / "data/games.json").read_text(encoding="utf-8"))
+pages["games"] = ("Games", game_directory(GAMES), "Games")
 for game in GAMES:
-    pages['games/' + game['slug']] = (game['name'], game_page(game), 'Games')
-pages['privacy'] = (pages['privacy'][0], pages['privacy'][1].replace('<h2>Your controls</h2>', '<h2>Games and public boards</h2><p>Private game progress and personal bests save on this device. Signed-in account saves sync privately to Supabase, isolated from guest saves. Guest saves copy to an account only when requested. New signed-in games that support rankings default to Public; you may choose Private. Connect Four and Reversi stay Private. Their computer opponents run in a browser worker, and local two-player matches use the same device. Public runs send a versioned action replay to Supabase for verification and publish your current profile name, avatar, result and date. Replays are not public and are not retained after verification. Paused, hidden or restored games continue privately and cannot enter the board. Pending completed submissions stay on this device for retry, isolated by account. Leaderboards are casual and cannot prevent automated play. Game saves can be deleted in Games. Sound defaults to 35% and starts only after a game gesture; mute, volume and Effects preferences remain on this device. Brick Breaker current and Previous rules rankings are separate; legacy saves and results are retained. Profile pages include qualifying game bests and unlocked milestone badges with dates. Only server-verified Public results count toward the 30 milestones and personal progress; locked milestone progress is visible only to its owner. Historical badges use only provable results.</p><h3>Online friend Pong</h3><p>Pong requires both players to sign in. Room members see each other’s public profile name and avatar. Positions and game controls travel through private Supabase Realtime channels, not per-frame database writes. Only short-lived room lifecycle and membership are stored. Rooms have two players, waiting rooms expire after 15 minutes, and pauses expire after 60 seconds. Pong does not create public rankings, achievements, permanent match records or resumable saves. Leaving, account changes and expired rooms release the connection. Supabase handles connection metadata under its own privacy policy.</p><h2>Your controls</h2>'), pages['privacy'][2])
-pages['credits'] = (pages['credits'][0], pages['credits'][1].replace('<ul class="credits-list">', '<ul class="credits-list"><li>2048 rules reference · Gabriele Cirulli · MIT · <a href="/vendor/licenses/2048.txt">License and pinned reference</a></li>'), pages['credits'][2])
+    pages["games/" + game["slug"]] = (game["name"], game_page(game), "Games")
+
+
 for route, (title, body, active) in pages.items():
-    target = OUT / route / 'index.html' if route else OUT / 'index.html'
+    target = OUT / route / "index.html" if route else OUT / "index.html"
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(layout(title, body, active), encoding='utf-8')
-(OUT / '404.html').write_text(layout(*pages['404'][:2]), encoding='utf-8')
-(OUT / 'robots.txt').write_text('User-agent: *\nAllow: /\nDisallow: /workspace/\nDisallow: /auth/\nDisallow: /profile/\n', encoding='utf-8')
-print(f'Built {len(pages)} pages in {OUT}')
+    target.write_text(layout(title, body, active), encoding="utf-8")
+(OUT / "404.html").write_text(layout(*pages["404"][:2]), encoding="utf-8")
+(OUT / "robots.txt").write_text(
+    "User-agent: *\nAllow: /\nDisallow: /workspace/\nDisallow: /auth/\nDisallow: /profile/\n",
+    encoding="utf-8",
+)
+print(f"Built {len(pages)} pages in {OUT}")

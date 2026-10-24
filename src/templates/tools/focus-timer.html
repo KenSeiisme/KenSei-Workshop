@@ -1,0 +1,53 @@
+<section class="panel timer-panel">
+  <div class="timer-modes">
+    <button data-mode="focus" class="active" aria-pressed="true">Focus</button
+    ><button data-mode="short" aria-pressed="false">Short break</button
+    ><button data-mode="long" aria-pressed="false">Long break</button>
+  </div>
+  <div class="timer-ring">
+    <div>
+      <span class="eyebrow" id="timer-label">TIME FOR YOUR NEXT IDEA</span
+      ><span id="timer-display" role="timer" aria-label="25 minutes remaining"
+        >25:00</span
+      ><span id="timer-round">Session 1 of 4</span>
+    </div>
+  </div>
+  <div class="timer-actions">
+    <button class="button primary" id="timer-start">Start focus</button
+    ><button class="button secondary" id="timer-reset">↶ Reset</button>
+  </div>
+  <p class="muted small">One thing at a time is enough.</p>
+  <details class="timer-settings">
+    <summary>Adjust your rhythm</summary>
+    <div>
+      <label
+        >Focus (min)<input
+          id="duration-focus"
+          type="number"
+          min="1"
+          max="120"
+          value="25" /></label
+      ><label
+        >Short break<input
+          id="duration-short"
+          type="number"
+          min="1"
+          max="60"
+          value="5" /></label
+      ><label
+        >Long break<input
+          id="duration-long"
+          type="number"
+          min="1"
+          max="60"
+          value="15"
+      /></label>
+    </div>
+    <button class="button secondary small-button" id="timer-save-settings">
+      Save settings
+    </button>
+  </details>
+</section>
+<p class="timer-caption" id="timer-summary">
+  Completed focus sessions appear in your workspace.
+</p>

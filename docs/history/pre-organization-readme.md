@@ -130,7 +130,6 @@ PDF Toolkit adds single-PDF page-number/watermark and information-cleanup operat
 
 Apply migrations in order and run supabase/checks/verify-flashcards.sql in a rolled-back transaction to verify production permissions without retaining test records. Run test:fifth with TEST_BASE_URL pointed at the preview, then the original suites. See [fifth-batch validation](docs/validation/fifth-batch-validation.md). Publish through the existing GitHub branch and Vercel integration.
 
-
 ## Sixth batch: planning, whiteboards and capture
 
 The shared catalog now contains 28 tools. Study Planner and Whiteboard are Productivity tools; Screen Recorder is a Utility. QR Studio adds a local image/camera Scan tab and Audio Studio adds microphone recording. Games remain separate.

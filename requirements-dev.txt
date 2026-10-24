@@ -1,0 +1,2 @@
+# Development formatting only. Site builds still use Python's standard library.
+black==26.10.1

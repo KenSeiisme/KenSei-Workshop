@@ -1,8 +1,6 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
 const sdk = `
 export function createClient(url, key, options) {
@@ -34,7 +32,10 @@ export function createClient(url, key, options) {
   };
 }`;
 (async () => {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true });
+  const browser = await chromium.launch({
+    channel: process.env.BROWSER_CHANNEL || "msedge",
+    headless: true,
+  });
   const results = [];
   async function scenario(mode, route, check) {
     const context = await browser.newContext();

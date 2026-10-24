@@ -1,9 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { unzipSync } = require("fflate");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
 const checks = [];
 const pass = (s) => {
@@ -11,7 +9,10 @@ const pass = (s) => {
   console.log("PASS " + s);
 };
 (async () => {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true });
+  const browser = await chromium.launch({
+    channel: process.env.BROWSER_CHANNEL || "msedge",
+    headless: true,
+  });
   const errors = [],
     uploads = [];
   async function open({ blocked = false, picaUnavailable = false } = {}) {

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="google-site-verification"
+      content="${google_site_verification}"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${title} — KenSei</title>
+    <meta name="description" content="${description}" />
+    <meta name="theme-color" content="#111015" />
+    <meta property="og:title" content="${title} — KenSei" />
+    <meta property="og:description" content="${description}" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/tools.css" />
+    <link rel="stylesheet" href="/planner.css" />
+    <link rel="stylesheet" href="/whiteboard.css" />
+    <link rel="stylesheet" href="/media.css" />
+    ${tool_css}${game_css}${profile_css}
+    <script src="/config.js" defer></script>
+    <script src="/tools-data.js" defer></script>
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    ${header}
+    <main id="main">${content}</main>
+    <footer class="footer">
+      <div class="container footer-inner">
+        <a class="brand" href="/">KenSei<span class="brand-dot">.</span></a>
+        <p>A small corner of the internet, made with care.</p>
+        <div>
+          <a href="/tools/">Tools</a><a href="/games/">Games</a
+          ><a href="/projects/">Projects</a><a href="/privacy/">Privacy</a
+          ><a href="/credits/">Open-source credits</a
+          ><a
+            data-personal
+            href="https://kensei-eta.vercel.app/"
+            target="_blank"
+            rel="noopener"
+            >About Me ↗</a
+          ><span>© 2026 KenSei</span>
+        </div>
+      </div>
+    </footer>
+    <div class="toast" role="status" aria-live="polite" hidden></div>
+    <dialog id="auth-dialog">
+      <button class="dialog-close icon-button" aria-label="Close dialog">
+        ×
+      </button>
+      <div class="eyebrow">YOUR SPACE, EVERYWHERE</div>
+      <h2>A little more personal.</h2>
+      <p>
+        Sign in to keep your workspace together and join Public typing and
+        games. Your Google name and avatar initialize your public profile, which
+        you can edit anytime.
+      </p>
+      <button class="button primary google-button" id="google-login">
+        <b>G</b> Continue with Google
+      </button>
+      <p class="muted small" id="auth-note">
+        Local tools, Typing Practice and Private games are available without an
+        account.
+      </p>
+    </dialog>
+    <noscript
+      ><div class="noscript">
+        Enable JavaScript to use interactive tools. Project pages and navigation
+        remain available.
+      </div></noscript
+    >
+  </body>
+</html>

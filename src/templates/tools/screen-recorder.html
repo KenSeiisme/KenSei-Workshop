@@ -1,0 +1,82 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>Capture what you want to show</h2>
+    <p>
+      Record a browser tab, window or screen. Your browser lets you choose the
+      source; the recording stays on this device.
+    </p>
+    <div class="notice-box">
+      <strong>Desktop browsers work best</strong>
+      <p>
+        Screen capture and shared audio depend on your browser and system. No
+        screen or microphone access until you start.
+      </p>
+    </div>
+    <label class="check-label"
+      ><input id="screen-shared-audio" type="checkbox" />Request shared tab or
+      system audio</label
+    >
+    <label class="check-label"
+      ><input id="screen-microphone" type="checkbox" />Include microphone</label
+    >
+    <p class="muted small">
+      Both audio options start off. Choose “Share audio” in the browser picker
+      when available. Requested quality: up to 1080p at 30 fps; the browser
+      decides the actual capture size.
+    </p>
+    <div class="capture-meter-row">
+      <span id="screen-time" class="capture-clock">00:00</span
+      ><span id="screen-bytes" class="muted small">0 MB</span>
+    </div>
+    <div class="action-row">
+      <button id="screen-start" class="button primary">Start recording</button
+      ><button id="screen-pause" class="button secondary" disabled>Pause</button
+      ><button id="screen-stop" class="button secondary" disabled>
+        Stop recording
+      </button>
+    </div>
+    <p id="screen-status" class="muted small" role="status" aria-live="polite">
+      Ready. Nothing is being captured.
+    </p>
+    <p id="screen-specs" class="muted small"></p>
+    <p class="muted small">
+      Automatically stops after 10 minutes elapsed or at 250 MB. Recording
+      continues while this tab is in the background. Leaving the page releases
+      capture; download your result before leaving.
+    </p>
+  </section>
+  <section class="panel capture-preview-panel">
+    <h2>Your preview</h2>
+    <video
+      id="screen-live"
+      class="capture-video"
+      muted
+      playsinline
+      autoplay
+      hidden
+    ></video
+    ><video
+      id="screen-result"
+      class="capture-video"
+      playsinline
+      controls
+      preload="metadata"
+      hidden
+    ></video>
+    <p id="screen-placeholder" class="muted">
+      A live preview and your finished recording appear here.
+    </p>
+    <div class="action-row">
+      <button id="screen-download" class="button primary" disabled>
+        Download recording ↓</button
+      ><button id="screen-discard" class="button secondary" disabled>
+        Discard result
+      </button>
+    </div>
+    <p class="muted small">
+      Downloads use a supported native WebM or MP4 format. Preview audio is
+      muted during capture to prevent feedback. Files are not uploaded or stored
+      in your account.
+    </p>
+  </section>
+</div>

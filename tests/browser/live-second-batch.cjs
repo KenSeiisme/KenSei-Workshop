@@ -1,11 +1,12 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
 (async () => {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true });
+  const browser = await chromium.launch({
+    channel: process.env.BROWSER_CHANNEL || "msedge",
+    headless: true,
+  });
   const c = await browser.newContext({ reducedMotion: "reduce" }),
     errors = [],
     uploads = [];
@@ -48,7 +49,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     await p.waitForSelector('[data-ready="true"]');
     await p.locator("#answer-question").fill("DO NOT UPLOAD THIS QUESTION");
     await p.locator("#answer-draw").click();
-    await p.getByText("Answer history", {exact:true}).click();
+    await p.getByText("Answer history", { exact: true }).click();
     await p.waitForSelector("#answer-history .saved-row");
     assert(
       !(await p.evaluate(() =>

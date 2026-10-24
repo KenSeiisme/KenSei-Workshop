@@ -1,0 +1,80 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>Words, at the right moment</h2>
+    <label
+      >Import SRT / WebVTT<input
+        id="sub-file"
+        type="file"
+        accept=".srt,.vtt,text/vtt,text/plain"
+    /></label>
+    <p class="muted small">
+      UTF-8 / BOM · 5 MB · 5,000 cues. Plain cues only; WebVTT regions, layout
+      settings and style blocks are not supported. Text is displayed literally.
+    </p>
+    <div class="form-row">
+      <label>Start<input id="sub-start" value="00:00:00.000" /></label
+      ><label>End<input id="sub-end" value="00:00:02.000" /></label>
+    </div>
+    <label
+      >Subtitle text<textarea
+        id="sub-text"
+        rows="5"
+        maxlength="10000"
+      ></textarea>
+    </label>
+    <div class="action-row">
+      <button id="sub-save" class="button primary">Save cue</button
+      ><button id="sub-new" class="button secondary">New cue</button
+      ><button id="sub-delete" class="text-link">Delete selected</button>
+    </div>
+    <label
+      >Shift all cues by milliseconds<input
+        id="sub-offset"
+        type="number"
+        value="1000"
+        step="1" /></label
+    ><button id="sub-shift" class="button secondary">Apply time shift</button>
+    <p class="muted small">
+      Positive delays subtitles; negative advances them. A shift that creates
+      negative times is rejected.
+    </p>
+  </section>
+  <section class="panel tool-form">
+    <h2>Preview with your video</h2>
+    <label
+      >Optional local video<input
+        id="sub-video-file"
+        type="file"
+        accept="video/*"
+    /></label>
+    <p class="muted small">
+      Up to 500 MB. Video is played from your device; supported formats depend
+      on your browser.
+    </p>
+    <video id="sub-video" controls playsinline hidden></video>
+    <pre id="sub-overlay" class="subtitle-overlay" aria-live="off"></pre>
+    <label
+      >Export format<select id="sub-format">
+        <option value="srt">SRT</option>
+        <option value="vtt">WebVTT</option>
+      </select></label
+    ><button id="sub-download" class="button primary" disabled>
+      Download subtitles ↓
+    </button>
+    <p class="muted small">
+      Edits stay on this page. Download to keep them. No automatic
+      transcription, translation or video export.
+    </p>
+  </section>
+</div>
+${job_status}
+<section class="panel daily-history">
+  <h2>Your cues</h2>
+  <p id="sub-warning" class="muted small"></p>
+  <div class="action-row">
+    <button id="sub-prev" class="button secondary">Previous</button
+    ><span id="sub-page"></span
+    ><button id="sub-next" class="button secondary">Next</button>
+  </div>
+  <div id="sub-list"></div>
+</section>

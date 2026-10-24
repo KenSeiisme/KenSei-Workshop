@@ -1,0 +1,78 @@
+<div class="studio-grid">
+  <section class="panel image-input">
+    <label class="dropzone" id="dropzone"
+      ><input
+        id="image-file"
+        type="file"
+        multiple
+        data-lock
+        accept="image/jpeg,image/png,image/webp"
+      /><span class="upload-icon">↥</span
+      ><strong>Drop up to 20 images here</strong
+      ><span>or click to choose files</span
+      ><small>JPG, PNG or WebP · 20 MB each · 100 MB total</small></label
+    >
+    <div class="image-stage" hidden>
+      <img id="image-preview" alt="Selected image preview" /><button
+        id="change-image"
+        data-lock
+        class="button secondary small-button"
+      >
+        Choose another image
+      </button>
+    </div>
+    <p id="image-info" class="muted small">Your image stays on this device.</p>
+  </section>
+  <section class="panel settings-panel">
+    <h2>Make it yours</h2>
+    <label
+      >Width <span>px</span
+      ><input
+        type="number"
+        id="image-width"
+        data-lock
+        min="1"
+        max="12000"
+        disabled /></label
+    ><label
+      >Height <span>px · first image ratio; each image keeps its own ratio</span
+      ><input
+        type="number"
+        id="image-height"
+        data-lock
+        min="1"
+        max="12000"
+        disabled /></label
+    ><label
+      >Output format<select id="image-format" data-lock>
+        <option value="image/webp">WebP</option>
+        <option value="image/jpeg">JPG · white background</option>
+        <option value="image/png">PNG · lossless</option>
+      </select></label
+    ><label
+      >Quality <output id="quality-value">80%</output
+      ><input
+        type="range"
+        id="image-quality"
+        data-lock
+        min="10"
+        max="100"
+        value="80"
+    /></label>
+    <p id="format-note" class="muted small">
+      WebP balances size and image quality.
+    </p>
+    <button
+      class="button primary full-width"
+      id="image-process"
+      data-lock
+      disabled
+    >
+      Process image →
+    </button>
+    <p id="image-result" role="status" class="muted small"></p>
+    <a id="image-download" class="button secondary full-width" hidden download
+      >Download image ↓</a
+    ><button class="text-link" id="save-preset">Save these settings</button>
+  </section>
+</div>

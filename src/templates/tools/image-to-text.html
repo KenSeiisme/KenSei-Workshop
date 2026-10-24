@@ -1,0 +1,74 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>From image to words</h2>
+    <label
+      >Choose an image<input
+        id="ocr-file"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        data-lock
+    /></label>
+    <p class="muted small" id="ocr-file-info">
+      JPG, PNG or WebP · up to 20 MB and 40 megapixels
+    </p>
+    <img
+      id="ocr-preview"
+      class="ocr-preview"
+      alt="Selected image for recognition"
+      hidden
+    />
+    <fieldset>
+      <legend>Languages in this image</legend>
+      <label class="check-label"
+        ><input
+          type="checkbox"
+          name="ocr-language"
+          value="eng"
+          checked
+          data-lock
+        />English</label
+      ><label class="check-label"
+        ><input
+          type="checkbox"
+          name="ocr-language"
+          value="chi_sim"
+          data-lock
+        />Simplified Chinese</label
+      ><label class="check-label"
+        ><input
+          type="checkbox"
+          name="ocr-language"
+          value="chi_tra"
+          data-lock
+        />Traditional Chinese</label
+      ><label class="check-label"
+        ><input
+          type="checkbox"
+          name="ocr-language"
+          value="msa"
+          data-lock
+        />Malay (Bahasa Melayu)</label
+      >
+    </fieldset>
+    <p class="muted small">
+      Only selected language packs are downloaded, then cached in this browser.
+      Clear printed text works best; review the result for mistakes.
+    </p>
+    <button id="ocr-run" class="button primary" data-lock>
+      Extract text →
+    </button>
+  </section>
+  <section class="panel editor-pane">
+    <h2><label for="ocr-output">Recognized text</label></h2>
+    <textarea
+      id="ocr-output"
+      maxlength="100000"
+      placeholder="Your extracted text will appear here. You can edit it before saving."
+    ></textarea>
+    <div class="action-row">
+      <button id="ocr-copy" class="button secondary">Copy text</button
+      ><button id="ocr-download" class="button secondary">Download .txt</button>
+    </div>
+  </section>
+</div>
+${job_status}${draft_controls}

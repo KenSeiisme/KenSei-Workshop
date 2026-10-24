@@ -1,0 +1,11 @@
+node_modules/
+dist/
+_qa/
+projects/
+src/vendor/
+src/assets/
+supabase/migrations/
+supabase/schema.sql
+pnpm-lock.yaml
+.vercel/
+.openai/

@@ -29,15 +29,15 @@
 
 The user explicitly authorized the temporary endpoint after the initial automatic approval rejection. On 2026-10-23T15:37:16.161Z, `games-session` version 8 briefly added the bounded benchmark wrapper with the gateway JWT check retained, a random 256-bit header secret and a five-minute hard expiry. Other routes delegated to the canonical handler. The benchmark creates no account, score, save or database fixture.
 
-| Measurement | Production result |
-| --- | --- |
-| Natural three-stage game | 980 points, won after 16,715 ticks |
-| Compact replay | 7,200 events, 81,283 bytes; canonical score/moves matched |
-| Fixture generation | 64.215ms elapsed |
-| Canonical replay | 28.641ms elapsed |
-| Three balls, 40 collision candidates, 18,000 steps | 147.579ms elapsed, no steps skipped |
-| Combined bounded computation | 241.094ms elapsed |
-| Platform-reported isolate CPU | 258ms; Shutdown reason EarlyDrop, not CPUTime |
+| Measurement                                        | Production result                                         |
+| -------------------------------------------------- | --------------------------------------------------------- |
+| Natural three-stage game                           | 980 points, won after 16,715 ticks                        |
+| Compact replay                                     | 7,200 events, 81,283 bytes; canonical score/moves matched |
+| Fixture generation                                 | 64.215ms elapsed                                          |
+| Canonical replay                                   | 28.641ms elapsed                                          |
+| Three balls, 40 collision candidates, 18,000 steps | 147.579ms elapsed, no steps skipped                       |
+| Combined bounded computation                       | 241.094ms elapsed                                         |
+| Platform-reported isolate CPU                      | 258ms; Shutdown reason EarlyDrop, not CPUTime             |
 
 CPU evidence belongs to the version-8 execution `5ed1bb9a-283f-49a1-8f6e-7f8dbba23b10`. The 258ms platform value includes isolate overhead and is separate from individual `performance.now()` elapsed timings. This one bounded measurement fits the documented 2,000ms CPU budget; it is not a guarantee for every future workload or concurrent load.
 

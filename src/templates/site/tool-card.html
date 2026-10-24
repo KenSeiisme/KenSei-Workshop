@@ -1,0 +1,26 @@
+<article
+  class="tool-card"
+  data-tool-card
+  data-search="${lower} ${lower_2} ${lower_3}"
+  data-category="${lower_4}"
+>
+  <div class="tool-card-top">
+    <span class="tool-icon ${glyph}">${icon}</span
+    ><button
+      class="favorite icon-button"
+      data-favorite="${slug}"
+      aria-label="Favorite ${name}"
+      aria-pressed="false"
+    >
+      ${icon_star}
+    </button>
+  </div>
+  <a href="/tools/${slug_2}/"
+    ><h3>${name_2} <span>↗</span></h3></a
+  >
+  <p>${desc}</p>
+  <div class="tool-bottom">
+    <span class="small-tag">${cat}</span
+    ><a href="/tools/${slug_3}/" class="text-link">Open tool ${icon_arrow}</a>
+  </div>
+</article>

@@ -2,9 +2,7 @@ const assert = require("node:assert/strict"),
   fs = require("node:fs"),
   { PDFDocument, PDFName, PDFString, degrees } = require("pdf-lib"),
   { createHash } = require("node:crypto");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
   checks = [],
   pass = (x) => {
@@ -12,7 +10,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
     console.log("PASS " + x);
   };
 (async () => {
-  const b = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true }),
+  const b = await chromium.launch({
+      channel: process.env.BROWSER_CHANNEL || "msedge",
+      headless: true,
+    }),
     c = await b.newContext({ reducedMotion: "reduce" }),
     p = await c.newPage(),
     errors = [],
@@ -260,7 +261,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
     await p.waitForTimeout(150);
     await p.fill("#edit-width", "128");
     await p.selectOption("#edit-format", "image/png");
-    await p.getByText("Watermark settings", {exact:true}).click();
+    await p.getByText("Watermark settings", { exact: true }).click();
     await p.fill("#edit-watermark", "KenSei 中文");
     await p.click("#edit-rotate");
     await p.fill("#edit-width", "128");

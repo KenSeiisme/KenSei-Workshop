@@ -1,90 +1,410 @@
 """Games remain independent from the tool catalog and workspace."""
+
+from template_renderer import render_template
 from html import escape
 from pong_view import VIEW as PONG_VIEW
 
 HELP = {
-    'block-drop': 'Stack seven kinds of falling pieces on a 10 × 20 board. Left/right or A/D move; Up/X rotates clockwise, Z counterclockwise, Down/S soft-drops, Space hard-drops, C/Shift holds once per piece. SRS wall kicks, seven-piece bags, a ghost and three-piece preview are included. Clear 1/2/3/4 lines for 100/300/500/800 × level; soft drop adds 1 per cell and hard drop 2. Every 10 lines increases level. Classic ends when the stack reaches the top. Sprint ranks completed 40-line runs by server time. Pause and restore are Private.',
-    'pong': 'Create an online invitation room. Both players sign in and press Ready. First to seven points wins.',
-    'sudoku': 'Fill each row, column and 3 × 3 box with digits 1–9. Select a cell and use the number pad or keyboard. Pencil notes are available in either mode. Conflicts show duplicates, not hidden answers. Private provides one-step Undo and a one-cell Hint. Complete a Public puzzle without hints or interruption to enter its difficulty board.',
-    'nonogram': 'The numbers show consecutive filled runs in each row and column, in order. Separate runs with at least one empty square. Switch Fill / Mark or use X to mark an empty square; drag to paint. A matching clue line is highlighted. Scroll the clue area to pan larger boards. Private provides Undo and a one-cell Hint. Only a completed Public puzzle can rank.',
-    'block-puzzle': 'Place each of the three shapes, then receive a new tray. Tap a shape and a board square, or drag it into place. The selected square is the shape’s top-left corner. Arrow keys move the placement cursor; Enter places. Full rows and columns clear together. Each placed cell earns 1 point, each cleared line 10. Shapes cannot rotate. The game ends when none of the remaining shapes fits.',
-    'brick-breaker': 'Move the paddle with your pointer, touch, arrow keys or A / D. Catch ×3 Multiball, ↔ Wide Paddle (12 seconds), and ¾ Slow Ball (8 seconds) drops. Only losing all active balls costs a life. New games use powerup rules v2; old saves use Legacy rules. Tap Launch or press Space to serve. Break each brick for 10 points; clear three stages using three shared lives. A new ball waits for your launch after a miss. The five-minute active-play limit includes waiting to launch. Only natural endings, time limit or all three cleared stages finish Public runs.',
-    'connect-four': 'Drop a piece into one of seven columns. Connect four horizontally, vertically or diagonally to win. A full board without a winner is a draw. Choose three computer difficulties or two players on this device. Choose first or second before starting. Private only: pause, continue and undo your last human turn (one move for two players).',
-    'reversi': 'Black plays first. Place a disc on a marked legal square to enclose and flip opponent discs along a row, column or diagonal. The opponent is skipped automatically if no move is legal. When neither player can move, the larger disc count wins; equal counts draw. Choose a computer difficulty or two local players. Private only, with save and Undo.',
-    '2048': 'Use arrow keys, WASD, swipe, or the direction buttons. Equal tiles merge once per move; their new value adds to your score. New tiles are 2 (90%) or 4 (10%). Reaching 2048 is a milestone: keep playing until no moves remain. One-step Undo is available in Private.',
-    'minesweeper': 'Reveal every safe square to win. Your first reveal and its neighbors are safe. Right-click to flag; on touch use Reveal / Flag. Activate an already-open number to reveal its neighbors when the surrounding flag count matches. Incorrect flags can lose the game. Random boards may require a guess. Large boards pan inside the game area.',
-    'snake': 'Use arrow keys, WASD, swipe, or the direction buttons. Each food adds 10 points and one segment. Avoid walls and your own body; filling the board wins. Slow, Normal and Fast use 6, 10 and 14 cells per second. Direction changes are accepted once per game tick.',
-    'memory-match': 'Select two cards to find a matching pair. Each pair of flips counts as one attempt. A mismatch stays visible for 650 ms; wait before trying again. Match every pair to finish. Fewer attempts rank first, then faster completion.',
+    "block-drop": (
+        "Stack seven kinds of falling pieces on a 10 × 20 board. Left/right or "
+        "A/D move; Up/X rotates clockwise, Z counterclockwise, Down/S "
+        "soft-drops, Space hard-drops, C/Shift holds once per piece. SRS wall "
+        "kicks, seven-piece bags, a ghost and three-piece preview are included."
+        " Clear 1/2/3/4 lines for 100/300/500/800 × level; soft drop adds 1 per"
+        " cell and hard drop 2. Every 10 lines increases level. Classic ends "
+        "when the stack reaches the top. Sprint ranks completed 40-line runs by"
+        " server time. Pause and restore are Private."
+    ),
+    "pong": "Create an online invitation room. Both players sign in and press Ready. First to seven points wins.",
+    "sudoku": (
+        "Fill each row, column and 3 × 3 box with digits 1–9. Select a cell and"
+        " use the number pad or keyboard. Pencil notes are available in either "
+        "mode. Conflicts show duplicates, not hidden answers. Private provides "
+        "one-step Undo and a one-cell Hint. Complete a Public puzzle without "
+        "hints or interruption to enter its difficulty board."
+    ),
+    "nonogram": (
+        "The numbers show consecutive filled runs in each row and column, in "
+        "order. Separate runs with at least one empty square. Switch Fill / "
+        "Mark or use X to mark an empty square; drag to paint. A matching clue "
+        "line is highlighted. Scroll the clue area to pan larger boards. "
+        "Private provides Undo and a one-cell Hint. Only a completed Public "
+        "puzzle can rank."
+    ),
+    "block-puzzle": (
+        "Place each of the three shapes, then receive a new tray. Tap a shape "
+        "and a board square, or drag it into place. The selected square is the "
+        "shape’s top-left corner. Arrow keys move the placement cursor; Enter "
+        "places. Full rows and columns clear together. Each placed cell earns 1"
+        " point, each cleared line 10. Shapes cannot rotate. The game ends when"
+        " none of the remaining shapes fits."
+    ),
+    "brick-breaker": (
+        "Move the paddle with your pointer, touch, arrow keys or A / D. Catch "
+        "×3 Multiball, ↔ Wide Paddle (12 seconds), and ¾ Slow Ball (8 seconds) "
+        "drops. Only losing all active balls costs a life. New games use "
+        "powerup rules v2; old saves use Legacy rules. Tap Launch or press "
+        "Space to serve. Break each brick for 10 points; clear three stages "
+        "using three shared lives. A new ball waits for your launch after a "
+        "miss. The five-minute active-play limit includes waiting to launch. "
+        "Only natural endings, time limit or all three cleared stages finish "
+        "Public runs."
+    ),
+    "connect-four": (
+        "Drop a piece into one of seven columns. Connect four horizontally, "
+        "vertically or diagonally to win. A full board without a winner is a "
+        "draw. Choose three computer difficulties or two players on this "
+        "device. Choose first or second before starting. Private only: pause, "
+        "continue and undo your last human turn (one move for two players)."
+    ),
+    "reversi": (
+        "Black plays first. Place a disc on a marked legal square to enclose "
+        "and flip opponent discs along a row, column or diagonal. The opponent "
+        "is skipped automatically if no move is legal. When neither player can "
+        "move, the larger disc count wins; equal counts draw. Choose a computer"
+        " difficulty or two local players. Private only, with save and Undo."
+    ),
+    "2048": (
+        "Use arrow keys, WASD, swipe, or the direction buttons. Equal tiles "
+        "merge once per move; their new value adds to your score. New tiles are"
+        " 2 (90%) or 4 (10%). Reaching 2048 is a milestone: keep playing until "
+        "no moves remain. One-step Undo is available in Private."
+    ),
+    "minesweeper": (
+        "Reveal every safe square to win. Your first reveal and its neighbors "
+        "are safe. Right-click to flag; on touch use Reveal / Flag. Activate an"
+        " already-open number to reveal its neighbors when the surrounding flag"
+        " count matches. Incorrect flags can lose the game. Random boards may "
+        "require a guess. Large boards pan inside the game area."
+    ),
+    "snake": (
+        "Use arrow keys, WASD, swipe, or the direction buttons. Each food adds "
+        "10 points and one segment. Avoid walls and your own body; filling the "
+        "board wins. Slow, Normal and Fast use 6, 10 and 14 cells per second. "
+        "Direction changes are accepted once per game tick."
+    ),
+    "memory-match": (
+        "Select two cards to find a matching pair. Each pair of flips counts as"
+        " one attempt. A mismatch stays visible for 650 ms; wait before trying "
+        "again. Match every pair to finish. Fewer attempts rank first, then "
+        "faster completion."
+    ),
 }
 DETAILS = {
-    'block-drop': ('11', 'Find your stack rhythm.', 'Classic / 40-line Sprint', 'Keys / touch buttons'),
-    'pong': ('12', 'A friend on the other side.', 'Online friends · Private', 'Pointer / touch / keys'),
-    'sudoku': ('05', 'A little room for logic.', '3 difficulties', 'Keys / number pad'),
-    'nonogram': ('06', 'A picture in the clues.', '5 × 5 to 15 × 15', 'Fill / mark'),
-    'block-puzzle': ('07', 'Make a little space.', '8 × 8 board', 'Drag / tap'),
-    'brick-breaker': ('08', 'Keep a good thing bouncing.', '3 stages · 5 minutes', 'Pointer / arrows'),
-    'connect-four': ('09', 'One move ahead.', '3 AI levels', 'Tap a column'),
-    'reversi': ('10', 'Turn the whole picture.', '3 AI levels', 'Tap a square'),
-    '2048': ('01', 'Merge. Build. Repeat.', '4 × 4 board', 'Arrow keys / swipe'),
-    'minesweeper': ('02', 'A little calculated risk.', '3 difficulties', 'Reveal / flag'),
-    'snake': ('03', 'One more bite.', '3 speeds', 'Arrow keys / swipe'),
-    'memory-match': ('04', 'Find your other half.', '6–12 pairs', 'Tap to match'),
+    "block-drop": (
+        "11",
+        "Find your stack rhythm.",
+        "Classic / 40-line Sprint",
+        "Keys / touch buttons",
+    ),
+    "pong": (
+        "12",
+        "A friend on the other side.",
+        "Online friends · Private",
+        "Pointer / touch / keys",
+    ),
+    "sudoku": ("05", "A little room for logic.", "3 difficulties", "Keys / number pad"),
+    "nonogram": ("06", "A picture in the clues.", "5 × 5 to 15 × 15", "Fill / mark"),
+    "block-puzzle": ("07", "Make a little space.", "8 × 8 board", "Drag / tap"),
+    "brick-breaker": (
+        "08",
+        "Keep a good thing bouncing.",
+        "3 stages · 5 minutes",
+        "Pointer / arrows",
+    ),
+    "connect-four": ("09", "One move ahead.", "3 AI levels", "Tap a column"),
+    "reversi": ("10", "Turn the whole picture.", "3 AI levels", "Tap a square"),
+    "2048": ("01", "Merge. Build. Repeat.", "4 × 4 board", "Arrow keys / swipe"),
+    "minesweeper": (
+        "02",
+        "A little calculated risk.",
+        "3 difficulties",
+        "Reveal / flag",
+    ),
+    "snake": ("03", "One more bite.", "3 speeds", "Arrow keys / swipe"),
+    "memory-match": ("04", "Find your other half.", "6–12 pairs", "Tap to match"),
 }
 
 
 def preview(kind):
-    if kind == 'block-drop':
-        return '<div class="mini-drop" aria-hidden="true">'+''.join(f'<span data-value="{1 if i in (2,7,8,9,18,19,20,21,24,25,26,27,28,29) else 0}"></span>' for i in range(30))+'</div>'
-    if kind == 'pong':
-        return '<svg viewBox="0 0 220 150" aria-hidden="true"><path d="M30 48v50M190 34v50" stroke="#f2c68c" stroke-width="8" stroke-linecap="round"/><path d="M110 16v118" stroke="#ffffff28" stroke-dasharray="6 7"/><circle cx="143" cy="66" r="7" fill="#f2c68c"/><path d="m142 66-24 14" stroke="#f2c68c55" stroke-width="3"/></svg>'
-    if kind == '2048':
-        return '<div class="mini-tiles" aria-hidden="true">' + ''.join(f'<span data-value="{n}">{n}</span>' for n in ['2','4','','8','16','32','4','','','64','128','2','4','','256','2048']) + '</div>'
-    if kind == 'mines':
-        return '<div class="mini-mines" aria-hidden="true">' + ''.join(f'<span data-value="{n}">{n}</span>' for n in ['','','1','1','','⚑','','2','','1','1','','⚑','','1','','2','','','1','','','1','','']) + '</div>'
-    if kind == 'snake':
-        return '<svg viewBox="0 0 220 150" aria-hidden="true"><path d="M40 110V50H120V90H175" fill="none" stroke="currentColor" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/><circle cx="178" cy="86" r="2" fill="#122b24"/><circle cx="178" cy="94" r="2" fill="#122b24"/><circle cx="175" cy="37" r="10" fill="#efbdd9"/><path d="m173 25 4-4" stroke="#b8dbc7" stroke-width="3" stroke-linecap="round"/></svg>'
-    if kind in ('sudoku', 'nonogram', 'block-puzzle', 'connect-four', 'reversi'):
-        cells = {'sudoku':['1','','3','','5','','7','','9'], 'nonogram':['','■','■','■','','■','','','','■','■','','','','■','','■','','■','','','','■','',''], 'block-puzzle':['■','■','','','■','','■','■','','','■','','■','■','■',''], 'connect-four':['','','','','','●','','','●','●','','●','●','●','●','','','','','',''], 'reversi':['','','','','','●','○','','','○','●','','','','','']}[kind]
-        return '<div class="mini-extra mini-'+kind+'" aria-hidden="true">'+''.join(f'<span data-value="{v}">{v}</span>' for v in cells)+'</div>'
-    if kind == 'brick-breaker':
-        return '<svg viewBox="0 0 220 150" aria-hidden="true"><g fill="#d6b5ed">'+''.join(f'<rect x="{20+x*37}" y="{20+y*19}" width="31" height="12" rx="3"/>' for y in range(3) for x in range(5))+'</g><path d="m95 100 25-22 20 22" fill="none" stroke="#efbdd966" stroke-width="2"/><circle cx="140" cy="100" r="6" fill="#efbdd9"/><rect x="95" y="126" width="66" height="8" rx="4" fill="#b2dfc9"/></svg>'
-    return '<div class="mini-memory" aria-hidden="true">' + ''.join(f'<span data-value="{n}">{n}</span>' for n in ['✦','?','?','◈','?','✦','◈','?']) + '</div>'
+    if kind == "block-drop":
+        return (
+            '<div class="mini-drop" aria-hidden="true">'
+            + "".join(
+                f'<span data-value="{1 if i in (2,7,8,9,18,19,20,21,24,25,26,27,28,29) else 0}"></span>'
+                for i in range(30)
+            )
+            + "</div>"
+        )
+    if kind == "pong":
+        return render_template("games/preview-pong.html")
+    if kind == "2048":
+        return (
+            '<div class="mini-tiles" aria-hidden="true">'
+            + "".join(
+                f'<span data-value="{n}">{n}</span>'
+                for n in [
+                    "2",
+                    "4",
+                    "",
+                    "8",
+                    "16",
+                    "32",
+                    "4",
+                    "",
+                    "",
+                    "64",
+                    "128",
+                    "2",
+                    "4",
+                    "",
+                    "256",
+                    "2048",
+                ]
+            )
+            + "</div>"
+        )
+    if kind == "mines":
+        return (
+            '<div class="mini-mines" aria-hidden="true">'
+            + "".join(
+                f'<span data-value="{n}">{n}</span>'
+                for n in [
+                    "",
+                    "",
+                    "1",
+                    "1",
+                    "",
+                    "⚑",
+                    "",
+                    "2",
+                    "",
+                    "1",
+                    "1",
+                    "",
+                    "⚑",
+                    "",
+                    "1",
+                    "",
+                    "2",
+                    "",
+                    "",
+                    "1",
+                    "",
+                    "",
+                    "1",
+                    "",
+                    "",
+                ]
+            )
+            + "</div>"
+        )
+    if kind == "snake":
+        return render_template("games/preview-snake.html")
+    if kind in ("sudoku", "nonogram", "block-puzzle", "connect-four", "reversi"):
+        cells = {
+            "sudoku": ["1", "", "3", "", "5", "", "7", "", "9"],
+            "nonogram": [
+                "",
+                "■",
+                "■",
+                "■",
+                "",
+                "■",
+                "",
+                "",
+                "",
+                "■",
+                "■",
+                "",
+                "",
+                "",
+                "■",
+                "",
+                "■",
+                "",
+                "■",
+                "",
+                "",
+                "",
+                "■",
+                "",
+                "",
+            ],
+            "block-puzzle": [
+                "■",
+                "■",
+                "",
+                "",
+                "■",
+                "",
+                "■",
+                "■",
+                "",
+                "",
+                "■",
+                "",
+                "■",
+                "■",
+                "■",
+                "",
+            ],
+            "connect-four": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "●",
+                "",
+                "",
+                "●",
+                "●",
+                "",
+                "●",
+                "●",
+                "●",
+                "●",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            ],
+            "reversi": [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "●",
+                "○",
+                "",
+                "",
+                "○",
+                "●",
+                "",
+                "",
+                "",
+                "",
+                "",
+            ],
+        }[kind]
+        return (
+            '<div class="mini-extra mini-'
+            + kind
+            + '" aria-hidden="true">'
+            + "".join(f'<span data-value="{v}">{v}</span>' for v in cells)
+            + "</div>"
+        )
+    if kind == "brick-breaker":
+        return render_template(
+            "games/preview-brick-breaker.html",
+            bricks="".join(
+                (
+                    f'<rect x="{20 + x * 37}" y="{20 + y * 19}" width="31" height="12" rx="3"/>'
+                    for y in range(3)
+                    for x in range(5)
+                )
+            ),
+        )
+    return (
+        '<div class="mini-memory" aria-hidden="true">'
+        + "".join(
+            f'<span data-value="{n}">{n}</span>'
+            for n in ["✦", "?", "?", "◈", "?", "✦", "◈", "?"]
+        )
+        + "</div>"
+    )
 
 
 def directory(games):
-    cards = ''.join(f'''<article class="game-card" data-game-card data-game-theme="{g['slug']}" data-category="{g['category'].lower()}" data-search="{escape((g['name']+' '+g['description']).lower(), quote=True)}">
-<a href="/games/{g['slug']}/" class="game-cover" aria-label="Play {g['name']}"><span class="game-card-number">{DETAILS[g['slug']][0]}</span>{preview(g['preview'])}<span class="small-tag">{g['category']}</span><span class="game-demo-label">DEMO PREVIEW</span></a>
-<div class="game-card-copy"><p class="game-card-kicker">{DETAILS[g['slug']][1]}</p><h2><a href="/games/{g['slug']}/">{g['name']}</a></h2><p>{g['description']}</p><div class="game-card-meta"><span>{DETAILS[g['slug']][2]}</span><span>{"Online / Friends" if g["slug"] == "pong" else "Computer / Local" if g["category"] == "Board" else "Solo"}</span></div><a href="/games/{g['slug']}/" class="game-card-play">Play game <span aria-hidden="true">↗</span></a></div></article>''' for g in games)
-    art = ''.join(f'<div class="games-hero-tile" data-game-theme="{g["slug"]}">{preview(g["preview"])}</div>' for g in games[:4])
-    return f'''<section class="container page-section games-page" data-games-directory>
-<div class="games-hero"><div class="page-intro"><div class="eyebrow"><span class="game-live-dot"></span> THE PLAY CORNER</div><h1>Press play.<br><em>Find your flow.</em></h1><p>Clear a board. Beat your best. Take a breather.<br>Twelve little challenges. One more personal best.</p><a class="button primary" href="#games-library">Find your next game <span aria-hidden="true">↘</span></a><div class="games-hero-note"><span>{len(games)} games</span><span>Solo without signing in</span><span>Your pace</span></div></div><div class="games-hero-art" aria-hidden="true"><div class="games-orbit"></div>{art}<span class="games-art-caption">A SMALL BREAK, WELL PLAYED.</span></div></div>
-<section id="games-library" aria-labelledby="games-library-heading"><div class="game-library-heading"><div><div class="eyebrow">PICK YOUR LITTLE CHALLENGE</div><h2 id="games-library-heading">What are we playing?</h2></div><span class="muted">Private play. Public personal bests.</span></div><div class="game-library-toolbar"><label class="game-effects-control">Effects <select data-effects-select aria-label="Game effects"><option value="auto">Auto</option><option value="reduced">Reduced</option><option value="off">Off</option></select></label><span class="game-library-count">12 GAMES / 9 RANKED GAMES</span></div><div class="tools-controls"><label class="search-box">⌕ <input type="search" id="game-search" placeholder="Find a game…" aria-label="Search games"></label><div class="filter-bar" id="game-filters"><button class="filter active" data-game-filter="all" aria-pressed="true">All games</button><button class="filter" data-game-filter="puzzle" aria-pressed="false">Puzzle</button><button class="filter" data-game-filter="arcade" aria-pressed="false">Arcade</button><button class="filter" data-game-filter="board" aria-pressed="false">Board</button></div></div><div class="games-grid">{cards}</div><p id="games-empty" class="game-empty-state" role="status" hidden>No games found. Try another search.</p></section>
-<section class="panel game-achievements" id="games-progress" hidden><div class="eyebrow">EVERY LITTLE MILESTONE</div><div class="game-section-heading"><h2>My Progress</h2><button class="text-link" data-progress-refresh>Refresh progress</button></div><p class="game-progress-status" role="status">Loading verified Public results…</p><div class="game-progress-stats"><div><strong id="progress-results">—</strong><span>Verified Public runs</span></div><div><strong id="progress-games">—</strong><span>Ranked games played</span></div><div><strong id="progress-achievements">—</strong><span>Milestones unlocked</span></div></div><div class="achievement-grid" id="progress-recent"></div><details><summary>All milestones · 30</summary><div class="achievement-grid" id="progress-all"></div></details></section><section class="game-continue panel" aria-labelledby="continue-title"><div class="game-section-heading"><div><div class="eyebrow">RIGHT WHERE YOU LEFT OFF</div><h2 id="continue-title">Continue playing</h2></div><div class="game-save-actions"><button class="button secondary" id="games-sync">Refresh saves</button><button class="text-link" id="games-clear">Clear private saves</button></div></div><p id="game-save-status" role="status">Loading local saves…</p><div id="game-saves"><p>No unfinished games yet. Pick a game above.</p></div><button class="button secondary" id="games-more" hidden>Load more saves</button><button class="button secondary" id="games-copy-guest" hidden>Copy guest saves to account</button></section><p class="games-privacy-note">Guest games stay on this device. Account saves are private. Only verified Public results appear on leaderboards.</p></section>'''
+    cards = "".join(
+        render_template(
+            "games/card.html",
+            slug=g["slug"],
+            category_key=g["category"].lower(),
+            category=g["category"],
+            search_text=escape(
+                (g["name"] + " " + g["description"]).lower(), quote=True
+            ),
+            name=g["name"],
+            station=DETAILS[g["slug"]][0],
+            preview=preview(g["preview"]),
+            tagline=DETAILS[g["slug"]][1],
+            description=g["description"],
+            spec=DETAILS[g["slug"]][2],
+            play_mode=(
+                "Online / Friends"
+                if g["slug"] == "pong"
+                else "Computer / Local" if g["category"] == "Board" else "Solo"
+            ),
+        )
+        for g in games
+    )
+    art = "".join(
+        f'<div class="games-hero-tile" data-game-theme="{g["slug"]}">{preview(g["preview"])}</div>'
+        for g in games[:4]
+    )
+    return render_template(
+        "games/directory.html", game_count=len(games), art=art, cards=cards
+    )
 
 
 def game_page(game):
-    if game['slug'] == 'pong':
+    if game["slug"] == "pong":
         return PONG_VIEW
-    slug, name = game['slug'], game['name']
+    slug, name = game["slug"], game["name"]
     number, tagline, spec, controls = DETAILS[slug]
-    private_only = game['category'] == 'Board'
-    mode_options = '<option value="private">Private · saved progress</option>' + ('' if private_only else '<option value="public">Public · Ranked</option>')
-    first_side = '<label>Play as<select id="game-human-side"><option value="1">First player</option><option value="2">Second player</option></select></label>' if private_only else ''
-    hint = '<button class="button secondary" id="game-hint" disabled>Hint · Private</button>' if slug in ('sudoku','nonogram') else ''
-    milestones = '' if private_only else '<details class="panel game-achievements" id="game-milestones"><summary>Milestones <span>3 goals</span></summary><p class="game-progress-status" role="status">Only verified Public runs unlock milestones.</p><div class="milestone-list"></div><button class="text-link" data-progress-refresh>Refresh progress</button></details>'
-    board_info = '<section class="panel game-private-info"><div class="eyebrow">A TABLE FOR TWO</div><h2>Your move.</h2><p>Play the computer or a friend on this device. These matches stay Private, with saved progress and Undo.</p><p>Computer thinking stops when you pause or leave.</p></section>' if private_only else ''
-    directions = '<div class="game-dpad" aria-label="Direction controls"><button data-dir="0" aria-label="Move up">↑</button><button data-dir="3" aria-label="Move left">←</button><button data-dir="2" aria-label="Move down">↓</button><button data-dir="1" aria-label="Move right">→</button></div>' if slug in ('2048', 'snake') else ''
-    mine_mode = '<div class="game-reveal-switch" id="mine-mode"><button class="button secondary" data-mine-mode="reveal" aria-pressed="true">Reveal</button><button class="button secondary" data-mine-mode="flag" aria-pressed="false">Flag ⚑</button><span id="mine-count" class="muted" role="status"></span></div>' if slug == 'minesweeper' else ''
-    undo = f'<button class="button secondary" id="game-undo" disabled>{"Undo turn" if private_only else "Undo one move"}</button>' if slug in ('2048','sudoku','nonogram','connect-four','reversi') else ''
-    return f'''<section class="container page-section games-page neon-arcade" data-game="{slug}" data-game-theme="{slug}" data-run-state="ready">
-<div class="game-page-heading"><div><a class="back-link" href="/games/">← Game select</a><div class="eyebrow"><span class="game-live-dot"></span> STATION {number} / {game['category'].upper()}</div><h1>{name}<span class="accent">.</span></h1><p>{tagline} <span class="muted">{game['description']}</span></p></div><div class="game-heading-tools"><div class="game-audio-controls"><button type="button" class="button secondary" id="game-sound" data-audio-toggle aria-pressed="true">Sound on</button><label>Volume<input type="range" min="0" max="100" value="35" data-audio-volume aria-label="Game volume"></label></div><label class="game-effects-control">Effects<select data-effects-select aria-label="Game effects"><option value="auto">Auto</option><option value="reduced">Reduced</option><option value="off">Off</option></select></label></div></div>
-<div class="game-layout"><section class="panel game-play"><div class="game-play-topline"><span class="eyebrow">PLAYER STATION / {number}</span><span id="game-run-label" class="game-run-label">Ready to play</span></div>
-<details class="game-setup" id="game-setup" open><summary><span>Game setup</span><span id="game-mode-summary">Choose your run</span><span aria-hidden="true">⌄</span></summary><div class="game-settings"><label>Mode<select id="game-mode">{mode_options}</select></label><label>{"Opponent" if private_only else "Difficulty"}<select id="game-difficulty"></select></label>{first_side}</div><p id="game-mode-note" class="muted">Private games can pause and continue later.</p></details>
-<div class="game-metrics" aria-label="Live game statistics"><div class="game-primary-metric"><span id="game-score-label">Score</span><strong id="game-score">—</strong></div><div><span>Time</span><strong id="game-clock">00:00</strong></div><div><span>Local best</span><strong id="game-best">—</strong></div></div>{mine_mode}
-<section id="game-result" class="game-result" aria-label="Game result" hidden><div><span class="eyebrow">RUN REPORT</span><h2 id="game-result-title">Run complete</h2><strong id="game-result-value"></strong></div><div class="game-result-meta"><span>Time <b id="game-result-time"></b></span><span id="game-result-best"></span><span id="game-result-public" data-submission="private" role="status">Private result</span></div></section>
-<div class="game-board-shell"><span class="game-stage-corner corner-a" aria-hidden="true"></span><span class="game-stage-corner corner-b" aria-hidden="true"></span><div id="game-board" tabindex="0" role="group" aria-label="{name} board"><div class="game-ready-art">{preview(game['preview'])}</div><div class="game-board-empty"><strong>Your next little challenge.</strong><p>Choose your setup. Press Start game.</p><span>{spec} · {controls}</span></div></div><canvas class="game-fx" aria-hidden="true" width="1" height="1"></canvas><div class="game-fx-labels" aria-hidden="true"></div><div id="game-overlay" hidden><span class="eyebrow">TAKE A BREATHER</span><h2 id="game-overlay-title">Paused</h2><p id="game-overlay-note"></p><button id="game-resume" class="button primary">Continue privately →</button></div></div>
-<div class="game-control-deck">{directions}<div class="game-actions"><button class="button primary" id="game-start">Start game →</button><button class="button secondary" id="game-pause" disabled>Pause</button><button class="button secondary" id="game-settings-change" hidden>Change settings</button>{undo}{hint}</div></div><p id="game-status" role="status" aria-live="polite">Ready when you are.</p><button id="game-restore" class="button secondary" hidden>Continue saved game · Private</button><button id="game-submit-retry" class="button secondary" hidden>Retry Public submission</button><button id="game-submit-discard" class="button secondary" hidden>Keep pending result Private</button>
-</section>
-<aside class="game-side"><details class="panel game-save-panel"><summary>Saved progress</summary><div class="eyebrow">YOUR PROGRESS</div><h2>Make it yours.</h2><div class="game-save-line"><span id="game-save-status" role="status">No game saved yet.</span><button class="text-link" id="game-save-retry">Retry sync</button></div><a class="text-link" href="/games/">Continue playing →</a><details class="game-public-disclosure" {"hidden" if private_only else ""}><summary>Public &amp; Private</summary><p>Public runs publish your profile name, result and date after verification. Pausing, hiding this page, refreshing or restoring makes the run Private.</p></details></details>
-{milestones}{board_info}<details class="game-rank-panel" id="game-rank-panel" {"hidden" if private_only else ""}><summary>Leaderboard <span aria-hidden="true">⌄</span></summary><section class="panel game-leaderboard"><div class="game-section-heading"><div><div class="eyebrow">THE HIGH SCORE CORNER</div><h2>Leaderboard<span class="accent">.</span></h2></div><button id="game-board-refresh" class="text-link">Refresh</button></div><label class="game-rules-selector" {"" if slug == "brick-breaker" else "hidden"}>Rules<select id="game-board-version"><option value="current">Current rules</option><option value="1">Previous rules · v1</option></select></label><p id="game-board-note" class="muted">Current rules · one best per player.</p><p id="game-leaderboard-status" role="status">Loading leaderboard…</p><div id="game-leaderboard"></div><div id="game-my-rank"></div><p class="muted small game-rank-disclaimer">Casual boards with replay checks. Automated play cannot be fully prevented.</p></section></details><details class="panel game-help-panel"><summary>Controls &amp; Help</summary><p>{HELP[slug]}</p><button class="text-link" id="game-help">Saving and Public rules ↗</button></details></aside></div>
-<dialog id="game-help-dialog"><button class="dialog-close icon-button" aria-label="Close help">×</button><div class="eyebrow">QUICK START GUIDE</div><h2>How to play {name}</h2><p>{HELP[slug]}</p><p>Controls work while the board is focused. Private progress saves automatically. Public requires sign-in and an uninterrupted completed run. Restart to change a locked mode or difficulty.</p><p>Save failed? Keep this page open and retry sync. Guest saves stay separate from account saves. Sound starts only after your action. Sound and volume preferences stay on this device.</p></dialog></section>'''
+    private_only = game["category"] == "Board"
+    mode_options = '<option value="private">Private · saved progress</option>' + (
+        "" if private_only else '<option value="public">Public · Ranked</option>'
+    )
+    first_side = (
+        '<label>Play as<select id="game-human-side"><option value="1">First player</option><option value="2">Second player</option></select></label>'
+        if private_only
+        else ""
+    )
+    hint = (
+        '<button class="button secondary" id="game-hint" disabled>Hint · Private</button>'
+        if slug in ("sudoku", "nonogram")
+        else ""
+    )
+    milestones = "" if private_only else render_template("games/milestones.html")
+    board_info = render_template("games/private-info.html") if private_only else ""
+    directions = (
+        render_template("games/direction-pad.html") if slug in ("2048", "snake") else ""
+    )
+    mine_mode = (
+        render_template("games/mine-controls.html") if slug == "minesweeper" else ""
+    )
+    undo = (
+        f'<button class="button secondary" id="game-undo" disabled>{"Undo turn" if private_only else "Undo one move"}</button>'
+        if slug in ("2048", "sudoku", "nonogram", "connect-four", "reversi")
+        else ""
+    )
+    return render_template(
+        "games/page.html",
+        slug=slug,
+        number=number,
+        category=game["category"].upper(),
+        name=name,
+        tagline=tagline,
+        description=game["description"],
+        mode_options=mode_options,
+        difficulty_label="Opponent" if private_only else "Difficulty",
+        first_side=first_side,
+        mine_mode=mine_mode,
+        preview=preview(game["preview"]),
+        spec=spec,
+        controls=controls,
+        directions=directions,
+        undo=undo,
+        hint=hint,
+        public_hidden="hidden" if private_only else "",
+        milestones=milestones,
+        board_info=board_info,
+        archive_hidden="" if slug == "brick-breaker" else "hidden",
+        help_text=HELP[slug],
+    )

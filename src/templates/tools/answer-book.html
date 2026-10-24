@@ -1,0 +1,41 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <div class="eyebrow">A MOMENT OF POSSIBILITY</div>
+    <h2>Hold a question. Turn a page.</h2>
+    <p>
+      Think of a question, or write it below for this moment only. The book
+      chooses a random original answer.
+    </p>
+    <label
+      >Question (optional, never saved)<input
+        id="answer-question"
+        maxlength="500"
+        autocomplete="off"
+        placeholder="What is on your mind?" /></label
+    ><label
+      >Answer language<select id="answer-language">
+        <option value="both">English + 中文</option>
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+      </select></label
+    ><button id="answer-draw" class="button primary" disabled>
+      Turn a page →</button
+    ><button id="answer-copy" class="button secondary" disabled>
+      Copy answer
+    </button>
+    <p class="muted small">
+      A playful prompt for reflection. Random answers, without AI. Your question
+      stays only in this input and is never saved or sent.
+    </p>
+    <p class="muted small" id="answer-status" role="status"></p>
+  </section>
+  <section class="panel answer-book" aria-label="Your answer">
+    <span class="eyebrow">THE ANSWER BOOK</span>
+    <div id="answer-page" aria-live="polite">
+      <p id="answer-en">A new page is waiting.</p>
+      <p id="answer-zh" lang="zh">新的一页正在等你。</p>
+    </div>
+    <span class="book-decoration" aria-hidden="true">✳</span>
+  </section>
+</div>
+${history}

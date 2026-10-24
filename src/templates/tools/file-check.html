@@ -1,0 +1,42 @@
+<section class="panel tool-form">
+  <h2>Check what you downloaded</h2>
+  <label>Files<input id="check-files" type="file" multiple data-lock /></label>
+  <p class="muted small">
+    Up to 20 files · 100 MB each · 200 MB total. Files are read one at a time.
+    No directory scanning or uploads.
+  </p>
+  <label
+    >Checksum<select id="check-algorithm" data-lock>
+      <option value="SHA-256">SHA-256</option>
+      <option value="SHA-512">SHA-512 + SHA-256 for duplicate checks</option>
+    </select></label
+  ><label
+    >Expected checksum for the first file (optional)<textarea
+      id="check-expected"
+      rows="3"
+      spellcheck="false"
+      maxlength="128"
+    ></textarea>
+  </label>
+  <p id="check-match" class="muted small"></p>
+  <div class="action-row">
+    <button id="check-run" class="button primary" data-lock disabled>
+      Check files →</button
+    ><button id="check-download" class="button secondary" disabled>
+      Download JSON manifest
+    </button>
+  </div>
+  <progress
+    id="check-progress"
+    max="100"
+    value="0"
+    aria-label="File-level progress"
+  ></progress>
+  <p class="muted small">
+    Matching size and SHA-256 identify likely duplicates among the files you
+    selected. Checksums verify integrity; they are not a malware scan. Original
+    files are untouched.
+  </p>
+</section>
+${job_status}
+<div id="check-results"></div>

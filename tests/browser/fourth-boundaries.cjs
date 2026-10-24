@@ -1,8 +1,6 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8796",
   checks = [];
 const pass = (x) => {
@@ -10,7 +8,10 @@ const pass = (x) => {
   console.log("PASS " + x);
 };
 (async () => {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true }),
+  const browser = await chromium.launch({
+      channel: process.env.BROWSER_CHANNEL || "msedge",
+      headless: true,
+    }),
     c = await browser.newContext(),
     p = await c.newPage(),
     errors = [];

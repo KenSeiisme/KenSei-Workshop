@@ -1,15 +1,16 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
   path = require("node:path");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
   output = "_qa/sixth-planner",
   checks = [];
 fs.mkdirSync(output, { recursive: true });
 (async () => {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true });
+  const browser = await chromium.launch({
+    channel: process.env.BROWSER_CHANNEL || "msedge",
+    headless: true,
+  });
   const context = await browser.newContext({
     timezoneId: "Asia/Kuala_Lumpur",
     reducedMotion: "reduce",
@@ -234,23 +235,37 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator("#planner-courses .planner-item button").first().click();
     await page.click("#planner-course-delete");
     await saved();
-    assert.equal(await page.locator("#planner-courses .planner-item").count(), 0);
+    assert.equal(
+      await page.locator("#planner-courses .planner-item").count(),
+      0,
+    );
     const unlinked = await exported(() => page.click("#planner-export"));
     assert.equal(unlinked.data.tasks.length, 2);
     assert.ok(unlinked.data.tasks.every((task) => task.courseId === null));
     await page.selectOption("#planner-task-filter", "all");
-    await page.locator("#planner-tasks .planner-item button").filter({ hasText: "Programming exam" }).click();
+    await page
+      .locator("#planner-tasks .planner-item button")
+      .filter({ hasText: "Programming exam" })
+      .click();
     await page.click("#planner-task-delete");
     await saved();
     const remaining = await exported(() => page.click("#planner-export"));
     assert.equal(remaining.data.tasks.length, 1);
     await page.click("#planner-delete");
-    await page.waitForFunction(() => document.querySelectorAll("#planner-list button").length === 1);
+    await page.waitForFunction(
+      () => document.querySelectorAll("#planner-list button").length === 1,
+    );
     await page.locator("#planner-list button").first().click();
     await page.click("#planner-clear");
-    await page.waitForFunction(() => document.querySelectorAll("#planner-list button").length === 0 && document.querySelector("#planner-fields").disabled);
+    await page.waitForFunction(
+      () =>
+        document.querySelectorAll("#planner-list button").length === 0 &&
+        document.querySelector("#planner-fields").disabled,
+    );
     assert.equal(await page.locator("#planner-name").isDisabled(), true);
-    pass("Course deletion preserves and unlinks tasks, individual task/plan deletion and clear-all reset the editor");
+    pass(
+      "Course deletion preserves and unlinks tasks, individual task/plan deletion and clear-all reset the editor",
+    );
     assert.deepEqual(errors, []);
     assert.deepEqual(uploads, []);
     pass(

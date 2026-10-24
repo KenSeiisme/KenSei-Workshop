@@ -1,3 +1,5 @@
+* text=auto eol=lf
+
 src/vendor/** linguist-vendored=true
 dist/** linguist-generated=true
 *.traineddata.gz binary

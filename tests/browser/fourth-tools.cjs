@@ -1,9 +1,7 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
   { unzipSync } = require("fflate");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8796",
   checks = [];
 function wav(seconds = 1.2, channels = 2, amplitude = 0.4) {
@@ -37,7 +35,10 @@ const pass = (x) => {
   console.log("PASS " + x);
 };
 (async () => {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true }),
+  const browser = await chromium.launch({
+      channel: process.env.BROWSER_CHANNEL || "msedge",
+      headless: true,
+    }),
     context = await browser.newContext({ reducedMotion: "reduce" }),
     p = await context.newPage(),
     errors = [],
@@ -143,7 +144,7 @@ const pass = (x) => {
         buffer: Buffer.from("keep original B"),
       },
     ]);
-    await p.getByText("Rename rules", {exact:true}).click();
+    await p.getByText("Rename rules", { exact: true }).click();
     await p.fill("#rename-find", "DSC");
     await p.fill("#rename-replace", "Photo");
     await p.check("#rename-number");

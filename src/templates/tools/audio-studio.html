@@ -1,0 +1,89 @@
+<div class="panel tool-form">
+  <h2>Keep the part you need</h2>
+  <label
+    >Audio file<input
+      id="audio-file"
+      type="file"
+      accept="audio/*,.mp3,.wav,.m4a,.ogg,.webm"
+      data-lock
+  /></label>
+  <p class="muted small">
+    One file · 50 MB · 5 minutes · mono or stereo · decoded PCM up to 128 MB.
+    MP3/WAV are supported; other formats depend on your browser.
+  </p>
+  <p id="audio-info" class="muted small"></p>
+  <div
+    id="audio-wave"
+    class="audio-wave"
+    aria-label="Audio waveform and editable selection"
+  ></div>
+  <p class="muted small">
+    Drag the selection or enter exact start/end seconds. Files are processed
+    locally.
+  </p>
+  <div class="audio-controls">
+    <label
+      >Start (seconds)<input
+        id="audio-start"
+        type="number"
+        min="0"
+        step="0.01"
+        value="0"
+        data-lock /></label
+    ><label
+      >End (seconds)<input
+        id="audio-end"
+        type="number"
+        min="0"
+        step="0.01"
+        value="0"
+        data-lock /></label
+    ><label
+      >Volume (%)<input
+        id="audio-gain"
+        type="number"
+        min="0"
+        max="200"
+        value="100"
+        data-lock /></label
+    ><label
+      >Format<select id="audio-format" data-lock>
+        <option value="mp3">MP3</option>
+        <option value="wav">WAV · 16-bit PCM</option>
+      </select></label
+    ><label
+      >MP3 bitrate<select id="audio-bitrate" data-lock>
+        <option value="128">128 kbps</option>
+        <option value="192" selected>192 kbps</option>
+        <option value="320">320 kbps</option>
+      </select></label
+    >
+  </div>
+  <div class="action-row">
+    <button id="audio-play" class="button secondary" data-lock disabled>
+      Play selection</button
+    ><button id="audio-stop" class="button secondary">Stop playback</button
+    ><button id="audio-export" class="button primary" data-lock disabled>
+      Export selection ↓
+    </button>
+  </div>
+  <p class="muted small">
+    Exports use 44.1 kHz and keep mono/stereo channels. Gain above the available
+    headroom clips at the output limit; review the preview. MP3/WASM loads only
+    when needed.
+  </p>
+</div>
+<div class="job-status">
+  <p id="tool-status" class="muted small" role="status" aria-live="polite">
+    Choose an audio file. Nothing uploads.
+  </p>
+  <button id="cancel-job" class="button secondary" hidden>
+    Cancel processing
+  </button>
+</div>
+<progress
+  id="audio-progress"
+  max="100"
+  value="0"
+  aria-label="Audio processing progress"
+></progress>

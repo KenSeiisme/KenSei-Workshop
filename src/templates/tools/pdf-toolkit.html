@@ -1,0 +1,64 @@
+<section class="panel tool-form">
+  <div class="form-row">
+    <label
+      >Operation<select id="pdf-operation" data-lock>
+        <option value="organize">Merge / extract / organize pages</option>
+        <option value="split">Split PDF into files</option>
+        <option value="images">Images to PDF</option>
+        <option value="export">PDF to PNG / JPG</option>
+        <option value="stamp">Page numbers / watermark</option>
+        <option value="metadata">View / clear document information</option>
+      </select></label
+    ><label
+      >Choose files<input
+        id="pdf-files"
+        type="file"
+        accept="application/pdf"
+        multiple
+        data-lock
+    /></label>
+  </div>
+  <p class="muted small" id="pdf-help"></p>
+  <p class="muted small">
+    Up to 50 MB and 200 pages in total. Encrypted PDFs are not supported.
+  </p>
+  <label id="pdf-ranges-group"
+    >Page ranges (optional)<input
+      id="pdf-ranges"
+      placeholder="All selected pages, or e.g. 1-3,5"
+      maxlength="2000"
+      data-lock
+  /></label>
+  <div class="form-row" id="pdf-export-settings" hidden>
+    <label
+      >Image format<select id="pdf-image-format" data-lock>
+        <option value="image/png">PNG</option>
+        <option value="image/jpeg">JPG</option>
+      </select></label
+    ><label
+      >Resolution<select id="pdf-scale" data-lock>
+        <option value="1.333333">96 DPI</option>
+        <option value="2" selected>144 DPI</option>
+        <option value="2.666667">192 DPI</option>
+      </select></label
+    >
+  </div>
+  ${pdf_settings}
+  <div class="action-row">
+    <button id="pdf-run" class="button primary" data-lock>
+      Create download →</button
+    ><span class="muted small" id="pdf-summary">No files selected.</span>
+  </div>
+</section>
+${job_status}
+<div class="pdf-layout">
+  <section class="panel">
+    <h2>Pages</h2>
+    <p class="muted small">Select, move or rotate pages before exporting.</p>
+    <div id="pdf-pages" class="pdf-page-list"></div>
+  </section>
+  <section class="panel pdf-preview-panel">
+    <h2>Page preview</h2>
+    <canvas id="pdf-preview" hidden aria-label="PDF page preview"></canvas>
+  </section>
+</div>

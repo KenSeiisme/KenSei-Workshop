@@ -1,0 +1,25 @@
+<div class="action-row">
+  <label class="button secondary file-button"
+    >Import .md<input
+      id="markdown-import"
+      type="file"
+      accept=".md,.markdown,.txt,text/plain,text/markdown" /></label
+  ><button id="markdown-md" class="button secondary">Download .md</button
+  ><button id="markdown-html" class="button secondary">Download HTML</button>
+</div>
+<div class="editor-split">
+  <section class="panel editor-pane">
+    <h2><label for="markdown-input">Markdown</label></h2>
+    <textarea
+      id="markdown-input"
+      maxlength="100000"
+      spellcheck="false"
+      placeholder="# Your next idea&#10;&#10;Start writing here…"
+    ></textarea>
+  </section>
+  <section class="panel editor-pane">
+    <h2>Live preview</h2>
+    <div id="markdown-preview" class="markdown-preview"></div>
+  </section>
+</div>
+${draft_controls}${job_status}

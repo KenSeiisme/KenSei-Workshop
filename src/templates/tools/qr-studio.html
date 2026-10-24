@@ -1,0 +1,93 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>Make a connection</h2>
+    <label
+      >Content type<select id="qr-type">
+        <option value="url">Website URL</option>
+        <option value="text">Plain text</option>
+        <option value="wifi">Wi-Fi network</option>
+      </select></label
+    >
+    <div data-qr-section="url">
+      <p class="muted small">Include https:// or http:// for website links.</p>
+    </div>
+    <label id="qr-content-group"
+      >URL or text<textarea
+        id="qr-content"
+        maxlength="2000"
+        rows="3"
+        placeholder="https://example.com"
+      ></textarea>
+    </label>
+    <div data-qr-section="wifi" hidden>
+      <label
+        >Network name (SSID)<input
+          id="qr-ssid"
+          maxlength="128"
+          autocomplete="off"
+      /></label>
+      <label
+        >Security<select id="qr-encryption">
+          <option value="WPA">WPA / WPA2 / WPA3</option>
+          <option value="WEP">WEP</option>
+          <option value="nopass">Open network</option>
+        </select></label
+      >
+      <label
+        >Password<input
+          id="qr-password"
+          type="password"
+          maxlength="128"
+          autocomplete="new-password"
+      /></label>
+      <label class="check-label"
+        ><input id="qr-hidden" type="checkbox" />Hidden network</label
+      >
+    </div>
+    <div class="form-row">
+      <label
+        >Foreground<input type="color" id="qr-dark" value="#21152d" /></label
+      ><label
+        >Background<input type="color" id="qr-light" value="#ffffff"
+      /></label>
+    </div>
+    <label
+      >Export size<select id="qr-size">
+        <option value="256">256 × 256</option>
+        <option value="512" selected>512 × 512</option>
+        <option value="1024">1024 × 1024</option>
+      </select></label
+    >
+    <label
+      >Logo (optional)<input
+        id="qr-logo"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+    /></label>
+    <button id="qr-remove-logo" class="text-link">Remove logo</button>
+    <p class="muted small">
+      Use strong contrast and a small logo so your code stays easy to scan.
+    </p>
+    <div class="action-row">
+      <button id="qr-generate" class="button primary">Generate QR code →</button
+      ><button id="save-qr-preset" class="button secondary">
+        Save appearance
+      </button>
+    </div>
+    <p class="muted small">
+      Appearance presets exclude QR content, passwords and logos.
+    </p>
+  </section>
+  <section class="panel preview-panel">
+    <div id="qr-preview" class="qr-preview">
+      <span>Your code will appear here.</span>
+    </div>
+    <div class="action-row">
+      <button id="qr-png" class="button secondary" disabled>Download PNG</button
+      ><button id="qr-svg" class="button secondary" disabled>
+        Download SVG
+      </button>
+    </div>
+  </section>
+</div>
+${job_status}

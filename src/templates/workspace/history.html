@@ -1,0 +1,18 @@
+<section class="panel history-panel" id="${element_id}">
+  <div class="section-heading">
+    <h2>${title}</h2>
+    <div class="action-row">
+      <button class="text-link" data-history-export>Export</button
+      ><button class="text-link" data-history-clear>Clear all</button>
+    </div>
+  </div>
+  <p class="muted small" data-save-state role="status">
+    Loading local history…
+  </p>
+  <div data-history-list></div>
+  <div class="action-row">
+    <button class="button secondary small-button" data-history-more hidden>
+      Load more</button
+    ><button class="text-link" data-history-retry>Retry sync</button>
+  </div>
+</section>

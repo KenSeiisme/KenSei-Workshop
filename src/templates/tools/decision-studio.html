@@ -1,0 +1,65 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>A little help choosing.</h2>
+    <label
+      >Scheme name<input
+        id="decision-name"
+        maxlength="100"
+        value="A new choice"
+        disabled /></label
+    ><label
+      >Mode<select id="decision-mode" disabled>
+        <option value="wheel">Spin the wheel</option>
+        <option value="draw">Random draw</option>
+        <option value="groups">Random groups</option>
+      </select></label
+    ><label
+      >Options · one per line<textarea
+        id="decision-options"
+        maxlength="40199"
+        rows="7"
+        disabled
+      >
+Tea
+Coffee
+Water</textarea>
+    </label>
+    <p class="muted small">
+      1–200 unique options, up to 200 characters each. Each option has an equal
+      chance.
+    </p>
+    <label class="check-label" id="no-repeat-row"
+      ><input type="checkbox" id="decision-no-repeat" disabled />No repeats
+      until the pool is reset</label
+    ><label id="group-count-row" hidden
+      >Number of groups<input
+        id="decision-group-count"
+        type="number"
+        min="1"
+        max="200"
+        value="2"
+        disabled
+    /></label>
+    <div class="action-row">
+      <button class="button primary" id="decision-run" disabled>
+        Make a choice →</button
+      ><button class="button secondary" id="decision-reset">
+        Reset draw pool</button
+      ><button class="text-link" id="decision-new" disabled>New scheme</button>
+    </div>
+    <p class="muted small" id="decision-save-state" role="status">
+      Loading your workspace…
+    </p>
+    <p class="muted small" id="decision-note" role="status"></p>
+  </section>
+  <section class="panel decision-stage">
+    <div id="decision-wheel-shell">
+      <div id="decision-wheel" aria-hidden="true"></div>
+      <span class="wheel-pointer" aria-hidden="true">▼</span>
+    </div>
+    <div id="decision-result" role="status" aria-live="polite">
+      Your next possibility starts here.
+    </div>
+  </section>
+</div>
+${history}

@@ -1,0 +1,26 @@
+<div class="panel tool-form converter-panel">
+  <h2>A different unit. The same amount.</h2>
+  <label>Category<select id="unit-category"></select></label>
+  <div class="conversion-grid">
+    <label
+      >Value<input
+        id="unit-value"
+        type="text"
+        inputmode="decimal"
+        value="1"
+        maxlength="80"
+        spellcheck="false" /></label
+    ><label>From<select id="unit-from"></select></label
+    ><button id="unit-swap" class="button secondary" aria-label="Swap units">
+      ⇄</button
+    ><label>To<select id="unit-to"></select></label>
+  </div>
+  <label>Result<input id="unit-result" class="unit-result" readonly /></label>
+  <p id="unit-status" class="muted small" role="status"></p>
+  <button id="unit-copy" class="button primary">Copy result</button>
+  <p class="muted small">
+    Storage uses explicit decimal (kB = 1,000 B) and binary (KiB = 1,024 B)
+    units. US and Imperial volumes are labeled separately. No live currency
+    rates.
+  </p>
+</div>

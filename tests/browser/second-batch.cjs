@@ -1,8 +1,6 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8793";
 const A = "11111111-1111-4111-8111-111111111111",
   B = "22222222-2222-4222-8222-222222222222";
@@ -14,7 +12,10 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
   for (const file of fs.readdirSync("supabase/migrations").sort())
     await db.exec(fs.readFileSync("supabase/migrations/" + file, "utf8"));
   await db.query("insert into auth.users(id) values($1),($2)", [A, B]);
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true }),
+  const browser = await chromium.launch({
+      channel: process.env.BROWSER_CHANNEL || "msedge",
+      headless: true,
+    }),
     errors = [],
     results = [],
     contexts = [];
@@ -73,7 +74,8 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
       waitUntil: "domcontentloaded",
     });
     await p.waitForSelector('[data-ready="true"]');
-    if (slug === "answer-book") await p.getByText("Answer history", {exact:true}).click();
+    if (slug === "answer-book")
+      await p.getByText("Answer history", { exact: true }).click();
     return p;
   }
   async function check(label, fn) {
@@ -117,7 +119,12 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
           ]) {
             const t = await open(guest, slug);
             await t.setViewportSize({ width, height: 900 });
-            await t.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+            await t.evaluate(
+              () =>
+                new Promise((resolve) =>
+                  requestAnimationFrame(() => requestAnimationFrame(resolve)),
+                ),
+            );
             assert(
               await t.evaluate(
                 () => document.documentElement.scrollWidth <= innerWidth + 1,
@@ -535,12 +542,16 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
         );
         await p.locator("[data-history-more]").click();
         await p.waitForFunction(
-          () => document.querySelectorAll("#answer-history .saved-row").length === 40,
+          () =>
+            document.querySelectorAll("#answer-history .saved-row").length ===
+            40,
         );
         assert.equal(await p.locator("#answer-history .saved-row").count(), 40);
         await p.locator("[data-history-more]").click();
         await p.waitForFunction(
-          () => document.querySelectorAll("#answer-history .saved-row").length === 53,
+          () =>
+            document.querySelectorAll("#answer-history .saved-row").length ===
+            53,
         );
         assert.equal(await p.locator("#answer-history .saved-row").count(), 53);
       },

@@ -1,0 +1,53 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>A little help with the numbers</h2>
+    <label
+      >Expression<textarea
+        id="calc-expression"
+        maxlength="1000"
+        rows="4"
+        data-lock
+        placeholder="sqrt(144) + 200 * 10%"
+      ></textarea></label
+    ><label
+      >Angle mode<select id="calc-angle" data-lock>
+        <option value="deg">DEG · degrees</option>
+        <option value="rad">RAD · radians</option>
+      </select></label
+    >
+    <p class="muted small">
+      Use + − * / ^ !, parentheses, pi, e, ans; sqrt, cbrt, abs, ln, log10, exp,
+      round, floor, ceil, sin/cos/tan and asin/acos/atan. % always means divide
+      by 100. Scalar real values only.
+    </p>
+    <button id="calc-run" class="button primary" data-lock>Calculate →</button>
+  </section>
+  <section class="panel">
+    <h2>Your result</h2>
+    <textarea
+      id="calc-result"
+      rows="3"
+      readonly
+      aria-label="Calculation result"
+    ></textarea>
+    <p id="calc-fraction" class="muted small"></p>
+    <button id="calc-copy" class="button secondary" disabled>
+      Copy result
+    </button>
+    <p class="muted small">
+      ≈ marks an approximation. Decimal display uses up to 34 significant
+      digits; fraction display is an approximation.
+    </p>
+  </section>
+</div>
+${job_status}
+<section class="panel daily-history">
+  <div class="section-heading">
+    <h2>On this device</h2>
+    <button id="calc-clear" class="text-link">Clear history</button>
+  </div>
+  <p class="muted small">
+    Last 50 calculations. Click one to reuse the expression.
+  </p>
+  <div id="calc-history"></div>
+</section>

@@ -1,0 +1,73 @@
+<div id="pdf-stamp-settings" hidden>
+  <label class="check-label"
+    ><input type="checkbox" id="pdf-add-numbers" checked data-lock />Add page
+    numbers</label
+  >
+  <div class="form-row">
+    <label
+      >Start numbering<input
+        id="pdf-number-start"
+        type="number"
+        value="1"
+        min="1"
+        max="999999"
+        data-lock /></label
+    ><label
+      >Page number position<select id="pdf-number-position" data-lock>
+        <option value="bottom-center">Bottom center</option>
+        <option value="bottom-right">Bottom right</option>
+      </select></label
+    >
+  </div>
+  <label
+    >Watermark text (optional)<input
+      id="pdf-watermark"
+      maxlength="100"
+      data-lock
+  /></label>
+  <div class="form-row">
+    <label
+      >Text size · points<input
+        id="pdf-watermark-size"
+        type="number"
+        min="8"
+        max="120"
+        value="36"
+        data-lock /></label
+    ><label
+      >Opacity<input
+        id="pdf-watermark-opacity"
+        type="range"
+        min="5"
+        max="100"
+        value="30"
+        data-lock
+    /></label>
+  </div>
+  <label
+    >Watermark color<input
+      type="color"
+      id="pdf-watermark-color"
+      value="#756080"
+      data-lock
+  /></label>
+  <p class="muted small">
+    Stamps apply to selected pages in their displayed order. Create a preview,
+    then download the resulting PDF.
+  </p>
+</div>
+<div id="pdf-metadata-settings" hidden>
+  <p class="muted small">
+    Removes the standard document Info dictionary and document/page XMP
+    metadata. Page content, annotations, attachments and embedded objects are
+    outside this cleanup scope.
+  </p>
+  <pre id="pdf-metadata" class="metadata-output"></pre>
+</div>
+<div class="action-row" id="pdf-enhanced-actions" hidden>
+  <button id="pdf-output-preview" class="button secondary" data-lock>
+    Preview output</button
+  ><button id="pdf-output-download" class="button secondary" disabled>
+    Download previewed PDF ↓
+  </button>
+</div>

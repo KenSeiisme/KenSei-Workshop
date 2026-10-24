@@ -1,0 +1,37 @@
+<div class="tools-controls">
+  <label class="search-box"
+    ><span aria-hidden="true">⌕</span
+    ><input
+      id="tool-search"
+      type="search"
+      placeholder="Find a tool…"
+      aria-label="Search tools"
+  /></label>
+  <div class="filter-bar" data-filter-group="tools">
+    <button class="filter active" data-filter="all" aria-pressed="true">
+      All</button
+    ><button class="filter" data-filter="images" aria-pressed="false">
+      Images</button
+    ><button class="filter" data-filter="text" aria-pressed="false">Text</button
+    ><button class="filter" data-filter="documents" aria-pressed="false">
+      Documents</button
+    ><button class="filter" data-filter="utilities" aria-pressed="false">
+      Utilities</button
+    ><button class="filter" data-filter="productivity" aria-pressed="false">
+      Productivity</button
+    ><button class="filter" data-filter="testing" aria-pressed="false">
+      Testing</button
+    ><button class="filter" data-filter="audio" aria-pressed="false">
+      Audio
+    </button>
+  </div>
+</div>
+<div class="tools-grid">${tool_cards}</div>
+<p id="search-empty" class="empty-state" role="status" hidden>
+  No tools found. Try another search.
+</p>
+<div class="privacy-line">
+  <span aria-hidden="true">◈</span> File processing stays on your device.
+  Network Test connects to Cloudflare; Public typing verifies input with
+  Supabase.
+</div>

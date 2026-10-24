@@ -1,0 +1,86 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>JSON, with a little more order</h2>
+    <label
+      >Import JSON<input
+        id="data-json-file"
+        type="file"
+        accept=".json,application/json"
+        data-lock /></label
+    ><label
+      >JSON input<textarea
+        id="data-json"
+        class="data-editor"
+        maxlength="5000000"
+        spellcheck="false"
+        placeholder='[{"name":"KenSei","count":1}]'
+        data-lock
+      ></textarea>
+    </label>
+    <div class="action-row">
+      <button data-json-action="format" class="button secondary" data-lock>
+        Validate & format</button
+      ><button data-json-action="minify" class="button secondary" data-lock>
+        Minify</button
+      ><button data-json-action="to-csv" class="button secondary" data-lock>
+        JSON → CSV</button
+      ><button id="data-json-download" class="button secondary" data-lock>
+        Download JSON
+      </button>
+    </div>
+    <p class="muted small">
+      5 MB UTF-8 JSON. JSON → CSV accepts an array of flat objects; nested
+      values need another representation.
+    </p>
+  </section>
+  <section class="panel tool-form">
+    <h2>A clearer view of CSV</h2>
+    <label
+      >Import CSV<input
+        id="data-csv-file"
+        type="file"
+        accept=".csv,text/csv"
+        data-lock /></label
+    ><label
+      >CSV input<textarea
+        id="data-csv"
+        class="data-editor"
+        maxlength="10000000"
+        spellcheck="false"
+        placeholder="name,count&#10;KenSei,1"
+        data-lock
+      ></textarea>
+    </label>
+    <div class="action-row">
+      <button id="data-csv-preview" class="button secondary" data-lock>
+        Preview table</button
+      ><button id="data-csv-to-json" class="button secondary" data-lock>
+        CSV → JSON</button
+      ><button id="data-csv-download" class="button secondary" data-lock>
+        Download safe CSV
+      </button>
+    </div>
+    <p class="muted small">
+      10 MB · 50,000 data rows · 200 columns. First row must have unique
+      non-empty names. UTF-8/BOM supported. Values stay strings, including
+      leading zeros. Downloads escape spreadsheet formulas.
+    </p>
+  </section>
+</div>
+<section class="panel daily-history">
+  <div class="section-heading">
+    <h2>Table preview</h2>
+    <div class="action-row">
+      <button id="data-prev" class="button secondary" disabled>Previous</button
+      ><span id="data-page" class="muted small"></span
+      ><button id="data-next" class="button secondary" disabled>Next</button>
+    </div>
+  </div>
+  <div id="data-table" class="table-scroll"></div>
+</section>
+<div class="job-status">
+  <p id="tool-status" class="muted small" role="status" aria-live="polite">
+    Local text processing. Inputs are not saved or uploaded.
+  </p>
+  <button id="cancel-job" class="button secondary" hidden>Cancel</button>
+</div>

@@ -1,0 +1,23 @@
+<div class="action-row capture-tabs" role="tablist" aria-label="QR mode">
+  <button
+    id="qr-generate-tab"
+    role="tab"
+    aria-selected="true"
+    aria-controls="qr-generate-panel"
+    class="button secondary"
+  >
+    Generate</button
+  ><button
+    id="qr-scan-tab"
+    role="tab"
+    aria-selected="false"
+    aria-controls="qr-scan-panel"
+    class="button secondary"
+  >
+    Scan
+  </button>
+</div>
+<div id="qr-generate-panel" role="tabpanel" aria-labelledby="qr-generate-tab">
+  ${view}
+</div>
+${qr_scan}

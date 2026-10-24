@@ -1,8 +1,6 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
-const {
-  chromium,
-} = require("../support/browser.cjs");
+const { chromium } = require("../support/browser.cjs");
 const { PDFDocument, rgb } = require("pdf-lib");
 const { unzipSync } = require("fflate");
 const jsQR = require("jsqr");
@@ -22,7 +20,10 @@ function pass(s) {
 }
 (async () => {
   fs.mkdirSync("_qa", { recursive: true });
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true });
+  const browser = await chromium.launch({
+    channel: process.env.BROWSER_CHANNEL || "msedge",
+    headless: true,
+  });
   const context = await browser.newContext({
     viewport: { width: 1440, height: 1000 },
     reducedMotion: "reduce",
@@ -50,7 +51,19 @@ function pass(s) {
   });
   async function go(slug) {
     await page.goto(base + "/tools/" + slug + "/");
-    await page.locator('[data-ready="true"]').waitFor().catch(error => { throw Error("Tool startup: " + slug + " · " + errors.join(" | ") + " · " + error.message); });
+    await page
+      .locator('[data-ready="true"]')
+      .waitFor()
+      .catch((error) => {
+        throw Error(
+          "Tool startup: " +
+            slug +
+            " · " +
+            errors.join(" | ") +
+            " · " +
+            error.message,
+        );
+      });
   }
   async function downloaded(action) {
     const [d] = await Promise.all([page.waitForEvent("download"), action()]);

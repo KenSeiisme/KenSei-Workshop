@@ -1,0 +1,85 @@
+<div class="flash-layout">
+  <section class="panel tool-form">
+    <h2>Your card decks</h2>
+    <button id="deck-new" class="button primary">New deck</button
+    ><label
+      >Import CSV / JSON<input
+        id="deck-import"
+        type="file"
+        accept=".csv,.json,text/csv,application/json"
+    /></label>
+    <p class="muted small">
+      CSV columns: front,back. Up to 200 cards / 1 MB per deck. Imports create a
+      new deck; JSON backups retain mastery.
+    </p>
+    <div id="deck-list"></div>
+    <button id="deck-more" class="text-link" hidden>Load more decks</button
+    ><button id="deck-retry" class="text-link">Retry sync</button>
+    <p id="deck-save-state" class="muted small" role="status"></p>
+  </section>
+  <section class="panel tool-form">
+    <h2>A little more memorable</h2>
+    <label
+      >Deck name<input
+        id="deck-name"
+        maxlength="100"
+        placeholder="Give this deck a name"
+    /></label>
+    <div class="action-row">
+      <button id="deck-delete" class="text-link">Delete deck</button
+      ><button id="deck-reset" class="text-link">Reset mastery</button
+      ><button id="deck-json" class="text-link">Export JSON</button
+      ><button id="deck-csv" class="text-link">Export CSV</button>
+    </div>
+    <p class="muted small">
+      Guests save on this device. Signed-in decks sync privately to your
+      account. Guest decks are not automatically uploaded when you sign in.
+    </p>
+    <hr />
+    <label
+      >Front<textarea
+        id="card-front"
+        rows="3"
+        maxlength="1000"
+      ></textarea></label
+    ><label
+      >Back<textarea id="card-back" rows="3" maxlength="1000"></textarea>
+    </label>
+    <div class="action-row">
+      <button id="card-save" class="button primary">Add / update card</button
+      ><button id="card-new" class="button secondary">New card</button
+      ><button id="card-delete" class="text-link">Delete card</button>
+    </div>
+    <p class="muted small">Editing a card resets that card to Need practice.</p>
+    <div id="card-list"></div>
+  </section>
+</div>
+<section class="panel daily-history">
+  <h2>Make it stick</h2>
+  <div class="action-row">
+    <label class="check-label"
+      ><input id="study-unknown" type="checkbox" />Only Need practice</label
+    ><label class="check-label"
+      ><input id="study-shuffle" type="checkbox" checked />Shuffle</label
+    ><button id="study-start" class="button primary">Start review</button>
+  </div>
+  <p id="study-progress" class="muted small"></p>
+  <button
+    id="study-card"
+    class="flash-card"
+    aria-label="Flip review card"
+    disabled
+  >
+    Choose a deck and start reviewing.
+  </button>
+  <div class="action-row">
+    <button id="study-again" class="button secondary" disabled>
+      Need practice</button
+    ><button id="study-known" class="button primary" disabled>Known</button>
+  </div>
+  <p class="muted small">
+    Flip first, then mark mastery. Review at your own pace; no automatic
+    spaced-repetition schedule.
+  </p>
+</section>
+${job_status}

@@ -1,0 +1,80 @@
+<section class="panel tool-form">
+  <div class="section-heading">
+    <div>
+      <h2>A little closer, across time zones</h2>
+      <p class="muted small">
+        Uses your device clock. No background alarms or cloud saves.
+      </p>
+    </div>
+    <label class="compact-label"
+      >Clock format<select id="time-format">
+        <option value="24">24-hour</option>
+        <option value="12">12-hour</option>
+      </select></label
+    >
+  </div>
+  <div class="form-row">
+    <label
+      >Time zone<input
+        id="clock-zone"
+        list="time-zones"
+        placeholder="Asia/Kuala_Lumpur" /></label
+    ><button id="clock-add" class="button secondary">Add clock</button>
+  </div>
+  <div id="world-clocks" class="world-clocks"></div>
+</section>
+<div class="studio-grid daily-history">
+  <section class="panel tool-form">
+    <h2>Convert a moment</h2>
+    <div class="form-row">
+      <label>Date<input id="time-date" type="date" /></label
+      ><label>Time<input id="time-value" type="time" step="1" /></label>
+    </div>
+    <label>From time zone<input id="time-from" list="time-zones" /></label
+    ><label
+      >To time zone<input
+        id="time-to"
+        list="time-zones"
+        value="Europe/London" /></label
+    ><label id="time-offset-label" hidden
+      >Repeated local time: choose offset<select
+        id="time-offset"
+      ></select></label
+    ><label
+      >Converted moment<textarea
+        id="time-output"
+        readonly
+        class="copy-output"
+      ></textarea></label
+    ><button id="time-copy" class="button secondary">Copy conversion</button>
+    <p id="time-state" class="muted small" role="status"></p>
+  </section>
+  <section class="panel tool-form">
+    <h2>The space between dates</h2>
+    <label>Start date<input id="date-start" type="date" /></label
+    ><label>End date<input id="date-end" type="date" /></label
+    ><label class="check-label"
+      ><input id="date-inclusive" type="checkbox" />Include the end date</label
+    >
+    <p id="date-result" class="large-result" role="status"></p>
+    <p class="muted small">
+      Calendar days, not a fixed 24-hour subtraction. Negative values mean the
+      end comes first.
+    </p>
+    <h2>A moment to look forward to</h2>
+    <label
+      >Countdown name<input
+        id="countdown-name"
+        maxlength="80"
+        placeholder="Assignment deadline" /></label
+    ><button id="countdown-add" class="button primary">
+      Save the converted moment as a countdown
+    </button>
+  </section>
+</div>
+<section class="panel daily-history">
+  <h2>Your countdowns</h2>
+  <div id="countdowns"></div>
+</section>
+<datalist id="time-zones"></datalist>
+<p id="time-notice" class="muted small" role="status"></p>

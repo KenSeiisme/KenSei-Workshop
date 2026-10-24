@@ -1,0 +1,126 @@
+<section class="container page-section games-page" data-games-directory>
+  <div class="games-hero">
+    <div class="page-intro">
+      <div class="eyebrow">
+        <span class="game-live-dot"></span> THE PLAY CORNER
+      </div>
+      <h1>Press play.<br /><em>Find your flow.</em></h1>
+      <p>
+        Clear a board. Beat your best. Take a breather.<br />Twelve little
+        challenges. One more personal best.
+      </p>
+      <a class="button primary" href="#games-library"
+        >Find your next game <span aria-hidden="true">↘</span></a
+      >
+      <div class="games-hero-note">
+        <span>${game_count} games</span><span>Solo without signing in</span
+        ><span>Your pace</span>
+      </div>
+    </div>
+    <div class="games-hero-art" aria-hidden="true">
+      <div class="games-orbit"></div>
+      ${art}<span class="games-art-caption">A SMALL BREAK, WELL PLAYED.</span>
+    </div>
+  </div>
+  <section id="games-library" aria-labelledby="games-library-heading">
+    <div class="game-library-heading">
+      <div>
+        <div class="eyebrow">PICK YOUR LITTLE CHALLENGE</div>
+        <h2 id="games-library-heading">What are we playing?</h2>
+      </div>
+      <span class="muted">Private play. Public personal bests.</span>
+    </div>
+    <div class="game-library-toolbar">
+      <label class="game-effects-control"
+        >Effects
+        <select data-effects-select aria-label="Game effects">
+          <option value="auto">Auto</option>
+          <option value="reduced">Reduced</option>
+          <option value="off">Off</option>
+        </select></label
+      ><span class="game-library-count">12 GAMES / 9 RANKED GAMES</span>
+    </div>
+    <div class="tools-controls">
+      <label class="search-box"
+        >⌕
+        <input
+          type="search"
+          id="game-search"
+          placeholder="Find a game…"
+          aria-label="Search games"
+      /></label>
+      <div class="filter-bar" id="game-filters">
+        <button
+          class="filter active"
+          data-game-filter="all"
+          aria-pressed="true"
+        >
+          All games</button
+        ><button class="filter" data-game-filter="puzzle" aria-pressed="false">
+          Puzzle</button
+        ><button class="filter" data-game-filter="arcade" aria-pressed="false">
+          Arcade</button
+        ><button class="filter" data-game-filter="board" aria-pressed="false">
+          Board
+        </button>
+      </div>
+    </div>
+    <div class="games-grid">${cards}</div>
+    <p id="games-empty" class="game-empty-state" role="status" hidden>
+      No games found. Try another search.
+    </p>
+  </section>
+  <section class="panel game-achievements" id="games-progress" hidden>
+    <div class="eyebrow">EVERY LITTLE MILESTONE</div>
+    <div class="game-section-heading">
+      <h2>My Progress</h2>
+      <button class="text-link" data-progress-refresh>Refresh progress</button>
+    </div>
+    <p class="game-progress-status" role="status">
+      Loading verified Public results…
+    </p>
+    <div class="game-progress-stats">
+      <div>
+        <strong id="progress-results">—</strong
+        ><span>Verified Public runs</span>
+      </div>
+      <div>
+        <strong id="progress-games">—</strong><span>Ranked games played</span>
+      </div>
+      <div>
+        <strong id="progress-achievements">—</strong
+        ><span>Milestones unlocked</span>
+      </div>
+    </div>
+    <div class="achievement-grid" id="progress-recent"></div>
+    <details>
+      <summary>All milestones · 30</summary>
+      <div class="achievement-grid" id="progress-all"></div>
+    </details>
+  </section>
+  <section class="game-continue panel" aria-labelledby="continue-title">
+    <div class="game-section-heading">
+      <div>
+        <div class="eyebrow">RIGHT WHERE YOU LEFT OFF</div>
+        <h2 id="continue-title">Continue playing</h2>
+      </div>
+      <div class="game-save-actions">
+        <button class="button secondary" id="games-sync">Refresh saves</button
+        ><button class="text-link" id="games-clear">Clear private saves</button>
+      </div>
+    </div>
+    <p id="game-save-status" role="status">Loading local saves…</p>
+    <div id="game-saves">
+      <p>No unfinished games yet. Pick a game above.</p>
+    </div>
+    <button class="button secondary" id="games-more" hidden>
+      Load more saves</button
+    ><button class="button secondary" id="games-copy-guest" hidden>
+      Copy guest saves to account
+    </button>
+  </section>
+  <p class="games-privacy-note">
+    Guest games stay on this device. Account saves are private. Only verified
+    Public results appear on leaderboards.
+  </p>
+</section>

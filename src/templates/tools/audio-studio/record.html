@@ -1,0 +1,42 @@
+<section class="panel tool-form capture-panel">
+  <h2>Record a fresh clip</h2>
+  <p class="muted small">
+    Microphone access starts only when you choose Start recording. Up to 5
+    minutes or 50 MB; recording is kept on this page only.
+  </p>
+  <div class="capture-meter-row">
+    <meter
+      id="audio-record-level"
+      min="0"
+      max="1"
+      value="0"
+      aria-label="Microphone level"
+    ></meter
+    ><span id="audio-record-time" class="capture-clock">00:00</span>
+  </div>
+  <div class="action-row">
+    <button id="audio-record-start" class="button secondary" data-lock>
+      Start recording</button
+    ><button id="audio-record-pause" class="button secondary" disabled>
+      Pause</button
+    ><button id="audio-record-stop" class="button secondary" disabled>
+      Stop & edit
+    </button>
+  </div>
+  <p
+    id="audio-record-status"
+    class="muted small"
+    role="status"
+    aria-live="polite"
+  >
+    Microphone is off. Stop a recording to open it in the editor below.
+  </p>
+  <div id="audio-record-recovery" hidden>
+    <audio id="audio-record-preview" controls preload="metadata"></audio
+    ><button id="audio-record-download" class="button secondary">
+      Download original recording ↓</button
+    ><button id="audio-record-retry" class="button secondary">
+      Retry editor
+    </button>
+  </div>
+</section>

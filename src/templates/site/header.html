@@ -1,0 +1,49 @@
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="header">
+  <div class="container nav-wrap">
+    <a class="brand" href="/" aria-label="KenSei home"
+      ><span class="brand-symbol">k<span>✳</span></span
+      >KenSei<span class="brand-dot">.</span></a
+    >
+    <nav aria-label="Main navigation" id="navigation">
+      ${nav}<a
+        data-personal
+        href="https://kensei-eta.vercel.app/"
+        target="_blank"
+        rel="noopener"
+        >About Me <span class="external-mark">↗</span></a
+      >
+    </nav>
+    <div class="account-controls" id="account-controls">
+      <button
+        class="sign-button"
+        data-sign-in
+        id="account-toggle"
+        aria-expanded="false"
+        aria-controls="account-menu"
+      >
+        <span class="user-dot"></span
+        ><span
+          class="avatar-badge avatar-small"
+          data-account-avatar
+          hidden
+        ></span
+        ><span data-auth-label>Sign in</span><span data-account-chevron>↗</span>
+      </button>
+      <div class="account-menu" id="account-menu" hidden>
+        <a href="/workspace/">Workspace</a><a href="/profile/">My Profile</a
+        ><a href="/profile/" id="account-public-profile" hidden
+          >Public Profile</a
+        ><button id="account-sign-out">Sign out</button>
+      </div>
+    </div>
+    <button
+      class="menu-toggle icon-button"
+      aria-label="Toggle navigation"
+      aria-controls="navigation"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
+  </div>
+</header>

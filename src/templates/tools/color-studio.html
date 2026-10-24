@@ -1,0 +1,76 @@
+<div class="studio-grid">
+  <section class="panel tool-form">
+    <h2>One color, three ways</h2>
+    <label>Color<input id="color-picker" type="color" value="#d6afe8" /></label>
+    <label
+      >HEX<input
+        id="color-hex"
+        value="#d6afe8"
+        maxlength="9"
+        spellcheck="false" /></label
+    ><label
+      >RGB<input
+        id="color-rgb"
+        value="214, 175, 232"
+        spellcheck="false" /></label
+    ><label>HSL<input id="color-hsl" spellcheck="false" /></label>
+    <p id="color-status" class="muted small" role="status"></p>
+    <button id="color-copy" class="button secondary">Copy HEX</button
+    ><textarea
+      id="color-copy-output"
+      class="copy-output"
+      readonly
+      aria-label="Color text to copy"
+      hidden
+    ></textarea>
+  </section>
+  <section class="panel tool-form">
+    <h2>Readable together</h2>
+    <div class="form-row">
+      <label>Text<input id="contrast-fg" type="color" value="#21152d" /></label
+      ><label
+        >Background<input id="contrast-bg" type="color" value="#d6afe8"
+      /></label>
+    </div>
+    <div id="contrast-preview" class="contrast-preview">
+      A little more clarity.<br /><small>Sample text</small>
+    </div>
+    <p id="contrast-result" role="status"></p>
+    <p class="muted small">
+      WCAG AA: 4.5:1 for normal text, 3:1 for large text. The pass/fail decision
+      uses the unrounded ratio.
+    </p>
+  </section>
+</div>
+<section class="panel daily-history">
+  <div class="section-heading">
+    <h2>Five colors, your way</h2>
+    <button id="palette-generate" class="button secondary">
+      Generate unlocked colors
+    </button>
+  </div>
+  <div id="palette" class="palette-grid"></div>
+</section>
+<section class="panel tool-form daily-history">
+  <h2>A softer transition</h2>
+  <div class="form-row">
+    <label>From<input id="gradient-from" type="color" value="#d6afe8" /></label
+    ><label>To<input id="gradient-to" type="color" value="#ef9bb7" /></label
+    ><label
+      >Angle<input
+        id="gradient-angle"
+        type="number"
+        min="0"
+        max="360"
+        value="135"
+    /></label>
+  </div>
+  <div id="gradient-preview" class="gradient-preview"></div>
+  <label
+    >CSS<textarea
+      id="gradient-css"
+      class="copy-output"
+      readonly
+    ></textarea></label
+  ><button id="gradient-copy" class="button secondary">Copy CSS</button>
+</section>

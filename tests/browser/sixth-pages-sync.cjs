@@ -1,8 +1,6 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
-  {
-    chromium,
-  } = require("../support/browser.cjs");
+  { chromium } = require("../support/browser.cjs");
 const kind = process.argv[2] || "planner",
   tableName = kind === "planner" ? "study_planners" : "whiteboards";
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
@@ -16,7 +14,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
   for (const f of fs.readdirSync("supabase/migrations").sort())
     await db.exec(fs.readFileSync("supabase/migrations/" + f, "utf8"));
   await db.query("insert into auth.users(id) values($1),($2)", [A, B]);
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || "msedge", headless: true }),
+  const browser = await chromium.launch({
+      channel: process.env.BROWSER_CHANNEL || "msedge",
+      headless: true,
+    }),
     contexts = [],
     errors = [];
   let fail = false,
