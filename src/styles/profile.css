@@ -558,3 +558,21 @@
   --game-accent: #e6afd4;
   --game-tint: #e6afd412;
 }
+
+/* Shared upload control without loading the unrelated tool workspace stylesheet. */
+#profile-page .file-button {
+  position: relative;
+  cursor: pointer;
+  max-width: 100%;
+}
+#profile-page .file-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+#profile-page .file-button:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}

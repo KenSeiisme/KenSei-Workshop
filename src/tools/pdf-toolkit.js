@@ -12,6 +12,8 @@ import {
   zip,
 } from "./common.js";
 import { metadata, enhancedPdf } from "./pdf-enhancements.js";
+import { uiMsg, uiJoin, uiError, uiText, uiAttr, uiHtml } from "../site/ui.js";
+
 let enhancedBytes = null,
   outputTask = null;
 let sources = [],
@@ -58,12 +60,23 @@ function mode() {
     : "application/pdf";
   $("#pdf-ranges-group").hidden = pictures;
   $("#pdf-export-settings").hidden = operation.value !== "export";
-  $("#pdf-help").textContent = pictures
-    ? "Choose images in their intended page order. Each image becomes one fitted A4 page."
-    : "Choose PDFs to merge, or one PDF to organize. Page numbers below refer to the current order. Ranges: 1-3,5. Split groups: 1-3;4-5 (leave blank for one file per page).";
+  uiText(
+    $("#pdf-help"),
+    pictures
+      ? uiMsg(
+          "Choose images in their intended page order. Each image becomes one fitted A4 page.",
+        )
+      : uiMsg(
+          "Choose PDFs to merge, or one PDF to organize. Page numbers below refer to the current order. Ranges: 1-3,5. Split groups: 1-3;4-5 (leave blank for one file per page).",
+        ),
+  );
   if (enhanced)
-    $("#pdf-help").textContent =
-      "Choose one PDF. Reorder or rotate pages below. Stamps affect selected pages; document-information cleanup applies to the whole output.";
+    uiText(
+      $("#pdf-help"),
+      uiMsg(
+        "Choose one PDF. Reorder or rotate pages below. Stamps affect selected pages; document-information cleanup applies to the whole output.",
+      ),
+    );
 }
 operation.onchange = () => {
   clearEnhanced();
@@ -76,27 +89,40 @@ operation.onchange = () => {
   $("#pdf-pages").replaceChildren();
   $("#pdf-preview").hidden = true;
   fileInput.value = "";
-  $("#pdf-summary").textContent = "No files selected.";
-  status("Choose files for this operation.");
+  uiText($("#pdf-summary"), uiMsg("No files selected."));
+  status(uiMsg("Choose files for this operation."));
   mode();
 };
 mode();
 function render() {
-  $("#pdf-summary").textContent = images.length
-    ? `${images.length} images ready.`
-    : `${sources.length} PDF${sources.length === 1 ? "" : "s"} · ${pages.length} pages · ${pages.filter((p) => p.included).length} selected`;
+  uiText(
+    $("#pdf-summary"),
+    images.length
+      ? uiMsg("{0} images ready.", [images.length])
+      : uiMsg("{0} PDF{1} · {2} pages · {3} selected", [
+          sources.length,
+          sources.length === 1 ? "" : "s",
+          pages.length,
+          pages.filter((p) => p.included).length,
+        ]),
+  );
   $("#pdf-pages").innerHTML = pages
     .map(
       (p, i) =>
-        `<div class="pdf-page-row"><label><input type="checkbox" data-page-select="${p.id}" ${p.included ? "checked" : ""} data-lock><span>Page ${i + 1}<small>${esc(sources[p.source].name)} · original page ${p.index + 1} · ${p.rotation}°</small></span></label><div class="page-actions"><button class="text-link" data-preview="${p.id}" data-lock>Preview</button><button data-move="${p.id}" data-direction="-1" aria-label="Move page ${i + 1} up" ${i === 0 ? "disabled" : ""} data-lock>↑</button><button data-move="${p.id}" data-direction="1" aria-label="Move page ${i + 1} down" ${i === pages.length - 1 ? "disabled" : ""} data-lock>↓</button><button data-rotate="${p.id}" aria-label="Rotate page ${i + 1}" data-lock>↻</button></div></div>`,
+        uiHtml`<div class="pdf-page-row"><label><input type="checkbox" data-page-select="${p.id}" ${p.included ? "checked" : ""} data-lock><span>Page ${i + 1}<small>${esc(sources[p.source].name)} · original page ${p.index + 1} · ${p.rotation}°</small></span></label><div class="page-actions"><button class="text-link" data-preview="${p.id}" data-lock>Preview</button><button data-move="${p.id}" data-direction="-1" aria-label="Move page ${i + 1} up" ${i === 0 ? "disabled" : ""} data-lock>↑</button><button data-move="${p.id}" data-direction="1" aria-label="Move page ${i + 1} down" ${i === pages.length - 1 ? "disabled" : ""} data-lock>↓</button><button data-rotate="${p.id}" aria-label="Rotate page ${i + 1}" data-lock>↻</button></div></div>`,
     )
     .join("");
   $$("[data-page-select]").forEach(
     (n) =>
       (n.onchange = () => {
         pages.find((p) => p.id === n.dataset.pageSelect).included = n.checked;
-        $("#pdf-summary").textContent =
-          `${pages.length} pages · ${pages.filter((p) => p.included).length} selected`;
+        uiText(
+          $("#pdf-summary"),
+          uiMsg("{0} pages · {1} selected", [
+            pages.length,
+            pages.filter((p) => p.included).length,
+          ]),
+        );
       }),
   );
   $$("[data-move]").forEach(
@@ -141,11 +167,14 @@ async function preview(p) {
     if (token !== previewGeneration) return;
     const old = $("#pdf-preview");
     c.id = "pdf-preview";
-    c.setAttribute("aria-label", "PDF page preview");
+    uiAttr(c, "aria-label", uiMsg("PDF page preview"));
     old.replaceWith(c);
   } catch (e) {
     if (token === previewGeneration)
-      status("Preview unavailable for this page. " + e.message, true);
+      status(
+        uiJoin([uiMsg("Preview unavailable for this page. "), uiError(e)]),
+        true,
+      );
   }
 }
 fileInput.onchange = async (e) => {
@@ -153,10 +182,10 @@ fileInput.onchange = async (e) => {
   if (!list.length) return;
   clearEnhanced();
   if (list.reduce((n, f) => n + f.size, 0) > 50 * 1048576)
-    return status("Choose files totaling no more than 50 MB.", true);
+    return status(uiMsg("Choose files totaling no more than 50 MB."), true);
   const token = ++revision;
   busy(true);
-  status("Opening files…");
+  status(uiMsg("Opening files…"));
   try {
     await dependencies();
     if (["stamp", "metadata"].includes(operation.value) && list.length !== 1)
@@ -174,8 +203,13 @@ fileInput.onchange = async (e) => {
       sources = [];
       pages = [];
       $("#pdf-pages").replaceChildren();
-      $("#pdf-summary").textContent =
-        `${list.length} images · ${size(list.reduce((n, f) => n + f.size, 0))}. Files follow the chosen order.`;
+      uiText(
+        $("#pdf-summary"),
+        uiMsg("{0} images · {1}. Files follow the chosen order.", [
+          list.length,
+          size(list.reduce((n, f) => n + f.size, 0)),
+        ]),
+      );
     } else {
       for (const f of list) {
         if (token !== revision) return;
@@ -215,15 +249,18 @@ fileInput.onchange = async (e) => {
       pages = nextPages;
       images = [];
       render();
-      $("#pdf-metadata").textContent = nextSources.length
-        ? JSON.stringify(metadata(nextSources[0].doc), null, 2)
-        : "";
+      uiText(
+        $("#pdf-metadata"),
+        nextSources.length
+          ? JSON.stringify(metadata(nextSources[0].doc), null, 2)
+          : "",
+      );
       if (pages.length) await preview(pages[0]);
     }
     if (token === revision)
-      status("Files ready. Choose pages and run the operation.");
+      status(uiMsg("Files ready. Choose pages and run the operation."));
   } catch (e) {
-    if (token === revision) status(e.message, true);
+    if (token === revision) status(uiError(e), true);
   } finally {
     if (token === revision) busy(false);
   }
@@ -252,7 +289,7 @@ async function createPdf(selected, token) {
       [copy] = await out.copyPages(sources[p.source].doc, [p.index]);
     copy.setRotation(lib.degrees(p.rotation));
     out.addPage(copy);
-    status(`Preparing page ${i + 1} of ${selected.length}…`);
+    status(uiMsg("Preparing page {0} of {1}…", [i + 1, selected.length]));
     await new Promise((r) => setTimeout(r, 0));
   }
   return new Blob([await out.save()], { type: "application/pdf" });
@@ -260,12 +297,12 @@ async function createPdf(selected, token) {
 $("#cancel-job").onclick = () => {
   revision++;
   busy(false);
-  status("Cancelled. Choose files again if loading was interrupted.");
+  status(uiMsg("Cancelled. Choose files again if loading was interrupted."));
 };
 $("#pdf-run").onclick = async () => {
   const token = ++revision;
   busy(true);
-  status("Preparing output…");
+  status(uiMsg("Preparing output…"));
   try {
     await dependencies();
     if (["stamp", "metadata"].includes(operation.value)) {
@@ -304,7 +341,7 @@ $("#pdf-run").onclick = async () => {
           width,
           height,
         });
-        status(`Adding image ${i + 1} of ${images.length}…`);
+        status(uiMsg("Adding image {0} of {1}…", [i + 1, images.length]));
         await new Promise((r) => setTimeout(r, 0));
       }
       const bytes = await out.save();
@@ -370,7 +407,7 @@ $("#pdf-run").onclick = async () => {
             c.width = c.height = 0;
             page.cleanup();
           }
-          status(`Rendered ${i + 1} of ${selected.length} pages…`);
+          status(uiMsg("Rendered {0} of {1} pages…", [i + 1, selected.length]));
         }
         if (token !== revision) return;
         if (outputs.length === 1) download(outputs[0][1], outputs[0][0]);
@@ -379,9 +416,11 @@ $("#pdf-run").onclick = async () => {
       }
     }
     if (token === revision)
-      status("Done. Your download is ready. Files stayed on this device.");
+      status(
+        uiMsg("Done. Your download is ready. Files stayed on this device."),
+      );
   } catch (e) {
-    if (token === revision) status(e.message, true);
+    if (token === revision) status(uiError(e), true);
   } finally {
     if (token === revision) busy(false);
   }
@@ -463,15 +502,17 @@ async function prepareEnhanced(token, show) {
     await page.render({ canvasContext: context, viewport }).promise;
     if (token !== revision) return;
     canvas.id = "pdf-preview";
-    canvas.setAttribute("aria-label", "Actual output PDF preview");
+    uiAttr(canvas, "aria-label", uiMsg("Actual output PDF preview"));
     $("#pdf-preview").replaceWith(canvas);
   }
   enhancedBytes = bytes;
   $("#pdf-output-download").disabled = false;
   status(
     show
-      ? "Actual output preview ready. Download the previewed PDF to keep it."
-      : "PDF ready. Files stayed on this device.",
+      ? uiMsg(
+          "Actual output preview ready. Download the previewed PDF to keep it.",
+        )
+      : uiMsg("PDF ready. Files stayed on this device."),
   );
 }
 $("#pdf-output-preview").onclick = async () => {
@@ -481,7 +522,7 @@ $("#pdf-output-preview").onclick = async () => {
     await dependencies();
     await prepareEnhanced(token, true);
   } catch (e) {
-    if (token === revision) status(e.message, true);
+    if (token === revision) status(uiError(e), true);
   } finally {
     if (token === revision) busy(false);
   }

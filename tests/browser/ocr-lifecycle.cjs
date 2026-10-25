@@ -59,7 +59,16 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       await r.continue().catch(() => {});
     });
     for (let i = 0; i < 4; i++) {
+      const workerStarted = page.waitForEvent("worker");
       await page.locator("#ocr-run").click();
+      const child = await workerStarted;
+      await page.evaluate(() => KenseiI18n.setLocale("zh-Hant"));
+      assert(page.workers().includes(child));
+      assert.equal(
+        await page.locator("#ocr-output").inputValue(),
+        "Preserve this text",
+      );
+      await page.evaluate(() => KenseiI18n.setLocale("en"));
       await page.locator("#cancel-job").click();
       await page.waitForTimeout(500);
       assert.match(

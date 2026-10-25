@@ -1,4 +1,6 @@
 import { $, $$, esc } from "./common.js";
+import { uiMsg, uiJoin, uiText, uiHtml } from "../site/ui.js";
+
 let controller = null,
   active = null,
   pressed = new Set(),
@@ -11,11 +13,13 @@ function stop() {
   active = null;
   pressed.clear();
   $("#keyboard-keys").replaceChildren();
-  $("#keyboard-last").textContent = "Press a key after starting.";
-  $("#keyboard-status").textContent = "Not listening.";
-  $("#mouse-status").textContent =
-    "Not listening. Start and move your mouse inside this area.";
-  $("#mouse-buttons").textContent = "Buttons: none";
+  uiText($("#keyboard-last"), uiMsg("Press a key after starting."));
+  uiText($("#keyboard-status"), uiMsg("Not listening."));
+  uiText(
+    $("#mouse-status"),
+    uiMsg("Not listening. Start and move your mouse inside this area."),
+  );
+  uiText($("#mouse-buttons"), uiMsg("Buttons: none"));
   $("#screen-surface").hidden = true;
   $("#keyboard-stop").disabled = true;
   $("#mouse-stop").disabled = true;
@@ -78,8 +82,10 @@ $("#screen-start").addEventListener("click", () => {
   listen(document, "fullscreenchange", () => {
     if (!document.fullscreenElement && active === "screen") stop();
   });
-  $("#screen-status").textContent =
-    "Screen test running. Use Esc or Exit test to finish.";
+  uiText(
+    $("#screen-status"),
+    uiMsg("Screen test running. Use Esc or Exit test to finish."),
+  );
 });
 $("#screen-pattern").addEventListener("change", () => {
   if (active === "screen")
@@ -90,8 +96,12 @@ $("#screen-fullscreen").addEventListener("click", async () => {
     await $("#screen-surface").requestFullscreen();
     $("#screen-surface").focus({ preventScroll: true });
   } catch {
-    $("#screen-status").textContent =
-      "Fullscreen unavailable. The embedded screen test is still active.";
+    uiText(
+      $("#screen-status"),
+      uiMsg(
+        "Fullscreen unavailable. The embedded screen test is still active.",
+      ),
+    );
   }
 });
 $("#screen-exit").addEventListener("click", stop);
@@ -100,13 +110,22 @@ $("#keyboard-start").addEventListener("click", () => {
   start("keyboard");
   const area = $("#keyboard-surface");
   area.focus();
-  $("#keyboard-status").textContent =
-    "Listening inside this area. Tab away or click outside to stop.";
+  uiText(
+    $("#keyboard-status"),
+    uiMsg("Listening inside this area. Tab away or click outside to stop."),
+  );
   const render = (e) => {
-    $("#keyboard-last").textContent =
-      `${e.type === "keydown" ? "Down" : "Up"} · key: ${e.key} · code: ${e.code || "unavailable"}${e.repeat ? " · repeat" : ""}`;
+    uiText(
+      $("#keyboard-last"),
+      uiMsg("{0} · key: {1} · code: {2}{3}", [
+        e.type === "keydown" ? uiMsg("Down") : uiMsg("Up"),
+        e.key,
+        e.code || "unavailable",
+        e.repeat ? uiMsg(" · repeat") : "",
+      ]),
+    );
     $("#keyboard-keys").innerHTML = [...pressed]
-      .map((x) => `<kbd>${esc(x)}</kbd>`)
+      .map((x) => uiHtml`<kbd>${esc(x)}</kbd>`)
       .join("");
   };
   listen(area, "keydown", (e) => {
@@ -127,28 +146,50 @@ $("#keyboard-start").addEventListener("click", () => {
 });
 $("#keyboard-stop").addEventListener("click", stop);
 function mouseStats() {
-  $("#mouse-clicks").textContent =
-    `Clicks · Left: ${clicks[0]} · Middle: ${clicks[1]} · Right: ${clicks[2]} · Other: ${clicks[3]}`;
-  $("#mouse-wheel").textContent =
-    `Wheel · X: ${Math.round(scrollX)} · Y: ${Math.round(scrollY)}`;
+  uiText(
+    $("#mouse-clicks"),
+    uiMsg("Clicks · Left: {0} · Middle: {1} · Right: {2} · Other: {3}", [
+      clicks[0],
+      clicks[1],
+      clicks[2],
+      clicks[3],
+    ]),
+  );
+  uiText(
+    $("#mouse-wheel"),
+    uiMsg("Wheel · X: {0} · Y: {1}", [
+      Math.round(scrollX),
+      Math.round(scrollY),
+    ]),
+  );
 }
 $("#mouse-start").addEventListener("click", () => {
   start("mouse");
   const area = $("#mouse-surface");
   area.focus();
-  $("#mouse-status").textContent = "Listening inside this area.";
+  uiText($("#mouse-status"), uiMsg("Listening inside this area."));
   listen(area, "pointerdown", (e) => {
     if (e.pointerType !== "mouse") {
-      $("#mouse-status").textContent =
-        "Touch or pen detected. Use a mouse for physical button testing.";
+      uiText(
+        $("#mouse-status"),
+        uiMsg(
+          "Touch or pen detected. Use a mouse for physical button testing.",
+        ),
+      );
       return;
     }
     clicks[Math.min(e.button, 3)]++;
-    $("#mouse-buttons").textContent = "Buttons bitmask: " + e.buttons;
+    uiText(
+      $("#mouse-buttons"),
+      uiJoin([uiMsg("Buttons bitmask: "), e.buttons]),
+    );
     mouseStats();
   });
   listen(area, "pointerup", (e) => {
-    $("#mouse-buttons").textContent = "Buttons bitmask: " + e.buttons;
+    uiText(
+      $("#mouse-buttons"),
+      uiJoin([uiMsg("Buttons bitmask: "), e.buttons]),
+    );
   });
   listen(
     area,
@@ -157,9 +198,13 @@ $("#mouse-start").addEventListener("click", () => {
       e.preventDefault();
       scrollX += e.deltaX;
       scrollY += e.deltaY;
-      $("#mouse-status").textContent =
-        "Wheel delta mode: " +
-        (["pixels", "lines", "pages"][e.deltaMode] || e.deltaMode);
+      uiText(
+        $("#mouse-status"),
+        uiJoin([
+          uiMsg("Wheel delta mode: "),
+          ["pixels", "lines", "pages"][e.deltaMode] || e.deltaMode,
+        ]),
+      );
       mouseStats();
     },
     { passive: false },
@@ -177,5 +222,9 @@ $("#mouse-reset").addEventListener("click", () => {
   mouseStats();
 });
 if (matchMedia("(pointer: coarse)").matches)
-  $("#device-touch-note").textContent =
-    "Touch device detected. Screen checks work here; physical keyboard and mouse checks need connected hardware.";
+  uiText(
+    $("#device-touch-note"),
+    uiMsg(
+      "Touch device detected. Screen checks work here; physical keyboard and mouse checks need connected hardware.",
+    ),
+  );

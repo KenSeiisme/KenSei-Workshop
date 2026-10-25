@@ -229,6 +229,29 @@ export function createClient(url, key, options) {
       await p.locator("[data-sign-in]").first().click();
       assert(await p.locator("#google-login").isDisabled());
     });
+    await scenario(
+      "guest",
+      "/zh-hant/games/minesweeper/?from=search#board",
+      async (p) => {
+        await p.waitForFunction(() => window.KenseiWorkspace?.ready);
+        await p.evaluate(() =>
+          KenseiWorkspace.openAuth(
+            location.pathname + location.search + location.hash,
+          ),
+        );
+        await p.locator("#google-login").click();
+        const returnTo = await p.evaluate(
+          () =>
+            JSON.parse(sessionStorage.getItem("kensei-workshop:auth-return"))
+              .path,
+        );
+        assert.equal(returnTo, "/zh-hant/games/minesweeper/?from=search#board");
+        assert.equal(
+          await p.evaluate(() => __oauthOptions.options.redirectTo),
+          base + "/auth/callback/",
+        );
+      },
+    );
     fs.mkdirSync("_qa", { recursive: true });
     fs.writeFileSync(
       "_qa/auth-results.json",

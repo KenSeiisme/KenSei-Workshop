@@ -49,6 +49,12 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8795";
     frame = await (await p.locator("iframe").elementHandle()).contentFrame();
     await frame.waitForURL(/network-runner/);
     await frame.waitForFunction(() => window.testConfig);
+    const iframe = await p.locator("iframe").elementHandle();
+    await p.evaluate(() => KenseiI18n.setLocale("zh-Hant"));
+    assert(
+      await iframe.evaluate((n) => n === document.querySelector("iframe")),
+    );
+    await p.evaluate(() => KenseiI18n.setLocale("en"));
     const config = await frame.evaluate(() => ({
       auto: window.testConfig.autoStart,
       measurement: window.testConfig.logMeasurementApiUrl,

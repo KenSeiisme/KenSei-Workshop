@@ -13,6 +13,8 @@ import {
   busy,
   filename,
 } from "./common.js";
+import { uiMsg, uiError, uiText, uiHtml, uiPrompt } from "../site/ui.js";
+
 let files = [],
   results = [],
   generation = 0,
@@ -36,11 +38,11 @@ function clearResults() {
   const summary = document.querySelector("#image-batch-summary");
   if (summary) {
     delete summary.dataset.measured;
-    summary.textContent = "Select images and process to see results.";
+    uiText(summary, uiMsg("Select images and process to see results."));
   }
   $("#batch-results").replaceChildren();
   $("#image-download").hidden = $("#image-zip").hidden = true;
-  $("#image-result").textContent = "";
+  uiText($("#image-result"), "");
 }
 async function load(list) {
   if (!list.length) return;
@@ -48,7 +50,9 @@ async function load(list) {
     list.length > 20 ||
     [...list].reduce((a, f) => a + f.size, 0) > 100 * 1048576
   )
-    return toast("Choose up to 20 images, totaling no more than 100 MB.");
+    return toast(
+      uiMsg("Choose up to 20 images, totaling no more than 100 MB."),
+    );
   try {
     for (const f of list) {
       if (
@@ -69,11 +73,19 @@ async function load(list) {
     $("#image-preview").src = URL.createObjectURL(files[0]);
     $("#image-preview").onload = () =>
       URL.revokeObjectURL($("#image-preview").src);
-    $("#image-info").textContent =
-      `${files.length} image${files.length > 1 ? "s" : ""} · ${size(files.reduce((n, f) => n + f.size, 0))} · ${img.width} × ${img.height} first image`;
+    uiText(
+      $("#image-info"),
+      uiMsg("{0} image{1} · {2} · {3} × {4} first image", [
+        files.length,
+        files.length > 1 ? "s" : "",
+        size(files.reduce((n, f) => n + f.size, 0)),
+        img.width,
+        img.height,
+      ]),
+    );
     $("#image-process").disabled = false;
   } catch (e) {
-    toast(e.message);
+    toast(uiError(e));
   }
 }
 $("#image-file").addEventListener("change", (e) => load(e.target.files));
@@ -111,11 +123,14 @@ h.addEventListener("input", () => {
 });
 function formatChanged() {
   quality.disabled = format.value === "image/png";
-  $("#format-note").textContent = quality.disabled
-    ? "PNG is lossless. Quality does not apply; output may be larger."
-    : format.value === "image/jpeg"
-      ? "Transparent areas will use a white background."
-      : "WebP balances size and image quality.";
+  uiText(
+    $("#format-note"),
+    quality.disabled
+      ? uiMsg("PNG is lossless. Quality does not apply; output may be larger.")
+      : format.value === "image/jpeg"
+        ? uiMsg("Transparent areas will use a white background.")
+        : uiMsg("WebP balances size and image quality."),
+  );
   clearResults();
 }
 format.onchange = formatChanged;
@@ -126,8 +141,10 @@ quality.oninput = () => {
 $("#cancel-job").onclick = () => {
   generation++;
   fileState(-1, "Cancelled");
-  $("#image-result").textContent =
-    "Cancelled. Finished images remain available.";
+  uiText(
+    $("#image-result"),
+    uiMsg("Cancelled. Finished images remain available."),
+  );
 };
 $("#image-process").onclick = async () => {
   const width = +w.value,
@@ -141,7 +158,9 @@ $("#image-process").onclick = async () => {
     height > 12000 ||
     width * height > 40000000
   )
-    return toast("Use whole dimensions from 1–12,000 px, up to 40 megapixels.");
+    return toast(
+      uiMsg("Use whole dimensions from 1–12,000 px, up to 40 megapixels."),
+    );
   clearResults();
   const job = generation,
     mime = format.value,
@@ -152,8 +171,10 @@ $("#image-process").onclick = async () => {
       browserResize = false;
     for (let i = 0; i < files.length; i++) {
       if (job !== generation) break;
-      $("#image-result").textContent =
-        `Processing ${i + 1} of ${files.length}…`;
+      uiText(
+        $("#image-result"),
+        uiMsg("Processing {0} of {1}…", [i + 1, files.length]),
+      );
       fileState(i, "Processing");
       try {
         const img = await image(files[i]),
@@ -239,19 +260,31 @@ $("#image-process").onclick = async () => {
           const inputBytes = results.reduce((n, r) => n + r.sourceSize, 0),
             outputBytes = results.reduce((n, r) => n + r.blob.size, 0);
           summary.dataset.measured = "true";
-          summary.textContent = `${results.length} image(s) ready · ${size(inputBytes)} → ${size(outputBytes)} · ${outputBytes <= inputBytes ? "saved" : "increased by"} ${size(Math.abs(inputBytes - outputBytes))}. Per-image dimensions and errors are below.`;
+          uiText(
+            summary,
+            uiMsg(
+              "{0} image(s) ready · {1} → {2} · {3} {4}. Per-image dimensions and errors are below.",
+              [
+                results.length,
+                size(inputBytes),
+                size(outputBytes),
+                outputBytes <= inputBytes ? "saved" : uiMsg("increased by"),
+                size(Math.abs(inputBytes - outputBytes)),
+              ],
+            ),
+          );
         }
         const diff = (1 - blob.size / files[i].size) * 100;
         $("#batch-results").insertAdjacentHTML(
           "beforeend",
-          `<div class="saved-row"><div><strong>${esc(files[i].name)}</strong><p>${targetWidth} × ${targetHeight} · ${size(files[i].size)} → ${size(blob.size)} · ${Math.abs(diff).toFixed(0)}% ${diff >= 0 ? "smaller" : "larger"}</p></div><a class="text-link" href="${url}" download="${esc(name)}">Download ↓</a></div>`,
+          uiHtml`<div class="saved-row"><div><strong>${esc(files[i].name)}</strong><p>${targetWidth} × ${targetHeight} · ${size(files[i].size)} → ${size(blob.size)} · ${Math.abs(diff).toFixed(0)}% ${diff >= 0 ? "smaller" : "larger"}</p></div><a class="text-link" href="${url}" download="${esc(name)}">Download ↓</a></div>`,
         );
         fileState(i, "Complete");
       } catch (e) {
         fileState(i, "Failed");
         $("#batch-results").insertAdjacentHTML(
           "beforeend",
-          `<div class="saved-row error-text">${esc(files[i].name)}: ${esc(e.message)}</div>`,
+          uiHtml`<div class="saved-row error-text">${esc(files[i].name)}: ${esc(e.message)}</div>`,
         );
       }
     }
@@ -263,8 +296,17 @@ $("#image-process").onclick = async () => {
         : results.length
           ? "Partially completed"
           : "Processing failed";
-    $("#image-result").textContent =
-      `${outcome} · ${results.length} of ${files.length} images ready.${completed && results.length < files.length ? " Check the messages below and retry." : ""}`;
+    uiText(
+      $("#image-result"),
+      uiMsg("{0} · {1} of {2} images ready.{3}", [
+        outcome,
+        results.length,
+        files.length,
+        completed && results.length < files.length
+          ? uiMsg(" Check the messages below and retry.")
+          : "",
+      ]),
+    );
     if (results.length) {
       const first = results[0];
       $("#image-download").href = first.url;
@@ -273,7 +315,7 @@ $("#image-process").onclick = async () => {
       $("#image-zip").hidden = results.length < 2;
     }
   } catch (e) {
-    toast(e.message);
+    toast(uiError(e));
   } finally {
     busy(false);
     formatChangedQuality();
@@ -290,17 +332,20 @@ $("#image-zip").onclick = async (e) => {
       "kensei-images.zip",
     );
   } catch (e) {
-    toast(e.message);
+    toast(uiError(e));
   } finally {
     e.target.disabled = false;
   }
 };
 $("#save-preset").onclick = async () => {
-  const name = prompt("Name this image preset:", "My image preset");
+  const name = uiPrompt(
+    uiMsg("Name this image preset:"),
+    uiMsg("My image preset"),
+  );
   if (!name?.trim()) return;
   const width = +w.value || null;
   if (width && (!Number.isInteger(width) || width < 1 || width > 12000))
-    return toast("Enter a valid width before saving.");
+    return toast(uiMsg("Enter a valid width before saving."));
   try {
     await api.saveItem("preset", {
       tool: "image-studio",
@@ -309,9 +354,9 @@ $("#save-preset").onclick = async () => {
       format: format.value,
       quality: +quality.value,
     });
-    toast("Preset saved.");
+    toast(uiMsg("Preset saved."));
   } catch {
-    toast("Preset could not be saved. Try again.");
+    toast(uiMsg("Preset could not be saved. Try again."));
   }
 };
 function applyPreset() {

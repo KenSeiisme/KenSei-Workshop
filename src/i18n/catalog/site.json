@@ -1,0 +1,422 @@
+{
+  "site.language": {
+    "en": "Language",
+    "zh-Hant": "語言"
+  },
+  "site.search": {
+    "en": "Search the site",
+    "zh-Hant": "搜尋全站"
+  },
+  "site.searchHint": {
+    "en": "Find tools, games and projects…",
+    "zh-Hant": "尋找工具、遊戲與作品…"
+  },
+  "site.searchEmpty": {
+    "en": "No results. Try another search.",
+    "zh-Hant": "找不到結果，請試試其他關鍵字。"
+  },
+  "site.searchPrompt": {
+    "en": "Search tools, games and projects.",
+    "zh-Hant": "搜尋工具、遊戲與作品。"
+  },
+  "site.searchLoading": {
+    "en": "Loading search…",
+    "zh-Hant": "正在載入搜尋…"
+  },
+  "site.languageFailure": {
+    "en": "Language could not load. Your work is unchanged. Try again.",
+    "zh-Hant": "無法載入語言，你的工作內容已保留，請再試一次。"
+  },
+  "site.close": {
+    "en": "Close",
+    "zh-Hant": "關閉"
+  },
+  "site.all": {
+    "en": "All",
+    "zh-Hant": "全部"
+  },
+  "site.tools": {
+    "en": "Tools",
+    "zh-Hant": "工具"
+  },
+  "site.games": {
+    "en": "Games",
+    "zh-Hant": "遊戲"
+  },
+  "site.projects": {
+    "en": "Projects",
+    "zh-Hant": "作品"
+  },
+  "site.menu": {
+    "en": "Menu",
+    "zh-Hant": "選單"
+  },
+  "site.languageLoading": {
+    "en": "Loading language…",
+    "zh-Hant": "正在載入語言…"
+  },
+  "site.searchFailure": {
+    "en": "Search could not load. Retry.",
+    "zh-Hant": "搜尋無法載入，請重試。"
+  },
+  "site.unknownError": {
+    "en": "Something went wrong. Please try again.",
+    "zh-Hant": "發生錯誤，請再試一次。"
+  },
+  "site.retry": {
+    "en": "Retry",
+    "zh-Hant": "重試"
+  },
+  "site.extra.9755f224ef93": {
+    "en": "UPPERCASE",
+    "zh-Hant": "轉成大寫"
+  },
+  "site.extra.46ede93b09bf": {
+    "en": "lowercase",
+    "zh-Hant": "轉成小寫"
+  },
+  "site.extra.1f6fa6f69d18": {
+    "en": "min",
+    "zh-Hant": "分鐘"
+  },
+  "site.extra.b15c8e6478b8": {
+    "en": "cues",
+    "zh-Hant": "則字幕"
+  },
+  "site.extra.f4db1e48476f": {
+    "en": "End",
+    "zh-Hant": "結束"
+  },
+  "site.extra.aacf94b7be62": {
+    "en": "HOLD",
+    "zh-Hant": "暫存"
+  },
+  "site.extra.7a66eabf637f": {
+    "en": "NEXT",
+    "zh-Hant": "下一個"
+  },
+  "site.extra.adc95605a1b3": {
+    "en": "Length",
+    "zh-Hant": "長度"
+  },
+  "site.extra.81d27ef6d503": {
+    "en": "Weight",
+    "zh-Hant": "重量"
+  },
+  "site.extra.b958ce8b871a": {
+    "en": "Temperature",
+    "zh-Hant": "溫度"
+  },
+  "site.extra.024dc204d7ba": {
+    "en": "Area",
+    "zh-Hant": "面積"
+  },
+  "site.extra.b10fb966d720": {
+    "en": "Volume",
+    "zh-Hant": "體積"
+  },
+  "site.extra.c372fee9b456": {
+    "en": "Speed",
+    "zh-Hant": "速度"
+  },
+  "site.extra.33b93476cf59": {
+    "en": "Time",
+    "zh-Hant": "時間"
+  },
+  "site.extra.a69c4dece144": {
+    "en": "Storage",
+    "zh-Hant": "儲存容量"
+  },
+  "site.extra.0a56a0dde3d9": {
+    "en": "24-hour",
+    "zh-Hant": "24 小時制"
+  },
+  "site.extra.c3a5f1416316": {
+    "en": "12-hour",
+    "zh-Hant": "12 小時制"
+  },
+  "site.extra.ae25d6481fc1": {
+    "en": "Classic",
+    "zh-Hant": "經典"
+  },
+  "site.extra.aebc10b26c93": {
+    "en": "40-line Sprint",
+    "zh-Hant": "40 行競速"
+  },
+  "site.extra.1744b96470b5": {
+    "en": "Network",
+    "zh-Hant": "網路"
+  },
+  "site.extra.6bf99799d0ef": {
+    "en": "disc",
+    "zh-Hant": "枚棋子"
+  },
+  "site.extra.dc1ebc943e43": {
+    "en": "discs",
+    "zh-Hant": "枚棋子"
+  },
+  "site.extra.683a62ce15fb": {
+    "en": "move",
+    "zh-Hant": "步"
+  },
+  "site.extra.8aca04ab6ee7": {
+    "en": "moves",
+    "zh-Hant": "步"
+  },
+  "site.extra.0c23e3138346": {
+    "en": "LIFE",
+    "zh-Hant": "條生命"
+  },
+  "site.extra.c5045fcd123d": {
+    "en": "LIVES",
+    "zh-Hant": "條生命"
+  },
+  "site.extra.b8d31e852725": {
+    "en": "on",
+    "zh-Hant": "開啟"
+  },
+  "site.extra.b4dc66dde806": {
+    "en": "off",
+    "zh-Hant": "關閉"
+  },
+  "site.extra.8a2f8bcb5572": {
+    "en": "filled",
+    "zh-Hant": "已填寫"
+  },
+  "site.extra.b23a6a8439c0": {
+    "en": "unknown",
+    "zh-Hant": "未知"
+  },
+  "site.extra.279b8a60f444": {
+    "en": "added",
+    "zh-Hant": "新增"
+  },
+  "site.extra.e1f79758cc42": {
+    "en": "removed",
+    "zh-Hant": "移除"
+  },
+  "site.extra.fed19d3a21f4": {
+    "en": "Millimeters (mm)",
+    "zh-Hant": "毫米 (mm)"
+  },
+  "site.extra.9c5bdd30d9b6": {
+    "en": "Centimeters (cm)",
+    "zh-Hant": "公分 (cm)"
+  },
+  "site.extra.1f0a9ec20798": {
+    "en": "Meters (m)",
+    "zh-Hant": "公尺 (m)"
+  },
+  "site.extra.086954243393": {
+    "en": "Kilometers (km)",
+    "zh-Hant": "公里 (km)"
+  },
+  "site.extra.f831c59e0926": {
+    "en": "Inches (in)",
+    "zh-Hant": "英吋 (in)"
+  },
+  "site.extra.edfdb5a87b35": {
+    "en": "Feet (ft)",
+    "zh-Hant": "英呎 (ft)"
+  },
+  "site.extra.0aeb999b046b": {
+    "en": "Yards (yd)",
+    "zh-Hant": "碼 (yd)"
+  },
+  "site.extra.bb4e926d0dbb": {
+    "en": "Miles (mi)",
+    "zh-Hant": "英里 (mi)"
+  },
+  "site.extra.57513771be4b": {
+    "en": "Milligrams (mg)",
+    "zh-Hant": "毫克 (mg)"
+  },
+  "site.extra.582495ec3179": {
+    "en": "Grams (g)",
+    "zh-Hant": "克 (g)"
+  },
+  "site.extra.7c066ab3b46e": {
+    "en": "Kilograms (kg)",
+    "zh-Hant": "公斤 (kg)"
+  },
+  "site.extra.08cba7a84268": {
+    "en": "Tonnes (t)",
+    "zh-Hant": "公噸 (t)"
+  },
+  "site.extra.60c239c57236": {
+    "en": "Ounces (oz)",
+    "zh-Hant": "盎司 (oz)"
+  },
+  "site.extra.499322ae749c": {
+    "en": "Pounds (lb)",
+    "zh-Hant": "磅 (lb)"
+  },
+  "site.extra.400b949d3863": {
+    "en": "Celsius (°C)",
+    "zh-Hant": "攝氏 (°C)"
+  },
+  "site.extra.9c9497df3469": {
+    "en": "Fahrenheit (°F)",
+    "zh-Hant": "華氏 (°F)"
+  },
+  "site.extra.7a0982b96a93": {
+    "en": "Kelvin (K)",
+    "zh-Hant": "克耳文 (K)"
+  },
+  "site.extra.6fa3a09dc4d3": {
+    "en": "Square meters (m²)",
+    "zh-Hant": "平方公尺 (m²)"
+  },
+  "site.extra.e0d290a9f068": {
+    "en": "Square kilometers (km²)",
+    "zh-Hant": "平方公里 (km²)"
+  },
+  "site.extra.d375122aa726": {
+    "en": "Square feet (ft²)",
+    "zh-Hant": "平方英呎 (ft²)"
+  },
+  "site.extra.00623de5fbd2": {
+    "en": "Hectares (ha)",
+    "zh-Hant": "公頃 (ha)"
+  },
+  "site.extra.93407f789f87": {
+    "en": "Acres",
+    "zh-Hant": "英畝"
+  },
+  "site.extra.614b02ca0e42": {
+    "en": "Milliliters (mL)",
+    "zh-Hant": "毫升 (mL)"
+  },
+  "site.extra.acbfec3652e0": {
+    "en": "Liters (L)",
+    "zh-Hant": "公升 (L)"
+  },
+  "site.extra.d986e646874f": {
+    "en": "Cubic meters (m³)",
+    "zh-Hant": "立方公尺 (m³)"
+  },
+  "site.extra.e10afebb9016": {
+    "en": "US fluid ounces",
+    "zh-Hant": "美制液量盎司"
+  },
+  "site.extra.653282981142": {
+    "en": "US gallons",
+    "zh-Hant": "美制加侖"
+  },
+  "site.extra.d26908f29422": {
+    "en": "Imperial fluid ounces",
+    "zh-Hant": "英制液量盎司"
+  },
+  "site.extra.9706d654cba5": {
+    "en": "Imperial gallons",
+    "zh-Hant": "英制加侖"
+  },
+  "site.extra.9b1713c06cd6": {
+    "en": "Meters / second (m/s)",
+    "zh-Hant": "公尺／秒 (m/s)"
+  },
+  "site.extra.e188e1ed9957": {
+    "en": "Kilometers / hour (km/h)",
+    "zh-Hant": "公里／小時 (km/h)"
+  },
+  "site.extra.2e1c1be8a87b": {
+    "en": "Miles / hour (mph)",
+    "zh-Hant": "英里／小時 (mph)"
+  },
+  "site.extra.5f3ec40135b1": {
+    "en": "Knots (kn)",
+    "zh-Hant": "節 (kn)"
+  },
+  "site.extra.b9f4833d25c1": {
+    "en": "Milliseconds (ms)",
+    "zh-Hant": "毫秒 (ms)"
+  },
+  "site.extra.75a1721d8063": {
+    "en": "Seconds (s)",
+    "zh-Hant": "秒 (s)"
+  },
+  "site.extra.d8b8a0dab7ac": {
+    "en": "Minutes (min)",
+    "zh-Hant": "分鐘 (min)"
+  },
+  "site.extra.27d1e81f42c6": {
+    "en": "Hours (h)",
+    "zh-Hant": "小時 (h)"
+  },
+  "site.extra.e08c0aa8f558": {
+    "en": "Days",
+    "zh-Hant": "天"
+  },
+  "site.extra.cf64435fbb0d": {
+    "en": "Weeks",
+    "zh-Hant": "週"
+  },
+  "site.extra.4739aa83d989": {
+    "en": "Bytes (B)",
+    "zh-Hant": "位元組 (B)"
+  },
+  "site.extra.a40abb5361fa": {
+    "en": "Kilobytes (kB · 1000 B)",
+    "zh-Hant": "千位元組 (kB · 1000 B)"
+  },
+  "site.extra.6c0978fb5b92": {
+    "en": "Megabytes (MB)",
+    "zh-Hant": "百萬位元組 (MB)"
+  },
+  "site.extra.aeb3788d63d1": {
+    "en": "Gigabytes (GB)",
+    "zh-Hant": "十億位元組 (GB)"
+  },
+  "site.extra.67bcc7e97f79": {
+    "en": "Terabytes (TB)",
+    "zh-Hant": "兆位元組 (TB)"
+  },
+  "site.extra.5204d544c217": {
+    "en": "Kibibytes (KiB · 1024 B)",
+    "zh-Hant": "二進位千位元組 (KiB · 1024 B)"
+  },
+  "site.extra.d7301d2af636": {
+    "en": "Mebibytes (MiB)",
+    "zh-Hant": "二進位百萬位元組 (MiB)"
+  },
+  "site.extra.5561cf2413fb": {
+    "en": "Gibibytes (GiB)",
+    "zh-Hant": "二進位十億位元組 (GiB)"
+  },
+  "site.extra.24ac9fae5823": {
+    "en": "Tebibytes (TiB)",
+    "zh-Hant": "二進位兆位元組 (TiB)"
+  },
+  "site.join": {
+    "en": "{0} · {1}",
+    "zh-Hant": "{0} · {1}"
+  },
+  "site.days": {
+    "en": "days",
+    "zh-Hant": "天"
+  },
+  "site.stage": {
+    "en": "STAGE {0} / 3",
+    "zh-Hant": "關卡 {0} / 3"
+  },
+  "site.ocr.0": {
+    "en": "loading tesseract core",
+    "zh-Hant": "正在載入 OCR 核心"
+  },
+  "site.ocr.1": {
+    "en": "initializing tesseract",
+    "zh-Hant": "正在初始化 OCR"
+  },
+  "site.ocr.2": {
+    "en": "loading language traineddata",
+    "zh-Hant": "正在載入語言資料"
+  },
+  "site.ocr.3": {
+    "en": "initializing api",
+    "zh-Hant": "正在初始化辨識引擎"
+  },
+  "site.ocr.4": {
+    "en": "recognizing text",
+    "zh-Hant": "正在辨識文字"
+  }
+}

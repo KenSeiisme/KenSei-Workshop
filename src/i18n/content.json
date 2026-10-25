@@ -1,0 +1,914 @@
+{
+  "tools/image-studio": {
+    "name": {
+      "en": "Image Studio",
+      "zh-Hant": "圖片工作室"
+    },
+    "description": {
+      "en": "Batch compress, resize and convert images. Download individually or as a ZIP.",
+      "zh-Hant": "批次壓縮、調整尺寸與轉換圖片，可逐張下載或打包為 ZIP。"
+    },
+    "aliases": [
+      "image",
+      "photo",
+      "compress",
+      "resize",
+      "convert",
+      "图片",
+      "圖片",
+      "压缩图片",
+      "壓縮圖片",
+      "图片转换",
+      "圖片轉換",
+      "jpg",
+      "png",
+      "webp"
+    ]
+  },
+  "tools/qr-studio": {
+    "name": {
+      "en": "QR Studio",
+      "zh-Hant": "二維碼工作室"
+    },
+    "description": {
+      "en": "Generate QR codes or scan local images and your camera, entirely on your device.",
+      "zh-Hant": "在裝置上產生二維碼，或使用本機圖片與攝影機掃描。"
+    },
+    "aliases": [
+      "qr",
+      "qrcode",
+      "qr code",
+      "wifi",
+      "二维码",
+      "二維碼",
+      "扫码",
+      "掃碼",
+      "条码",
+      "條碼"
+    ]
+  },
+  "tools/pdf-toolkit": {
+    "name": {
+      "en": "PDF Toolkit",
+      "zh-Hant": "PDF 工具箱"
+    },
+    "description": {
+      "en": "Merge, split, arrange and rotate PDFs. Convert images to PDF and PDF pages to images.",
+      "zh-Hant": "合併、拆分、排序與旋轉 PDF，並在圖片與 PDF 頁面之間轉換。"
+    },
+    "aliases": [
+      "pdf",
+      "merge",
+      "split",
+      "extract",
+      "rotate",
+      "合并",
+      "合併",
+      "拆分",
+      "提取页面",
+      "擷取頁面",
+      "图片转pdf",
+      "圖片轉PDF"
+    ]
+  },
+  "tools/text-toolkit": {
+    "name": {
+      "en": "Text Toolkit",
+      "zh-Hant": "文字工具箱"
+    },
+    "description": {
+      "en": "Count, clean up and transform text without the busywork.",
+      "zh-Hant": "計算字數、整理與轉換文字，減少重複操作。"
+    },
+    "aliases": [
+      "text",
+      "word count",
+      "case",
+      "文字",
+      "文本",
+      "字数",
+      "字數",
+      "大小写",
+      "大小寫",
+      "去除空白"
+    ]
+  },
+  "tools/markdown-studio": {
+    "name": {
+      "en": "Markdown Studio",
+      "zh-Hant": "Markdown 工作室"
+    },
+    "description": {
+      "en": "Write Markdown with a live preview, save drafts and export MD or HTML.",
+      "zh-Hant": "撰寫 Markdown 並即時預覽、儲存草稿及匯出 MD 或 HTML。"
+    },
+    "aliases": [
+      "markdown",
+      "md",
+      "editor",
+      "preview",
+      "编辑器",
+      "編輯器",
+      "笔记",
+      "筆記",
+      "预览",
+      "預覽"
+    ]
+  },
+  "tools/text-compare": {
+    "name": {
+      "en": "Text Compare",
+      "zh-Hant": "文字比較"
+    },
+    "description": {
+      "en": "Compare two texts by line or character and export their differences.",
+      "zh-Hant": "逐行或逐字元比較兩份文字，並匯出差異。"
+    },
+    "aliases": [
+      "diff",
+      "compare",
+      "text diff",
+      "文字对比",
+      "文字對比",
+      "文本比较",
+      "文字比較",
+      "差异",
+      "差異"
+    ]
+  },
+  "tools/image-to-text": {
+    "name": {
+      "en": "Image to Text",
+      "zh-Hant": "圖片轉文字"
+    },
+    "description": {
+      "en": "Extract English, Chinese and Malay text from images, right on your device.",
+      "zh-Hant": "直接在裝置上，從圖片擷取英文、中文與馬來文。"
+    },
+    "aliases": [
+      "ocr",
+      "image to text",
+      "recognition",
+      "图片转文字",
+      "圖片轉文字",
+      "文字识别",
+      "文字辨識",
+      "提取文字",
+      "擷取文字"
+    ]
+  },
+  "tools/focus-timer": {
+    "name": {
+      "en": "Focus Timer",
+      "zh-Hant": "專注計時器"
+    },
+    "description": {
+      "en": "Find your rhythm with a simple, adjustable Pomodoro timer.",
+      "zh-Hant": "使用簡單且可調整的番茄鐘，找出你的專注節奏。"
+    },
+    "aliases": [
+      "pomodoro",
+      "timer",
+      "focus",
+      "番茄钟",
+      "番茄鐘",
+      "专注",
+      "專注",
+      "计时器",
+      "計時器"
+    ]
+  },
+  "tools/answer-book": {
+    "name": {
+      "en": "Answer Book",
+      "zh-Hant": "答案之書"
+    },
+    "description": {
+      "en": "Draw original English and Chinese answers, turn another page and revisit your history.",
+      "zh-Hant": "抽取原創中英文答案、再翻一頁，並重溫你的答案歷史。"
+    },
+    "aliases": [
+      "answer book",
+      "random answer",
+      "答案之书",
+      "答案之書",
+      "随机答案",
+      "隨機答案",
+      "占卜",
+      "解答"
+    ]
+  },
+  "tools/decision-studio": {
+    "name": {
+      "en": "Decision Studio",
+      "zh-Hant": "選擇助手"
+    },
+    "description": {
+      "en": "Spin a wheel, draw without repeats or create balanced random groups. Autosave your schemes.",
+      "zh-Hant": "轉動轉盤、不重複抽取或隨機平均分組，並自動儲存方案。"
+    },
+    "aliases": [
+      "decision",
+      "wheel",
+      "random",
+      "groups",
+      "选择助手",
+      "選擇助手",
+      "转盘",
+      "轉盤",
+      "抽签",
+      "抽籤",
+      "分组",
+      "分組"
+    ]
+  },
+  "tools/typing-sprint": {
+    "name": {
+      "en": "Typing Sprint",
+      "zh-Hant": "打字衝刺"
+    },
+    "description": {
+      "en": "Practice English or Chinese typing for 60 seconds, or join the public Ranked leaderboard.",
+      "zh-Hant": "練習 60 秒中英文打字，或參加公開排行測試。"
+    },
+    "aliases": [
+      "typing",
+      "typing test",
+      "wpm",
+      "cpm",
+      "打字测速",
+      "打字測速",
+      "打字练习",
+      "打字練習",
+      "打字排行榜"
+    ]
+  },
+  "tools/device-check": {
+    "name": {
+      "en": "Device Check",
+      "zh-Hant": "設備測試"
+    },
+    "description": {
+      "en": "Check your screen, keyboard and mouse with temporary tests you control.",
+      "zh-Hant": "由你控制暫時性的測試，檢查螢幕、鍵盤與滑鼠。"
+    },
+    "aliases": [
+      "device test",
+      "screen",
+      "keyboard",
+      "mouse",
+      "设备测试",
+      "設備測試",
+      "屏幕检测",
+      "螢幕檢測",
+      "键盘测试",
+      "鍵盤測試",
+      "鼠标测试",
+      "滑鼠測試"
+    ]
+  },
+  "tools/network-test": {
+    "name": {
+      "en": "Network Test",
+      "zh-Hant": "網路測速"
+    },
+    "description": {
+      "en": "Measure download, upload, latency and jitter with a full Cloudflare connection test.",
+      "zh-Hant": "透過完整的 Cloudflare 連線測試，測量下載、上傳、延遲與抖動。"
+    },
+    "aliases": [
+      "speedtest",
+      "speed test",
+      "internet speed",
+      "network",
+      "网络测速",
+      "網路測速",
+      "网速",
+      "網速",
+      "延迟",
+      "延遲",
+      "抖动",
+      "抖動"
+    ]
+  },
+  "tools/zip-studio": {
+    "name": {
+      "en": "ZIP Studio",
+      "zh-Hant": "ZIP 工作室"
+    },
+    "description": {
+      "en": "Pack files into a ZIP, inspect an archive and download checked files locally.",
+      "zh-Hant": "將檔案打包為 ZIP、檢視壓縮檔，並在本機下載已檢查的檔案。"
+    },
+    "aliases": [
+      "zip",
+      "archive",
+      "compress",
+      "unzip",
+      "压缩包",
+      "壓縮檔",
+      "打包",
+      "解压",
+      "解壓縮"
+    ]
+  },
+  "tools/color-studio": {
+    "name": {
+      "en": "Color Studio",
+      "zh-Hant": "配色工作室"
+    },
+    "description": {
+      "en": "Convert colors, build a palette, preview gradients and check text contrast.",
+      "zh-Hant": "轉換色彩、建立調色板、預覽漸層，並檢查文字對比度。"
+    },
+    "aliases": [
+      "color",
+      "colour",
+      "palette",
+      "gradient",
+      "contrast",
+      "hex",
+      "rgb",
+      "hsl",
+      "配色",
+      "调色板",
+      "調色板",
+      "渐变",
+      "漸層",
+      "对比度",
+      "對比度"
+    ]
+  },
+  "tools/unit-converter": {
+    "name": {
+      "en": "Unit Converter",
+      "zh-Hant": "單位換算"
+    },
+    "description": {
+      "en": "Convert everyday units, from temperature and distance to volume and storage.",
+      "zh-Hant": "換算溫度、距離、體積、儲存容量等日常單位。"
+    },
+    "aliases": [
+      "unit",
+      "converter",
+      "temperature",
+      "storage",
+      "单位换算",
+      "單位換算",
+      "温度",
+      "溫度",
+      "容量",
+      "长度",
+      "長度"
+    ]
+  },
+  "tools/password-generator": {
+    "name": {
+      "en": "Password Generator",
+      "zh-Hant": "密碼產生器"
+    },
+    "description": {
+      "en": "Generate a random password on your device, with the length and characters you choose.",
+      "zh-Hant": "依你選擇的長度與字元，在裝置上產生隨機密碼。"
+    },
+    "aliases": [
+      "password",
+      "generator",
+      "random password",
+      "密码生成器",
+      "密碼產生器",
+      "随机密码",
+      "隨機密碼"
+    ]
+  },
+  "tools/time-studio": {
+    "name": {
+      "en": "Time Studio",
+      "zh-Hant": "時間工作室"
+    },
+    "description": {
+      "en": "World clocks, time-zone conversion, calendar date differences and local countdowns.",
+      "zh-Hant": "世界時鐘、時區換算、日曆日期差距與本機倒數計時。"
+    },
+    "aliases": [
+      "time",
+      "world clock",
+      "timezone",
+      "date difference",
+      "countdown",
+      "世界时钟",
+      "世界時鐘",
+      "时区",
+      "時區",
+      "日期计算",
+      "日期計算",
+      "倒计时",
+      "倒數計時"
+    ]
+  },
+  "tools/file-renamer": {
+    "name": {
+      "en": "File Renamer",
+      "zh-Hant": "檔案重新命名"
+    },
+    "description": {
+      "en": "Preview batch names, add numbering and download renamed copies as a ZIP.",
+      "zh-Hant": "預覽批次檔名、加入編號，並將重新命名的副本下載為 ZIP。"
+    },
+    "aliases": [
+      "rename",
+      "batch rename",
+      "filename",
+      "文件重命名",
+      "檔案重新命名",
+      "批量改名",
+      "批次改名",
+      "编号",
+      "編號"
+    ]
+  },
+  "tools/audio-studio": {
+    "name": {
+      "en": "Audio Studio",
+      "zh-Hant": "音訊工作室"
+    },
+    "description": {
+      "en": "Record your microphone, trim audio and export MP3 or WAV on your device.",
+      "zh-Hant": "在裝置上使用麥克風錄音、裁剪音訊，並匯出 MP3 或 WAV。"
+    },
+    "aliases": [
+      "audio",
+      "trim",
+      "record",
+      "mp3",
+      "wav",
+      "音频",
+      "音訊",
+      "音频剪辑",
+      "音訊裁剪",
+      "录音",
+      "錄音"
+    ]
+  },
+  "tools/data-studio": {
+    "name": {
+      "en": "Data Studio",
+      "zh-Hant": "資料工作室"
+    },
+    "description": {
+      "en": "Validate and format JSON, preview CSV tables and convert between flat JSON and CSV.",
+      "zh-Hant": "驗證與格式化 JSON、預覽 CSV 表格，並在平面 JSON 與 CSV 之間轉換。"
+    },
+    "aliases": [
+      "json",
+      "csv",
+      "formatter",
+      "validator",
+      "convert",
+      "数据整理",
+      "資料整理",
+      "格式化",
+      "表格",
+      "转换",
+      "轉換"
+    ]
+  },
+  "tools/flashcards": {
+    "name": {
+      "en": "Flashcards",
+      "zh-Hant": "學習卡"
+    },
+    "description": {
+      "en": "Create bilingual learning cards, review mastery and sync private decks across devices.",
+      "zh-Hant": "建立雙語學習卡、複習掌握程度，並跨裝置同步私人牌組。"
+    },
+    "aliases": [
+      "flashcard",
+      "flashcards",
+      "study cards",
+      "revision",
+      "学习卡",
+      "學習卡",
+      "记忆卡",
+      "記憶卡",
+      "复习",
+      "複習",
+      "牌组",
+      "牌組"
+    ]
+  },
+  "tools/calculator-studio": {
+    "name": {
+      "en": "Calculator Studio",
+      "zh-Hant": "計算機工作室"
+    },
+    "description": {
+      "en": "Calculate scientific expressions, fractions and percentages with DEG or RAD angles.",
+      "zh-Hant": "計算科學運算式、分數與百分比，支援 DEG 或 RAD 角度模式。"
+    },
+    "aliases": [
+      "calculator",
+      "scientific",
+      "math",
+      "计算器",
+      "計算機",
+      "科学计算",
+      "科學計算",
+      "分数",
+      "分數",
+      "百分比"
+    ]
+  },
+  "tools/file-check": {
+    "name": {
+      "en": "File Check",
+      "zh-Hant": "檔案校驗"
+    },
+    "description": {
+      "en": "Calculate SHA-256 / SHA-512, compare checksums and find matching selected files.",
+      "zh-Hant": "計算 SHA-256 / SHA-512、比較檢查碼，並找出相符的所選檔案。"
+    },
+    "aliases": [
+      "checksum",
+      "hash",
+      "sha256",
+      "sha512",
+      "integrity",
+      "文件校验",
+      "檔案校驗",
+      "校验码",
+      "檢查碼",
+      "哈希",
+      "雜湊",
+      "重复文件",
+      "重複檔案"
+    ]
+  },
+  "tools/subtitle-studio": {
+    "name": {
+      "en": "Subtitle Studio",
+      "zh-Hant": "字幕工作室"
+    },
+    "description": {
+      "en": "Edit SRT and WebVTT, shift timing and preview subtitles with your local video.",
+      "zh-Hant": "編輯 SRT 與 WebVTT、調整時間，並搭配本機影片預覽字幕。"
+    },
+    "aliases": [
+      "subtitle",
+      "srt",
+      "vtt",
+      "webvtt",
+      "字幕",
+      "字幕编辑",
+      "字幕編輯",
+      "时间轴",
+      "時間軸",
+      "字幕同步"
+    ]
+  },
+  "tools/study-planner": {
+    "name": {
+      "en": "Study Planner",
+      "zh-Hant": "學習計畫"
+    },
+    "description": {
+      "en": "Plan weekly classes, assignments and exams with private account sync.",
+      "zh-Hant": "規劃每週課堂、作業與考試，並使用私人帳號同步。"
+    },
+    "aliases": [
+      "study planner",
+      "schedule",
+      "assignment",
+      "exam",
+      "学习计划",
+      "學習計畫",
+      "课程表",
+      "課表",
+      "作业",
+      "作業",
+      "考试",
+      "考試"
+    ]
+  },
+  "tools/whiteboard": {
+    "name": {
+      "en": "Whiteboard",
+      "zh-Hant": "白板"
+    },
+    "description": {
+      "en": "Draw, connect and sketch ideas on privately synced whiteboards.",
+      "zh-Hant": "在私密同步的白板上繪圖、連結與勾勒想法。"
+    },
+    "aliases": [
+      "whiteboard",
+      "drawing",
+      "sketch",
+      "excalidraw",
+      "白板",
+      "绘图",
+      "繪圖",
+      "画布",
+      "畫布",
+      "手绘",
+      "手繪"
+    ]
+  },
+  "tools/screen-recorder": {
+    "name": {
+      "en": "Screen Recorder",
+      "zh-Hant": "螢幕錄影"
+    },
+    "description": {
+      "en": "Record your screen with optional audio, then preview and download locally.",
+      "zh-Hant": "錄製螢幕與選用的音訊，並在本機預覽及下載。"
+    },
+    "aliases": [
+      "screen recorder",
+      "screen capture",
+      "recording",
+      "录屏",
+      "錄屏",
+      "屏幕录像",
+      "螢幕錄影",
+      "录制",
+      "錄製"
+    ]
+  },
+  "games/2048": {
+    "name": {
+      "en": "2048",
+      "zh-Hant": "2048"
+    },
+    "description": {
+      "en": "Slide, merge and find a little room for one more tile.",
+      "zh-Hant": "滑動、合併，為下一塊方塊騰出空間。"
+    },
+    "aliases": [
+      "2048",
+      "merge",
+      "tiles",
+      "数字合并",
+      "數字合併",
+      "合并方块",
+      "合併方塊"
+    ]
+  },
+  "games/minesweeper": {
+    "name": {
+      "en": "Minesweeper",
+      "zh-Hant": "掃雷"
+    },
+    "description": {
+      "en": "Read the numbers. Trust your flags. Clear a careful path.",
+      "zh-Hant": "解讀數字、標記地雷，謹慎清出安全路徑。"
+    },
+    "aliases": ["minesweeper", "mines", "扫雷", "掃雷", "踩地雷", "地雷"]
+  },
+  "games/snake": {
+    "name": {
+      "en": "Snake",
+      "zh-Hant": "貪食蛇"
+    },
+    "description": {
+      "en": "One more bite, one less corner. A familiar little challenge.",
+      "zh-Hant": "多吃一口，少一個轉彎空間。熟悉又耐玩的挑戰。"
+    },
+    "aliases": ["snake", "贪吃蛇", "貪食蛇", "贪食蛇", "貪吃蛇"]
+  },
+  "games/memory-match": {
+    "name": {
+      "en": "Memory Match",
+      "zh-Hant": "記憶配對"
+    },
+    "description": {
+      "en": "A few familiar shapes. A little more attention.",
+      "zh-Hant": "幾個熟悉圖案，考驗多一點專注。"
+    },
+    "aliases": [
+      "memory",
+      "match",
+      "pairs",
+      "记忆配对",
+      "記憶配對",
+      "翻牌",
+      "配对",
+      "配對"
+    ]
+  },
+  "games/sudoku": {
+    "name": {
+      "en": "Sudoku",
+      "zh-Hant": "數獨"
+    },
+    "description": {
+      "en": "A little logic, one number at a time. Notes, hints and three difficulties.",
+      "zh-Hant": "運用邏輯，一次填入一個數字。提供筆記、提示與三種難度。"
+    },
+    "aliases": ["sudoku", "数独", "數獨", "九宫格", "九宮格", "逻辑", "邏輯"]
+  },
+  "games/nonogram": {
+    "name": {
+      "en": "Nonogram",
+      "zh-Hant": "數織"
+    },
+    "description": {
+      "en": "Follow the clues. Fill the squares. Reveal a little pixel picture.",
+      "zh-Hant": "跟隨線索、填滿格子，揭開像素圖案。"
+    },
+    "aliases": [
+      "nonogram",
+      "picross",
+      "griddlers",
+      "数织",
+      "數織",
+      "数图",
+      "數圖",
+      "逻辑绘图",
+      "邏輯繪圖"
+    ]
+  },
+  "games/block-puzzle": {
+    "name": {
+      "en": "Block Puzzle",
+      "zh-Hant": "方塊拼圖"
+    },
+    "description": {
+      "en": "Find a place for every shape. Fill a line and make a little space.",
+      "zh-Hant": "為每個形狀找個位置，填滿一行以騰出空間。"
+    },
+    "aliases": [
+      "block puzzle",
+      "blocks",
+      "方块拼图",
+      "方塊拼圖",
+      "积木",
+      "積木",
+      "拼块",
+      "拼塊"
+    ]
+  },
+  "games/brick-breaker": {
+    "name": {
+      "en": "Brick Breaker",
+      "zh-Hant": "打磚塊"
+    },
+    "description": {
+      "en": "Keep the ball in play. Three stages, three lives, one more bounce.",
+      "zh-Hant": "讓球持續反彈。三個關卡、三條生命，再接住下一次彈跳。"
+    },
+    "aliases": [
+      "brick breaker",
+      "breakout",
+      "arkanoid",
+      "打砖块",
+      "打磚塊",
+      "弹球",
+      "彈球"
+    ]
+  },
+  "games/connect-four": {
+    "name": {
+      "en": "Connect Four",
+      "zh-Hant": "四子棋"
+    },
+    "description": {
+      "en": "Four in a row, a move ahead. Play the computer or share a screen.",
+      "zh-Hant": "四子連成一線，思考下一步。可與電腦對戰或共用螢幕遊玩。"
+    },
+    "aliases": [
+      "connect four",
+      "connect 4",
+      "four in a row",
+      "四子棋",
+      "四连棋",
+      "四連棋",
+      "四子连线",
+      "四子連線"
+    ]
+  },
+  "games/reversi": {
+    "name": {
+      "en": "Reversi",
+      "zh-Hant": "黑白棋"
+    },
+    "description": {
+      "en": "A quiet move can turn the board. Play the computer or a friend beside you.",
+      "zh-Hant": "安靜的一步，也能翻轉棋局。可與電腦或身旁好友對弈。"
+    },
+    "aliases": [
+      "reversi",
+      "othello",
+      "黑白棋",
+      "翻转棋",
+      "翻轉棋",
+      "奥赛罗",
+      "奧賽羅"
+    ]
+  },
+  "games/block-drop": {
+    "name": {
+      "en": "Block Drop",
+      "zh-Hant": "下落方塊"
+    },
+    "description": {
+      "en": "Find your stack rhythm. Clear a line, chase forty, hold your next move.",
+      "zh-Hant": "找到堆疊節奏、消除整行、挑戰四十行，或暫存下一步。"
+    },
+    "aliases": [
+      "block drop",
+      "falling blocks",
+      "tetris",
+      "下落方块",
+      "下落方塊",
+      "俄罗斯方块",
+      "俄羅斯方塊",
+      "消行"
+    ]
+  },
+  "games/pong": {
+    "name": {
+      "en": "Pong",
+      "zh-Hant": "Pong 乒乓對戰"
+    },
+    "description": {
+      "en": "Invite a friend. Share a rally. A private online room for two.",
+      "zh-Hant": "邀請好友，一起來回接球。專屬兩人的私人線上房間。"
+    },
+    "aliases": [
+      "pong",
+      "table tennis",
+      "paddle",
+      "乒乓",
+      "乒乓球",
+      "在线对战",
+      "線上對戰",
+      "好友对战",
+      "好友對戰"
+    ]
+  },
+  "projects/3a3d": {
+    "name": {
+      "en": "3A3D",
+      "zh-Hant": "3A3D"
+    },
+    "description": {
+      "en": "An automotive showcase built around car culture, visual discovery and detailed specifications.",
+      "zh-Hant": "以汽車文化、視覺探索與詳細規格為核心的汽車展示網站。"
+    },
+    "aliases": [
+      "3a3d",
+      "cars",
+      "automotive",
+      "汽车",
+      "汽車",
+      "车款",
+      "車款",
+      "汽车展示",
+      "汽車展示"
+    ]
+  },
+  "projects/salon-system": {
+    "name": {
+      "en": "Salon Management System",
+      "zh-Hant": "沙龍管理系統"
+    },
+    "description": {
+      "en": "A C++ coursework project exploring how software can support salon operations.",
+      "zh-Hant": "以 C++ 課程專案，探索軟體如何支援沙龍營運。"
+    },
+    "aliases": [
+      "salon",
+      "salon management",
+      "c++",
+      "coursework",
+      "沙龙管理",
+      "沙龍管理",
+      "理发店",
+      "理髮店",
+      "美发",
+      "美髮"
+    ]
+  },
+  "projects/ai-art": {
+    "name": {
+      "en": "AI Art Gallery",
+      "zh-Hant": "AI 藝術畫廊"
+    },
+    "description": {
+      "en": "A collection of visual experiments with local AI and image generation.",
+      "zh-Hant": "使用本機 AI 與圖像生成，展開一系列視覺實驗。"
+    },
+    "aliases": [
+      "ai art",
+      "gallery",
+      "local ai",
+      "image generation",
+      "AI绘画",
+      "AI繪畫",
+      "AI艺术",
+      "AI藝術",
+      "图像生成",
+      "圖像生成"
+    ]
+  }
+}

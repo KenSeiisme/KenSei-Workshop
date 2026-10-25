@@ -6,6 +6,15 @@ import {
   mediaError,
   clockText,
 } from "./media-capture.js";
+import {
+  uiMsg,
+  uiJoin,
+  uiFrom,
+  uiError,
+  uiText,
+  uiConfirm,
+} from "../site/ui.js";
+
 let buffer = null,
   name = "audio",
   wave = null,
@@ -141,8 +150,12 @@ async function waveform(file, token) {
     });
   } catch {
     if (token === job) {
-      $("#audio-wave").textContent =
-        "Waveform unavailable. Exact start/end fields and audio processing remain available.";
+      uiText(
+        $("#audio-wave"),
+        uiMsg(
+          "Waveform unavailable. Exact start/end fields and audio processing remain available.",
+        ),
+      );
       region = null;
     }
   }
@@ -152,13 +165,13 @@ function finish(message, error = false) {
   worker = null;
   busy(false);
   controls();
-  if (message) status(message, error);
+  if (message) status(uiFrom(message), error);
 }
 async function loadAudio(file, recordedDuration = null) {
   stopPlayback();
   const token = ++job;
   busy(true);
-  status("Reading audio metadata…");
+  status(uiMsg("Reading audio metadata…"));
   $("#audio-progress").value = 0;
   let nextUrl = null;
   try {
@@ -190,7 +203,7 @@ async function loadAudio(file, recordedDuration = null) {
       duration = recordedDuration;
     if (!Number.isFinite(duration) || duration <= 0 || duration > 300.05)
       throw Error("Choose audio up to five minutes long.");
-    status("Decoding on this device…");
+    status(uiMsg("Decoding on this device…"));
     const ctx = await audioContext(),
       decoded = await ctx.decodeAudioData(await file.arrayBuffer());
     if (token !== job) return;
@@ -214,16 +227,20 @@ async function loadAudio(file, recordedDuration = null) {
     start.value = "0";
     end.value = String(decoded.duration);
     gain.value = "100";
-    info.textContent =
-      file.name +
-      " · " +
-      decoded.duration.toFixed(2) +
-      " s · " +
-      decoded.numberOfChannels +
-      " channel(s) · " +
-      decoded.sampleRate +
-      " Hz decoded · " +
-      size(file.size);
+    uiText(
+      info,
+      uiJoin([
+        file.name +
+          " · " +
+          decoded.duration.toFixed(2) +
+          " s · " +
+          decoded.numberOfChannels,
+        uiMsg(" channel(s) · "),
+        decoded.sampleRate,
+        uiMsg(" Hz decoded · "),
+        size(file.size),
+      ]),
+    );
     await waveform(file, token);
     if (token === job) {
       finish("Audio ready. Drag or enter a selection; export as MP3 or WAV.");
@@ -271,12 +288,14 @@ $("#audio-play").onclick = async () => {
     };
     tick();
     status(
-      "Playing selection" +
-        (volume > 1 ? " · gain may clip at export" : "") +
+      uiJoin([
+        uiMsg("Playing selection"),
+        volume > 1 ? uiMsg(" · gain may clip at export") : "",
         ".",
+      ]),
     );
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#audio-stop").onclick = stopPlayback;
@@ -285,13 +304,13 @@ $("#audio-export").onclick = async () => {
   try {
     selected = valid();
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
     return;
   }
   stopPlayback();
   const token = ++job;
   busy(true);
-  status("Preparing 44.1 kHz selection…");
+  status(uiMsg("Preparing 44.1 kHz selection…"));
   $("#audio-progress").value = 0;
   try {
     const { a, b, volume } = selected,
@@ -309,7 +328,13 @@ $("#audio-export").onclick = async () => {
       format = $("#audio-format").value,
       bitrate = Number($("#audio-bitrate").value);
     worker = new Worker("/tool-scripts/audio-worker.js", { type: "module" });
-    status("Encoding " + format.toUpperCase() + " on this device…");
+    status(
+      uiJoin([
+        uiMsg("Encoding "),
+        format.toUpperCase(),
+        uiMsg(" on this device…"),
+      ]),
+    );
     worker.onmessage = ({ data }) => {
       if (token !== job) return;
       if (data.type === "progress") $("#audio-progress").value = data.value;
@@ -384,7 +409,7 @@ let microphoneStream = null,
   recordingUnsaved = false;
 if ($("#audio-record-start")) {
   const recordStatus = (text, error = false) => {
-    $("#audio-record-status").textContent = text;
+    uiText($("#audio-record-status"), text);
     $("#audio-record-status").classList.toggle("error-text", error);
   };
   function recordingControls() {
@@ -399,8 +424,10 @@ if ($("#audio-record-start")) {
     $("#audio-record-stop").disabled = !["recording", "paused"].includes(
       recordingState,
     );
-    $("#audio-record-pause").textContent =
-      recordingState === "paused" ? "Resume" : "Pause";
+    uiText(
+      $("#audio-record-pause"),
+      recordingState === "paused" ? uiMsg("Resume") : uiMsg("Pause"),
+    );
     $("#audio-record-retry").disabled =
       recordPending || recordingState !== "idle" || !recordedFile;
   }
@@ -440,8 +467,10 @@ if ($("#audio-record-start")) {
     if (recordPending || recordingState !== "idle") return;
     if (
       recordingUnsaved &&
-      !confirm(
-        "Discard the recording you have not downloaded and record again?",
+      !uiConfirm(
+        uiMsg(
+          "Discard the recording you have not downloaded and record again?",
+        ),
       )
     )
       return;
@@ -499,7 +528,7 @@ if ($("#audio-record-start")) {
         maxSeconds: 300,
         maxBytes: 50000000,
         onTick({ seconds }) {
-          $("#audio-record-time").textContent = clockText(seconds);
+          uiText($("#audio-record-time"), clockText(seconds));
         },
         onState(next) {
           recordingState = next;
@@ -524,7 +553,7 @@ if ($("#audio-record-start")) {
           recordedUrl = URL.createObjectURL(blob);
           $("#audio-record-preview").src = recordedUrl;
           $("#audio-record-recovery").hidden = false;
-          $("#audio-record-time").textContent = clockText(detail.seconds);
+          uiText($("#audio-record-time"), clockText(detail.seconds));
           recordingUnsaved = true;
           recordStatus(
             `${detail.reason}. Opening ${size(blob.size)} in the editor…`,
@@ -544,7 +573,7 @@ if ($("#audio-record-start")) {
       });
       microphoneRecorder.start();
       recordingUnsaved = true;
-      $("#audio-record-time").textContent = "00:00";
+      uiText($("#audio-record-time"), "00:00");
       recordStatus(
         "Recording from your microphone. Stop to edit and export your clip.",
       );

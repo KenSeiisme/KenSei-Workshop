@@ -12,6 +12,15 @@ import {
   observeText,
   summary,
 } from "./tool-layout.js";
+import {
+  uiSource,
+  uiMsg,
+  uiFrom,
+  uiText,
+  uiAttr,
+  uiConfirm,
+} from "../site/ui.js";
+
 const examples = {
   "text-toolkit": {
     "text-input":
@@ -37,7 +46,7 @@ function example(tool, root) {
   if (!examples[tool]) return;
   const button = el(
     "button",
-    "Try an example",
+    uiMsg("Try an example"),
     "button secondary tool-example",
   );
   button.type = "button";
@@ -46,8 +55,10 @@ function example(tool, root) {
   button.onclick = () => {
     if (
       Object.keys(examples[tool]).some((id) => $("#" + id)?.value.trim()) &&
-      !confirm(
-        "Replace the current text with an example? Saved Workspace records are unchanged.",
+      !uiConfirm(
+        uiMsg(
+          "Replace the current text with an example? Saved Workspace records are unchanged.",
+        ),
       )
     )
       return;
@@ -60,7 +71,7 @@ function example(tool, root) {
     first.focus();
     feedback(
       "ready",
-      "Example loaded. Edit it or run the tool when you are ready.",
+      uiMsg("Example loaded. Edit it or run the tool when you are ready."),
     );
   };
 }
@@ -68,14 +79,14 @@ function fileRows(tool) {
   const input = $(tool === "image-studio" ? "#image-file" : "#check-files");
   if (!input) return;
   const list = el("ul", undefined, "file-state-list");
-  list.setAttribute("aria-label", "Selected files and processing state");
+  uiAttr(list, "aria-label", uiMsg("Selected files and processing state"));
   input.closest("section").append(list);
   input.addEventListener("change", () => {
     list.replaceChildren();
     for (const file of [...input.files]) {
       const row = el("li"),
         name = el("span", file.name),
-        state = el("span", "Waiting", "file-state");
+        state = el("span", uiMsg("Waiting"), "file-state");
       row.append(name, state);
       list.append(row);
     }
@@ -88,32 +99,35 @@ function fileRows(tool) {
         [...list.children].forEach((row) => {
           if (
             state === "Waiting" ||
-            !["Complete", "Failed"].includes(row.lastChild.textContent)
+            !["Complete", "Failed"].includes(uiSource(row.lastChild))
           )
-            row.lastChild.textContent = state;
+            uiText(row.lastChild, state);
         });
       else if (list.children[index])
-        list.children[index].lastChild.textContent = state;
+        uiText(list.children[index].lastChild, state);
     });
     return;
   }
   const status = $("#tool-status");
   observeText(status, (node) => {
-    const text = node.textContent,
+    const text = uiSource(node),
       match = text.match(/(?:file|image)\s+(\d+)/i),
       index = match ? Number(match[1]) - 1 : -1;
     $$("li", list).forEach((row, i) => {
-      row.lastChild.textContent = /complete|done/i.test(text)
-        ? "Complete"
-        : /cancel/i.test(text)
-          ? "Cancelled"
-          : i < index
-            ? "Complete"
-            : i === index
-              ? /failed|could not/i.test(text)
-                ? "Failed"
-                : "Processing"
-              : "Waiting";
+      uiText(
+        row.lastChild,
+        /complete|done/i.test(text)
+          ? uiMsg("Complete")
+          : /cancel/i.test(text)
+            ? uiMsg("Cancelled")
+            : i < index
+              ? uiMsg("Complete")
+              : i === index
+                ? /failed|could not/i.test(text)
+                  ? uiMsg("Failed")
+                  : uiMsg("Processing")
+                : uiMsg("Waiting"),
+      );
     });
   });
 }
@@ -137,9 +151,15 @@ function adapt(tool, root) {
         const rows = $$("#batch-results > *"),
           good = rows.filter((n) => n.querySelector("a[download]")),
           errors = rows.length - good.length;
-        result.textContent = rows.length
-          ? `${good.length} image(s) ready · ${errors} failed. Individual results below retain their dimensions and sizes.`
-          : "Your batch results will appear here.";
+        uiText(
+          result,
+          rows.length
+            ? uiMsg(
+                "{0} image(s) ready · {1} failed. Individual results below retain their dimensions and sizes.",
+                [good.length, errors],
+              )
+            : uiMsg("Your batch results will appear here."),
+        );
       });
       fileRows(tool);
       break;
@@ -159,7 +179,13 @@ function adapt(tool, root) {
       const label = summary($(".pdf-layout"), "pdf-source-summary");
       const update = () => {
         const files = $("#pdf-files").files;
-        label.textContent = `${files.length} source file(s) · ${$$("#pdf-pages > *").length} page preview(s). Selection and rotation are reflected in the next output.`;
+        uiText(
+          label,
+          uiMsg(
+            "{0} source file(s) · {1} page preview(s). Selection and rotation are reflected in the next output.",
+            [files.length, $$("#pdf-pages > *").length],
+          ),
+        );
       };
       $("#pdf-files").addEventListener("change", update);
       observeText($("#pdf-pages"), update);
@@ -186,7 +212,18 @@ function adapt(tool, root) {
       const node = summary($("#rename-preview"), "rename-summary");
       observeText($("#rename-preview"), () => {
         const rows = $$("#rename-preview .rename-row, #rename-preview tr");
-        node.textContent = `${$("#rename-files").files.length} selected files · ${rows.filter((n) => /conflict|invalid|reserved|duplicate/i.test(n.textContent)).length} row(s) need attention. Resolve every conflict before export.`;
+        uiText(
+          node,
+          uiMsg(
+            "{0} selected files · {1} row(s) need attention. Resolve every conflict before export.",
+            [
+              $("#rename-files").files.length,
+              rows.filter((n) =>
+                /conflict|invalid|reserved|duplicate/i.test(uiSource(n)),
+              ).length,
+            ],
+          ),
+        );
       });
       break;
     }
@@ -197,7 +234,7 @@ function adapt(tool, root) {
     case "text-toolkit": {
       const toolbar = $(".editor-toolbar > div");
       toolbar?.setAttribute("role", "group");
-      toolbar?.setAttribute("aria-label", "Text transformations and undo");
+      uiAttr(toolbar, "aria-label", uiMsg("Text transformations and undo"));
       $("#text-clear")?.classList.add("tool-danger");
       break;
     }
@@ -212,13 +249,13 @@ function adapt(tool, root) {
     case "text-compare": {
       const legend = el("div", undefined, "diff-legend");
       legend.append(
-        el("span", "+ Added", "diff-added"),
-        el("span", "− Removed", "diff-removed"),
+        el("span", uiMsg("+ Added"), "diff-added"),
+        el("span", uiMsg("− Removed"), "diff-removed"),
       );
       $("#compare-output")?.before(legend);
       const result = summary($("#compare-output"), "compare-summary");
       observeText($("#tool-status"), (n) => {
-        result.textContent = n.textContent;
+        uiText(result, uiFrom(uiSource(n)));
       });
       break;
     }
@@ -253,10 +290,12 @@ function adapt(tool, root) {
       $("#timer-reset")?.classList.add("tool-danger");
       observeText($("#timer-start"), (node) =>
         feedback(
-          node.textContent === "Pause" ? "working" : "ready",
-          node.textContent === "Pause"
-            ? "Timer running. Pause here whenever you need a break."
-            : "Timer ready. Choose your phase and start when you are ready.",
+          uiSource(node) === "Pause" ? "working" : "ready",
+          uiSource(node) === "Pause"
+            ? uiMsg("Timer running. Pause here whenever you need a break.")
+            : uiMsg(
+                "Timer ready. Choose your phase and start when you are ready.",
+              ),
         ),
       );
       break;
@@ -374,7 +413,13 @@ function adapt(tool, root) {
           .value.split(/\r?\n/)
           .map((s) => s.trim())
           .filter(Boolean);
-        node.textContent = `${new Set(options).size} unique options · ${$("#decision-mode").selectedOptions[0].textContent}. Each option has equal chance.`;
+        uiText(
+          node,
+          uiMsg("{0} unique options · {1}. Each option has equal chance.", [
+            new Set(options).size,
+            $("#decision-mode").selectedOptions[0].textContent,
+          ]),
+        );
       };
       $("#decision-options")?.addEventListener("input", update);
       $("#decision-mode")?.addEventListener("change", update);
@@ -391,9 +436,18 @@ function adapt(tool, root) {
         const locks = $$("#palette input[type=checkbox]");
         locks.forEach((n) => {
           n.closest(".palette-card").dataset.locked = String(n.checked);
-          n.parentNode.lastChild.textContent = n.checked ? "Locked" : "Lock";
+          uiText(
+            n.parentNode.lastChild,
+            n.checked ? uiMsg("Locked") : uiMsg("Lock"),
+          );
         });
-        paletteState.textContent = `${locks.filter((n) => n.checked).length} of ${locks.length} colors locked. Generate keeps every locked color.`;
+        uiText(
+          paletteState,
+          uiMsg(
+            "{0} of {1} colors locked. Generate keeps every locked color.",
+            [locks.filter((n) => n.checked).length, locks.length],
+          ),
+        );
       };
       $$("#palette input[type=checkbox]").forEach((n) =>
         n.addEventListener("change", updateLocks),
@@ -403,7 +457,7 @@ function adapt(tool, root) {
     }
     case "unit-converter":
       $(".conversion-grid")?.before(
-        el("span", "1 · Value & units", "tool-step"),
+        el("span", uiMsg("1 · Value & units"), "tool-step"),
       );
       step($("#unit-result")?.closest("label"), "2 · Converted result");
       $("#unit-result")?.classList.add("large-result");
@@ -411,7 +465,7 @@ function adapt(tool, root) {
       break;
     case "password-generator": {
       const input = $("#password-output"),
-        button = el("button", "Show password", "button secondary");
+        button = el("button", uiMsg("Show password"), "button secondary");
       input.type = "password";
       input.classList.add("checksum");
       input.after(button);
@@ -421,7 +475,7 @@ function adapt(tool, root) {
       button.onclick = () => {
         const show = input.type === "password";
         input.type = show ? "text" : "password";
-        button.textContent = show ? "Hide password" : "Show password";
+        uiText(button, show ? uiMsg("Hide password") : uiMsg("Show password"));
         button.setAttribute("aria-pressed", String(show));
       };
       break;
@@ -450,7 +504,7 @@ function adapt(tool, root) {
         observeText(state, (n) => {
           $("#device-" + name)?.classList.toggle(
             "tool-stage-active",
-            !/not listening|stopped|start|fullscreen may/i.test(n.textContent),
+            !/not listening|stopped|start|fullscreen may/i.test(uiSource(n)),
           );
         });
       }
@@ -460,10 +514,16 @@ function adapt(tool, root) {
       const mode = $("#typing-mode"),
         note = summary($("#typing-account"), "typing-mode-note");
       const update = () => {
-        note.textContent =
+        uiText(
+          note,
           mode.value === "ranked"
-            ? "Public · Sign in, then start a 60-second test. Qualifying scores appear on the public board."
-            : "Practice · Private, available without signing in. Results stay on this device.";
+            ? uiMsg(
+                "Public · Sign in, then start a 60-second test. Qualifying scores appear on the public board.",
+              )
+            : uiMsg(
+                "Practice · Private, available without signing in. Results stay on this device.",
+              ),
+        );
       };
       mode.addEventListener("change", update);
       update();

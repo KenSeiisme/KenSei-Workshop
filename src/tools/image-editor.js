@@ -1,4 +1,6 @@
 import { $, image, canvasBlob, download } from "./common.js";
+import { uiText } from "../site/ui.js";
+
 let cropper = null,
   selection = null,
   current = null,
@@ -39,7 +41,7 @@ function fitSelection() {
   applyRatio();
 }
 const note = (s, error = false) => {
-  $("#edit-status").textContent = s;
+  uiText($("#edit-status"), s);
   $("#edit-status").classList.toggle("error-text", error);
 };
 function clear() {

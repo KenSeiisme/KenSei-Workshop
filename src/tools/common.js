@@ -1,4 +1,6 @@
 import { feedback, stateFor } from "./tool-state.js";
+import { uiMsg, uiFrom, uiText } from "../site/ui.js";
+
 export const $ = (s, root = document) => root.querySelector(s);
 export const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 export const api = window.KenseiWorkspace;
@@ -96,7 +98,7 @@ export function status(text, error = false) {
   feedback(stateFor(text, error), text);
   const n = $("#tool-status");
   if (n) {
-    n.textContent = text;
+    uiText(n, uiFrom(text));
     n.classList.toggle("error-text", error);
   }
 }
@@ -104,7 +106,7 @@ export function busy(value) {
   document
     .querySelector("[data-tool]")
     ?.setAttribute("aria-busy", String(value));
-  if (value) feedback("working", "Processing on this device…");
+  if (value) feedback("working", uiMsg("Processing on this device…"));
   $$("[data-lock]").forEach((n) => {
     if (value) {
       if (!n.hasAttribute("data-was-disabled"))
@@ -121,14 +123,16 @@ export function busy(value) {
 export async function copy(input) {
   try {
     await navigator.clipboard.writeText(input.value);
-    toast("Copied to clipboard.");
+    toast(uiMsg("Copied to clipboard."));
   } catch {
     input.focus();
     input.select();
     toast(
       input.type === "password"
-        ? "Clipboard unavailable. Choose Show password, then select and copy it manually."
-        : "Text selected. Press Ctrl+C to copy.",
+        ? uiMsg(
+            "Clipboard unavailable. Choose Show password, then select and copy it manually.",
+          )
+        : uiMsg("Text selected. Press Ctrl+C to copy."),
     );
   }
 }
@@ -142,7 +146,7 @@ export function draftEditor(tool, input, render = () => {}) {
   const changed = () => {
     window.dispatchEvent(new Event("tool-content-changed"));
     dirty = true;
-    state.textContent = "Unsaved changes · save when you are ready.";
+    uiText(state, uiMsg("Unsaved changes · save when you are ready."));
     render();
   };
   input.addEventListener("input", changed);
@@ -160,18 +164,20 @@ export function draftEditor(tool, input, render = () => {}) {
       savedAt = item.updated_at;
       name.value = item.data.name;
       input.value = item.data.text;
-      state.textContent = "Saved draft loaded.";
+      uiText(state, uiMsg("Saved draft loaded."));
       render();
     }
   };
   $("#save-draft").addEventListener("click", async (e) => {
     if (!name.value.trim() || !input.value.trim())
-      return toast("Add text and give your draft a name first.");
+      return toast(uiMsg("Add text and give your draft a name first."));
     if (
       new TextEncoder().encode(JSON.stringify({ text: input.value })).length >
       450000
     )
-      return toast("This draft is too large to save. Download it instead.");
+      return toast(
+        uiMsg("This draft is too large to save. Download it instead."),
+      );
     e.target.disabled = true;
     try {
       const item = await api.saveItem(
@@ -183,13 +189,18 @@ export function draftEditor(tool, input, render = () => {}) {
       id = item.id;
       savedAt = item.updated_at;
       dirty = false;
-      state.textContent = api.user
-        ? "Saved and synced to your workspace."
-        : "Saved to your workspace on this device.";
-      toast("Draft saved.");
+      uiText(
+        state,
+        api.user
+          ? uiMsg("Saved and synced to your workspace.")
+          : uiMsg("Saved to your workspace on this device."),
+      );
+      toast(uiMsg("Draft saved."));
     } catch {
-      state.textContent =
-        "Save failed. Your text is still here; retry or download it.";
+      uiText(
+        state,
+        uiMsg("Save failed. Your text is still here; retry or download it."),
+      );
     } finally {
       e.target.disabled = false;
     }

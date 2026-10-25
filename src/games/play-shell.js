@@ -1,3 +1,4 @@
+import { uiMsg, uiFrom, uiText, uiAttr } from "../site/ui.js";
 // 仅管理页面布局和焦点；对局状态、计时、随机数及 Public 资格由调用方管理。
 export function mountPlayShell(root, { beforeCover = () => true } = {}) {
   if (!root?.hasAttribute("data-play-shell")) return null;
@@ -71,7 +72,7 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     document.body.classList.toggle("game-is-focused", focus);
     for (const button of root.querySelectorAll("[data-shell-focus]")) {
       button.hidden = state === "ready";
-      button.textContent = focus ? "Exit focus" : "Focus";
+      uiText(button, focus ? uiMsg("Exit focus") : uiMsg("Focus"));
       button.setAttribute("aria-pressed", String(focus));
     }
     requestSize();
@@ -136,8 +137,8 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     root.dataset.shellState = state;
     const label = next.label || "Ready to play";
     for (const node of root.querySelectorAll("[data-shell-mode]")) {
-      if (node.textContent !== label) node.textContent = label;
-      node.title = label;
+      if (node.textContent !== label) uiText(node, uiFrom(label));
+      uiAttr(node, "title", uiFrom(label));
     }
     if (state === "ready") {
       if (oldState !== "ready") setFocus(false);
@@ -150,22 +151,33 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
       move(saveLine, entry);
       move(status, $("[data-shell-entry-message]"));
       if (start) {
-        start.textContent = next.startFailed ? "Retry start" : "Start game →";
+        uiText(
+          start,
+          next.startFailed ? uiMsg("Retry start") : uiMsg("Start game →"),
+        );
         start.classList.toggle("primary", !next.pending);
         start.classList.toggle("secondary", !!next.pending);
       }
       if (restore)
-        restore.textContent = next.legacy
-          ? "Continue saved game · Legacy"
-          : "Continue saved game";
+        uiText(
+          restore,
+          next.legacy
+            ? uiMsg("Continue saved game · Legacy")
+            : uiMsg("Continue saved game"),
+        );
       const detail = $("#game-save-detail");
       if (detail) {
         detail.hidden = !next.saveInfo || !!restore?.hidden;
-        detail.textContent = next.saveInfo || "";
+        uiText(detail, next.saveInfo || "");
       }
       const summary = $("#game-mode-summary");
       if (summary)
-        summary.textContent = next.legacy ? `${label} · Legacy rules` : label;
+        uiText(
+          summary,
+          next.legacy
+            ? uiMsg("{0} · Legacy rules", [uiFrom(label)])
+            : uiFrom(label),
+        );
     } else {
       if (entry) entry.hidden = true;
       move(status, $("[data-shell-status-slot]"));
@@ -175,7 +187,7 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
       move(discard, state === "complete" ? resultActions : entryActions);
       move(localStart, destination);
       move(saveLine, $("[data-shell-status-slot]"));
-      if (next.startFailed && start) start.textContent = "Retry start";
+      if (next.startFailed && start) uiText(start, uiMsg("Retry start"));
     }
     const setupButton = $("#game-settings-change");
     if (setupButton) {

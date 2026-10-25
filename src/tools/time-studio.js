@@ -1,12 +1,16 @@
 import { $, copy } from "./common.js";
 import { Temporal as T } from "/vendor/temporal.js";
 import { moments, dateDays } from "./time-core.js";
+import { uiMsg, uiJoin, uiError, uiText, uiAttr } from "../site/ui.js";
+
 const deviceZone =
     Intl.DateTimeFormat().resolvedOptions().timeZone || "Asia/Kuala_Lumpur",
   key = "kensei-time-studio-v1";
 const zoneValid = (zone) => {
   try {
-    new Intl.DateTimeFormat("en", { timeZone: zone }).format();
+    new Intl.DateTimeFormat(globalThis.KenseiI18n?.getLocale() || "en", {
+      timeZone: zone,
+    }).format();
     return true;
   } catch {
     return false;
@@ -51,8 +55,12 @@ function save() {
   try {
     localStorage.setItem(key, JSON.stringify(data));
   } catch {
-    $("#time-notice").textContent =
-      "This browser could not save settings. Your current page still works.";
+    uiText(
+      $("#time-notice"),
+      uiMsg(
+        "This browser could not save settings. Your current page still works.",
+      ),
+    );
   }
 }
 const zones = Intl.supportedValuesOf
@@ -79,26 +87,36 @@ function clock() {
   if (container.dataset.zones === signature) {
     data.zones.forEach((zone, i) => {
       const card = container.children[i];
-      card.querySelector("strong").textContent = new Intl.DateTimeFormat(
-        "en-GB",
-        {
-          timeZone: zone,
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: data.format === "12",
-        },
-      ).format(new Date());
-      card.querySelector("small").textContent = new Intl.DateTimeFormat(
-        "en-GB",
-        {
-          timeZone: zone,
-          weekday: "short",
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        },
-      ).format(new Date());
+      uiText(
+        card.querySelector("strong"),
+        new Intl.DateTimeFormat(
+          globalThis.KenseiI18n?.getLocale() === "zh-Hant"
+            ? "zh-Hant"
+            : "en-GB",
+          {
+            timeZone: zone,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: data.format === "12",
+          },
+        ).format(new Date()),
+      );
+      uiText(
+        card.querySelector("small"),
+        new Intl.DateTimeFormat(
+          globalThis.KenseiI18n?.getLocale() === "zh-Hant"
+            ? "zh-Hant"
+            : "en-GB",
+          {
+            timeZone: zone,
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          },
+        ).format(new Date()),
+      );
     });
     return;
   }
@@ -111,24 +129,36 @@ function clock() {
       time = document.createElement("strong"),
       day = document.createElement("small"),
       remove = document.createElement("button");
-    name.textContent = zone;
-    time.textContent = new Intl.DateTimeFormat("en-GB", {
-      timeZone: zone,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: data.format === "12",
-    }).format(new Date());
-    day.textContent = new Intl.DateTimeFormat("en-GB", {
-      timeZone: zone,
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }).format(new Date());
+    uiText(name, zone);
+    uiText(
+      time,
+      new Intl.DateTimeFormat(
+        globalThis.KenseiI18n?.getLocale() === "zh-Hant" ? "zh-Hant" : "en-GB",
+        {
+          timeZone: zone,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: data.format === "12",
+        },
+      ).format(new Date()),
+    );
+    uiText(
+      day,
+      new Intl.DateTimeFormat(
+        globalThis.KenseiI18n?.getLocale() === "zh-Hant" ? "zh-Hant" : "en-GB",
+        {
+          timeZone: zone,
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        },
+      ).format(new Date()),
+    );
     remove.className = "text-link";
-    remove.textContent = "Remove";
-    remove.setAttribute("aria-label", "Remove " + zone);
+    uiText(remove, uiMsg("Remove"));
+    uiAttr(remove, "aria-label", uiJoin([uiMsg("Remove"), zone]));
     remove.onclick = () => {
       data.zones = data.zones.filter((x) => x !== zone);
       save();
@@ -148,11 +178,14 @@ function countdownText(record) {
       ? days + "d " + hours + "h " + minutes + "m " + (seconds % 60) + "s"
       : "Reached") +
     " · " +
-    new Intl.DateTimeFormat("en-GB", {
-      timeZone: record.zone,
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(record.target) +
+    new Intl.DateTimeFormat(
+      globalThis.KenseiI18n?.getLocale() === "zh-Hant" ? "zh-Hant" : "en-GB",
+      {
+        timeZone: record.zone,
+        dateStyle: "medium",
+        timeStyle: "short",
+      },
+    ).format(record.target) +
     " · " +
     record.zone
   );
@@ -161,17 +194,15 @@ function count() {
   const out = $("#countdowns"),
     signature = data.countdowns.map((x) => x.id).join("|");
   if (data.countdowns.length && out.dataset.records === signature) {
-    data.countdowns.forEach(
-      (record, i) =>
-        (out.children[i].querySelector("p").textContent =
-          countdownText(record)),
+    data.countdowns.forEach((record, i) =>
+      uiText(out.children[i].querySelector("p"), countdownText(record)),
     );
     return;
   }
   out.dataset.records = signature;
   out.replaceChildren();
   if (!data.countdowns.length) {
-    out.textContent = "No countdowns saved on this device.";
+    uiText(out, uiMsg("No countdowns saved on this device."));
     return;
   }
   for (const record of data.countdowns) {
@@ -181,9 +212,9 @@ function count() {
       title = document.createElement("strong"),
       value = document.createElement("p"),
       remove = document.createElement("button");
-    title.textContent = record.name;
-    value.textContent = countdownText(record);
-    remove.textContent = "Delete";
+    uiText(title, record.name);
+    uiText(value, countdownText(record));
+    uiText(remove, uiMsg("Delete"));
     remove.className = "text-link";
     remove.onclick = () => {
       data.countdowns = data.countdowns.filter((x) => x.id !== record.id);
@@ -228,13 +259,13 @@ function convert() {
       to +
       " · UTC" +
       z.offset;
-    $("#time-state").textContent = "";
+    uiText($("#time-state"), "");
     $("#time-copy").disabled = false;
     $("#countdown-add").disabled = false;
     return epoch;
   } catch (e) {
     $("#time-output").value = "";
-    $("#time-state").textContent = e.message;
+    uiText($("#time-state"), uiError(e));
     $("#time-copy").disabled = true;
     $("#countdown-add").disabled = true;
     return null;
@@ -251,9 +282,9 @@ function dates() {
       $("#date-end").value,
       $("#date-inclusive").checked,
     );
-    $("#date-result").textContent = days + " days";
+    uiText($("#date-result"), uiJoin([days, uiMsg(" days")]));
   } catch {
-    $("#date-result").textContent = "Choose two valid dates.";
+    uiText($("#date-result"), uiMsg("Choose two valid dates."));
   }
 }
 for (const id of ["date-start", "date-end", "date-inclusive"])
@@ -261,12 +292,12 @@ for (const id of ["date-start", "date-end", "date-inclusive"])
 $("#clock-add").onclick = () => {
   const zone = $("#clock-zone").value.trim();
   if (!zoneValid(zone)) {
-    $("#time-notice").textContent = "Choose a valid IANA time zone.";
+    uiText($("#time-notice"), uiMsg("Choose a valid IANA time zone."));
     return;
   }
   if (data.zones.includes(zone)) return;
   if (data.zones.length >= 8) {
-    $("#time-notice").textContent = "Keep up to eight clocks on this page.";
+    uiText($("#time-notice"), uiMsg("Keep up to eight clocks on this page."));
     return;
   }
   data.zones.push(zone);
@@ -284,17 +315,21 @@ $("#countdown-add").onclick = () => {
     name = $("#countdown-name").value.trim();
   if (target === null) return;
   if (!name) {
-    $("#time-notice").textContent = "Give this countdown a name.";
+    uiText($("#time-notice"), uiMsg("Give this countdown a name."));
     return;
   }
   if (target <= Date.now()) {
-    $("#time-notice").textContent =
-      "Choose a future moment for your countdown.";
+    uiText(
+      $("#time-notice"),
+      uiMsg("Choose a future moment for your countdown."),
+    );
     return;
   }
   if (data.countdowns.length >= 20) {
-    $("#time-notice").textContent =
-      "Delete a countdown before adding another (20 maximum).";
+    uiText(
+      $("#time-notice"),
+      uiMsg("Delete a countdown before adding another (20 maximum)."),
+    );
     return;
   }
   data.countdowns.push({
@@ -305,7 +340,7 @@ $("#countdown-add").onclick = () => {
   });
   save();
   count();
-  $("#time-notice").textContent = "Countdown saved on this device.";
+  uiText($("#time-notice"), uiMsg("Countdown saved on this device."));
 };
 let timer = setInterval(() => {
   clock();

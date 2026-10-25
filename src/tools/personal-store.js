@@ -1,4 +1,6 @@
 import { api } from "./common.js";
+import { uiMsg } from "../site/ui.js";
+
 const prefix = "kensei-workshop:personal:v1:",
   listeners = new Set();
 let scope = null,
@@ -260,7 +262,9 @@ function emitConflict(from, to) {
     new CustomEvent("personal-conflict", { detail: { from, to } }),
   );
   api.toast(
-    "Another device edited this scheme. Your changes were kept in a conflict copy.",
+    uiMsg(
+      "Another device edited this scheme. Your changes were kept in a conflict copy.",
+    ),
   );
 }
 export function exportPersonal() {

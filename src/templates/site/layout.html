@@ -1,28 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="${locale}">
   <head>
-    <meta charset="utf-8" />
+    ${head_html}
     <meta
       name="google-site-verification"
       content="${google_site_verification}"
     />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${title} — KenSei</title>
-    <meta name="description" content="${description}" />
-    <meta name="theme-color" content="#111015" />
-    <meta property="og:title" content="${title} — KenSei" />
-    <meta property="og:description" content="${description}" />
-    <meta property="og:type" content="website" />
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/styles.css" />
-    <link rel="stylesheet" href="/tools.css" />
-    <link rel="stylesheet" href="/planner.css" />
-    <link rel="stylesheet" href="/whiteboard.css" />
-    <link rel="stylesheet" href="/media.css" />
-    ${tool_css}${game_css}${profile_css}
-    <script src="/config.js" defer></script>
-    <script src="/tools-data.js" defer></script>
-    <script src="/app.js" defer></script>
   </head>
   <body>
     ${header}

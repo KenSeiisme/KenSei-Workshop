@@ -7,6 +7,15 @@ import {
   editableScene,
   assertVectorScene,
 } from "./whiteboard-core.js";
+import {
+  uiOption,
+  uiMsg,
+  uiJoin,
+  uiFrom,
+  uiError,
+  uiText,
+  uiConfirm,
+} from "../site/ui.js";
 
 export const store = createRecordStore("whiteboard", validateWhiteboard, {
   syncDelay: 2000,
@@ -86,13 +95,18 @@ function controls() {
   ])
     $("#" + id).disabled = !enabled;
   $("#board-guests").hidden = !api.user;
-  $("#board-state").textContent =
-    error || (dirty ? "Unsaved changes · Saving locally…" : store.saveState());
+  uiText(
+    $("#board-state"),
+    error ||
+      (dirty
+        ? uiMsg("Unsaved changes · Saving locally…")
+        : uiFrom(store.saveState())),
+  );
 }
 function list() {
   const select = $("#board-select"),
     selected = board?.id;
-  select.replaceChildren(new Option("Choose a whiteboard", ""));
+  select.replaceChildren(uiOption(uiMsg("Choose a whiteboard"), ""));
   for (const row of store.rows())
     select.append(new Option(row.data.name, row.id));
   select.value = selected || "";
@@ -123,7 +137,7 @@ function changed(elements, state, files) {
   } catch (e) {
     error = e.message;
     controls();
-    message(e.message, true);
+    message(uiError(e), true);
     if (lastScene && drawing) {
       ignore = true;
       drawing.updateScene({
@@ -147,7 +161,7 @@ function changed(elements, state, files) {
     persistedSignature,
   });
   clearTimeout(timer);
-  timer = setTimeout(() => save().catch((e) => message(e.message, true)), 500);
+  timer = setTimeout(() => save().catch((e) => message(uiError(e), true)), 500);
   controls();
 }
 function blockPaste(data) {
@@ -157,60 +171,80 @@ function blockPaste(data) {
     if (data.elements) assertVectorScene(data.elements, data.files || {});
     return true;
   } catch (e) {
-    message(e.message, true);
+    message(uiError(e), true);
     return false;
   }
 }
+// Excalidraw sets the document language to its zh-TW package code. Keep the page's URL locale.
+const preserveDocumentLocale = () => {
+  const locale = globalThis.KenseiI18n?.getLocale() || "en";
+  if (document.documentElement.lang !== locale)
+    document.documentElement.lang = locale;
+};
+const documentLocaleObserver = new MutationObserver(preserveDocumentLocale);
+documentLocaleObserver.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ["lang"],
+});
+window.addEventListener("pagehide", () => documentLocaleObserver.disconnect(), {
+  once: true,
+});
+let mountedProps = null;
 async function mount(data) {
   await engineReady;
   drawing = null;
   lastScene = data;
   signature = recordSignature(data);
   ignore = false;
-  root.render(
-    engine.createElement(engine.Excalidraw, {
-      key: key(scope, board?.id || "empty") + ":" + ++renderVersion,
-      initialData: {
-        elements: data.elements,
-        appState: { ...data.appState, currentItemFontFamily: 2 },
+  mountedProps = {
+    key: key(scope, board?.id || "empty") + ":" + ++renderVersion,
+    initialData: {
+      elements: data.elements,
+      appState: { ...data.appState, currentItemFontFamily: 2 },
+    },
+    theme: "dark",
+    langCode: globalThis.KenseiI18n?.getLocale() === "zh-Hant" ? "zh-TW" : "en",
+    aiEnabled: false,
+    isCollaborating: false,
+    validateEmbeddable: () => false,
+    viewModeEnabled: !board,
+    autoFocus: false,
+    handleKeyboardGlobally: false,
+    UIOptions: {
+      tools: { image: false },
+      welcomeScreen: false,
+      canvasActions: {
+        loadScene: false,
+        saveToActiveFile: false,
+        saveAsImage: false,
+        export: false,
+        toggleTheme: false,
       },
-      theme: "dark",
-      langCode: "en",
-      aiEnabled: false,
-      isCollaborating: false,
-      validateEmbeddable: () => false,
-      viewModeEnabled: !board,
-      autoFocus: false,
-      handleKeyboardGlobally: false,
-      UIOptions: {
-        tools: { image: false },
-        welcomeScreen: false,
-        canvasActions: {
-          loadScene: false,
-          saveToActiveFile: false,
-          saveAsImage: false,
-          export: false,
-          toggleTheme: false,
-        },
-      },
-      excalidrawAPI: (instance) => {
-        drawing = instance;
-      },
-      onChange: changed,
-      onPaste: blockPaste,
-      onLibraryChange: () => {},
-      onLinkOpen: (el, event) => event.preventDefault(),
-      children: engine.createElement(
-        engine.MainMenu,
-        null,
-        engine.createElement(engine.MainMenu.DefaultItems.ClearCanvas),
-        engine.createElement(
-          engine.MainMenu.DefaultItems.ChangeCanvasBackground,
-        ),
-      ),
-    }),
-  );
+    },
+    excalidrawAPI: (instance) => {
+      drawing = instance;
+    },
+    onChange: changed,
+    onPaste: blockPaste,
+    onLibraryChange: () => {},
+    onLinkOpen: (el, event) => event.preventDefault(),
+    children: engine.createElement(
+      engine.MainMenu,
+      null,
+      engine.createElement(engine.MainMenu.DefaultItems.ClearCanvas),
+      engine.createElement(engine.MainMenu.DefaultItems.ChangeCanvasBackground),
+    ),
+  };
+  root.render(engine.createElement(engine.Excalidraw, mountedProps));
 }
+window.addEventListener("locale-change", () => {
+  if (!mountedProps) return;
+  mountedProps = {
+    ...mountedProps,
+    langCode: globalThis.KenseiI18n?.getLocale() === "zh-Hant" ? "zh-TW" : "en",
+  };
+  root.render(engine.createElement(engine.Excalidraw, mountedProps));
+});
 async function save() {
   clearTimeout(timer);
   if (!dirty || !board || scope !== owner()) return true;
@@ -245,7 +279,7 @@ async function save() {
   } catch (e) {
     error = e.message;
     controls();
-    message(e.message, true);
+    message(uiError(e), true);
     return false;
   } finally {
     saving = false;
@@ -256,8 +290,10 @@ async function open(id) {
   if (
     dirty &&
     !(await save()) &&
-    !confirm(
-      "This board has unsaved edits. Keep them in this tab and switch boards?",
+    !uiConfirm(
+      uiMsg(
+        "This board has unsaved edits. Keep them in this tab and switch boards?",
+      ),
     )
   )
     return;
@@ -265,7 +301,7 @@ async function open(id) {
     row = await store.get(id);
   if (expected !== owner() || token !== switching) return;
   if (!row) {
-    message("This whiteboard is unavailable or was deleted.", true);
+    message(uiMsg("This whiteboard is unavailable or was deleted."), true);
     return;
   }
   board = structuredClone(row);
@@ -289,8 +325,10 @@ async function open(id) {
   history.replaceState(null, "", "?id=" + encodeURIComponent(id));
   message(
     draft
-      ? "Unfinished edits restored from this tab. Export or retry saving."
-      : "Whiteboard opened. Drawing changes save automatically.",
+      ? uiMsg(
+          "Unfinished edits restored from this tab. Export or retry saving.",
+        )
+      : uiMsg("Whiteboard opened. Drawing changes save automatically."),
   );
 }
 async function newBoard(
@@ -304,8 +342,10 @@ async function newBoard(
   if (
     dirty &&
     !(await save()) &&
-    !confirm(
-      "Keep the current unsaved edits in this tab and create a new whiteboard?",
+    !uiConfirm(
+      uiMsg(
+        "Keep the current unsaved edits in this tab and create a new whiteboard?",
+      ),
     )
   )
     return;
@@ -319,10 +359,10 @@ async function newBoard(
   await open(row.id);
 }
 $("#board-new").onclick = () =>
-  newBoard().catch((e) => message(e.message, true));
+  newBoard().catch((e) => message(uiError(e), true));
 $("#board-select").onchange = (e) => {
   if (e.target.value)
-    open(e.target.value).catch((e) => message(e.message, true));
+    open(e.target.value).catch((e) => message(uiError(e), true));
 };
 $("#board-name").oninput = () => {
   if (!board) return;
@@ -336,7 +376,7 @@ $("#board-name").oninput = () => {
   if (scene) changed(scene.elements, scene.appState, scene.files || {});
 };
 $("#board-delete").onclick = async () => {
-  if (!board || !confirm("Delete this whiteboard?")) return;
+  if (!board || !uiConfirm(uiMsg("Delete this whiteboard?"))) return;
   try {
     clearTimeout(timer);
     dirty = false;
@@ -347,13 +387,13 @@ $("#board-delete").onclick = async () => {
     $("#board-name").value = "";
     await mount({ elements: [], appState: { viewBackgroundColor: "#ffffff" } });
     list();
-    message("Whiteboard deleted.");
+    message(uiMsg("Whiteboard deleted."));
   } catch (e) {
-    message(e.message, true);
+    message(uiError(e), true);
   }
 };
 $("#board-more").onclick = () =>
-  store.load().catch((e) => message(e.message, true));
+  store.load().catch((e) => message(uiError(e), true));
 $("#board-retry").onclick = async () => {
   await save();
   await store.flush();
@@ -372,9 +412,9 @@ $("#board-import").onchange = async (e) => {
         file.name.replace(/\.(?:excalidraw|json)$/i, ""),
       ),
     );
-    message("Imported as a new whiteboard.");
+    message(uiMsg("Imported as a new whiteboard."));
   } catch (e) {
-    message("Import failed: " + e.message, true);
+    message(uiJoin([uiMsg("Import failed: "), uiError(e)]), true);
   }
 };
 async function exportBoard(format) {
@@ -439,9 +479,9 @@ async function exportBoard(format) {
       });
       download(blob, filename(data.name) + ".png");
     }
-    message("Whiteboard exported.");
+    message(uiMsg("Whiteboard exported."));
   } catch (e) {
-    message("Export failed: " + e.message, true);
+    message(uiJoin([uiMsg("Export failed: "), uiError(e)]), true);
   }
 }
 $("#board-json").onclick = () => exportBoard("json");
@@ -454,10 +494,15 @@ $("#board-fullscreen").onclick = async () => {
       await $("#board-canvas-shell").requestFullscreen();
     else
       message(
-        "Fullscreen is unavailable. You can zoom and pan inside the canvas.",
+        uiMsg(
+          "Fullscreen is unavailable. You can zoom and pan inside the canvas.",
+        ),
       );
   } catch (e) {
-    message("Fullscreen could not start. Use the canvas normally.", true);
+    message(
+      uiMsg("Fullscreen could not start. Use the canvas normally."),
+      true,
+    );
   }
 };
 $("#board-guests").onclick = async () => {
@@ -467,13 +512,16 @@ $("#board-guests").onclick = async () => {
   try {
     const rows = await store.guestRows();
     if (!rows.length) {
-      out.textContent = "No guest whiteboards on this device.";
+      uiText(out, uiMsg("No guest whiteboards on this device."));
       return;
     }
     for (const row of rows) {
       const b = document.createElement("button");
       b.className = "saved-row text-link";
-      b.textContent = "Copy “" + row.data.name + "” to my account";
+      uiText(
+        b,
+        uiJoin([uiMsg("Copy “"), row.data.name, uiMsg("” to my account")]),
+      );
       b.onclick = async () => {
         const expected = owner();
         if (expected === "guest") return;
@@ -490,17 +538,19 @@ $("#board-guests").onclick = async () => {
             out.hidden = true;
             await open(copy.id);
             message(
-              "Guest whiteboard copied. The original remains on this device.",
+              uiMsg(
+                "Guest whiteboard copied. The original remains on this device.",
+              ),
             );
           }
         } catch (e) {
-          message(e.message, true);
+          message(uiError(e), true);
         }
       };
       out.append(b);
     }
   } catch (e) {
-    message(e.message, true);
+    message(uiError(e), true);
   }
 };
 host.addEventListener(
@@ -509,7 +559,9 @@ host.addEventListener(
     e.preventDefault();
     e.stopImmediatePropagation();
     message(
-      "Use Import for vector whiteboards. Image and file drops are not supported.",
+      uiMsg(
+        "Use Import for vector whiteboards. Image and file drops are not supported.",
+      ),
       true,
     );
   },
@@ -522,7 +574,7 @@ host.addEventListener(
     if (e.clipboardData?.files.length) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      message("Image and file paste is not supported.", true);
+      message(uiMsg("Image and file paste is not supported."), true);
     }
   },
   true,
@@ -538,7 +590,9 @@ host.addEventListener(
     ) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      message("Libraries are not included. Use the drawing and text tools.");
+      message(
+        uiMsg("Libraries are not included. Use the drawing and text tools."),
+      );
       return;
     }
     if (
@@ -549,7 +603,7 @@ host.addEventListener(
       e.stopImmediatePropagation();
       if (e.key.toLowerCase() === "o") $("#board-import").click();
       else if (e.key.toLowerCase() === "s") exportBoard("json");
-      else message("Linked elements are not included in this version.");
+      else message(uiMsg("Linked elements are not included in this version."));
     }
   },
   true,
@@ -569,15 +623,17 @@ store.subscribe(() => {
   persistedSignature = incoming;
   $("#board-name").value = row.data.name;
   mount(row.data)
-    .then(() => message("Whiteboard refreshed from your workspace."))
-    .catch((e) => message(e.message, true));
+    .then(() => message(uiMsg("Whiteboard refreshed from your workspace.")))
+    .catch((e) => message(uiError(e), true));
 });
 window.addEventListener("record-conflict", async ({ detail }) => {
   if (detail.kind !== "whiteboard" || board?.id !== detail.from) return;
   board.id = detail.to;
   history.replaceState(null, "", "?id=" + encodeURIComponent(detail.to));
   message(
-    "Another device edited this board. Your changes were kept in a conflict copy.",
+    uiMsg(
+      "Another device edited this board. Your changes were kept in a conflict copy.",
+    ),
   );
   list();
 });
@@ -624,7 +680,7 @@ async function start() {
         appState: { viewBackgroundColor: "#ffffff" },
       });
   } catch (e) {
-    message(e.message, true);
+    message(uiError(e), true);
   }
 }
 window.addEventListener("workspace-ready", start);

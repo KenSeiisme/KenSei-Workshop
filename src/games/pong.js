@@ -10,6 +10,8 @@ import {
   pongTickAt,
   PONG,
 } from "./pong-engine.js";
+import { uiMsg, uiFrom, uiError, uiText, uiConfirm } from "../site/ui.js";
+
 mountEffects();
 mountAudio();
 const $ = (s) => document.querySelector(s),
@@ -69,7 +71,7 @@ let pollAt = 0,
   profileSignatures = new Map(),
   closedByPage = false,
   authTimer;
-const message = (text) => ($("#pong-status").textContent = text);
+const message = (text) => uiText($("#pong-status"), uiFrom(text));
 const host = () => room?.role === "host";
 const active = () =>
   room?.status === "playing" &&
@@ -80,8 +82,8 @@ const active = () =>
 const channelName = (role) => `pong:${room.id}:${room.channel_key}:${role}`;
 function overlay(title, note = "") {
   $("#pong-overlay").hidden = !title;
-  $("#pong-overlay-title").textContent = title || "";
-  $("#pong-overlay-note").textContent = note;
+  uiText($("#pong-overlay-title"), uiFrom(title || ""));
+  uiText($("#pong-overlay-note"), uiFrom(note));
 }
 function renderRoom() {
   root.dataset.pongState = room?.status || "ready";
@@ -98,7 +100,7 @@ function renderRoom() {
   $("#pong-create").disabled = busy || !!live;
   $("#pong-join").disabled = busy || !!live;
   $("#pong-invite").hidden = !live;
-  $("#pong-invite-code").textContent = room?.code || "";
+  uiText($("#pong-invite-code"), room?.code || "");
   $("#pong-leave").disabled = !live || busy;
   const me = room?.players?.find((p) => p.role === room.role),
     two = room?.players?.length === 2;
@@ -109,43 +111,60 @@ function renderRoom() {
     busy ||
     room.status === "playing" ||
     !!me?.ready;
-  $("#pong-ready").textContent =
+  uiText(
+    $("#pong-ready"),
     room?.status === "finished"
       ? me?.ready
-        ? "Waiting for rematch…"
-        : "Ready for rematch →"
+        ? uiMsg("Waiting for rematch…")
+        : uiMsg("Ready for rematch →")
       : me?.ready
-        ? "Waiting for friend…"
+        ? uiMsg("Waiting for friend…")
         : room?.status === "paused"
-          ? "Ready to resume →"
-          : "Ready →";
+          ? uiMsg("Ready to resume →")
+          : uiMsg("Ready →"),
+  );
   $("#pong-pause").disabled = room?.status !== "playing" || busy;
-  $("#pong-room-state").textContent = room
-    ? `Private · ${room.status[0].toUpperCase() + room.status.slice(1)}`
-    : "Not connected";
+  uiText(
+    $("#pong-room-state"),
+    room
+      ? uiMsg("Private · {0}", [
+          room.status[0].toUpperCase() + room.status.slice(1),
+        ])
+      : uiMsg("Not connected"),
+  );
   for (const role of ["host", "guest"]) {
     const p = room?.players?.find((x) => x.role === role)?.profile;
-    $(`#pong-${role}-name`).textContent =
-      p?.nickname || (role === "host" ? "Player one" : "Waiting for a friend");
+    uiText(
+      $(`#pong-${role}-name`),
+      p?.nickname ||
+        (role === "host" ? uiMsg("Player one") : uiMsg("Waiting for a friend")),
+    );
     const signature = JSON.stringify(p || null);
     if (profileSignatures.get(role) !== signature) {
       profileSignatures.set(role, signature);
       const node = $(`#pong-${role}-avatar`);
       if (p) paintAvatar(node, p);
-      else node.textContent = "?";
+      else uiText(node, "?");
     }
   }
-  $("#pong-connection-status").textContent = live
-    ? connected
-      ? "Private connection · connected"
-      : "Reconnecting · game paused"
-    : "No active online match.";
-  $("#pong-latency").textContent =
-    latency === null ? "Latency —" : `Round trip ${Math.round(latency)} ms`;
+  uiText(
+    $("#pong-connection-status"),
+    live
+      ? connected
+        ? uiMsg("Private connection · connected")
+        : uiMsg("Reconnecting · game paused")
+      : uiMsg("No active online match."),
+  );
+  uiText(
+    $("#pong-latency"),
+    latency === null
+      ? uiMsg("Latency —")
+      : uiMsg("Round trip {0} ms", [Math.round(latency)]),
+  );
   const current = host() ? state : remoteState || state;
-  $("#pong-left-score").textContent = current?.score[0] ?? 0;
-  $("#pong-right-score").textContent = current?.score[1] ?? 0;
-  $("#pong-time").textContent = `${clock((current?.ticks || 0) / 120)} / 10:00`;
+  uiText($("#pong-left-score"), current?.score[0] ?? 0);
+  uiText($("#pong-right-score"), current?.score[1] ?? 0);
+  uiText($("#pong-time"), `${clock((current?.ticks || 0) / 120)} / 10:00`);
   if (!room)
     overlay("Bring a friend.", "Create or join a private room to play.");
   else if (room.status === "waiting")
@@ -274,7 +293,7 @@ async function poll() {
     const next = await rpc("heartbeat");
     installRoom(next);
   } catch (e) {
-    message(e.message);
+    message(uiError(e));
     connectionLost();
   } finally {
     pollBusy = false;
@@ -406,7 +425,7 @@ async function connect() {
     await poll();
   } catch (e) {
     connected = false;
-    message(e.message);
+    message(uiError(e));
     $("#pong-retry").hidden = false;
   } finally {
     connecting = false;
@@ -463,15 +482,15 @@ async function operation(action, extra = {}) {
         `/games/pong/?room=${encodeURIComponent(result.code)}`,
       );
       await connect();
-      message("Share the room link. Both players press Ready to begin.");
+      message(uiMsg("Share the room link. Both players press Ready to begin."));
     } else {
       installRoom(result);
       tell("control");
       if (action === "ready")
         message(
           room.status === "playing"
-            ? "Match ready. Move your paddle on the court."
-            : "Ready sent. Waiting for your friend.",
+            ? uiMsg("Match ready. Move your paddle on the court.")
+            : uiMsg("Ready sent. Waiting for your friend."),
         );
       if (action === "leave") {
         history.replaceState(null, "", "/games/pong/");
@@ -479,11 +498,11 @@ async function operation(action, extra = {}) {
         state = null;
         remoteState = null;
         round = 0;
-        message("You left the room. Create or join a new one.");
+        message(uiMsg("You left the room. Create or join a new one."));
       }
     }
   } catch (e) {
-    message(e.message);
+    message(uiError(e));
   } finally {
     busy = false;
     renderRoom();
@@ -708,8 +727,10 @@ $("#pong-ready").onclick = () => operation("ready");
 $("#pong-pause").onclick = () => operation("pause");
 $("#pong-leave").onclick = () => {
   if (
-    confirm(
-      "Leave this online room? The current match will close for both players.",
+    uiConfirm(
+      uiMsg(
+        "Leave this online room? The current match will close for both players.",
+      ),
     )
   )
     operation("leave");
@@ -724,11 +745,16 @@ $("#pong-copy").onclick = async () => {
       `${location.origin}/games/pong/?room=${room.code}`,
     );
     message(
-      "Invite link copied. Your friend signs in, joins, then presses Ready.",
+      uiMsg(
+        "Invite link copied. Your friend signs in, joins, then presses Ready.",
+      ),
     );
   } catch {
     message(
-      `Copy this invitation: ${location.origin}/games/pong/?room=${room.code}`,
+      uiMsg("Copy this invitation: {0}/games/pong/?room={1}", [
+        location.origin,
+        room.code,
+      ]),
     );
   }
 };
@@ -768,13 +794,13 @@ authTimer = setInterval(() => {
     remoteState = null;
     round = 0;
     renderRoom();
-    message("Account changed. Create or join a fresh room.");
+    message(uiMsg("Account changed. Create or join a fresh room."));
   }
   if (!room)
     message(
       api.user
-        ? "Create a room or enter your friend's invitation code."
-        : "Sign in with Google to create or join a room.",
+        ? uiMsg("Create a room or enter your friend's invitation code.")
+        : uiMsg("Sign in with Google to create or join a room."),
     );
 }, 1000);
 const invitation = new URLSearchParams(location.search).get("room");

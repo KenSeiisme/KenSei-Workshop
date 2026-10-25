@@ -10,6 +10,8 @@ import {
   download,
 } from "./common.js";
 import "./qr-scan.js";
+import { uiMsg, uiError, uiPrompt } from "../site/ui.js";
+
 let logo = "",
   qr = null,
   revision = 0;
@@ -17,7 +19,7 @@ function invalidateOutput() {
   revision++;
   qr = null;
   $("#qr-png").disabled = $("#qr-svg").disabled = true;
-  status("Inputs changed. Generate again to update the preview.");
+  status(uiMsg("Inputs changed. Generate again to update the preview."));
 }
 for (const input of document.querySelectorAll(
   "#qr-generate-panel input,#qr-generate-panel textarea,#qr-generate-panel select",
@@ -71,9 +73,9 @@ $("#qr-logo").onchange = async (e) => {
       reader.onload = () => r(reader.result);
       reader.readAsDataURL(blob);
     });
-    status("Logo ready. Generate your code to apply it.");
+    status(uiMsg("Logo ready. Generate your code to apply it."));
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#qr-remove-logo").onclick = () => {
@@ -108,9 +110,9 @@ $("#qr-generate").onclick = async (e) => {
     qr = next;
     window.dispatchEvent(new Event("tool-output-current"));
     $("#qr-png").disabled = $("#qr-svg").disabled = false;
-    status("Ready. Scan the code to check it before sharing.");
+    status(uiMsg("Ready. Scan the code to check it before sharing."));
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   } finally {
     e.target.disabled = false;
   }
@@ -120,11 +122,17 @@ for (const ext of ["png", "svg"])
     try {
       if (qr) download(await qr.getRawData(ext), "kensei-qr." + ext);
     } catch {
-      status("Could not export the code. Generate again and retry.", true);
+      status(
+        uiMsg("Could not export the code. Generate again and retry."),
+        true,
+      );
     }
   };
 $("#save-qr-preset").onclick = async () => {
-  const name = prompt("Name this appearance preset:", "My QR style");
+  const name = uiPrompt(
+    uiMsg("Name this appearance preset:"),
+    uiMsg("My QR style"),
+  );
   if (!name?.trim()) return;
   try {
     await api.saveItem("preset", {
@@ -134,9 +142,11 @@ $("#save-qr-preset").onclick = async () => {
       light: $("#qr-light").value,
       size: +$("#qr-size").value,
     });
-    toast("Appearance saved. Content, passwords and logos are excluded.");
+    toast(
+      uiMsg("Appearance saved. Content, passwords and logos are excluded."),
+    );
   } catch {
-    toast("Preset could not be saved. Try again.");
+    toast(uiMsg("Preset could not be saved. Try again."));
   }
 };
 function loadPreset() {
@@ -149,7 +159,7 @@ function loadPreset() {
     $("#qr-dark").value = p.dark;
     $("#qr-light").value = p.light;
     $("#qr-size").value = p.size;
-    status("Appearance preset loaded. Add content to generate a code.");
+    status(uiMsg("Appearance preset loaded. Add content to generate a code."));
   }
 }
 loadPreset();

@@ -9,6 +9,8 @@ import {
   downloadText,
   filename,
 } from "./common.js";
+import { uiMsg, uiJoin, uiFrom, uiError, uiText } from "../site/ui.js";
+
 const output = $("#ocr-output");
 let selected = null,
   worker = null;
@@ -19,15 +21,15 @@ $("#ocr-file").onchange = async (e) => {
   try {
     await image(file);
     selected = file;
-    $("#ocr-file-info").textContent = file.name;
+    uiText($("#ocr-file-info"), file.name);
     const url = URL.createObjectURL(file);
     $("#ocr-preview").src = url;
     $("#ocr-preview").hidden = false;
     $("#ocr-preview").onload = () => URL.revokeObjectURL(url);
-    status("Image ready. Choose languages, then extract text.");
+    status(uiMsg("Image ready. Choose languages, then extract text."));
   } catch (e) {
     selected = null;
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 function stop() {
@@ -41,14 +43,15 @@ function stop() {
 }
 $("#cancel-job").onclick = () => {
   stop();
-  status("Recognition cancelled. Your previous text is kept.");
+  status(uiMsg("Recognition cancelled. Your previous text is kept."));
 };
 $("#ocr-run").onclick = () => {
-  if (!selected) return status("Choose an image first.", true);
+  if (!selected) return status(uiMsg("Choose an image first."), true);
   const languages = $$('[name="ocr-language"]:checked').map((n) => n.value);
-  if (!languages.length) return status("Select at least one language.", true);
+  if (!languages.length)
+    return status(uiMsg("Select at least one language."), true);
   busy(true);
-  status("Loading recognition engine and selected language packs…");
+  status(uiMsg("Loading recognition engine and selected language packs…"));
   worker = new Worker("/tool-scripts/ocr-worker.js");
   const currentWorker = worker;
   worker.onmessage = ({ data }) => {
@@ -56,15 +59,24 @@ $("#ocr-run").onclick = () => {
     if (data.progress) {
       const m = data.progress;
       status(
-        `${m.status}${Number.isFinite(m.progress) ? " · " + Math.round(m.progress * 100) + "%" : ""}`,
+        uiJoin([
+          uiFrom(m.status),
+          Number.isFinite(m.progress)
+            ? " · " + Math.round(m.progress * 100) + "%"
+            : "",
+        ]),
       );
       return;
     }
     if (data.error) {
       stop();
       status(
-        "Recognition failed. Check your connection for model downloads, then retry. " +
+        uiJoin([
+          uiMsg(
+            "Recognition failed. Check your connection for model downloads, then retry. ",
+          ),
           data.error,
+        ]),
         true,
       );
       return;
@@ -74,8 +86,12 @@ $("#ocr-run").onclick = () => {
     stop();
     status(
       data.text.trim()
-        ? `Text extracted. Review it before use.${data.text.length > 100000 ? " Output limited to 100,000 characters." : ""}`
-        : "No text found. Try a clearer image or different language.",
+        ? uiMsg("Text extracted. Review it before use.{0}", [
+            data.text.length > 100000
+              ? uiMsg(" Output limited to 100,000 characters.")
+              : "",
+          ])
+        : uiMsg("No text found. Try a clearer image or different language."),
     );
   };
   worker.onerror = (e) => {
@@ -83,7 +99,9 @@ $("#ocr-run").onclick = () => {
     if (worker !== currentWorker) return;
     stop();
     status(
-      "Recognition failed. Tool files could not load. Check your connection and retry.",
+      uiMsg(
+        "Recognition failed. Tool files could not load. Check your connection and retry.",
+      ),
       true,
     );
   };

@@ -108,5 +108,15 @@
     "name": "react-dom",
     "version": "19.3.1",
     "license": "MIT"
+  },
+  {
+    "name": "DM-Sans",
+    "version": "Google Fonts v17",
+    "license": "OFL-1.1"
+  },
+  {
+    "name": "Space-Grotesk",
+    "version": "Google Fonts v22",
+    "license": "OFL-1.1"
   }
 ]

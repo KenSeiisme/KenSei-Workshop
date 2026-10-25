@@ -11,6 +11,16 @@ import {
   weekEvents,
   emptyPlanner,
 } from "./planner-core.js";
+import {
+  uiOption,
+  uiMsg,
+  uiJoin,
+  uiFrom,
+  uiError,
+  uiText,
+  uiAttr,
+  uiConfirm,
+} from "../site/ui.js";
 
 const store = createRecordStore("planner", validatePlanner),
   owner = () => api.user?.id || "guest";
@@ -41,7 +51,7 @@ const recoveryKey = (account = scope) =>
   "kensei-planner-recovery-v1:" + account;
 function node(tag, text, className) {
   const element = document.createElement(tag);
-  if (text !== undefined) element.textContent = text;
+  if (text !== undefined) uiText(element, text);
   if (className) element.className = className;
   return element;
 }
@@ -50,7 +60,7 @@ function on(id, event, handler) {
     Promise.resolve()
       .then(() => handler(...args))
       .catch((error) => {
-        status(error.message, true);
+        status(uiError(error), true);
         state();
       }),
   );
@@ -133,10 +143,18 @@ function readEdits() {
   return data;
 }
 function state() {
-  $("#planner-save-state").textContent =
-    (saving ? "Saving edits… · " : dirty ? "Unsaved edits · " : "") +
-    store.saveState() +
-    (hasUnadded() ? " · New item not added yet" : "");
+  uiText(
+    $("#planner-save-state"),
+    uiJoin([
+      saving
+        ? uiMsg("Saving edits… · ")
+        : dirty
+          ? uiMsg("Unsaved edits · ")
+          : "",
+      uiFrom(store.saveState()),
+      hasUnadded() ? uiMsg(" · New item not added yet") : "",
+    ]),
+  );
 }
 function change({ schedule = true } = {}) {
   if (!plan || owner() !== scope) return;
@@ -161,8 +179,12 @@ async function saveEdits() {
     data = validatePlanner(readEdits());
   } catch (error) {
     status(
-      error.message +
-        " Your edits remain here; export JSON to keep a recovery backup.",
+      uiJoin([
+        uiError(error),
+        uiMsg(
+          " Your edits remain here; export JSON to keep a recovery backup.",
+        ),
+      ]),
       true,
     );
     state();
@@ -187,7 +209,9 @@ async function saveEdits() {
       }
       if ($("#tool-status")?.classList.contains("error-text"))
         status(
-          "Changes saved. Private account sync will retry automatically when needed.",
+          uiMsg(
+            "Changes saved. Private account sync will retry automatically when needed.",
+          ),
         );
       renderList();
       renderCalendar();
@@ -196,7 +220,10 @@ async function saveEdits() {
     } catch (error) {
       if (owner() === expected && generation === token) {
         status(
-          error.message + " Your edits remain here and can be exported.",
+          uiJoin([
+            uiError(error),
+            uiMsg(" Your edits remain here and can be exported."),
+          ]),
           true,
         );
         recovery();
@@ -214,8 +241,10 @@ async function leaveEditor() {
   if (!(await saveEdits())) return false;
   if (
     hasUnadded() &&
-    !confirm(
-      "This new course or task has not been added. Discard the unadded item? Export JSON first to keep a recovery backup.",
+    !uiConfirm(
+      uiMsg(
+        "This new course or task has not been added. Discard the unadded item? Export JSON first to keep a recovery backup.",
+      ),
     )
   )
     return false;
@@ -235,7 +264,7 @@ function defaults() {
 }
 function courseChoices(value = $("#planner-task-course").value) {
   const select = $("#planner-task-course");
-  select.replaceChildren(new Option("No course", ""));
+  select.replaceChildren(uiOption(uiMsg("No course"), ""));
   for (const c of plan?.data.courses || [])
     select.append(new Option(c.title, c.id));
   select.value = [...select.options].some((option) => option.value === value)
@@ -250,11 +279,17 @@ function fillCourse(course = null) {
   $("#planner-course-end").value = course?.endDate || d.end;
   $("#planner-course-color").value = course?.color || "#d6b1ec";
   sessions = structuredClone(course?.sessions || []);
-  $("#planner-course-save").textContent = course ? "Save course" : "Add course";
+  uiText(
+    $("#planner-course-save"),
+    course ? uiMsg("Save course") : uiMsg("Add course"),
+  );
   $("#planner-course-delete").hidden = !course;
-  $("#planner-course-edit-label").textContent = course
-    ? "Editing course · changes save automatically"
-    : "Add a course";
+  uiText(
+    $("#planner-course-edit-label"),
+    course
+      ? uiMsg("Editing course · changes save automatically")
+      : uiMsg("Add a course"),
+  );
   renderSessions();
   renderItems();
 }
@@ -265,11 +300,17 @@ function fillTask(task = null) {
   courseChoices(task?.courseId || "");
   $("#planner-task-due").value = task?.due || defaults().date + "T23:59";
   $("#planner-task-done").checked = task?.done || false;
-  $("#planner-task-save").textContent = task ? "Save task" : "Add task";
+  uiText(
+    $("#planner-task-save"),
+    task ? uiMsg("Save task") : uiMsg("Add task"),
+  );
   $("#planner-task-delete").hidden = !task;
-  $("#planner-task-edit-label").textContent = task
-    ? "Editing task · changes save automatically"
-    : "Add an assignment or exam";
+  uiText(
+    $("#planner-task-edit-label"),
+    task
+      ? uiMsg("Editing task · changes save automatically")
+      : uiMsg("Add an assignment or exam"),
+  );
   renderItems();
 }
 function fillPlan(row) {
@@ -314,9 +355,10 @@ function clearEditor() {
     "planner-sessions",
   ])
     $("#" + id).replaceChildren();
-  $("#planner-week-label").textContent = $(
-    "#planner-task-summary",
-  ).textContent = "";
+  uiText(
+    $("#planner-week-label"),
+    ($("#planner-task-summary").textContent = ""),
+  );
   setAddress(null);
   state();
 }
@@ -335,7 +377,7 @@ function renderList() {
   }
   if (!container.children.length)
     container.append(
-      node("p", "No plans saved in this account yet.", "muted small"),
+      node("p", uiMsg("No plans saved in this account yet."), "muted small"),
     );
   $("#planner-more").hidden = !store.hasMore();
   state();
@@ -353,10 +395,17 @@ function renderCalendar() {
     container = $("#planner-week");
   if (!week) week = monday(today(data.timeZone));
   container.replaceChildren();
-  $("#planner-week-label").textContent =
-    `${week} – ${addDays(week, 6)} · ${data.timeZone}`;
-  $("#planner-zone-note").textContent =
-    `All classes and deadlines use ${data.timeZone}, including on other devices. Changing the plan zone keeps written dates and times.`;
+  uiText(
+    $("#planner-week-label"),
+    `${week} – ${addDays(week, 6)} · ${data.timeZone}`,
+  );
+  uiText(
+    $("#planner-zone-note"),
+    uiMsg(
+      "All classes and deadlines use {0}, including on other devices. Changing the plan zone keeps written dates and times.",
+      [data.timeZone],
+    ),
+  );
   for (const day of weekEvents(data, week)) {
     const column = node("section", undefined, "planner-day");
     column.dataset.today = String(day.date === today(data.timeZone));
@@ -403,7 +452,9 @@ function renderCalendar() {
         ),
       );
     if (column.children.length === 1)
-      column.append(node("p", "No classes or deadlines", "planner-empty-day"));
+      column.append(
+        node("p", uiMsg("No classes or deadlines"), "planner-empty-day"),
+      );
     container.append(column);
   }
 }
@@ -446,7 +497,11 @@ function renderItems() {
     row.dataset.selected = String(taskId === task.id);
     checked.type = "checkbox";
     checked.checked = task.done;
-    checked.setAttribute("aria-label", "Mark " + task.title + " done");
+    uiAttr(
+      checked,
+      "aria-label",
+      uiJoin([uiMsg("Mark "), task.title, uiMsg("done")]),
+    );
     checked.onchange = () => toggleTask(task.id, checked.checked);
     const label = node(
       "small",
@@ -460,28 +515,43 @@ function renderItems() {
   }
   if (!courses.children.length)
     courses.append(
-      node("p", "Add courses to build your weekly schedule.", "muted small"),
+      node(
+        "p",
+        uiMsg("Add courses to build your weekly schedule."),
+        "muted small",
+      ),
     );
   if (!tasks.children.length)
-    tasks.append(node("p", "No tasks in this view.", "muted small"));
-  $("#planner-task-summary").textContent =
-    `${counts.due} due · ${counts.overdue} overdue · ${counts.done} done · ${data.timeZone}`;
+    tasks.append(node("p", uiMsg("No tasks in this view."), "muted small"));
+  uiText(
+    $("#planner-task-summary"),
+    uiMsg("{0} due · {1} overdue · {2} done · {3}", [
+      counts.due,
+      counts.overdue,
+      counts.done,
+      data.timeZone,
+    ]),
+  );
 }
 function renderSessions() {
   const container = $("#planner-sessions");
   container.replaceChildren();
   sessions.forEach((session) => {
     const row = node("div", undefined, "planner-session"),
-      remove = node("button", "Remove", "text-link");
+      remove = node("button", uiMsg("Remove"), "text-link");
     row.append(
       node(
         "span",
         `${weekdays[session.day - 1]} ${session.start}–${session.end}`,
       ),
     );
-    remove.setAttribute(
+    uiAttr(
+      remove,
       "aria-label",
-      `Remove ${weekdays[session.day - 1]} ${session.start} class time`,
+      uiMsg("Remove {0} {1} class time", [
+        weekdays[session.day - 1],
+        session.start,
+      ]),
     );
     remove.onclick = () => {
       sessions = sessions.filter((x) => x.id !== session.id);
@@ -509,10 +579,12 @@ async function open(id) {
       );
     fillPlan(row);
     status(
-      "Plan opened. Existing items save automatically; use Add for a new course or task.",
+      uiMsg(
+        "Plan opened. Existing items save automatically; use Add for a new course or task.",
+      ),
     );
   } catch (error) {
-    status(error.message, true);
+    status(uiError(error), true);
   }
 }
 async function chooseCourse(id) {
@@ -520,7 +592,7 @@ async function chooseCourse(id) {
   if (
     !courseId &&
     ($("#planner-course-title").value.trim() || sessions.length) &&
-    !confirm("Discard this unadded course?")
+    !uiConfirm(uiMsg("Discard this unadded course?"))
   )
     return;
   const course = plan?.data.courses.find((c) => c.id === id);
@@ -536,7 +608,7 @@ async function chooseTask(id) {
   if (
     !taskId &&
     $("#planner-task-title").value.trim() &&
-    !confirm("Discard this unadded task?")
+    !uiConfirm(uiMsg("Discard this unadded task?"))
   )
     return;
   const task = plan?.data.tasks.find((t) => t.id === id);
@@ -559,7 +631,7 @@ async function toggleTask(id, done) {
     renderCalendar();
     renderItems();
   } catch (error) {
-    status(error.message, true);
+    status(uiError(error), true);
     renderItems();
   }
 }
@@ -575,7 +647,7 @@ async function guestCopies() {
     for (const row of rows) select.append(new Option(row.data.name, row.id));
     $("#planner-copy-account").disabled = !rows.length;
     if (!rows.length)
-      select.append(new Option("No guest plans on this device", ""));
+      select.append(uiOption(uiMsg("No guest plans on this device"), ""));
   } catch {
     $("#planner-copy-account").disabled = true;
   }
@@ -614,13 +686,17 @@ function restoreEditing(saved) {
           )
           .map((s) => ({ id: s.id, day: s.day, start: s.start, end: s.end }))
       : [];
-    $("#planner-course-save").textContent = courseId
-      ? "Save course"
-      : "Add course";
+    uiText(
+      $("#planner-course-save"),
+      courseId ? uiMsg("Save course") : uiMsg("Add course"),
+    );
     $("#planner-course-delete").hidden = !courseId;
-    $("#planner-course-edit-label").textContent = courseId
-      ? "Recovered course edits · changes save automatically"
-      : "Recovered unadded course";
+    uiText(
+      $("#planner-course-edit-label"),
+      courseId
+        ? uiMsg("Recovered course edits · changes save automatically")
+        : uiMsg("Recovered unadded course"),
+    );
     renderSessions();
   }
   const task = edit.task;
@@ -635,11 +711,17 @@ function restoreEditing(saved) {
     courseChoices(task.courseId || "");
     $("#planner-task-due").value = task.due || "";
     $("#planner-task-done").checked = task.done === true;
-    $("#planner-task-save").textContent = taskId ? "Save task" : "Add task";
+    uiText(
+      $("#planner-task-save"),
+      taskId ? uiMsg("Save task") : uiMsg("Add task"),
+    );
     $("#planner-task-delete").hidden = !taskId;
-    $("#planner-task-edit-label").textContent = taskId
-      ? "Recovered task edits · changes save automatically"
-      : "Recovered unadded task";
+    uiText(
+      $("#planner-task-edit-label"),
+      taskId
+        ? uiMsg("Recovered task edits · changes save automatically")
+        : uiMsg("Recovered unadded task"),
+    );
   }
   change();
   renderCalendar();
@@ -653,7 +735,7 @@ on("planner-new", "click", async () => {
   fillPlan(row);
   change({ schedule: false });
   if (expected === owner()) await saveEdits();
-  status("New plan. Add courses and deadlines below.");
+  status(uiMsg("New plan. Add courses and deadlines below."));
   $("#planner-name").focus();
 });
 for (const id of ["planner-name", "planner-zone"])
@@ -696,7 +778,7 @@ on("planner-course-new", "click", async () => {
   if (
     !courseId &&
     ($("#planner-course-title").value.trim() || sessions.length) &&
-    !confirm("Discard this unadded course?")
+    !uiConfirm(uiMsg("Discard this unadded course?"))
   )
     return;
   fillCourse();
@@ -709,7 +791,7 @@ on("planner-task-new", "click", async () => {
   if (
     !taskId &&
     $("#planner-task-title").value.trim() &&
-    !confirm("Discard this unadded task?")
+    !uiConfirm(uiMsg("Discard this unadded task?"))
   )
     return;
   fillTask();
@@ -742,7 +824,7 @@ on("planner-session-add", "click", () => {
 });
 on("planner-course-save", "click", async () => {
   if (courseId) {
-    if (await saveEdits()) status("Course saved.");
+    if (await saveEdits()) status(uiMsg("Course saved."));
     return;
   }
   const data = readEdits(),
@@ -758,7 +840,7 @@ on("planner-course-save", "click", async () => {
 });
 on("planner-task-save", "click", async () => {
   if (taskId) {
-    if (await saveEdits()) status("Task saved.");
+    if (await saveEdits()) status(uiMsg("Task saved."));
     return;
   }
   const data = readEdits(),
@@ -774,8 +856,10 @@ on("planner-task-save", "click", async () => {
 on("planner-course-delete", "click", async () => {
   if (
     !courseId ||
-    !confirm(
-      "Delete this course and its weekly class times? Linked assignments and exams will remain without a course.",
+    !uiConfirm(
+      uiMsg(
+        "Delete this course and its weekly class times? Linked assignments and exams will remain without a course.",
+      ),
     )
   )
     return;
@@ -795,7 +879,7 @@ on("planner-course-delete", "click", async () => {
   renderItems();
 });
 on("planner-task-delete", "click", async () => {
-  if (!taskId || !confirm("Delete this assignment or exam?")) return;
+  if (!taskId || !uiConfirm(uiMsg("Delete this assignment or exam?"))) return;
   const data = readEdits();
   data.tasks = data.tasks.filter((t) => t.id !== taskId);
   plan.data = validatePlanner(data);
@@ -830,8 +914,10 @@ on("planner-export", "click", async () => {
   );
   status(
     dirty || hasUnadded()
-      ? "Recovery backup exported, including the editor fields that have not been saved. Import it to restore those edits."
-      : "Study plan exported.",
+      ? uiMsg(
+          "Recovery backup exported, including the editor fields that have not been saved. Import it to restore those edits.",
+        )
+      : uiMsg("Study plan exported."),
   );
 });
 on("planner-import", "change", async (event) => {
@@ -857,17 +943,23 @@ on("planner-import", "change", async (event) => {
   if (owner() !== expected) return;
   if (input.format === "kensei-planner-backup") restoreEditing(input);
   status(
-    "Imported as a new plan." +
-      (input.editing
-        ? " Recovery editor fields restored; invalid fields remain available to correct."
-        : ""),
+    uiJoin([
+      uiMsg("Imported as a new plan."),
+      input.editing
+        ? uiMsg(
+            " Recovery editor fields restored; invalid fields remain available to correct.",
+          )
+        : "",
+    ]),
   );
 });
 on("planner-delete", "click", async () => {
   if (
     !plan ||
-    !confirm(
-      "Delete this study plan? Unexported edits in this plan will also be removed.",
+    !uiConfirm(
+      uiMsg(
+        "Delete this study plan? Unexported edits in this plan will also be removed.",
+      ),
     )
   )
     return;
@@ -879,12 +971,14 @@ on("planner-delete", "click", async () => {
   forgetRecovery();
   clearEditor();
   renderList();
-  status("Study plan deleted.");
+  status(uiMsg("Study plan deleted."));
 });
 on("planner-clear", "click", async () => {
   if (
-    !confirm(
-      "Clear all study plans in the current account? This also deletes synced plans in this account. Export anything you want to keep first.",
+    !uiConfirm(
+      uiMsg(
+        "Clear all study plans in the current account? This also deletes synced plans in this account. Export anything you want to keep first.",
+      ),
     )
   )
     return;
@@ -895,7 +989,7 @@ on("planner-clear", "click", async () => {
   forgetRecovery();
   clearEditor();
   renderList();
-  status("Study plans cleared.");
+  status(uiMsg("Study plans cleared."));
 });
 on("planner-more", "click", async () => {
   await store.load();
@@ -924,7 +1018,9 @@ on("planner-copy-account", "click", async () => {
   if (owner() !== expected) return;
   fillPlan(row);
   status(
-    "A private copy was added to this account. The guest original remains on this device.",
+    uiMsg(
+      "A private copy was added to this account. The guest original remains on this device.",
+    ),
   );
 });
 
@@ -970,14 +1066,20 @@ async function initialize() {
         restoreEditing(saved);
         status(
           sameRevision
-            ? "Unsaved edits restored from this tab. Valid changes will save automatically."
-            : "Unsaved edits restored as a separate copy, preserving any newer saved plan.",
+            ? uiMsg(
+                "Unsaved edits restored from this tab. Valid changes will save automatically.",
+              )
+            : uiMsg(
+                "Unsaved edits restored as a separate copy, preserving any newer saved plan.",
+              ),
         );
         requested = null;
         return;
       } catch {
         status(
-          "A recovery backup could not be restored. Your saved plans are still available.",
+          uiMsg(
+            "A recovery backup could not be restored. Your saved plans are still available.",
+          ),
           true,
         );
       }
@@ -986,7 +1088,7 @@ async function initialize() {
     requested = null;
     if (id) await open(id);
   } catch (error) {
-    status(error.message, true);
+    status(uiError(error), true);
     state();
   }
 }
@@ -1026,7 +1128,9 @@ window.addEventListener("record-conflict", (event) => {
     setAddress(plan.id);
     recovery();
     status(
-      "Another device changed this plan. Your edits were kept in a conflict copy.",
+      uiMsg(
+        "Another device changed this plan. Your edits were kept in a conflict copy.",
+      ),
     );
     renderList();
   }

@@ -1,15 +1,16 @@
+import { uiFrom, uiText, uiAttr } from "../site/ui.js";
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
-  if (text !== undefined) node.textContent = text;
+  if (text !== undefined) uiText(node, text);
   if (className) node.className = className;
   return node;
 };
 function fold(node, title, open = false) {
   if (!node) return null;
   const details = el("details", undefined, "tool-fold"),
-    summary = el("summary", title);
+    summary = el("summary", uiFrom(title));
   const key = "kensei-tool-view:" + $("[data-tool]").dataset.tool + ":" + title;
   try {
     const saved = sessionStorage.getItem(key);
@@ -39,20 +40,20 @@ function foldRange(first, last, title) {
   return fold(group, title);
 }
 function step(node, text) {
-  if (node) node.prepend(el("span", text, "tool-step"));
+  if (node) node.prepend(el("span", uiFrom(text), "tool-step"));
 }
 function tabs(panels, labels, { mobile = false, name = "Tool sections" } = {}) {
   if (panels.some((p) => !p) || panels.length < 2) return;
   const parent = panels[0].parentNode,
     bar = el("div", undefined, "tool-tabs");
   bar.setAttribute("role", "tablist");
-  bar.setAttribute("aria-label", name);
+  uiAttr(bar, "aria-label", uiFrom(name));
   panels[0].before(bar);
   const id = crypto.randomUUID(),
     query = matchMedia("(max-width:767px)");
   let active = 0;
   const buttons = panels.map((panel, i) => {
-    const button = el("button", labels[i], "tool-tab");
+    const button = el("button", uiFrom(labels[i]), "tool-tab");
     button.type = "button";
     button.id = `tab-${id}-${i}`;
     panel.id ||= `panel-${id}-${i}`;

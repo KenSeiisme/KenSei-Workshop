@@ -1,4 +1,6 @@
 import { api } from "./common.js";
+import { uiText } from "../site/ui.js";
+
 let pending = null,
   pendingOwner = null;
 export async function profileRPC(name, args) {
@@ -57,7 +59,7 @@ export function paintAvatar(node, profile, preview = "") {
     .slice(0, 1)
     .join("")
     .toUpperCase();
-  node.textContent = initials;
+  uiText(node, initials);
   const src = preview || avatarURL(profile);
   node.dataset.source = src;
   if (!src) return;
@@ -68,7 +70,7 @@ export function paintAvatar(node, profile, preview = "") {
     if (node.dataset.source === src) node.replaceChildren(image);
   };
   image.onerror = () => {
-    if (node.dataset.source === src) node.textContent = initials;
+    if (node.dataset.source === src) uiText(node, initials);
   };
   node.dataset.source = src;
   image.src = src;

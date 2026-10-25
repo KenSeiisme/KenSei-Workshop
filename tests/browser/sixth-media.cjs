@@ -118,6 +118,23 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
         .flatMap((stream) => stream.getTracks())
         .every((track) => track.readyState === "ended"),
     );
+  async function captureLocale() {
+    const before = await page.evaluate(() =>
+      __captureStreams.map((s) =>
+        s.getTracks().map((t) => [t.id, t.readyState]),
+      ),
+    );
+    await page.evaluate(() => KenseiI18n.setLocale("zh-Hant"));
+    assert.deepEqual(
+      await page.evaluate(() =>
+        __captureStreams.map((s) =>
+          s.getTracks().map((t) => [t.id, t.readyState]),
+        ),
+      ),
+      before,
+    );
+    await page.evaluate(() => KenseiI18n.setLocale("en"));
+  }
   try {
     await open("screen-recorder");
     assert.equal(await page.evaluate(() => __captureCalls.length), 0);
@@ -128,6 +145,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
       () => !document.querySelector("#screen-stop").disabled,
     );
     await page.waitForTimeout(1200);
+    await captureLocale();
     await page.click("#screen-pause");
     await page.waitForTimeout(200);
     assert.equal(await page.textContent("#screen-pause"), "Resume");
@@ -176,6 +194,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
       () => !document.querySelector("#screen-stop").disabled,
     );
     await page.waitForTimeout(1200);
+    await captureLocale();
     assert.match(
       await page.textContent("#screen-specs"),
       /Shared audio on.*Microphone on/,
@@ -224,6 +243,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
       () => !document.querySelector("#audio-record-stop").disabled,
     );
     await page.waitForTimeout(1300);
+    await captureLocale();
     await page.click("#audio-record-pause");
     assert.equal(await page.textContent("#audio-record-pause"), "Resume");
     await page.click("#audio-record-pause");

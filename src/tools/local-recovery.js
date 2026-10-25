@@ -1,3 +1,11 @@
+import {
+  uiDate,
+  uiMsg,
+  uiJoin,
+  uiError,
+  uiText,
+  uiConfirm,
+} from "../site/ui.js";
 // 恢复仅保存白名单文字；与 Workspace、同步队列及正式草稿完全分离。
 const FIELDS = {
   "text-toolkit": ["text-input", "draft-name"],
@@ -105,7 +113,7 @@ async function mutate(scope, tool, operation, value) {
 }
 function element(tag, text, className) {
   const node = document.createElement(tag);
-  if (text !== undefined) node.textContent = text;
+  if (text !== undefined) uiText(node, text);
   if (className) node.className = className;
   return node;
 }
@@ -120,13 +128,15 @@ export async function initRecovery(root, tool) {
     heading = element("div", undefined, "recovery-heading"),
     label = element("label", undefined, "check-label"),
     toggle = element("input"),
-    clear = element("button", "Clear recovery", "text-link"),
-    state = element("p", "Loading recovery preference…", "muted small"),
+    clear = element("button", uiMsg("Clear recovery"), "text-link"),
+    state = element("p", uiMsg("Loading recovery preference…"), "muted small"),
     list = element("div", undefined, "recovery-list");
   toggle.type = "checkbox";
   toggle.id = "remember-on-device";
   toggle.disabled = true;
-  label.append(toggle, document.createTextNode("Remember on this device"));
+  const caption = document.createElement("span");
+  uiText(caption, uiMsg("Remember on this device"));
+  label.append(toggle, caption);
   clear.type = "button";
   clear.disabled = true;
   clear.dataset.clearRecovery = "";
@@ -137,7 +147,9 @@ export async function initRecovery(root, tool) {
     heading,
     element(
       "p",
-      "Optional local recovery, separate from Workspace saves. Keeps up to 3 recent editing sessions, 2 MB each. No files, media or automatic cloud sync.",
+      uiMsg(
+        "Optional local recovery, separate from Workspace saves. Keeps up to 3 recent editing sessions, 2 MB each. No files, media or automatic cloud sync.",
+      ),
       "muted small",
     ),
     state,
@@ -152,7 +164,7 @@ export async function initRecovery(root, tool) {
   const current = (owner) =>
     !disposed && owner === scope && owner === (api.user?.id || "guest");
   const message = (text, error = false) => {
-    state.textContent = text;
+    uiText(state, text);
     state.classList.toggle("recovery-error", error);
   };
   const channel =
@@ -177,11 +189,19 @@ export async function initRecovery(root, tool) {
         const entry = element("div", undefined, "recovery-entry"),
           text = element(
             "span",
-            "Unsaved local copy · " + new Date(row.updated).toLocaleString(),
+            "Unsaved local copy · " +
+              uiDate(new Date(row.updated), {
+                dateStyle: "medium",
+                timeStyle: "short",
+              }),
           ),
           actions = element("div", undefined, "action-row"),
-          restore = element("button", "Restore copy", "button secondary"),
-          discard = element("button", "Discard", "text-link");
+          restore = element(
+            "button",
+            uiMsg("Restore copy"),
+            "button secondary",
+          ),
+          discard = element("button", uiMsg("Discard"), "text-link");
         restore.type = discard.type = "button";
         restore.dataset.restoreRecovery = row.id;
         discard.dataset.discardRecovery = row.id;
@@ -191,8 +211,10 @@ export async function initRecovery(root, tool) {
             fields.some(
               (n) => n.value && n.type !== "checkbox" && n.tagName !== "SELECT",
             ) &&
-            !confirm(
-              "Replace the current editor with this local copy? Workspace records will not be changed.",
+            !uiConfirm(
+              uiMsg(
+                "Replace the current editor with this local copy? Workspace records will not be changed.",
+              ),
             )
           )
             return;
@@ -230,10 +252,12 @@ export async function initRecovery(root, tool) {
               n.dispatchEvent(new Event("change", { bubbles: true }));
             });
             message(
-              "Recovered as an unsaved local copy. Workspace records are unchanged.",
+              uiMsg(
+                "Recovered as an unsaved local copy. Workspace records are unchanged.",
+              ),
             );
           } catch (error) {
-            message(error.message, true);
+            message(uiError(error), true);
           }
         };
         discard.onclick = async () => {
@@ -241,10 +265,10 @@ export async function initRecovery(root, tool) {
           try {
             await mutate(owner, tool, "discard", row.id);
             await refresh();
-            message("Recovery copy discarded.");
+            message(uiMsg("Recovery copy discarded."));
             channel?.postMessage({ scope: owner, tool });
           } catch (e) {
-            message(e.message, true);
+            message(uiError(e), true);
           }
         };
         actions.append(restore, discard);
@@ -252,7 +276,7 @@ export async function initRecovery(root, tool) {
         list.append(entry);
       }
     } catch (error) {
-      if (current(owner)) message(error.message, true);
+      if (current(owner)) message(uiError(error), true);
     }
   }
   async function save() {
@@ -272,7 +296,9 @@ export async function initRecovery(root, tool) {
       };
     if (new TextEncoder().encode(JSON.stringify(record)).length > LIMIT)
       return message(
-        "Recovery not updated: this editor exceeds 2 MB. An older copy may remain; download the current content before leaving.",
+        uiMsg(
+          "Recovery not updated: this editor exceeds 2 MB. An older copy may remain; download the current content before leaving.",
+        ),
         true,
       );
     try {
@@ -281,25 +307,31 @@ export async function initRecovery(root, tool) {
       if (!wrote) {
         await refresh();
         message(
-          "Recovery is off in another tab. Workspace records are unchanged.",
+          uiMsg(
+            "Recovery is off in another tab. Workspace records are unchanged.",
+          ),
         );
         return;
       }
       message(
-        "Recovery saved locally · " +
-          new Date(record.updated).toLocaleTimeString() +
+        uiJoin([
+          uiMsg("Recovery saved locally · "),
+          new Date(record.updated).toLocaleTimeString(),
           ". Separate from Workspace saves.",
+        ]),
       );
       channel?.postMessage({ scope: owner, tool });
     } catch (error) {
-      if (current(owner)) message(error.message, true);
+      if (current(owner)) message(uiError(error), true);
     }
   }
   function schedule() {
     clearTimeout(timer);
     if (enabled) {
       message(
-        "Recovery pending · changes stay on this page until saved locally.",
+        uiMsg(
+          "Recovery pending · changes stay on this page until saved locally.",
+        ),
       );
       timer = setTimeout(save, 500);
     }
@@ -323,13 +355,17 @@ export async function initRecovery(root, tool) {
       await refresh();
       message(
         next
-          ? "Recovery enabled for this tool and account on this device only."
-          : "Recovery off. Local recovery copies cleared; Workspace records unchanged.",
+          ? uiMsg(
+              "Recovery enabled for this tool and account on this device only.",
+            )
+          : uiMsg(
+              "Recovery off. Local recovery copies cleared; Workspace records unchanged.",
+            ),
       );
       if (next) schedule();
       channel?.postMessage({ scope: owner, tool });
     } catch (error) {
-      message(error.message, true);
+      message(uiError(error), true);
       await refresh();
     } finally {
       toggle.disabled = false;
@@ -343,11 +379,13 @@ export async function initRecovery(root, tool) {
       if (!current(owner)) return;
       await refresh();
       message(
-        "Recovery copies cleared. Editing and Workspace records are unchanged.",
+        uiMsg(
+          "Recovery copies cleared. Editing and Workspace records are unchanged.",
+        ),
       );
       channel?.postMessage({ scope: owner, tool });
     } catch (error) {
-      message(error.message, true);
+      message(uiError(error), true);
     }
   };
   if (channel)
@@ -370,7 +408,7 @@ export async function initRecovery(root, tool) {
   if (!state.classList.contains("recovery-error"))
     message(
       enabled
-        ? "Recovery enabled. Choose a dated local copy to restore."
-        : "Recovery off. Workspace saves continue to work normally.",
+        ? uiMsg("Recovery enabled. Choose a dated local copy to restore.")
+        : uiMsg("Recovery off. Workspace saves continue to work normally."),
     );
 }

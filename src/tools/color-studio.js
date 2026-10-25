@@ -7,6 +7,8 @@ import {
   contrast,
   randomIndex,
 } from "./daily-core.js";
+import { uiMsg, uiJoin, uiError, uiText, uiAttr } from "../site/ui.js";
+
 function paint(rgb) {
   $("#color-status").classList.remove("error-text");
   const hex = hexColor(rgb),
@@ -16,14 +18,14 @@ function paint(rgb) {
   $("#color-hsl").value = hsl
     .map((v, i) => v.toFixed(2) + (i ? "%" : ""))
     .join(", ");
-  $("#color-status").textContent = "";
+  uiText($("#color-status"), "");
 }
 $("#color-picker").oninput = (e) => paint(parseHex(e.target.value));
 $("#color-hex").onchange = (e) => {
   try {
     paint(parseHex(e.target.value));
   } catch (x) {
-    $("#color-status").textContent = x.message;
+    uiText($("#color-status"), uiError(x));
   }
 };
 for (const kind of ["rgb", "hsl"])
@@ -52,7 +54,7 @@ for (const kind of ["rgb", "hsl"])
         kind === "rgb" ? v.map(Math.round) : hslToRgb([v[0] % 360, v[1], v[2]]),
       );
     } catch (x) {
-      $("#color-status").textContent = x.message;
+      uiText($("#color-status"), uiError(x));
     }
   };
 $("#color-copy").onclick = () => {
@@ -62,7 +64,7 @@ $("#color-copy").onclick = () => {
     out.hidden = false;
     copy(out);
   } catch (e) {
-    $("#color-status").textContent = e.message;
+    uiText($("#color-status"), uiError(e));
     $("#color-status").classList.add("error-text");
   }
 };
@@ -72,12 +74,16 @@ function checkContrast() {
     ratio = contrast(parseHex(fg), parseHex(bg));
   $("#contrast-preview").style.color = fg;
   $("#contrast-preview").style.backgroundColor = bg;
-  $("#contrast-result").textContent =
-    ratio.toFixed(2) +
-    ":1 · Normal AA: " +
-    (ratio >= 4.5 ? "Pass" : "Fail") +
-    " · Large AA: " +
-    (ratio >= 3 ? "Pass" : "Fail");
+  uiText(
+    $("#contrast-result"),
+    uiJoin([
+      ratio.toFixed(2),
+      uiMsg(":1 · Normal AA: "),
+      ratio >= 4.5 ? uiMsg("Pass") : uiMsg("Fail"),
+      uiMsg(" · Large AA: "),
+      ratio >= 3 ? uiMsg("Pass") : uiMsg("Fail"),
+    ]),
+  );
 }
 $("#contrast-fg").oninput = $("#contrast-bg").oninput = checkContrast;
 const colors = ["#d6afe8", "#ef9bb7", "#9aaae5", "#b8d8ca", "#f3d7ac"];
@@ -88,20 +94,20 @@ colors.forEach((color, i) => {
   const input = document.createElement("input");
   input.type = "color";
   input.value = color;
-  input.setAttribute("aria-label", "Palette color " + (i + 1));
+  uiAttr(input, "aria-label", uiJoin([uiMsg("Palette color "), i + 1]));
   const code = document.createElement("input");
   code.readOnly = true;
   code.value = color;
-  code.setAttribute("aria-label", "Palette HEX " + (i + 1));
+  uiAttr(code, "aria-label", uiJoin([uiMsg("Palette HEX "), i + 1]));
   const label = document.createElement("label");
   label.className = "check-label";
   const lock = document.createElement("input");
   lock.type = "checkbox";
-  lock.setAttribute("aria-label", "Lock color " + (i + 1));
+  uiAttr(lock, "aria-label", uiJoin([uiMsg("Lock color "), i + 1]));
   label.append(lock, "Lock");
   const button = document.createElement("button");
   button.className = "text-link";
-  button.textContent = "Copy";
+  uiText(button, uiMsg("Copy"));
   button.onclick = () => copy(code);
   input.oninput = () => {
     code.value = input.value;

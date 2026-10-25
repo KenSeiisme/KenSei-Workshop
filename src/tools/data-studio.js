@@ -1,19 +1,26 @@
 import { $, $$, busy, status, downloadText } from "./common.js";
+import { uiMsg, uiJoin, uiText } from "../site/ui.js";
+
 let worker = null,
   table = null,
   page = 0;
 function render() {
   const target = $("#data-table");
   target.replaceChildren();
-  $("#data-page").textContent = table
-    ? page +
-      1 +
-      " / " +
-      Math.max(1, Math.ceil(table.rows.length / 50)) +
-      " · " +
-      table.rows.length +
-      " rows"
-    : "No table yet";
+  uiText(
+    $("#data-page"),
+    table
+      ? uiJoin([
+          page +
+            1 +
+            " / " +
+            Math.max(1, Math.ceil(table.rows.length / 50)) +
+            " · " +
+            table.rows.length,
+          uiMsg(" rows"),
+        ])
+      : uiMsg("No table yet"),
+  );
   $("#data-prev").disabled = !table || page === 0;
   $("#data-next").disabled = !table || (page + 1) * 50 >= table.rows.length;
   if (!table) return;
@@ -23,7 +30,7 @@ function render() {
     hr = document.createElement("tr");
   table.headers.forEach((name) => {
     const cell = document.createElement("th");
-    cell.textContent = name;
+    uiText(cell, name);
     hr.append(cell);
   });
   head.append(hr);
@@ -32,7 +39,7 @@ function render() {
     const tr = document.createElement("tr");
     row.forEach((value) => {
       const td = document.createElement("td");
-      td.textContent = value;
+      uiText(td, value);
       tr.append(td);
     });
     body.append(tr);
@@ -44,7 +51,7 @@ function process(kind, action, file = null) {
   worker?.terminate();
   worker = new Worker("/tool-scripts/data-worker.js");
   busy(true);
-  status("Processing locally…");
+  status(uiMsg("Processing locally…"));
   worker.onmessage = ({ data }) => {
     worker?.terminate();
     worker = null;
@@ -80,12 +87,17 @@ function process(kind, action, file = null) {
         }),
       );
     status(
-      "Done." +
-        (data.escaped
-          ? " " +
-            data.escaped +
-            " spreadsheet-formula cell(s) escaped with a leading apostrophe. Original inputs remain available."
-          : ""),
+      uiJoin([
+        uiMsg("Done."),
+        data.escaped
+          ? uiJoin([
+              " " + data.escaped,
+              uiMsg(
+                " spreadsheet-formula cell(s) escaped with a leading apostrophe. Original inputs remain available.",
+              ),
+            ])
+          : "",
+      ]),
     );
   };
   worker.onerror = (e) => {
@@ -94,7 +106,9 @@ function process(kind, action, file = null) {
     worker = null;
     busy(false);
     status(
-      "Processing failed. Your inputs are still here; retry with a smaller file.",
+      uiMsg(
+        "Processing failed. Your inputs are still here; retry with a smaller file.",
+      ),
       true,
     );
   };
@@ -131,7 +145,7 @@ $("#cancel-job").onclick = () => {
   worker?.terminate();
   worker = null;
   busy(false);
-  status("Cancelled. Your inputs are unchanged.");
+  status(uiMsg("Cancelled. Your inputs are unchanged."));
 };
 window.addEventListener("pagehide", () => worker?.terminate());
 render();

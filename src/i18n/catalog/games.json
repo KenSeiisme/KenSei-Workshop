@@ -1,0 +1,3022 @@
+{
+  "m_644906e76d60": {
+    "en": "Reach {0} {1} in a qualifying Public run.",
+    "zh-Hant": "在合格公開對局中達到 {0} {1}。"
+  },
+  "m_ab29de6f2d86": {
+    "en": "as your largest tile",
+    "zh-Hant": "作為最大方塊"
+  },
+  "m_061bed093bca": {
+    "en": "Complete {0} in Public.",
+    "zh-Hant": "在公開對局中完成 {0}。"
+  },
+  "m_d6915875decb": {
+    "en": "Easy",
+    "zh-Hant": "簡單"
+  },
+  "m_a7248eeb45eb": {
+    "en": "Normal",
+    "zh-Hant": "一般"
+  },
+  "m_9e73f8fa9cb7": {
+    "en": "Hard",
+    "zh-Hant": "困難"
+  },
+  "m_c6fc00a0b510": {
+    "en": "Room to grow",
+    "zh-Hant": "成長空間"
+  },
+  "m_95e6bcefcfde": {
+    "en": "Four figures",
+    "zh-Hant": "邁入四位數"
+  },
+  "m_861a4d443823": {
+    "en": "The namesake",
+    "zh-Hant": "名副其實"
+  },
+  "m_40782582d5e4": {
+    "en": "Careful steps",
+    "zh-Hant": "步步為營"
+  },
+  "m_b4b2138796cb": {
+    "en": "Clear thinking",
+    "zh-Hant": "思路清晰"
+  },
+  "m_1d71e8cb50bc": {
+    "en": "Expert sweep",
+    "zh-Hant": "專家掃蕩"
+  },
+  "m_0256e74b1ee2": {
+    "en": "Ten more bites",
+    "zh-Hant": "再吃十口"
+  },
+  "m_66593ce4eac8": {
+    "en": "Long story",
+    "zh-Hant": "長長的故事"
+  },
+  "m_7e67568fc935": {
+    "en": "Room for sixty",
+    "zh-Hant": "容納六十段"
+  },
+  "m_e0ca5f71480e": {
+    "en": "Six connections",
+    "zh-Hant": "六組連結"
+  },
+  "m_84600a41d8b2": {
+    "en": "Eight in mind",
+    "zh-Hant": "記住八組"
+  },
+  "m_be41e2fa8d72": {
+    "en": "Perfect company",
+    "zh-Hant": "完美成雙"
+  },
+  "m_4b71e446f601": {
+    "en": "A logical start",
+    "zh-Hant": "邏輯起步"
+  },
+  "m_b44e20c7022d": {
+    "en": "Nine by nine",
+    "zh-Hant": "九乘九"
+  },
+  "m_907793aecbcd": {
+    "en": "Hard-earned logic",
+    "zh-Hant": "得來不易的邏輯"
+  },
+  "m_623bccc63df4": {
+    "en": "Little picture",
+    "zh-Hant": "小小圖像"
+  },
+  "m_e32dfae686c8": {
+    "en": "Pixel by pixel",
+    "zh-Hant": "一格接一格"
+  },
+  "m_6d2881a27d00": {
+    "en": "The whole picture",
+    "zh-Hant": "完整圖像"
+  },
+  "m_b2126d3174bc": {
+    "en": "Make some space",
+    "zh-Hant": "騰出空間"
+  },
+  "m_5982ffc2b701": {
+    "en": "Fit for more",
+    "zh-Hant": "容納更多"
+  },
+  "m_d6959f495142": {
+    "en": "Space architect",
+    "zh-Hant": "空間建築師"
+  },
+  "m_7ebc60f783cf": {
+    "en": "Brick by brick",
+    "zh-Hant": "一磚接一磚"
+  },
+  "m_d19b464abcd6": {
+    "en": "Keep it bouncing",
+    "zh-Hant": "繼續彈跳"
+  },
+  "m_fdbc7d842cac": {
+    "en": "Three-stage clear",
+    "zh-Hant": "三關全破"
+  },
+  "m_34fcce36cb4f": {
+    "en": "Clear all three Brick Breaker stages in a qualifying Public run.",
+    "zh-Hant": "在合格公開對局中，完成 Brick Breaker 的全部三關。"
+  },
+  "m_7e12dd7c658c": {
+    "en": "A clean ten",
+    "zh-Hant": "漂亮的十行"
+  },
+  "m_68e57831d1f1": {
+    "en": "Clear 10 lines in one qualifying Public Classic run.",
+    "zh-Hant": "在一局合格的公開經典模式中消除 10 行。"
+  },
+  "m_4a395e3449b8": {
+    "en": "Forty and rising",
+    "zh-Hant": "四十行，繼續上升"
+  },
+  "m_38c198fb672e": {
+    "en": "Clear 40 lines in one qualifying Public Classic run.",
+    "zh-Hant": "在一局合格的公開經典模式中消除 40 行。"
+  },
+  "m_bbeb28acb8ce": {
+    "en": "Sprint finish",
+    "zh-Hant": "衝刺完成"
+  },
+  "m_a174f334642f": {
+    "en": "Complete the 40-line Sprint in Public.",
+    "zh-Hant": "在公開模式完成 40 行衝刺。"
+  },
+  "m_079c97517bd3": {
+    "en": "First verified",
+    "zh-Hant": "首次驗證"
+  },
+  "m_f09913c314fa": {
+    "en": "Finish your first qualifying Public run.",
+    "zh-Hant": "完成你的第一局合格公開對局。"
+  },
+  "m_8c4052dcdaf6": {
+    "en": "Ten on record",
+    "zh-Hant": "記錄十局"
+  },
+  "m_3f14722dcce0": {
+    "en": "Finish 10 qualifying Public runs.",
+    "zh-Hant": "完成 10 局合格公開對局。"
+  },
+  "m_19da27030023": {
+    "en": "Find your range",
+    "zh-Hant": "拓展你的領域"
+  },
+  "m_7fee0cca51eb": {
+    "en": "Earn qualifying Public results in three different games.",
+    "zh-Hant": "在三款不同遊戲取得合格公開成績。"
+  },
+  "m_78f204d53315": {
+    "en": "Unlocked · {1}",
+    "zh-Hant": "已解鎖 · {1}"
+  },
+  "m_6f0f36051f48": {
+    "en": "{2} verified progress",
+    "zh-Hant": "{2} 已驗證進度"
+  },
+  "m_c5cd8685e856": {
+    "en": "{3} / {4} verified",
+    "zh-Hant": "{3}／{4} 已驗證"
+  },
+  "m_1725b9ca32f1": {
+    "en": "Target reached · finish and submit Public to verify.",
+    "zh-Hant": "已達目標 · 完成並提交公開對局後才能驗證。"
+  },
+  "m_6229a569ce7b": {
+    "en": "No verified milestones yet. A first Public result is a good start.",
+    "zh-Hant": "尚無已驗證的里程碑。第一筆公開成績，就是好開始。"
+  },
+  "m_774bd5373df9": {
+    "en": "Sign in and complete Public runs to unlock milestones.",
+    "zh-Hant": "登入並完成公開對局，即可解鎖里程碑。"
+  },
+  "m_8b18c6d3c247": {
+    "en": "Only qualifying, server-verified Public results count.",
+    "zh-Hant": "只計入合格且經伺服器驗證的公開成績。"
+  },
+  "m_972b1b6acf0e": {
+    "en": "Verified progress could not load. Retry to refresh.",
+    "zh-Hant": "無法載入已驗證進度，請重試重新整理。"
+  },
+  "m_56d2c3ec225a": {
+    "en": "Verified Public results · Private runs are excluded.",
+    "zh-Hant": "已驗證公開成績 · 不包含私人對局。"
+  },
+  "m_b9e99fe2e6a8": {
+    "en": "Progress could not load. Retry when connected.",
+    "zh-Hant": "無法載入進度，請連線後重試。"
+  },
+  "m_ad33cb6a249f": {
+    "en": "Milestone unlocked · {0}",
+    "zh-Hant": "里程碑已解鎖 · {0}"
+  },
+  "m_bc47b6002409": {
+    "en": "Block Puzzle",
+    "zh-Hant": "Block Puzzle"
+  },
+  "m_2509a2687740": {
+    "en": "Puzzle",
+    "zh-Hant": "益智"
+  },
+  "m_5d166412c780": {
+    "en": "Classic · 8 × 8",
+    "zh-Hant": "經典 · 8 × 8"
+  },
+  "m_cbd55936a986": {
+    "en": "Brick Breaker",
+    "zh-Hant": "Brick Breaker"
+  },
+  "m_df79c0f30f3a": {
+    "en": "Arcade",
+    "zh-Hant": "街機"
+  },
+  "m_3143d023f858": {
+    "en": "Classic · 3 stages",
+    "zh-Hant": "經典 · 3 關"
+  },
+  "m_fd5589beaf96": {
+    "en": "Unknown arcade game or difficulty.",
+    "zh-Hant": "未知的街機遊戲或難度。"
+  },
+  "m_b098eae6bd05": {
+    "en": "Invalid random seed.",
+    "zh-Hant": "隨機種子無效。"
+  },
+  "m_562879e96973": {
+    "en": "Invalid game tick.",
+    "zh-Hant": "遊戲邏輯步數無效。"
+  },
+  "m_5aab7aaa2aa4": {
+    "en": "Invalid Brick Breaker replay or game speed.",
+    "zh-Hant": "Brick Breaker 重播或遊戲速度無效。"
+  },
+  "m_d2bde730adc4": {
+    "en": "Invalid paddle replay event.",
+    "zh-Hant": "擋板重播事件無效。"
+  },
+  "m_ba73b1f069c0": {
+    "en": "Invalid game action or actions after game over.",
+    "zh-Hant": "遊戲操作無效，或遊戲結束後仍有操作。"
+  },
+  "m_75e9588c48f7": {
+    "en": "Actions after game over.",
+    "zh-Hant": "遊戲結束後仍有操作。"
+  },
+  "m_a30647e5c9e7": {
+    "en": "This game has not finished.",
+    "zh-Hant": "此遊戲尚未結束。"
+  },
+  "m_7aff57376ffe": {
+    "en": "Invalid arcade save.",
+    "zh-Hant": "街機遊戲存檔無效。"
+  },
+  "m_c6a929d29b3d": {
+    "en": "Invalid Block Puzzle save.",
+    "zh-Hant": "Block Puzzle 存檔無效。"
+  },
+  "m_44aa980b8514": {
+    "en": "Invalid Brick Breaker save.",
+    "zh-Hant": "Brick Breaker 存檔無效。"
+  },
+  "m_c5b143be9ce0": {
+    "en": "Invalid Brick Breaker end state.",
+    "zh-Hant": "Brick Breaker 結束狀態無效。"
+  },
+  "m_0141b6b944b9": {
+    "en": "11px system-ui, sans-serif",
+    "zh-Hant": "11px system-ui, sans-serif"
+  },
+  "m_262853fb887e": {
+    "en": "STAGE {0} / 3",
+    "zh-Hant": "第 {0}／3 關"
+  },
+  "m_e7f3d8dde203": {
+    "en": "bold 12px system-ui",
+    "zh-Hant": "bold 12px system-ui"
+  },
+  "m_c5ac8c0598ea": {
+    "en": "bold 13px system-ui",
+    "zh-Hant": "bold 13px system-ui"
+  },
+  "m_81f0cfd54ca7": {
+    "en": "14px system-ui, sans-serif",
+    "zh-Hant": "14px system-ui, sans-serif"
+  },
+  "m_054eb20329d6": {
+    "en": "Move your paddle. Tap or press Space to launch.",
+    "zh-Hant": "移動擋板，點按或按 Space 發球。"
+  },
+  "m_8388df6dac27": {
+    "en": "Ready for another ball? Tap or press Space.",
+    "zh-Hant": "準備好下一顆球了嗎？點按或按 Space。"
+  },
+  "m_cd49646418b5": {
+    "en": "{0} / 64 cells filled",
+    "zh-Hant": "已填入 {0}／64 格"
+  },
+  "m_1a3526f12937": {
+    "en": "{1} lines cleared",
+    "zh-Hant": "已消除 {1} 行"
+  },
+  "m_c6095275eede": {
+    "en": "8 by 8 block puzzle board",
+    "zh-Hant": "8 × 8 拼塊棋盤"
+  },
+  "m_c543fbe43312": {
+    "en": "Choose a piece; use 1, 2 or 3 on the keyboard",
+    "zh-Hant": "選擇一個形狀，或使用鍵盤 1、2、3"
+  },
+  "m_f4721fdee188": {
+    "en": "Choose a piece, then tap a square. Drag to place, or use 1–3, arrow keys and Enter.",
+    "zh-Hant": "先選形狀，再點棋盤格。也可拖曳放置，或使用 1–3、方向鍵與 Enter。"
+  },
+  "m_2ff8b1bc5ea5": {
+    "en": "Row {4}, column {5}, {6}",
+    "zh-Hant": "第 {4} 行，第 {5} 欄，{6}"
+  },
+  "m_d78e3270b3b8": {
+    "en": "Piece {1} already used",
+    "zh-Hant": "形狀 {1} 已使用"
+  },
+  "m_cfa70d64a482": {
+    "en": "Placed",
+    "zh-Hant": "已放置"
+  },
+  "m_a2ff29596c05": {
+    "en": "Piece {3}: {4} cells, {5} wide by {6} tall",
+    "zh-Hant": "形狀 {3}：{4} 格，寬 {5} 格、高 {6} 格"
+  },
+  "m_684fe5502505": {
+    "en": "Piece {11}",
+    "zh-Hant": "形狀 {11}"
+  },
+  "m_0da228a4131f": {
+    "en": "Start or resume the game before placing a piece.",
+    "zh-Hant": "請先開始或繼續遊戲，再放置形狀。"
+  },
+  "m_5b88df74c4ba": {
+    "en": "That piece does not fit there. Choose another square or piece.",
+    "zh-Hant": "這個形狀放不進該位置，請選擇其他格子或形狀。"
+  },
+  "m_a46eb4fc6693": {
+    "en": "Brick Breaker board",
+    "zh-Hant": "Brick Breaker 棋盤"
+  },
+  "m_4e2b2e518f56": {
+    "en": "Your browser cannot draw this game. Try another browser or enable canvas support.",
+    "zh-Hant": "瀏覽器無法繪製此遊戲，請更換瀏覽器或啟用畫布支援。"
+  },
+  "m_7b26cdb27a5b": {
+    "en": "Move paddle",
+    "zh-Hant": "移動擋板"
+  },
+  "m_7200c2b6999f": {
+    "en": "Move paddle left",
+    "zh-Hant": "向左移動擋板"
+  },
+  "m_a5ad0ffa3e40": {
+    "en": "Move paddle right",
+    "zh-Hant": "向右移動擋板"
+  },
+  "m_8ee03c59d2f2": {
+    "en": "Launch ball →",
+    "zh-Hant": "發球 →"
+  },
+  "m_092707bf02ec": {
+    "en": "Five-minute game limit",
+    "zh-Hant": "五分鐘遊戲時限"
+  },
+  "m_dc6d6e5d4df6": {
+    "en": "Move with your pointer, drag, or focus the court and use ← / → or A / D. Tap the board or press Space to launch.",
+    "zh-Hant": "使用游標移動、拖曳，或將焦點移至球場後使用 ←／→ 或 A／D。點按棋盤或按 Space 發球。"
+  },
+  "m_052e2f72f321": {
+    "en": "Canvas drawing is unavailable. This game needs a browser with 2D canvas support.",
+    "zh-Hant": "無法使用畫布繪圖。此遊戲需要支援 2D 畫布的瀏覽器。"
+  },
+  "m_0675b4c4fe2d": {
+    "en": "Brick Breaker, stage {0} of 3, {1} bricks remaining, {2} lives",
+    "zh-Hant": "Brick Breaker，第 {0}／3 關，剩餘 {1} 塊磚，{2} 條生命"
+  },
+  "m_2962d4fab3ac": {
+    "en": "Stage {0} / 3 · {1} bricks",
+    "zh-Hant": "第 {0}／3 關 · {1} 塊磚"
+  },
+  "m_6120cdf3a2da": {
+    "en": "{0} {1} left",
+    "zh-Hant": "剩餘 {0} {1}"
+  },
+  "m_a00c53ab41b9": {
+    "en": "{0} / 3 balls",
+    "zh-Hant": "{0}／3 顆球"
+  },
+  "m_e86c302583fb": {
+    "en": "1 ball",
+    "zh-Hant": "1 顆球"
+  },
+  "m_d975e180b9ac": {
+    "en": "Legacy rules · v1",
+    "zh-Hant": "舊版規則 · v1"
+  },
+  "m_224fa4da0a0c": {
+    "en": "Powerups · v2",
+    "zh-Hant": "強化道具 · v2"
+  },
+  "m_68fb75953510": {
+    "en": "↔ Wide paddle · {0}s",
+    "zh-Hant": "↔ 加寬擋板 · {0} 秒"
+  },
+  "m_b3a744a68a5c": {
+    "en": "¾ Slow ball · {0}s",
+    "zh-Hant": "¾ 慢速球 · {0} 秒"
+  },
+  "m_c1fe1d003083": {
+    "en": "Max balls",
+    "zh-Hant": "已達球數上限"
+  },
+  "m_0947fff3eb0b": {
+    "en": "Ball in play",
+    "zh-Hant": "球已在場上"
+  },
+  "m_6d4997e43b0b": {
+    "en": "Launch next ball →",
+    "zh-Hant": "發射下一顆球 →"
+  },
+  "m_b566998d9cef": {
+    "en": "{0}:{1} left",
+    "zh-Hant": "剩餘 {0}:{1}"
+  },
+  "m_3d98b8c6967c": {
+    "en": "[data-block-slot], [data-block-cell], [data-brick-launch]",
+    "zh-Hant": "[data-block-slot], [data-block-cell], [data-brick-launch]"
+  },
+  "m_8c477e13ad00": {
+    "en": "Sound on",
+    "zh-Hant": "音效開啟"
+  },
+  "m_3f5d70944c3f": {
+    "en": "Sound off",
+    "zh-Hant": "音效關閉"
+  },
+  "m_1d8df5645610": {
+    "en": "{0} percent",
+    "zh-Hant": "百分之 {0}"
+  },
+  "m_b641f6842075": {
+    "en": "[data-audio-toggle], [data-audio-volume]",
+    "zh-Hant": "[data-audio-toggle], [data-audio-volume]"
+  },
+  "m_53fa478e108f": {
+    "en": "Block Drop",
+    "zh-Hant": "Block Drop"
+  },
+  "m_ae25d6481fc1": {
+    "en": "Classic",
+    "zh-Hant": "經典"
+  },
+  "m_aebc10b26c93": {
+    "en": "40-line Sprint",
+    "zh-Hant": "40 行衝刺"
+  },
+  "m_42003af6d1c0": {
+    "en": "Invalid piece.",
+    "zh-Hant": "方塊無效。"
+  },
+  "m_8f72ad6b2540": {
+    "en": "Invalid Block Drop game.",
+    "zh-Hant": "Block Drop 遊戲無效。"
+  },
+  "m_2c4e73911692": {
+    "en": "Invalid Block Drop tick.",
+    "zh-Hant": "Block Drop 邏輯步數無效。"
+  },
+  "m_70c7f54a7674": {
+    "en": "Invalid Block Drop replay limits.",
+    "zh-Hant": "Block Drop 重播限制無效。"
+  },
+  "m_f2284915c580": {
+    "en": "Invalid Block Drop input.",
+    "zh-Hant": "Block Drop 輸入無效。"
+  },
+  "m_674f8cfff492": {
+    "en": "Invalid Block Drop action.",
+    "zh-Hant": "Block Drop 操作無效。"
+  },
+  "m_4bab1a258560": {
+    "en": "Block Drop has not ended at this tick.",
+    "zh-Hant": "Block Drop 在此邏輯步數尚未結束。"
+  },
+  "m_6f45f3712104": {
+    "en": "Invalid Block Drop save.",
+    "zh-Hant": "Block Drop 存檔無效。"
+  },
+  "m_c6c094bc0054": {
+    "en": "Empty",
+    "zh-Hant": "空"
+  },
+  "m_ece58508f1a8": {
+    "en": "{1} piece",
+    "zh-Hant": "{1} 方塊"
+  },
+  "m_8e685d5409b3": {
+    "en": "Hold",
+    "zh-Hant": "保留"
+  },
+  "m_518b7a21f064": {
+    "en": "Block Drop, ten columns and twenty rows",
+    "zh-Hant": "Block Drop，十欄二十行"
+  },
+  "m_1709305c9fa9": {
+    "en": "Level",
+    "zh-Hant": "等級"
+  },
+  "m_e2eafcca05c2": {
+    "en": "Block Drop controls",
+    "zh-Hant": "Block Drop 操作"
+  },
+  "m_252b8742d557": {
+    "en": "Hold piece",
+    "zh-Hant": "保留方塊"
+  },
+  "m_10fdf5583470": {
+    "en": "Rotate counterclockwise",
+    "zh-Hant": "逆時針旋轉"
+  },
+  "m_fb594c58c73d": {
+    "en": "Rotate clockwise",
+    "zh-Hant": "順時針旋轉"
+  },
+  "m_f0b63a66d80b": {
+    "en": "Move piece left",
+    "zh-Hant": "方塊左移"
+  },
+  "m_6c107901fcfa": {
+    "en": "Soft drop",
+    "zh-Hant": "軟降"
+  },
+  "m_6e0a6aa65788": {
+    "en": "Move piece right",
+    "zh-Hant": "方塊右移"
+  },
+  "m_4433ab03ac20": {
+    "en": "Hard drop",
+    "zh-Hant": "硬降"
+  },
+  "m_61a33366c9f6": {
+    "en": "Drop ⤓",
+    "zh-Hant": "硬降 ⤓"
+  },
+  "m_cf308eda8c39": {
+    "en": "← → move · ↑ / X / Z rotate · ↓ soft drop · Space drop · C / Shift hold",
+    "zh-Hant": "← → 移動 · ↑／X／Z 旋轉 · ↓ 軟降 · Space 硬降 · C／Shift 保留"
+  },
+  "m_64ba6b41c186": {
+    "en": "Canvas drawing is unavailable. Try another browser.",
+    "zh-Hant": "無法使用畫布繪圖，請更換瀏覽器。"
+  },
+  "m_c616730a7f92": {
+    "en": "Available after landing",
+    "zh-Hant": "落地後可用"
+  },
+  "m_faed85fa6106": {
+    "en": "Once per piece",
+    "zh-Hant": "每個方塊限一次"
+  },
+  "m_dd704eef7872": {
+    "en": "{0} / 40 lines · finish to rank",
+    "zh-Hant": "{0}／40 行 · 完成後才能排名"
+  },
+  "m_7925d339c38d": {
+    "en": "Classic · {0} pieces placed",
+    "zh-Hant": "經典 · 已放置 {0} 個方塊"
+  },
+  "m_65dac5b3b068": {
+    "en": "The computer could not choose a move.",
+    "zh-Hant": "電腦無法選擇落子。"
+  },
+  "m_ddf1ef74e369": {
+    "en": "Computer · Easy",
+    "zh-Hant": "電腦 · 簡單"
+  },
+  "m_d7328182f914": {
+    "en": "Computer · Normal",
+    "zh-Hant": "電腦 · 一般"
+  },
+  "m_305836f27aaf": {
+    "en": "Computer · Hard",
+    "zh-Hant": "電腦 · 困難"
+  },
+  "m_eb86fcca7aee": {
+    "en": "Two players · same device",
+    "zh-Hant": "雙人 · 同一裝置"
+  },
+  "m_58a326815777": {
+    "en": "Connect Four",
+    "zh-Hant": "四子棋"
+  },
+  "m_4816cbfd74aa": {
+    "en": "Board",
+    "zh-Hant": "棋類"
+  },
+  "m_582f8c2c2f8c": {
+    "en": "Reversi",
+    "zh-Hant": "黑白棋"
+  },
+  "m_cfa46669aa72": {
+    "en": "Unknown board game or difficulty.",
+    "zh-Hant": "未知的棋類遊戲或難度。"
+  },
+  "m_630db202b3be": {
+    "en": "Invalid board save.",
+    "zh-Hant": "棋類存檔無效。"
+  },
+  "m_c4e9edeafb25": {
+    "en": "Invalid Connect Four position.",
+    "zh-Hant": "四子棋局面無效。"
+  },
+  "m_573e1cc132dd": {
+    "en": "A Connect Four disc cannot float.",
+    "zh-Hant": "四子棋棋子不能懸空。"
+  },
+  "m_a6debcd8e82b": {
+    "en": "Invalid Connect Four result.",
+    "zh-Hant": "四子棋結果無效。"
+  },
+  "m_b2a21e019e8a": {
+    "en": "Invalid Reversi position.",
+    "zh-Hant": "黑白棋局面無效。"
+  },
+  "m_e0e697d7af8b": {
+    "en": "Invalid Reversi turn.",
+    "zh-Hant": "黑白棋回合無效。"
+  },
+  "m_68291c7159c4": {
+    "en": "Invalid Reversi skipped turn.",
+    "zh-Hant": "黑白棋跳過回合狀態無效。"
+  },
+  "m_59b66f9a5b35": {
+    "en": "Invalid Reversi result.",
+    "zh-Hant": "黑白棋結果無效。"
+  },
+  "m_3da8a3487f6d": {
+    "en": "Player {0}",
+    "zh-Hant": "玩家 {0}"
+  },
+  "m_08b041935798": {
+    "en": "You",
+    "zh-Hant": "你"
+  },
+  "m_76ed42d22129": {
+    "en": "Computer",
+    "zh-Hant": "電腦"
+  },
+  "m_ed789803acb5": {
+    "en": "A draw. Well played.",
+    "zh-Hant": "平局，表現精彩。"
+  },
+  "m_b19d0bb04d32": {
+    "en": "Player {0} wins.",
+    "zh-Hant": "玩家 {0} 獲勝。"
+  },
+  "m_8a0522578ed8": {
+    "en": "You win. Well played!",
+    "zh-Hant": "你贏了，表現精彩！"
+  },
+  "m_2ff18256cd70": {
+    "en": "Computer wins. Try another round.",
+    "zh-Hant": "電腦獲勝，再試一局吧。"
+  },
+  "m_52bf4bbecac7": {
+    "en": "{0} Choose Retry computer move to try again.",
+    "zh-Hant": "{0} 請選擇「重試電腦落子」後再試一次。"
+  },
+  "m_cedb093766aa": {
+    "en": "The computer returned no legal move.",
+    "zh-Hant": "電腦未傳回合法落子。"
+  },
+  "m_55a6558213cc": {
+    "en": "The computer returned an invalid move.",
+    "zh-Hant": "電腦傳回的落子無效。"
+  },
+  "m_be10041bc3b5": {
+    "en": "The computer could not start. Please retry.",
+    "zh-Hant": "電腦無法啟動，請重試。"
+  },
+  "m_cd015845cebd": {
+    "en": "The computer took too long. Please retry.",
+    "zh-Hant": "電腦思考逾時，請重試。"
+  },
+  "m_d68ac7e5549d": {
+    "en": "This browser could not start the computer. Please retry or choose two players.",
+    "zh-Hant": "此瀏覽器無法啟動電腦對手，請重試或選擇雙人模式。"
+  },
+  "m_bd38ed773240": {
+    "en": "Pink",
+    "zh-Hant": "粉紅"
+  },
+  "m_6bbb850f0475": {
+    "en": "Paused · continue when you are ready.",
+    "zh-Hant": "已暫停 · 準備好後即可繼續。"
+  },
+  "m_e774af019473": {
+    "en": "Computer paused · retry below.",
+    "zh-Hant": "電腦已暫停 · 請在下方重試。"
+  },
+  "m_7511d7f3fd51": {
+    "en": "Computer is thinking…",
+    "zh-Hant": "電腦思考中…"
+  },
+  "m_cdd264d488af": {
+    "en": "Your turn. Choose a column.",
+    "zh-Hant": "輪到你了，請選擇一欄。"
+  },
+  "m_3b867fd7a501": {
+    "en": "Your turn. Pick a square.",
+    "zh-Hant": "輪到你了，請選擇一格。"
+  },
+  "m_22a0fa1e3a64": {
+    "en": "Player {0} to move.",
+    "zh-Hant": "輪到玩家 {0}。"
+  },
+  "m_3dfa0f70255b": {
+    "en": "· to move",
+    "zh-Hant": "· 待落子"
+  },
+  "m_1b00a787c5a5": {
+    "en": "Row {0}, column {1}. {2} {3}",
+    "zh-Hant": "第 {0} 行，第 {1} 欄。{2} {3}"
+  },
+  "m_a306cc98bd81": {
+    "en": "{0} disc.",
+    "zh-Hant": "{0} 棋子。"
+  },
+  "m_8a112150702b": {
+    "en": "Empty.",
+    "zh-Hant": "空格。"
+  },
+  "m_419a091089bd": {
+    "en": "Drop in column {0}.",
+    "zh-Hant": "落子至第 {0} 欄。"
+  },
+  "m_4a351e1049ed": {
+    "en": "Column full.",
+    "zh-Hant": "此欄已滿。"
+  },
+  "m_dbf6e00c53a1": {
+    "en": "Legal move. Flip {0} {1}.",
+    "zh-Hant": "合法落子，可翻轉 {0} {1}。"
+  },
+  "m_d5d54abf236e": {
+    "en": "No legal move here.",
+    "zh-Hant": "此處不能落子。"
+  },
+  "m_710b84f43cf2": {
+    "en": "Choose a column. Discs fall to the lowest empty space.",
+    "zh-Hant": "請選擇一欄，棋子會落至最下方的空格。"
+  },
+  "m_07bca2aad518": {
+    "en": "{0} legal {1}. Hover or focus a marked square to preview flips.",
+    "zh-Hant": "{0} 個合法{1}。將游標移至標記的格子，或將其聚焦，即可預覽翻轉結果。"
+  },
+  "m_1d5e76fcfc06": {
+    "en": "Start a new game to play again.",
+    "zh-Hant": "開始新遊戲即可再玩一局。"
+  },
+  "m_b3ae32c48840": {
+    "en": "{0} has no legal move. {1} plays again.",
+    "zh-Hant": "{0} 無處可落子，由 {1} 再下一步。"
+  },
+  "m_d3d5f3da2e56": {
+    "en": "Seven column, six row Connect Four board",
+    "zh-Hant": "七欄六行的四子棋棋盤"
+  },
+  "m_09c81f438645": {
+    "en": "Eight by eight Reversi board",
+    "zh-Hant": "八乘八的黑白棋棋盤"
+  },
+  "m_e363bc9c3340": {
+    "en": "The computer move did not finish. Your position is unchanged.",
+    "zh-Hant": "電腦尚未完成落子，目前局面保持不變。"
+  },
+  "m_c0858c62654c": {
+    "en": "Retry computer move",
+    "zh-Hant": "重試電腦落子"
+  },
+  "m_8211098f74b2": {
+    "en": "[data-drop], [data-disc], [data-board-retry]",
+    "zh-Hant": "[data-drop], [data-disc], [data-board-retry]"
+  },
+  "m_7d3782005d66": {
+    "en": "This column is full. Choose another column.",
+    "zh-Hant": "此欄已滿，請選擇其他欄。"
+  },
+  "m_f12149cc3fc3": {
+    "en": "That square is not a legal move. Choose a marked square.",
+    "zh-Hant": "此格不能落子，請選擇有標記的格子。"
+  },
+  "m_9a6fd29a16a1": {
+    "en": "Multiball",
+    "zh-Hant": "多球"
+  },
+  "m_fb9564a299ab": {
+    "en": "Wide Paddle",
+    "zh-Hant": "加寬擋板"
+  },
+  "m_09fa66d584de": {
+    "en": "Slow Ball",
+    "zh-Hant": "慢速球"
+  },
+  "m_0f2827fc13c3": {
+    "en": "Unknown Brick Breaker rules or seed.",
+    "zh-Hant": "未知的 Brick Breaker 規則或隨機種子。"
+  },
+  "m_672da4bbd664": {
+    "en": "Invalid Brick Breaker event.",
+    "zh-Hant": "Brick Breaker 事件無效。"
+  },
+  "m_ecb529bfac59": {
+    "en": "Invalid Brick Breaker action.",
+    "zh-Hant": "Brick Breaker 操作無效。"
+  },
+  "m_ffb7f9e5caa1": {
+    "en": "Brick Breaker has not ended at this tick.",
+    "zh-Hant": "Brick Breaker 在此邏輯步數尚未結束。"
+  },
+  "m_ff3ad5f0cc29": {
+    "en": "Invalid Brick Breaker v2 state.",
+    "zh-Hant": "Brick Breaker v2 狀態無效。"
+  },
+  "m_f53ac22d52ef": {
+    "en": "Invalid power bricks.",
+    "zh-Hant": "強化磚無效。"
+  },
+  "m_1564a3b59949": {
+    "en": "Invalid balls or drops.",
+    "zh-Hant": "球或掉落道具無效。"
+  },
+  "m_7a741d46bb09": {
+    "en": "Invalid Brick Breaker result.",
+    "zh-Hant": "Brick Breaker 結果無效。"
+  },
+  "m_7ef34c108ac7": {
+    "en": "Classic · 4 × 4",
+    "zh-Hant": "經典 · 4 × 4"
+  },
+  "m_313f17ff0013": {
+    "en": "Minesweeper",
+    "zh-Hant": "掃雷"
+  },
+  "m_181e6ceab8c7": {
+    "en": "Beginner · 9 × 9",
+    "zh-Hant": "初級 · 9 × 9"
+  },
+  "m_b43a31524f19": {
+    "en": "Intermediate · 16 × 16",
+    "zh-Hant": "中級 · 16 × 16"
+  },
+  "m_cbd93fbddf47": {
+    "en": "Expert · 30 × 16",
+    "zh-Hant": "專家 · 30 × 16"
+  },
+  "m_aaa73ac77213": {
+    "en": "Snake",
+    "zh-Hant": "貪食蛇"
+  },
+  "m_7a5640f01d8d": {
+    "en": "Slow · 6 cells/s",
+    "zh-Hant": "慢速 · 每秒 6 格"
+  },
+  "m_d8ae788b3671": {
+    "en": "Normal · 10 cells/s",
+    "zh-Hant": "一般 · 每秒 10 格"
+  },
+  "m_f7effdcc4221": {
+    "en": "Fast · 14 cells/s",
+    "zh-Hant": "快速 · 每秒 14 格"
+  },
+  "m_6e445a094b86": {
+    "en": "Memory Match",
+    "zh-Hant": "記憶配對"
+  },
+  "m_0c572b41d6d7": {
+    "en": "Easy · 6 pairs",
+    "zh-Hant": "簡單 · 6 對"
+  },
+  "m_5e3cc32bdbe0": {
+    "en": "Normal · 8 pairs",
+    "zh-Hant": "一般 · 8 對"
+  },
+  "m_ddacc5ff8015": {
+    "en": "Hard · 12 pairs",
+    "zh-Hant": "困難 · 12 對"
+  },
+  "m_d084467b75fe": {
+    "en": "Unknown game or difficulty.",
+    "zh-Hant": "未知的遊戲或難度。"
+  },
+  "m_98ad0f8ecd75": {
+    "en": "Unsupported game rules.",
+    "zh-Hant": "不支援此遊戲規則。"
+  },
+  "m_9156d2c0da13": {
+    "en": "This game supports Private play only.",
+    "zh-Hant": "此遊戲僅支援私人遊玩。"
+  },
+  "m_d2f13b8c8973": {
+    "en": "Unsupported replay format.",
+    "zh-Hant": "不支援此重播格式。"
+  },
+  "m_2ddc65f7460d": {
+    "en": "Replay exceeds game limits.",
+    "zh-Hant": "重播超出遊戲限制。"
+  },
+  "m_38cd3df5319f": {
+    "en": "Invalid event timing.",
+    "zh-Hant": "事件時間無效。"
+  },
+  "m_f879974b9587": {
+    "en": "Impossible game speed.",
+    "zh-Hant": "遊戲速度不合理。"
+  },
+  "m_585a42371368": {
+    "en": "Invalid game action.",
+    "zh-Hant": "遊戲操作無效。"
+  },
+  "m_e415e48f56c8": {
+    "en": "Game save is too large.",
+    "zh-Hant": "遊戲存檔過大。"
+  },
+  "m_53a41fe1c09f": {
+    "en": "This save uses unsupported game rules.",
+    "zh-Hant": "此存檔使用不支援的遊戲規則。"
+  },
+  "m_7f448720df18": {
+    "en": "Invalid game save.",
+    "zh-Hant": "遊戲存檔無效。"
+  },
+  "m_efd505fd7781": {
+    "en": "Invalid player side in saved game.",
+    "zh-Hant": "存檔中的玩家陣營無效。"
+  },
+  "m_74aa1c8216a6": {
+    "en": "Invalid 2048 board.",
+    "zh-Hant": "2048 棋盤無效。"
+  },
+  "m_27be301cc342": {
+    "en": "Invalid mines board.",
+    "zh-Hant": "掃雷棋盤無效。"
+  },
+  "m_d1e3377d0e8e": {
+    "en": "Invalid snake board.",
+    "zh-Hant": "貪食蛇棋盤無效。"
+  },
+  "m_a5df19f821d6": {
+    "en": "Invalid matching board.",
+    "zh-Hant": "配對棋盤無效。"
+  },
+  "m_1f4f6aeccaf8": {
+    "en": "Ranked",
+    "zh-Hant": "參榜中"
+  },
+  "m_c905013aab29": {
+    "en": "Local only",
+    "zh-Hant": "僅限本機"
+  },
+  "m_5cf68939f7a7": {
+    "en": "Submission pending",
+    "zh-Hant": "等待提交"
+  },
+  "m_a7d4a9f301ed": {
+    "en": "Verifying",
+    "zh-Hant": "驗證中"
+  },
+  "m_4f7838402f37": {
+    "en": "Verified",
+    "zh-Hant": "已驗證"
+  },
+  "m_e9192227dc27": {
+    "en": "Not ranked",
+    "zh-Hant": "未參榜"
+  },
+  "m_59ac28010c87": {
+    "en": "Opening this panel pauses your ranked run. It will continue locally without ranking. Continue?",
+    "zh-Hant": "開啟此面板會暫停參榜對局，之後將僅在本機繼續，不再參榜。是否繼續？"
+  },
+  "m_af6cf7756e21": {
+    "en": "A game panel was opened.",
+    "zh-Hant": "已開啟遊戲面板。"
+  },
+  "m_076564cf9c03": {
+    "en": "{0} · {1} · Local only",
+    "zh-Hant": "{0} · {1} · 僅限本機"
+  },
+  "m_66ef9b3df8c8": {
+    "en": "Your current game remains available; retry when storage is ready.",
+    "zh-Hant": "目前對局仍然保留；儲存空間恢復可用後，請重試。"
+  },
+  "m_acc90cccbe94": {
+    "en": "{0} attempts · {1} s",
+    "zh-Hant": "{0} 次嘗試 · {1} 秒"
+  },
+  "m_7640997f3653": {
+    "en": "{0} pts",
+    "zh-Hant": "{0} 分"
+  },
+  "m_77f87fe17b62": {
+    "en": "Save failed · {0} Keep this page open and retry.",
+    "zh-Hant": "儲存失敗 · {0} 請保持此頁開啟並重試。"
+  },
+  "m_6dbc080db4ab": {
+    "en": "Ready to play",
+    "zh-Hant": "準備遊玩"
+  },
+  "m_811ef9484447": {
+    "en": "Loading game…",
+    "zh-Hant": "正在載入遊戲…"
+  },
+  "m_182bf2ce919b": {
+    "en": "Ready when you are.",
+    "zh-Hant": "準備好就開始吧。"
+  },
+  "m_64e955421714": {
+    "en": "New games rank automatically after verification.",
+    "zh-Hant": "新對局通過驗證後會自動參榜。"
+  },
+  "m_4cdad80abd3d": {
+    "en": "Play locally. Progress saves automatically.",
+    "zh-Hant": "在本機遊玩，進度會自動儲存。"
+  },
+  "m_f709021e7150": {
+    "en": "Local best on this device. Sign in for ranked results.",
+    "zh-Hant": "此裝置的本機最佳紀錄。登入即可取得參榜成績。"
+  },
+  "m_07e079f42674": {
+    "en": "{0} · Playing",
+    "zh-Hant": "{0} · 遊戲中"
+  },
+  "m_49305dbfd230": {
+    "en": "Local only · Paused",
+    "zh-Hant": "僅限本機 · 已暫停"
+  },
+  "m_d2e898189277": {
+    "en": "Game complete",
+    "zh-Hant": "遊戲完成"
+  },
+  "m_81fb330a70da": {
+    "en": "{0} mines · {1} flags · {2} remaining",
+    "zh-Hant": "{0} 顆地雷 · {1} 面旗幟 · 剩餘 {2} 顆"
+  },
+  "m_3a6f67ad6f68": {
+    "en": "Scrollable minefield",
+    "zh-Hant": "可捲動的雷區"
+  },
+  "m_4f3103fc4100": {
+    "en": "Row {6}, column {7}: {8}",
+    "zh-Hant": "第 {6} 行，第 {7} 欄：{8}"
+  },
+  "m_3ecd724951ad": {
+    "en": "{0} neighboring mines",
+    "zh-Hant": "周圍有 {0} 顆地雷"
+  },
+  "m_7ce3f49b91fd": {
+    "en": "Snake board. Use direction controls to move.",
+    "zh-Hant": "貪食蛇棋盤，請使用方向控制移動。"
+  },
+  "m_1826ed156871": {
+    "en": "Canvas is unavailable. Enable canvas drawing to play Snake.",
+    "zh-Hant": "無法使用畫布。請啟用畫布繪圖以遊玩貪食蛇。"
+  },
+  "m_f186997defce": {
+    "en": "Card {2}: {3}",
+    "zh-Hant": "卡牌 {2}：{3}"
+  },
+  "m_aff03b6be4e8": {
+    "en": "shape {0}{1}",
+    "zh-Hant": "圖案 {0}{1}"
+  },
+  "m_3297d6fda9e6": {
+    "en": ", matched",
+    "zh-Hant": "，已配對"
+  },
+  "m_7c19adc54914": {
+    "en": "face down",
+    "zh-Hant": "背面朝上"
+  },
+  "m_fa91101cb1be": {
+    "en": "Drawing is unavailable. Try another browser to play this game.",
+    "zh-Hant": "無法繪圖，請使用其他瀏覽器遊玩此遊戲。"
+  },
+  "m_fc129a971413": {
+    "en": "Current turn",
+    "zh-Hant": "目前回合"
+  },
+  "m_bf7c92559522": {
+    "en": "Filled cells",
+    "zh-Hant": "已填格數"
+  },
+  "m_778f665bf4cb": {
+    "en": "Filled squares",
+    "zh-Hant": "已填方格"
+  },
+  "m_06e70139fcf5": {
+    "en": "Attempts",
+    "zh-Hant": "嘗試次數"
+  },
+  "m_537605a119ad": {
+    "en": "Safe squares",
+    "zh-Hant": "安全格數"
+  },
+  "m_38e5a46cbc5a": {
+    "en": "Score",
+    "zh-Hant": "分數"
+  },
+  "m_61517c08b3bf": {
+    "en": "Draw",
+    "zh-Hant": "平局"
+  },
+  "m_6b983a81e5e8": {
+    "en": "Restart",
+    "zh-Hant": "重新開始"
+  },
+  "m_59f1ff17282e": {
+    "en": "Play again →",
+    "zh-Hant": "再玩一次 →"
+  },
+  "m_fc891b508273": {
+    "en": "Time left",
+    "zh-Hant": "剩餘時間"
+  },
+  "m_c25a5dc12420": {
+    "en": "{0} This run is now local only and can continue.",
+    "zh-Hant": "{0} 此局現僅限本機，可繼續遊玩。"
+  },
+  "m_af0ecb7fcc51": {
+    "en": "Paused.",
+    "zh-Hant": "已暫停。"
+  },
+  "m_e159b06187d3": {
+    "en": "Paused",
+    "zh-Hant": "已暫停"
+  },
+  "m_631fbb6b9567": {
+    "en": "{0} Ranking eligibility ended. Continue locally.",
+    "zh-Hant": "{0} 參榜資格已結束，可在本機繼續。"
+  },
+  "m_da29599dfede": {
+    "en": "{0} Progress is kept for local play.",
+    "zh-Hant": "{0} 進度已保留，可在本機遊玩。"
+  },
+  "m_e9dbc434c442": {
+    "en": "Paused · Local only. Continue when ready.",
+    "zh-Hant": "已暫停 · 僅限本機。準備好後即可繼續。"
+  },
+  "m_41c42bffa26a": {
+    "en": "Paused · Progress retained.",
+    "zh-Hant": "已暫停 · 進度已保留。"
+  },
+  "m_00bf93049adb": {
+    "en": "Local only · Game in progress.",
+    "zh-Hant": "僅限本機 · 遊戲中。"
+  },
+  "m_50cb3776e1a6": {
+    "en": "Verifying your completed run…",
+    "zh-Hant": "正在驗證你完成的對局…"
+  },
+  "m_3196fbc3b14a": {
+    "en": "Verifying result…",
+    "zh-Hant": "正在驗證成績…"
+  },
+  "m_483d0f072e0a": {
+    "en": "Verified result accepted · {0}. Best results appear on the board.",
+    "zh-Hant": "已接受驗證成績 · {0}。最佳成績會顯示在排行榜上。"
+  },
+  "m_3fe9a98479c2": {
+    "en": "Game complete. This result did not qualify for the public board.",
+    "zh-Hant": "遊戲完成，此成績未達公開排行榜資格。"
+  },
+  "m_5271a570d4e2": {
+    "en": "Verified · Ranked result accepted",
+    "zh-Hant": "已驗證 · 已接受參榜成績"
+  },
+  "m_34e577b67622": {
+    "en": "Not eligible for the public board",
+    "zh-Hant": "未達公開排行榜資格"
+  },
+  "m_1012083c0829": {
+    "en": "Your result is retained; retry submission or keep it locally.",
+    "zh-Hant": "成績已保留，請重試提交或保留於本機。"
+  },
+  "m_e7a51aad1ae9": {
+    "en": "Submission failed · result retained for retry",
+    "zh-Hant": "提交失敗 · 成績已保留，可重試"
+  },
+  "m_258b19ed1ada": {
+    "en": "Complete. Nicely played.",
+    "zh-Hant": "完成了，玩得漂亮。"
+  },
+  "m_138702c8c595": {
+    "en": "No moves remain. Your game is complete.",
+    "zh-Hant": "已無法移動，本局完成。"
+  },
+  "m_d3cbcb82dded": {
+    "en": "Game over. Ready for another try?",
+    "zh-Hant": "遊戲結束，準備再挑戰一次嗎？"
+  },
+  "m_db7d9be6e61c": {
+    "en": "The game was interrupted.",
+    "zh-Hant": "遊戲已中斷。"
+  },
+  "m_c227fafe3c5f": {
+    "en": "Public session time limit reached.",
+    "zh-Hant": "已達公開對局的時間上限。"
+  },
+  "m_9cdc97876508": {
+    "en": "The replay limit was reached.",
+    "zh-Hant": "已達重播上限。"
+  },
+  "m_13ab6967b620": {
+    "en": "2048 reached! Keep playing until no moves remain.",
+    "zh-Hant": "達到 2048！可繼續遊玩，直到無法移動。"
+  },
+  "m_f90ce3ac146c": {
+    "en": "Retry the pending ranked result before starting another run.",
+    "zh-Hant": "開始下一局前，請先重試提交待處理的參榜成績。"
+  },
+  "m_bc02e01f5924": {
+    "en": "Start a new game and replace the saved position for this difficulty?",
+    "zh-Hant": "開始新遊戲，並取代此難度的已儲存局面嗎？"
+  },
+  "m_d247400a7132": {
+    "en": "Restart this game? Your current position will be replaced.",
+    "zh-Hant": "重新開始遊戲嗎？目前局面將被取代。"
+  },
+  "m_90720059f1ba": {
+    "en": "The previous run was restarted.",
+    "zh-Hant": "上一局已重新開始。"
+  },
+  "m_5b9843bc29f3": {
+    "en": "Starting a verified ranked session…",
+    "zh-Hant": "正在建立可驗證的參榜對局…"
+  },
+  "m_fb5affba9212": {
+    "en": "Game rules changed. Reload this page before starting.",
+    "zh-Hant": "遊戲規則已更新，請重新載入此頁後再開始。"
+  },
+  "m_39f67d9cde3d": {
+    "en": "Ranked game in progress. Stay on this page to remain eligible.",
+    "zh-Hant": "參榜對局進行中，請留在此頁以保留資格。"
+  },
+  "m_1d82226cc64b": {
+    "en": "Local only · Game in progress. Progress saves automatically.",
+    "zh-Hant": "僅限本機 · 遊戲中，進度會自動儲存。"
+  },
+  "m_1330b04d0381": {
+    "en": "Retry, or choose Play locally without ranking.",
+    "zh-Hant": "請重試，或選擇「在本機遊玩」而不參榜。"
+  },
+  "m_7d5378280712": {
+    "en": "Retry when ready.",
+    "zh-Hant": "準備好後可重試。"
+  },
+  "m_b8f2e0f8b198": {
+    "en": "Previous game kept",
+    "zh-Hant": "已保留上一局"
+  },
+  "m_609a0b1f87b9": {
+    "en": "The new game could not start. Retry, or continue your previous position locally.",
+    "zh-Hant": "無法開始新遊戲，請重試，或在本機繼續原有局面。"
+  },
+  "m_f48d1b5ece70": {
+    "en": "That save was removed. Refresh saves to try again.",
+    "zh-Hant": "此存檔已被移除，請重新整理存檔後再試。"
+  },
+  "m_1c69174134c9": {
+    "en": "{2}Local only · {3} · {4}",
+    "zh-Hant": "{2}僅限本機 · {3} · {4}"
+  },
+  "m_31fbef162594": {
+    "en": "Continue",
+    "zh-Hant": "繼續"
+  },
+  "m_cab68ac96106": {
+    "en": "· conflict copy",
+    "zh-Hant": "· 衝突副本"
+  },
+  "m_04db5a7f3674": {
+    "en": "Legacy rules · v1 ·",
+    "zh-Hant": "舊版規則 · v1 ·"
+  },
+  "m_84b70b5648d0": {
+    "en": "A fresh start is a good start.",
+    "zh-Hant": "重新開始，也是一個好開始。"
+  },
+  "m_19ce962e6f39": {
+    "en": "No unfinished games yet. Pick a game above; your saved games will appear here.",
+    "zh-Hant": "目前沒有未完成的遊戲。選擇上方遊戲後，存檔便會顯示於此。"
+  },
+  "m_520a3910b79c": {
+    "en": "Clear all saved games and local bests for this identity? Public leaderboard results remain.",
+    "zh-Hant": "清除此身分的全部遊戲存檔與本機最佳紀錄嗎？公開排行榜成績會保留。"
+  },
+  "m_afba46f9ff13": {
+    "en": "Delete this private game save?",
+    "zh-Hant": "刪除此私人遊戲存檔嗎？"
+  },
+  "m_6bf03c8bce89": {
+    "en": "Copy guest saves into your account? Guest originals remain on this device.",
+    "zh-Hant": "將遊客存檔複製至你的帳號嗎？遊客原始存檔仍會保留在此裝置。"
+  },
+  "m_674398d3b031": {
+    "en": "Changing setup ends ranking eligibility. Keep this position saved and choose new settings?",
+    "zh-Hant": "更改設定將結束參榜資格。要保留目前局面並選擇新設定嗎？"
+  },
+  "m_6785f647ead9": {
+    "en": "Game settings were opened.",
+    "zh-Hant": "已開啟遊戲設定。"
+  },
+  "m_6d380e5c14f2": {
+    "en": "Start game →",
+    "zh-Hant": "開始遊戲 →"
+  },
+  "m_5b1a3d3d2aa0": {
+    "en": "Position saved. Choose settings for your next game.",
+    "zh-Hant": "局面已儲存，請選擇下一局的設定。"
+  },
+  "m_4d116d5e6047": {
+    "en": "Keep this result locally and discard its pending ranked submission?",
+    "zh-Hant": "將此成績保留於本機，並捨棄待處理的參榜提交嗎？"
+  },
+  "m_0079fdf0aba4": {
+    "en": "Ranked submission discarded · Local only",
+    "zh-Hant": "已捨棄參榜提交 · 僅限本機"
+  },
+  "m_12ce1fb714ff": {
+    "en": "Submission discarded. Your result remains saved locally.",
+    "zh-Hant": "已捨棄提交，成績仍保留在本機。"
+  },
+  "m_4e7cf92d6ae1": {
+    "en": "One move undone · Local only.",
+    "zh-Hant": "已復原一步 · 僅限本機。"
+  },
+  "m_f1b755f07dbe": {
+    "en": "The page went into the background.",
+    "zh-Hant": "頁面已切至背景。"
+  },
+  "m_4ac7b7d6505d": {
+    "en": "The game page was left.",
+    "zh-Hant": "已離開遊戲頁面。"
+  },
+  "m_286af836f6fe": {
+    "en": "The connection was interrupted.",
+    "zh-Hant": "連線已中斷。"
+  },
+  "m_c5140ef35682": {
+    "en": "A newer save exists. Your position was kept as a conflict copy.",
+    "zh-Hant": "已有較新的存檔，你的局面已保留為衝突副本。"
+  },
+  "m_376a6472e652": {
+    "en": "A completed ranked result is waiting. Retry submission or keep it locally before a new game.",
+    "zh-Hant": "有一筆已完成的參榜成績等待處理。開始新遊戲前，請重試提交或保留於本機。"
+  },
+  "m_849032ab1596": {
+    "en": "Saved game ready. Continue locally, or start a new game.",
+    "zh-Hant": "存檔已就緒，可在本機繼續，或開始新遊戲。"
+  },
+  "m_15ceeb3ebd77": {
+    "en": "Local storage unavailable · {0} You can play, but this browser cannot preserve progress.",
+    "zh-Hant": "本機儲存無法使用 · {0} 仍可遊玩，但此瀏覽器無法保留進度。"
+  },
+  "m_cadb5f0e55b7": {
+    "en": "tbody tr",
+    "zh-Hant": "tbody tr"
+  },
+  "m_eceb32ca4faa": {
+    "en": "Show Top 10",
+    "zh-Hant": "顯示前 10 名"
+  },
+  "m_29601eb80e79": {
+    "en": "Show Top 50",
+    "zh-Hant": "顯示前 50 名"
+  },
+  "m_ac20a57bfde0": {
+    "en": "Hide",
+    "zh-Hant": "隱藏"
+  },
+  "m_95d9760dba5f": {
+    "en": "Fewer attempts, then faster completion.",
+    "zh-Hant": "先比較嘗試次數，次數較少者優先；再比較完成時間。"
+  },
+  "m_dd9aaa6ed0b2": {
+    "en": "Completed runs · fastest time first.",
+    "zh-Hant": "已完成對局 · 用時較短者優先。"
+  },
+  "m_c5424f4751b7": {
+    "en": "Highest score, then largest tile.",
+    "zh-Hant": "分數較高者優先，再比較最大方塊。"
+  },
+  "m_c01c19148afe": {
+    "en": "Highest score, then lines cleared.",
+    "zh-Hant": "分數較高者優先，再比較消行數。"
+  },
+  "m_c95ddbfa5a9d": {
+    "en": "Most points, then faster completion.",
+    "zh-Hant": "分數較高者優先，再比較完成時間。"
+  },
+  "m_0d794bcfa3ce": {
+    "en": "Highest score · one best per player.",
+    "zh-Hant": "分數較高者優先 · 每位玩家只列出最佳紀錄。"
+  },
+  "m_eecdca185c18": {
+    "en": "Leaderboard service unavailable.",
+    "zh-Hant": "排行榜服務無法使用。"
+  },
+  "m_6b6d674e6253": {
+    "en": "Invalid leaderboard response.",
+    "zh-Hant": "排行榜回應無效。"
+  },
+  "m_e05e8ebb8183": {
+    "en": "{0} · rules v{1}",
+    "zh-Hant": "{0} · 規則 v{1}"
+  },
+  "m_64aee8c6cbd0": {
+    "en": "Player",
+    "zh-Hant": "玩家"
+  },
+  "m_e06219d0fa4f": {
+    "en": "Your next run could be the first.",
+    "zh-Hant": "你的下一局，可能就是第一筆紀錄。"
+  },
+  "m_fca5a168711a": {
+    "en": "No verified results yet. Sign in and complete a new game.",
+    "zh-Hant": "目前尚無驗證成績，登入並完成新遊戲即可參榜。"
+  },
+  "m_a658cfe53140": {
+    "en": "Your rank:",
+    "zh-Hant": "你的排名："
+  },
+  "m_8ff9589c95a3": {
+    "en": "Your ranked best · No verified result yet.",
+    "zh-Hant": "你的參榜最佳 · 尚無驗證成績。"
+  },
+  "m_992fd900ab2d": {
+    "en": "Sign in to record your ranked best.",
+    "zh-Hant": "登入即可記錄你的參榜最佳成績。"
+  },
+  "m_6abf89c0bf2f": {
+    "en": "{0} · {1} ranked players.",
+    "zh-Hant": "{0} · {1} 位參榜玩家。"
+  },
+  "m_78da99d6a7de": {
+    "en": "Current rules",
+    "zh-Hant": "目前規則"
+  },
+  "m_0e79bf10517b": {
+    "en": "Previous rules · archived",
+    "zh-Hant": "舊版規則 · 已封存"
+  },
+  "m_eb7b3fdc80cd": {
+    "en": "Leaderboard unavailable. Refresh to retry; you can still play.",
+    "zh-Hant": "排行榜無法使用。請重新整理以重試；仍可繼續遊玩。"
+  },
+  "m_9329979c45d6": {
+    "en": "Rank unavailable",
+    "zh-Hant": "無法取得排名"
+  },
+  "m_8c12bfe86ec6": {
+    "en": "(max-width: 600px)",
+    "zh-Hant": "(max-width: 600px)"
+  },
+  "m_5cb437447760": {
+    "en": "game-float game-float-headline",
+    "zh-Hant": "game-float game-float-headline"
+  },
+  "m_98f17452a611": {
+    "en": "translate(-50%, 0) scale(.8)",
+    "zh-Hant": "translate(-50%, 0) scale(.8)"
+  },
+  "m_378e5418304b": {
+    "en": "translate(-50%, -12px) scale(1)",
+    "zh-Hant": "translate(-50%, -12px) scale(1)"
+  },
+  "m_89ed5622b279": {
+    "en": "translate(-50%, -42px) scale(1)",
+    "zh-Hant": "translate(-50%, -42px) scale(1)"
+  },
+  "m_31129ec29f75": {
+    "en": "translate(-50%,-50%) scale(.4)",
+    "zh-Hant": "translate(-50%,-50%) scale(.4)"
+  },
+  "m_eccb7cbeef82": {
+    "en": "translate(-50%,-50%) scale(2.2)",
+    "zh-Hant": "translate(-50%,-50%) scale(2.2)"
+  },
+  "m_8f36c62612c4": {
+    "en": "Player {0} wins",
+    "zh-Hant": "玩家 {0} 獲勝"
+  },
+  "m_d67e191e27c5": {
+    "en": "You win",
+    "zh-Hant": "你贏了"
+  },
+  "m_7d4303e4167c": {
+    "en": "Computer wins",
+    "zh-Hant": "電腦獲勝"
+  },
+  "m_4cafd4e1f18c": {
+    "en": "Challenge cleared",
+    "zh-Hant": "挑戰完成"
+  },
+  "m_eac05cf28f87": {
+    "en": "Time’s up",
+    "zh-Hant": "時間到"
+  },
+  "m_7da041350f6a": {
+    "en": "Out of lives",
+    "zh-Hant": "生命耗盡"
+  },
+  "m_42019de499f6": {
+    "en": "Mine found",
+    "zh-Hant": "踩到地雷"
+  },
+  "m_8fe338418cc4": {
+    "en": "Run complete",
+    "zh-Hant": "本局完成"
+  },
+  "m_1fec3259b988": {
+    "en": "An even match",
+    "zh-Hant": "勢均力敵"
+  },
+  "m_c7a754a9942f": {
+    "en": "Board complete",
+    "zh-Hant": "棋盤完成"
+  },
+  "m_4da05c9779a5": {
+    "en": "Four connected",
+    "zh-Hant": "四子連線"
+  },
+  "m_37cf92a031f0": {
+    "en": "Local match",
+    "zh-Hant": "本機對局"
+  },
+  "m_e5a3e8dfce41": {
+    "en": "Local best · {0}",
+    "zh-Hant": "本機最佳 · {0}"
+  },
+  "m_6db69449e7b0": {
+    "en": "Local only · not submitted to a leaderboard",
+    "zh-Hant": "僅限本機 · 未提交至排行榜"
+  },
+  "m_ee1946226e4d": {
+    "en": "2048 REACHED",
+    "zh-Hant": "達到 2048"
+  },
+  "m_74236fc2119a": {
+    "en": "TURN PASSED",
+    "zh-Hant": "跳過回合"
+  },
+  "m_69df01525357": {
+    "en": "{0} {1} LEFT",
+    "zh-Hant": "剩餘 {0} {1}"
+  },
+  "m_ee43cbbb47bb": {
+    "en": "STAGE {0} · READY TO LAUNCH",
+    "zh-Hant": "第 {0} 關 · 準備發球"
+  },
+  "m_bf21173dda34": {
+    "en": "hsl(157 48% {0}%)",
+    "zh-Hant": "hsl(157 48% {0}%)"
+  },
+  "m_e509a5de05fc": {
+    "en": "(max-height: 480px) and (orientation: landscape)",
+    "zh-Hant": "(max-height: 480px) and (orientation: landscape)"
+  },
+  "m_b25868b7c7bf": {
+    "en": "Exit focus",
+    "zh-Hant": "退出專注"
+  },
+  "m_5ffcb43525ac": {
+    "en": "Retry start",
+    "zh-Hant": "重試開局"
+  },
+  "m_1f33455a85dc": {
+    "en": "Continue saved game · Legacy",
+    "zh-Hant": "繼續存檔 · 舊版"
+  },
+  "m_ab128526da3e": {
+    "en": "Continue saved game",
+    "zh-Hant": "繼續存檔"
+  },
+  "m_7c46eeae6234": {
+    "en": "{0} · Legacy rules",
+    "zh-Hant": "{0} · 舊版規則"
+  },
+  "m_0efc577ad414": {
+    "en": "Invalid Pong tick.",
+    "zh-Hant": "Pong 邏輯步數無效。"
+  },
+  "m_ed9c9f076ee0": {
+    "en": "Private · {0}",
+    "zh-Hant": "私人 · {0}"
+  },
+  "m_8e2c70540912": {
+    "en": "Online · Friends",
+    "zh-Hant": "線上 · 好友"
+  },
+  "m_373c11f184b3": {
+    "en": "Waiting for rematch…",
+    "zh-Hant": "等待重賽…"
+  },
+  "m_96644f6939a2": {
+    "en": "Ready for rematch →",
+    "zh-Hant": "準備重賽 →"
+  },
+  "m_5ec88757291f": {
+    "en": "Waiting for friend…",
+    "zh-Hant": "等待好友…"
+  },
+  "m_6bb84e07ccdf": {
+    "en": "Ready to resume →",
+    "zh-Hant": "準備繼續 →"
+  },
+  "m_91838d853ad4": {
+    "en": "Ready →",
+    "zh-Hant": "準備就緒 →"
+  },
+  "m_0303e1824670": {
+    "en": "Not connected",
+    "zh-Hant": "尚未連線"
+  },
+  "m_80d441d27568": {
+    "en": "Player one",
+    "zh-Hant": "玩家一"
+  },
+  "m_45dbcab3de89": {
+    "en": "Waiting for a friend",
+    "zh-Hant": "等待好友加入"
+  },
+  "m_cd6114f691b4": {
+    "en": "Private connection · connected",
+    "zh-Hant": "私人連線 · 已連線"
+  },
+  "m_8559396005a2": {
+    "en": "Reconnecting · game paused",
+    "zh-Hant": "正在重新連線 · 遊戲已暫停"
+  },
+  "m_d342e20cb02b": {
+    "en": "No active online match.",
+    "zh-Hant": "目前沒有進行中的線上對局。"
+  },
+  "m_699ca0b06649": {
+    "en": "Latency —",
+    "zh-Hant": "延遲 —"
+  },
+  "m_ae849b4c9f93": {
+    "en": "Round trip {0} ms",
+    "zh-Hant": "來回延遲 {0} 毫秒"
+  },
+  "m_b022f421431b": {
+    "en": "Bring a friend.",
+    "zh-Hant": "邀位好友一起來。"
+  },
+  "m_140854d5ca00": {
+    "en": "Create or join a private room to play.",
+    "zh-Hant": "建立或加入私人房間即可遊玩。"
+  },
+  "m_513c8b46e45d": {
+    "en": "Ready for a rally?",
+    "zh-Hant": "準備好接球了嗎？"
+  },
+  "m_761b76fe7fb8": {
+    "en": "Waiting for your friend…",
+    "zh-Hant": "正在等待好友…"
+  },
+  "m_2fb74dccec11": {
+    "en": "Both players press Ready.",
+    "zh-Hant": "雙方都需按下「準備就緒」。"
+  },
+  "m_9a48d345cfc9": {
+    "en": "Share the invitation link or room code.",
+    "zh-Hant": "分享邀請連結或房間代碼。"
+  },
+  "m_dda2a508fd7b": {
+    "en": "Both players press Ready to resume. Pauses last up to 60 seconds.",
+    "zh-Hant": "雙方按下「準備就緒」後繼續，暫停最長 60 秒。"
+  },
+  "m_132d124d6bb3": {
+    "en": "Interrupted",
+    "zh-Hant": "已中斷"
+  },
+  "m_2141933ec907": {
+    "en": "Room closed",
+    "zh-Hant": "房間已關閉"
+  },
+  "m_59220f8da0e2": {
+    "en": "Create a fresh invitation when you are ready.",
+    "zh-Hant": "準備好時，請建立新的邀請。"
+  },
+  "m_31ffe29256e6": {
+    "en": "{0} wins",
+    "zh-Hant": "{0} 獲勝"
+  },
+  "m_f7a6ed736f51": {
+    "en": "Match complete",
+    "zh-Hant": "對局完成"
+  },
+  "m_d666c6c98942": {
+    "en": "Private casual result · both players can Ready for a rematch.",
+    "zh-Hant": "私人休閒對局成績 · 雙方可準備重賽。"
+  },
+  "m_183383d6bc23": {
+    "en": "Connection interrupted",
+    "zh-Hant": "連線中斷"
+  },
+  "m_8ededd3d6c70": {
+    "en": "Play is paused. Reconnect within 15 seconds.",
+    "zh-Hant": "遊戲已暫停，請在 15 秒內重新連線。"
+  },
+  "m_0b42d029b993": {
+    "en": "Next serve…",
+    "zh-Hant": "下一次發球…"
+  },
+  "m_97ed95b7c41a": {
+    "en": "Sign in with Google to play online.",
+    "zh-Hant": "使用 Google 登入即可線上遊玩。"
+  },
+  "m_8c7f619180a2": {
+    "en": "Account changed. Reopen Pong before joining.",
+    "zh-Hant": "帳號已變更，加入前請重新開啟 Pong。"
+  },
+  "m_0cc1b60d325e": {
+    "en": "Room service is unavailable. Retry when connected.",
+    "zh-Hant": "房間服務無法使用，連線恢復後請重試。"
+  },
+  "m_6803ddcb7d8c": {
+    "en": "The private connection timed out. Retry to reconnect.",
+    "zh-Hant": "私人連線逾時，請重試以重新連線。"
+  },
+  "m_2c91025b8bb7": {
+    "en": "The room connection was interrupted.",
+    "zh-Hant": "房間連線已中斷。"
+  },
+  "m_68d49a90abc0": {
+    "en": "Share the room link. Both players press Ready to begin.",
+    "zh-Hant": "請分享房間連結，雙方按下「準備就緒」即可開始。"
+  },
+  "m_b151aeafaf1c": {
+    "en": "Match ready. Move your paddle on the court.",
+    "zh-Hant": "對局已就緒，在球場內移動你的擋板。"
+  },
+  "m_b0e064cc2e89": {
+    "en": "Ready sent. Waiting for your friend.",
+    "zh-Hant": "已送出準備狀態，正在等待好友。"
+  },
+  "m_b8c0dadaf00e": {
+    "en": "You left the room. Create or join a new one.",
+    "zh-Hant": "你已離開房間，可建立或加入新房間。"
+  },
+  "m_ad2173cac3cd": {
+    "en": "Enable drawing or try another browser.",
+    "zh-Hant": "請啟用繪圖功能，或使用其他瀏覽器。"
+  },
+  "m_7ebd63bbd922": {
+    "en": "Leave this online room? The current match will close for both players.",
+    "zh-Hant": "離開此線上房間嗎？目前對局將為雙方一同關閉。"
+  },
+  "m_e2249e1ffc87": {
+    "en": "Invite link copied. Your friend signs in, joins, then presses Ready.",
+    "zh-Hant": "邀請連結已複製。好友登入、加入後，再按下「準備就緒」。"
+  },
+  "m_28efbc48e4df": {
+    "en": "Copy this invitation: {0}/games/pong/?room={1}",
+    "zh-Hant": "複製此邀請：{0}/games/pong/?room={1}"
+  },
+  "m_ebfd15fc3e4e": {
+    "en": "Account changed. Create or join a fresh room.",
+    "zh-Hant": "帳號已變更，請建立或加入新的房間。"
+  },
+  "m_087c86af7299": {
+    "en": "Create a room or enter your friend's invitation code.",
+    "zh-Hant": "建立房間，或輸入好友的邀請代碼。"
+  },
+  "m_5a5978926e0a": {
+    "en": "Sign in with Google to create or join a room.",
+    "zh-Hant": "使用 Google 登入即可建立或加入房間。"
+  },
+  "m_f16bc1ded055": {
+    "en": "{0} lines cleared",
+    "zh-Hant": "已消除 {0} 行"
+  },
+  "m_ccb568757b36": {
+    "en": "Largest tile · {0}",
+    "zh-Hant": "最大方塊 · {0}"
+  },
+  "m_226f68b172a9": {
+    "en": "Completed in {0} s",
+    "zh-Hant": "於 {0} 秒完成"
+  },
+  "m_208325cba1e5": {
+    "en": "All safe squares revealed",
+    "zh-Hant": "已揭開全部安全格"
+  },
+  "m_6ec2b79497c2": {
+    "en": "Completed 9 × 9 puzzle",
+    "zh-Hant": "已完成 9 × 9 謎題"
+  },
+  "m_26b480999533": {
+    "en": "All filled squares found",
+    "zh-Hant": "已找出全部填色格"
+  },
+  "m_fc69cf6356cc": {
+    "en": "{0} shapes placed",
+    "zh-Hant": "已放置 {0} 個形狀"
+  },
+  "m_211919bca274": {
+    "en": "{0}:{1} played",
+    "zh-Hant": "已遊玩 {0}:{1}"
+  },
+  "m_e22262fb1042": {
+    "en": "Sudoku",
+    "zh-Hant": "數獨"
+  },
+  "m_9a93a3f1a6d5": {
+    "en": "Easy · 9 × 9",
+    "zh-Hant": "簡單 · 9 × 9"
+  },
+  "m_0413e8d7fd1c": {
+    "en": "Normal · 9 × 9",
+    "zh-Hant": "一般 · 9 × 9"
+  },
+  "m_db3f03d32972": {
+    "en": "Hard · 9 × 9",
+    "zh-Hant": "困難 · 9 × 9"
+  },
+  "m_68baf3b53859": {
+    "en": "Nonogram",
+    "zh-Hant": "數織"
+  },
+  "m_41cfa265de02": {
+    "en": "Easy · 5 × 5",
+    "zh-Hant": "簡單 · 5 × 5"
+  },
+  "m_110b323dd65e": {
+    "en": "Normal · 10 × 10",
+    "zh-Hant": "一般 · 10 × 10"
+  },
+  "m_72750ed3bae6": {
+    "en": "Hard · 15 × 15",
+    "zh-Hant": "困難 · 15 × 15"
+  },
+  "m_5e57543a045f": {
+    "en": "Unknown puzzle or difficulty.",
+    "zh-Hant": "未知的謎題或難度。"
+  },
+  "m_c8d9c5aa7790": {
+    "en": "Invalid puzzle save.",
+    "zh-Hant": "謎題存檔無效。"
+  },
+  "m_e8513b8ca4d1": {
+    "en": "Puzzle givens cannot be changed.",
+    "zh-Hant": "不能變更謎題的已知數字。"
+  },
+  "m_b9a7579643c7": {
+    "en": "Invalid Sudoku notes.",
+    "zh-Hant": "數獨筆記無效。"
+  },
+  "m_36a76590ea7b": {
+    "en": "Puzzle clues cannot be changed.",
+    "zh-Hant": "不能變更謎題線索。"
+  },
+  "m_213a348c50ca": {
+    "en": "Invalid puzzle completion state.",
+    "zh-Hant": "謎題完成狀態無效。"
+  },
+  "m_798ac517d08c": {
+    "en": "This is a given digit. Select an empty cell.",
+    "zh-Hant": "這是已知數字，請選擇空格。"
+  },
+  "m_57cbaa7b365a": {
+    "en": "Erase the digit before adding pencil notes.",
+    "zh-Hant": "請先清除數字，再加入鉛筆筆記。"
+  },
+  "m_7fe44cc04c9b": {
+    "en": "Pencil note {0} {1}.",
+    "zh-Hant": "鉛筆筆記 {0} 已{1}。"
+  },
+  "m_0067a2e074b9": {
+    "en": "Pencil notes cleared.",
+    "zh-Hant": "鉛筆筆記已清除。"
+  },
+  "m_2e56edb61b90": {
+    "en": "Row {0}, column {1}, {2}{3}",
+    "zh-Hant": "第 {0} 行，第 {1} 欄，{2}{3}"
+  },
+  "m_412631361db4": {
+    "en": "digit {0}{1}",
+    "zh-Hant": "數字 {0}{1}"
+  },
+  "m_b4b8cbb7b03a": {
+    "en": ", given",
+    "zh-Hant": "，已知數字"
+  },
+  "m_48739ad63177": {
+    "en": ", notes {0}",
+    "zh-Hant": "，筆記 {0}"
+  },
+  "m_7314554b9b9e": {
+    "en": ", conflict",
+    "zh-Hant": "，衝突"
+  },
+  "m_bac9887f9161": {
+    "en": "{2} conflicting cells",
+    "zh-Hant": "{2} 個衝突格"
+  },
+  "m_9ef8f65ad4a3": {
+    "en": "Sudoku puzzle, use arrow keys to select a cell",
+    "zh-Hant": "數獨謎題，使用方向鍵選擇格子"
+  },
+  "m_caef35a6bf0b": {
+    "en": "Pencil notes",
+    "zh-Hant": "鉛筆筆記"
+  },
+  "m_511a2da097fa": {
+    "en": "Erase",
+    "zh-Hant": "清除"
+  },
+  "m_cf9242f696b4": {
+    "en": "Enter a digit",
+    "zh-Hant": "輸入數字"
+  },
+  "m_d325a99b00c8": {
+    "en": "Select a cell, then enter 1–9. Arrow keys move; Delete erases; N toggles notes. Conflicts show an underline.",
+    "zh-Hant": "選擇格子後輸入 1–9。方向鍵移動；Delete 清除；N 切換筆記。衝突處會顯示底線。"
+  },
+  "m_130011756125": {
+    "en": "On",
+    "zh-Hant": "開啟"
+  },
+  "m_d1ff2513cd01": {
+    "en": "Toggle pencil note",
+    "zh-Hant": "切換鉛筆筆記"
+  },
+  "m_f597effec564": {
+    "en": "Enter digit",
+    "zh-Hant": "輸入數字"
+  },
+  "m_27cab059e698": {
+    "en": "Column {1}: {2}{3}",
+    "zh-Hant": "第 {1} 欄：{2}{3}"
+  },
+  "m_cd172c118f92": {
+    "en": ", runs match",
+    "zh-Hant": "，連續格數符合線索"
+  },
+  "m_dc9ae8726ff8": {
+    "en": "Row {1}: {2}{3}",
+    "zh-Hant": "第 {1} 行：{2}{3}"
+  },
+  "m_4c6ce75aa5c1": {
+    "en": "marked empty",
+    "zh-Hant": "已標記為空"
+  },
+  "m_ebbb5bd5fa08": {
+    "en": "picture puzzle",
+    "zh-Hant": "圖像謎題"
+  },
+  "m_5356bf82c6db": {
+    "en": "{2} cells filled",
+    "zh-Hant": "已填入 {2} 格"
+  },
+  "m_6725f84c8a13": {
+    "en": "Drawing mode",
+    "zh-Hant": "繪製模式"
+  },
+  "m_2f6c3dd07cfe": {
+    "en": "■ Fill",
+    "zh-Hant": "■ 填色"
+  },
+  "m_3c0f44876e82": {
+    "en": "× Mark empty",
+    "zh-Hant": "× 標空"
+  },
+  "m_207e8658e45f": {
+    "en": "Scrollable Nonogram board",
+    "zh-Hant": "可捲動的數織棋盤"
+  },
+  "m_89172098fbf8": {
+    "en": "Nonogram puzzle",
+    "zh-Hant": "數織謎題"
+  },
+  "m_beb8cfd380fb": {
+    "en": "Drag cells to paint; select the same mark to erase. Swipe the clues or scroll to move a large board. Arrows move; Space fills; X marks empty. A check means the visible runs match the clues.",
+    "zh-Hant": "拖曳格子即可填色；選擇相同標記可清除。滑動線索或捲動可移動大型棋盤。方向鍵移動；Space 填色；X 標空。勾號表示目前可見的連續格數符合線索。"
+  },
+  "m_3a71fcd7a7ba": {
+    "en": "Pencil notes {0}.",
+    "zh-Hant": "鉛筆筆記已{0}。"
+  },
+  "m_75240b36f86a": {
+    "en": "Fill mode.",
+    "zh-Hant": "填色模式。"
+  },
+  "m_4df286093c52": {
+    "en": "Mark empty mode.",
+    "zh-Hant": "標空模式。"
+  },
+  "m_292fffe328d0": {
+    "en": "Backspace",
+    "zh-Hant": "Backspace"
+  },
+  "m_17f6bc7b3354": {
+    "en": "Start or resume this puzzle before using a hint.",
+    "zh-Hant": "請先開始或繼續此謎題，再使用提示。"
+  },
+  "m_c0c38ab1fd8e": {
+    "en": "Hints are available in Private games only.",
+    "zh-Hant": "僅私人遊戲可使用提示。"
+  },
+  "m_148f591c669c": {
+    "en": "Hint applied to row {0}, column {1}.",
+    "zh-Hant": "已在第 {0} 行、第 {1} 欄套用提示。"
+  },
+  "m_ee2f41c6c76c": {
+    "en": "Sign in to start a Public game.",
+    "zh-Hant": "登入即可開始公開對局。"
+  },
+  "m_00c080715a4e": {
+    "en": "Account changed. Reopen this game.",
+    "zh-Hant": "帳號已變更，請重新開啟此遊戲。"
+  },
+  "m_3331838f8500": {
+    "en": "Public service could not complete this request. Check your connection and retry.",
+    "zh-Hant": "公開對局服務無法完成此請求，請檢查連線後重試。"
+  },
+  "m_55eee794d37a": {
+    "en": "Could not preserve this Public result locally. Keep this page open to retry.",
+    "zh-Hant": "無法在本機保留此公開成績，請保持此頁開啟以重試。"
+  },
+  "m_abf84f037af7": {
+    "en": "Public result storage failed. Keep this page open to retry.",
+    "zh-Hant": "公開成績儲存失敗，請保持此頁開啟以重試。"
+  },
+  "m_566573d74a8a": {
+    "en": "Games — KenSei",
+    "zh-Hant": "遊戲 — KenSei"
+  },
+  "m_26a2ee31d9a1": {
+    "en": "Press play.",
+    "zh-Hant": "按下開始。"
+  },
+  "m_b1c8e67602d6": {
+    "en": "Find your flow.",
+    "zh-Hant": "找到你的節奏。"
+  },
+  "m_95fe4be17473": {
+    "en": "Clear a board. Beat your best. Take a breather.",
+    "zh-Hant": "清空棋盤，突破紀錄，讓自己歇一會。"
+  },
+  "m_44be3293f9bd": {
+    "en": "Twelve little challenges. One more personal best.",
+    "zh-Hant": "十二個小挑戰，再創一次個人最佳。"
+  },
+  "m_d1d678149e70": {
+    "en": "Find your next game",
+    "zh-Hant": "尋找下一款遊戲"
+  },
+  "m_e29f6200a707": {
+    "en": "12 games",
+    "zh-Hant": "12 款遊戲"
+  },
+  "m_4cea3b007cf7": {
+    "en": "Solo without signing in",
+    "zh-Hant": "無需登入，獨自暢玩"
+  },
+  "m_d49f8d9f65e3": {
+    "en": "Your pace",
+    "zh-Hant": "照自己的步調"
+  },
+  "m_4a2ceced9b91": {
+    "en": "A SMALL BREAK, WELL PLAYED.",
+    "zh-Hant": "小歇片刻，也要玩得精彩。"
+  },
+  "m_2753fb78b867": {
+    "en": "PICK YOUR LITTLE CHALLENGE",
+    "zh-Hant": "挑選你的小挑戰"
+  },
+  "m_30ac9b00002e": {
+    "en": "What are we playing?",
+    "zh-Hant": "今天玩甚麼？"
+  },
+  "m_ff126a5f7bd1": {
+    "en": "Play freely. Keep your best.",
+    "zh-Hant": "自在遊玩，留下最佳紀錄。"
+  },
+  "m_e7e4eeead666": {
+    "en": "12 GAMES / 9 RANKED GAMES",
+    "zh-Hant": "12 款遊戲／9 款可參榜"
+  },
+  "m_e3fb8df9aa30": {
+    "en": "Find a game…",
+    "zh-Hant": "尋找遊戲…"
+  },
+  "m_cfc027acf02d": {
+    "en": "Search games",
+    "zh-Hant": "搜尋遊戲"
+  },
+  "m_cf2bf152b629": {
+    "en": "All games",
+    "zh-Hant": "全部遊戲"
+  },
+  "m_f0c92524b565": {
+    "en": "Play 2048",
+    "zh-Hant": "玩 2048"
+  },
+  "m_7e14a3db13c3": {
+    "en": "DEMO PREVIEW",
+    "zh-Hant": "示範預覽"
+  },
+  "m_fdfc227e7220": {
+    "en": "Merge. Build. Repeat.",
+    "zh-Hant": "合併、堆疊，再接再厲。"
+  },
+  "m_1c7440e4c1c2": {
+    "en": "Slide, merge and find a little room for one more tile.",
+    "zh-Hant": "滑動、合併，再為下一個方塊騰出一點空間。"
+  },
+  "m_7df048f5768c": {
+    "en": "4 × 4 board",
+    "zh-Hant": "4 × 4 棋盤"
+  },
+  "m_a6db48009495": {
+    "en": "Solo",
+    "zh-Hant": "單人"
+  },
+  "m_1ed5b16810b3": {
+    "en": "Play Minesweeper",
+    "zh-Hant": "玩掃雷"
+  },
+  "m_3d26377635f9": {
+    "en": "A little calculated risk.",
+    "zh-Hant": "一點經過計算的冒險。"
+  },
+  "m_29b17813ee24": {
+    "en": "Read the numbers. Trust your flags. Clear a careful path.",
+    "zh-Hant": "看懂數字，相信旗幟，小心開出安全路線。"
+  },
+  "m_f3e7a30afab7": {
+    "en": "3 difficulties",
+    "zh-Hant": "3 種難度"
+  },
+  "m_6f8c61406b8f": {
+    "en": "Play Snake",
+    "zh-Hant": "玩貪食蛇"
+  },
+  "m_e128ab905544": {
+    "en": "One more bite.",
+    "zh-Hant": "再吃一口。"
+  },
+  "m_4d015521f7b3": {
+    "en": "One more bite, one less corner. A familiar little challenge.",
+    "zh-Hant": "多吃一口，少一個轉角。熟悉的小挑戰，等你再試一次。"
+  },
+  "m_57631ba72705": {
+    "en": "3 speeds",
+    "zh-Hant": "3 種速度"
+  },
+  "m_f448a59dee7b": {
+    "en": "Play Memory Match",
+    "zh-Hant": "玩記憶配對"
+  },
+  "m_2620661e09b7": {
+    "en": "Find your other half.",
+    "zh-Hant": "找出另一半。"
+  },
+  "m_f68ddcfec790": {
+    "en": "A few familiar shapes. A little more attention.",
+    "zh-Hant": "幾個熟悉的圖案，再多一點專注。"
+  },
+  "m_84c91b33544d": {
+    "en": "6–12 pairs",
+    "zh-Hant": "6–12 對"
+  },
+  "m_a7fd6f13813f": {
+    "en": "Play Sudoku",
+    "zh-Hant": "玩數獨"
+  },
+  "m_cbde46cfba81": {
+    "en": "A little room for logic.",
+    "zh-Hant": "給邏輯一點空間。"
+  },
+  "m_b5e141367af6": {
+    "en": "A little logic, one number at a time. Notes, hints and three difficulties.",
+    "zh-Hant": "一次一個數字，慢慢推理。提供筆記、提示與三種難度。"
+  },
+  "m_7a81f86ab21c": {
+    "en": "Play Nonogram",
+    "zh-Hant": "玩數織"
+  },
+  "m_122e05ae4589": {
+    "en": "A picture in the clues.",
+    "zh-Hant": "線索中藏著圖像。"
+  },
+  "m_25add22265f7": {
+    "en": "Follow the clues. Fill the squares. Reveal a little pixel picture.",
+    "zh-Hant": "跟隨線索，填滿方格，揭開小小的像素圖。"
+  },
+  "m_f1d89e7acb02": {
+    "en": "5 × 5 to 15 × 15",
+    "zh-Hant": "5 × 5 至 15 × 15"
+  },
+  "m_e5781314bfec": {
+    "en": "Play Block Puzzle",
+    "zh-Hant": "玩 Block Puzzle"
+  },
+  "m_27c43781582e": {
+    "en": "Make a little space.",
+    "zh-Hant": "騰出一點空間。"
+  },
+  "m_051f8c8eb06f": {
+    "en": "Find a place for every shape. Fill a line and make a little space.",
+    "zh-Hant": "替每個形狀找到位置，填滿一行，再騰出一點空間。"
+  },
+  "m_1ee55424a062": {
+    "en": "8 × 8 board",
+    "zh-Hant": "8 × 8 棋盤"
+  },
+  "m_7b08e79648e8": {
+    "en": "Play Brick Breaker",
+    "zh-Hant": "玩 Brick Breaker"
+  },
+  "m_183e989f776f": {
+    "en": "Keep a good thing bouncing.",
+    "zh-Hant": "讓精彩繼續彈跳。"
+  },
+  "m_0e15ba7033d3": {
+    "en": "Keep the ball in play. Three stages, three lives, one more bounce.",
+    "zh-Hant": "讓球持續在場。三個關卡、三條生命，再多一次反彈。"
+  },
+  "m_0b28d18eef3b": {
+    "en": "3 stages · 5 minutes",
+    "zh-Hant": "3 關 · 5 分鐘"
+  },
+  "m_94b13a1e8fee": {
+    "en": "Play Connect Four",
+    "zh-Hant": "玩四子棋"
+  },
+  "m_4c414c99e77e": {
+    "en": "One move ahead.",
+    "zh-Hant": "想在前一步。"
+  },
+  "m_ab5c1158b9c8": {
+    "en": "Four in a row, a move ahead. Play the computer or share a screen.",
+    "zh-Hant": "四子連線，先想一步。可挑戰電腦，也可與朋友共用畫面。"
+  },
+  "m_9abb9d6937db": {
+    "en": "3 AI levels",
+    "zh-Hant": "3 種電腦難度"
+  },
+  "m_5c3b978a3df6": {
+    "en": "Computer / Local",
+    "zh-Hant": "電腦／本機"
+  },
+  "m_232bd87da52c": {
+    "en": "Play Reversi",
+    "zh-Hant": "玩黑白棋"
+  },
+  "m_3a71ca3188b3": {
+    "en": "Turn the whole picture.",
+    "zh-Hant": "翻轉整個局面。"
+  },
+  "m_4a3622572a91": {
+    "en": "A quiet move can turn the board. Play the computer or a friend beside you.",
+    "zh-Hant": "安靜的一步，也能翻轉棋盤。挑戰電腦，或與身旁好友對弈。"
+  },
+  "m_defa04fbfef6": {
+    "en": "Play Block Drop",
+    "zh-Hant": "玩 Block Drop"
+  },
+  "m_2de1b1ea30bf": {
+    "en": "Find your stack rhythm.",
+    "zh-Hant": "找到你的堆疊節奏。"
+  },
+  "m_c1ec406ac5bc": {
+    "en": "Find your stack rhythm. Clear a line, chase forty, hold your next move.",
+    "zh-Hant": "找到堆疊節奏。消除一行、挑戰四十行，再保留下一步。"
+  },
+  "m_883275dae68a": {
+    "en": "Classic / 40-line Sprint",
+    "zh-Hant": "經典／40 行衝刺"
+  },
+  "m_8fe6e325e41c": {
+    "en": "Play Pong",
+    "zh-Hant": "玩 Pong"
+  },
+  "m_04658dee2bcb": {
+    "en": "A friend on the other side.",
+    "zh-Hant": "另一端，有位好友。"
+  },
+  "m_f4e2f2b43402": {
+    "en": "Pong",
+    "zh-Hant": "Pong"
+  },
+  "m_4d4f3cd82221": {
+    "en": "Invite a friend. Share a rally. A private online room for two.",
+    "zh-Hant": "邀請好友，一起接球。專屬兩人的私人線上房間。"
+  },
+  "m_a0f6f31545cd": {
+    "en": "Online friends · Casual",
+    "zh-Hant": "線上好友 · 休閒"
+  },
+  "m_ec7391a7983b": {
+    "en": "Online / Friends",
+    "zh-Hant": "線上／好友"
+  },
+  "m_ada628bc5416": {
+    "en": "No games found. Try another search.",
+    "zh-Hant": "找不到遊戲，請換個關鍵字。"
+  },
+  "m_9553fdebfcd4": {
+    "en": "EVERY LITTLE MILESTONE",
+    "zh-Hant": "每個小小里程碑"
+  },
+  "m_ac4aee882dc3": {
+    "en": "My Progress",
+    "zh-Hant": "我的進度"
+  },
+  "m_c55e1d589a38": {
+    "en": "Refresh progress",
+    "zh-Hant": "重新整理進度"
+  },
+  "m_266d5342c55f": {
+    "en": "Loading verified Public results…",
+    "zh-Hant": "正在載入已驗證公開成績…"
+  },
+  "m_da122c2711c9": {
+    "en": "Verified Public runs",
+    "zh-Hant": "已驗證公開對局"
+  },
+  "m_dffdfd4624e1": {
+    "en": "Ranked games played",
+    "zh-Hant": "已參榜遊戲數"
+  },
+  "m_315b2f80d700": {
+    "en": "Milestones unlocked",
+    "zh-Hant": "已解鎖里程碑"
+  },
+  "m_6badd1e313a5": {
+    "en": "All milestones · 30",
+    "zh-Hant": "全部里程碑 · 30 項"
+  },
+  "m_7a3ad2d4b176": {
+    "en": "RIGHT WHERE YOU LEFT OFF",
+    "zh-Hant": "從上次停下的地方繼續"
+  },
+  "m_4724aacd403d": {
+    "en": "Continue playing",
+    "zh-Hant": "繼續遊玩"
+  },
+  "m_c7dc037d1881": {
+    "en": "Refresh saves",
+    "zh-Hant": "重新整理存檔"
+  },
+  "m_e7bc43518f78": {
+    "en": "Clear saved games",
+    "zh-Hant": "清除遊戲存檔"
+  },
+  "m_c46002ea4fba": {
+    "en": "Loading local saves…",
+    "zh-Hant": "正在載入本機存檔…"
+  },
+  "m_45b15219c9b5": {
+    "en": "No unfinished games yet. Pick a game above.",
+    "zh-Hant": "目前沒有未完成的遊戲，請選擇上方遊戲。"
+  },
+  "m_543c3a51c1d8": {
+    "en": "Load more saves",
+    "zh-Hant": "載入更多存檔"
+  },
+  "m_15a063a065b5": {
+    "en": "Copy guest saves to account",
+    "zh-Hant": "將遊客存檔複製至帳號"
+  },
+  "m_5b7f29662bd3": {
+    "en": "Guest games stay on this device. Account saves are private. Only verified Public results appear on leaderboards.",
+    "zh-Hant": "遊客遊戲保留在此裝置，帳號存檔為私人資料。只有經驗證的公開成績會顯示於排行榜。"
+  },
+  "m_43b9b9ed8baf": {
+    "en": "2048 — KenSei",
+    "zh-Hant": "2048 — KenSei"
+  },
+  "m_c8beaf9602df": {
+    "en": "Back to Games",
+    "zh-Hant": "返回遊戲"
+  },
+  "m_b3e9380ba810": {
+    "en": "Game setup",
+    "zh-Hant": "開局設定"
+  },
+  "m_74a883a037bc": {
+    "en": "Settings",
+    "zh-Hant": "設定"
+  },
+  "m_2548cc52306a": {
+    "en": "Live game statistics",
+    "zh-Hant": "即時遊戲數據"
+  },
+  "m_56d25fa6c42a": {
+    "en": "2048 board",
+    "zh-Hant": "2048 棋盤"
+  },
+  "m_5017cde8f689": {
+    "en": "2048 ready preview",
+    "zh-Hant": "2048 待機預覽"
+  },
+  "m_ef1acab64e3f": {
+    "en": "Start 2048",
+    "zh-Hant": "開始 2048"
+  },
+  "m_e99fdc4b5710": {
+    "en": "Ready preview",
+    "zh-Hant": "待機預覽"
+  },
+  "m_ad7b60713b64": {
+    "en": "Choose your run",
+    "zh-Hant": "選擇本局設定"
+  },
+  "m_be44133ed57f": {
+    "en": "Difficulty",
+    "zh-Hant": "難度"
+  },
+  "m_29d1ee1fdfb0": {
+    "en": "Play locally",
+    "zh-Hant": "在本機遊玩"
+  },
+  "m_8fc2e587a1e2": {
+    "en": "Retry submission",
+    "zh-Hant": "重試提交"
+  },
+  "m_b850278bdf09": {
+    "en": "Keep result locally",
+    "zh-Hant": "將成績保留於本機"
+  },
+  "m_00c70a36704e": {
+    "en": "Sign in for ranked results",
+    "zh-Hant": "登入以取得參榜成績"
+  },
+  "m_67cb65efa1c0": {
+    "en": "No game saved yet.",
+    "zh-Hant": "尚無遊戲存檔。"
+  },
+  "m_22e23a8546b3": {
+    "en": "Reload game",
+    "zh-Hant": "重新載入遊戲"
+  },
+  "m_b584725b3f8f": {
+    "en": "TAKE A BREATHER",
+    "zh-Hant": "歇一會吧"
+  },
+  "m_496267ccc6b0": {
+    "en": "Continue →",
+    "zh-Hant": "繼續 →"
+  },
+  "m_4dfe368f7d69": {
+    "en": "Game result",
+    "zh-Hant": "遊戲結果"
+  },
+  "m_ddb3dffbbff0": {
+    "en": "RUN REPORT",
+    "zh-Hant": "本局報告"
+  },
+  "m_897eea2500c2": {
+    "en": "Direction controls",
+    "zh-Hant": "方向控制"
+  },
+  "m_c66feb5eb8f2": {
+    "en": "Move up",
+    "zh-Hant": "向上移動"
+  },
+  "m_6c94221edd26": {
+    "en": "Move left",
+    "zh-Hant": "向左移動"
+  },
+  "m_40bb50da160c": {
+    "en": "Move down",
+    "zh-Hant": "向下移動"
+  },
+  "m_8d60decd44f3": {
+    "en": "Move right",
+    "zh-Hant": "向右移動"
+  },
+  "m_99af6606ff9d": {
+    "en": "Menu",
+    "zh-Hant": "選單"
+  },
+  "m_cf5637f58e8f": {
+    "en": "Undo one move",
+    "zh-Hant": "復原一步"
+  },
+  "m_31b471215872": {
+    "en": "Leaderboard",
+    "zh-Hant": "排行榜"
+  },
+  "m_4228aeb07c41": {
+    "en": "Rules",
+    "zh-Hant": "規則"
+  },
+  "m_6ee7ce6e5567": {
+    "en": "Previous rules · v1",
+    "zh-Hant": "舊版規則 · v1"
+  },
+  "m_55bdaf01ab6f": {
+    "en": "One verified best per player.",
+    "zh-Hant": "每位玩家只列出一筆驗證最佳成績。"
+  },
+  "m_f876a9788806": {
+    "en": "Leaderboard results",
+    "zh-Hant": "排行榜成績"
+  },
+  "m_5df33f98504d": {
+    "en": "Verified results only. Your best on this device may differ.",
+    "zh-Hant": "僅列出驗證成績，你在此裝置的最佳紀錄可能不同。"
+  },
+  "m_0ccfef828950": {
+    "en": "Close settings",
+    "zh-Hant": "關閉設定"
+  },
+  "m_fece8604a2c2": {
+    "en": "Game settings",
+    "zh-Hant": "遊戲設定"
+  },
+  "m_4bd71de6f789": {
+    "en": "Sound & display",
+    "zh-Hant": "聲音與顯示"
+  },
+  "m_b10fb966d720": {
+    "en": "Volume",
+    "zh-Hant": "音量"
+  },
+  "m_a5baa732dc5d": {
+    "en": "Game volume",
+    "zh-Hant": "遊戲音量"
+  },
+  "m_67103200d43a": {
+    "en": "Preferences stay on this device. Playing continues while these settings are open.",
+    "zh-Hant": "偏好保留在此裝置。開啟設定時，遊戲仍會繼續。"
+  },
+  "m_08037ba76deb": {
+    "en": "Help & game menu",
+    "zh-Hant": "說明與遊戲選單"
+  },
+  "m_6ccd5c785604": {
+    "en": "Close menu",
+    "zh-Hant": "關閉選單"
+  },
+  "m_652a13d69ab6": {
+    "en": "Game menu",
+    "zh-Hant": "遊戲選單"
+  },
+  "m_40985b6ad3c6": {
+    "en": "New game setup",
+    "zh-Hant": "設定新遊戲"
+  },
+  "m_d8aa4bc52aeb": {
+    "en": "Controls & Help",
+    "zh-Hant": "操作與說明"
+  },
+  "m_8de73a74568d": {
+    "en": "Milestones & Help",
+    "zh-Hant": "里程碑與說明"
+  },
+  "m_73ec5b270dac": {
+    "en": "Play continues while this menu is open. Pausing or opening Help makes a ranked run local only.",
+    "zh-Hant": "開啟此選單時，遊戲仍會繼續。暫停或開啟說明，會使參榜對局轉為僅限本機。"
+  },
+  "m_4951cbea7055": {
+    "en": "Milestones and help",
+    "zh-Hant": "里程碑與說明"
+  },
+  "m_8780669a7597": {
+    "en": "Close milestones and help",
+    "zh-Hant": "關閉里程碑與說明"
+  },
+  "m_3c8728088628": {
+    "en": "Local best",
+    "zh-Hant": "本機最佳"
+  },
+  "m_39c33dc2375f": {
+    "en": "Milestones",
+    "zh-Hant": "里程碑"
+  },
+  "m_225c4ca767bd": {
+    "en": "3 goals",
+    "zh-Hant": "3 個目標"
+  },
+  "m_be22bb04d272": {
+    "en": "Only verified Public runs unlock milestones.",
+    "zh-Hant": "只有經驗證的公開對局能解鎖里程碑。"
+  },
+  "m_893c9fd1223a": {
+    "en": "Use arrow keys, WASD, swipe, or the direction buttons. Equal tiles merge once per move; their new value adds to your score. New tiles are 2 (90%) or 4 (10%). Reaching 2048 is a milestone: keep playing until no moves remain. One-step Undo is available during local-only play.",
+    "zh-Hant": "使用方向鍵、WASD、滑動或方向按鈕操作。相同方塊每次移動只能合併一次，合併後的數值會加入分數。新方塊有 90% 機率為 2、10% 為 4。達到 2048 是一個里程碑，之後可繼續遊玩，直到無法移動。僅限本機遊玩時可復原一步。"
+  },
+  "m_d581855e7ae4": {
+    "en": "QUICK START GUIDE",
+    "zh-Hant": "快速入門"
+  },
+  "m_eeff9f1c0784": {
+    "en": "How to play 2048",
+    "zh-Hant": "2048 玩法"
+  },
+  "m_a81ded35061e": {
+    "en": "Controls work while the board is focused. Progress saves automatically. Signed-in new games submit eligible results after verification. Paused, interrupted or restored games are local only. Restart to change a locked mode or difficulty.",
+    "zh-Hant": "棋盤聚焦時可使用控制鍵。進度會自動儲存。登入後開始的新對局，符合資格的成績會在驗證後提交。暫停、中斷或從存檔恢復的遊戲僅限本機。要更改已鎖定的模式或難度，請重新開始。"
+  },
+  "m_b23842a40db1": {
+    "en": "Save failed? Keep this page open and retry sync. Guest saves stay separate from account saves. Sound starts only after your action. Sound and volume preferences stay on this device.",
+    "zh-Hant": "儲存失敗？請保持此頁開啟並重試同步。遊客存檔與帳號存檔分開保留。只有在你操作後才會啟動聲音，聲音與音量偏好保留於此裝置。"
+  },
+  "m_ff549b5f00b0": {
+    "en": "Block Drop — KenSei",
+    "zh-Hant": "Block Drop — KenSei"
+  },
+  "m_399801fcae6e": {
+    "en": "Block Drop board",
+    "zh-Hant": "Block Drop 棋盤"
+  },
+  "m_03f1b4057e50": {
+    "en": "block drop ready preview",
+    "zh-Hant": "Block Drop 待機預覽"
+  },
+  "m_1b70b3b71e3c": {
+    "en": "Start Block Drop",
+    "zh-Hant": "開始 Block Drop"
+  },
+  "m_fce9b3e351e0": {
+    "en": "Stack seven kinds of falling pieces on a 10 × 20 board. Left/right or A/D move; Up/X rotates clockwise, Z counterclockwise, Down/S soft-drops, Space hard-drops, C/Shift holds once per piece. SRS wall kicks, seven-piece bags, a ghost and three-piece preview are included. Clear 1/2/3/4 lines for 100/300/500/800 × level; soft drop adds 1 per cell and hard drop 2. Every 10 lines increases level. Classic ends when the stack reaches the top. Sprint ranks completed 40-line runs by server time. Paused and restored games are local only.",
+    "zh-Hant": "在 10 × 20 棋盤堆疊七種下落方塊。左右鍵或 A／D 移動；上鍵／X 順時針旋轉，Z 逆時針旋轉；下鍵／S 軟降，Space 硬降，C／Shift 保留，每個方塊限一次。提供 SRS 踢牆旋轉、七種方塊一袋的隨機序列、落點投影及接下來三塊預覽。一次消除 1／2／3／4 行，分別獲得 100／300／500／800 × 等級的分數；軟降每格加 1 分，硬降每格加 2 分。每消除 10 行升一級。經典模式在方塊堆至頂部時結束；衝刺模式以伺服器時間排列完成 40 行的成績。暫停或恢復存檔後，遊戲僅限本機。"
+  },
+  "m_3bef2968f536": {
+    "en": "How to play Block Drop",
+    "zh-Hant": "Block Drop 玩法"
+  },
+  "m_c7f8bf9b1e70": {
+    "en": "Block Puzzle — KenSei",
+    "zh-Hant": "Block Puzzle — KenSei"
+  },
+  "m_7b4a11e336e3": {
+    "en": "Block Puzzle board",
+    "zh-Hant": "Block Puzzle 棋盤"
+  },
+  "m_39acb4287970": {
+    "en": "block puzzle ready preview",
+    "zh-Hant": "Block Puzzle 待機預覽"
+  },
+  "m_2bebe4d3975f": {
+    "en": "Start Block Puzzle",
+    "zh-Hant": "開始 Block Puzzle"
+  },
+  "m_65e351ccf1b1": {
+    "en": "Place each of the three shapes, then receive a new tray. Tap a shape and a board square, or drag it into place. The selected square is the shape’s top-left corner. Arrow keys move the placement cursor; Enter places. Full rows and columns clear together. Each placed cell earns 1 point, each cleared line 10. Shapes cannot rotate. The game ends when none of the remaining shapes fits.",
+    "zh-Hant": "放置三個形狀後，會取得新的一組。先點選形狀再點棋盤格，或直接拖曳放置。選擇的格子代表形狀左上角。方向鍵可移動放置游標，Enter 放置。填滿的行與欄會同時消除。每放置一格得 1 分，每消除一行或一欄得 10 分。形狀不能旋轉。剩餘形狀皆無處可放時，遊戲結束。"
+  },
+  "m_b64070f1896b": {
+    "en": "How to play Block Puzzle",
+    "zh-Hant": "Block Puzzle 玩法"
+  },
+  "m_b9aeeebd90ed": {
+    "en": "Brick Breaker — KenSei",
+    "zh-Hant": "Brick Breaker — KenSei"
+  },
+  "m_33331bdee730": {
+    "en": "brick breaker ready preview",
+    "zh-Hant": "Brick Breaker 待機預覽"
+  },
+  "m_0767140e7e09": {
+    "en": "Start Brick Breaker",
+    "zh-Hant": "開始 Brick Breaker"
+  },
+  "m_51b329042c0b": {
+    "en": "Move the paddle with your pointer, touch, arrow keys or A / D. Catch ×3 Multiball, ↔ Wide Paddle (12 seconds), and ¾ Slow Ball (8 seconds) drops. Only losing all active balls costs a life. New games use powerup rules v2; old saves use Legacy rules. Tap Launch or press Space to serve. Break each brick for 10 points; clear three stages using three shared lives. A new ball waits for your launch after a miss. The five-minute active-play limit includes waiting to launch. Only natural endings, time limit or all three cleared stages finish ranked runs.",
+    "zh-Hant": "使用游標、觸控、方向鍵或 A／D 移動擋板。接住掉落的 ×3 多球、↔ 加寬擋板（12 秒）及 ¾ 慢速球（8 秒）。只有全部場上球掉落才扣一條生命。新遊戲使用強化道具 v2 規則，舊存檔沿用舊版規則。點按「發球」或按 Space 發球。每塊磚得 10 分，共用三條生命挑戰三關。失球後，新球會等待你發射。五分鐘的遊玩時限包含等待發球的時間。只有自然結束、時間到或完成全部三關，才算完成參榜對局。"
+  },
+  "m_57eec5f11de9": {
+    "en": "How to play Brick Breaker",
+    "zh-Hant": "Brick Breaker 玩法"
+  },
+  "m_aec73139df1b": {
+    "en": "Connect Four — KenSei",
+    "zh-Hant": "四子棋 — KenSei"
+  },
+  "m_9a9c8a15e453": {
+    "en": "Connect Four board",
+    "zh-Hant": "四子棋棋盤"
+  },
+  "m_83112e4d37f4": {
+    "en": "connect four ready preview",
+    "zh-Hant": "四子棋待機預覽"
+  },
+  "m_64daba3d01c1": {
+    "en": "Start Connect Four",
+    "zh-Hant": "開始四子棋"
+  },
+  "m_c0886e50d42e": {
+    "en": "Opponent",
+    "zh-Hant": "對手"
+  },
+  "m_84061ac6e98a": {
+    "en": "Play as",
+    "zh-Hant": "選擇先後手"
+  },
+  "m_95c8fc966986": {
+    "en": "First player",
+    "zh-Hant": "先手"
+  },
+  "m_ffc75c16bb4e": {
+    "en": "Second player",
+    "zh-Hant": "後手"
+  },
+  "m_a7aabf37d2da": {
+    "en": "Undo turn",
+    "zh-Hant": "復原回合"
+  },
+  "m_e37ece207dde": {
+    "en": "A TABLE FOR TWO",
+    "zh-Hant": "兩人的棋桌"
+  },
+  "m_d4d046aa0452": {
+    "en": "Your move.",
+    "zh-Hant": "輪到你了。"
+  },
+  "m_4b305550925a": {
+    "en": "Play the computer or a friend on this device. These matches stay Private, with saved progress and Undo.",
+    "zh-Hant": "可挑戰電腦，或與好友在此裝置對弈。對局保持私人，支援儲存進度與復原。"
+  },
+  "m_cc52667c6f4f": {
+    "en": "Computer thinking stops when you pause or leave.",
+    "zh-Hant": "暫停或離開時，電腦會停止思考。"
+  },
+  "m_bd92581cd7c4": {
+    "en": "Drop a piece into one of seven columns. Connect four horizontally, vertically or diagonally to win. A full board without a winner is a draw. Choose three computer difficulties or two players on this device. Choose first or second before starting. Local only: pause, continue and undo your last human turn (one move for two players).",
+    "zh-Hant": "將棋子投入七欄中的其中一欄。橫向、直向或斜向連成四子即可獲勝。棋盤填滿仍無人獲勝則為平局。提供三種電腦難度，或在此裝置雙人對弈。開始前可選擇先手或後手。僅限本機遊玩，可暫停、繼續及復原上一次玩家回合；雙人模式則復原一步。"
+  },
+  "m_ef92cd01064c": {
+    "en": "How to play Connect Four",
+    "zh-Hant": "四子棋玩法"
+  },
+  "m_1a7e194f6843": {
+    "en": "Memory Match — KenSei",
+    "zh-Hant": "記憶配對 — KenSei"
+  },
+  "m_fb98a9600faf": {
+    "en": "Memory Match board",
+    "zh-Hant": "記憶配對棋盤"
+  },
+  "m_440a14b5bf56": {
+    "en": "memory match ready preview",
+    "zh-Hant": "記憶配對待機預覽"
+  },
+  "m_812d6b57736e": {
+    "en": "Start Memory Match",
+    "zh-Hant": "開始記憶配對"
+  },
+  "m_791fe34d0357": {
+    "en": "Select two cards to find a matching pair. Each pair of flips counts as one attempt. A mismatch stays visible for 650 ms; wait before trying again. Match every pair to finish. Fewer attempts rank first, then faster completion.",
+    "zh-Hant": "選擇兩張卡牌，找出相同圖案。每翻開兩張計為一次嘗試。配對失敗時會顯示 650 毫秒，請等待後再試。配對全部卡牌即可完成。排行榜先比較嘗試次數，次數較少者優先；再比較完成時間。"
+  },
+  "m_3b8dd2e5e8e5": {
+    "en": "How to play Memory Match",
+    "zh-Hant": "記憶配對玩法"
+  },
+  "m_252e4aa5772a": {
+    "en": "Minesweeper — KenSei",
+    "zh-Hant": "掃雷 — KenSei"
+  },
+  "m_246733fa2621": {
+    "en": "Minesweeper board",
+    "zh-Hant": "掃雷棋盤"
+  },
+  "m_80f9cf2252c3": {
+    "en": "minesweeper ready preview",
+    "zh-Hant": "掃雷待機預覽"
+  },
+  "m_4701faac26d4": {
+    "en": "Start Minesweeper",
+    "zh-Hant": "開始掃雷"
+  },
+  "m_36b830bdb447": {
+    "en": "Reveal",
+    "zh-Hant": "揭開"
+  },
+  "m_701534692b98": {
+    "en": "Flag ⚑",
+    "zh-Hant": "插旗 ⚑"
+  },
+  "m_dfe01bc7acf6": {
+    "en": "Reveal every safe square to win. Your first reveal and its neighbors are safe. Right-click to flag; on touch use Reveal / Flag. Activate an already-open number to reveal its neighbors when the surrounding flag count matches. Incorrect flags can lose the game. Random boards may require a guess. Large boards pan inside the game area.",
+    "zh-Hant": "揭開全部安全格即可獲勝。首次揭開的格子及相鄰格均安全。按滑鼠右鍵插旗；觸控裝置可切換「揭開／插旗」。當周圍旗幟數與數字相符時，再次點按已揭開的數字，可揭開相鄰格。插錯旗可能導致失敗。隨機棋盤有時需要猜測。大型棋盤可在遊戲區內平移。"
+  },
+  "m_2a4c43f59310": {
+    "en": "How to play Minesweeper",
+    "zh-Hant": "掃雷玩法"
+  },
+  "m_35d4e950fcfa": {
+    "en": "Nonogram — KenSei",
+    "zh-Hant": "數織 — KenSei"
+  },
+  "m_3c4e83f578cb": {
+    "en": "Nonogram board",
+    "zh-Hant": "數織棋盤"
+  },
+  "m_ad4d2d6dbf6f": {
+    "en": "nonogram ready preview",
+    "zh-Hant": "數織待機預覽"
+  },
+  "m_870f4adec7e3": {
+    "en": "Start Nonogram",
+    "zh-Hant": "開始數織"
+  },
+  "m_7d755ebcd2a4": {
+    "en": "Hint · local only",
+    "zh-Hant": "提示 · 僅限本機"
+  },
+  "m_bcf62483731c": {
+    "en": "The numbers show consecutive filled runs in each row and column, in order. Separate runs with at least one empty square. Switch Fill / Mark or use X to mark an empty square; drag to paint. A matching clue line is highlighted. Scroll the clue area to pan larger boards. Local-only play provides Undo and a one-cell Hint. Only a completed ranked puzzle can rank.",
+    "zh-Hant": "數字依序表示每行、每欄連續填色格的長度。每段之間至少留一個空格。切換「填色／標空」，或使用 X 標記空格；拖曳可連續填色。符合的線索行會亮起。捲動線索區可平移大型棋盤。僅限本機遊玩時，提供復原及單格提示。只有完成的參榜謎題才能上榜。"
+  },
+  "m_07011297e231": {
+    "en": "How to play Nonogram",
+    "zh-Hant": "數織玩法"
+  },
+  "m_dfc0325884d7": {
+    "en": "Pong — KenSei",
+    "zh-Hant": "Pong — KenSei"
+  },
+  "m_ecfb42853be5": {
+    "en": "Online Pong court. Move your paddle with pointer, touch or up and down keys.",
+    "zh-Hant": "線上 Pong 球場。使用游標、觸控或上下鍵移動擋板。"
+  },
+  "m_8cb3ba42c78e": {
+    "en": "Pong room",
+    "zh-Hant": "Pong 房間"
+  },
+  "m_8da069cf5e52": {
+    "en": "Create room →",
+    "zh-Hant": "建立房間 →"
+  },
+  "m_cb2421c4877b": {
+    "en": "Join room",
+    "zh-Hant": "加入房間"
+  },
+  "m_362c5966669d": {
+    "en": "Room code",
+    "zh-Hant": "房間代碼"
+  },
+  "m_ac478e6b8c6b": {
+    "en": "8-character code",
+    "zh-Hant": "8 字元代碼"
+  },
+  "m_be11c200089a": {
+    "en": "Invite your friend",
+    "zh-Hant": "邀請好友"
+  },
+  "m_5c58cd7963ca": {
+    "en": "Copy invite link",
+    "zh-Hant": "複製邀請連結"
+  },
+  "m_3f69ee16107d": {
+    "en": "No game traffic before joining a room.",
+    "zh-Hant": "加入房間前，不會產生遊戲流量。"
+  },
+  "m_eccee4ef9458": {
+    "en": "Retry connection",
+    "zh-Hant": "重試連線"
+  },
+  "m_47110fe6ce4a": {
+    "en": "A wider court plays best in landscape. Drag on the court to move your paddle.",
+    "zh-Hant": "橫向畫面有更寬的球場，遊玩體驗較佳。在球場內拖曳即可移動擋板。"
+  },
+  "m_30456b9c4100": {
+    "en": "Pong settings",
+    "zh-Hant": "Pong 設定"
+  },
+  "m_9358fe27ca00": {
+    "en": "Pong menu",
+    "zh-Hant": "Pong 選單"
+  },
+  "m_3ab9621f0c8e": {
+    "en": "Leave room",
+    "zh-Hant": "離開房間"
+  },
+  "m_f12dda925b87": {
+    "en": "Pong help",
+    "zh-Hant": "Pong 說明"
+  },
+  "m_6bd97137d862": {
+    "en": "A room for two.",
+    "zh-Hant": "兩人的房間。"
+  },
+  "m_418fc2a85bb7": {
+    "en": "Both players sign in with Google. Two rooms can be open at a time. Waiting rooms expire after 15 minutes.",
+    "zh-Hant": "雙方均需使用 Google 登入。同時最多開放兩個房間，等待中的房間會在 15 分鐘後失效。"
+  },
+  "m_48dcdef6901a": {
+    "en": "Both players press Ready to start or resume.",
+    "zh-Hant": "雙方按下「準備就緒」即可開始或繼續。"
+  },
+  "m_bb32dab144ce": {
+    "en": "First to 7 wins. After 10 minutes, the higher score wins; equal scores draw.",
+    "zh-Hant": "先得 7 分者獲勝。10 分鐘後以較高分者獲勝，同分則為平局。"
+  },
+  "m_0860f7f9f3d1": {
+    "en": "Switching away pauses the match. Reconnect within 15 seconds after a lost connection.",
+    "zh-Hant": "切離頁面會暫停對局。連線中斷後，請在 15 秒內重新連線。"
+  },
+  "m_831e961b4837": {
+    "en": "A pause lasts up to 60 seconds. Online matches are temporary and do not enter Continue playing.",
+    "zh-Hant": "暫停最長 60 秒。線上對局為暫時性，不會進入「繼續遊玩」。"
+  },
+  "m_77589a89264b": {
+    "en": "This casual room has no Public rank or achievements.",
+    "zh-Hant": "此休閒房間不提供公開排名或成就。"
+  },
+  "m_8657858ce063": {
+    "en": "Move the pointer, drag, or focus the court and use ↑ / ↓ or W / S. First to 7 points.",
+    "zh-Hant": "移動游標、拖曳，或將焦點移至球場後使用 ↑／↓ 或 W／S。先得 7 分者獲勝。"
+  },
+  "m_20a16ab2ea4f": {
+    "en": "Reversi — KenSei",
+    "zh-Hant": "黑白棋 — KenSei"
+  },
+  "m_86a02db07ce0": {
+    "en": "Reversi board",
+    "zh-Hant": "黑白棋棋盤"
+  },
+  "m_dbaf11833f64": {
+    "en": "reversi ready preview",
+    "zh-Hant": "黑白棋待機預覽"
+  },
+  "m_d0ff6127837e": {
+    "en": "Start Reversi",
+    "zh-Hant": "開始黑白棋"
+  },
+  "m_27741794fd48": {
+    "en": "Black plays first. Place a disc on a marked legal square to enclose and flip opponent discs along a row, column or diagonal. The opponent is skipped automatically if no move is legal. When neither player can move, the larger disc count wins; equal counts draw. Choose a computer difficulty or two local players. Local only, with save and Undo.",
+    "zh-Hant": "黑棋先手。在有標記的合法格放置棋子，沿行、欄或斜線夾住對手棋子並將其翻轉。若對手沒有合法落子，會自動跳過其回合。雙方都無法落子時，棋子較多者獲勝，同數則為平局。可選擇電腦難度，或在本機雙人對弈。僅限本機遊玩，支援儲存與復原。"
+  },
+  "m_80c1b9c4610d": {
+    "en": "How to play Reversi",
+    "zh-Hant": "黑白棋玩法"
+  },
+  "m_9cf13151f9fb": {
+    "en": "Snake — KenSei",
+    "zh-Hant": "貪食蛇 — KenSei"
+  },
+  "m_3a2550917055": {
+    "en": "Snake board",
+    "zh-Hant": "貪食蛇棋盤"
+  },
+  "m_02fd0a2ea08a": {
+    "en": "snake ready preview",
+    "zh-Hant": "貪食蛇待機預覽"
+  },
+  "m_6eee0293fca0": {
+    "en": "Start Snake",
+    "zh-Hant": "開始貪食蛇"
+  },
+  "m_0a921e08f9a6": {
+    "en": "Use arrow keys, WASD, swipe, or the direction buttons. Each food adds 10 points and one segment. Avoid walls and your own body; filling the board wins. Slow, Normal and Fast use 6, 10 and 14 cells per second. Direction changes are accepted once per game tick.",
+    "zh-Hant": "使用方向鍵、WASD、滑動或方向按鈕。每份食物增加 10 分及一節身體。避開牆壁與自己的身體，填滿棋盤即可獲勝。慢速、一般、快速分別為每秒 6、10、14 格。每個遊戲邏輯步只能接受一次轉向。"
+  },
+  "m_84b142836739": {
+    "en": "How to play Snake",
+    "zh-Hant": "貪食蛇玩法"
+  },
+  "m_8b35111fc806": {
+    "en": "Sudoku — KenSei",
+    "zh-Hant": "數獨 — KenSei"
+  },
+  "m_6253b7cda1da": {
+    "en": "Sudoku board",
+    "zh-Hant": "數獨棋盤"
+  },
+  "m_1c1ad9fc379b": {
+    "en": "sudoku ready preview",
+    "zh-Hant": "數獨待機預覽"
+  },
+  "m_b7faf3be1934": {
+    "en": "Start Sudoku",
+    "zh-Hant": "開始數獨"
+  },
+  "m_2197af1586b5": {
+    "en": "Fill each row, column and 3 × 3 box with digits 1–9. Select a cell and use the number pad or keyboard. Pencil notes are available in either mode. Conflicts show duplicates, not hidden answers. Local-only play provides one-step Undo and a one-cell Hint. Complete a ranked puzzle without hints or interruption to enter its difficulty board.",
+    "zh-Hant": "在每行、每欄與每個 3 × 3 宮填入數字 1–9。選擇格子後，使用數字面板或鍵盤輸入。兩種模式都可使用鉛筆筆記。衝突提示只顯示重複數字，不會透露答案。僅限本機遊玩時提供復原一步及單格提示。完成參榜謎題，且未使用提示或中斷，才能進入該難度的排行榜。"
+  },
+  "m_cd971a70253d": {
+    "en": "How to play Sudoku",
+    "zh-Hant": "數獨玩法"
+  }
+}

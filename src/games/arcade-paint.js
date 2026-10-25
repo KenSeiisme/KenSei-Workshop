@@ -1,3 +1,4 @@
+import { uiMsg, uiFrom, uiRender } from "../site/ui.js";
 import { BRICK, brickRect, paddleCenter } from "./arcade-engine.js";
 import {
   paddleWidth,
@@ -35,10 +36,15 @@ export function paintBrick(canvas, state, view = {}) {
   ctx.fillStyle = "#aa9bbb";
   ctx.font = "11px system-ui, sans-serif";
   ctx.textAlign = "left";
-  ctx.fillText(`STAGE ${state.stage + 1} / 3`, 27, 29);
+  ctx.fillText(uiRender(uiMsg("STAGE {0} / 3", [state.stage + 1])), 27, 29);
   ctx.textAlign = "right";
   ctx.fillText(
-    `${state.lives} ${state.lives === 1 ? "LIFE" : "LIVES"}`,
+    uiRender(
+      uiMsg("{0} {1}", [
+        state.lives,
+        uiFrom(state.lives === 1 ? "LIFE" : "LIVES"),
+      ]),
+    ),
     w - 27,
     29,
   );
@@ -136,9 +142,13 @@ export function paintBrick(canvas, state, view = {}) {
     ctx.fillStyle = "#d9cdea";
     ctx.font = "14px system-ui, sans-serif";
     ctx.fillText(
-      state.ticks === 0
-        ? "Move your paddle. Tap or press Space to launch."
-        : "Ready for another ball? Tap or press Space.",
+      uiRender(
+        uiFrom(
+          state.ticks === 0
+            ? "Move your paddle. Tap or press Space to launch."
+            : "Ready for another ball? Tap or press Space.",
+        ),
+      ),
       w / 2,
       h - 78,
     );

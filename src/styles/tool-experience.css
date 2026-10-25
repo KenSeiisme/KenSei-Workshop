@@ -267,7 +267,7 @@
   background: #d6b5ed14;
 }
 .tool-page [data-save-kind]::before {
-  content: attr(data-save-kind) " · ";
+  content: attr(data-save-label) " · ";
   font-weight: 600;
 }
 .tool-page [data-save-repeat="true"]::before {

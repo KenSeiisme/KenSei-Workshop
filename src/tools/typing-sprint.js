@@ -3,6 +3,8 @@ import { practiceTexts } from "./sprint-content.js";
 import { scoreText } from "./sprint-core.js";
 import { ready } from "./personal-store.js";
 import { ensureProfile, paintAvatar } from "./profile-service.js";
+import { uiDate, uiMsg, uiJoin, uiError, uiText, uiHtml } from "../site/ui.js";
+
 let run = null,
   interval,
   committed = "",
@@ -24,10 +26,12 @@ function renderHistory() {
       .slice(0, 20)
       .map(
         (x) =>
-          `<div class="saved-row"><strong>${x.language === "zh" ? "中文" : "English"} · ${Number(x.speed).toFixed(1)} ${x.language === "zh" ? "CPM" : "WPM"}</strong><span>${Number(x.accuracy).toFixed(2)}% · ${esc(new Date(x.date).toLocaleString())}</span></div>`,
+          uiHtml`<div class="saved-row"><strong>${x.language === "zh" ? "中文" : uiMsg("English")} · ${Number(x.speed).toFixed(1)} ${x.language === "zh" ? "CPM" : "WPM"}</strong><span>${Number(x.accuracy).toFixed(2)}% · ${uiDate(new Date(x.date), { dateStyle: "medium", timeStyle: "short" })}</span></div>`,
       )
       .join("") ||
-    '<p class="muted small">Complete a practice run to see it here.</p>';
+    uiHtml(
+      '<p class="muted small">Complete a practice run to see it here.</p>',
+    );
 }
 function passage(source, typed = "") {
   const chars = Array.from(source),
@@ -40,7 +44,7 @@ function passage(source, typed = "") {
       .slice(start, end)
       .map((c, i) => {
         const index = i + start;
-        return `<span class="${index < input.length ? (input[index] === c ? "typed-correct" : "typed-error") : index === input.length ? "typing-caret" : ""}">${esc(c)}</span>`;
+        return uiHtml`<span class="${index < input.length ? (input[index] === c ? "typed-correct" : "typed-error") : index === input.length ? "typing-caret" : ""}">${esc(c)}</span>`;
       })
       .join("");
 }
@@ -48,9 +52,9 @@ function meter() {
   if (!run) return;
   const s = scoreText(run.text, committed, run.language),
     remaining = Math.max(0, Math.ceil((run.deadline - Date.now()) / 1000));
-  $("#typing-time").textContent = remaining;
-  $("#typing-speed").textContent = s.speed.toFixed(1);
-  $("#typing-accuracy").textContent = s.accuracy.toFixed(2) + "%";
+  uiText($("#typing-time"), remaining);
+  uiText($("#typing-speed"), s.speed.toFixed(1));
+  uiText($("#typing-accuracy"), s.accuracy.toFixed(2) + "%");
   passage(run.text, committed);
   if (!remaining) finish();
 }
@@ -71,59 +75,99 @@ async function rpc(name, args) {
 async function board() {
   const token = ++boardToken,
     lang = language();
-  $("#leaderboard-status").textContent = "Loading leaderboard…";
-  $("#leaderboard-unit").textContent = lang === "zh" ? "CPM" : "WPM";
+  uiText($("#leaderboard-status"), uiMsg("Loading leaderboard…"));
+  uiText($("#leaderboard-unit"), lang === "zh" ? "CPM" : "WPM");
   try {
     const data = await rpc("get_typing_leaderboard", { language: lang });
     if (token !== boardToken) return;
-    $("#leaderboard-version").textContent =
-      `${lang === "zh" ? "中文" : "English"} · text version ${data.version || "—"} · 60 seconds · 95% accuracy required`;
+    uiText(
+      $("#leaderboard-version"),
+      uiMsg("{0} · text version {1} · 60 seconds · 95% accuracy required", [
+        lang === "zh" ? "中文" : uiMsg("English"),
+        data.version || "—",
+      ]),
+    );
     const row = (x) =>
-      `<tr><td>${Number(x.rank)}</td><td>${x.public_id ? `<a class="text-link" href="/profile/?id=${encodeURIComponent(x.public_id)}">${esc(x.nickname)}</a>` : esc(x.nickname)}</td><td>${Number(x.speed).toFixed(1)}</td><td>${Number(x.accuracy).toFixed(2)}%</td><td>${esc(new Date(x.achieved_at).toLocaleDateString())}</td></tr>`;
+      uiHtml`<tr><td>${Number(x.rank)}</td><td>${x.public_id ? uiHtml`<a class="text-link" href="/profile/?id=${encodeURIComponent(x.public_id)}">${esc(x.nickname)}</a>` : esc(x.nickname)}</td><td>${Number(x.speed).toFixed(1)}</td><td>${Number(x.accuracy).toFixed(2)}%</td><td>${uiDate(new Date(x.achieved_at), { year: "numeric", month: "short", day: "numeric" })}</td></tr>`;
     $("#leaderboard-rows").innerHTML = (data.top || []).map(row).join("");
-    $("#leaderboard-status").textContent = data.top?.length
-      ? ""
-      : "No qualifying scores yet. Set the first pace.";
-    $("#leaderboard-me").textContent = data.me
-      ? `Your rank: #${data.me.rank} · ${data.me.speed} ${lang === "zh" ? "CPM" : "WPM"} · ${data.me.accuracy}%`
-      : api.user
-        ? "Your rank will appear after a qualifying Ranked test."
-        : "Sign in to join Public with your Google profile name.";
+    uiText(
+      $("#leaderboard-status"),
+      data.top?.length
+        ? ""
+        : uiMsg("No qualifying scores yet. Set the first pace."),
+    );
+    uiText(
+      $("#leaderboard-me"),
+      data.me
+        ? uiMsg("Your rank: #{0} · {1} {2} · {3}%", [
+            data.me.rank,
+            data.me.speed,
+            lang === "zh" ? "CPM" : "WPM",
+            data.me.accuracy,
+          ])
+        : api.user
+          ? uiMsg("Your rank will appear after a qualifying Ranked test.")
+          : uiMsg("Sign in to join Public with your Google profile name."),
+    );
   } catch {
     if (token === boardToken) {
       $("#leaderboard-rows").innerHTML = "";
-      $("#leaderboard-status").textContent =
-        "Leaderboard unavailable. Check your connection and refresh; Practice still works.";
-      $("#leaderboard-me").textContent = "";
+      uiText(
+        $("#leaderboard-status"),
+        uiMsg(
+          "Leaderboard unavailable. Check your connection and refresh; Practice still works.",
+        ),
+      );
+      uiText($("#leaderboard-me"), "");
     }
   }
 }
 function player() {
   $("#typing-account").hidden = !api.user;
   if (api.profile) {
-    $("#typing-player").textContent = "Playing as " + api.profile.nickname;
+    uiText(
+      $("#typing-player"),
+      uiJoin([uiMsg("Playing as "), api.profile.nickname]),
+    );
     paintAvatar($("#typing-avatar"), api.profile);
-  } else $("#typing-player").textContent = "Your profile is connecting…";
+  } else uiText($("#typing-player"), uiMsg("Your profile is connecting…"));
 }
 async function mode() {
   const ranked = $("#typing-mode").value === "ranked";
   if (!run)
-    $("#typing-start").textContent =
-      ranked && !api.user ? "Sign in to start →" : "Start 60-second test →";
+    uiText(
+      $("#typing-start"),
+      ranked && !api.user
+        ? uiMsg("Sign in to start →")
+        : uiMsg("Start 60-second test →"),
+    );
   player();
-  $("#typing-status").textContent = ranked
-    ? api.user
-      ? "Your qualifying best score will appear publicly. Your profile can be changed at any time."
-      : "Sign in to join the public leaderboard, or select Practice for a private test."
-    : "Practice stays on this device and never enters the public leaderboard.";
+  uiText(
+    $("#typing-status"),
+    ranked
+      ? api.user
+        ? uiMsg(
+            "Your qualifying best score will appear publicly. Your profile can be changed at any time.",
+          )
+        : uiMsg(
+            "Sign in to join the public leaderboard, or select Practice for a private test.",
+          )
+      : uiMsg(
+          "Practice stays on this device and never enters the public leaderboard.",
+        ),
+  );
   if (api.user) {
     try {
       await ensureProfile();
       player();
     } catch {
       if (ranked && !run)
-        $("#typing-status").textContent =
-          "Your profile could not connect. Start again to retry, or select Practice.";
+        uiText(
+          $("#typing-status"),
+          uiMsg(
+            "Your profile could not connect. Start again to retry, or select Practice.",
+          ),
+        );
     }
   }
 }
@@ -138,9 +182,10 @@ $("#typing-start").addEventListener("click", async () => {
     return;
   }
   $("#typing-start").disabled = true;
-  $("#typing-status").textContent = ranked
-    ? "Starting a server session…"
-    : "Starting practice…";
+  uiText(
+    $("#typing-status"),
+    ranked ? uiMsg("Starting a server session…") : uiMsg("Starting practice…"),
+  );
   try {
     if (ranked) await ensureProfile();
     if (actor() !== owner) throw new Error("Account changed. Please reload.");
@@ -162,17 +207,22 @@ $("#typing-start").addEventListener("click", async () => {
     committed = "";
     composing = false;
     $("#typing-input").value = "";
-    $("#typing-result").textContent = "";
+    uiText($("#typing-result"), "");
     lock(true);
     $("#typing-input").focus();
-    $("#typing-status").textContent = ranked
-      ? "Ranked is running. Keep typing until the timer ends."
-      : "Practice is running. Find a steady rhythm.";
+    uiText(
+      $("#typing-status"),
+      ranked
+        ? uiMsg("Ranked is running. Keep typing until the timer ends.")
+        : uiMsg("Practice is running. Find a steady rhythm."),
+    );
     interval = setInterval(meter, 100);
     meter();
   } catch (e) {
-    $("#typing-status").textContent =
-      e.message || "Test could not start. Please retry.";
+    uiText(
+      $("#typing-status"),
+      uiError(e) || uiMsg("Test could not start. Please retry."),
+    );
     $("#typing-start").disabled = false;
   }
 });
@@ -186,37 +236,65 @@ async function finish() {
   lock(false);
   $("#typing-input").disabled = true;
   $("#typing-input").value = text;
-  $("#typing-time").textContent = "0";
-  $("#typing-start").textContent = "Start another 60-second test →";
+  uiText($("#typing-time"), "0");
+  uiText($("#typing-start"), uiMsg("Start another 60-second test →"));
   const score = scoreText(completed.text, text, completed.language);
-  $("#typing-result").textContent =
-    `${score.speed.toFixed(1)} ${completed.language === "zh" ? "CPM" : "WPM"} · ${score.accuracy.toFixed(2)}% accuracy · ${score.correct} correct characters.`;
+  uiText(
+    $("#typing-result"),
+    uiMsg("{0} {1} · {2}% accuracy · {3} correct characters.", [
+      score.speed.toFixed(1),
+      completed.language === "zh" ? "CPM" : "WPM",
+      score.accuracy.toFixed(2),
+      score.correct,
+    ]),
+  );
   if (actor() !== completed.owner) {
-    $("#typing-status").textContent =
-      "Account changed. This run was not submitted.";
+    uiText(
+      $("#typing-status"),
+      uiMsg("Account changed. This run was not submitted."),
+    );
     return;
   }
   if (completed.ranked) {
     $("#typing-start").disabled = true;
-    $("#typing-status").textContent =
-      "Submitting your completed run for server verification…";
+    uiText(
+      $("#typing-status"),
+      uiMsg("Submitting your completed run for server verification…"),
+    );
     try {
       const result = await rpc("finish_typing_test", {
         sessionId: completed.sessionId,
         typedText: text.normalize("NFC"),
       });
       if (actor() !== completed.owner) return;
-      $("#typing-result").textContent =
-        `${Number(result.speed).toFixed(1)} ${completed.language === "zh" ? "CPM" : "WPM"} · ${Number(result.accuracy).toFixed(2)}% accuracy.`;
-      $("#typing-status").textContent = result.qualified
-        ? "Verified. Your best score is eligible for this text version’s board."
-        : "Verified, but below 95% accuracy. This score is not on the public board.";
+      uiText(
+        $("#typing-result"),
+        uiMsg("{0} {1} · {2}% accuracy.", [
+          Number(result.speed).toFixed(1),
+          completed.language === "zh" ? "CPM" : "WPM",
+          Number(result.accuracy).toFixed(2),
+        ]),
+      );
+      uiText(
+        $("#typing-status"),
+        result.qualified
+          ? uiMsg(
+              "Verified. Your best score is eligible for this text version’s board.",
+            )
+          : uiMsg(
+              "Verified, but below 95% accuracy. This score is not on the public board.",
+            ),
+      );
       board();
     } catch (e) {
-      $("#typing-status").textContent =
-        "Could not confirm submission: " +
-        (e.message || "connection failed") +
-        ". Refresh the leaderboard to check your best score.";
+      uiText(
+        $("#typing-status"),
+        uiJoin([
+          uiMsg("Could not confirm submission: "),
+          uiError(e) || uiMsg("connection failed"),
+          ". Refresh the leaderboard to check your best score.",
+        ]),
+      );
     } finally {
       $("#typing-start").disabled = false;
     }
@@ -235,11 +313,17 @@ async function finish() {
           ].slice(0, 100),
         ),
       );
-      $("#typing-status").textContent =
-        "Practice complete. Saved on this device.";
+      uiText(
+        $("#typing-status"),
+        uiMsg("Practice complete. Saved on this device."),
+      );
     } catch {
-      $("#typing-status").textContent =
-        "Practice complete. Browser storage is unavailable; the result could not be saved.";
+      uiText(
+        $("#typing-status"),
+        uiMsg(
+          "Practice complete. Browser storage is unavailable; the result could not be saved.",
+        ),
+      );
     }
     renderHistory();
   }
@@ -251,8 +335,10 @@ function abort() {
   composing = false;
   lock(false);
   $("#typing-input").disabled = true;
-  $("#typing-status").textContent =
-    "Test aborted. No score was saved or submitted.";
+  uiText(
+    $("#typing-status"),
+    uiMsg("Test aborted. No score was saved or submitted."),
+  );
 }
 $("#typing-abort").addEventListener("click", abort);
 const input = $("#typing-input");
@@ -286,20 +372,20 @@ input.addEventListener("beforeinput", (e) => {
     )
   ) {
     e.preventDefault();
-    toast("Ranked accepts typing only.");
+    toast(uiMsg("Ranked accepts typing only."));
   }
 });
 for (const name of ["paste", "drop"])
   input.addEventListener(name, (e) => {
     if (run?.ranked) {
       e.preventDefault();
-      toast("Pasting and dropping are disabled in Ranked.");
+      toast(uiMsg("Pasting and dropping are disabled in Ranked."));
     }
   });
 $("#typing-mode").addEventListener("change", mode);
 $("#typing-language").addEventListener("change", () => {
   const lang = language();
-  $("#typing-unit").textContent = lang === "zh" ? "CPM" : "WPM";
+  uiText($("#typing-unit"), lang === "zh" ? "CPM" : "WPM");
   passage(practiceTexts[lang]);
   board();
 });
@@ -309,7 +395,7 @@ $("#typing-clear-practice").addEventListener("click", () => {
     localStorage.removeItem(practiceKey());
     renderHistory();
   } catch {
-    toast("Could not clear browser storage.");
+    toast(uiMsg("Could not clear browser storage."));
   }
 });
 document.addEventListener("visibilitychange", () => {

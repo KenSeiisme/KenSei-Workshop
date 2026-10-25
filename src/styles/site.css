@@ -1,0 +1,237 @@
+/* Site shell: shared navigation/search only. Tool and game workspaces retain their own layouts. */
+.site-language {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.site-language select {
+  width: auto;
+  max-width: 130px;
+  padding: 9px 6px;
+  min-height: 44px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+}
+.site-search-button {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.site-language-status {
+  position: absolute;
+  top: 100%;
+  right: 1rem;
+  max-width: 320px;
+  padding: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  z-index: 80;
+}
+.site-search,
+.site-drawer {
+  max-height: 90dvh;
+  overflow: auto;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid #b985db55;
+  border-radius: 18px;
+  padding: 26px;
+}
+.site-search {
+  width: min(680px, calc(100% - 24px));
+  max-width: calc(100% - 24px);
+}
+.site-dialog-close {
+  float: right;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 24px;
+}
+.site-search-input {
+  width: 100%;
+  margin: 16px 0;
+  min-height: 48px;
+}
+.site-search-results {
+  max-height: 55dvh;
+  overflow: auto;
+  display: grid;
+  gap: 6px;
+}
+.site-search-result {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 7px;
+  padding: 14px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+.site-search-result span {
+  grid-column: 1/-1;
+  color: var(--muted);
+  font-size: 13px;
+}
+.site-search-result small {
+  color: var(--accent);
+}
+.site-search-result:hover,
+.site-search-result.selected,
+.site-search-result:focus-visible {
+  border-color: var(--accent);
+  background: var(--surface2);
+}
+.site-drawer {
+  width: min(380px, calc(100% - 20px));
+  margin: 10px 10px 10px auto;
+  height: calc(100dvh - 20px);
+  max-height: calc(100dvh - 20px);
+}
+.site-drawer #navigation {
+  display: flex !important;
+  position: static;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  border: 0;
+  margin: 30px 0 20px;
+  padding: 0;
+  background: none;
+}
+.site-drawer #navigation a {
+  padding: 12px;
+  min-height: 44px;
+}
+.site-drawer .account-controls {
+  margin: 16px 0;
+}
+.site-drawer .account-menu {
+  position: static;
+  margin-top: 12px;
+}
+.site-drawer .site-language {
+  margin-top: 25px;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+[lang="zh-Hant"] body {
+  line-height: 1.65;
+}
+@media (min-width: 1024px) {
+  .nav-wrap {
+    gap: 15px;
+  }
+  .header nav {
+    gap: 20px;
+  }
+  .menu-toggle {
+    display: none !important;
+  }
+}
+@media (max-width: 1023px) {
+  .header {
+    height: 72px;
+  }
+  .header #navigation,
+  .header #account-controls,
+  .header .site-language {
+    display: none !important;
+  }
+  .header .menu-toggle {
+    display: flex !important;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-wrap {
+    gap: 8px;
+  }
+  .nav-wrap .brand {
+    margin-right: auto;
+  }
+  .site-drawer #account-controls {
+    display: block !important;
+  }
+  .site-drawer .site-language {
+    display: flex !important;
+  }
+}
+@media (max-width: 360px) {
+  .site-search,
+  .site-drawer {
+    padding: 16px;
+  }
+  .site-search .filter {
+    padding: 8px;
+  }
+  .site-search-result {
+    padding: 10px;
+  }
+  .nav-wrap .brand {
+    font-size: 23px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-search,
+  .site-drawer {
+    scroll-behavior: auto;
+  }
+}
+
+.site-language-status.site-language-inline {
+  position: static;
+  max-width: none;
+  margin: 12px 0;
+}
+
+/* Catalog/footer rules remain available without loading tool editor styles. */
+.footer-inner > div {
+  flex-wrap: wrap;
+}
+.credits-list li {
+  margin-block: 10px;
+}
+@media (max-width: 1050px) {
+  .tools-controls {
+    align-items: flex-start;
+  }
+  .tools-controls .filter-bar {
+    gap: 3px;
+  }
+  .filter {
+    padding: 8px 11px;
+  }
+}
+/* Long public names must not push navigation beyond the viewport. */
+.sign-button [data-auth-label] {
+  display: inline-block;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.site-drawer .sign-button [data-auth-label] {
+  max-width: 180px;
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .site-language > span {
+    display: none;
+  }
+  .nav-wrap {
+    gap: 10px;
+  }
+  .header nav {
+    gap: 14px;
+  }
+  .sign-button [data-auth-label] {
+    max-width: 88px;
+  }
+}

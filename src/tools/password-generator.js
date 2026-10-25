@@ -1,5 +1,7 @@
 import { $, copy } from "./common.js";
 import { password } from "./daily-core.js";
+import { uiMsg, uiError, uiText } from "../site/ui.js";
+
 const groups = {
   upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   lower: "abcdefghijklmnopqrstuvwxyz",
@@ -15,12 +17,14 @@ function generate() {
         .map(([, v]) => v),
       $("#password-ambiguous").checked,
     );
-    $("#password-status").textContent =
-      "Ready. This password exists only on this page.";
+    uiText(
+      $("#password-status"),
+      uiMsg("Ready. This password exists only on this page."),
+    );
     $("#password-copy").disabled = false;
   } catch (e) {
     $("#password-output").value = "";
-    $("#password-status").textContent = e.message;
+    uiText($("#password-status"), uiError(e));
     $("#password-copy").disabled = true;
   }
 }

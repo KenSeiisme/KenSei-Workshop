@@ -1,4 +1,6 @@
 import { $, $$, status, downloadText, busy } from "./common.js";
+import { uiMsg, uiError, uiText } from "../site/ui.js";
+
 let worker = null,
   patch = "";
 for (const side of ["left", "right"])
@@ -13,14 +15,14 @@ for (const side of ["left", "right"])
       $("#compare-" + side).value = text;
       invalidate();
     } catch (e) {
-      status(e.message, true);
+      status(uiError(e), true);
     }
   };
 function invalidate() {
   patch = "";
   $("#compare-download").disabled = true;
   $("#compare-output").replaceChildren();
-  status("Ready to compare.");
+  status(uiMsg("Ready to compare."));
 }
 $$(
   "#compare-left,#compare-right,#compare-case,#compare-space,#compare-mode",
@@ -35,12 +37,12 @@ $("#cancel-job").onclick = () => {
   worker?.terminate();
   worker = null;
   busy(false);
-  status("Comparison cancelled.");
+  status(uiMsg("Comparison cancelled."));
 };
 $("#compare-run").onclick = () => {
   invalidate();
   busy(true);
-  status("Comparing…");
+  status(uiMsg("Comparing…"));
   worker?.terminate();
   worker = new Worker("/tool-scripts/compare-worker.js", { type: "module" });
   worker.onmessage = ({ data }) => {
@@ -61,9 +63,11 @@ $("#compare-run").onclick = () => {
         : part.removed
           ? "diff-removed"
           : "diff-same";
-      span.textContent =
+      uiText(
+        span,
         (characters ? "" : part.added ? "+ " : part.removed ? "- " : "  ") +
-        part.value;
+          part.value,
+      );
       fragment.append(span);
       if (part.added) additions += part.count;
       if (part.removed) deletions += part.count;
@@ -72,15 +76,22 @@ $("#compare-run").onclick = () => {
     $("#compare-download").disabled = false;
     status(
       additions || deletions
-        ? `Added ${additions} · removed ${deletions} ${$("#compare-mode").value === "characters" ? "characters" : "lines"}. ${$("#compare-case").checked || $("#compare-space").checked ? "Output uses the selected normalization." : ""}`
-        : "No differences with these settings.",
+        ? uiMsg("Added {0} · removed {1} {2}. {3}", [
+            additions,
+            deletions,
+            $("#compare-mode").value === "characters" ? "characters" : "lines",
+            $("#compare-case").checked || $("#compare-space").checked
+              ? uiMsg("Output uses the selected normalization.")
+              : "",
+          ])
+        : uiMsg("No differences with these settings."),
     );
   };
   worker.onerror = () => {
     worker?.terminate();
     worker = null;
     busy(false);
-    status("Comparison could not run. Reload the page and retry.", true);
+    status(uiMsg("Comparison could not run. Reload the page and retry."), true);
   };
   worker.postMessage({
     left: $("#compare-left").value,

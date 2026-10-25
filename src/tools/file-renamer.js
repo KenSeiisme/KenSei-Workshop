@@ -1,5 +1,7 @@
 import { $, download, busy, status, size } from "./common.js";
 import { renamed } from "./rename-core.js";
+import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiAttr } from "../site/ui.js";
+
 let files = [],
   worker = null,
   preview = [],
@@ -29,10 +31,10 @@ function render() {
         name = document.createElement("input"),
         error = document.createElement("small"),
         actions = document.createElement("div");
-      original.textContent = file.name + " · " + size(file.size);
+      uiText(original, file.name + " · " + size(file.size));
       name.value = preview[i].name;
       name.dataset.lock = "";
-      name.setAttribute("aria-label", "New name for " + file.name);
+      uiAttr(name, "aria-label", uiJoin([uiMsg("New name for "), file.name]));
       name.onchange = () => {
         manual.set(file, name.value);
         render();
@@ -48,11 +50,19 @@ function render() {
         b.className = "text-link";
         b.dataset.lock = "";
       }
-      up.textContent = "↑";
-      up.setAttribute("aria-label", "Move " + file.name + " up");
+      uiText(up, "↑");
+      uiAttr(
+        up,
+        "aria-label",
+        uiJoin([uiMsg("Move "), file.name, uiMsg(" up")]),
+      );
       up.disabled = i === 0;
-      down.textContent = "↓";
-      down.setAttribute("aria-label", "Move " + file.name + " down");
+      uiText(down, "↓");
+      uiAttr(
+        down,
+        "aria-label",
+        uiJoin([uiMsg("Move "), file.name, uiMsg(" down")]),
+      );
       down.disabled = i === files.length - 1;
       const move = (to) => {
         [files[i], files[to]] = [files[to], files[i]];
@@ -71,22 +81,24 @@ function render() {
     preview.forEach((row, i) => {
       row.error = checked[i].error;
       const el = out.children[i];
-      el.querySelector("small").textContent = row.error || "Ready";
+      uiText(el.querySelector("small"), row.error || uiMsg("Ready"));
       el.querySelector("input").classList.toggle("input-error", !!row.error);
     });
     $("#rename-download").disabled =
       !files.length || preview.some((x) => x.error);
     status(
-      files.length +
-        " files · " +
-        size(files.reduce((n, f) => n + f.size, 0)) +
-        " · " +
-        (preview.some((x) => x.error)
-          ? "Resolve conflicts or invalid names."
-          : "Preview ready."),
+      uiJoin([
+        files.length,
+        uiMsg(" files · "),
+        size(files.reduce((n, f) => n + f.size, 0)),
+        " · ",
+        preview.some((x) => x.error)
+          ? uiMsg("Resolve conflicts or invalid names.")
+          : uiMsg("Preview ready."),
+      ]),
     );
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 }
 $("#rename-files").onchange = () => {
@@ -96,7 +108,7 @@ $("#rename-files").onchange = () => {
     manual.clear();
     $("#rename-preview").replaceChildren();
     $("#rename-download").disabled = true;
-    status("Choose up to 100 files totaling 100 MB.", true);
+    status(uiMsg("Choose up to 100 files totaling 100 MB."), true);
     return;
   }
   files = next;
@@ -130,13 +142,13 @@ function finish(message) {
   active = false;
   busy(false);
   render();
-  if (message) status(message);
+  if (message) status(uiFrom(message));
 }
 $("#rename-download").onclick = () => {
   if (!files.length || preview.some((x) => x.error)) return;
   active = true;
   busy(true);
-  status("Packing renamed copies…");
+  status(uiMsg("Packing renamed copies…"));
   const renamedFiles = files.map(
     (file, i) =>
       new File([file], preview[i].name, {
@@ -148,7 +160,7 @@ $("#rename-download").onclick = () => {
   worker.onmessage = ({ data }) => {
     if (data.type === "progress") {
       $("#rename-progress").value = data.value;
-      status(data.message);
+      status(uiError(data));
     }
     if (data.type === "error") finish(data.message);
     if (data.type === "packed") {

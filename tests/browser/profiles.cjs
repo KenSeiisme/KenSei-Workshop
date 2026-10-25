@@ -453,6 +453,7 @@ const sdk = `export function createClient(){const initial=window.__qaUser,actor=
               () => document.documentElement.scrollWidth <= innerWidth + 1,
             ),
           );
+          if (width < 1024) await edit.locator(".menu-toggle").click();
           await edit.locator("#account-toggle").click();
           assert(await edit.locator("#account-menu").isVisible());
           assert.deepEqual(
@@ -461,6 +462,7 @@ const sdk = `export function createClient(){const initial=window.__qaUser,actor=
           );
           await edit.keyboard.press("Escape");
           assert(await edit.locator("#account-menu").isHidden());
+          if (width < 1024) await edit.keyboard.press("Escape");
           await edit.screenshot({
             path: "_qa/profile-" + width + ".png",
             fullPage: true,

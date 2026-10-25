@@ -66,6 +66,7 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
         ("tools", "tool-scripts"),
         ("games", "game-scripts"),
         ("vendor", "vendor"),
+        ("site", "site"),
     ):
         for path in (SOURCE / source).rglob("*"):
             if (
@@ -112,7 +113,10 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
     expected_locations = set()
     for path in pages:
         relative = path.relative_to(output)
-        if relative.parts[0] in {"workspace", "auth", "profile", "404", "404.html"}:
+        logical_parts = (
+            relative.parts[1:] if relative.parts[0] == "zh-hant" else relative.parts
+        )
+        if logical_parts[0] in {"workspace", "auth", "profile", "404", "404.html"}:
             continue
         assert path.name == "index.html", str(relative)
         route = relative.parent.as_posix()
@@ -125,8 +129,13 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
         assert not url.query and not url.fragment and url.path.endswith("/")
     robots = (output / "robots.txt").read_text(encoding="utf-8")
     assert robots.count(f"Sitemap: {site_url}/sitemap.xml") == 1
-    for route in ("workspace", "auth", "profile"):
-        assert f"Disallow: /{route}/" in robots
+    assert "Disallow:" not in robots
+    assert len(locations) == 98
+    for prefix in ("", "zh-hant/"):
+        for route in ("workspace", "profile", "auth/callback", "404"):
+            assert 'name="robots" content="noindex, follow"' in (
+                output / prefix / route / "index.html"
+            ).read_text(encoding="utf-8")
     print(
         f"PASS clean build: {len(tools)} tools, {len(games)} games, "
         f"ownership tag in the head of all {len(pages)} pages, "

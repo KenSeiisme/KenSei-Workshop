@@ -31,6 +31,18 @@ import { INPUTS as DROP_INPUTS } from "./block-drop-engine.js";
 import { mountAchievements } from "./achievements.js";
 import { mountPlayShell } from "./play-shell.js";
 import { mountLeaderboard } from "./leaderboard.js";
+import {
+  uiDate,
+  uiSource,
+  uiMsg,
+  uiJoin,
+  uiFrom,
+  uiError,
+  uiText,
+  uiHtml,
+  uiConfirm,
+} from "../site/ui.js";
+
 mountEffects();
 mountAudio();
 
@@ -104,8 +116,10 @@ function coverGame() {
   if (
     running &&
     publicSession &&
-    !confirm(
-      "Opening this panel pauses your ranked run. It will continue locally without ranking. Continue?",
+    !uiConfirm(
+      uiMsg(
+        "Opening this panel pauses your ranked run. It will continue locally without ranking. Continue?",
+      ),
     )
   )
     return false;
@@ -130,11 +144,14 @@ function syncShell() {
         : active.status === "playing"
           ? "paused"
           : "complete",
-    label: `${eligibilityLabel()} · ${rules(game, difficulty()).label}`,
+    label: uiMsg("{0} · {1}", [
+      uiFrom(eligibilityLabel()),
+      uiFrom(rules(game, difficulty()).label),
+    ]),
     startFailed,
     localFallback: localFallbackAvailable,
     saveInfo: saved
-      ? `${rules(game, saved.data.difficulty).label} · ${new Date(saved.updated_at).toLocaleString()} · Local only`
+      ? `${rules(game, saved.data.difficulty).label} · ${uiDate(new Date(saved.updated_at), { dateStyle: "medium", timeStyle: "short" })} · Local only`
       : "",
     busy,
     pending: !!pending,
@@ -143,11 +160,11 @@ function syncShell() {
   });
 }
 function statusMessage(message) {
-  status(message);
+  status(uiFrom(message));
 }
 const elapsed = () => accumulated + (running ? performance.now() - started : 0);
 const status = (message) => {
-  if ($("#game-status")) $("#game-status").textContent = message;
+  if ($("#game-status")) uiText($("#game-status"), uiFrom(message));
 };
 let directoryBound = false;
 const guard =
@@ -156,9 +173,15 @@ const guard =
     try {
       return await fn(...args);
     } catch (e) {
-      $("#game-save-status").textContent =
-        e.message +
-        " Your current game remains available; retry when storage is ready.";
+      uiText(
+        $("#game-save-status"),
+        uiJoin([
+          uiError(e),
+          uiMsg(
+            " Your current game remains available; retry when storage is ready.",
+          ),
+        ]),
+      );
     }
   };
 const difficulty = () => $("#game-difficulty").value;
@@ -228,14 +251,17 @@ function displayResult(row, slug) {
     return `${(row.elapsed_ms / 1000).toFixed(2)} s`;
   if (timeScored(slug)) return `${(row.elapsed_ms / 1000).toFixed(2)} s`;
   if (slug === "memory-match")
-    return `${row.moves} attempts · ${(row.elapsed_ms / 1000).toFixed(1)} s`;
-  return `${Number(row.score).toLocaleString()} pts`;
+    return uiMsg("{0} attempts · {1} s", [
+      row.moves,
+      (row.elapsed_ms / 1000).toFixed(1),
+    ]);
+  return uiMsg("{0} pts", [Number(row.score).toLocaleString()]);
 }
 function saveLine() {
   const el = $("#game-save-status");
-  if (el) el.textContent = store.saveState();
+  if (el) uiText(el, uiFrom(store.saveState()));
   if (game) {
-    const failed = /fail|error|unavailable/i.test(el?.textContent || "");
+    const failed = /fail|error|unavailable/i.test(uiSource(el));
     $("#game-save-retry").hidden = !failed;
     $("#game-save-line").hidden =
       !active && $("#game-restore").hidden && !failed;
@@ -257,8 +283,10 @@ async function persist() {
     await store.put(data, activeId, scoped, revision);
     if (owner() === scoped) saveLine();
   } catch (e) {
-    $("#game-save-status").textContent =
-      `Save failed · ${e.message} Keep this page open and retry.`;
+    uiText(
+      $("#game-save-status"),
+      uiMsg("Save failed · {0} Keep this page open and retry.", [uiError(e)]),
+    );
     $("#game-save-retry").hidden = false;
     $("#game-save-line").hidden = false;
   }
@@ -281,9 +309,9 @@ function readyUI() {
     presenter.reset();
     shell?.restorePreview();
     root.dataset.runState = "ready";
-    $("#game-run-label").textContent = "Ready to play";
-    if ($("#game-status").textContent.trim() === "Loading game…")
-      status("Ready when you are.");
+    uiText($("#game-run-label"), uiMsg("Ready to play"));
+    if (uiSource($("#game-status")).trim() === "Loading game…")
+      status(uiMsg("Ready when you are."));
   }
   const row = store
     .rows()
@@ -296,15 +324,15 @@ function readyUI() {
     .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
   $("#game-restore").hidden = !row || running;
   $("#game-restore").dataset.id = row?.id || "";
-  $("#game-best").textContent = displayResult(
-    priorBest(game, difficulty()),
-    game,
+  uiText($("#game-best"), displayResult(priorBest(game, difficulty()), game));
+  uiText(
+    $("#game-eligibility-note"),
+    newRunIsRanked()
+      ? uiMsg("New games rank automatically after verification.")
+      : isBoard()
+        ? uiMsg("Play locally. Progress saves automatically.")
+        : uiMsg("Local best on this device. Sign in for ranked results."),
   );
-  $("#game-eligibility-note").textContent = newRunIsRanked()
-    ? "New games rank automatically after verification."
-    : isBoard()
-      ? "Play locally. Progress saves automatically."
-      : "Local best on this device. Sign in for ranked results.";
   const setup = $("#game-setup");
   const oneOption = $("#game-difficulty").options.length === 1;
   setup.classList.toggle("has-one-option", oneOption);
@@ -314,18 +342,18 @@ function readyUI() {
   syncShell();
 }
 const SHAPES = [
-  '<path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>',
-  '<circle cx="12" cy="12" r="8"/>',
-  '<path d="m12 3 9 9-9 9-9-9z"/>',
-  '<path d="M4 19 12 4l8 15z"/>',
-  '<rect x="5" y="5" width="14" height="14" rx="3"/>',
-  '<path d="M4 8 8 4l4 4 4-4 4 4-8 13z"/>',
-  '<path d="M5 5h14v14H5zM5 12h14M12 5v14"/>',
-  '<path d="m4 12 4-7h8l4 7-4 7H8z"/>',
-  '<path d="M5 19 19 5M5 5l14 14M4 12h16M12 4v16"/>',
-  '<path d="M6 20V4h12v16M6 9h12M6 15h12"/>',
-  '<path d="M4 17 9 5l6 14 5-12"/>',
-  '<path d="M4 12c0-11 16-11 16 0s-16 11-16 0M8 12h8"/>',
+  uiHtml('<path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>'),
+  uiHtml('<circle cx="12" cy="12" r="8"/>'),
+  uiHtml('<path d="m12 3 9 9-9 9-9-9z"/>'),
+  uiHtml('<path d="M4 19 12 4l8 15z"/>'),
+  uiHtml('<rect x="5" y="5" width="14" height="14" rx="3"/>'),
+  uiHtml('<path d="M4 8 8 4l4 4 4-4 4 4-8 13z"/>'),
+  uiHtml('<path d="M5 5h14v14H5zM5 12h14M12 5v14"/>'),
+  uiHtml('<path d="m4 12 4-7h8l4 7-4 7H8z"/>'),
+  uiHtml('<path d="M5 19 19 5M5 5l14 14M4 12h16M12 4v16"/>'),
+  uiHtml('<path d="M6 20V4h12v16M6 9h12M6 15h12"/>'),
+  uiHtml('<path d="M4 17 9 5l6 14 5-12"/>'),
+  uiHtml('<path d="M4 12c0-11 16-11 16 0s-16 11-16 0M8 12h8"/>'),
 ];
 function draw(reason = "view", event = null) {
   if (!active) return;
@@ -342,25 +370,36 @@ function draw(reason = "view", event = null) {
     : active.status === "playing"
       ? "paused"
       : "complete";
-  $("#game-run-label").textContent = running
-    ? `${publicSession ? "Ranked" : "Local only"} · Playing`
-    : active.status === "playing"
-      ? "Local only · Paused"
-      : "Game complete";
+  uiText(
+    $("#game-run-label"),
+    running
+      ? uiMsg("{0} · Playing", [
+          publicSession ? uiMsg("Ranked") : uiMsg("Local only"),
+        ])
+      : active.status === "playing"
+        ? uiMsg("Local only · Paused")
+        : uiMsg("Game complete"),
+  );
   if (game === "2048") presenter.render2048(board, active);
   if (game === "minesweeper") {
     const m = rules(game, active.difficulty),
       seen = new Set(active.revealed),
       flags = new Set(active.flags);
-    $("#mine-count").textContent =
-      `${m.mines} mines · ${flags.size} flags · ${m.mines - flags.size} remaining`;
+    uiText(
+      $("#mine-count"),
+      uiMsg("{0} mines · {1} flags · {2} remaining", [
+        m.mines,
+        flags.size,
+        m.mines - flags.size,
+      ]),
+    );
     patchMarkup(
       board,
-      `<div class="mines-viewport" tabindex="0" aria-label="Scrollable minefield"><div class="mines-grid" style="grid-template-columns:repeat(${m.w},32px)">${active.board
+      uiHtml`<div class="mines-viewport" tabindex="0" aria-label="Scrollable minefield"><div class="mines-grid" style="grid-template-columns:repeat(${m.w},32px)">${active.board
         .map((n, i) => {
           const open = seen.has(i),
             mine = active.status === "lost" && n === -1;
-          return `<button data-cell="${i}" data-number="${open ? n : ""}" tabindex="${i === Number(selected || 0) ? 0 : -1}" class="${open ? "open" : ""} ${mine ? "mine" : ""} ${flags.has(i) ? "flagged" : ""}" aria-label="Row ${Math.floor(i / m.w) + 1}, column ${(i % m.w) + 1}: ${mine ? "mine" : open ? `${n} neighboring mines` : flags.has(i) ? "flagged" : "covered"}">${mine ? "✹" : flags.has(i) ? "⚑" : open ? n || "" : ""}</button>`;
+          return uiHtml`<button data-cell="${i}" data-number="${open ? n : ""}" tabindex="${i === Number(selected || 0) ? 0 : -1}" class="${open ? "open" : ""} ${mine ? "mine" : ""} ${flags.has(i) ? "flagged" : ""}" aria-label="Row ${Math.floor(i / m.w) + 1}, column ${(i % m.w) + 1}: ${mine ? "mine" : open ? uiMsg("{0} neighboring mines", [n]) : flags.has(i) ? "flagged" : "covered"}">${mine ? "✹" : flags.has(i) ? "⚑" : open ? n || "" : ""}</button>`;
         })
         .join("")}</div></div>`,
     );
@@ -369,7 +408,9 @@ function draw(reason = "view", event = null) {
     if (!board.querySelector("canvas"))
       patchMarkup(
         board,
-        '<canvas class="snake-board" width="460" height="460" role="img" aria-label="Snake board. Use direction controls to move."></canvas>',
+        uiHtml(
+          '<canvas class="snake-board" width="460" height="460" role="img" aria-label="Snake board. Use direction controls to move."></canvas>',
+        ),
       );
     if (!presenter.paintSnake(board.querySelector("canvas"), active)) {
       pause("Canvas is unavailable. Enable canvas drawing to play Snake.");
@@ -380,11 +421,11 @@ function draw(reason = "view", event = null) {
     const m = rules(game, active.difficulty);
     patchMarkup(
       board,
-      `<div class="memory-grid" style="grid-template-columns:repeat(${m.cols},minmax(0,1fr));--memory-ratio:${(m.cols * m.cols * 0.82) / (m.pairs * 2)}">${active.cards
+      uiHtml`<div class="memory-grid" style="grid-template-columns:repeat(${m.cols},minmax(0,1fr));--memory-ratio:${(m.cols * m.cols * 0.82) / (m.pairs * 2)}">${active.cards
         .map((n, i) => {
           const matched = active.matched.includes(i),
             up = matched || active.faceUp.includes(i);
-          return `<button class="memory-card ${matched ? "matched" : up ? "face-up" : ""}" data-cell="${i}" aria-label="Card ${i + 1}: ${up ? `shape ${n + 1}${matched ? ", matched" : ""}` : "face down"}" aria-pressed="${up}"><span class="memory-inner" aria-hidden="true"><span class="memory-face memory-back"><span>✦</span></span><span class="memory-face memory-front"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${SHAPES[n]}</svg><span class="memory-match-check">✓</span></span></span></button>`;
+          return uiHtml`<button class="memory-card ${matched ? "matched" : up ? "face-up" : ""}" data-cell="${i}" aria-label="Card ${i + 1}: ${up ? uiMsg("shape {0}{1}", [n + 1, matched ? uiMsg(", matched") : ""]) : uiMsg("face down")}" aria-pressed="${up}"><span class="memory-inner" aria-hidden="true"><span class="memory-face memory-back"><span>✦</span></span><span class="memory-face memory-front"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${SHAPES[n]}</svg><span class="memory-match-check">✓</span></span></span></button>`;
         })
         .join("")}</div>`,
     );
@@ -397,55 +438,63 @@ function draw(reason = "view", event = null) {
     board
       .querySelector(`[data-cell="${selected}"]`)
       ?.focus({ preventScroll: true });
-  $("#game-score-label").textContent = isBoard()
-    ? "Current turn"
-    : game === "sudoku"
-      ? "Filled cells"
-      : game === "nonogram"
-        ? "Filled squares"
-        : game === "memory-match"
-          ? "Attempts"
-          : game === "minesweeper"
-            ? "Safe squares"
-            : "Score";
-  $("#game-score").textContent = isBoard()
-    ? active.status === "playing"
-      ? `Player ${active.turn}`
-      : active.winner === 0
-        ? "Draw"
-        : `Player ${active.winner}`
-    : game === "sudoku"
-      ? `${active.board.filter(Boolean).length} / 81`
-      : game === "nonogram"
-        ? active.board.filter((n) => n === 1).length
-        : game === "memory-match"
-          ? active.moves
-          : game === "minesweeper"
-            ? `${active.revealed.filter((i) => active.board[i] !== -1).length} / ${active.board.length - rules(game, active.difficulty).mines}`
-            : active.score.toLocaleString();
+  uiText(
+    $("#game-score-label"),
+    isBoard()
+      ? uiMsg("Current turn")
+      : game === "sudoku"
+        ? uiMsg("Filled cells")
+        : game === "nonogram"
+          ? uiMsg("Filled squares")
+          : game === "memory-match"
+            ? uiMsg("Attempts")
+            : game === "minesweeper"
+              ? uiMsg("Safe squares")
+              : uiMsg("Score"),
+  );
+  uiText(
+    $("#game-score"),
+    isBoard()
+      ? active.status === "playing"
+        ? uiMsg("Player {0}", [active.turn])
+        : active.winner === 0
+          ? uiMsg("Draw")
+          : uiMsg("Player {0}", [active.winner])
+      : game === "sudoku"
+        ? `${active.board.filter(Boolean).length} / 81`
+        : game === "nonogram"
+          ? active.board.filter((n) => n === 1).length
+          : game === "memory-match"
+            ? active.moves
+            : game === "minesweeper"
+              ? `${active.revealed.filter((i) => active.board[i] !== -1).length} / ${active.board.length - rules(game, active.difficulty).mines}`
+              : active.score.toLocaleString(),
+  );
   if ($("#game-hint")) $("#game-hint").disabled = !!publicSession || !running;
-  $("#game-clock").textContent = clock(
-    game === "brick-breaker" ? Math.max(0, 300000 - elapsed()) : elapsed(),
+  uiText(
+    $("#game-clock"),
+    clock(
+      game === "brick-breaker" ? Math.max(0, 300000 - elapsed()) : elapsed(),
+    ),
   );
   $("#game-pause").disabled = !running;
   if ($("#game-undo"))
     $("#game-undo").disabled = !undo || !!publicSession || !running;
-  $("#game-start").textContent =
-    active.status === "playing" ? "Restart" : "Play again →";
+  uiText(
+    $("#game-start"),
+    active.status === "playing" ? uiMsg("Restart") : uiMsg("Play again →"),
+  );
   $("#game-start").classList.toggle("primary", active.status !== "playing");
   $("#game-start").classList.toggle("secondary", active.status === "playing");
   $("#game-run-label").dataset.rulesVersion = String(active.version);
   if (game === "brick-breaker")
-    $("#game-clock").previousElementSibling.textContent = "Time left";
+    uiText($("#game-clock").previousElementSibling, uiMsg("Time left"));
   $("#game-settings-change").hidden = false;
   $("#game-settings-change").disabled = !!pending || busy;
   $("#game-difficulty").disabled = active.status === "playing";
   if ($("#game-human-side"))
     $("#game-human-side").disabled = active.status === "playing";
-  $("#game-best").textContent = displayResult(
-    bestResult(active, elapsed()),
-    game,
-  );
+  uiText($("#game-best"), displayResult(bestResult(active, elapsed()), game));
   presenter.commit(active);
   milestones.update(active, !!publicSession);
   syncShell();
@@ -457,7 +506,9 @@ function downgrade(reason) {
   submissionStatus = "local";
   events = [];
   sessionCall("abandon", { session_id: id }).catch(() => {});
-  status(`${reason} This run is now local only and can continue.`);
+  status(
+    uiMsg("{0} This run is now local only and can continue.", [uiFrom(reason)]),
+  );
 }
 function pause(reason = "Paused.") {
   stopAudio();
@@ -470,14 +521,19 @@ function pause(reason = "Paused.") {
   const wasPublic = !!publicSession;
   downgrade(reason);
   $("#game-overlay").hidden = false;
-  $("#game-overlay-title").textContent = "Paused";
-  $("#game-overlay-note").textContent = wasPublic
-    ? `${reason} Ranking eligibility ended. Continue locally.`
-    : `${reason} Progress is kept for local play.`;
+  uiText($("#game-overlay-title"), uiMsg("Paused"));
+  uiText(
+    $("#game-overlay-note"),
+    wasPublic
+      ? uiMsg("{0} Ranking eligibility ended. Continue locally.", [
+          uiFrom(reason),
+        ])
+      : uiMsg("{0} Progress is kept for local play.", [uiFrom(reason)]),
+  );
   status(
     wasPublic
-      ? "Paused · Local only. Continue when ready."
-      : "Paused · Progress retained.",
+      ? uiMsg("Paused · Local only. Continue when ready.")
+      : uiMsg("Paused · Progress retained."),
   );
   draw();
   persist();
@@ -491,7 +547,7 @@ function resume() {
   started = performance.now();
   lastFrame = started;
   running = true;
-  status("Local only · Game in progress.");
+  status(uiMsg("Local only · Game in progress."));
   draw();
   $("#game-board").focus({ preventScroll: true });
   frameId = requestAnimationFrame(frame);
@@ -501,8 +557,8 @@ async function submit() {
   busy = true;
   $("#game-submit-retry").hidden = true;
   submissionStatus = "verifying";
-  status("Verifying your completed run…");
-  presenter.setSubmission("verifying", "Verifying result…");
+  status(uiMsg("Verifying your completed run…"));
+  presenter.setSubmission("verifying", uiMsg("Verifying result…"));
   const submitted = pending;
   try {
     const result = await sessionCall("finish", submitted.body);
@@ -512,27 +568,34 @@ async function submit() {
     $("#game-submit-discard").hidden = true;
     status(
       result.qualified
-        ? `Verified result accepted · ${displayResult(result, game)}. Best results appear on the board.`
+        ? uiMsg(
+            "Verified result accepted · {0}. Best results appear on the board.",
+            [displayResult(result, game)],
+          )
         : result.reason ||
-            "Game complete. This result did not qualify for the public board.",
+            uiMsg(
+              "Game complete. This result did not qualify for the public board.",
+            ),
     );
     presenter.setSubmission(
       result.qualified ? "verified" : "unqualified",
       result.qualified
-        ? "Verified · Ranked result accepted"
-        : result.reason || "Not eligible for the public board",
+        ? uiMsg("Verified · Ranked result accepted")
+        : result.reason || uiMsg("Not eligible for the public board"),
     );
     await leaderboard();
     await milestones.accepted(result, submitted.body.session_id);
   } catch (e) {
     submissionStatus = "failed";
     status(
-      e.message +
-        " Your result is retained; retry submission or keep it locally.",
+      uiJoin([
+        uiError(e),
+        uiMsg(" Your result is retained; retry submission or keep it locally."),
+      ]),
     );
     presenter.setSubmission(
       "failed",
-      "Submission failed · result retained for retry",
+      uiMsg("Submission failed · result retained for retry"),
     );
     $("#game-submit-retry").hidden = false;
     $("#game-submit-discard").hidden = false;
@@ -551,10 +614,10 @@ async function finish() {
     isBoard()
       ? ui.resultText()
       : active.status === "won"
-        ? "Complete. Nicely played."
+        ? uiMsg("Complete. Nicely played.")
         : game === "2048"
-          ? "No moves remain. Your game is complete."
-          : "Game over. Ready for another try?",
+          ? uiMsg("No moves remain. Your game is complete.")
+          : uiMsg("Game over. Ready for another try?"),
   );
   // 先锁定本局提交，防止本机写入期间重新开局丢失已完成的 Public 结果。
   let completed = null;
@@ -573,11 +636,11 @@ async function finish() {
       },
     };
     publicSession = null;
-    presenter.setSubmission("verifying", "Verifying result…");
+    presenter.setSubmission("verifying", uiMsg("Verifying result…"));
   }
   await persist();
   if (completed && pending === completed && owner() === completed.owner) {
-    await pendingResult(game, completed).catch((e) => status(e.message));
+    await pendingResult(game, completed).catch((e) => status(uiError(e)));
     await submit();
   }
 }
@@ -628,8 +691,11 @@ function frame(now) {
   }
   presenter.frame(now);
   if (now - lastClock > 200) {
-    $("#game-clock").textContent = clock(
-      game === "brick-breaker" ? Math.max(0, 300000 - elapsed()) : elapsed(),
+    uiText(
+      $("#game-clock"),
+      clock(
+        game === "brick-breaker" ? Math.max(0, 300000 - elapsed()) : elapsed(),
+      ),
     );
     lastClock = now;
   }
@@ -674,7 +740,7 @@ function action(event) {
   queueSave();
 
   if (game === "2048" && Math.max(...active.board) >= 2048 && priorMax < 2048)
-    status("2048 reached! Keep playing until no moves remain.");
+    status(uiMsg("2048 reached! Keep playing until no moves remain."));
   if (active.status !== "playing") finish();
   return true;
 }
@@ -682,21 +748,27 @@ async function start({ localOnly = false } = {}) {
   unlockAudio();
   if (busy) return;
   if (pending) {
-    status("Retry the pending ranked result before starting another run.");
+    status(
+      uiMsg("Retry the pending ranked result before starting another run."),
+    );
     $("#game-submit-retry").hidden = false;
     return;
   }
   if (
     !active &&
     !$("#game-restore").hidden &&
-    !confirm(
-      "Start a new game and replace the saved position for this difficulty?",
+    !uiConfirm(
+      uiMsg(
+        "Start a new game and replace the saved position for this difficulty?",
+      ),
     )
   )
     return;
   if (
     active?.status === "playing" &&
-    !confirm("Restart this game? Your current position will be replaced.")
+    !uiConfirm(
+      uiMsg("Restart this game? Your current position will be replaced."),
+    )
   )
     return;
   if (running) {
@@ -719,7 +791,7 @@ async function start({ localOnly = false } = {}) {
       nextSession = null;
     if (mode === "public") {
       await ensureProfile();
-      status("Starting a verified ranked session…");
+      status(uiMsg("Starting a verified ranked session…"));
       nextSession = await sessionCall("start", {
         game,
         difficulty: diff,
@@ -746,8 +818,10 @@ async function start({ localOnly = false } = {}) {
     $("#game-restore").hidden = true;
     status(
       mode === "public"
-        ? "Ranked game in progress. Stay on this page to remain eligible."
-        : "Local only · Game in progress. Progress saves automatically.",
+        ? uiMsg(
+            "Ranked game in progress. Stay on this page to remain eligible.",
+          )
+        : uiMsg("Local only · Game in progress. Progress saves automatically."),
     );
     draw();
     queueSave();
@@ -757,17 +831,23 @@ async function start({ localOnly = false } = {}) {
     startFailed = true;
     localFallbackAvailable = mode === "public";
     status(
-      e.message +
-        (localFallbackAvailable
-          ? " Retry, or choose Play locally without ranking."
-          : " Retry when ready."),
+      uiJoin([
+        uiError(e),
+        localFallbackAvailable
+          ? uiMsg(" Retry, or choose Play locally without ranking.")
+          : uiMsg(" Retry when ready."),
+      ]),
     );
     if (active?.status === "playing") {
       publicSession = null;
       $("#game-overlay").hidden = false;
-      $("#game-overlay-title").textContent = "Previous game kept";
-      $("#game-overlay-note").textContent =
-        "The new game could not start. Retry, or continue your previous position locally.";
+      uiText($("#game-overlay-title"), uiMsg("Previous game kept"));
+      uiText(
+        $("#game-overlay-note"),
+        uiMsg(
+          "The new game could not start. Retry, or continue your previous position locally.",
+        ),
+      );
       draw();
     }
   } finally {
@@ -801,7 +881,7 @@ async function restore() {
     resume();
     draw();
   } catch (e) {
-    status(e.message);
+    status(uiError(e));
   } finally {
     busy = false;
     syncShell();
@@ -818,10 +898,12 @@ async function renderSaves() {
     ? rows
         .map(
           (r) =>
-            `<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? " · conflict copy" : ""}</strong><small>${r.data.game === "brick-breaker" && r.data.state.version === 1 ? "Legacy rules · v1 · " : ""}Local only · ${esc(new Date(r.updated_at).toLocaleString())} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
+            uiHtml`<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${r.data.game === "brick-breaker" && r.data.state.version === 1 ? uiMsg("Legacy rules · v1 · ") : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
         )
         .join("")
-    : '<div class="game-empty-state"><strong>A fresh start is a good start.</strong><p>No unfinished games yet. Pick a game above; your saved games will appear here.</p></div>';
+    : uiHtml(
+        '<div class="game-empty-state"><strong>A fresh start is a good start.</strong><p>No unfinished games yet. Pick a game above; your saved games will appear here.</p></div>',
+      );
   $("#games-more").hidden = !store.hasMore();
   saveLine();
   $("#games-copy-guest").hidden =
@@ -867,8 +949,10 @@ async function initDirectory() {
   });
   $("#games-clear").onclick = guard(async () => {
     if (
-      !confirm(
-        "Clear all saved games and local bests for this identity? Public leaderboard results remain.",
+      !uiConfirm(
+        uiMsg(
+          "Clear all saved games and local bests for this identity? Public leaderboard results remain.",
+        ),
       )
     )
       return;
@@ -877,15 +961,17 @@ async function initDirectory() {
   });
   $("#game-saves").onclick = guard(async (e) => {
     const b = e.target.closest("[data-delete-save]");
-    if (b && confirm("Delete this private game save?")) {
+    if (b && uiConfirm(uiMsg("Delete this private game save?"))) {
       await store.remove(b.dataset.deleteSave);
       renderSaves();
     }
   });
   $("#games-copy-guest").onclick = async () => {
     if (
-      !confirm(
-        "Copy guest saves into your account? Guest originals remain on this device.",
+      !uiConfirm(
+        uiMsg(
+          "Copy guest saves into your account? Guest originals remain on this device.",
+        ),
       )
     )
       return;
@@ -894,7 +980,7 @@ async function initDirectory() {
         await store.put(validateSave(row.data), row.id, owner(), 0);
       renderSaves();
     } catch (e) {
-      $("#game-save-status").textContent = e.message;
+      uiText($("#game-save-status"), uiError(e));
     }
   };
   store.subscribe(guard(renderSaves));
@@ -903,7 +989,7 @@ async function initDirectory() {
 function bindGame() {
   player = owner();
   $("#game-difficulty").innerHTML = Object.entries(GAMES[game].modes)
-    .map(([id, m]) => `<option value="${id}">${esc(m.label)}</option>`)
+    .map(([id, m]) => uiHtml`<option value="${id}">${uiFrom(m.label)}</option>`)
     .join("");
   $("#game-difficulty").value = GAMES[game].default;
   $("#game-best").parentElement.hidden = isBoard();
@@ -919,8 +1005,10 @@ function bindGame() {
     if (busy || pending) return;
     if (
       publicSession &&
-      !confirm(
-        "Changing setup ends ranking eligibility. Keep this position saved and choose new settings?",
+      !uiConfirm(
+        uiMsg(
+          "Changing setup ends ranking eligibility. Keep this position saved and choose new settings?",
+        ),
       )
     )
       return;
@@ -938,9 +1026,9 @@ function bindGame() {
     $("#game-difficulty").disabled = false;
     if ($("#game-human-side")) $("#game-human-side").disabled = false;
     $("#game-settings-change").hidden = true;
-    $("#game-start").textContent = "Start game →";
+    uiText($("#game-start"), uiMsg("Start game →"));
     shell?.restorePreview();
-    status("Position saved. Choose settings for your next game.");
+    status(uiMsg("Position saved. Choose settings for your next game."));
     readyUI();
     shell?.closeDialogs();
     shell?.focusSetup();
@@ -950,8 +1038,10 @@ function bindGame() {
   $("#game-submit-discard").onclick = async () => {
     if (
       busy ||
-      !confirm(
-        "Keep this result locally and discard its pending ranked submission?",
+      !uiConfirm(
+        uiMsg(
+          "Keep this result locally and discard its pending ranked submission?",
+        ),
       )
     )
       return;
@@ -960,10 +1050,10 @@ function bindGame() {
     submissionStatus = "local";
     presenter.setSubmission(
       "private",
-      "Ranked submission discarded · Local only",
+      uiMsg("Ranked submission discarded · Local only"),
     );
     $("#game-submit-retry").hidden = $("#game-submit-discard").hidden = true;
-    status("Submission discarded. Your result remains saved locally.");
+    status(uiMsg("Submission discarded. Your result remains saved locally."));
     syncShell();
   };
   $("#game-save-retry").onclick = async () => {
@@ -995,7 +1085,7 @@ function bindGame() {
       undo = null;
       draw();
       queueSave();
-      status("One move undone · Local only.");
+      status(uiMsg("One move undone · Local only."));
     };
   for (const b of document.querySelectorAll("[data-dir]"))
     b.onclick = () => {
@@ -1114,7 +1204,11 @@ function bindGame() {
     if (e.detail.kind === "game" && e.detail.from === activeId) {
       activeId = e.detail.to;
       revision = store.rows().find((r) => r.id === activeId)?.revision || 1;
-      status("A newer save exists. Your position was kept as a conflict copy.");
+      status(
+        uiMsg(
+          "A newer save exists. Your position was kept as a conflict copy.",
+        ),
+      );
     }
   });
   store.subscribe(() => {
@@ -1131,7 +1225,9 @@ try {
     if (pending) {
       $("#game-submit-retry").hidden = $("#game-submit-discard").hidden = false;
       status(
-        "A completed ranked result is waiting. Retry submission or keep it locally before a new game.",
+        uiMsg(
+          "A completed ranked result is waiting. Retry submission or keep it locally before a new game.",
+        ),
       );
     }
     syncShell();
@@ -1149,7 +1245,9 @@ try {
         $("#game-difficulty").value = r.data.difficulty;
         $("#game-restore").dataset.id = r.id;
         $("#game-restore").hidden = false;
-        status("Saved game ready. Continue locally, or start a new game.");
+        status(
+          uiMsg("Saved game ready. Continue locally, or start a new game."),
+        );
         syncShell();
         leaderboard();
       }
@@ -1163,6 +1261,11 @@ try {
     leaderboard();
   }
   if (!game) await initDirectory().catch(() => {});
-  $("#game-save-status").textContent =
-    `Local storage unavailable · ${e.message} You can play, but this browser cannot preserve progress.`;
+  uiText(
+    $("#game-save-status"),
+    uiMsg(
+      "Local storage unavailable · {0} You can play, but this browser cannot preserve progress.",
+      [uiError(e)],
+    ),
+  );
 }

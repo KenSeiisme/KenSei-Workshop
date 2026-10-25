@@ -1,5 +1,15 @@
 import { $, copy, downloadText, download, canvasBlob } from "./common.js";
 import { publicReport, summarize } from "./network-stats.js";
+import {
+  uiOption,
+  uiDate,
+  uiMsg,
+  uiJoin,
+  uiFrom,
+  uiText,
+  uiAttr,
+} from "../site/ui.js";
+
 const key = "kensei-network-history-v1",
   fields = {
     download: ["Download", "speed"],
@@ -45,18 +55,22 @@ const unit = () => ($("#network-unit").value === "mbytes" ? "MB/s" : "Mbps");
 const fmt = (n, suffix = "") =>
   typeof n === "number" && Number.isFinite(n)
     ? n.toFixed(2) + suffix
-    : "Unavailable";
+    : uiMsg("Unavailable");
 function saveHistory() {
   try {
     localStorage.setItem(key, JSON.stringify(history.map(publicReport)));
   } catch {
-    $("#network-reason").textContent =
-      "Result ready, but history could not save. Download or copy your report.";
+    uiText(
+      $("#network-reason"),
+      uiMsg(
+        "Result ready, but history could not save. Download or copy your report.",
+      ),
+    );
   }
 }
 function textElement(tag, text, className) {
   const el = document.createElement(tag);
-  el.textContent = text;
+  uiText(el, text);
   if (className) el.className = className;
   return el;
 }
@@ -67,7 +81,7 @@ function table(headers, rows) {
   t.className = "data-table";
   const head = document.createElement("thead"),
     hr = document.createElement("tr");
-  headers.forEach((x) => hr.append(textElement("th", x)));
+  headers.forEach((x) => hr.append(textElement("th", uiFrom(x))));
   head.append(hr);
   const body = document.createElement("tbody");
   rows.forEach((row) => {
@@ -100,16 +114,16 @@ function paintConnection() {
         ? showIP
           ? connection.ip
           : "•••• · click Show IP"
-        : "Unavailable",
+        : uiMsg("Unavailable"),
     ],
   ]) {
     list.append(
-      textElement("dt", label),
-      textElement("dd", value || "Unavailable"),
+      textElement("dt", uiFrom(label)),
+      textElement("dd", value || uiMsg("Unavailable")),
     );
   }
   $("#network-ip").disabled = $("#network-copy-ip").disabled = !connection.ip;
-  $("#network-ip").textContent = showIP ? "Hide IP" : "Show IP";
+  uiText($("#network-ip"), showIP ? uiMsg("Hide IP") : uiMsg("Show IP"));
 }
 function paintMetrics(row = {}) {
   const metrics = row.metrics || {};
@@ -118,7 +132,7 @@ function paintMetrics(row = {}) {
     const card = textElement("div", "", "metric-card");
     const value = metrics[key];
     card.append(
-      textElement("span", label),
+      textElement("span", uiFrom(label)),
       textElement(
         "strong",
         typeof value === "number" && Number.isFinite(value)
@@ -132,21 +146,35 @@ function paintMetrics(row = {}) {
   const sample = running
     ? row.samples?.[phase]?.at(-1)?.mbps
     : metrics.download;
-  $("#gauge-value").textContent =
-    typeof sample === "number" ? fmt(sample * factor()) : "—";
-  $("#gauge-unit").textContent = unit();
+  uiText(
+    $("#gauge-value"),
+    typeof sample === "number" ? fmt(sample * factor()) : "—",
+  );
+  uiText($("#gauge-unit"), unit());
   const max = sample > 0 ? 10 ** Math.ceil(Math.log10(sample * 1.1)) : 100;
   $("#gauge-arc").setAttribute(
     "stroke-dasharray",
     (sample > 0 ? Math.min(100, (sample / max) * 100) : 0) + " 100",
   );
   $("#gauge-arc").style.stroke = phase === "upload" ? "#a8a0ee" : "#ef9bb7";
-  $("#gauge-caption").textContent = running
-    ? (phase === "upload" ? "Upload" : "Download") + " · latest valid sample"
-    : last
-      ? "Download · final P90"
-      : "Latest valid sample while running · P90 after completion";
-  $("#network-phase").textContent = "FULL TEST / " + phase.toUpperCase();
+  uiText(
+    $("#gauge-caption"),
+    running
+      ? uiJoin([
+          phase === "upload" ? uiMsg("Upload") : uiMsg("Download"),
+          uiMsg(" · latest valid sample"),
+        ])
+      : last
+        ? uiMsg("Download · final P90")
+        : uiMsg("Latest valid sample while running · P90 after completion"),
+  );
+  uiText(
+    $("#network-phase"),
+    uiJoin([
+      uiMsg("FULL TEST / "),
+      uiFrom(phase.charAt(0).toUpperCase() + phase.slice(1)),
+    ]),
+  );
 }
 function paintDetails(row) {
   const samples = row.samples,
@@ -225,7 +253,9 @@ function paintDetails(row) {
     values.append(
       textElement(
         "p",
-        "Legacy summary only. Sample curves were not recorded for this result.",
+        uiMsg(
+          "Legacy summary only. Sample curves were not recorded for this result.",
+        ),
         "muted small",
       ),
     );
@@ -344,7 +374,11 @@ async function plots(row) {
       speedPlot?.destroy();
       speedPlot = null;
       a.replaceChildren(
-        textElement("p", "Waiting for valid speed samples.", "muted small"),
+        textElement(
+          "p",
+          uiMsg("Waiting for valid speed samples."),
+          "muted small",
+        ),
       );
     }
     const idle = data.idle || [],
@@ -387,7 +421,11 @@ async function plots(row) {
       latencyPlot?.destroy();
       latencyPlot = null;
       b.replaceChildren(
-        textElement("p", "Waiting for valid latency samples.", "muted small"),
+        textElement(
+          "p",
+          uiMsg("Waiting for valid latency samples."),
+          "muted small",
+        ),
       );
     }
   } catch {
@@ -400,7 +438,9 @@ async function plots(row) {
       el.replaceChildren(
         textElement(
           "p",
-          "Chart drawing is unavailable. Sample tables and statistics remain available.",
+          uiMsg(
+            "Chart drawing is unavailable. Sample tables and statistics remain available.",
+          ),
           "muted small",
         ),
       );
@@ -411,13 +451,13 @@ function paint(row) {
   paintMetrics(row);
   paintDetails(row);
   plots(row);
-  if (!running) $("#network-elapsed").textContent = fmt(row.elapsed, " s");
+  if (!running) uiText($("#network-elapsed"), fmt(row.elapsed, " s"));
 }
 function resultText(row) {
   const safe = publicReport(row);
   return [
     "KenSei Network Test · connection to Cloudflare",
-    new Date(safe.date).toLocaleString(),
+    uiDate(new Date(safe.date), { dateStyle: "medium", timeStyle: "short" }),
     ...Object.entries(fields).map(
       ([k, [label, type]]) =>
         label +
@@ -441,21 +481,31 @@ function selectResult(row) {
   $("#network-result").value = resultText(row);
   for (const id of ["copy", "png", "json", "csv"])
     $("#network-" + id).disabled = id === "csv" && !row.samples;
-  $("#network-reason").textContent =
-    "Saved result · " + new Date(row.date).toLocaleString();
+  uiText(
+    $("#network-reason"),
+    uiJoin([
+      uiMsg("Saved result · "),
+      uiDate(new Date(row.date), { dateStyle: "medium", timeStyle: "short" }),
+    ]),
+  );
 }
 function showHistory() {
   const list = $("#network-history");
   list.replaceChildren();
   if (!history.length)
-    list.append(textElement("p", "No completed tests yet.", "muted small"));
+    list.append(
+      textElement("p", uiMsg("No completed tests yet."), "muted small"),
+    );
   for (const row of history) {
     const item = textElement("div", "", "saved-row"),
       actions = textElement("div", "", "saved-actions");
     item.append(
       textElement(
         "span",
-        new Date(row.date).toLocaleString() +
+        uiDate(new Date(row.date), {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }) +
           " · ↓ " +
           fmt(row.metrics.download) +
           " / ↑ " +
@@ -463,10 +513,10 @@ function showHistory() {
           " Mbps",
       ),
     );
-    const view = textElement("button", "View", "text-link");
+    const view = textElement("button", uiMsg("View"), "text-link");
     view.disabled = running;
     view.onclick = () => selectResult(row);
-    const remove = textElement("button", "Delete", "text-link");
+    const remove = textElement("button", uiMsg("Delete"), "text-link");
     remove.onclick = () => {
       history = history.filter((x) => x.id !== row.id);
       saveHistory();
@@ -481,7 +531,15 @@ function showHistory() {
       previous = select.value;
     select.replaceChildren();
     for (const row of history)
-      select.add(new Option(new Date(row.date).toLocaleString(), row.id));
+      select.add(
+        uiOption(
+          uiDate(new Date(row.date), {
+            dateStyle: "medium",
+            timeStyle: "short",
+          }),
+          row.id,
+        ),
+      );
     if (history.some((r) => r.id === previous)) select.value = previous;
     else select.selectedIndex = id === "b" && history.length > 1 ? 1 : 0;
   }
@@ -510,7 +568,7 @@ function stop(message) {
   run = null;
   $("#network-start").disabled = false;
   $("#network-cancel").disabled = true;
-  if (message) $("#network-status").textContent = message;
+  if (message) uiText($("#network-status"), uiFrom(message));
   showHistory();
 }
 $("#network-start").onclick = () => {
@@ -526,23 +584,27 @@ $("#network-start").onclick = () => {
   for (const id of ["copy", "png", "json", "csv"])
     $("#network-" + id).disabled = true;
   $("#network-result").hidden = true;
-  $("#network-reason").textContent = "";
-  $("#network-status").textContent =
-    "Loading engine and optional connection information…";
+  uiText($("#network-reason"), "");
+  uiText(
+    $("#network-status"),
+    uiMsg("Loading engine and optional connection information…"),
+  );
   $("#network-progress").value = 0;
   $("#network-start").disabled = true;
   $("#network-cancel").disabled = false;
   began = performance.now();
   ticker = setInterval(
     () =>
-      ($("#network-elapsed").textContent =
-        ((performance.now() - began) / 1000).toFixed(1) + " s"),
+      uiText(
+        $("#network-elapsed"),
+        ((performance.now() - began) / 1000).toFixed(1) + " s",
+      ),
     100,
   );
   run = crypto.randomUUID();
   frame = document.createElement("iframe");
   frame.hidden = true;
-  frame.title = "Isolated network measurement";
+  uiAttr(frame, "title", uiMsg("Isolated network measurement"));
   frame.src = "/tool-scripts/network-runner.html#" + run;
   document.body.append(frame);
   showHistory();
@@ -576,20 +638,26 @@ window.addEventListener("message", (event) => {
   if (d.type === "metrics") paint(d);
   if (d.type === "phase") {
     phase = d.phase;
-    $("#network-status").textContent =
+    uiText(
+      $("#network-status"),
       {
         latency: "Measuring idle latency…",
         download: "Measuring download…",
         upload: "Measuring upload…",
-      }[phase] || "Measuring…";
+      }[phase] || uiMsg("Measuring…"),
+    );
     $("#network-progress").value = d.progress;
     paintMetrics(current);
   }
   if (d.type === "traffic")
-    $("#network-reason").textContent =
-      "Attempted payload: " +
-      (d.used / 1e6).toFixed(1) +
-      " / 500 MB · not a billing-byte count.";
+    uiText(
+      $("#network-reason"),
+      uiJoin([
+        uiMsg("Attempted payload: "),
+        (d.used / 1e6).toFixed(1),
+        uiMsg(" / 500 MB · not a billing-byte count."),
+      ]),
+    );
   if (d.type === "error") {
     if (d.metrics) paint(d);
     stop(d.message);
@@ -698,7 +766,8 @@ $("#network-png").onclick = async () => {
     c.fillStyle = "#bbb0c5";
     c.font = "20px sans-serif";
     c.fillText(
-      new Date(last.date).toLocaleString() + " · connection to Cloudflare",
+      uiDate(new Date(last.date), { dateStyle: "medium", timeStyle: "short" }) +
+        " · connection to Cloudflare",
       50,
       105,
     );
@@ -758,8 +827,12 @@ $("#network-png").onclick = async () => {
     );
     download(await canvasBlob(canvas), "kensei-network.png");
   } catch {
-    $("#network-status").textContent =
-      "PNG export is unavailable in this browser. CSV, JSON and text reports still work.";
+    uiText(
+      $("#network-status"),
+      uiMsg(
+        "PNG export is unavailable in this browser. CSV, JSON and text reports still work.",
+      ),
+    );
   }
 };
 $("#network-compare").onclick = () => {
@@ -768,7 +841,7 @@ $("#network-compare").onclick = () => {
     out = $("#network-comparison");
   out.replaceChildren();
   if (!a || !b || a.id === b.id) {
-    out.textContent = "Choose two different tests.";
+    uiText(out, uiMsg("Choose two different tests."));
     return;
   }
   out.append(
@@ -790,7 +863,9 @@ $("#network-compare").onclick = () => {
   out.append(
     textElement(
       "p",
-      "Compare connection, route and conditions as well as the numbers. Legacy records may contain summaries only.",
+      uiMsg(
+        "Compare connection, route and conditions as well as the numbers. Legacy records may contain summaries only.",
+      ),
       "muted small",
     ),
   );

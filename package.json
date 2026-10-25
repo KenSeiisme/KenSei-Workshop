@@ -52,7 +52,8 @@
     "games:record": "node scripts/record-game-demo.cjs",
     "test:arcade-next": "node scripts/test.mjs arcade-next",
     "test:game-experience": "node scripts/test.mjs game-experience",
-    "test:game-shell": "node scripts/test.mjs game-shell"
+    "test:game-shell": "node scripts/test.mjs game-shell",
+    "test:bilingual": "node scripts/test.mjs bilingual"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

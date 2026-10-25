@@ -16,6 +16,7 @@ SITE = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(SOURCE / "views"))
 from template_renderer import render_template
+import localization as i18n
 from tool_experience import heading as tool_heading
 from profile_view import PROFILE_VIEW
 from file_tools import VIEWS
@@ -49,26 +50,34 @@ parser.add_argument(
     default=ROOT / "dist",
     help="Output directory (default: dist).",
 )
-OUT = parser.parse_args().output.resolve()
+parser.add_argument(
+    "--pages-only",
+    action="store_true",
+    help="Rebuild page metadata and locale packs without copying unchanged static assets (development only).",
+)
+arguments = parser.parse_args()
+OUT = arguments.output.resolve()
 OUT.mkdir(parents=True, exist_ok=True)
-for name in ("app.js", "config.js"):
-    shutil.copy2(SOURCE / name, OUT / name)
-for path in (SOURCE / "styles").glob("*.css"):
-    shutil.copy2(path, OUT / path.name)
-shutil.copytree(SOURCE / "assets", OUT / "assets", dirs_exist_ok=True)
+if not arguments.pages_only:
+    for name in ("app.js", "config.js"):
+        shutil.copy2(SOURCE / name, OUT / name)
+    for path in (SOURCE / "styles").glob("*.css"):
+        shutil.copy2(path, OUT / path.name)
+    shutil.copytree(SOURCE / "assets", OUT / "assets", dirs_exist_ok=True)
 
-# 源码归类不改变公开资源网址，现有链接和浏览器存档继续可用。
-for source, public in (
-    ("tools", "tool-scripts"),
-    ("games", "game-scripts"),
-    ("vendor", "vendor"),
-):
-    shutil.copytree(
-        SOURCE / source,
-        OUT / public,
-        dirs_exist_ok=True,
-        ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.tar.gz"),
-    )
+    # 源码归类不改变公开资源网址，现有链接和浏览器存档继续可用。
+    for source, public in (
+        ("tools", "tool-scripts"),
+        ("games", "game-scripts"),
+        ("vendor", "vendor"),
+        ("site", "site"),
+    ):
+        shutil.copytree(
+            SOURCE / source,
+            OUT / public,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.tar.gz"),
+        )
 
 ICONS = {
     "cards": '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',
@@ -211,39 +220,12 @@ def header(active):
     return render_template("site/header.html", nav=nav)
 
 
-def layout(
-    title,
-    content,
-    active="Home",
-    desc="Useful browser tools for images, text and focus. No installation or account needed. Built by KenSei.",
-):
-    game_css = (
-        '<link rel="stylesheet" href="/games.css"><link rel="stylesheet" href="/puzzle-games.css"><link rel="stylesheet" href="/arcade-games.css"><link rel="stylesheet" href="/board-games.css">'
-        if "games-page" in content
-        else ""
-    )
-    profile_css = (
-        '<link rel="stylesheet" href="/profile.css">'
-        if 'id="profile-page"' in content
-        else ""
-    )
-    if game_css or profile_css:
-        profile_css += '<link rel="stylesheet" href="/game-neon.css"><link rel="stylesheet" href="/game-next.css"><link rel="stylesheet" href="/game-experience.css">'
-    if "data-play-shell" in content:
-        profile_css += '<link rel="stylesheet" href="/game-play-shell.css">'
-    tool_css = (
-        '<link rel="stylesheet" href="/tool-experience.css">'
-        if "data-tool=" in content
-        else ""
-    )
+def layout(title, content, active="Home", route="", locale="en"):
     return render_template(
         "site/layout.html",
         google_site_verification=SITE["google_site_verification"],
-        title=title,
-        description=desc,
-        tool_css=tool_css,
-        game_css=game_css,
-        profile_css=profile_css,
+        locale=locale,
+        head_html=i18n.head(route, locale, SITE["site_url"].rstrip("/")),
         header=header(active),
         content=content,
     )
@@ -430,30 +412,59 @@ for game in GAMES:
     pages["games/" + game["slug"]] = (game["name"], game_page(game), "Games")
 
 
-for route, (title, body, active) in pages.items():
-    target = OUT / route / "index.html" if route else OUT / "index.html"
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(layout(title, body, active), encoding="utf-8")
-(OUT / "404.html").write_text(layout(*pages["404"][:2]), encoding="utf-8")
-
-# 直接使用页面目录生成公开网址；不收录账号页面、登录回调或错误页。
 site_url = SITE["site_url"].rstrip("/")
+routes = [i18n.page_path(route) for route in pages]
+social = []
+for route, (title, body, active) in pages.items():
+    for locale in i18n.LOCALES:
+        relative = i18n.page_path(route, locale).strip("/")
+        target = OUT / relative / "index.html"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        raw = layout(title, body, active, route, locale)
+        target.write_text(
+            i18n.write_page(route, locale, raw, OUT, site_url, routes), encoding="utf-8"
+        )
+        if i18n.is_public(route):
+            meta = i18n.metadata(route, locale, site_url)
+            social.append(
+                {
+                    "route": route,
+                    "locale": locale,
+                    "title": meta["title"].split(" — ")[0],
+                    "description": meta["description"],
+                    "type": route.split("/")[0] or "home",
+                }
+            )
+(OUT / "404.html").write_text(
+    (OUT / "404/index.html").read_text(encoding="utf-8"), encoding="utf-8"
+)
+(OUT / "social-manifest.json").write_text(
+    json.dumps(social, ensure_ascii=False, indent=2), encoding="utf-8"
+)
+search = [
+    {"route": "/" + route + "/", "type": route.split("/")[0], **entry}
+    for route, entry in i18n.CONTENT.items()
+]
+(OUT / "assets/search-index.json").write_text(
+    json.dumps(search, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
+)
 sitemap_namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
 ET.register_namespace("", sitemap_namespace)
 sitemap = ET.Element(f"{{{sitemap_namespace}}}urlset")
 for route in pages:
-    if route.split("/")[0] in {"workspace", "auth", "profile", "404"}:
+    if not i18n.is_public(route):
         continue
-    entry = ET.SubElement(sitemap, f"{{{sitemap_namespace}}}url")
-    location = ET.SubElement(entry, f"{{{sitemap_namespace}}}loc")
-    location.text = site_url + (f"/{route}/" if route else "/")
+    for locale in i18n.LOCALES:
+        entry = ET.SubElement(sitemap, f"{{{sitemap_namespace}}}url")
+        ET.SubElement(entry, f"{{{sitemap_namespace}}}loc").text = (
+            site_url + i18n.page_path(route, locale)
+        )
 ET.indent(sitemap, space="  ")
 ET.ElementTree(sitemap).write(
     OUT / "sitemap.xml", encoding="utf-8", xml_declaration=True
 )
 (OUT / "robots.txt").write_text(
-    "User-agent: *\nAllow: /\nDisallow: /workspace/\nDisallow: /auth/\nDisallow: /profile/\n"
-    f"\nSitemap: {site_url}/sitemap.xml\n",
+    "User-agent: *\nAllow: /\n\nSitemap: " + site_url + "/sitemap.xml\n",
     encoding="utf-8",
 )
-print(f"Built {len(pages)} pages in {OUT}")
+print(f"Built {len(pages)*2} localized pages in {OUT}")

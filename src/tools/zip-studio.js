@@ -1,4 +1,6 @@
 import { $, $$, size, download, status, busy } from "./common.js";
+import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiAttr } from "../site/ui.js";
+
 let worker = null,
   active = false,
   opened = false;
@@ -10,7 +12,7 @@ function stop(message) {
   busy(false);
   $("#zip-entries").replaceChildren();
   if (message) {
-    status(message);
+    status(uiFrom(message));
     $("#zip-open").value = "";
   }
 }
@@ -20,7 +22,7 @@ function create() {
   worker.onmessage = ({ data }) => {
     if (data.type === "progress") {
       $("#zip-progress").value = data.value;
-      status(data.message);
+      status(uiError(data));
     } else if (data.type === "error") {
       stop(data.message);
       $("#tool-status").classList.add("error-text");
@@ -45,21 +47,21 @@ function create() {
         const row = document.createElement("div");
         row.className = "zip-row";
         const name = document.createElement("span");
-        name.textContent = entry.name;
-        name.title = entry.name;
+        uiText(name, entry.name);
+        uiAttr(name, "title", entry.name);
         const detail = document.createElement("small");
-        detail.textContent = size(entry.expanded);
+        uiText(detail, size(entry.expanded));
         row.append(name, detail);
         if (!entry.name.endsWith("/")) {
           const button = document.createElement("button");
           button.className = "text-link";
-          button.textContent = "Download";
+          uiText(button, uiMsg("Download"));
           button.dataset.lock = "";
           button.onclick = () => {
             if (!active && opened) {
               active = true;
               busy(true);
-              status("Extracting " + entry.name);
+              status(uiJoin([uiMsg("Extracting "), entry.name]));
               worker.postMessage({ action: "extract", index: entry.index });
             }
           };
@@ -68,13 +70,16 @@ function create() {
         list.append(row);
       }
       status(
-        data.entries.length + " entries checked. Select a file to download.",
+        uiJoin([
+          data.entries.length,
+          uiMsg(" entries checked. Select a file to download."),
+        ]),
       );
     } else if (data.type === "extracted") {
       download(data.blob, data.name);
       active = false;
       busy(false);
-      status("File checked and downloaded.");
+      status(uiMsg("File checked and downloaded."));
     }
   };
   worker.onerror = (e) => {
@@ -88,25 +93,28 @@ function create() {
 $("#zip-files").onchange = () => {
   const files = [...$("#zip-files").files],
     total = files.reduce((n, f) => n + f.size, 0);
-  $("#zip-selected").textContent = files.length + " files · " + size(total);
+  uiText(
+    $("#zip-selected"),
+    uiJoin([files.length, uiMsg(" files · "), size(total)]),
+  );
   $("#zip-pack").disabled =
     !files.length || files.length > 100 || total > 100000000;
   if ($("#zip-pack").disabled && files.length)
-    status("Choose at most 100 files totaling 100 MB.", true);
+    status(uiMsg("Choose at most 100 files totaling 100 MB."), true);
 };
 $("#zip-pack").disabled = true;
 $("#zip-pack").onclick = () => {
   const files = [...$("#zip-files").files];
   if (!files.length) return;
   create();
-  status("Preparing files…");
+  status(uiMsg("Preparing files…"));
   worker.postMessage({ action: "pack", files });
 };
 $("#zip-open").onchange = () => {
   const file = $("#zip-open").files[0];
   if (!file) return;
   create();
-  status("Checking archive and expanded content…");
+  status(uiMsg("Checking archive and expanded content…"));
   worker.postMessage({ action: "open", file });
 };
 $("#cancel-job").onclick = () => {

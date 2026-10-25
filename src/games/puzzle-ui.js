@@ -1,5 +1,6 @@
 import { patchMarkup } from "./dom.js";
 import { solution } from "./puzzle-engine.js";
+import { uiMsg, uiHtml } from "../site/ui.js";
 
 const SUDOKU_DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const escapeText = (value) =>
@@ -85,12 +86,12 @@ export function createPuzzleUI(ctx) {
     const current = state();
     if (!playable() || current?.game !== "sudoku") return;
     if (current.givens[selected]) {
-      announce("This is a given digit. Select an empty cell.");
+      announce(uiMsg("This is a given digit. Select an empty cell."));
       return;
     }
     if (noteMode && value) {
       if (current.board[selected]) {
-        announce("Erase the digit before adding pencil notes.");
+        announce(uiMsg("Erase the digit before adding pencil notes."));
         return;
       }
       const notes = new Set(current.notes[selected]);
@@ -100,7 +101,10 @@ export function createPuzzleUI(ctx) {
       ctx.queueSave();
       ctx.redraw();
       announce(
-        `Pencil note ${value} ${notes.has(value) ? "added" : "removed"}.`,
+        uiMsg("Pencil note {0} {1}.", [
+          value,
+          notes.has(value) ? "added" : "removed",
+        ]),
       );
     } else if (
       !value &&
@@ -110,7 +114,7 @@ export function createPuzzleUI(ctx) {
       current.notes[selected] = [];
       ctx.queueSave();
       ctx.redraw();
-      announce("Pencil notes cleared.");
+      announce(uiMsg("Pencil notes cleared."));
     } else ctx.act({ type: "digit", index: selected, value });
   }
   function paint(index, value) {
@@ -180,12 +184,12 @@ export function createPuzzleUI(ctx) {
         const label = `Row ${y + 1}, column ${x + 1}, ${value ? `digit ${value}${current.givens[index] ? ", given" : ""}` : `empty${notes.length ? `, notes ${notes.join(", ")}` : ""}`}${conflicts.has(index) ? ", conflict" : ""}`;
         const content =
           value ||
-          `<span class="sudoku-notes" aria-hidden="true">${SUDOKU_DIGITS.map((n) => `<span>${notes.includes(n) ? n : ""}</span>`).join("")}</span>`;
-        return `${x === 0 ? '<div class="puzzle-grid-row" role="row">' : ""}<button type="button" class="${classes}" data-puzzle-cell="${index}" role="gridcell" aria-label="${escapeText(label)}" aria-selected="${index === selected}" ${conflicts.has(index) ? 'aria-invalid="true"' : ""} tabindex="${index === selected ? 0 : -1}">${content}</button>${x === 8 ? "</div>" : ""}`;
+          uiHtml`<span class="sudoku-notes" aria-hidden="true">${SUDOKU_DIGITS.map((n) => uiHtml`<span>${notes.includes(n) ? n : ""}</span>`).join("")}</span>`;
+        return uiHtml`${x === 0 ? uiHtml('<div class="puzzle-grid-row" role="row">') : ""}<button type="button" class="${classes}" data-puzzle-cell="${index}" role="gridcell" aria-label="${escapeText(label)}" aria-selected="${index === selected}" ${conflicts.has(index) ? 'aria-invalid="true"' : ""} tabindex="${index === selected ? 0 : -1}">${content}</button>${x === 8 ? "</div>" : ""}`;
       })
       .join("");
     const filled = current.board.filter(Boolean).length;
-    return `<div class="puzzle-stage sudoku-stage"><div class="puzzle-summary"><span><strong>${filled}</strong> / 81 cells filled</span><span class="puzzle-conflict-summary" ${conflicts.size ? "" : "hidden"}>${conflicts.size} conflicting cells</span></div><div class="sudoku-grid" role="grid" aria-label="Sudoku puzzle, use arrow keys to select a cell">${cells}</div><div class="puzzle-controls"><button type="button" class="button secondary puzzle-notes-toggle" data-puzzle-action="notes" aria-pressed="${noteMode}">Pencil notes <span>${noteMode ? "On" : "Off"}</span></button><button type="button" class="button secondary" data-puzzle-digit="0">Erase</button></div><div class="sudoku-number-pad" aria-label="Enter a digit">${SUDOKU_DIGITS.map((n) => `<button type="button" data-puzzle-digit="${n}" aria-label="${noteMode ? "Toggle pencil note" : "Enter digit"} ${n}">${n}</button>`).join("")}</div><p class="puzzle-key-help">Select a cell, then enter 1–9. Arrow keys move; Delete erases; N toggles notes. Conflicts show an underline.</p></div>`;
+    return uiHtml`<div class="puzzle-stage sudoku-stage"><div class="puzzle-summary"><span><strong>${filled}</strong> / 81 cells filled</span><span class="puzzle-conflict-summary" ${conflicts.size ? "" : "hidden"}>${conflicts.size} conflicting cells</span></div><div class="sudoku-grid" role="grid" aria-label="Sudoku puzzle, use arrow keys to select a cell">${cells}</div><div class="puzzle-controls"><button type="button" class="button secondary puzzle-notes-toggle" data-puzzle-action="notes" aria-pressed="${noteMode}">Pencil notes <span>${noteMode ? uiMsg("On") : uiMsg("Off")}</span></button><button type="button" class="button secondary" data-puzzle-digit="0">Erase</button></div><div class="sudoku-number-pad" aria-label="Enter a digit">${SUDOKU_DIGITS.map((n) => uiHtml`<button type="button" data-puzzle-digit="${n}" aria-label="${noteMode ? uiMsg("Toggle pencil note") : uiMsg("Enter digit")} ${n}">${n}</button>`).join("")}</div><p class="puzzle-key-help">Select a cell, then enter 1–9. Arrow keys move; Delete erases; N toggles notes. Conflicts show an underline.</p></div>`;
   }
   function renderNonogram(current) {
     const n = current.size;
@@ -201,17 +205,17 @@ export function createPuzzleUI(ctx) {
       ),
     );
     const clue = (list) =>
-      (list.length ? list : [0]).map((v) => `<span>${v}</span>`).join("");
+      (list.length ? list : [0]).map((v) => uiHtml`<span>${v}</span>`).join("");
     const top = current.cols
       .map(
         (clues, x) =>
-          `<div class="nonogram-col-clue ${completeCols[x] ? "is-complete" : ""}" role="columnheader" aria-label="Column ${x + 1}: ${clues.join(", ") || "empty"}${completeCols[x] ? ", runs match" : ""}">${clue(clues)}${completeCols[x] ? '<i aria-hidden="true">✓</i>' : ""}</div>`,
+          uiHtml`<div class="nonogram-col-clue ${completeCols[x] ? "is-complete" : ""}" role="columnheader" aria-label="Column ${x + 1}: ${clues.join(", ") || "empty"}${completeCols[x] ? uiMsg(", runs match") : ""}">${clue(clues)}${completeCols[x] ? uiHtml('<i aria-hidden="true">✓</i>') : ""}</div>`,
       )
       .join("");
     const rows = current.rows
       .map(
         (clues, y) =>
-          `<div class="puzzle-grid-row" role="row"><div class="nonogram-row-clue ${completeRows[y] ? "is-complete" : ""}" role="rowheader" aria-label="Row ${y + 1}: ${clues.join(", ") || "empty"}${completeRows[y] ? ", runs match" : ""}">${clue(clues)}${completeRows[y] ? '<i aria-hidden="true">✓</i>' : ""}</div>${Array.from(
+          uiHtml`<div class="puzzle-grid-row" role="row"><div class="nonogram-row-clue ${completeRows[y] ? "is-complete" : ""}" role="rowheader" aria-label="Row ${y + 1}: ${clues.join(", ") || "empty"}${completeRows[y] ? uiMsg(", runs match") : ""}">${clue(clues)}${completeRows[y] ? uiHtml('<i aria-hidden="true">✓</i>') : ""}</div>${Array.from(
             { length: n },
             (_, x) => {
               const index = y * n + x,
@@ -225,12 +229,12 @@ export function createPuzzleUI(ctx) {
               ]
                 .filter(Boolean)
                 .join(" ");
-              return `<button type="button" class="${classes}" data-puzzle-cell="${index}" role="gridcell" tabindex="${index === selected ? 0 : -1}" aria-selected="${index === selected}" aria-label="Row ${y + 1}, column ${x + 1}, ${value === 1 ? "filled" : value === 2 ? "marked empty" : "unknown"}">${value === 2 ? '<span class="nonogram-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5L19 19"/><path d="M19 5L5 19"/></svg></span>' : ""}</button>`;
+              return uiHtml`<button type="button" class="${classes}" data-puzzle-cell="${index}" role="gridcell" tabindex="${index === selected ? 0 : -1}" aria-selected="${index === selected}" aria-label="Row ${y + 1}, column ${x + 1}, ${value === 1 ? "filled" : value === 2 ? uiMsg("marked empty") : "unknown"}">${value === 2 ? uiHtml('<span class="nonogram-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5L19 19"/><path d="M19 5L5 19"/></svg></span>') : ""}</button>`;
             },
           ).join("")}</div>`,
       )
       .join("");
-    return `<div class="puzzle-stage nonogram-stage"><div class="puzzle-summary"><span><strong>${n} × ${n}</strong> picture puzzle</span><span>${current.board.filter((v) => v === 1).length} cells filled</span></div><div class="puzzle-controls nonogram-mode" role="group" aria-label="Drawing mode"><button type="button" class="button secondary" data-puzzle-paint="fill" aria-pressed="${paintMode === "fill"}">■ Fill</button><button type="button" class="button secondary" data-puzzle-paint="mark" aria-pressed="${paintMode === "mark"}">× Mark empty</button></div><div class="nonogram-viewport" tabindex="0" role="region" aria-label="Scrollable Nonogram board"><div class="nonogram-grid" role="grid" aria-label="Nonogram puzzle" style="--nonogram-size:${n};--row-clue-width:${Math.max(50, maxRows * 15 + 8)}px;--col-clue-height:${Math.max(48, maxCols * 16 + 12)}px"><div class="puzzle-grid-row" role="row"><div class="nonogram-corner" aria-hidden="true">${n} × ${n}</div>${top}</div>${rows}</div></div><p class="puzzle-key-help">Drag cells to paint; select the same mark to erase. Swipe the clues or scroll to move a large board. Arrows move; Space fills; X marks empty. A check means the visible runs match the clues.</p></div>`;
+    return uiHtml`<div class="puzzle-stage nonogram-stage"><div class="puzzle-summary"><span><strong>${n} × ${n}</strong> picture puzzle</span><span>${current.board.filter((v) => v === 1).length} cells filled</span></div><div class="puzzle-controls nonogram-mode" role="group" aria-label="Drawing mode"><button type="button" class="button secondary" data-puzzle-paint="fill" aria-pressed="${paintMode === "fill"}">■ Fill</button><button type="button" class="button secondary" data-puzzle-paint="mark" aria-pressed="${paintMode === "mark"}">× Mark empty</button></div><div class="nonogram-viewport" tabindex="0" role="region" aria-label="Scrollable Nonogram board"><div class="nonogram-grid" role="grid" aria-label="Nonogram puzzle" style="--nonogram-size:${n};--row-clue-width:${Math.max(50, maxRows * 15 + 8)}px;--col-clue-height:${Math.max(48, maxCols * 16 + 12)}px"><div class="puzzle-grid-row" role="row"><div class="nonogram-corner" aria-hidden="true">${n} × ${n}</div>${top}</div>${rows}</div></div><p class="puzzle-key-help">Drag cells to paint; select the same mark to erase. Swipe the clues or scroll to move a large board. Arrows move; Space fills; X marks empty. A check means the visible runs match the clues.</p></div>`;
   }
   function render(element) {
     board = element;
@@ -297,11 +301,13 @@ export function createPuzzleUI(ctx) {
     else if (target.dataset.puzzleAction === "notes") {
       noteMode = !noteMode;
       ctx.redraw();
-      announce(`Pencil notes ${noteMode ? "on" : "off"}.`);
+      announce(uiMsg("Pencil notes {0}.", [noteMode ? "on" : "off"]));
     } else if (target.hasAttribute("data-puzzle-paint")) {
       paintMode = target.dataset.puzzlePaint;
       ctx.redraw();
-      announce(paintMode === "fill" ? "Fill mode." : "Mark empty mode.");
+      announce(
+        paintMode === "fill" ? uiMsg("Fill mode.") : uiMsg("Mark empty mode."),
+      );
     }
     return true;
   }
@@ -357,7 +363,7 @@ export function createPuzzleUI(ctx) {
         event.preventDefault();
         noteMode = !noteMode;
         ctx.redraw();
-        announce(`Pencil notes ${noteMode ? "on" : "off"}.`);
+        announce(uiMsg("Pencil notes {0}.", [noteMode ? "on" : "off"]));
         return true;
       }
     } else if (
@@ -445,11 +451,11 @@ export function createPuzzleUI(ctx) {
   function hint() {
     const current = state();
     if (!playable() || !current) {
-      announce("Start or resume this puzzle before using a hint.");
+      announce(uiMsg("Start or resume this puzzle before using a hint."));
       return;
     }
     if (ctx.isPublic()) {
-      announce("Hints are available in Private games only.");
+      announce(uiMsg("Hints are available in Private games only."));
       return;
     }
     const answer = solution(current);
@@ -468,7 +474,10 @@ export function createPuzzleUI(ctx) {
       value: current.game === "sudoku" ? answer[index] : answer[index] ? 1 : 2,
     });
     announce(
-      `Hint applied to row ${Math.floor(index / (current.game === "sudoku" ? 9 : current.size)) + 1}, column ${(index % (current.game === "sudoku" ? 9 : current.size)) + 1}.`,
+      uiMsg("Hint applied to row {0}, column {1}.", [
+        Math.floor(index / (current.game === "sudoku" ? 9 : current.size)) + 1,
+        (index % (current.game === "sudoku" ? 9 : current.size)) + 1,
+      ]),
     );
   }
   function reset() {

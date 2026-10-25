@@ -1,6 +1,15 @@
 import { $, status, downloadText, library, api } from "./common.js";
 import * as store from "./flashcard-store.js";
 import { validateDeck, shuffled } from "./flashcard-core.js";
+import {
+  uiMsg,
+  uiJoin,
+  uiFrom,
+  uiError,
+  uiText,
+  uiConfirm,
+} from "../site/ui.js";
+
 let deck = null,
   cardId = null,
   timer = null,
@@ -15,7 +24,7 @@ let deck = null,
 const owner = () => api.user?.id || "guest";
 function element(tag, text, className) {
   const e = document.createElement(tag);
-  e.textContent = text;
+  uiText(e, text);
   if (className) e.className = className;
   return e;
 }
@@ -31,7 +40,7 @@ function list() {
     b.onclick = () => open(row.id);
     out.append(b);
   }
-  $("#deck-save-state").textContent = store.saveState();
+  uiText($("#deck-save-state"), uiFrom(store.saveState()));
   $("#deck-more").hidden = !store.hasMore();
 }
 function cards() {
@@ -52,17 +61,21 @@ function cards() {
     };
     out.append(b);
   }
-  $("#study-progress").textContent =
-    deck.data.cards.filter((c) => c.known).length +
-    " / " +
-    deck.data.cards.length +
-    " known";
+  uiText(
+    $("#study-progress"),
+    uiJoin([
+      deck.data.cards.filter((c) => c.known).length +
+        " / " +
+        deck.data.cards.length,
+      uiMsg(" known"),
+    ]),
+  );
 }
 function resetReview() {
   review = [];
   position = 0;
   flipped = false;
-  $("#study-card").textContent = "Choose a deck and start reviewing.";
+  uiText($("#study-card"), uiMsg("Choose a deck and start reviewing."));
   $("#study-card").disabled = true;
   $("#study-again").disabled = $("#study-known").disabled = true;
 }
@@ -71,7 +84,8 @@ async function open(id) {
   const expected = owner(),
     row = await store.get(id);
   if (expected !== owner()) return;
-  if (!row) return status("This deck is unavailable or was deleted.", true);
+  if (!row)
+    return status(uiMsg("This deck is unavailable or was deleted."), true);
   deck = structuredClone(row);
   cardId = null;
   $("#deck-name").value = deck.data.name;
@@ -81,7 +95,9 @@ async function open(id) {
   cards();
   list();
   status(
-    "Deck opened. Changes save automatically; new cards use Add / update.",
+    uiMsg(
+      "Deck opened. Changes save automatically; new cards use Add / update.",
+    ),
   );
 }
 async function saveEdits() {
@@ -112,9 +128,9 @@ async function saveEdits() {
     deck = row;
     if (version === editVersion) dirty = false;
     cards();
-    status("Deck saved on this device.");
+    status(uiMsg("Deck saved on this device."));
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   } finally {
     saving = false;
   }
@@ -136,11 +152,11 @@ $("#deck-new").onclick = async () => {
     const row = await store.put({ name: "Untitled deck", cards: [] });
     await open(row.id);
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#card-save").onclick = async () => {
-  if (!deck) return status("Create or open a deck first.", true);
+  if (!deck) return status(uiMsg("Create or open a deck first."), true);
   try {
     const data = structuredClone(deck.data),
       id = cardId || crypto.randomUUID(),
@@ -161,9 +177,9 @@ $("#card-save").onclick = async () => {
     dirty = false;
     clearTimeout(timer);
     cards();
-    status("Card saved.");
+    status(uiMsg("Card saved."));
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#card-new").onclick = async () => {
@@ -187,11 +203,14 @@ $("#card-delete").onclick = async () => {
     resetReview();
     cards();
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#deck-delete").onclick = async () => {
-  if (!deck || !confirm("Delete this deck and its private review progress?"))
+  if (
+    !deck ||
+    !uiConfirm(uiMsg("Delete this deck and its private review progress?"))
+  )
     return;
   clearTimeout(timer);
   try {
@@ -201,13 +220,14 @@ $("#deck-delete").onclick = async () => {
     $("#deck-name").value = $("#card-front").value = $("#card-back").value = "";
     $("#card-list").replaceChildren();
     resetReview();
-    status("Deck deleted.");
+    status(uiMsg("Deck deleted."));
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#deck-reset").onclick = async () => {
-  if (!deck || !confirm("Reset mastery for every card in this deck?")) return;
+  if (!deck || !uiConfirm(uiMsg("Reset mastery for every card in this deck?")))
+    return;
   await saveEdits();
   try {
     deck = await store.put(
@@ -221,7 +241,7 @@ $("#deck-reset").onclick = async () => {
     cards();
     resetReview();
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#deck-json").onclick = async () => {
@@ -249,7 +269,9 @@ $("#deck-csv").onclick = async () => {
     "text/csv;charset=utf-8",
   );
   status(
-    "CSV exported. Formula-like cells use a protective leading apostrophe; JSON preserves exact content and mastery.",
+    uiMsg(
+      "CSV exported. Formula-like cells use a protective leading apostrophe; JSON preserves exact content and mastery.",
+    ),
   );
 };
 $("#deck-import").onchange = async (e) => {
@@ -299,12 +321,12 @@ $("#deck-import").onchange = async (e) => {
     validateDeck(data);
     const row = await store.put(data);
     await open(row.id);
-    status("Imported as a new private deck.");
+    status(uiMsg("Imported as a new private deck."));
   } catch (e) {
     status(
       e instanceof TypeError
-        ? "Use a valid UTF-8 card deck with front and back text."
-        : e.message,
+        ? uiMsg("Use a valid UTF-8 card deck with front and back text.")
+        : uiError(e),
       true,
     );
   }
@@ -313,23 +335,30 @@ function showReview() {
   const c = deck?.data.cards.find((c) => c.id === review[position]);
   if (!c) {
     resetReview();
-    $("#study-progress").textContent = "Review complete. Mastery is saved.";
+    uiText($("#study-progress"), uiMsg("Review complete. Mastery is saved."));
     cards();
     return;
   }
   $("#study-card").disabled = false;
-  $("#study-card").textContent = flipped
-    ? "Back\n\n" + c.back
-    : "Front\n\n" + c.front;
+  uiText(
+    $("#study-card"),
+    flipped
+      ? uiJoin([uiMsg("Back "), c.back])
+      : uiJoin([uiMsg("Front "), c.front]),
+  );
   $("#study-again").disabled = $("#study-known").disabled = !flipped;
-  $("#study-progress").textContent =
-    "Card " +
-    (position + 1) +
-    " / " +
-    review.length +
-    " · " +
-    deck.data.cards.filter((c) => c.known).length +
-    " known";
+  uiText(
+    $("#study-progress"),
+    uiJoin([
+      uiMsg("Card "),
+      position + 1,
+      " / ",
+      review.length,
+      " · ",
+      deck.data.cards.filter((c) => c.known).length,
+      uiMsg(" known"),
+    ]),
+  );
 }
 $("#study-start").onclick = async () => {
   await saveEdits();
@@ -368,7 +397,7 @@ for (const [id, known] of [
       cards();
       showReview();
     } catch (e) {
-      status(e.message, true);
+      status(uiError(e), true);
     }
   };
 $("#deck-more").onclick = () => store.load();
@@ -378,7 +407,7 @@ $("#deck-retry").onclick = async () => {
     await store.load(true);
     if (deck) await open(deck.id);
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 store.subscribe(list);
@@ -405,8 +434,8 @@ async function initialize() {
       await open(id);
     }
   } catch (e) {
-    status(e.message, true);
-    $("#deck-save-state").textContent = e.message;
+    status(uiError(e), true);
+    uiText($("#deck-save-state"), uiError(e));
   }
 }
 window.addEventListener("workspace-ready", initialize);
@@ -414,7 +443,9 @@ window.addEventListener("flashcard-conflict", (e) => {
   if (deck?.id === e.detail.from) {
     deck.id = e.detail.to;
     status(
-      "Another device changed this deck. Your work was kept in a conflict copy.",
+      uiMsg(
+        "Another device changed this deck. Your work was kept in a conflict copy.",
+      ),
     );
   }
 });

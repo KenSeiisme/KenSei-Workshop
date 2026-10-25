@@ -1,4 +1,6 @@
 import { $, copy, busy, status } from "./common.js";
+import { uiMsg, uiJoin, uiText } from "../site/ui.js";
+
 let worker = null,
   timer = null,
   ans = "0",
@@ -24,8 +26,10 @@ function draw() {
   for (const row of history) {
     const b = document.createElement("button");
     b.className = "saved-row text-link";
-    b.textContent =
-      row.expression + " = " + row.result + " · " + row.mode.toUpperCase();
+    uiText(
+      b,
+      row.expression + " = " + row.result + " · " + row.mode.toUpperCase(),
+    );
     b.onclick = () => {
       $("#calc-expression").value = row.expression;
       $("#calc-angle").value = row.mode;
@@ -34,13 +38,13 @@ function draw() {
     out.append(b);
   }
   if (!history.length)
-    out.textContent = "No calculations saved on this device.";
+    uiText(out, uiMsg("No calculations saved on this device."));
 }
 function save() {
   try {
     localStorage.setItem(key, JSON.stringify(history));
   } catch {
-    status("Result ready, but this browser could not save history.");
+    status(uiMsg("Result ready, but this browser could not save history."));
   }
 }
 function finish() {
@@ -52,7 +56,7 @@ function finish() {
 $("#calc-run").onclick = () => {
   finish();
   busy(true);
-  status("Calculating locally…");
+  status(uiMsg("Calculating locally…"));
   const expression = $("#calc-expression").value,
     mode = $("#calc-angle").value;
   worker = new Worker("/tool-scripts/calculator-worker.js", { type: "module" });
@@ -63,7 +67,7 @@ $("#calc-run").onclick = () => {
       timer = setTimeout(() => {
         finish();
         status(
-          "Stopped after 2 seconds. Simplify the expression and retry.",
+          uiMsg("Stopped after 2 seconds. Simplify the expression and retry."),
           true,
         );
       }, 2000);
@@ -77,9 +81,12 @@ $("#calc-run").onclick = () => {
     last = data;
     ans = data.exact;
     $("#calc-result").value = (data.approx ? "≈ " : "") + data.text;
-    $("#calc-fraction").textContent = data.fraction
-      ? "Fraction approximation: " + data.fraction
-      : "Fraction display unavailable for this result.";
+    uiText(
+      $("#calc-fraction"),
+      data.fraction
+        ? uiJoin([uiMsg("Fraction approximation: "), data.fraction])
+        : uiMsg("Fraction display unavailable for this result."),
+    );
     $("#calc-copy").disabled = false;
     history = [{ expression, result: data.text, mode }, ...history].slice(
       0,
@@ -87,17 +94,20 @@ $("#calc-run").onclick = () => {
     );
     save();
     draw();
-    status("Calculated. % means divide by 100.");
+    status(uiMsg("Calculated. % means divide by 100."));
   };
   worker.onerror = (e) => {
     e.preventDefault();
     finish();
-    status("Calculator files could not load. Retry when connected.", true);
+    status(
+      uiMsg("Calculator files could not load. Retry when connected."),
+      true,
+    );
   };
   timer = setTimeout(() => {
     finish();
     status(
-      "Calculator files took too long to load. Retry when connected.",
+      uiMsg("Calculator files took too long to load. Retry when connected."),
       true,
     );
   }, 15000);
@@ -116,7 +126,7 @@ $("#calc-clear").onclick = () => {
 };
 $("#cancel-job").onclick = () => {
   finish();
-  status("Cancelled. Your expression is unchanged.");
+  status(uiMsg("Cancelled. Your expression is unchanged."));
 };
 window.addEventListener("pagehide", finish);
 draw();

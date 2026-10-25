@@ -1,9 +1,11 @@
 import { $, copy } from "./common.js";
 import { units, convert } from "./daily-core.js";
+import { uiOption, uiMsg, uiFrom, uiError, uiText } from "../site/ui.js";
+
 const cat = $("#unit-category"),
   from = $("#unit-from"),
   to = $("#unit-to");
-for (const name of Object.keys(units)) cat.add(new Option(name, name));
+for (const name of Object.keys(units)) cat.add(uiOption(uiFrom(name), name));
 function update() {
   try {
     const result = convert(
@@ -13,12 +15,12 @@ function update() {
       Number(to.value),
     );
     $("#unit-result").value = Number(result.toPrecision(12)).toString();
-    $("#unit-status").textContent = "Rounded to 12 significant digits.";
+    uiText($("#unit-status"), uiMsg("Rounded to 12 significant digits."));
     $("#unit-copy").disabled = false;
     $("#unit-status").classList.remove("error-text");
   } catch (e) {
     $("#unit-result").value = "";
-    $("#unit-status").textContent = e.message;
+    uiText($("#unit-status"), uiError(e));
     $("#unit-copy").disabled = true;
     $("#unit-status").classList.add("error-text");
   }
@@ -27,8 +29,8 @@ cat.onchange = () => {
   from.replaceChildren();
   to.replaceChildren();
   units[cat.value].forEach((u, i) => {
-    from.add(new Option(u.name, i));
-    to.add(new Option(u.name, i));
+    from.add(uiOption(uiFrom(u.name), i));
+    to.add(uiOption(uiFrom(u.name), i));
   });
   to.value = "1";
   update();

@@ -3,6 +3,7 @@ import { playCue } from "./audio.js";
 import { patchMarkup } from "./dom.js";
 import { SHAPES, BRICK, canPlace } from "./arcade-engine.js";
 import { paintBrick } from "./arcade-paint.js";
+import { uiMsg, uiText, uiAttr, uiHtml } from "../site/ui.js";
 
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 const playing = (ctx) =>
@@ -57,13 +58,13 @@ export function createArcadeUI(ctx) {
     board.classList.add("arcade-board", "block-puzzle-board");
     patchMarkup(
       board,
-      `<div class="block-instruction"><span>${s.board.filter(Boolean).length} / 64 cells filled</span><span>${s.cleared} lines cleared</span></div><div class="block-grid" role="group" aria-label="8 by 8 block puzzle board">${s.board.map((filled, i) => `<button type="button" data-block-cell="${i}" class="block-cell${filled ? " is-filled" : ""}${preview.has(i) ? (valid ? " is-preview" : " is-invalid-preview") : ""}" tabindex="${i === cursor ? "0" : "-1"}" aria-label="Row ${Math.floor(i / 8) + 1}, column ${(i % 8) + 1}, ${filled ? "occupied" : "empty"}" aria-disabled="${!playing(ctx) || !!filled}">${filled ? '<span aria-hidden="true"></span>' : ""}</button>`).join("")}</div><div class="block-tray" role="group" aria-label="Choose a piece; use 1, 2 or 3 on the keyboard">${s.hand
+      uiHtml`<div class="block-instruction"><span>${s.board.filter(Boolean).length} / 64 cells filled</span><span>${s.cleared} lines cleared</span></div><div class="block-grid" role="group" aria-label="8 by 8 block puzzle board">${s.board.map((filled, i) => uiHtml`<button type="button" data-block-cell="${i}" class="block-cell${filled ? uiMsg(" is-filled") : ""}${preview.has(i) ? (valid ? uiMsg(" is-preview") : uiMsg(" is-invalid-preview")) : ""}" tabindex="${i === cursor ? "0" : "-1"}" aria-label="Row ${Math.floor(i / 8) + 1}, column ${(i % 8) + 1}, ${filled ? "occupied" : "empty"}" aria-disabled="${!playing(ctx) || !!filled}">${filled ? uiHtml('<span aria-hidden="true"></span>') : ""}</button>`).join("")}</div><div class="block-tray" role="group" aria-label="Choose a piece; use 1, 2 or 3 on the keyboard">${s.hand
         .map((id, slot) => {
           if (id === null)
-            return `<button type="button" class="block-piece is-used" data-block-slot="${slot}" disabled aria-label="Piece ${slot + 1} already used"><span aria-hidden="true">✓</span><small>Placed</small></button>`;
+            return uiHtml`<button type="button" class="block-piece is-used" data-block-slot="${slot}" disabled aria-label="Piece ${slot + 1} already used"><span aria-hidden="true">✓</span><small>Placed</small></button>`;
           const item = SHAPES[id],
             cells = new Set(item.cells.map(([x, y]) => y * item.w + x));
-          return `<button type="button" class="block-piece${selected === slot ? " is-selected" : ""}" data-block-slot="${slot}" aria-pressed="${selected === slot}" aria-label="Piece ${slot + 1}: ${item.cells.length} cells, ${item.w} wide by ${item.h} tall" ${playing(ctx) ? "" : "disabled"}><span class="block-piece-art" style="--piece-width:${item.w};--piece-height:${item.h}" aria-hidden="true">${Array.from({ length: item.w * item.h }, (_, i) => `<i${cells.has(i) ? ' class="is-part"' : ""}></i>`).join("")}</span><small>Piece ${slot + 1}</small></button>`;
+          return uiHtml`<button type="button" class="block-piece${selected === slot ? uiMsg(" is-selected") : ""}" data-block-slot="${slot}" aria-pressed="${selected === slot}" aria-label="Piece ${slot + 1}: ${item.cells.length} cells, ${item.w} wide by ${item.h} tall" ${playing(ctx) ? "" : "disabled"}><span class="block-piece-art" style="--piece-width:${item.w};--piece-height:${item.h}" aria-hidden="true">${Array.from({ length: item.w * item.h }, (_, i) => uiHtml`<i${cells.has(i) ? uiMsg(' class="is-part"') : ""}></i>`).join("")}</span><small>Piece ${slot + 1}</small></button>`;
         })
         .join(
           "",
@@ -85,13 +86,13 @@ export function createArcadeUI(ctx) {
   function placeAt(index) {
     const s = state();
     if (!playing(ctx)) {
-      announce("Start or resume the game before placing a piece.");
+      announce(uiMsg("Start or resume the game before placing a piece."));
       return;
     }
     if (!canPlace(s, selected, index)) {
       playCue("conflict");
       announce(
-        "That piece does not fit there. Choose another square or piece.",
+        uiMsg("That piece does not fit there. Choose another square or piece."),
       );
       return;
     }
@@ -124,8 +125,9 @@ export function createArcadeUI(ctx) {
     const s = state();
     board.classList.add("arcade-board", "brick-breaker-board");
     if (!board.querySelector(".brick-canvas")) {
-      board.innerHTML =
-        '<div class="brick-situation"><span class="brick-stage"></span><span class="brick-lives"></span><span class="brick-ball-count"></span><span class="brick-rules"></span></div><canvas class="brick-canvas" width="640" height="480" tabindex="0" role="img" aria-label="Brick Breaker board"></canvas><p class="brick-unavailable" role="alert" hidden>Your browser cannot draw this game. Try another browser or enable canvas support.</p><div class="brick-controller"><div class="brick-touch-controls" aria-label="Move paddle"><button type="button" class="button secondary" data-brick-move="left" aria-label="Move paddle left">←</button><button type="button" class="button secondary" data-brick-move="right" aria-label="Move paddle right">→</button></div><button type="button" class="button primary brick-launch" data-brick-launch>Launch ball →</button></div><div class="brick-buffs"></div><p class="brick-pickup-status" role="status"></p><div class="brick-limit" hidden><progress max="18000" value="0" aria-label="Five-minute game limit"></progress><span class="brick-time-left"></span></div><p class="arcade-control-note">Move with your pointer, drag, or focus the court and use ← / → or A / D. Tap the board or press Space to launch.</p>';
+      board.innerHTML = uiHtml(
+        '<div class="brick-situation"><span class="brick-stage"></span><span class="brick-lives"></span><span class="brick-ball-count"></span><span class="brick-rules"></span></div><canvas class="brick-canvas" width="640" height="480" tabindex="0" role="img" aria-label="Brick Breaker board"></canvas><p class="brick-unavailable" role="alert" hidden>Your browser cannot draw this game. Try another browser or enable canvas support.</p><div class="brick-controller"><div class="brick-touch-controls" aria-label="Move paddle"><button type="button" class="button secondary" data-brick-move="left" aria-label="Move paddle left">←</button><button type="button" class="button secondary" data-brick-move="right" aria-label="Move paddle right">→</button></div><button type="button" class="button primary brick-launch" data-brick-launch>Launch ball →</button></div><div class="brick-buffs"></div><p class="brick-pickup-status" role="status"></p><div class="brick-limit" hidden><progress max="18000" value="0" aria-label="Five-minute game limit"></progress><span class="brick-time-left"></span></div><p class="arcade-control-note">Move with your pointer, drag, or focus the court and use ← / → or A / D. Tap the board or press Space to launch.</p>',
+      );
       target = s.paddle;
     }
     const canvas = board.querySelector(".brick-canvas");
@@ -139,49 +141,77 @@ export function createArcadeUI(ctx) {
     }
     if (!supported && !canvasFailed)
       announce(
-        "Canvas drawing is unavailable. This game needs a browser with 2D canvas support.",
+        uiMsg(
+          "Canvas drawing is unavailable. This game needs a browser with 2D canvas support.",
+        ),
       );
     canvasFailed = !supported;
     canvas.hidden = !supported;
     board.querySelector(".brick-unavailable").hidden = supported;
-    canvas.setAttribute(
+    uiAttr(
+      canvas,
       "aria-label",
-      `Brick Breaker, stage ${s.stage + 1} of 3, ${s.bricks.filter(Boolean).length} bricks remaining, ${s.lives} lives`,
+      uiMsg("Brick Breaker, stage {0} of 3, {1} bricks remaining, {2} lives", [
+        s.stage + 1,
+        s.bricks.filter(Boolean).length,
+        s.lives,
+      ]),
     );
-    board.querySelector(".brick-stage").textContent =
-      `Stage ${s.stage + 1} / 3 · ${s.bricks.filter(Boolean).length} bricks`;
-    board.querySelector(".brick-lives").textContent =
-      `${s.lives} ${s.lives === 1 ? "life" : "lives"} left`;
-    board.querySelector(".brick-ball-count").textContent = s.balls
-      ? `${s.balls.length} / 3 balls`
-      : "1 ball";
-    board.querySelector(".brick-rules").textContent =
-      s.version === 1 ? "Legacy rules · v1" : "Powerups · v2";
+    uiText(
+      board.querySelector(".brick-stage"),
+      uiMsg("Stage {0} / 3 · {1} bricks", [
+        s.stage + 1,
+        s.bricks.filter(Boolean).length,
+      ]),
+    );
+    uiText(
+      board.querySelector(".brick-lives"),
+      uiMsg("{0} {1} left", [s.lives, s.lives === 1 ? "life" : "lives"]),
+    );
+    uiText(
+      board.querySelector(".brick-ball-count"),
+      s.balls ? uiMsg("{0} / 3 balls", [s.balls.length]) : uiMsg("1 ball"),
+    );
+    uiText(
+      board.querySelector(".brick-rules"),
+      s.version === 1 ? uiMsg("Legacy rules · v1") : uiMsg("Powerups · v2"),
+    );
     const buffs = [];
     if (s.wideUntil > s.ticks)
       buffs.push(`↔ Wide paddle · ${Math.ceil((s.wideUntil - s.ticks) / 60)}s`);
     if (s.slowUntil > s.ticks)
       buffs.push(`¾ Slow ball · ${Math.ceil((s.slowUntil - s.ticks) / 60)}s`);
-    board.querySelector(".brick-buffs").textContent = buffs.join(" · ");
+    uiText(board.querySelector(".brick-buffs"), buffs.join(" · "));
     const notice = board.querySelector(".brick-pickup-status");
     if (notice.dataset.pickups !== String(s.pickups || 0)) {
       notice.dataset.pickups = String(s.pickups || 0);
-      notice.textContent = s.lastPickup
-        ? `${s.lastPickup} ${s.lastPickup === "Max balls" ? "" : "collected"}`
-        : "";
+      uiText(
+        notice,
+        s.lastPickup
+          ? `${s.lastPickup} ${s.lastPickup === "Max balls" ? "" : "collected"}`
+          : "",
+      );
     }
     const button = board.querySelector(".brick-launch");
     button.disabled = !playing(ctx) || !supported;
     button.hidden =
       !!(s.balls?.[0] || s.ball)?.launched || s.status !== "playing";
-    button.textContent = (s.balls?.[0] || s.ball)?.launched
-      ? "Ball in play"
-      : s.stage > 0
-        ? "Launch next ball →"
-        : "Launch ball →";
+    uiText(
+      button,
+      (s.balls?.[0] || s.ball)?.launched
+        ? uiMsg("Ball in play")
+        : s.stage > 0
+          ? uiMsg("Launch next ball →")
+          : uiMsg("Launch ball →"),
+    );
     const remain = Math.max(0, 300 - Math.floor(s.ticks / 60));
-    board.querySelector(".brick-time-left").textContent =
-      `${Math.floor(remain / 60)}:${String(remain % 60).padStart(2, "0")} left`;
+    uiText(
+      board.querySelector(".brick-time-left"),
+      uiMsg("{0}:{1} left", [
+        Math.floor(remain / 60),
+        String(remain % 60).padStart(2, "0"),
+      ]),
+    );
     board.querySelector("progress").value = s.ticks;
     return supported;
   }

@@ -2,6 +2,15 @@ import { $, api, downloadText } from "./common.js";
 import { createRecordStore } from "./record-store.js";
 import { validatePlanner } from "./planner-core.js";
 import { validateWhiteboard } from "./whiteboard-core.js";
+import {
+  uiMsg,
+  uiFrom,
+  uiError,
+  uiText,
+  uiConfirm,
+  uiPrompt,
+} from "../site/ui.js";
+
 for (const [kind, slug, validate] of [
   ["planner", "study-planner", validatePlanner],
   ["whiteboard", "whiteboard", validateWhiteboard],
@@ -19,7 +28,7 @@ for (const [kind, slug, validate] of [
       const a = document.createElement("a");
       a.className = "text-link";
       a.href = `/tools/${slug}/?id=${encodeURIComponent(row.id)}`;
-      a.textContent = row.data.name;
+      uiText(a, row.data.name);
       const actions = document.createElement("div");
       actions.className = "action-row";
       for (const [label, action] of [
@@ -27,7 +36,7 @@ for (const [kind, slug, validate] of [
           "Rename",
           async () => {
             const expected = owner(),
-              name = prompt("Name", row.data.name);
+              name = uiPrompt(uiMsg("Name"), row.data.name);
             if (name !== null)
               await store.put(
                 { ...row.data, name },
@@ -41,24 +50,23 @@ for (const [kind, slug, validate] of [
           "Delete",
           async () => {
             const expected = owner();
-            if (confirm(`Delete ${row.data.name}?`))
+            if (uiConfirm(uiMsg("Delete {0}?", [row.data.name])))
               await store.remove(row.id, expected, row.revision);
           },
         ],
       ]) {
         const button = document.createElement("button");
         button.className = "text-link";
-        button.textContent = label;
-        button.onclick = () =>
-          action().catch((e) => (state.textContent = e.message));
+        uiText(button, uiFrom(label));
+        button.onclick = () => action().catch((e) => uiText(state, uiError(e)));
         actions.append(button);
       }
       el.append(a, actions);
       out.append(el);
     }
     if (!store.rows().length)
-      out.textContent = "Nothing saved in this workspace yet.";
-    state.textContent = store.saveState();
+      uiText(out, uiMsg("Nothing saved in this workspace yet."));
+    uiText(state, uiFrom(store.saveState()));
     $(`#${kind}-workspace-more`).hidden = !store.hasMore();
   }
   async function start() {
@@ -68,7 +76,7 @@ for (const [kind, slug, validate] of [
       await store.flush();
       await store.load(true);
     } catch (e) {
-      state.textContent = e.message;
+      uiText(state, uiError(e));
     }
   }
   store.subscribe(draw);
@@ -76,11 +84,11 @@ for (const [kind, slug, validate] of [
   $(`#${kind}-workspace-retry`).onclick = start;
   $(`#${kind}-workspace-clear`).onclick = async () => {
     const expected = owner();
-    if (confirm(`Clear every saved ${kind} in this workspace?`)) {
+    if (uiConfirm(uiMsg("Clear every saved {0} in this workspace?", [kind]))) {
       try {
         await store.clear(expected);
       } catch (e) {
-        state.textContent = e.message;
+        uiText(state, uiError(e));
       }
     }
   };
@@ -97,7 +105,7 @@ for (const [kind, slug, validate] of [
         "application/json",
       );
     } catch (e) {
-      state.textContent = e.message;
+      uiText(state, uiError(e));
     }
   };
   window.addEventListener("workspace-ready", start);

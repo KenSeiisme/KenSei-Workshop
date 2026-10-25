@@ -1,5 +1,18 @@
 (() => {
   "use strict";
+  const {
+    msg: uiMsg,
+    join: uiJoin,
+    from: uiFrom,
+    error: uiError,
+    text: uiText,
+    attr: uiAttr,
+    html: uiHtml,
+    confirm: uiConfirm,
+    alert: uiAlert,
+    prompt: uiPrompt,
+  } = window.KenseiI18n;
+
   const $ = (s, root = document) => root.querySelector(s);
   const $$ = (s, root = document) => [...root.querySelectorAll(s)];
   const config = window.KENSEI_CONFIG || {};
@@ -28,7 +41,9 @@
     } catch {
       if (!storageWarning) {
         toast(
-          "Browser storage is unavailable or full. Export your work before leaving.",
+          uiMsg(
+            "Browser storage is unavailable or full. Export your work before leaving.",
+          ),
         );
         storageWarning = true;
       }
@@ -38,7 +53,7 @@
   function toast(message) {
     window.dispatchEvent(new CustomEvent("tool-toast", { detail: message }));
     const node = $(".toast");
-    node.textContent = message;
+    uiText(node, uiFrom(message));
     node.hidden = false;
     clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => {
@@ -79,7 +94,9 @@
           item.id = uid();
           item.data.name += " (conflict copy)";
           toast(
-            "This draft changed on another device. Saved your work as a separate copy.",
+            uiMsg(
+              "This draft changed on another device. Saved your work as a separate copy.",
+            ),
           );
         }
       }
@@ -146,13 +163,13 @@
           updateFavorites();
           toast(
             existing
-              ? "Removed from favorites."
+              ? uiMsg("Removed from favorites.")
               : user
-                ? "Favorite synced."
-                : "Saved to this device.",
+                ? uiMsg("Favorite synced.")
+                : uiMsg("Saved to this device."),
           );
         } catch {
-          toast("Could not save your favorite. Please try again.");
+          toast(uiMsg("Could not save your favorite. Please try again."));
         }
       }),
     );
@@ -164,20 +181,17 @@
   $$("[data-car]").forEach((a) => {
     if (config.carUrl) a.href = config.carUrl;
   });
-  $(".menu-toggle")?.addEventListener("click", (e) => {
-    const open = $("#navigation").classList.toggle("open");
-    e.currentTarget.setAttribute("aria-expanded", String(open));
-  });
   function renderAccount() {
     const signed = !!user,
       toggle = $("#account-toggle");
     if (!toggle) return;
-    $("[data-auth-label]").textContent = signed
-      ? profile?.nickname || "Account"
-      : "Sign in";
+    uiText(
+      $("[data-auth-label]"),
+      signed ? profile?.nickname || uiMsg("Account") : uiMsg("Sign in"),
+    );
     $("[data-account-avatar]").hidden = !signed;
     $(".user-dot", toggle).hidden = signed;
-    $("[data-account-chevron]").textContent = signed ? "▾" : "↗";
+    uiText($("[data-account-chevron]"), signed ? "▾" : "↗");
     toggle.setAttribute("aria-expanded", "false");
     $("#account-menu").hidden = true;
     $("#account-public-profile").hidden = !profile;
@@ -186,7 +200,7 @@
       import("/tool-scripts/profile-service.js").then((module) =>
         module.paintAvatar($("[data-account-avatar]"), profile),
       );
-    } else $("[data-account-avatar]").textContent = "K";
+    } else uiText($("[data-account-avatar]"), "K");
   }
   document.addEventListener("click", (e) => {
     const root = $("#account-controls");
@@ -210,16 +224,17 @@
   $("#google-login").disabled = true;
   const returnKey = "kensei-workshop:auth-return";
   function safeReturn(value) {
+    const fallback = window.KenseiI18n.localePath("/workspace/");
     try {
       const url = new URL(value, location.origin);
+      const plain = url.pathname.replace(/^\/zh-hant(?=\/|$)/, "") || "/";
       return url.origin === location.origin &&
-        ["/tools/typing-sprint/", "/profile/", "/workspace/"].includes(
-          url.pathname,
-        )
-        ? url.pathname + url.search
-        : "/workspace/";
+        window.KenseiI18n.config.routes.includes(plain) &&
+        !["/auth/callback/", "/404/"].includes(plain)
+        ? url.pathname + url.search + url.hash
+        : fallback;
     } catch {
-      return "/workspace/";
+      return fallback;
     }
   }
   let authReturn = safeReturn(location.pathname + location.search);
@@ -229,10 +244,29 @@
       sessionStorage.removeItem(returnKey);
       if (item && Date.now() - item.at < 1800000) return safeReturn(item.path);
     } catch {}
-    return "/workspace/";
+    return window.KenseiI18n.localePath("/workspace/");
   }
   function openAuth(returnTo) {
-    if (typeof returnTo === "string") authReturn = safeReturn(returnTo);
+    if (typeof returnTo === "string") {
+      const target = new URL(safeReturn(returnTo), location.origin);
+      const logical = (path) => path.replace(/^\/zh-hant(?=\/|$)/, "");
+      if (
+        logical(target.pathname) === logical(location.pathname) &&
+        !target.search &&
+        !target.hash
+      ) {
+        target.search = location.search;
+        target.hash = location.hash;
+      }
+
+      authReturn =
+        window.KenseiI18n.localePath(target.pathname) +
+        target.search +
+        target.hash;
+    } else
+      authReturn = safeReturn(
+        location.pathname + location.search + location.hash,
+      );
     if (user) {
       const menu = $("#account-menu");
       if (menu) {
@@ -246,13 +280,24 @@
     }
     if (!config.supabaseUrl || !config.supabasePublishableKey) {
       $("#google-login").disabled = true;
-      $("#auth-note").textContent =
-        "Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. Local tools and private practice work without an account.";
+      uiText(
+        $("#auth-note"),
+        uiMsg(
+          "Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. Local tools and private practice work without an account.",
+        ),
+      );
     } else {
       $("#google-login").disabled = !authReady || authStarting;
-      $("#auth-note").textContent = authReady
-        ? "Local tools and Typing Practice are available without an account."
-        : "Sign-in is connecting. If this takes a moment, close this window and try again.";
+      uiText(
+        $("#auth-note"),
+        authReady
+          ? uiMsg(
+              "Local tools and Typing Practice are available without an account.",
+            )
+          : uiMsg(
+              "Sign-in is connecting. If this takes a moment, close this window and try again.",
+            ),
+      );
     }
     dialog.showModal();
   }
@@ -274,7 +319,7 @@
     if (!client || !authReady || authStarting) return;
     authStarting = true;
     $("#google-login").disabled = true;
-    $("#auth-note").textContent = "Opening Google sign-in…";
+    uiText($("#auth-note"), uiMsg("Opening Google sign-in…"));
     try {
       try {
         sessionStorage.setItem(
@@ -288,9 +333,11 @@
       });
       if (error) throw error;
     } catch {
-      $("#auth-note").textContent =
-        "Could not open Google sign-in. Please try again.";
-      toast("Could not start Google sign-in. Please try again.");
+      uiText(
+        $("#auth-note"),
+        uiMsg("Could not open Google sign-in. Please try again."),
+      );
+      toast(uiMsg("Could not start Google sign-in. Please try again."));
     } finally {
       authStarting = false;
       $("#google-login").disabled = !authReady;
@@ -299,8 +346,10 @@
   async function initAuth() {
     if (!config.supabaseUrl || !config.supabasePublishableKey) {
       if ($("#callback-status"))
-        $("#callback-status").textContent =
-          "Google sign-in has not been configured for this site yet.";
+        uiText(
+          $("#callback-status"),
+          uiMsg("Google sign-in has not been configured for this site yet."),
+        );
       return;
     }
     try {
@@ -329,7 +378,9 @@
       client = createClient(config.supabaseUrl, config.supabasePublishableKey, {
         auth: { flowType: "pkce", detectSessionInUrl: false },
       });
-      const callback = location.pathname.startsWith("/auth/callback");
+      const callback = location.pathname
+        .replace(/^\/zh-hant(?=\/|$)/, "")
+        .startsWith("/auth/callback");
       if (callback) {
         const params = new URLSearchParams(location.search);
         // 回调 code 只由这里交换一次，避免 SDK 自动处理后再次交换。
@@ -347,8 +398,12 @@
       user = data.session?.user || null;
       authReady = true;
       $("#google-login").disabled = false;
-      $("#auth-note").textContent =
-        "Local tools and Typing Practice are available without an account.";
+      uiText(
+        $("#auth-note"),
+        uiMsg(
+          "Local tools and Typing Practice are available without an account.",
+        ),
+      );
       if (user) {
         renderAccount();
         import("/tool-scripts/profile-service.js")
@@ -362,13 +417,17 @@
           cloudError = true;
           renderWorkspace();
           toast(
-            "Signed in, but cloud data could not be loaded. Please refresh to retry.",
+            uiMsg(
+              "Signed in, but cloud data could not be loaded. Please refresh to retry.",
+            ),
           );
         }
         if (callback) location.replace(consumeReturn());
       } else if (callback)
-        $("#callback-status").textContent =
-          "No active session. Try signing in again.";
+        uiText(
+          $("#callback-status"),
+          uiMsg("No active session. Try signing in again."),
+        );
       client.auth.onAuthStateChange((event, session) => {
         if (session?.user && session.user.id !== user?.id) {
           profile = null;
@@ -384,19 +443,30 @@
           } catch {}
           user = null;
           profile = null;
-          location.replace("/workspace/");
+          location.replace(window.KenseiI18n.localePath("/workspace/"));
         }
       });
     } catch (e) {
       authReady = !!client;
       $("#google-login").disabled = !authReady;
-      $("#auth-note").textContent = authReady
-        ? "Sign-in could not be completed. Please try Google sign-in again."
-        : "Sign-in is unavailable right now. Refresh the page to try again. Local tools still work.";
-      toast("Sign-in connection unavailable. Local tools still work.");
+      uiText(
+        $("#auth-note"),
+        authReady
+          ? uiMsg(
+              "Sign-in could not be completed. Please try Google sign-in again.",
+            )
+          : uiMsg(
+              "Sign-in is unavailable right now. Refresh the page to try again. Local tools still work.",
+            ),
+      );
+      toast(uiMsg("Sign-in connection unavailable. Local tools still work."));
       if ($("#callback-status"))
-        $("#callback-status").textContent =
-          "Sign-in could not be completed. Please use Sign in to try again.";
+        uiText(
+          $("#callback-status"),
+          uiMsg(
+            "Sign-in could not be completed. Please use Sign in to try again.",
+          ),
+        );
     }
   }
   let filter = "all";
@@ -449,17 +519,22 @@
     const setDirty = () => {
       window.dispatchEvent(new Event("tool-content-changed"));
       dirty = true;
-      $("#draft-state").textContent =
-        "Unsaved changes · your text is still on this page.";
+      uiText(
+        $("#draft-state"),
+        uiMsg("Unsaved changes · your text is still on this page."),
+      );
     };
     function stats() {
       const s = input.value,
         words = (s.match(/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu) || [])
           .length;
-      $("#stat-characters").textContent = [...s].length.toLocaleString();
-      $("#stat-words").textContent = words.toLocaleString();
-      $("#stat-lines").textContent = s.length ? s.split("\n").length : 0;
-      $("#stat-reading").textContent = Math.ceil(words / 200) + " min";
+      uiText($("#stat-characters"), [...s].length.toLocaleString());
+      uiText($("#stat-words"), words.toLocaleString());
+      uiText($("#stat-lines"), s.length ? s.split("\n").length : 0);
+      uiText(
+        $("#stat-reading"),
+        uiJoin([Math.ceil(words / 200), uiMsg(" min")]),
+      );
     }
     input.addEventListener("input", () => {
       stats();
@@ -514,12 +589,14 @@
     $("#text-copy").addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(input.value);
-        toast("Copied to clipboard.");
+        toast(uiMsg("Copied to clipboard."));
       } catch {
         input.focus();
         input.select();
         toast(
-          "Clipboard unavailable. Your text is selected; press Ctrl+C to copy.",
+          uiMsg(
+            "Clipboard unavailable. Your text is selected; press Ctrl+C to copy.",
+          ),
         );
       }
     });
@@ -536,11 +613,11 @@
       const name = $("#draft-name").value.trim();
       if (!name) {
         $("#draft-name").focus();
-        toast("Give your draft a name first.");
+        toast(uiMsg("Give your draft a name first."));
         return;
       }
       if (!input.value.trim()) {
-        toast("Add some text before saving.");
+        toast(uiMsg("Add some text before saving."));
         return;
       }
       const button = $("#save-draft");
@@ -555,14 +632,19 @@
         draftId = item.id;
         savedAt = item.updated_at;
         dirty = false;
-        $("#draft-state").textContent = user
-          ? "Saved and synced to your workspace."
-          : "Saved to your workspace on this device.";
-        toast("Draft saved.");
+        uiText(
+          $("#draft-state"),
+          user
+            ? uiMsg("Saved and synced to your workspace.")
+            : uiMsg("Saved to your workspace on this device."),
+        );
+        toast(uiMsg("Draft saved."));
       } catch {
-        $("#draft-state").textContent =
-          "Save failed. Your text is still here; please retry.";
-        toast("Could not save. Your text has been kept on this page.");
+        uiText(
+          $("#draft-state"),
+          uiMsg("Save failed. Your text is still here; please retry."),
+        );
+        toast(uiMsg("Could not save. Your text has been kept on this page."));
       } finally {
         button.disabled = false;
       }
@@ -585,8 +667,10 @@
         savedAt = item.updated_at;
         input.value = item.data.text;
         $("#draft-name").value = item.data.name;
-        $("#draft-state").textContent =
-          "Saved draft loaded. Changes need to be saved.";
+        uiText(
+          $("#draft-state"),
+          uiMsg("Saved draft loaded. Changes need to be saved."),
+        );
         stats();
       }
     };
@@ -654,21 +738,32 @@
     } catch {}
     function render() {
       const display = `${String(Math.floor(remaining / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`;
-      $("#timer-display").textContent = display;
-      $("#timer-display").setAttribute(
+      uiText($("#timer-display"), display);
+      uiAttr(
+        $("#timer-display"),
         "aria-label",
-        `${Math.floor(remaining / 60)} minutes ${remaining % 60} seconds remaining`,
+        uiMsg("{0} minutes {1} seconds remaining", [
+          Math.floor(remaining / 60),
+          remaining % 60,
+        ]),
       );
-      $("#timer-start").textContent = running
-        ? "Pause"
-        : remaining < settings[mode] * 60
-          ? "Resume"
-          : mode === "focus"
-            ? "Start focus"
-            : "Start break";
-      $("#timer-label").textContent =
-        mode === "focus" ? "TIME FOR YOUR NEXT IDEA" : "A MOMENT TO RECHARGE";
-      $("#timer-round").textContent = `Session ${(round % 4) + 1} of 4`;
+      uiText(
+        $("#timer-start"),
+        running
+          ? uiMsg("Pause")
+          : remaining < settings[mode] * 60
+            ? uiMsg("Resume")
+            : mode === "focus"
+              ? uiMsg("Start focus")
+              : uiMsg("Start break"),
+      );
+      uiText(
+        $("#timer-label"),
+        mode === "focus"
+          ? uiMsg("TIME FOR YOUR NEXT IDEA")
+          : uiMsg("A MOMENT TO RECHARGE"),
+      );
+      uiText($("#timer-round"), uiMsg("Session {0} of 4", [(round % 4) + 1]));
       $$("[data-mode]").forEach((b) => {
         b.classList.toggle("active", b.dataset.mode === mode);
         b.setAttribute("aria-pressed", String(b.dataset.mode === mode));
@@ -690,10 +785,16 @@
             { minutes: duration, completedAt: new Date().toISOString() },
             id,
           );
-          $("#timer-summary").textContent =
-            `${duration} minutes of focus, saved. Nicely done.`;
+          uiText(
+            $("#timer-summary"),
+            uiMsg("{0} minutes of focus, saved. Nicely done.", [duration]),
+          );
         } catch {
-          toast("Session could not sync. Export or retry from your workspace.");
+          toast(
+            uiMsg(
+              "Session could not sync. Export or retry from your workspace.",
+            ),
+          );
           localSave({
             id,
             type: "session",
@@ -706,10 +807,10 @@
           });
         }
         mode = round % 4 === 0 ? "long" : "short";
-        toast("Focus complete. Time for a break.");
+        toast(uiMsg("Focus complete. Time for a break."));
       } else {
         mode = "focus";
-        toast("Break complete. Ready when you are.");
+        toast(uiMsg("Break complete. Ready when you are."));
       }
       remaining = settings[mode] * 60;
       persist();
@@ -761,7 +862,7 @@
             !Number.isInteger(v) || v < 1 || v > (m === "focus" ? 120 : 60),
         )
       ) {
-        toast("Use whole minutes: focus 1–120; breaks 1–60.");
+        toast(uiMsg("Use whole minutes: focus 1–120; breaks 1–60."));
         return;
       }
       try {
@@ -772,9 +873,9 @@
         completedId = null;
         persist();
         render();
-        toast("Your rhythm is saved.");
+        toast(uiMsg("Your rhythm is saved."));
       } catch {
-        toast("Settings could not be saved. Please retry.");
+        toast(uiMsg("Settings could not be saved. Please retry."));
       }
     });
     window.addEventListener("workspace-ready", () => {
@@ -791,10 +892,11 @@
     if (!$("#favorite-tools")) return;
     const banner = $("#workspace-account");
     if (user)
-      banner.innerHTML = `<div><strong>Your connected workspace</strong><p>${escape(user.email)} · ${cloudError ? "Cloud data could not be loaded. Refresh to retry." : "Cloud saves enabled"}</p></div><span class="small-tag">${cloudError ? "Sync unavailable" : "Connected"}</span>`;
+      banner.innerHTML = uiHtml`<div><strong>Your connected workspace</strong><p>${escape(user.email)} · ${cloudError ? "Cloud data could not be loaded. Refresh to retry." : "Cloud saves enabled"}</p></div><span class="small-tag">${cloudError ? "Sync unavailable" : "Connected"}</span>`;
     else
-      banner.innerHTML =
-        '<div><strong>On this device</strong><p>Your local saves stay on this device. Sign in with Google to sync new saves across devices.</p></div><button class="button secondary" id="workspace-login">Sign in with Google ↗</button>';
+      banner.innerHTML = uiHtml(
+        '<div><strong>On this device</strong><p>Your local saves stay on this device. Sign in with Google to sync new saves across devices.</p></div><button class="button secondary" id="workspace-login">Sign in with Google ↗</button>',
+      );
     $("#workspace-login")?.addEventListener("click", openAuth);
     $("#sign-out").hidden = !user;
     const drafts = items("draft"),
@@ -809,26 +911,38 @@
         now.getDate(),
       ).getTime(),
       week = today - 6 * 86400000;
-    $("#today-focus").textContent =
-      sessions
-        .filter((x) => Date.parse(x.data.completedAt) >= today)
-        .reduce((a, x) => a + x.data.minutes, 0) + " min";
-    $("#week-focus").textContent =
-      sessions
-        .filter((x) => Date.parse(x.data.completedAt) >= week)
-        .reduce((a, x) => a + x.data.minutes, 0) + " min";
-    $("#draft-count").textContent = drafts.length;
+    uiText(
+      $("#today-focus"),
+      uiJoin([
+        sessions
+          .filter((x) => Date.parse(x.data.completedAt) >= today)
+          .reduce((a, x) => a + x.data.minutes, 0),
+        uiMsg(" min"),
+      ]),
+    );
+    uiText(
+      $("#week-focus"),
+      uiJoin([
+        sessions
+          .filter((x) => Date.parse(x.data.completedAt) >= week)
+          .reduce((a, x) => a + x.data.minutes, 0),
+        uiMsg(" min"),
+      ]),
+    );
+    uiText($("#draft-count"), drafts.length);
     $("#favorite-tools").innerHTML =
       items("favorite")
         .filter((x) => tools[x.data.slug])
         .map((x) => {
           const t = tools[x.data.slug];
-          return `<article class="tool-card"><div class="tool-card-top"><span class="small-tag">${t.category}</span><button class="text-link" data-delete="${escape(x.id)}">Remove</button></div><a href="/tools/${x.data.slug}/"><h3>${t.name} ↗</h3></a><p>${t.description}</p></article>`;
+          return uiHtml`<article class="tool-card"><div class="tool-card-top"><span class="small-tag">${uiFrom(t.category)}</span><button class="text-link" data-delete="${escape(x.id)}">Remove</button></div><a href="/tools/${x.data.slug}/"><h3>${uiFrom(t.name)} ↗</h3></a><p>${uiFrom(t.description)}</p></article>`;
         })
         .join("") ||
-      '<p class="muted small">Star a tool to keep it close. <a class="text-link" href="/tools/">Explore tools →</a></p>';
+      uiHtml(
+        '<p class="muted small">Star a tool to keep it close. <a class="text-link" href="/tools/">Explore tools →</a></p>',
+      );
     function row(item, detail, action) {
-      return `<div class="saved-row"><div><strong>${escape(item.data.name || detail)}</strong><p>${escape(item.data.name ? detail : new Date(item.data.completedAt).toLocaleString())}${item.data.pending ? " · Saved locally, sync pending" : ""}</p></div><div class="saved-actions">${action}<button data-delete="${escape(item.id)}">Delete</button></div></div>`;
+      return uiHtml`<div class="saved-row"><div><strong>${escape(item.data.name || detail)}</strong><p>${escape(item.data.name ? detail : new Date(item.data.completedAt).toLocaleString())}${item.data.pending ? " · Saved locally, sync pending" : ""}</p></div><div class="saved-actions">${action}<button data-delete="${escape(item.id)}">Delete</button></div></div>`;
     }
     $("#saved-drafts").innerHTML =
       drafts
@@ -836,11 +950,13 @@
           row(
             x,
             `${tools[x.data.tool || "text-toolkit"]?.name || "Text Toolkit"} · ${x.data.text.slice(0, 90)}`,
-            `<a class="text-link" href="/tools/${["text-toolkit", "markdown-studio", "image-to-text"].includes(x.data.tool) ? x.data.tool : "text-toolkit"}/?draft=${encodeURIComponent(x.id)}">Open →</a>`,
+            uiHtml`<a class="text-link" href="/tools/${["text-toolkit", "markdown-studio", "image-to-text"].includes(x.data.tool) ? x.data.tool : "text-toolkit"}/?draft=${encodeURIComponent(x.id)}">Open →</a>`,
           ),
         )
         .join("") ||
-      '<p class="muted small">Your next good idea can start in Text Toolkit.</p>';
+      uiHtml(
+        '<p class="muted small">Your next good idea can start in Text Toolkit.</p>',
+      );
     $("#saved-presets").innerHTML =
       presets
         .map((x) =>
@@ -849,11 +965,13 @@
             x.data.tool === "qr-studio"
               ? `QR appearance · ${x.data.size} px`
               : `${x.data.format.replace("image/", "").toUpperCase()} · ${x.data.quality}% quality${x.data.width ? " · " + x.data.width + " px wide" : ""}`,
-            `<a class="text-link" href="/tools/${x.data.tool === "qr-studio" ? "qr-studio" : "image-studio"}/?preset=${encodeURIComponent(x.id)}">Use →</a>`,
+            uiHtml`<a class="text-link" href="/tools/${x.data.tool === "qr-studio" ? "qr-studio" : "image-studio"}/?preset=${encodeURIComponent(x.id)}">Use →</a>`,
           ),
         )
         .join("") ||
-      '<p class="muted small">Save a favorite image setup in Image Studio.</p>';
+      uiHtml(
+        '<p class="muted small">Save a favorite image setup in Image Studio.</p>',
+      );
     $("#saved-sessions").innerHTML =
       sessions
         .slice(0, 30)
@@ -862,22 +980,27 @@
             x,
             `${x.data.minutes} minutes of focus`,
             x.data.pending && user
-              ? `<button data-retry-session="${escape(x.id)}">Retry sync</button>`
+              ? uiHtml`<button data-retry-session="${escape(x.id)}">Retry sync</button>`
               : "",
           ),
         )
         .join("") ||
-      '<p class="muted small">Complete a focus session to see it here.</p>';
+      uiHtml(
+        '<p class="muted small">Complete a focus session to see it here.</p>',
+      );
     $$("[data-delete]").forEach((b) =>
       b.addEventListener("click", async () => {
         const item = read().items.find((x) => x.id === b.dataset.delete);
-        if (item?.type === "draft" && !confirm("Delete this saved draft?"))
+        if (
+          item?.type === "draft" &&
+          !uiConfirm(uiMsg("Delete this saved draft?"))
+        )
           return;
         try {
           await removeItem(b.dataset.delete);
-          toast("Removed.");
+          toast(uiMsg("Removed."));
         } catch {
-          toast("Could not delete. Please try again.");
+          toast(uiMsg("Could not delete. Please try again."));
         }
       }),
     );
@@ -888,9 +1011,9 @@
         try {
           await saveItem("session", { ...x.data, pending: false }, x.id);
           renderWorkspace();
-          toast("Session synced.");
+          toast(uiMsg("Session synced."));
         } catch {
-          toast("Still unable to sync. Please retry later.");
+          toast(uiMsg("Still unable to sync. Please retry later."));
         }
       }),
     );
@@ -900,7 +1023,7 @@
     const oldKey = key();
     const { error } = await client.auth.signOut();
     if (error) {
-      toast("Could not sign out. Please retry.");
+      toast(uiMsg("Could not sign out. Please retry."));
       return;
     }
     try {
@@ -909,7 +1032,7 @@
     } catch {}
     user = null;
     profile = null;
-    location.replace("/workspace/");
+    location.replace(window.KenseiI18n.localePath("/workspace/"));
   }
   $("#sign-out")?.addEventListener("click", signOut);
   $("#account-sign-out")?.addEventListener("click", signOut);
@@ -968,24 +1091,24 @@
         document.querySelector("[data-tool]").dataset.ready = "true";
       })
       .catch(() => {
-        toast("Tool files could not load. Reload this page to retry.");
+        toast(uiMsg("Tool files could not load. Reload this page to retry."));
       });
   }
   if (document.querySelector("#private-workspace"))
     import("/tool-scripts/private-workspace.js").catch(() =>
-      toast("Saved history could not load. Reload to retry."),
+      toast(uiMsg("Saved history could not load. Reload to retry.")),
     );
   if (document.querySelector("#profile-page"))
     import("/tool-scripts/profile.js").catch(() =>
-      toast("Profile files could not load. Reload to retry."),
+      toast(uiMsg("Profile files could not load. Reload to retry.")),
     );
   if (document.querySelector("[data-pong]"))
     import("/game-scripts/pong.js").catch(() =>
-      toast("Pong files could not load. Reload to retry."),
+      toast(uiMsg("Pong files could not load. Reload to retry.")),
     );
   if (document.querySelector("[data-game], [data-games-directory]"))
     import("/game-scripts/games.js").catch(() =>
-      toast("Game files could not load. Reload this page to retry."),
+      toast(uiMsg("Game files could not load. Reload this page to retry.")),
     );
   initAuth().finally(() => {
     window.KenseiWorkspace.ready = true;

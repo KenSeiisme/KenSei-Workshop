@@ -7,6 +7,8 @@ import {
   validateCue,
   shiftCues,
 } from "./subtitle-core.js";
+import { uiMsg, uiJoin, uiError, uiText } from "../site/ui.js";
+
 let cues = [],
   selected = null,
   page = 0,
@@ -22,8 +24,7 @@ function draw() {
   for (const c of sorted.slice(page * pageSize, (page + 1) * pageSize)) {
     const b = document.createElement("button");
     b.className = "saved-row sub-cue";
-    b.textContent =
-      formatTime(c.start) + " → " + formatTime(c.end) + " · " + c.text;
+    uiText(b, formatTime(c.start) + " → " + formatTime(c.end) + " · " + c.text);
     b.dataset.cueId = c.id;
     b.setAttribute("aria-current", String(selected === c.id));
     b.onclick = () => {
@@ -38,29 +39,41 @@ function draw() {
     };
     list.append(b);
   }
-  $("#sub-page").textContent =
-    page +
-    1 +
-    " / " +
-    Math.max(1, Math.ceil(cues.length / pageSize)) +
-    " · " +
-    cues.length +
-    " cues";
+  uiText(
+    $("#sub-page"),
+    uiJoin([
+      page +
+        1 +
+        " / " +
+        Math.max(1, Math.ceil(cues.length / pageSize)) +
+        " · " +
+        cues.length,
+      uiMsg(" cues"),
+    ]),
+  );
   $("#sub-prev").disabled = page === 0;
   $("#sub-next").disabled = (page + 1) * pageSize >= cues.length;
   $("#sub-download").disabled = !cues.length;
   const overlap = sorted.some((c, i) => i > 0 && c.start < sorted[i - 1].end);
-  $("#sub-warning").textContent = overlap
-    ? "Some cues overlap. This can be intentional; export is still available."
-    : "";
+  uiText(
+    $("#sub-warning"),
+    overlap
+      ? uiMsg(
+          "Some cues overlap. This can be intentional; export is still available.",
+        )
+      : "",
+  );
   overlay();
 }
 function overlay() {
   const now = video.currentTime * 1000;
-  $("#sub-overlay").textContent = cues
-    .filter((c) => c.start <= now && c.end > now)
-    .map((c) => c.text)
-    .join("\n");
+  uiText(
+    $("#sub-overlay"),
+    cues
+      .filter((c) => c.start <= now && c.end > now)
+      .map((c) => c.text)
+      .join("\n"),
+  );
 }
 $("#sub-file").onchange = async (e) => {
   const file = e.target.files[0];
@@ -77,10 +90,14 @@ $("#sub-file").onchange = async (e) => {
     page = 0;
     dirty = false;
     draw();
-    status("Subtitles loaded. Edits stay on this page; download your result.");
+    status(
+      uiMsg("Subtitles loaded. Edits stay on this page; download your result."),
+    );
   } catch (e) {
     status(
-      e instanceof TypeError ? "Use a valid UTF-8 subtitle file." : e.message,
+      e instanceof TypeError
+        ? uiMsg("Use a valid UTF-8 subtitle file.")
+        : uiError(e),
       true,
     );
   }
@@ -101,9 +118,9 @@ $("#sub-save").onclick = () => {
     selected = c.id;
     dirty = true;
     draw();
-    status("Cue updated. Download to keep your changes.");
+    status(uiMsg("Cue updated. Download to keep your changes."));
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#sub-new").onclick = () => {
@@ -122,16 +139,22 @@ $("#sub-delete").onclick = () => {
   page = Math.min(page, Math.max(0, Math.ceil(cues.length / pageSize) - 1));
   dirty = true;
   draw();
-  status("Cue removed.");
+  status(uiMsg("Cue removed."));
 };
 $("#sub-shift").onclick = () => {
   try {
     cues = shiftCues(cues, Number($("#sub-offset").value));
     dirty = true;
     draw();
-    status("Timing shifted by " + $("#sub-offset").value + " ms.");
+    status(
+      uiJoin([
+        uiMsg("Timing shifted by "),
+        $("#sub-offset").value,
+        uiMsg(" ms."),
+      ]),
+    );
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#sub-download").onclick = () => {
@@ -143,9 +166,9 @@ $("#sub-download").onclick = () => {
       f === "vtt" ? "text/vtt;charset=utf-8" : "text/plain;charset=utf-8",
     );
     dirty = false;
-    status("Subtitle download ready.");
+    status(uiMsg("Subtitle download ready."));
   } catch (e) {
-    status(e.message, true);
+    status(uiError(e), true);
   }
 };
 $("#sub-prev").onclick = () => {
@@ -161,18 +184,22 @@ $("#sub-video-file").onchange = (e) => {
   e.target.value = "";
   if (!file) return;
   if (file.size > 500000000)
-    return status("Choose a video no larger than 500 MB.", true);
+    return status(uiMsg("Choose a video no larger than 500 MB."), true);
   if (url) URL.revokeObjectURL(url);
   url = URL.createObjectURL(file);
   video.src = url;
   video.hidden = false;
   video.load();
-  status("Local video ready. Browser codec support determines playback.");
+  status(
+    uiMsg("Local video ready. Browser codec support determines playback."),
+  );
 };
 video.ontimeupdate = overlay;
 video.onerror = () =>
   status(
-    "This video format cannot play here. Subtitle editing and downloads remain available.",
+    uiMsg(
+      "This video format cannot play here. Subtitle editing and downloads remain available.",
+    ),
     true,
   );
 window.addEventListener("beforeunload", (e) => {

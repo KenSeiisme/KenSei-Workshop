@@ -2,6 +2,8 @@ import { $, api, esc, toast } from "./common.js";
 import { randomIndex, shuffle } from "./sprint-core.js";
 import * as store from "./personal-store.js";
 import { historyView, decisionRow } from "./history-view.js";
+import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiHtml } from "../site/ui.js";
+
 let id = null,
   owner = null,
   saveTimer,
@@ -59,9 +61,12 @@ function save() {
     id = store.put("decision", value, id || crypto.randomUUID()).id;
     history.replaceState(null, "", "?scheme=" + id);
     dirty = false;
-    $("#decision-save-state").textContent = store.saveState();
+    uiText($("#decision-save-state"), uiFrom(store.saveState()));
   } catch (e) {
-    $("#decision-save-state").textContent = "Not saved · " + e.message;
+    uiText(
+      $("#decision-save-state"),
+      uiJoin([uiMsg("Not saved · "), uiError(e)]),
+    );
   }
 }
 function mode() {
@@ -93,13 +98,17 @@ function redraw() {
   } catch {
     wheel?.remove();
     wheel = null;
-    $("#decision-note").textContent =
-      "Wheel drawing is unavailable. Your random choice still works as text.";
+    uiText(
+      $("#decision-note"),
+      uiMsg(
+        "Wheel drawing is unavailable. Your random choice still works as text.",
+      ),
+    );
   }
 }
 function edit() {
   dirty = true;
-  $("#decision-save-state").textContent = "Saving on this device…";
+  uiText($("#decision-save-state"), uiMsg("Saving on this device…"));
   clearTimeout(saveTimer);
   saveTimer = setTimeout(save, 500);
   drawn.clear();
@@ -132,7 +141,7 @@ function reopen(record) {
   wheel?.stop();
   busy = false;
   $("#decision-run").disabled = false;
-  $("#decision-result").textContent = "Your next possibility starts here.";
+  uiText($("#decision-result"), uiMsg("Your next possibility starts here."));
   mode();
   redraw();
 }
@@ -160,7 +169,7 @@ $("#decision-new").addEventListener("click", () => {
 });
 $("#decision-reset").addEventListener("click", () => {
   drawn.clear();
-  $("#decision-note").textContent = "Draw pool reset.";
+  uiText($("#decision-note"), uiMsg("Draw pool reset."));
 });
 $("#decision-run").addEventListener("click", async () => {
   if (busy) return;
@@ -168,13 +177,13 @@ $("#decision-run").addEventListener("click", async () => {
   try {
     d = data();
   } catch (e) {
-    toast(e.message);
+    toast(uiError(e));
     return;
   }
   if (!id) dirty = true;
   save();
   const result = $("#decision-result");
-  $("#decision-note").textContent = "";
+  uiText($("#decision-note"), "");
   if (d.mode === "groups") {
     const list = shuffle(d.options),
       groups = Array.from({ length: d.groupCount }, () => []);
@@ -182,7 +191,7 @@ $("#decision-run").addEventListener("click", async () => {
     result.innerHTML = groups
       .map(
         (g, i) =>
-          `<div class="decision-group"><h3>Group ${i + 1}</h3><ul>${g.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`,
+          uiHtml`<div class="decision-group"><h3>Group ${i + 1}</h3><ul>${g.map((x) => uiHtml`<li>${esc(x)}</li>`).join("")}</ul></div>`,
       )
       .join("");
     return;
@@ -191,23 +200,28 @@ $("#decision-run").addEventListener("click", async () => {
     .map((label, index) => ({ label, index }))
     .filter((x) => d.mode !== "draw" || !d.noRepeat || !drawn.has(x.index));
   if (!candidates.length) {
-    result.textContent =
-      "Every option has been drawn. Reset the pool to draw again.";
+    uiText(
+      result,
+      uiMsg("Every option has been drawn. Reset the pool to draw again."),
+    );
     return;
   }
   const winner = candidates[randomIndex(candidates.length)];
   if (d.mode === "draw") {
     if (d.noRepeat) drawn.add(winner.index);
-    result.textContent = winner.label;
-    $("#decision-note").textContent = d.noRepeat
-      ? `${d.options.length - drawn.size} options remain.`
-      : "Every option had an equal chance.";
+    uiText(result, winner.label);
+    uiText(
+      $("#decision-note"),
+      d.noRepeat
+        ? uiMsg("{0} options remain.", [d.options.length - drawn.size])
+        : uiMsg("Every option had an equal chance."),
+    );
     return;
   }
   const token = ++generation;
   busy = true;
   $("#decision-run").disabled = true;
-  result.textContent = "Turning possibilities…";
+  uiText(result, uiMsg("Turning possibilities…"));
   if (wheel && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
     try {
       await new Promise((resolve) => {
@@ -222,7 +236,7 @@ $("#decision-run").addEventListener("click", async () => {
     } catch {}
   }
   if (token !== generation) return;
-  result.textContent = winner.label;
+  uiText(result, winner.label);
   busy = false;
   $("#decision-run").disabled = false;
 });
@@ -237,15 +251,17 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) save();
 });
 store.subscribe(() => {
-  if (!dirty) $("#decision-save-state").textContent = store.saveState();
+  if (!dirty) uiText($("#decision-save-state"), uiFrom(store.saveState()));
 });
 await store.ready;
 owner = actor();
 try {
   ({ Wheel } = await import("/vendor/spin-wheel.js"));
 } catch {
-  $("#decision-note").textContent =
-    "Wheel artwork could not load. Text choices remain available.";
+  uiText(
+    $("#decision-note"),
+    uiMsg("Wheel artwork could not load. Text choices remain available."),
+  );
 }
 await store.loadPage("decision", true);
 const requested = new URLSearchParams(location.search).get("scheme");
@@ -257,7 +273,9 @@ while (requested && !found && store.hasMore("decision")) {
 reopen(found);
 fields.forEach((s) => ($(s).disabled = false));
 $("#decision-new").disabled = false;
-$("#decision-save-state").textContent = store.saveState();
+uiText($("#decision-save-state"), uiFrom(store.saveState()));
 if (requested && !found)
-  $("#decision-note").textContent =
-    "That scheme is not available in this workspace.";
+  uiText(
+    $("#decision-note"),
+    uiMsg("That scheme is not available in this workspace."),
+  );

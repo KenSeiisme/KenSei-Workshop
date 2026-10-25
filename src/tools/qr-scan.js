@@ -1,5 +1,6 @@
 import { $, library, image, copy } from "./common.js";
 import { stopTracks, mediaError } from "./media-capture.js";
+import { uiText } from "../site/ui.js";
 
 if ($("#qr-scan-panel")) {
   let stream = null,
@@ -11,7 +12,7 @@ if ($("#qr-scan-panel")) {
     canvas = document.createElement("canvas"),
     context = canvas.getContext("2d", { willReadFrequently: true });
   const state = (text, error = false) => {
-    $("#qr-scan-status").textContent = text;
+    uiText($("#qr-scan-status"), text);
     $("#qr-scan-status").classList.toggle("error-text", error);
   };
   function controls() {

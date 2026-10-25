@@ -361,6 +361,8 @@ function pass(name) {
     pass(
       "Timer settings, pause/resume, background-time completion and workspace history",
     );
+    if (await page.locator(".menu-toggle").isVisible())
+      await page.locator(".menu-toggle").click();
     await page.locator("[data-sign-in]").first().click();
     assert(await page.locator("#auth-dialog").isVisible());
     assert(await page.locator("#google-login").isDisabled());

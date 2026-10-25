@@ -6,6 +6,7 @@ import {
   mediaError,
   clockText,
 } from "./media-capture.js";
+import { uiMsg, uiText, uiConfirm } from "../site/ui.js";
 
 let capture = null,
   microphone = null,
@@ -19,7 +20,7 @@ let capture = null,
   generation = 0,
   state = "idle";
 const message = (text, error = false) => {
-  $("#screen-status").textContent = text;
+  uiText($("#screen-status"), text);
   $("#screen-status").classList.toggle("error-text", error);
 };
 const supported = Boolean(
@@ -28,7 +29,10 @@ const supported = Boolean(
 function controls() {
   $("#screen-start").disabled = !supported || pending || state !== "idle";
   $("#screen-pause").disabled = !["recording", "paused"].includes(state);
-  $("#screen-pause").textContent = state === "paused" ? "Resume" : "Pause";
+  uiText(
+    $("#screen-pause"),
+    state === "paused" ? uiMsg("Resume") : uiMsg("Pause"),
+  );
   $("#screen-stop").disabled = !["recording", "paused"].includes(state);
   $("#screen-microphone").disabled = $("#screen-shared-audio").disabled =
     pending || state !== "idle";
@@ -61,14 +65,18 @@ $("#screen-start").onclick = async () => {
   if (!supported || pending || state !== "idle") return;
   if (
     unsaved &&
-    !confirm("Discard the recording you have not downloaded and start again?")
+    !uiConfirm(
+      uiMsg("Discard the recording you have not downloaded and start again?"),
+    )
   )
     return;
   discard();
   const token = ++generation;
   pending = true;
   controls();
-  message("Choose a tab, window or screen in your browser's capture picker…");
+  message(
+    uiMsg("Choose a tab, window or screen in your browser's capture picker…"),
+  );
   let nextCapture = null,
     nextMic = null;
   try {
@@ -99,7 +107,7 @@ $("#screen-start").onclick = async () => {
         "The selected screen source ended. Start again to choose another source.",
       );
     if (includeMic) {
-      message("Screen selected. Allow microphone access to continue…");
+      message(uiMsg("Screen selected. Allow microphone access to continue…"));
       nextMic = await navigator.mediaDevices.getUserMedia({
         audio: true,
         video: false,
@@ -145,14 +153,14 @@ $("#screen-start").onclick = async () => {
       hasShared ? "Shared audio on" : "No shared audio",
       microphone ? "Microphone on" : "Microphone off",
     ];
-    $("#screen-specs").textContent = parts.join(" · ");
+    uiText($("#screen-specs"), parts.join(" · "));
     recording = makeRecording(mixed, {
       types: VIDEO_TYPES,
       maxSeconds: 600,
       maxBytes: 250000000,
       onTick({ seconds, bytes }) {
-        $("#screen-time").textContent = clockText(seconds);
-        $("#screen-bytes").textContent = size(bytes);
+        uiText($("#screen-time"), clockText(seconds));
+        uiText($("#screen-bytes"), size(bytes));
       },
       onState(next) {
         state = next;
@@ -168,10 +176,19 @@ $("#screen-start").onclick = async () => {
         video.src = resultUrl;
         video.hidden = false;
         $("#screen-placeholder").hidden = true;
-        $("#screen-time").textContent = clockText(detail.seconds);
-        $("#screen-bytes").textContent = size(blob.size);
+        uiText($("#screen-time"), clockText(detail.seconds));
+        uiText($("#screen-bytes"), size(blob.size));
         message(
-          `${detail.reason}. Recording ready · ${size(blob.size)} · ${blob.type.split(";")[0]}. Download to keep it.${detail.error ? " The browser reported an interruption; review the result." : ""}`,
+          uiMsg("{0}. Recording ready · {1} · {2}. Download to keep it.{3}", [
+            detail.reason,
+            size(blob.size),
+            blob.type.split(";")[0],
+            detail.error
+              ? uiMsg(
+                  " The browser reported an interruption; review the result.",
+                )
+              : "",
+          ]),
         );
         controls();
       },
@@ -193,8 +210,8 @@ $("#screen-start").onclick = async () => {
         () => recording?.stop("An audio capture source ended"),
         { once: true },
       );
-    $("#screen-time").textContent = "00:00";
-    $("#screen-bytes").textContent = "0 MB";
+    uiText($("#screen-time"), "00:00");
+    uiText($("#screen-bytes"), uiMsg("0 MB"));
     $("#screen-live").srcObject = capture;
     $("#screen-live").hidden = false;
     $("#screen-live")
@@ -203,8 +220,12 @@ $("#screen-start").onclick = async () => {
     $("#screen-placeholder").hidden = true;
     message(
       includeShared && !hasShared
-        ? "Recording. The browser provided no shared audio track; your video is still being captured."
-        : "Recording on this device. Switch to your content whenever you are ready.",
+        ? uiMsg(
+            "Recording. The browser provided no shared audio track; your video is still being captured.",
+          )
+        : uiMsg(
+            "Recording on this device. Switch to your content whenever you are ready.",
+          ),
     );
   } catch (error) {
     if (token !== generation) {
@@ -228,11 +249,13 @@ $("#screen-stop").onclick = () => recording?.stop("Stopped by you");
 $("#screen-pause").onclick = () => {
   if (recording?.state === "paused") {
     recording.resume();
-    message("Recording resumed.");
+    message(uiMsg("Recording resumed."));
   } else if (recording?.state === "recording") {
     recording.pause();
     message(
-      "Paused. Capture permissions remain active; the 10-minute elapsed limit still applies.",
+      uiMsg(
+        "Paused. Capture permissions remain active; the 10-minute elapsed limit still applies.",
+      ),
     );
   }
 };
@@ -244,11 +267,13 @@ $("#screen-download").onclick = () => {
     `kensei-screen-${new Date().toISOString().replace(/[:.]/g, "-")}.${extension}`,
   );
   unsaved = false;
-  message("Download requested. Check your downloads before leaving this page.");
+  message(
+    uiMsg("Download requested. Check your downloads before leaving this page."),
+  );
 };
 $("#screen-discard").onclick = () => {
   discard();
-  message("Recording discarded. Ready for a new capture.");
+  message(uiMsg("Recording discarded. Ready for a new capture."));
 };
 window.addEventListener("beforeunload", (event) => {
   if (unsaved || pending || state !== "idle") {
@@ -267,7 +292,9 @@ window.addEventListener("pagehide", () => {
 });
 if (!supported)
   message(
-    "Screen recording is unavailable in this browser. Try a current desktop Chrome, Edge, Firefox or Safari browser.",
+    uiMsg(
+      "Screen recording is unavailable in this browser. Try a current desktop Chrome, Edge, Firefox or Safari browser.",
+    ),
     true,
   );
 controls();

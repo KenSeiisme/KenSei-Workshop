@@ -1,3 +1,4 @@
+import { uiMsg, uiText } from "../site/ui.js";
 // 声音属于表现层：只读游戏状态，不修改规则、存档或随机数。
 const KEY = "kensei-game-audio-v1";
 let preference = { enabled: true, volume: 0.35 },
@@ -43,7 +44,7 @@ const sequences = {
 };
 function paint() {
   document.querySelectorAll("[data-audio-toggle]").forEach((b) => {
-    b.textContent = preference.enabled ? "Sound on" : "Sound off";
+    uiText(b, preference.enabled ? uiMsg("Sound on") : uiMsg("Sound off"));
     b.setAttribute("aria-pressed", String(preference.enabled));
   });
   document.querySelectorAll("[data-audio-volume]").forEach((input) => {

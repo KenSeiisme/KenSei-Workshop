@@ -3,6 +3,7 @@ import { paintAvatar } from "/tool-scripts/profile-service.js";
 import { rules, isRanked, timeScored } from "./engine.js";
 import { gameIcon } from "./presentation.js";
 import { patchMarkup } from "./dom.js";
+import { uiDate, uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
 
 // 只读取已验证成绩；榜单控件不调用游戏的暂停、开局或保存逻辑。
 export function mountLeaderboard(root, game, formatResult) {
@@ -31,7 +32,7 @@ export function mountLeaderboard(root, game, formatResult) {
     ].entries())
       row.hidden = !expanded && index >= 10;
     more.hidden = !data || data.top.length <= 10;
-    more.textContent = expanded ? "Show Top 10" : "Show Top 50";
+    uiText(more, expanded ? uiMsg("Show Top 10") : uiMsg("Show Top 50"));
     more.setAttribute("aria-expanded", String(expanded));
   }
   more.onclick = () => {
@@ -42,7 +43,7 @@ export function mountLeaderboard(root, game, formatResult) {
     const content = $("#game-leaderboard-content"),
       button = event.currentTarget;
     content.hidden = !content.hidden;
-    button.textContent = content.hidden ? "Show" : "Hide";
+    uiText(button, content.hidden ? uiMsg("Show") : uiMsg("Hide"));
     button.setAttribute("aria-expanded", String(!content.hidden));
   };
   async function refresh() {
@@ -54,27 +55,29 @@ export function mountLeaderboard(root, game, formatResult) {
       data = null;
       expanded = false;
       patchMarkup(destination, "");
-      $("#game-my-rank").textContent = "";
+      uiText($("#game-my-rank"), "");
       more.hidden = true;
     }
-    $("#game-board-difficulty").textContent = rules(
-      game,
-      selected.difficulty,
-    ).label;
-    $("#game-board-note").textContent =
+    uiText(
+      $("#game-board-difficulty"),
+      uiFrom(rules(game, selected.difficulty).label),
+    );
+    uiText(
+      $("#game-board-note"),
       game === "memory-match"
-        ? "Fewer attempts, then faster completion."
+        ? uiMsg("Fewer attempts, then faster completion.")
         : timeScored(game) ||
             (game === "block-drop" && selected.difficulty === "sprint")
-          ? "Completed runs · fastest time first."
+          ? uiMsg("Completed runs · fastest time first.")
           : game === "2048"
-            ? "Highest score, then largest tile."
+            ? uiMsg("Highest score, then largest tile.")
             : game === "block-drop"
-              ? "Highest score, then lines cleared."
+              ? uiMsg("Highest score, then lines cleared.")
               : game === "brick-breaker"
-                ? "Most points, then faster completion."
-                : "Highest score · one best per player.";
-    note.textContent = "Loading leaderboard…";
+                ? uiMsg("Most points, then faster completion.")
+                : uiMsg("Highest score · one best per player."),
+    );
+    uiText(note, uiMsg("Loading leaderboard…"));
     refreshButton.disabled = true;
     const current = () =>
       !disposed && id === requestId && keyOf(selection()) === key;
@@ -101,8 +104,8 @@ export function mountLeaderboard(root, game, formatResult) {
       patchMarkup(
         destination,
         data.top.length
-          ? `<table><caption>${esc(rules(game, selected.difficulty).label)} · rules v${Number(data.version)}</caption><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Result</th></tr></thead><tbody>${data.top.map((row, index) => `<tr data-player-id="${esc(row.public_id)}" data-rank="${Number(row.rank)}" class="${data.me?.public_id === row.public_id ? "is-me" : ""}"${!expanded && index >= 10 ? " hidden" : ""}><td>${Number(row.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(row.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(row.public_id)}" data-preserve aria-hidden="true"></span>${esc(row.nickname)}</a><small>${esc(new Date(row.achieved_at).toLocaleDateString())}</small></td><td>${esc(formatResult({ ...row, difficulty: selected.difficulty }, game))}</td></tr>`).join("")}</tbody></table>`
-          : `<div class="game-empty-state">${gameIcon(game)}<strong>Your next run could be the first.</strong><p>No verified results yet. Sign in and complete a new game.</p></div>`,
+          ? uiHtml`<table><caption>${esc(rules(game, selected.difficulty).label)} · rules v${Number(data.version)}</caption><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Result</th></tr></thead><tbody>${data.top.map((row, index) => uiHtml`<tr data-player-id="${esc(row.public_id)}" data-rank="${Number(row.rank)}" class="${data.me?.public_id === row.public_id ? "is-me" : ""}"${!expanded && index >= 10 ? uiMsg(" hidden") : ""}><td>${Number(row.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(row.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(row.public_id)}" data-preserve aria-hidden="true"></span>${esc(row.nickname)}</a><small>${uiDate(new Date(row.achieved_at), { year: "numeric", month: "short", day: "numeric" })}</small></td><td>${esc(formatResult({ ...row, difficulty: selected.difficulty }, game))}</td></tr>`).join("")}</tbody></table>`
+          : uiHtml`<div class="game-empty-state">${gameIcon(game)}<strong>Your next run could be the first.</strong><p>No verified results yet. Sign in and complete a new game.</p></div>`,
       );
       for (const row of data.top) {
         const avatar = destination.querySelector(
@@ -115,15 +118,25 @@ export function mountLeaderboard(root, game, formatResult) {
         }
       }
       $("#game-my-rank").innerHTML = data.me
-        ? `<p class="game-my-result">Your rank: <strong>#${Number(data.me.rank)}</strong><br>${esc(formatResult({ ...data.me, difficulty: selected.difficulty }, game))}</p>`
-        : `<p class="muted small">${api.user ? "Your ranked best · No verified result yet." : "Sign in to record your ranked best."}</p>`;
-      note.textContent = `${selected.version === "current" ? "Current rules" : "Previous rules · archived"} · ${Math.min(50, data.top.length)} ranked players.`;
+        ? uiHtml`<p class="game-my-result">Your rank: <strong>#${Number(data.me.rank)}</strong><br>${esc(formatResult({ ...data.me, difficulty: selected.difficulty }, game))}</p>`
+        : uiHtml`<p class="muted small">${api.user ? uiMsg("Your ranked best · No verified result yet.") : uiMsg("Sign in to record your ranked best.")}</p>`;
+      uiText(
+        note,
+        uiMsg("{0} · {1} ranked players.", [
+          selected.version === "current"
+            ? uiMsg("Current rules")
+            : uiMsg("Previous rules · archived"),
+          Math.min(50, data.top.length),
+        ]),
+      );
       showRows();
     } catch {
       if (!current()) return;
-      note.textContent =
-        "Leaderboard unavailable. Refresh to retry; you can still play.";
-      if (!data) $("#game-my-rank").textContent = "Rank unavailable";
+      uiText(
+        note,
+        uiMsg("Leaderboard unavailable. Refresh to retry; you can still play."),
+      );
+      if (!data) uiText($("#game-my-rank"), uiMsg("Rank unavailable"));
     } finally {
       if (current()) refreshButton.disabled = false;
     }

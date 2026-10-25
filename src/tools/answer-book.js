@@ -3,6 +3,8 @@ import { answers } from "./answers.js";
 import { randomIndex } from "./sprint-core.js";
 import * as store from "./personal-store.js";
 import { historyView, answerRow } from "./history-view.js";
+import { uiMsg, uiFrom, uiText } from "../site/ui.js";
+
 let current = null,
   busy = false;
 historyView("answer", $("#answer-history"), answerRow);
@@ -12,8 +14,8 @@ function show() {
   const lang = $("#answer-language").value;
   $("#answer-en").hidden = lang === "zh";
   $("#answer-zh").hidden = lang === "en";
-  $("#answer-en").textContent = current.en;
-  $("#answer-zh").textContent = current.zh;
+  uiText($("#answer-en"), current.en);
+  uiText($("#answer-zh"), current.zh);
 }
 $("#answer-language").addEventListener("change", show);
 $("#answer-draw").addEventListener("click", async () => {
@@ -36,8 +38,8 @@ $("#answer-draw").addEventListener("click", async () => {
   current = { en: pair[0], zh: pair[1], drawnAt: new Date().toISOString() };
   show();
   store.put("answer", current);
-  $("#answer-status").textContent = store.saveState();
-  $("#answer-draw").textContent = "Turn another page →";
+  uiText($("#answer-status"), uiFrom(store.saveState()));
+  uiText($("#answer-draw"), uiMsg("Turn another page →"));
   $("#answer-copy").disabled = false;
   $("#answer-draw").disabled = false;
   busy = false;
@@ -52,4 +54,4 @@ $("#answer-copy").addEventListener("click", () => {
           : current.en + "\n" + current.zh,
     );
 });
-store.subscribe(() => ($("#answer-status").textContent = store.saveState()));
+store.subscribe(() => uiText($("#answer-status"), uiFrom(store.saveState())));

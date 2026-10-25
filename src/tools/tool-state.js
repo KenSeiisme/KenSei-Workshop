@@ -1,3 +1,4 @@
+import { uiFrom, uiText } from "../site/ui.js";
 // 独立于具体工具的状态适配层；不持有文件或编辑内容。
 const labels = {
   ready: "Ready",
@@ -14,8 +15,8 @@ export function feedback(state, message) {
   const label = box.querySelector(".tool-state-label"),
     text = box.querySelector(".tool-state-message"),
     value = labels[state] || labels.ready;
-  if (label.textContent !== value) label.textContent = value;
-  if (message && text.textContent !== message) text.textContent = message;
+  uiText(label, uiFrom(value));
+  if (message) uiText(text, uiFrom(message));
 }
 export function stateFor(message, error = false) {
   if (

@@ -1,5 +1,14 @@
 import { $, api, downloadText } from "./common.js";
 import * as store from "./flashcard-store.js";
+import {
+  uiMsg,
+  uiJoin,
+  uiFrom,
+  uiError,
+  uiText,
+  uiConfirm,
+} from "../site/ui.js";
+
 function draw() {
   const out = $("#workspace-decks");
   out.replaceChildren();
@@ -9,30 +18,34 @@ function draw() {
     const a = document.createElement("a");
     a.className = "text-link";
     a.href = "/tools/flashcards/?deck=" + encodeURIComponent(row.id);
-    a.textContent =
-      row.data.name +
-      " · " +
-      row.data.cards.filter((c) => c.known).length +
-      "/" +
-      row.data.cards.length +
-      " known";
+    uiText(
+      a,
+      uiJoin([
+        row.data.name +
+          " · " +
+          row.data.cards.filter((c) => c.known).length +
+          "/" +
+          row.data.cards.length,
+        uiMsg(" known"),
+      ]),
+    );
     const remove = document.createElement("button");
     remove.className = "text-link";
-    remove.textContent = "Delete";
+    uiText(remove, uiMsg("Delete"));
     remove.onclick = async () => {
-      if (confirm("Delete this card deck?"))
+      if (uiConfirm(uiMsg("Delete this card deck?")))
         try {
           await store.remove(row.id);
         } catch (e) {
-          $("#workspace-deck-state").textContent = e.message;
+          uiText($("#workspace-deck-state"), uiError(e));
         }
     };
     el.append(a, remove);
     out.append(el);
   }
   if (!store.rows().length)
-    out.textContent = "No learning card decks in this workspace.";
-  $("#workspace-deck-state").textContent = store.saveState();
+    uiText(out, uiMsg("No learning card decks in this workspace."));
+  uiText($("#workspace-deck-state"), uiFrom(store.saveState()));
   $("#workspace-deck-more").hidden = !store.hasMore();
 }
 store.subscribe(draw);
@@ -43,16 +56,20 @@ async function start() {
     await store.flush();
     await store.load(true);
   } catch (e) {
-    $("#workspace-deck-state").textContent = e.message;
+    uiText($("#workspace-deck-state"), uiError(e));
   }
 }
 $("#workspace-deck-more").onclick = () => store.load();
 $("#workspace-deck-clear").onclick = async () => {
-  if (confirm("Clear all card decks and review progress for this workspace?"))
+  if (
+    uiConfirm(
+      uiMsg("Clear all card decks and review progress for this workspace?"),
+    )
+  )
     try {
       await store.clear();
     } catch (e) {
-      $("#workspace-deck-state").textContent = e.message;
+      uiText($("#workspace-deck-state"), uiError(e));
     }
 };
 $("#workspace-deck-export").onclick = async () => {
@@ -64,7 +81,7 @@ $("#workspace-deck-export").onclick = async () => {
       "application/json",
     );
   } catch (e) {
-    $("#workspace-deck-state").textContent = e.message;
+    uiText($("#workspace-deck-state"), uiError(e));
   }
 };
 window.addEventListener("workspace-ready", start);

@@ -1,5 +1,6 @@
 import { patchMarkup } from "./dom.js";
 import { legalMoves, reversiFlips } from "./board-engine.js";
+import { uiMsg, uiFrom, uiHtml } from "../site/ui.js";
 
 // 棋类只负责棋盘、焦点和电脑任务；保存及开局流程由通用控制器负责。
 export function createBoardUI(ctx) {
@@ -65,7 +66,9 @@ export function createBoardUI(ctx) {
   function fail(message) {
     clearJob();
     failure = message || "The computer could not choose a move.";
-    ctx.announce(`${failure} Choose Retry computer move to try again.`);
+    ctx.announce(
+      uiMsg("{0} Choose Retry computer move to try again.", [failure]),
+    );
     ctx.redraw();
   }
   function schedule() {
@@ -102,7 +105,7 @@ export function createBoardUI(ctx) {
           return;
         }
         if (data.error || !data.event) {
-          fail(data.error || "The computer returned no legal move.");
+          fail(data.error || uiMsg("The computer returned no legal move."));
           return;
         }
         const event = data.event;
@@ -111,7 +114,7 @@ export function createBoardUI(ctx) {
           event.type !== (connect ? "drop" : "disc") ||
           !legalMoves(current).includes(move)
         ) {
-          fail("The computer returned an invalid move.");
+          fail(uiMsg("The computer returned an invalid move."));
           return;
         }
         clearJob();
@@ -120,15 +123,19 @@ export function createBoardUI(ctx) {
       };
       worker.onerror = (event) => {
         event.preventDefault?.();
-        if (job?.id === id) fail("The computer could not start. Please retry.");
+        if (job?.id === id)
+          fail(uiMsg("The computer could not start. Please retry."));
       };
       timer = setTimeout(() => {
-        if (job?.id === id) fail("The computer took too long. Please retry.");
+        if (job?.id === id)
+          fail(uiMsg("The computer took too long. Please retry."));
       }, 10000);
       worker.postMessage({ id, state: s });
     } catch {
       fail(
-        "This browser could not start the computer. Please retry or choose two players.",
+        uiMsg(
+          "This browser could not start the computer. Please retry or choose two players.",
+        ),
       );
     }
   }
@@ -201,7 +208,7 @@ export function createBoardUI(ctx) {
     const playerChips = [1, 2]
       .map(
         (side) =>
-          `<div class="board-player ${s.turn === side && s.status === "playing" ? "is-turn" : ""}" data-side="${side}"><span class="board-player-piece" aria-hidden="true"></span><span>${label(s, side)}<small>${colors[side - 1]}${s.turn === side && s.status === "playing" ? " · to move" : ""}</small></span><strong>${s.counts[side - 1]}</strong></div>`,
+          uiHtml`<div class="board-player ${s.turn === side && s.status === "playing" ? "is-turn" : ""}" data-side="${side}"><span class="board-player-piece" aria-hidden="true"></span><span>${label(s, side)}<small>${colors[side - 1]}${s.turn === side && s.status === "playing" ? uiMsg(" · to move") : ""}</small></span><strong>${s.counts[side - 1]}</strong></div>`,
       )
       .join("");
     const cells = s.board
@@ -214,7 +221,7 @@ export function createBoardUI(ctx) {
         const flips =
           !connect && isLegal ? reversiFlips(s.board, index, s.turn).length : 0;
         const text = `Row ${row}, column ${column}. ${value ? `${colors[value - 1]} disc.` : "Empty."} ${connect ? (isLegal ? `Drop in column ${column}.` : "Column full.") : isLegal ? `Legal move. Flip ${flips} ${flips === 1 ? "disc" : "discs"}.` : "No legal move here."}`;
-        return `<button type="button" class="board-cell ${value ? "occupied" : ""} ${isLegal ? "is-legal" : ""} ${s.lastMove === index ? "last-move" : ""}" data-board-cell="${index}" ${connect ? `data-drop="${column - 1}"` : `data-disc="${index}"`} data-piece="${value}" aria-label="${text}" aria-disabled="${!playable || !isLegal}" tabindex="${index === focusIndex ? 0 : -1}" ${!playable ? "disabled" : ""}><span class="board-disc" aria-hidden="true">${s.lastMove === index ? '<i class="board-last-dot"></i>' : ""}</span>${!connect && !value && isLegal ? '<span class="board-legal-dot" aria-hidden="true"></span>' : ""}</button>`;
+        return uiHtml`<button type="button" class="board-cell ${value ? "occupied" : ""} ${isLegal ? "is-legal" : ""} ${s.lastMove === index ? "last-move" : ""}" data-board-cell="${index}" ${connect ? uiMsg('data-drop="{0}"', [column - 1]) : uiMsg('data-disc="{0}"', [index])} data-piece="${value}" aria-label="${text}" aria-disabled="${!playable || !isLegal}" tabindex="${index === focusIndex ? 0 : -1}" ${!playable ? "disabled" : ""}><span class="board-disc" aria-hidden="true">${s.lastMove === index ? uiHtml('<i class="board-last-dot"></i>') : ""}</span>${!connect && !value && isLegal ? uiHtml('<span class="board-legal-dot" aria-hidden="true"></span>') : ""}</button>`;
       })
       .join("");
     const note =
@@ -225,7 +232,7 @@ export function createBoardUI(ctx) {
         : "Start a new game to play again.";
     patchMarkup(
       board,
-      `<div class="board-native ${connect ? "connect-native" : "reversi-native"}"><div class="board-players">${playerChips}</div><p class="board-turn" role="status">${turnText}</p>${!connect && s.passCount === 1 ? `<p class="board-pass-notice">${label(s, s.lastSkipped)} has no legal move. ${label(s, s.turn)} plays again.</p>` : ""}<div class="board-grid ${connect ? "connect-grid" : "reversi-grid"}" role="group" aria-label="${connect ? "Seven column, six row Connect Four board" : "Eight by eight Reversi board"}">${cells}</div><p class="board-input-note">${note}</p>${failure ? '<div class="board-ai-error"><p>The computer move did not finish. Your position is unchanged.</p><button type="button" class="button secondary" data-board-retry>Retry computer move</button></div>' : ""}</div>`,
+      uiHtml`<div class="board-native ${connect ? "connect-native" : "reversi-native"}"><div class="board-players">${playerChips}</div><p class="board-turn" role="status">${turnText}</p>${!connect && s.passCount === 1 ? uiHtml`<p class="board-pass-notice">${label(s, s.lastSkipped)} has no legal move. ${label(s, s.turn)} plays again.</p>` : ""}<div class="board-grid ${connect ? "connect-grid" : "reversi-grid"}" role="group" aria-label="${connect ? uiMsg("Seven column, six row Connect Four board") : uiMsg("Eight by eight Reversi board")}">${cells}</div><p class="board-input-note">${uiFrom(note)}</p>${failure ? uiHtml('<div class="board-ai-error"><p>The computer move did not finish. Your position is unchanged.</p><button type="button" class="button secondary" data-board-retry>Retry computer move</button></div>') : ""}</div>`,
     );
     bind(board);
     if (hadFocus) {
@@ -253,8 +260,8 @@ export function createBoardUI(ctx) {
     if (!legalMoves(s).includes(move)) {
       ctx.announce(
         connect
-          ? "This column is full. Choose another column."
-          : "That square is not a legal move. Choose a marked square.",
+          ? uiMsg("This column is full. Choose another column.")
+          : uiMsg("That square is not a legal move. Choose a marked square."),
       );
       return true;
     }

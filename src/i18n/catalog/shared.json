@@ -1,0 +1,1858 @@
+{
+  "m_d640c7421da0": {
+    "en": "Resume",
+    "zh-Hant": "繼續"
+  },
+  "m_858e4ba7a29f": {
+    "en": "Pause",
+    "zh-Hant": "暫停"
+  },
+  "m_af09632242f3": {
+    "en": "Copied to clipboard.",
+    "zh-Hant": "已複製到剪貼簿。"
+  },
+  "m_ec5afc66818f": {
+    "en": "Saved and synced to your workspace.",
+    "zh-Hant": "已儲存並同步至工作區。"
+  },
+  "m_07e768b0cafc": {
+    "en": "Saved to your workspace on this device.",
+    "zh-Hant": "已儲存至此裝置的工作區。"
+  },
+  "m_be997844b2a8": {
+    "en": "Draft saved.",
+    "zh-Hant": "草稿已儲存。"
+  },
+  "m_3a78695388b3": {
+    "en": "Home",
+    "zh-Hant": "首頁"
+  },
+  "m_037c968467aa": {
+    "en": "Escape",
+    "zh-Hant": "Escape"
+  },
+  "m_e2d0a54968ea": {
+    "en": "Delete",
+    "zh-Hant": "刪除"
+  },
+  "m_29a390f9237e": {
+    "en": "Clear all",
+    "zh-Hant": "全部清除"
+  },
+  "m_f5d7beb0a27c": {
+    "en": "Loading profile…",
+    "zh-Hant": "正在載入個人檔案…"
+  },
+  "m_c3812fc4acb8": {
+    "en": "Remove",
+    "zh-Hant": "移除"
+  },
+  "m_9d3cab2b5efe": {
+    "en": "Focus",
+    "zh-Hant": "專注"
+  },
+  "m_ca7981b46ecf": {
+    "en": "Off",
+    "zh-Hant": "關閉"
+  },
+  "m_d96cdf6b2af7": {
+    "en": "use strict",
+    "zh-Hant": "use strict"
+  },
+  "m_a19ace0df63a": {
+    "en": "Browser storage is unavailable or full. Export your work before leaving.",
+    "zh-Hant": "瀏覽器儲存空間無法使用或已滿。離開前請先匯出作品。"
+  },
+  "m_512987351945": {
+    "en": "(conflict copy)",
+    "zh-Hant": "（衝突副本）"
+  },
+  "m_2668c4368ec5": {
+    "en": "This draft changed on another device. Saved your work as a separate copy.",
+    "zh-Hant": "此草稿已在其他裝置上變更。你的內容已另存為副本。"
+  },
+  "m_c612e9d0fb40": {
+    "en": "Could not save in this browser.",
+    "zh-Hant": "無法在此瀏覽器儲存。"
+  },
+  "m_500eefc6a682": {
+    "en": "Removed from favorites.",
+    "zh-Hant": "已從收藏移除。"
+  },
+  "m_5140e27c0286": {
+    "en": "Favorite synced.",
+    "zh-Hant": "收藏已同步。"
+  },
+  "m_d2fda512acc0": {
+    "en": "Saved to this device.",
+    "zh-Hant": "已儲存至此裝置。"
+  },
+  "m_b2e8ba58660a": {
+    "en": "Could not save your favorite. Please try again.",
+    "zh-Hant": "無法儲存收藏，請再試一次。"
+  },
+  "m_7e1b0d5641f2": {
+    "en": "Account",
+    "zh-Hant": "帳號"
+  },
+  "m_bfd402b2f6f3": {
+    "en": "Sign in",
+    "zh-Hant": "登入"
+  },
+  "m_ddb16736c115": {
+    "en": "Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. Local tools and private practice work without an account.",
+    "zh-Hant": "雲端登入尚未連線。本站需要設定自己的 Supabase 和 Google OAuth。無須帳號仍可使用本機工具和私人練習。"
+  },
+  "m_22ea8431961c": {
+    "en": "Local tools and Typing Practice are available without an account.",
+    "zh-Hant": "無須帳號即可使用本機工具和打字練習。"
+  },
+  "m_04d7c8ed080b": {
+    "en": "Sign-in is connecting. If this takes a moment, close this window and try again.",
+    "zh-Hant": "正在連線登入。如果等候較久，請關閉此視窗後再試一次。"
+  },
+  "m_a04cbc7a8f16": {
+    "en": "Opening Google sign-in…",
+    "zh-Hant": "正在開啟 Google 登入…"
+  },
+  "m_c833064d2f15": {
+    "en": "Could not open Google sign-in. Please try again.",
+    "zh-Hant": "無法開啟 Google 登入，請再試一次。"
+  },
+  "m_35a22406d7f2": {
+    "en": "Could not start Google sign-in. Please try again.",
+    "zh-Hant": "無法啟動 Google 登入，請再試一次。"
+  },
+  "m_663805200a04": {
+    "en": "Google sign-in has not been configured for this site yet.",
+    "zh-Hant": "本站尚未設定 Google 登入。"
+  },
+  "m_0b428bc3aab3": {
+    "en": "Account connection timed out",
+    "zh-Hant": "帳號連線逾時"
+  },
+  "m_1c1d4b5907cc": {
+    "en": "Sign-in was cancelled or could not be completed.",
+    "zh-Hant": "登入已取消，或無法完成。"
+  },
+  "m_2819b5d9b2f1": {
+    "en": "Signed in, but cloud data could not be loaded. Please refresh to retry.",
+    "zh-Hant": "已登入，但無法載入雲端資料。請重新整理後重試。"
+  },
+  "m_7d14649bf866": {
+    "en": "No active session. Try signing in again.",
+    "zh-Hant": "目前沒有有效的登入工作階段，請重新登入。"
+  },
+  "m_8d5ee0010cee": {
+    "en": "Sign-in could not be completed. Please try Google sign-in again.",
+    "zh-Hant": "無法完成登入，請再次使用 Google 登入。"
+  },
+  "m_04999adec82c": {
+    "en": "Sign-in is unavailable right now. Refresh the page to try again. Local tools still work.",
+    "zh-Hant": "登入目前無法使用。請重新整理頁面後重試，本機工具仍可使用。"
+  },
+  "m_9176fb91cf20": {
+    "en": "Sign-in connection unavailable. Local tools still work.",
+    "zh-Hant": "登入連線無法使用，本機工具仍可使用。"
+  },
+  "m_72ef88606f87": {
+    "en": "Sign-in could not be completed. Please use Sign in to try again.",
+    "zh-Hant": "無法完成登入，請按「登入」後重試。"
+  },
+  "m_4a9b2c39a934": {
+    "en": "[data-filter-group] .filter",
+    "zh-Hant": "[data-filter-group] .filter"
+  },
+  "m_5b29b26c66fc": {
+    "en": "Unsaved changes · your text is still on this page.",
+    "zh-Hant": "尚有未儲存的變更；文字仍保留在此頁面。"
+  },
+  "m_a278233b6c4c": {
+    "en": "Clipboard unavailable. Your text is selected; press Ctrl+C to copy.",
+    "zh-Hant": "無法使用剪貼簿。已選取文字，請按 Ctrl+C 複製。"
+  },
+  "m_af7b03194029": {
+    "en": "Give your draft a name first.",
+    "zh-Hant": "請先為草稿命名。"
+  },
+  "m_800539d13af7": {
+    "en": "Add some text before saving.",
+    "zh-Hant": "儲存前請先輸入文字。"
+  },
+  "m_170fefa67c70": {
+    "en": "Save failed. Your text is still here; please retry.",
+    "zh-Hant": "儲存失敗。文字仍在此頁面，請重試。"
+  },
+  "m_5df2d5301d92": {
+    "en": "Could not save. Your text has been kept on this page.",
+    "zh-Hant": "無法儲存。文字已保留在此頁面。"
+  },
+  "m_72f1c34f8a51": {
+    "en": "Saved draft loaded. Changes need to be saved.",
+    "zh-Hant": "已載入草稿。變更後需要再次儲存。"
+  },
+  "m_8caf535e74f3": {
+    "en": "{0} minutes {1} seconds remaining",
+    "zh-Hant": "剩餘 {0} 分 {1} 秒"
+  },
+  "m_bd3802506113": {
+    "en": "Start focus",
+    "zh-Hant": "開始專注"
+  },
+  "m_2b9336aba617": {
+    "en": "Start break",
+    "zh-Hant": "開始休息"
+  },
+  "m_722e8c567ce3": {
+    "en": "TIME FOR YOUR NEXT IDEA",
+    "zh-Hant": "迎接下一個好點子"
+  },
+  "m_561e6dbf93be": {
+    "en": "A MOMENT TO RECHARGE",
+    "zh-Hant": "休息一下，恢復精神"
+  },
+  "m_656140cb977f": {
+    "en": "Session {0} of 4",
+    "zh-Hant": "第 {0}／4 回合"
+  },
+  "m_759ab4c8d8bf": {
+    "en": "{0} · {1} — KenSei",
+    "zh-Hant": "{0} · {1} — KenSei"
+  },
+  "m_f71081fb0af4": {
+    "en": "Break",
+    "zh-Hant": "休息"
+  },
+  "m_b51812c8ea22": {
+    "en": "Focus Timer — KenSei",
+    "zh-Hant": "專注計時器 — KenSei"
+  },
+  "m_92ad3809b729": {
+    "en": "{0} minutes of focus, saved. Nicely done.",
+    "zh-Hant": "已記錄 {0} 分鐘的專注時間，做得好。"
+  },
+  "m_61175dcbf25f": {
+    "en": "Session could not sync. Export or retry from your workspace.",
+    "zh-Hant": "無法同步此回合。請從工作區匯出或重試。"
+  },
+  "m_5e1459312728": {
+    "en": "Focus complete. Time for a break.",
+    "zh-Hant": "專注完成，該休息了。"
+  },
+  "m_aad2b257d136": {
+    "en": "Break complete. Ready when you are.",
+    "zh-Hant": "休息結束，準備好就開始。"
+  },
+  "m_3d86dc9353d2": {
+    "en": "Use whole minutes: focus 1–120; breaks 1–60.",
+    "zh-Hant": "請輸入整數分鐘：專注 1–120 分鐘，休息 1–60 分鐘。"
+  },
+  "m_60c43bc93bfd": {
+    "en": "Your rhythm is saved.",
+    "zh-Hant": "你的節奏設定已儲存。"
+  },
+  "m_7021afcf0cf9": {
+    "en": "Settings could not be saved. Please retry.",
+    "zh-Hant": "無法儲存設定，請重試。"
+  },
+  "m_488b0f2b608f": {
+    "en": "Your connected workspace",
+    "zh-Hant": "已連線的工作區"
+  },
+  "m_62e68ac174e5": {
+    "en": "Cloud data could not be loaded. Refresh to retry.",
+    "zh-Hant": "無法載入雲端資料。請重新整理後重試。"
+  },
+  "m_5f9a89ddea17": {
+    "en": "Cloud saves enabled",
+    "zh-Hant": "已啟用雲端儲存"
+  },
+  "m_2a68eae2df06": {
+    "en": "Sync unavailable",
+    "zh-Hant": "無法同步"
+  },
+  "m_22965568d22a": {
+    "en": "Connected",
+    "zh-Hant": "已連線"
+  },
+  "m_38b9d88c1fdb": {
+    "en": "On this device",
+    "zh-Hant": "在此裝置上"
+  },
+  "m_c1aeb8773127": {
+    "en": "Your local saves stay on this device. Sign in with Google to sync new saves across devices.",
+    "zh-Hant": "本機儲存內容只保留在此裝置。使用 Google 登入，即可將新儲存的內容同步至其他裝置。"
+  },
+  "m_41d606f3239f": {
+    "en": "Sign in with Google ↗",
+    "zh-Hant": "使用 Google 登入 ↗"
+  },
+  "m_1ad47784aac3": {
+    "en": "Star a tool to keep it close.",
+    "zh-Hant": "收藏常用工具，隨時快速找到。"
+  },
+  "m_9f5a6ee9ef53": {
+    "en": "Explore tools →",
+    "zh-Hant": "探索工具 →"
+  },
+  "m_10f09c243f70": {
+    "en": "· Saved locally, sync pending",
+    "zh-Hant": "· 已儲存於本機，等待同步"
+  },
+  "m_d0ddd9955954": {
+    "en": "Text Toolkit",
+    "zh-Hant": "Text Toolkit"
+  },
+  "m_1d2902ca81b6": {
+    "en": "Open →",
+    "zh-Hant": "開啟 →"
+  },
+  "m_6ca32d8ee736": {
+    "en": "Your next good idea can start in Text Toolkit.",
+    "zh-Hant": "下一個好點子，可以從 Text Toolkit 開始。"
+  },
+  "m_92da0c9e1925": {
+    "en": "QR appearance · {0} px",
+    "zh-Hant": "QR 外觀 · {0} px"
+  },
+  "m_cad60af988bf": {
+    "en": "{0} · {1}% quality{2}",
+    "zh-Hant": "{0} · {1}% 品質{2}"
+  },
+  "m_c50e89acc49a": {
+    "en": "px wide",
+    "zh-Hant": "px 寬"
+  },
+  "m_b666a9b581fe": {
+    "en": "Use →",
+    "zh-Hant": "使用 →"
+  },
+  "m_34df64a5a8a0": {
+    "en": "Save a favorite image setup in Image Studio.",
+    "zh-Hant": "在 Image Studio 儲存常用圖片設定。"
+  },
+  "m_2d37b1b0319e": {
+    "en": "{0} minutes of focus",
+    "zh-Hant": "專注 {0} 分鐘"
+  },
+  "m_b6d7d34f682d": {
+    "en": "Retry sync",
+    "zh-Hant": "重試同步"
+  },
+  "m_b76f2cfef0b8": {
+    "en": "Complete a focus session to see it here.",
+    "zh-Hant": "完成一次專注回合，即可在這裡查看。"
+  },
+  "m_1394baaa6c6d": {
+    "en": "Delete this saved draft?",
+    "zh-Hant": "刪除此已儲存的草稿？"
+  },
+  "m_b4df0c43b59c": {
+    "en": "Removed.",
+    "zh-Hant": "已移除。"
+  },
+  "m_2835c7195d62": {
+    "en": "Could not delete. Please try again.",
+    "zh-Hant": "無法刪除，請再試一次。"
+  },
+  "m_bb913b8f802b": {
+    "en": "Session synced.",
+    "zh-Hant": "回合已同步。"
+  },
+  "m_6e1e10dc6644": {
+    "en": "Still unable to sync. Please retry later.",
+    "zh-Hant": "仍無法同步，請稍後再試。"
+  },
+  "m_6f01b8bb1303": {
+    "en": "Could not sign out. Please retry.",
+    "zh-Hant": "無法登出，請重試。"
+  },
+  "m_274852c7d96d": {
+    "en": "Tool files could not load. Reload this page to retry.",
+    "zh-Hant": "無法載入工具檔案。請重新載入頁面後重試。"
+  },
+  "m_7004455ddee5": {
+    "en": "Saved history could not load. Reload to retry.",
+    "zh-Hant": "無法載入已儲存的歷史記錄。請重新載入後重試。"
+  },
+  "m_2d5ad2e3f57c": {
+    "en": "Profile files could not load. Reload to retry.",
+    "zh-Hant": "無法載入個人檔案所需的檔案。請重新載入後重試。"
+  },
+  "m_9f6de081ed80": {
+    "en": "Pong files could not load. Reload to retry.",
+    "zh-Hant": "無法載入 Pong 檔案。請重新載入後重試。"
+  },
+  "m_09d8aeb7fae3": {
+    "en": "[data-game], [data-games-directory]",
+    "zh-Hant": "[data-game], [data-games-directory]"
+  },
+  "m_e60f8de86628": {
+    "en": "Game files could not load. Reload this page to retry.",
+    "zh-Hant": "無法載入遊戲檔案。請重新載入此頁面後重試。"
+  },
+  "m_6009c4db633f": {
+    "en": "Useful tools for everyday things — KenSei",
+    "zh-Hant": "日常實用工具 — KenSei"
+  },
+  "m_ac576a66d456": {
+    "en": "Skip to content",
+    "zh-Hant": "跳至主要內容"
+  },
+  "m_e1b1d8e88973": {
+    "en": "KenSei home",
+    "zh-Hant": "KenSei 首頁"
+  },
+  "m_58a346eabfce": {
+    "en": "KenSei",
+    "zh-Hant": "KenSei"
+  },
+  "m_eb355944b92d": {
+    "en": "Main navigation",
+    "zh-Hant": "主要導覽"
+  },
+  "m_ea93d6a262ec": {
+    "en": "Tools",
+    "zh-Hant": "工具"
+  },
+  "m_d9dae78103ad": {
+    "en": "Games",
+    "zh-Hant": "遊戲"
+  },
+  "m_04e2a9728af7": {
+    "en": "Projects",
+    "zh-Hant": "作品"
+  },
+  "m_0bf7f38adc87": {
+    "en": "About Me",
+    "zh-Hant": "關於我"
+  },
+  "m_87bb59ba2f92": {
+    "en": "Workspace",
+    "zh-Hant": "工作區"
+  },
+  "m_991bfa015514": {
+    "en": "My Profile",
+    "zh-Hant": "我的個人檔案"
+  },
+  "m_6f3c838c26c3": {
+    "en": "Public Profile",
+    "zh-Hant": "公開個人檔案"
+  },
+  "m_48f0d3d397d4": {
+    "en": "Sign out",
+    "zh-Hant": "登出"
+  },
+  "m_dfc1e6d16ba5": {
+    "en": "Toggle navigation",
+    "zh-Hant": "展開或收合導覽"
+  },
+  "m_4fc6af988eb5": {
+    "en": "THE KENSEI TOOLBOX",
+    "zh-Hant": "KENSEI 工具箱"
+  },
+  "m_01a917d703e2": {
+    "en": "Useful tools.",
+    "zh-Hant": "實用工具。"
+  },
+  "m_caf94c06eecb": {
+    "en": "A little less",
+    "zh-Hant": "讓日常"
+  },
+  "m_1d0abca01ddb": {
+    "en": "friction.",
+    "zh-Hant": "更順手。"
+  },
+  "m_c667cd6648ff": {
+    "en": "Work with files, colors and everyday tasks,",
+    "zh-Hant": "處理檔案、色彩與日常任務，"
+  },
+  "m_222685aec9a5": {
+    "en": "check your connection, and find your rhythm. Simple tools, ready when you are.",
+    "zh-Hant": "測試網路連線，找到自己的節奏。簡單工具，隨時可用。"
+  },
+  "m_cb7f129c58ac": {
+    "en": "Explore Tools",
+    "zh-Hant": "探索工具"
+  },
+  "m_b7c082ac6e46": {
+    "en": "Open Workspace",
+    "zh-Hant": "開啟工作區"
+  },
+  "m_348c97649105": {
+    "en": "Less busywork. More room for your next idea.",
+    "zh-Hant": "少一點瑣事，多一點空間，留給下一個點子。"
+  },
+  "m_c477223fcee2": {
+    "en": "Illustrative examples of the three browser tools",
+    "zh-Hant": "三款瀏覽器工具的示意範例"
+  },
+  "m_23e80f1ae059": {
+    "en": "A GLIMPSE INSIDE",
+    "zh-Hant": "搶先看看"
+  },
+  "m_f7dd55751982": {
+    "en": "ILLUSTRATIVE EXAMPLES",
+    "zh-Hant": "示意範例"
+  },
+  "m_8f767847eb2a": {
+    "en": "IMAGE STUDIO",
+    "zh-Hant": "IMAGE STUDIO"
+  },
+  "m_b8e38d5f8c79": {
+    "en": "SAMPLE IMAGE",
+    "zh-Hant": "範例圖片"
+  },
+  "m_a6d534956587": {
+    "en": "2.4 MB",
+    "zh-Hant": "2.4 MB"
+  },
+  "m_103b0db49448": {
+    "en": "480 KB",
+    "zh-Hant": "480 KB"
+  },
+  "m_22348cb49d3f": {
+    "en": "◈ A little lighter.",
+    "zh-Hant": "◈ 輕巧一點。"
+  },
+  "m_e3d83adaf2d6": {
+    "en": "80% smaller · example",
+    "zh-Hant": "縮小 80% · 示範"
+  },
+  "m_0fc1e7139f5e": {
+    "en": "a little more clarity",
+    "zh-Hant": "a little more clarity"
+  },
+  "m_f70d91d0fbdc": {
+    "en": "↓ TITLE CASE",
+    "zh-Hant": "↓ 標題大小寫"
+  },
+  "m_0509cfecd9e6": {
+    "en": "A Little More Clarity",
+    "zh-Hant": "A Little More Clarity"
+  },
+  "m_60d29269c4a4": {
+    "en": "4 words",
+    "zh-Hant": "4 個單字"
+  },
+  "m_e71b27bd5a83": {
+    "en": "20 characters",
+    "zh-Hant": "20 個字元"
+  },
+  "m_38d254776561": {
+    "en": "Focus Timer",
+    "zh-Hant": "Focus Timer"
+  },
+  "m_1d191adac941": {
+    "en": "ONE THING AT A TIME",
+    "zh-Hant": "一次專注一件事"
+  },
+  "m_45168b2d9a19": {
+    "en": "YOUR EVERYDAY TOOLBOX",
+    "zh-Hant": "你的日常工具箱"
+  },
+  "m_ab3abf2cbb76": {
+    "en": "What can we make easier",
+    "zh-Hant": "有什麼可以更輕鬆"
+  },
+  "m_adc7dd3d8467": {
+    "en": "Pick a tool and get straight to it.",
+    "zh-Hant": "選個工具，直接開始。"
+  },
+  "m_81c151f98a19": {
+    "en": "All tools",
+    "zh-Hant": "全部工具"
+  },
+  "m_ad02046d85e8": {
+    "en": "Find a tool…",
+    "zh-Hant": "尋找工具…"
+  },
+  "m_fbd165231fa1": {
+    "en": "Search tools",
+    "zh-Hant": "搜尋工具"
+  },
+  "m_a52ace420f21": {
+    "en": "All",
+    "zh-Hant": "全部"
+  },
+  "m_be7e2f201293": {
+    "en": "Images",
+    "zh-Hant": "圖片"
+  },
+  "m_71988c4d8e08": {
+    "en": "Text",
+    "zh-Hant": "文字"
+  },
+  "m_b4e929d8bcfe": {
+    "en": "Documents",
+    "zh-Hant": "文件"
+  },
+  "m_0a035c2b85b8": {
+    "en": "Utilities",
+    "zh-Hant": "實用工具"
+  },
+  "m_f42bca637cb3": {
+    "en": "Productivity",
+    "zh-Hant": "生產力"
+  },
+  "m_e806a291cfc3": {
+    "en": "Testing",
+    "zh-Hant": "測試"
+  },
+  "m_bc1b88907d3b": {
+    "en": "Audio",
+    "zh-Hant": "音訊"
+  },
+  "m_305bb36142b1": {
+    "en": "Favorite Image Studio",
+    "zh-Hant": "收藏 Image Studio"
+  },
+  "m_26ad63209eac": {
+    "en": "Image Studio",
+    "zh-Hant": "Image Studio"
+  },
+  "m_2be4adeb8e6b": {
+    "en": "Batch compress, resize and convert images. Download individually or as a ZIP.",
+    "zh-Hant": "批次壓縮、調整尺寸與轉換圖片，可個別下載或打包為 ZIP。"
+  },
+  "m_ee048b5c04d0": {
+    "en": "Open tool",
+    "zh-Hant": "開啟工具"
+  },
+  "m_227a47c01a2c": {
+    "en": "Favorite QR Studio",
+    "zh-Hant": "收藏 QR Studio"
+  },
+  "m_0760acefb781": {
+    "en": "QR Studio",
+    "zh-Hant": "QR Studio"
+  },
+  "m_0439241edcfa": {
+    "en": "Generate QR codes or scan local images and your camera, entirely on your device.",
+    "zh-Hant": "產生 QR Code，或使用本機圖片與相機掃描，全程在裝置上處理。"
+  },
+  "m_db495d8c2323": {
+    "en": "Favorite PDF Toolkit",
+    "zh-Hant": "收藏 PDF Toolkit"
+  },
+  "m_7c616ba8065f": {
+    "en": "PDF Toolkit",
+    "zh-Hant": "PDF Toolkit"
+  },
+  "m_1f29e32c1b83": {
+    "en": "Merge, split, arrange and rotate PDFs. Convert images to PDF and PDF pages to images.",
+    "zh-Hant": "合併、分割、排序及旋轉 PDF；也能將圖片轉成 PDF，或將 PDF 頁面轉成圖片。"
+  },
+  "m_3998ab82b5a3": {
+    "en": "Favorite Text Toolkit",
+    "zh-Hant": "收藏 Text Toolkit"
+  },
+  "m_c7b0e34e793c": {
+    "en": "Count, clean up and transform text without the busywork.",
+    "zh-Hant": "計算、整理與轉換文字，減少重複瑣事。"
+  },
+  "m_7b321b2bed17": {
+    "en": "Favorite Markdown Studio",
+    "zh-Hant": "收藏 Markdown Studio"
+  },
+  "m_4b30a05a3d29": {
+    "en": "Markdown Studio",
+    "zh-Hant": "Markdown Studio"
+  },
+  "m_b66ad7c54216": {
+    "en": "Write Markdown with a live preview, save drafts and export MD or HTML.",
+    "zh-Hant": "撰寫 Markdown 並即時預覽，儲存草稿，匯出 MD 或 HTML。"
+  },
+  "m_d219a188f596": {
+    "en": "Favorite Text Compare",
+    "zh-Hant": "收藏 Text Compare"
+  },
+  "m_2ed1b26ad499": {
+    "en": "Text Compare",
+    "zh-Hant": "Text Compare"
+  },
+  "m_20647f94e170": {
+    "en": "Compare two texts by line or character and export their differences.",
+    "zh-Hant": "按行或字元比較兩份文字，並匯出差異。"
+  },
+  "m_68b66037546e": {
+    "en": "Favorite Image to Text",
+    "zh-Hant": "收藏 Image to Text"
+  },
+  "m_fe2b9cc38333": {
+    "en": "Image to Text",
+    "zh-Hant": "Image to Text"
+  },
+  "m_4552727fda3f": {
+    "en": "Extract English, Chinese and Malay text from images, right on your device.",
+    "zh-Hant": "直接在裝置上，從圖片辨識英文、中文和馬來文。"
+  },
+  "m_5a40d4158a5d": {
+    "en": "Favorite Focus Timer",
+    "zh-Hant": "收藏 Focus Timer"
+  },
+  "m_7dbdf9bf4bfd": {
+    "en": "Find your rhythm with a simple, adjustable Pomodoro timer.",
+    "zh-Hant": "使用簡單、可調整的番茄鐘，找到專注節奏。"
+  },
+  "m_a9d2acd2674f": {
+    "en": "Favorite Answer Book",
+    "zh-Hant": "收藏 Answer Book"
+  },
+  "m_3f0d082579b5": {
+    "en": "Answer Book",
+    "zh-Hant": "Answer Book"
+  },
+  "m_bc549c411b09": {
+    "en": "Draw original English and Chinese answers, turn another page and revisit your history.",
+    "zh-Hant": "抽取原創中英文答案，再翻一頁，或回顧過去的回答。"
+  },
+  "m_e4632f4593e3": {
+    "en": "Favorite Decision Studio",
+    "zh-Hant": "收藏 Decision Studio"
+  },
+  "m_72633e0b75cb": {
+    "en": "Decision Studio",
+    "zh-Hant": "Decision Studio"
+  },
+  "m_cd6bd25b83a5": {
+    "en": "Spin a wheel, draw without repeats or create balanced random groups. Autosave your schemes.",
+    "zh-Hant": "轉動轉盤、不重複抽選或隨機平均分組，方案會自動儲存。"
+  },
+  "m_37fc3b2bb0d0": {
+    "en": "Favorite Typing Sprint",
+    "zh-Hant": "收藏 Typing Sprint"
+  },
+  "m_abe993c25ee5": {
+    "en": "Typing Sprint",
+    "zh-Hant": "Typing Sprint"
+  },
+  "m_fcb7b47b7c5c": {
+    "en": "Practice English or Chinese typing for 60 seconds, or join the public Ranked leaderboard.",
+    "zh-Hant": "進行 60 秒英文或中文打字練習，或參加公開排名測試。"
+  },
+  "m_d86c72f5d9d3": {
+    "en": "Favorite Device Check",
+    "zh-Hant": "收藏 Device Check"
+  },
+  "m_116232ce47cd": {
+    "en": "Device Check",
+    "zh-Hant": "Device Check"
+  },
+  "m_02576b62e377": {
+    "en": "Check your screen, keyboard and mouse with temporary tests you control.",
+    "zh-Hant": "由你主動啟動暫時性測試，檢查螢幕、鍵盤和滑鼠。"
+  },
+  "m_05c9a70fcdd9": {
+    "en": "Favorite Network Test",
+    "zh-Hant": "收藏 Network Test"
+  },
+  "m_180a0b9224d0": {
+    "en": "Network Test",
+    "zh-Hant": "Network Test"
+  },
+  "m_ee7b85cd0722": {
+    "en": "Measure download, upload, latency and jitter with a full Cloudflare connection test.",
+    "zh-Hant": "透過完整的 Cloudflare 連線測試，測量下載、上傳速度、延遲和抖動。"
+  },
+  "m_900a60ded3f4": {
+    "en": "Favorite ZIP Studio",
+    "zh-Hant": "收藏 ZIP Studio"
+  },
+  "m_21089b48b903": {
+    "en": "ZIP Studio",
+    "zh-Hant": "ZIP Studio"
+  },
+  "m_b0821bdb0c96": {
+    "en": "Pack files into a ZIP, inspect an archive and download checked files locally.",
+    "zh-Hant": "在本機將檔案打包為 ZIP、查看壓縮包，並下載已檢查的檔案。"
+  },
+  "m_a026cbd76cef": {
+    "en": "Favorite Color Studio",
+    "zh-Hant": "收藏 Color Studio"
+  },
+  "m_13641effb175": {
+    "en": "Color Studio",
+    "zh-Hant": "Color Studio"
+  },
+  "m_c444bc062566": {
+    "en": "Convert colors, build a palette, preview gradients and check text contrast.",
+    "zh-Hant": "轉換色彩、建立調色盤、預覽漸層與檢查文字對比度。"
+  },
+  "m_4a471fa241ca": {
+    "en": "Favorite Unit Converter",
+    "zh-Hant": "收藏 Unit Converter"
+  },
+  "m_de3e449e39d7": {
+    "en": "Unit Converter",
+    "zh-Hant": "Unit Converter"
+  },
+  "m_4ceecf2c318d": {
+    "en": "Convert everyday units, from temperature and distance to volume and storage.",
+    "zh-Hant": "換算日常單位，涵蓋溫度、距離、容量和儲存空間。"
+  },
+  "m_a967ab6cd6fc": {
+    "en": "Favorite Password Generator",
+    "zh-Hant": "收藏 Password Generator"
+  },
+  "m_7bec027afa19": {
+    "en": "Password Generator",
+    "zh-Hant": "Password Generator"
+  },
+  "m_5781e23b1ad4": {
+    "en": "Generate a random password on your device, with the length and characters you choose.",
+    "zh-Hant": "在裝置上依指定長度及字元類型，產生隨機密碼。"
+  },
+  "m_e10f97cfe2af": {
+    "en": "Favorite Time Studio",
+    "zh-Hant": "收藏 Time Studio"
+  },
+  "m_648852347b3d": {
+    "en": "Time Studio",
+    "zh-Hant": "Time Studio"
+  },
+  "m_be474ffdf608": {
+    "en": "World clocks, time-zone conversion, calendar date differences and local countdowns.",
+    "zh-Hant": "世界時鐘、時區轉換、日期差與本機倒數計時。"
+  },
+  "m_303eb5aac6c2": {
+    "en": "Favorite File Renamer",
+    "zh-Hant": "收藏 File Renamer"
+  },
+  "m_88fcac6f34b4": {
+    "en": "File Renamer",
+    "zh-Hant": "File Renamer"
+  },
+  "m_6214e0195336": {
+    "en": "Preview batch names, add numbering and download renamed copies as a ZIP.",
+    "zh-Hant": "預覽批次檔名、加上編號，並將重新命名的副本下載為 ZIP。"
+  },
+  "m_c6406642804e": {
+    "en": "Favorite Audio Studio",
+    "zh-Hant": "收藏 Audio Studio"
+  },
+  "m_c15e3ff611a3": {
+    "en": "Audio Studio",
+    "zh-Hant": "Audio Studio"
+  },
+  "m_03f046adc809": {
+    "en": "Record your microphone, trim audio and export MP3 or WAV on your device.",
+    "zh-Hant": "在裝置上使用麥克風錄音、裁剪音訊，並匯出 MP3 或 WAV。"
+  },
+  "m_d733f6536021": {
+    "en": "Favorite Data Studio",
+    "zh-Hant": "收藏 Data Studio"
+  },
+  "m_86fda4bbd499": {
+    "en": "Data Studio",
+    "zh-Hant": "Data Studio"
+  },
+  "m_1cbf81320589": {
+    "en": "Validate and format JSON, preview CSV tables and convert between flat JSON and CSV.",
+    "zh-Hant": "驗證及格式化 JSON、預覽 CSV 表格，並在扁平 JSON 與 CSV 之間轉換。"
+  },
+  "m_4221d4110b40": {
+    "en": "Favorite Flashcards",
+    "zh-Hant": "收藏 Flashcards"
+  },
+  "m_eac4b70868b6": {
+    "en": "Flashcards",
+    "zh-Hant": "Flashcards"
+  },
+  "m_af0285ccbed4": {
+    "en": "Create bilingual learning cards, review mastery and sync private decks across devices.",
+    "zh-Hant": "建立雙語學習卡、複習熟練度，並跨裝置私下同步牌組。"
+  },
+  "m_0b019096ea9f": {
+    "en": "Favorite Calculator Studio",
+    "zh-Hant": "收藏 Calculator Studio"
+  },
+  "m_36027499ea03": {
+    "en": "Calculator Studio",
+    "zh-Hant": "Calculator Studio"
+  },
+  "m_08dc690a160f": {
+    "en": "Calculate scientific expressions, fractions and percentages with DEG or RAD angles.",
+    "zh-Hant": "使用 DEG 或 RAD 角度模式，計算科學運算式、分數和百分比。"
+  },
+  "m_dc008b88bcf5": {
+    "en": "Favorite File Check",
+    "zh-Hant": "收藏 File Check"
+  },
+  "m_c0657b74c18d": {
+    "en": "File Check",
+    "zh-Hant": "File Check"
+  },
+  "m_1fe2870c10c4": {
+    "en": "Calculate SHA-256 / SHA-512, compare checksums and find matching selected files.",
+    "zh-Hant": "計算 SHA-256／SHA-512、比較校驗碼，並找出所選檔案中內容相同的檔案。"
+  },
+  "m_0b1ed7d4326c": {
+    "en": "Favorite Subtitle Studio",
+    "zh-Hant": "收藏 Subtitle Studio"
+  },
+  "m_5fdfc7a72f2d": {
+    "en": "Subtitle Studio",
+    "zh-Hant": "Subtitle Studio"
+  },
+  "m_0433d1de1ec8": {
+    "en": "Edit SRT and WebVTT, shift timing and preview subtitles with your local video.",
+    "zh-Hant": "編輯 SRT 與 WebVTT、調整時間，並搭配本機影片預覽字幕。"
+  },
+  "m_9b10a98c3b5c": {
+    "en": "Favorite Study Planner",
+    "zh-Hant": "收藏 Study Planner"
+  },
+  "m_769f86e100cb": {
+    "en": "Study Planner",
+    "zh-Hant": "Study Planner"
+  },
+  "m_40e8e9b6e5bd": {
+    "en": "Plan weekly classes, assignments and exams with private account sync.",
+    "zh-Hant": "規劃每週課程、作業和考試，並私下同步至帳號。"
+  },
+  "m_0df39c8d6ce2": {
+    "en": "Favorite Whiteboard",
+    "zh-Hant": "收藏 Whiteboard"
+  },
+  "m_40295e7054aa": {
+    "en": "Whiteboard",
+    "zh-Hant": "Whiteboard"
+  },
+  "m_5ccfc9326657": {
+    "en": "Draw, connect and sketch ideas on privately synced whiteboards.",
+    "zh-Hant": "在私下同步的白板上繪圖、連結想法與隨手構思。"
+  },
+  "m_c9bc524a0956": {
+    "en": "Favorite Screen Recorder",
+    "zh-Hant": "收藏 Screen Recorder"
+  },
+  "m_c39ecee63846": {
+    "en": "Screen Recorder",
+    "zh-Hant": "Screen Recorder"
+  },
+  "m_410855ab9a54": {
+    "en": "Record your screen with optional audio, then preview and download locally.",
+    "zh-Hant": "錄製螢幕，可選擇加入音訊，完成後在本機預覽及下載。"
+  },
+  "m_afc20162ca97": {
+    "en": "No tools found. Try another search.",
+    "zh-Hant": "找不到工具，請換個關鍵字搜尋。"
+  },
+  "m_d4d263e62182": {
+    "en": "File processing stays on your device. Network Test connects to Cloudflare; Public typing verifies input with Supabase.",
+    "zh-Hant": "檔案在你的裝置上處理。Network Test 會連線至 Cloudflare；公開打字測試會透過 Supabase 驗證輸入。"
+  },
+  "m_e0e6c494b4db": {
+    "en": "A SPACE OF YOUR OWN",
+    "zh-Hant": "專屬於你的空間"
+  },
+  "m_44f88bc6c6fc": {
+    "en": "Pick up where you left off.",
+    "zh-Hant": "從上次停下的地方繼續。"
+  },
+  "m_da1b25089163": {
+    "en": "Your saved drafts, favorite tools and moments of focus. All in one place.",
+    "zh-Hant": "已儲存的草稿、收藏工具與專注時刻，集中在同一處。"
+  },
+  "m_0e3ba6991416": {
+    "en": "A small corner of the internet, made with care.",
+    "zh-Hant": "用心打造的一小角網路空間。"
+  },
+  "m_54a57c3147c4": {
+    "en": "Privacy",
+    "zh-Hant": "隱私"
+  },
+  "m_0cd8786a8cb1": {
+    "en": "Open-source credits",
+    "zh-Hant": "開源致謝"
+  },
+  "m_5bdba0f29463": {
+    "en": "About Me ↗",
+    "zh-Hant": "關於我 ↗"
+  },
+  "m_86ea6b6c722d": {
+    "en": "© 2026 KenSei",
+    "zh-Hant": "© 2026 KenSei"
+  },
+  "m_c8df66c5fe3f": {
+    "en": "Close dialog",
+    "zh-Hant": "關閉對話框"
+  },
+  "m_77a688369b66": {
+    "en": "YOUR SPACE, EVERYWHERE",
+    "zh-Hant": "你的空間，隨處可用"
+  },
+  "m_544754ff05b6": {
+    "en": "A little more personal.",
+    "zh-Hant": "多一點個人風格。"
+  },
+  "m_c3607657f445": {
+    "en": "Sign in to keep your workspace together and join Public typing and games. Your Google name and avatar initialize your public profile, which you can edit anytime.",
+    "zh-Hant": "登入即可讓工作區內容保持同步，並參加公開打字與遊戲排名。首次登入會使用 Google 名稱與頭像建立公開個人檔案，之後可以自行編輯。"
+  },
+  "m_cce937e89144": {
+    "en": "Continue with Google",
+    "zh-Hant": "使用 Google 繼續"
+  },
+  "m_559b13ef6572": {
+    "en": "Local tools, Typing Practice and Private games are available without an account.",
+    "zh-Hant": "無須帳號即可使用本機工具、打字練習與私人遊戲。"
+  },
+  "m_b2103534991f": {
+    "en": "Enable JavaScript to use interactive tools. Project pages and navigation remain available.",
+    "zh-Hant": "請啟用 JavaScript 以使用互動工具。作品頁與導覽仍可使用。"
+  },
+  "m_ba81b1cdd760": {
+    "en": "Page not found — KenSei",
+    "zh-Hant": "找不到頁面 — KenSei"
+  },
+  "m_7a7db907ed9b": {
+    "en": "404 / A SMALL DETOUR",
+    "zh-Hant": "404／暫時繞個路"
+  },
+  "m_7b0be0ef16e6": {
+    "en": "This idea isn’t here.",
+    "zh-Hant": "這個點子不在這裡。"
+  },
+  "m_b4a725f6e870": {
+    "en": "The page may have moved. There’s plenty more to explore.",
+    "zh-Hant": "頁面可能已移動，還有許多內容值得探索。"
+  },
+  "m_2297fac65b54": {
+    "en": "Back to the workshop →",
+    "zh-Hant": "返回 Workshop →"
+  },
+  "m_862805dae751": {
+    "en": "Open-source credits — KenSei",
+    "zh-Hant": "開源致謝 — KenSei"
+  },
+  "m_66a169fa7e8b": {
+    "en": "BUILT TOGETHER",
+    "zh-Hant": "攜手打造"
+  },
+  "m_400989308402": {
+    "en": "Open-source credits.",
+    "zh-Hant": "開源致謝。"
+  },
+  "m_4708fa33022a": {
+    "en": "These projects power the Workshop. The newer games, including Block Drop and online Pong, puzzle generators, computer opponents and board artwork use original native code and assets. Their licenses and copyright notices are included below.",
+    "zh-Hant": "這些專案支援 Workshop 的運作。較新的遊戲，包括 Block Drop 與線上 Pong，以及謎題產生器、電腦對手和棋盤圖形，都使用原創的原生程式碼與素材。各項授權及著作權聲明列於下方。"
+  },
+  "m_369b3ac69c98": {
+    "en": "2048 rules reference · Gabriele Cirulli · MIT ·",
+    "zh-Hant": "2048 規則參考 · Gabriele Cirulli · MIT ·"
+  },
+  "m_5ffaa1328d33": {
+    "en": "License and pinned reference",
+    "zh-Hant": "授權與固定版本參考"
+  },
+  "m_6da8e558bff3": {
+    "en": "pica 10.0.3",
+    "zh-Hant": "pica 10.0.3"
+  },
+  "m_e7d2a449b10c": {
+    "en": "· MIT ·",
+    "zh-Hant": "· MIT ·"
+  },
+  "m_c011d6097bfb": {
+    "en": "License",
+    "zh-Hant": "授權"
+  },
+  "m_cd323fc03509": {
+    "en": "fflate 0.8.3",
+    "zh-Hant": "fflate 0.8.3"
+  },
+  "m_a3202187faaf": {
+    "en": "qr-code-styling 1.9.2",
+    "zh-Hant": "qr-code-styling 1.9.2"
+  },
+  "m_f295e9fbdf3a": {
+    "en": "pdf-lib 1.17.1",
+    "zh-Hant": "pdf-lib 1.17.1"
+  },
+  "m_e62a14dfe739": {
+    "en": "pdfjs-dist 6.4.299",
+    "zh-Hant": "pdfjs-dist 6.4.299"
+  },
+  "m_4367ec112a78": {
+    "en": "· Apache-2.0 ·",
+    "zh-Hant": "· Apache-2.0 ·"
+  },
+  "m_646a3d6d1335": {
+    "en": "markdown-it 15.0.3",
+    "zh-Hant": "markdown-it 15.0.3"
+  },
+  "m_9ea5f6296922": {
+    "en": "diff 9.0.0",
+    "zh-Hant": "diff 9.0.0"
+  },
+  "m_fd6c611a2fdb": {
+    "en": "· BSD-3-Clause ·",
+    "zh-Hant": "· BSD-3-Clause ·"
+  },
+  "m_a94e9ef4f41d": {
+    "en": "tesseract.js 7.0.0",
+    "zh-Hant": "tesseract.js 7.0.0"
+  },
+  "m_b41c57cdb739": {
+    "en": "spin-wheel 5.0.2",
+    "zh-Hant": "spin-wheel 5.0.2"
+  },
+  "m_b46f616a7524": {
+    "en": "@cloudflare/speedtest 1.14.2",
+    "zh-Hant": "@cloudflare/speedtest 1.14.2"
+  },
+  "m_3464ef1a969c": {
+    "en": "@js-temporal/polyfill 0.5.1",
+    "zh-Hant": "@js-temporal/polyfill 0.5.1"
+  },
+  "m_6190801767aa": {
+    "en": "· ISC ·",
+    "zh-Hant": "· ISC ·"
+  },
+  "m_2fe1202779a2": {
+    "en": "uplot 1.6.32",
+    "zh-Hant": "uplot 1.6.32"
+  },
+  "m_8af9ebeb0b3d": {
+    "en": "wavesurfer.js 8.0.3",
+    "zh-Hant": "wavesurfer.js 8.0.3"
+  },
+  "m_8b85957ab61f": {
+    "en": "mediabunny 1.61.6",
+    "zh-Hant": "mediabunny 1.61.6"
+  },
+  "m_4e72ff3cb0cb": {
+    "en": "· MPL-2.0 ·",
+    "zh-Hant": "· MPL-2.0 ·"
+  },
+  "m_c69a413e89ef": {
+    "en": "papaparse 5.7.0",
+    "zh-Hant": "papaparse 5.7.0"
+  },
+  "m_158ef590d40d": {
+    "en": "mathjs 15.2.0",
+    "zh-Hant": "mathjs 15.2.0"
+  },
+  "m_70843336009c": {
+    "en": "cropperjs 2.3.1",
+    "zh-Hant": "cropperjs 2.3.1"
+  },
+  "m_4d8abc176aba": {
+    "en": "@excalidraw/excalidraw 0.18.1",
+    "zh-Hant": "@excalidraw/excalidraw 0.18.1"
+  },
+  "m_4b4ae2bb59d9": {
+    "en": "jsqr 1.4.0",
+    "zh-Hant": "jsqr 1.4.0"
+  },
+  "m_113fc93bd627": {
+    "en": "react 19.3.1",
+    "zh-Hant": "react 19.3.1"
+  },
+  "m_a4aac0738b19": {
+    "en": "react-dom 19.3.1",
+    "zh-Hant": "react-dom 19.3.1"
+  },
+  "m_3a3ad5818851": {
+    "en": "Tesseract.js Core · Apache-2.0 ·",
+    "zh-Hant": "Tesseract.js 核心 · Apache-2.0 ·"
+  },
+  "m_32304ffd6f94": {
+    "en": "Tesseract fast language models · Apache-2.0 ·",
+    "zh-Hant": "Tesseract 快速語言模型 · Apache-2.0 ·"
+  },
+  "m_b3233f5fc0bd": {
+    "en": "Bundled dependency notices",
+    "zh-Hant": "內附相依套件聲明"
+  },
+  "m_a23db2566e7c": {
+    "en": "Mediabunny and its MP3 extension use MPL-2.0; embedded LAME uses LGPL.",
+    "zh-Hant": "Mediabunny 與其 MP3 擴充套件使用 MPL-2.0；內嵌的 LAME 使用 LGPL。"
+  },
+  "m_a2318fc8b4c6": {
+    "en": "Pinned source and build information",
+    "zh-Hant": "固定版本原始碼與建置資訊"
+  },
+  "m_01a3192bf38c": {
+    "en": "Mediabunny sources",
+    "zh-Hant": "Mediabunny 原始碼"
+  },
+  "m_32606c0f81e3": {
+    "en": "LAME sources",
+    "zh-Hant": "LAME 原始碼"
+  },
+  "m_56a126eda41e": {
+    "en": "LAME license",
+    "zh-Hant": "LAME 授權"
+  },
+  "m_92302d55c859": {
+    "en": "Whiteboard uses Excalidraw and React.",
+    "zh-Hant": "Whiteboard 使用 Excalidraw 和 React。"
+  },
+  "m_ea9d414cecdf": {
+    "en": "Whiteboard dependency notices",
+    "zh-Hant": "白板相依套件聲明"
+  },
+  "m_dea1cc23bd69": {
+    "en": "Local whiteboard font licenses",
+    "zh-Hant": "本機白板字體授權"
+  },
+  "m_ae3b97a04a69": {
+    "en": "Files are processed in your browser.",
+    "zh-Hant": "檔案在你的瀏覽器中處理。"
+  },
+  "m_9592c2e16c4e": {
+    "en": "Read our privacy notes →",
+    "zh-Hant": "閱讀隱私說明 →"
+  },
+  "m_cf598e34d0f9": {
+    "en": "THE PLAY CORNER",
+    "zh-Hant": "遊戲小角落"
+  },
+  "m_358511c8c098": {
+    "en": "Effects",
+    "zh-Hant": "效果"
+  },
+  "m_c3cee8ad3c47": {
+    "en": "Game effects",
+    "zh-Hant": "遊戲效果"
+  },
+  "m_0286249762f7": {
+    "en": "Auto",
+    "zh-Hant": "自動"
+  },
+  "m_9f96285d77b9": {
+    "en": "Reduced",
+    "zh-Hant": "減少動態效果"
+  },
+  "m_e59c8480da12": {
+    "en": "Privacy — KenSei",
+    "zh-Hant": "隱私 — KenSei"
+  },
+  "m_231aafa84015": {
+    "en": "A LITTLE TRANSPARENCY",
+    "zh-Hant": "多一點透明"
+  },
+  "m_b77e24f3eac4": {
+    "en": "Your work stays yours.",
+    "zh-Hant": "你的作品，始終屬於你。"
+  },
+  "m_321e98c7237d": {
+    "en": "Browser tools",
+    "zh-Hant": "瀏覽器工具"
+  },
+  "m_c389fcef6d97": {
+    "en": "Image, PDF, ZIP, QR, Markdown, color, unit conversion, text comparison and OCR processing happen in your browser. ZIP contents are checked and extracted locally; archive files are never uploaded. Password Generator uses cryptographic randomness and does not save, log or upload generated passwords. Copying a password places it on your device clipboard. Images, PDF files, QR content, Wi-Fi passwords and logos are not uploaded or saved to your workspace. QR appearance presets contain only colors and size. OCR downloads only the language packs you choose, and caches them in your browser. Existing text tools send text to cloud storage only when you explicitly save a signed-in draft. Answer Book and Decision Studio automatically save new or edited records: locally first, then privately to your signed-in account. Answer Book questions are never saved. Guest history is not automatically uploaded when you sign in.",
+    "zh-Hant": "圖片、PDF、ZIP、QR、Markdown、色彩、單位換算、文字比較及 OCR 都在瀏覽器中處理。ZIP 內容在本機檢查與解壓縮，壓縮包不會上傳。Password Generator 使用密碼學安全隨機數，不會儲存、記錄或上傳產生的密碼。複製密碼會將它放入裝置的剪貼簿。圖片、PDF 檔案、QR 內容、Wi-Fi 密碼及 Logo 不會上傳或儲存至工作區。QR 外觀預設只包含色彩與尺寸。OCR 只下載你選擇的語言包，並快取在瀏覽器中。既有文字工具只會在你明確儲存已登入的草稿時，將文字傳至雲端。Answer Book 和 Decision Studio 會自動儲存新增或編輯的記錄：先存於本機，再私下同步至已登入的帳號。答案之書的問題不會儲存。登入時不會自動上傳訪客歷史。"
+  },
+  "m_73be239704e9": {
+    "en": "Network Test is an online measurement, started only by you. Your browser downloads and uploads synthetic test data directly to Cloudflare, which receives your connection IP and handles requests under its own privacy policy. A Full Test schedules 488.9 MB of payload at most; all attempts including retries share a 500 MB payload budget, with protocol overhead additional. Extra per-measurement and final-result reporting are disabled. The test stops when cancelled, hidden, left or timed out. The last 20 completed results, valid sample curves, connection organization and approximate region are stored only in this browser and can be deleted or cleared; they are never synced to your account. A small Cloudflare /meta request runs once after Start for connection details. Full IP is masked by default, exists only on the current page and is excluded from history, logs and every report. Exported PNG/CSV/JSON reports exclude full IP. Old summary-only history remains readable. Measurements describe your connection to Cloudflare, not every internet destination.",
+    "zh-Hant": "Network Test 是由你主動啟動的線上測量。瀏覽器會直接向 Cloudflare 下載及上傳合成測試資料；Cloudflare 會取得連線 IP，並依其隱私政策處理請求。完整測試最多排定 488.9 MB 的測試負載；所有嘗試及重試共用 500 MB 的負載上限，通訊協定開銷另計。額外的逐次測量及最終結果上報均已關閉。取消、頁面隱藏、離開或逾時都會停止測試。最近 20 次完成結果、有效樣本曲線、連線組織及概略地區只儲存在此瀏覽器，可個別刪除或全部清除，不會同步至帳號。按下開始後，會向 Cloudflare /meta 發送一次小型請求以取得連線資訊。完整 IP 預設遮蔽，只存在目前頁面，不會加入歷史、記錄或任何報告。匯出的 PNG／CSV／JSON 報告也不包含完整 IP。只有摘要的舊歷史仍可讀取。測量反映你至 Cloudflare 的連線，不代表所有網路目的地。"
+  },
+  "m_f6c86aa309fe": {
+    "en": "Time, audio and data tools",
+    "zh-Hant": "時間、音訊與資料工具"
+  },
+  "m_b9b7d9a9be72": {
+    "en": "Time Studio uses your device clock and browser time-zone data. Clock settings and named countdowns stay on this device; it does not provide background alarms. File Renamer downloads renamed ZIP copies without changing originals. Audio files, waveform samples, exported audio, JSON and CSV inputs are processed locally. Audio is never saved or uploaded. JSON and CSV are not uploaded; optional text recovery can retain selected editor text on this device when enabled. MP3 encoding runs locally using a vendored encoder and WASM. CSV downloads escape spreadsheet formula cells and explain any escaping.",
+    "zh-Hant": "Time Studio 使用裝置時鐘與瀏覽器時區資料。時鐘設定及命名倒數只保留在此裝置，不提供背景鬧鈴。File Renamer 下載重新命名的 ZIP 副本，不會更動原始檔。音訊檔案、波形樣本、匯出音訊，以及 JSON 與 CSV 輸入都在本機處理。音訊不會儲存或上傳。JSON 與 CSV 不會上傳；開啟選用文字恢復後，可將指定編輯器中的文字保留在裝置上。MP3 使用本站提供的編碼器與 WASM 在本機編碼。CSV 下載會對試算表公式儲存格進行跳脫處理，並說明這些處理。"
+  },
+  "m_eadeb058796e": {
+    "en": "Learning cards and local utilities",
+    "zh-Hant": "學習卡與本機實用工具"
+  },
+  "m_bb27d9bf620c": {
+    "en": "Learning cards and review mastery are stored in IndexedDB on this device. Signed-in card decks sync privately to your account; guest decks are not automatically uploaded. Private decks are excluded from public profiles. Conflicts retain copies, and deleted cloud decks keep empty synchronization tombstones. Calculator history stays on this device. File checksums, subtitle files and local preview videos are processed here without uploads. Download subtitle edits before leaving. PDF information cleanup covers the standard Info dictionary and document/page XMP only.",
+    "zh-Hant": "學習卡及複習熟練度儲存在此裝置的 IndexedDB。登入後，牌組會私下同步至帳號，訪客牌組不會自動上傳。私人牌組不會出現在公開個人檔案。衝突時會保留副本；已刪除的雲端牌組會留下不含內容的同步刪除標記。計算機歷史只保留在此裝置。檔案校驗碼、字幕檔及本機預覽影片都在這裡處理，不會上傳。離開前請下載字幕修改。PDF 資訊清理僅涵蓋標準 Info 字典及文件／頁面的 XMP。"
+  },
+  "m_eb9fd0ca8b32": {
+    "en": "Study plans and whiteboards",
+    "zh-Hant": "學習計畫與白板"
+  },
+  "m_9826a60715fc": {
+    "en": "Plans and vector whiteboards save first in IndexedDB and sync privately when signed in. Guest records are copied to an account only through Copy to account. Sync queues are isolated by account; conflicting edits retain a copy. Whiteboards do not embed files or external pages. Workspace provides deletion and backups.",
+    "zh-Hant": "計畫及向量白板先儲存至 IndexedDB，登入後再私下同步。訪客記錄只會透過「複製至帳號」操作匯入帳號。同步佇列依帳號隔離；編輯衝突時保留副本。白板不嵌入檔案或外部頁面。工作區提供刪除與備份功能。"
+  },
+  "m_8b0524b86c08": {
+    "en": "Recording and QR scanning",
+    "zh-Hant": "錄製與 QR 掃描"
+  },
+  "m_b842801aaeb3": {
+    "en": "Screen recording, microphone recording and QR scanning start only after your action and device permission. Camera frames, scanned content and recordings stay on this page, are never uploaded or added to history, and must be downloaded to keep. Stopping or leaving releases capture devices. Screen recording continues when switching windows. Shared audio and recording formats depend on your browser. QR links open only when you choose.",
+    "zh-Hant": "錄屏、麥克風錄音及 QR 掃描，都只會在你主動操作並授予裝置權限後開始。相機影格、掃描內容和錄製結果只保留在此頁面，不會上傳或加入歷史；若要保留，必須自行下載。停止或離開會釋放擷取裝置。切換視窗時錄屏會繼續。能否分享音訊及錄製格式取決於瀏覽器。QR 連結只會在你選擇時開啟。"
+  },
+  "m_dfbbec38fc54": {
+    "en": "Local workspace",
+    "zh-Hant": "本機工作區"
+  },
+  "m_8c0cb0619ed3": {
+    "en": "Favorites, presets, saved drafts, timer settings and completed focus sessions are stored in this browser. Clearing browser storage removes local data. Use the workspace export to keep a backup.",
+    "zh-Hant": "收藏、預設、草稿、計時器設定及已完成的專注回合，都儲存在此瀏覽器。清除瀏覽器儲存空間會移除本機資料。請使用工作區匯出功能保留備份。"
+  },
+  "m_a927d18b1ae0": {
+    "en": "Optional account",
+    "zh-Hant": "選用帳號"
+  },
+  "m_a56ae821d870": {
+    "en": "When configured, Google sign-in is provided through Supabase. Account identity and private items are stored with Supabase, with access limited to your account. Your Google display name and avatar initialize your public profile on first sign-in. Existing chosen names and later profile edits are retained. Profile names, avatars and biographies are public; your email and tool histories stay private. The application requests basic profile and email information, not access to your Google files.",
+    "zh-Hant": "設定完成後，Google 登入由 Supabase 提供。帳號身分及私人項目儲存在 Supabase，存取權限僅限你的帳號。首次登入會以 Google 顯示名稱和頭像建立公開個人檔案；原先選擇的名稱及之後的修改都會保留。個人檔案名稱、頭像與簡介為公開資料；電子郵件及工具歷史仍為私人資料。應用程式只要求基本個人資料及電子郵件資訊，不會存取你的 Google 檔案。"
+  },
+  "m_444775277074": {
+    "en": "Typing and device tests",
+    "zh-Hant": "打字與裝置測試"
+  },
+  "m_ff4d397f9197": {
+    "en": "Typing Practice scores stay in this browser. Ranked sends your completed input to Supabase to calculate a score; raw typed text is not retained. Public is the default typing mode and requires sign-in; Practice remains local and can be selected without an account. Qualifying best scores publish your current public name, speed, accuracy and date, with a link to your public profile. Uploaded avatars are the only images sent to profile storage, after you explicitly save them; file-tool inputs are never uploaded. Avatars are center-cropped and re-encoded in the browser, then stored publicly in Supabase Storage. Google avatars may be loaded from Google, and can be replaced or removed in Profile. English and Chinese use separate versioned boards. Device tests run only when started, stop when you leave their test area, and never save or upload key or mouse events.",
+    "zh-Hant": "打字練習成績只保留在此瀏覽器。排名測試會將完成的輸入傳至 Supabase 計算分數，不保留原始輸入文字。打字預設為公開模式，需要登入；練習仍在本機進行，無須帳號即可選擇。合格的最佳成績會公開目前的名稱、速度、準確率和日期，並連結至公開個人檔案。只有在你明確儲存後，上傳的頭像才會傳至個人檔案儲存空間；檔案工具的輸入不會上傳。頭像會在瀏覽器中置中裁切並重新編碼，再公開儲存在 Supabase Storage。Google 頭像可能從 Google 載入，並可在個人檔案中更換或移除。英文和中文使用不同版本的排行榜。裝置測試只在啟動後執行，離開測試區域即停止，且不儲存或上傳鍵盤及滑鼠事件。"
+  },
+  "m_0910a6e43e75": {
+    "en": "Optional local recovery",
+    "zh-Hant": "選用本機恢復"
+  },
+  "m_2b3919360505": {
+    "en": "Remember on this device is off by default and enabled separately for each supported tool and account. It stores only selected editor text and settings in IndexedDB on this browser, with up to three recent editing sessions and 2 MB per copy. Restore or discard dated copies explicitly. Recovery is separate from Workspace saves and is never automatically synced. Passwords, QR and Wi-Fi content, Answer Book questions, typing input, file objects and media are excluded. Turning recovery off clears this tool’s copies for the current identity. Existing private autosave records keep their original behavior.",
+    "zh-Hant": "「記住此裝置」預設關閉，並依支援的工具與帳號分別啟用。它只將指定的編輯器文字與設定儲存於此瀏覽器的 IndexedDB，最多保留最近三次編輯工作階段，每份上限為 2 MB。請明確選擇恢復或捨棄附有日期的副本。恢復副本與工作區儲存分開，不會自動同步。密碼、QR 與 Wi-Fi 內容、答案之書問題、打字輸入、檔案物件及媒體都不包含在內。關閉恢復會清除目前身分在此工具的恢復副本。既有私人自動儲存記錄保留原有行為。"
+  },
+  "m_f5db3ca31dfe": {
+    "en": "Games and public boards",
+    "zh-Hant": "遊戲與公開排行榜"
+  },
+  "m_093db0bc3125": {
+    "en": "Private game progress and personal bests save on this device. Signed-in account saves sync privately to Supabase, isolated from guest saves. Guest saves copy to an account only when requested. New signed-in games that support rankings automatically submit eligible completed results. Guests can play without signing in; old local results are not uploaded to rankings. Connect Four and Reversi are local-only matches. Their computer opponents run in a browser worker, and local two-player matches use the same device. Public runs send a versioned action replay to Supabase for verification and publish your current profile name, avatar, result and date. Replays are not public and are not retained after verification. Paused, hidden or restored games continue privately and cannot enter the board. Pending completed submissions stay on this device for retry, isolated by account. Leaderboards are casual and cannot prevent automated play. Game saves can be deleted in Games. Sound defaults to 35% and starts only after a game gesture; mute, volume and Effects preferences remain on this device. Brick Breaker current and Previous rules rankings are separate; legacy saves and results are retained. Profile pages include qualifying game bests and unlocked milestone badges with dates. Only server-verified Public results count toward the 30 milestones and personal progress; locked milestone progress is visible only to its owner. Historical badges use only provable results.",
+    "zh-Hant": "私人遊戲進度和個人最佳儲存在此裝置。已登入的帳號存檔會私下同步至 Supabase，與訪客存檔隔離。訪客存檔只在明確要求時複製至帳號。登入後，支援排名的新遊戲會自動提交合格的完成結果。訪客無須登入即可遊玩；舊本機成績不會上傳至排行榜。四子棋與黑白棋只在本機對局；電腦對手在瀏覽器 Worker 中執行，本機雙人則共用同一裝置。公開對局會將附版本的操作重播傳至 Supabase 驗證，並公開目前的個人檔案名稱、頭像、成績及日期。重播不公開，且驗證後不保留。暫停、頁面隱藏或從存檔恢復的遊戲會以私人方式繼續，不能進入排行榜。已完成但待提交的結果依帳號隔離，保留在此裝置供重試。排行榜屬休閒性質，無法防止自動遊玩。可在 Games 刪除存檔。音量預設為 35%，只在遊戲操作後啟用；靜音、音量與效果偏好只保留在此裝置。Brick Breaker 的目前規則與舊規則排行榜分開，舊存檔及成績保留。個人檔案包含合格的遊戲最佳成績，以及附解鎖日期的里程碑徽章。只有經伺服器驗證的公開成績會計入 30 項里程碑及個人進度；尚未解鎖的進度僅本人可見。歷史徽章只根據可證明的結果補發。"
+  },
+  "m_7d85734037c7": {
+    "en": "Online friend Pong",
+    "zh-Hant": "線上好友 Pong"
+  },
+  "m_eeb4a20f6eed": {
+    "en": "Pong requires both players to sign in. Room members see each other’s public profile name and avatar. Positions and game controls travel through private Supabase Realtime channels, not per-frame database writes. Only short-lived room lifecycle and membership are stored. Rooms have two players, waiting rooms expire after 15 minutes, and pauses expire after 60 seconds. Pong does not create public rankings, achievements, permanent match records or resumable saves. Leaving, account changes and expired rooms release the connection. Supabase handles connection metadata under its own privacy policy.",
+    "zh-Hant": "Pong 需要雙方登入。房間成員可看到彼此公開個人檔案的名稱與頭像。位置與遊戲控制透過 Supabase Realtime 私人頻道傳送，不會逐影格寫入資料庫。系統只儲存短期的房間生命週期及成員資料。每個房間限兩位玩家；等候房間在 15 分鐘後失效，暫停在 60 秒後逾期。Pong 不建立公開排名、成就、永久對局記錄或可續玩的存檔。離開、切換帳號及房間到期時都會釋放連線。Supabase 依其隱私政策處理連線中繼資料。"
+  },
+  "m_b5d982247f16": {
+    "en": "Your controls",
+    "zh-Hant": "你的控制權"
+  },
+  "m_e5b07ea4b667": {
+    "en": "Delete or clear private histories in Workspace, export each history, or sign out. Autosave caches and retry queues are isolated by account. Conflicting scheme edits are kept as separate copies. Deleted cloud records retain an empty-content tombstone for sync; minimal retry receipts contain no saved record content. Signing out hides account data on this device. The platform does not add advertising trackers.",
+    "zh-Hant": "你可以在工作區刪除或清空私人歷史、匯出各項歷史，或登出。自動儲存快取及重試佇列依帳號隔離；方案編輯衝突會另存副本。已刪除的雲端記錄會留下不含內容的同步刪除標記；最小化的重試回執不含已儲存的內容。登出會隱藏此裝置上的帳號資料。平台不加入廣告追蹤器。"
+  },
+  "m_42138bba5e4e": {
+    "en": "External destinations",
+    "zh-Hant": "外部網站"
+  },
+  "m_a896beff76f9": {
+    "en": "About Me, 3A3D, GitHub and Pixiv are independent websites with their own privacy policies.",
+    "zh-Hant": "About Me、3A3D、GitHub 與 Pixiv 是獨立網站，各有自己的隱私政策。"
+  },
+  "m_5e1be31ad494": {
+    "en": "Profile — KenSei",
+    "zh-Hant": "個人檔案 — KenSei"
+  },
+  "m_165e79bdec0c": {
+    "en": "YOUR CORNER OF THE WORKSHOP",
+    "zh-Hant": "WORKSHOP 裡屬於你的一角"
+  },
+  "m_528d89ad72cb": {
+    "en": "Your profile",
+    "zh-Hant": "你的個人檔案"
+  },
+  "m_55c9687565da": {
+    "en": "A name, a little personality, and your next best score.",
+    "zh-Hant": "一個名字、一點個性，還有下一次最佳成績。"
+  },
+  "m_7547896770bb": {
+    "en": "Make this space yours.",
+    "zh-Hant": "讓這個空間展現你的風格。"
+  },
+  "m_7f2fb2e1a4f9": {
+    "en": "Sign in with Google to edit your name, avatar and biography.",
+    "zh-Hant": "使用 Google 登入，即可編輯名稱、頭像與簡介。"
+  },
+  "m_a88082542289": {
+    "en": "Avatar preview",
+    "zh-Hant": "頭像預覽"
+  },
+  "m_777794058c73": {
+    "en": "Choose avatar",
+    "zh-Hant": "選擇頭像"
+  },
+  "m_5ae2a862d687": {
+    "en": "Remove avatar",
+    "zh-Hant": "移除頭像"
+  },
+  "m_e26f36b0c7f9": {
+    "en": "JPG, PNG or WebP · up to 5 MB. Center-cropped to a square. Uploaded when you save.",
+    "zh-Hant": "JPG、PNG 或 WebP · 上限 5 MB。置中裁切為正方形，按下儲存後才會上傳。"
+  },
+  "m_8bb1664e67fa": {
+    "en": "Public name",
+    "zh-Hant": "公開名稱"
+  },
+  "m_d7ba8df8b162": {
+    "en": "2–32 characters. Your Google name is used initially; you can choose another unique name.",
+    "zh-Hant": "2–32 個字元。首次使用 Google 名稱，之後可選擇其他不重複的名稱。"
+  },
+  "m_942dbeda9171": {
+    "en": "Biography",
+    "zh-Hant": "個人簡介"
+  },
+  "m_0018b8955e9f": {
+    "en": "Your name, avatar, biography and qualifying best typing and game scores are public. Your email, drafts and tool histories stay private.",
+    "zh-Hant": "名稱、頭像、簡介，以及合格的打字與遊戲最佳成績為公開資料。電子郵件、草稿與工具歷史仍為私人資料。"
+  },
+  "m_dd0ae7a5cbcf": {
+    "en": "Save changes",
+    "zh-Hant": "儲存變更"
+  },
+  "m_4b0d1dd32dcb": {
+    "en": "View public profile ↗",
+    "zh-Hant": "查看公開個人檔案 ↗"
+  },
+  "m_b02d5e469131": {
+    "en": "Profile avatar",
+    "zh-Hant": "個人檔案頭像"
+  },
+  "m_78572688dfce": {
+    "en": "THE PERSON BEHIND THE PERSONAL BESTS",
+    "zh-Hant": "最佳成績背後的你"
+  },
+  "m_a465527c1f9c": {
+    "en": "Edit my profile ↗",
+    "zh-Hant": "編輯我的個人檔案 ↗"
+  },
+  "m_7afa2a31c563": {
+    "en": "Public record summary",
+    "zh-Hant": "公開記錄摘要"
+  },
+  "m_0c869719d6c1": {
+    "en": "games with a ranked best",
+    "zh-Hant": "款遊戲擁有排名最佳成績"
+  },
+  "m_7a22a0777f06": {
+    "en": "typing languages ranked",
+    "zh-Hant": "種打字語言已上榜"
+  },
+  "m_e52d2be507f6": {
+    "en": "Personal bests",
+    "zh-Hant": "個人最佳"
+  },
+  "m_864d2947466d": {
+    "en": "Explore games ↗",
+    "zh-Hant": "探索遊戲 ↗"
+  },
+  "m_f26a582596f5": {
+    "en": "Verified Public results, grouped by game and difficulty. Each score is a personal best for its current rules.",
+    "zh-Hant": "依遊戲與難度整理的已驗證公開成績。每項成績都是目前規則下的個人最佳。"
+  },
+  "m_ef0859df5c33": {
+    "en": "Verified milestones ·",
+    "zh-Hant": "已驗證的里程碑 ·"
+  },
+  "m_f2db3bf573a5": {
+    "en": "Unlocked through qualifying Public results. Private play and unfinished runs stay outside these records.",
+    "zh-Hant": "透過合格公開成績解鎖。私人遊玩和未完成對局不計入這些記錄。"
+  },
+  "m_4881d341b368": {
+    "en": "WORDS AT YOUR PACE",
+    "zh-Hant": "用自己的節奏打字"
+  },
+  "m_355e077a963f": {
+    "en": "Best typing sprints",
+    "zh-Hant": "打字測速最佳成績"
+  },
+  "m_8d00c80f67fc": {
+    "en": "Try Typing Sprint ↗",
+    "zh-Hant": "試試 Typing Sprint ↗"
+  },
+  "m_6f701003fa56": {
+    "en": "Only qualifying Public bests appear here. Private games, saves and practice sessions stay private.",
+    "zh-Hant": "這裡只顯示合格的公開最佳成績。私人遊戲、存檔與練習仍保持私人。"
+  },
+  "m_f738916695f2": {
+    "en": "Retry loading profile",
+    "zh-Hant": "重新載入個人檔案"
+  },
+  "m_f692a3415f66": {
+    "en": "Projects — KenSei",
+    "zh-Hant": "作品 — KenSei"
+  },
+  "m_e7048911c78f": {
+    "en": "THE PROJECT SHELF",
+    "zh-Hant": "作品架"
+  },
+  "m_1f39ed3b32d2": {
+    "en": "Ideas, made tangible",
+    "zh-Hant": "讓點子成真"
+  },
+  "m_5bffff12a562": {
+    "en": "Websites, software and creative experiments. Each one starts with a little curiosity.",
+    "zh-Hant": "網站、軟體與創意實驗，每一個都從一點好奇開始。"
+  },
+  "m_4b87271b6b81": {
+    "en": "All projects",
+    "zh-Hant": "全部作品"
+  },
+  "m_2975104784a4": {
+    "en": "Web",
+    "zh-Hant": "網站"
+  },
+  "m_9b3289a385a5": {
+    "en": "Software",
+    "zh-Hant": "軟體"
+  },
+  "m_2c7e63313045": {
+    "en": "Creative",
+    "zh-Hant": "創意"
+  },
+  "m_cf50a6dd1154": {
+    "en": "Explore 3A3D",
+    "zh-Hant": "探索 3A3D"
+  },
+  "m_8d042f331c72": {
+    "en": "DRIVEN BY OBSESSION",
+    "zh-Hant": "源自熱愛"
+  },
+  "m_1a802052dbcf": {
+    "en": "Mazda RX-7 side profile",
+    "zh-Hant": "Mazda RX-7 側面"
+  },
+  "m_fb57916d30d5": {
+    "en": "JAPANESE ICONS",
+    "zh-Hant": "日本經典"
+  },
+  "m_8f5c80053876": {
+    "en": "An automotive showcase built around car culture, visual discovery and detailed specifications.",
+    "zh-Hant": "以汽車文化、視覺探索及詳細規格為核心的汽車展示網站。"
+  },
+  "m_4db674974ecb": {
+    "en": "HTML / CSS / JavaScript",
+    "zh-Hant": "HTML / CSS / JavaScript"
+  },
+  "m_047e2616e407": {
+    "en": "Explore Salon Management System",
+    "zh-Hant": "探索 Salon Management System"
+  },
+  "m_dacf2cacbfc8": {
+    "en": "ILLUSTRATIVE COVER · C++",
+    "zh-Hant": "示意封面 · C++"
+  },
+  "m_2f931ab23ea8": {
+    "en": "Salon Management System",
+    "zh-Hant": "Salon Management System"
+  },
+  "m_2d76c199f4a5": {
+    "en": "A C++ coursework project exploring how software can support salon operations.",
+    "zh-Hant": "探索軟體如何支援沙龍營運的 C++ 課程專案。"
+  },
+  "m_2b6e2c2a25af": {
+    "en": "C++ / Console application",
+    "zh-Hant": "C++／主控台應用程式"
+  },
+  "m_4dadaf416e83": {
+    "en": "Explore AI Art Gallery",
+    "zh-Hant": "探索 AI Art Gallery"
+  },
+  "m_1ebfbc76ebe3": {
+    "en": "Beyond",
+    "zh-Hant": "超越"
+  },
+  "m_111e6b1159fe": {
+    "en": "the ordinary.",
+    "zh-Hant": "平凡。"
+  },
+  "m_73f4390975e7": {
+    "en": "GENERATIVE STUDIES · GRAPHIC COVER",
+    "zh-Hant": "生成式探索 · 圖形封面"
+  },
+  "m_75a7a4bc3197": {
+    "en": "AI Art Gallery",
+    "zh-Hant": "AI Art Gallery"
+  },
+  "m_2970188a1ae7": {
+    "en": "A collection of visual experiments with local AI and image generation.",
+    "zh-Hant": "運用本機 AI 和影像生成進行的視覺實驗集。"
+  },
+  "m_97da4ebd6fff": {
+    "en": "Local AI / Digital art",
+    "zh-Hant": "本機 AI／數位藝術"
+  },
+  "m_2e680bdfce14": {
+    "en": "Your workspace — KenSei",
+    "zh-Hant": "你的工作區 — KenSei"
+  },
+  "m_a135f62867ed": {
+    "en": "YOUR OWN LITTLE CORNER",
+    "zh-Hant": "屬於你的小角落"
+  },
+  "m_47173482314e": {
+    "en": "Pick up where you left off",
+    "zh-Hant": "從上次停下的地方繼續"
+  },
+  "m_a81b80d40643": {
+    "en": "Your favorites, saved words and moments of focus.",
+    "zh-Hant": "收藏、儲存的文字與專注時刻。"
+  },
+  "m_f370027ae18f": {
+    "en": "Local saves work now. Connect your account to sync between devices.",
+    "zh-Hant": "現在即可在本機儲存。連結帳號，便能跨裝置同步。"
+  },
+  "m_d124f0ccbf88": {
+    "en": "Focused today",
+    "zh-Hant": "今日專注"
+  },
+  "m_86fc914661af": {
+    "en": "0 min",
+    "zh-Hant": "0 分鐘"
+  },
+  "m_0603deca4fcb": {
+    "en": "Last 7 days",
+    "zh-Hant": "最近 7 天"
+  },
+  "m_ec135ea58fd5": {
+    "en": "Saved drafts",
+    "zh-Hant": "已儲存草稿"
+  },
+  "m_aeff9c4c92c8": {
+    "en": "Favorite tools",
+    "zh-Hant": "收藏工具"
+  },
+  "m_45edd2c21f23": {
+    "en": "Saved tool presets",
+    "zh-Hant": "已儲存工具預設"
+  },
+  "m_bce07f71ae4c": {
+    "en": "Recent focus sessions",
+    "zh-Hant": "最近專注回合"
+  },
+  "m_18ffeb656315": {
+    "en": "Answer Book history",
+    "zh-Hant": "答案之書歷史"
+  },
+  "m_3664895579f0": {
+    "en": "Export",
+    "zh-Hant": "匯出"
+  },
+  "m_d7b9fc6cb11c": {
+    "en": "Loading local history…",
+    "zh-Hant": "正在載入本機歷史…"
+  },
+  "m_ac8991ef0101": {
+    "en": "Load more",
+    "zh-Hant": "載入更多"
+  },
+  "m_97e536d59fa1": {
+    "en": "Decision schemes",
+    "zh-Hant": "選擇方案"
+  },
+  "m_04230f8fd07f": {
+    "en": "Learning cards",
+    "zh-Hant": "學習卡"
+  },
+  "m_0f0af69940f8": {
+    "en": "Export card decks ↓",
+    "zh-Hant": "匯出牌組 ↓"
+  },
+  "m_fa74de0865aa": {
+    "en": "Clear card decks",
+    "zh-Hant": "清空牌組"
+  },
+  "m_874d147df9ca": {
+    "en": "Open Flashcards →",
+    "zh-Hant": "開啟 Flashcards →"
+  },
+  "m_720cf90b84bc": {
+    "en": "Study plans",
+    "zh-Hant": "學習計畫"
+  },
+  "m_da0cdd987240": {
+    "en": "Export all ↓",
+    "zh-Hant": "全部匯出 ↓"
+  },
+  "m_4c8e17058fad": {
+    "en": "Open Study plans →",
+    "zh-Hant": "開啟學習計畫 →"
+  },
+  "m_a3835ac2814f": {
+    "en": "Whiteboards",
+    "zh-Hant": "白板"
+  },
+  "m_186d617607fe": {
+    "en": "Open Whiteboards →",
+    "zh-Hant": "開啟白板 →"
+  },
+  "m_1088ce680343": {
+    "en": "Export my workspace ↓",
+    "zh-Hant": "匯出我的工作區 ↓"
+  },
+  "m_db56a84eaf97": {
+    "en": "Signing in — KenSei",
+    "zh-Hant": "正在登入 — KenSei"
+  },
+  "m_cd2d7f2c5c69": {
+    "en": "YOUR WORKSPACE",
+    "zh-Hant": "你的工作區"
+  },
+  "m_d808d5ba103f": {
+    "en": "Bringing you back.",
+    "zh-Hant": "帶你回到原處。"
+  },
+  "m_fc379aff8002": {
+    "en": "Completing sign-in…",
+    "zh-Hant": "正在完成登入…"
+  },
+  "m_6fd961b42a29": {
+    "en": "Go to workspace →",
+    "zh-Hant": "前往工作區 →"
+  },
+  "m_b189a1a6edb3": {
+    "en": "3A3D — KenSei",
+    "zh-Hant": "3A3D — KenSei"
+  },
+  "m_027351de5625": {
+    "en": "← All projects",
+    "zh-Hant": "← 全部作品"
+  },
+  "m_5bf8b82a8550": {
+    "en": "WEB / PROJECT NOTES",
+    "zh-Hant": "網站／專案筆記"
+  },
+  "m_087af2b9f7f2": {
+    "en": "An independent automotive showcase",
+    "zh-Hant": "獨立的汽車展示網站"
+  },
+  "m_f341223b7488": {
+    "en": "Launch website ↗",
+    "zh-Hant": "開啟網站 ↗"
+  },
+  "m_36926029ed47": {
+    "en": "Car imagery from the existing project. This cover is a graphic composition, not a screenshot.",
+    "zh-Hant": "車輛影像來自原有專案。此封面是圖形構圖，並非畫面截圖。"
+  },
+  "m_2599e87b4740": {
+    "en": "The idea",
+    "zh-Hant": "構想"
+  },
+  "m_51311166442f": {
+    "en": "3A3D brings automotive browsing into a visual, editorial experience. The project combines a shared design system with a structured vehicle catalog.",
+    "zh-Hant": "3A3D 將汽車瀏覽帶入兼具視覺與編輯設計的體驗，以共用設計系統搭配結構化車輛目錄。"
+  },
+  "m_262671ff6ef0": {
+    "en": "What it explores",
+    "zh-Hant": "探索內容"
+  },
+  "m_5988004f8d18": {
+    "en": "Vehicle and brand discovery",
+    "zh-Hant": "探索車輛與品牌"
+  },
+  "m_b96a918a0456": {
+    "en": "Search, filtering and sorting",
+    "zh-Hant": "搜尋、篩選與排序"
+  },
+  "m_1d701f6da5b0": {
+    "en": "Reusable templates and catalog data",
+    "zh-Hant": "可重複使用的範本及目錄資料"
+  },
+  "m_220125a803c4": {
+    "en": "BUILT WITH",
+    "zh-Hant": "使用技術"
+  },
+  "m_f423f2601a9f": {
+    "en": "HTML, CSS, JavaScript and a Python static-page generator.",
+    "zh-Hant": "HTML、CSS、JavaScript 及 Python 靜態頁面產生器。"
+  },
+  "m_7b33f3da0573": {
+    "en": "BY KENSEI",
+    "zh-Hant": "由 KENSEI 製作"
+  },
+  "m_7ef69f8d1f77": {
+    "en": "Part of an ongoing collection of projects and experiments.",
+    "zh-Hant": "持續累積的作品與實驗之一。"
+  },
+  "m_ea622328006f": {
+    "en": "AI Art Gallery — KenSei",
+    "zh-Hant": "AI Art Gallery — KenSei"
+  },
+  "m_f0530d418f4f": {
+    "en": "CREATIVE / PROJECT NOTES",
+    "zh-Hant": "創意／專案筆記"
+  },
+  "m_29c5020a5a02": {
+    "en": "Experiments in local AI",
+    "zh-Hant": "本機 AI 實驗"
+  },
+  "m_060b95083a19": {
+    "en": "View on Pixiv ↗",
+    "zh-Hant": "在 Pixiv 查看 ↗"
+  },
+  "m_d3ac1f07b180": {
+    "en": "Abstract graphic cover. Browse Pixiv to see the actual artworks.",
+    "zh-Hant": "抽象圖形封面。請前往 Pixiv 欣賞實際作品。"
+  },
+  "m_f86567eff5ee": {
+    "en": "A space for exploring image generation, composition and visual direction. The artwork collection lives on Pixiv as a separate creative destination.",
+    "zh-Hant": "探索影像生成、構圖與視覺方向的空間。作品集在 Pixiv 獨立展示。"
+  },
+  "m_5b0f77024eb8": {
+    "en": "Image-generation experiments",
+    "zh-Hant": "影像生成實驗"
+  },
+  "m_6b605c8f41c1": {
+    "en": "Creative direction and composition",
+    "zh-Hant": "創意方向與構圖"
+  },
+  "m_fee6e5a4077c": {
+    "en": "An external artwork collection",
+    "zh-Hant": "獨立的外部作品集"
+  },
+  "m_030d865edab1": {
+    "en": "Local AI and digital image creation.",
+    "zh-Hant": "本機 AI 與數位影像創作。"
+  },
+  "m_b696ed3185ff": {
+    "en": "Salon Management System — KenSei",
+    "zh-Hant": "Salon Management System — KenSei"
+  },
+  "m_62fdbb3db992": {
+    "en": "SOFTWARE / PROJECT NOTES",
+    "zh-Hant": "軟體／專案筆記"
+  },
+  "m_67ca8e226c07": {
+    "en": "A software coursework project",
+    "zh-Hant": "軟體課程專案"
+  },
+  "m_7bc3e1c7d64d": {
+    "en": "View source code ↗",
+    "zh-Hant": "查看原始碼 ↗"
+  },
+  "m_aebc2d3bfe69": {
+    "en": "Illustrative cover. The code graphic is not a screenshot of the application.",
+    "zh-Hant": "示意封面。程式碼圖形並非應用程式的畫面截圖。"
+  },
+  "m_90cebf2fe07d": {
+    "en": "An exploration of C++ and system design through a salon management application. The repository is the source of truth for implementation details.",
+    "zh-Hant": "透過沙龍管理應用程式探索 C++ 與系統設計。實作細節以儲存庫中的原始碼為準。"
+  },
+  "m_9ccdd32323ab": {
+    "en": "Console application structure",
+    "zh-Hant": "主控台應用程式架構"
+  },
+  "m_103c05628e6e": {
+    "en": "Salon operations as a software domain",
+    "zh-Hant": "以沙龍營運為軟體領域"
+  },
+  "m_22764558fe10": {
+    "en": "Coursework source available on GitHub",
+    "zh-Hant": "課程原始碼可在 GitHub 查看"
+  },
+  "m_9ae9992ba6dc": {
+    "en": "C++. Explore the source for implementation and assignment context.",
+    "zh-Hant": "C++。請探索原始碼，了解實作與作業背景。"
+  },
+  "m_72b33c672792": {
+    "en": "Your language preference is stored on this device. Public site search uses a static index of tools, games and projects and does not search private records.",
+    "zh-Hant": "語言偏好儲存在此裝置。全站搜尋使用工具、遊戲與作品的靜態公開索引，不會搜尋私人記錄。"
+  }
+}

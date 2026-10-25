@@ -2,6 +2,15 @@ import { feedback, stateFor } from "./tool-state.js";
 
 import { $, $$, el, observeText } from "./tool-layout.js";
 import { adapt, example } from "./tool-adapters.js";
+import {
+  uiSource,
+  uiMsg,
+  uiFrom,
+  uiError,
+  uiText,
+  uiAttr,
+} from "../site/ui.js";
+
 const statusIds = {
   "image-studio": ["image-result", "edit-status"],
   "qr-studio": ["tool-status", "qr-scan-status"],
@@ -26,11 +35,11 @@ export async function initToolUI() {
   for (const id of statusIds[tool] || ["tool-status"]) {
     observeText($("#" + id), (n) => {
       if (n.closest("[hidden]")) return;
-      const message = n.textContent.trim();
+      const message = uiSource(n).trim();
       if (message)
         feedback(
           stateFor(message, n.classList.contains("error-text")),
-          message,
+          uiFrom(message),
         );
     });
   }
@@ -39,7 +48,7 @@ export async function initToolUI() {
     root,
   ).forEach((node) => {
     const update = () => {
-      const text = node.textContent;
+      const text = uiSource(node);
       node.dataset.saveKind = /failed|unavailable/i.test(text)
         ? "Save failed"
         : /unsaved|new item not added/i.test(text)
@@ -53,6 +62,7 @@ export async function initToolUI() {
                 : /saved|loaded/i.test(text)
                   ? "Saved locally"
                   : "Unsaved changes";
+      uiAttr(node, "data-save-label", uiFrom(node.dataset.saveKind));
       node.dataset.saveRepeat = String(
         text.toLowerCase().startsWith(node.dataset.saveKind.toLowerCase()),
       );
@@ -122,13 +132,11 @@ export async function initToolUI() {
     if (
       !edited ||
       /permission|connection|unavailable|could not load|timed out/.test(
-        box.querySelector(".tool-state-message").textContent,
+        uiSource(box.querySelector(".tool-state-message")),
       )
     )
       return;
-    fieldError.textContent = box.querySelector(
-      ".tool-state-message",
-    ).textContent;
+    uiText(fieldError, box.querySelector(".tool-state-message").textContent);
     (edited.closest("label") || edited).after(fieldError);
     edited.setAttribute("aria-invalid", "true");
     const ids = new Set(
@@ -164,11 +172,11 @@ export async function initToolUI() {
         (n) =>
           !n.id &&
           !n.hasAttribute("data-save-state") &&
-          /\bMB\b|UTF-8|100,000 characters|200 cards/.test(n.textContent) &&
+          /\bMB\b|UTF-8|100,000 characters|200 cards/.test(uiSource(n)) &&
           !n.closest("dialog"),
       )
       .forEach((n) => {
-        help.append(el("p", n.textContent));
+        help.append(el("p", uiFrom(uiSource(n))));
         n.classList.add("tool-help-note");
       });
   }
@@ -188,8 +196,10 @@ export async function initToolUI() {
       feedback(
         "stale",
         tool === "subtitle-studio"
-          ? "Cue edits are not committed. Save the cue before downloading subtitles."
-          : "Inputs changed. Run the tool again to update the result.",
+          ? uiMsg(
+              "Cue edits are not committed. Save the cue before downloading subtitles.",
+            )
+          : uiMsg("Inputs changed. Run the tool again to update the result."),
       );
       if (tool === "calculator-studio") $("#calc-copy").disabled = true;
       if (tool === "subtitle-studio") $("#sub-download").disabled = true;
@@ -212,7 +222,7 @@ export async function initToolUI() {
       .catch((error) => {
         const state = $("[data-recovery-state]");
         if (state) {
-          state.textContent = error.message;
+          uiText(state, uiError(error));
           state.classList.add("recovery-error");
         }
       });

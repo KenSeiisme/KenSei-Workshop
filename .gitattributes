@@ -3,3 +3,7 @@
 src/vendor/** linguist-vendored=true
 dist/** linguist-generated=true
 *.traineddata.gz binary
+# Preserve the exact upstream license notices, including their original whitespace.
+src/assets/fonts/*-OFL.txt -text whitespace=-trailing-space
+src/vendor/licenses/DM-Sans.txt -text whitespace=-trailing-space
+src/vendor/licenses/Space-Grotesk.txt -text whitespace=-trailing-space

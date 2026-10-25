@@ -2,10 +2,12 @@ import { api, esc } from "/tool-scripts/common.js";
 import { ACHIEVEMENTS, liveValue } from "./achievement-catalog.js";
 import { patchMarkup } from "./dom.js";
 import { playCue } from "./audio.js";
+import { uiDate, uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
+
 export { ACHIEVEMENTS };
 export function achievementCard(def, unlocked, progress = 0, live = 0) {
   const date = unlocked?.unlocked_at;
-  return `<article class="milestone-card${unlocked ? " is-unlocked" : ""}" data-achievement="${esc(def.id)}"><span class="milestone-badge" aria-hidden="true">${unlocked ? "✦" : "◇"}</span><div><h3>${esc(def.name)}</h3><p>${esc(def.description)}</p>${date ? `<time datetime="${esc(date)}">Unlocked · ${esc(new Date(date).toLocaleDateString())}</time>` : `<progress max="${def.target}" value="${Math.min(def.target, progress)}" aria-label="${esc(def.name)} verified progress"></progress><small>${Math.min(def.target, progress)} / ${def.target} verified</small>${live >= def.target ? '<p class="milestone-live">Target reached · finish and submit Public to verify.</p>' : ""}`}</div></article>`;
+  return uiHtml`<article class="milestone-card${unlocked ? uiMsg(" is-unlocked") : ""}" data-achievement="${esc(def.id)}"><span class="milestone-badge" aria-hidden="true">${unlocked ? "✦" : "◇"}</span><div><h3>${uiFrom(def.name)}</h3><p>${uiFrom(def.description)}</p>${date ? uiHtml`<time datetime="${esc(date)}">Unlocked · ${uiDate(new Date(date), { year: "numeric", month: "short", day: "numeric" })}</time>` : uiHtml`<progress max="${def.target}" value="${Math.min(def.target, progress)}" aria-label="${uiFrom(def.name)} verified progress"></progress><small>${Math.min(def.target, progress)} / ${def.target} verified</small>${live >= def.target ? uiHtml('<p class="milestone-live">Target reached · finish and submit Public to verify.</p>') : ""}`}</div></article>`;
 }
 export function renderPublicAchievements(node, rows = []) {
   if (!node) return;
@@ -23,7 +25,9 @@ export function renderPublicAchievements(node, rows = []) {
             ),
           )
           .join("")
-      : '<p class="muted">No verified milestones yet. A first Public result is a good start.</p>',
+      : uiHtml(
+          '<p class="muted">No verified milestones yet. A first Public result is a good start.</p>',
+        ),
   );
 }
 export function mountAchievements(game = null) {
@@ -57,24 +61,34 @@ export function mountAchievements(game = null) {
           )
           .join(""),
       );
-      panel.querySelector(".game-progress-status").textContent = !signed
-        ? "Sign in and complete Public runs to unlock milestones."
-        : record
-          ? "Only qualifying, server-verified Public results count."
-          : "Verified progress could not load. Retry to refresh.";
+      uiText(
+        panel.querySelector(".game-progress-status"),
+        !signed
+          ? uiMsg("Sign in and complete Public runs to unlock milestones.")
+          : record
+            ? uiMsg("Only qualifying, server-verified Public results count.")
+            : uiMsg("Verified progress could not load. Retry to refresh."),
+      );
     }
     if (progressPanel && signed) {
-      progressPanel.querySelector("#progress-results").textContent =
-        record?.result_count ?? "—";
-      progressPanel.querySelector("#progress-games").textContent = record
-        ? `${record.game_count} / 9`
-        : "—";
-      progressPanel.querySelector("#progress-achievements").textContent = record
-        ? `${record.unlocks.length} / 30`
-        : "—";
-      progressPanel.querySelector(".game-progress-status").textContent = record
-        ? "Verified Public results · Private runs are excluded."
-        : "Progress could not load. Retry when connected.";
+      uiText(
+        progressPanel.querySelector("#progress-results"),
+        record?.result_count ?? "—",
+      );
+      uiText(
+        progressPanel.querySelector("#progress-games"),
+        record ? `${record.game_count} / 9` : "—",
+      );
+      uiText(
+        progressPanel.querySelector("#progress-achievements"),
+        record ? `${record.unlocks.length} / 30` : "—",
+      );
+      uiText(
+        progressPanel.querySelector(".game-progress-status"),
+        record
+          ? uiMsg("Verified Public results · Private runs are excluded.")
+          : uiMsg("Progress could not load. Retry when connected."),
+      );
       const rows = record?.unlocks || [];
       renderPublicAchievements(
         progressPanel.querySelector("#progress-recent"),
@@ -156,10 +170,18 @@ export function mountAchievements(game = null) {
           note.setAttribute("role", "status");
           panel.append(note);
         }
-        note.textContent = `Milestone unlocked · ${unlocked
-          .map((r) => ACHIEVEMENTS.find((d) => d.id === r.achievement_id)?.name)
-          .filter(Boolean)
-          .join(" · ")}`;
+        uiText(
+          note,
+          uiMsg("Milestone unlocked · {0}", [
+            unlocked
+              .map(
+                (r) =>
+                  ACHIEVEMENTS.find((d) => d.id === r.achievement_id)?.name,
+              )
+              .filter(Boolean)
+              .join(" · "),
+          ]),
+        );
       }
       await refresh();
     },

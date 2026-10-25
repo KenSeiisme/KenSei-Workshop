@@ -9,6 +9,7 @@ import {
   animateElement as animate,
   effectsMode as effectiveEffects,
 } from "./effects.js";
+import { uiMsg, uiText, uiHtml } from "../site/ui.js";
 
 const COLORS = [
   "#83e9f0",
@@ -55,9 +56,9 @@ export function createDropUI(ctx) {
   }
   function mini(id) {
     if (id === null || id === undefined)
-      return '<span class="drop-hold-empty">Empty</span>';
+      return uiHtml('<span class="drop-hold-empty">Empty</span>');
     const cells = new Set(pieceCells(id).map(([x, y]) => y * 4 + x));
-    return `<span class="drop-mini" style="--drop-color:${COLORS[id]}" aria-label="${["I", "J", "L", "O", "S", "T", "Z"][id]} piece">${Array.from({ length: 16 }, (_, i) => `<i class="${cells.has(i) ? "filled" : ""}"></i>`).join("")}</span>`;
+    return uiHtml`<span class="drop-mini" style="--drop-color:${COLORS[id]}" aria-label="${["I", "J", "L", "O", "S", "T", "Z"][id]} piece">${Array.from({ length: 16 }, (_, i) => uiHtml`<i class="${cells.has(i) ? "filled" : ""}"></i>`).join("")}</span>`;
   }
   function paint(canvas, s) {
     const g = canvas.getContext("2d");
@@ -116,7 +117,7 @@ export function createDropUI(ctx) {
     if (!board.querySelector(".drop-canvas")) {
       patchMarkup(
         board,
-        `<div class="drop-stage"><aside class="drop-hold"><h3>Hold <kbd>C</kbd></h3><div id="drop-hold-piece"></div><p id="drop-hold-note"></p></aside><div class="drop-well"><canvas class="drop-canvas" width="240" height="480" role="img" aria-label="Block Drop, ten columns and twenty rows"></canvas><div class="drop-clear-effects" aria-hidden="true"></div></div><aside class="drop-next"><h3>Next</h3><div id="drop-next-pieces"></div><dl><dt>Lines</dt><dd id="drop-lines">0</dd><dt>Level</dt><dd id="drop-level">1</dd></dl></aside></div><p class="drop-target" id="drop-target"></p><div class="drop-touch" role="group" aria-label="Block Drop controls"><button type="button" data-drop-input="hold" aria-label="Hold piece">Hold</button><button type="button" data-drop-input="ccw" aria-label="Rotate counterclockwise">↶</button><button type="button" data-drop-input="cw" aria-label="Rotate clockwise">↷</button><button type="button" data-drop-input="left" aria-label="Move piece left">←</button><button type="button" data-drop-input="down" aria-label="Soft drop">↓</button><button type="button" data-drop-input="right" aria-label="Move piece right">→</button><button type="button" data-drop-input="hard" aria-label="Hard drop">Drop ⤓</button></div><p class="arcade-control-note">← → move · ↑ / X / Z rotate · ↓ soft drop · Space drop · C / Shift hold</p>`,
+        uiHtml`<div class="drop-stage"><aside class="drop-hold"><h3>Hold <kbd>C</kbd></h3><div id="drop-hold-piece"></div><p id="drop-hold-note"></p></aside><div class="drop-well"><canvas class="drop-canvas" width="240" height="480" role="img" aria-label="Block Drop, ten columns and twenty rows"></canvas><div class="drop-clear-effects" aria-hidden="true"></div></div><aside class="drop-next"><h3>Next</h3><div id="drop-next-pieces"></div><dl><dt>Lines</dt><dd id="drop-lines">0</dd><dt>Level</dt><dd id="drop-level">1</dd></dl></aside></div><p class="drop-target" id="drop-target"></p><div class="drop-touch" role="group" aria-label="Block Drop controls"><button type="button" data-drop-input="hold" aria-label="Hold piece">Hold</button><button type="button" data-drop-input="ccw" aria-label="Rotate counterclockwise">↶</button><button type="button" data-drop-input="cw" aria-label="Rotate clockwise">↷</button><button type="button" data-drop-input="left" aria-label="Move piece left">←</button><button type="button" data-drop-input="down" aria-label="Soft drop">↓</button><button type="button" data-drop-input="right" aria-label="Move piece right">→</button><button type="button" data-drop-input="hard" aria-label="Hard drop">Drop ⤓</button></div><p class="arcade-control-note">← → move · ↑ / X / Z rotate · ↓ soft drop · Space drop · C / Shift hold</p>`,
       );
     }
     const canvas = board.querySelector(".drop-canvas");
@@ -126,7 +127,9 @@ export function createDropUI(ctx) {
       canvasFailed = true;
     }
     if (canvasFailed) {
-      ctx.announce("Canvas drawing is unavailable. Try another browser.");
+      ctx.announce(
+        uiMsg("Canvas drawing is unavailable. Try another browser."),
+      );
       return false;
     }
     const hold = board.querySelector("#drop-hold-piece"),
@@ -141,15 +144,18 @@ export function createDropUI(ctx) {
       next.innerHTML = s.queue.slice(0, 3).map(mini).join("");
       next.dataset.signature = nextSignature;
     }
-    board.querySelector("#drop-hold-note").textContent = s.holdUsed
-      ? "Available after landing"
-      : "Once per piece";
-    board.querySelector("#drop-lines").textContent = s.lines;
-    board.querySelector("#drop-level").textContent = s.level;
-    board.querySelector("#drop-target").textContent =
+    uiText(
+      board.querySelector("#drop-hold-note"),
+      s.holdUsed ? uiMsg("Available after landing") : uiMsg("Once per piece"),
+    );
+    uiText(board.querySelector("#drop-lines"), s.lines);
+    uiText(board.querySelector("#drop-level"), s.level);
+    uiText(
+      board.querySelector("#drop-target"),
       s.difficulty === "sprint"
-        ? `${Math.min(s.lines, 40)} / 40 lines · finish to rank`
-        : `Classic · ${s.moves} pieces placed`;
+        ? uiMsg("{0} / 40 lines · finish to rank", [Math.min(s.lines, 40)])
+        : uiMsg("Classic · {0} pieces placed", [s.moves]),
+    );
     for (const b of board.querySelectorAll("[data-drop-input]"))
       b.disabled = !playing() || (b.dataset.dropInput === "hold" && s.holdUsed);
     if (

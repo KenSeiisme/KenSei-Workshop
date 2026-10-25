@@ -91,5 +91,9 @@
     ["tests/database/achievement-backfill.mjs"],
     ["tests/database/pong-rooms.mjs"],
     ["tests/browser/arcade-next.cjs"]
+  ],
+  "bilingual": [
+    ["tests/browser/localization.cjs"],
+    ["tests/browser/localization-games.cjs"]
   ]
 }

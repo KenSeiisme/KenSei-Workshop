@@ -15,6 +15,7 @@ import {
 } from "./motion-state.js";
 import { paintBrick as paintBrickBoard } from "./arcade-paint.js";
 import { BRICK, brickRect } from "./arcade-engine.js";
+import { uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
 
 const ease = "cubic-bezier(.2,.8,.2,1)",
   clamp = (v) => Math.max(0, Math.min(1, v));
@@ -173,7 +174,7 @@ export function createGamePresenter(root, game) {
     label.className = headline
       ? "game-float game-float-headline"
       : "game-float";
-    label.textContent = text;
+    uiText(label, text);
     label.style.left = `${point.x}px`;
     label.style.top = `${point.y}px`;
     labels.append(label);
@@ -310,7 +311,7 @@ export function createGamePresenter(root, game) {
   function render2048(element, state) {
     patchMarkup(
       element,
-      `<div class="board-2048">${state.board.map((n, i) => `<div class="tile" data-cell="${i}" data-value="${n}" data-level="${Math.min(12, Math.log2(n) || 0)}" aria-label="${n || "Empty"}">${n || ""}</div>`).join("")}</div>`,
+      uiHtml`<div class="board-2048">${state.board.map((n, i) => uiHtml`<div class="tile" data-cell="${i}" data-value="${n}" data-level="${Math.min(12, Math.log2(n) || 0)}" aria-label="${n || uiMsg("Empty")}">${n || ""}</div>`).join("")}</div>`,
     );
   }
   function slide2048(before, state, event) {
@@ -336,7 +337,7 @@ export function createGamePresenter(root, game) {
       const ghost = document.createElement("span");
       ghost.className = "moving-tile";
       ghost.dataset.level = String(Math.min(12, Math.log2(move.value)));
-      ghost.textContent = String(move.value);
+      uiText(ghost, String(move.value));
       ghost.setAttribute("aria-hidden", "true");
       ghost.dataset.motionLayer = "true";
       Object.assign(ghost.style, {
@@ -442,9 +443,10 @@ export function createGamePresenter(root, game) {
           : game === "minesweeper"
             ? "Mine found"
             : "Run complete";
-    root.querySelector("#game-result-title").textContent = draw
-      ? "An even match"
-      : winner;
+    uiText(
+      root.querySelector("#game-result-title"),
+      draw ? uiMsg("An even match") : uiFrom(winner),
+    );
     panel.dataset.outcome = draw
       ? "draw"
       : boardGame
@@ -455,27 +457,39 @@ export function createGamePresenter(root, game) {
         : won
           ? "won"
           : "lost";
-    root.querySelector("#game-result-value").textContent =
+    uiText(
+      root.querySelector("#game-result-value"),
       boardGame && game === "reversi"
         ? `${state.counts[0]} : ${state.counts[1]}`
         : boardGame
           ? draw
-            ? "Board complete"
-            : "Four connected"
+            ? uiMsg("Board complete")
+            : uiMsg("Four connected")
           : won && ["minesweeper", "sudoku", "nonogram"].includes(game)
             ? root.querySelector("#game-clock").textContent
-            : root.querySelector("#game-score").textContent;
-    root.querySelector("#game-result-time").textContent =
+            : root.querySelector("#game-score").textContent,
+    );
+    uiText(
+      root.querySelector("#game-result-time"),
       game === "brick-breaker"
         ? [Math.floor(state.ticks / 3600), Math.floor(state.ticks / 60) % 60]
             .map((n) => String(n).padStart(2, "0"))
             .join(":")
-        : root.querySelector("#game-clock").textContent;
-    root.querySelector("#game-result-best").textContent = boardGame
-      ? "Local match"
-      : `Local best · ${root.querySelector("#game-best").textContent}`;
+        : root.querySelector("#game-clock").textContent,
+    );
+    uiText(
+      root.querySelector("#game-result-best"),
+      boardGame
+        ? uiMsg("Local match")
+        : uiMsg("Local best · {0}", [
+            root.querySelector("#game-best").textContent,
+          ]),
+    );
     if (root.dataset.runEligibility !== "ranked")
-      setSubmission("private", "Local only · not submitted to a leaderboard");
+      setSubmission(
+        "private",
+        uiMsg("Local only · not submitted to a leaderboard"),
+      );
   }
   function commit(state) {
     const before = ticket?.before,
@@ -864,7 +878,7 @@ export function createGamePresenter(root, game) {
     const node = root.querySelector("#game-result-public");
     if (node) {
       node.dataset.submission = kind;
-      node.textContent = text;
+      uiText(node, text);
     }
   }
   function onModeChange() {
