@@ -94,6 +94,7 @@
   ],
   "bilingual": [
     ["tests/browser/localization.cjs"],
-    ["tests/browser/localization-games.cjs"]
+    ["tests/browser/localization-games.cjs"],
+    ["tests/browser/localization-profile.cjs"]
   ]
 }

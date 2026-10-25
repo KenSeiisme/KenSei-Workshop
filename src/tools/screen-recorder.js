@@ -6,7 +6,7 @@ import {
   mediaError,
   clockText,
 } from "./media-capture.js";
-import { uiMsg, uiText, uiConfirm } from "../site/ui.js";
+import { uiJoin, uiFrom, uiMsg, uiText, uiConfirm } from "../site/ui.js";
 
 let capture = null,
   microphone = null,
@@ -153,7 +153,15 @@ $("#screen-start").onclick = async () => {
       hasShared ? "Shared audio on" : "No shared audio",
       microphone ? "Microphone on" : "Microphone off",
     ];
-    uiText($("#screen-specs"), parts.join(" · "));
+    uiText(
+      $("#screen-specs"),
+      uiJoin(
+        parts.flatMap((part, index) => [
+          ...(index ? [" · "] : []),
+          uiFrom(part),
+        ]),
+      ),
+    );
     recording = makeRecording(mixed, {
       types: VIDEO_TYPES,
       maxSeconds: 600,

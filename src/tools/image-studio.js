@@ -268,7 +268,9 @@ $("#image-process").onclick = async () => {
                 results.length,
                 size(inputBytes),
                 size(outputBytes),
-                outputBytes <= inputBytes ? "saved" : uiMsg("increased by"),
+                outputBytes <= inputBytes
+                  ? uiMsg("saved")
+                  : uiMsg("increased by"),
                 size(Math.abs(inputBytes - outputBytes)),
               ],
             ),

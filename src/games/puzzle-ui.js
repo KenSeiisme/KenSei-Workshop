@@ -1,6 +1,6 @@
 import { patchMarkup } from "./dom.js";
 import { solution } from "./puzzle-engine.js";
-import { uiMsg, uiHtml } from "../site/ui.js";
+import { uiFrom, uiMsg, uiHtml } from "../site/ui.js";
 
 const SUDOKU_DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const escapeText = (value) =>
@@ -301,7 +301,7 @@ export function createPuzzleUI(ctx) {
     else if (target.dataset.puzzleAction === "notes") {
       noteMode = !noteMode;
       ctx.redraw();
-      announce(uiMsg("Pencil notes {0}.", [noteMode ? "on" : "off"]));
+      announce(uiMsg("Pencil notes {0}.", [uiFrom(noteMode ? "on" : "off")]));
     } else if (target.hasAttribute("data-puzzle-paint")) {
       paintMode = target.dataset.puzzlePaint;
       ctx.redraw();
@@ -363,7 +363,7 @@ export function createPuzzleUI(ctx) {
         event.preventDefault();
         noteMode = !noteMode;
         ctx.redraw();
-        announce(uiMsg("Pencil notes {0}.", [noteMode ? "on" : "off"]));
+        announce(uiMsg("Pencil notes {0}.", [uiFrom(noteMode ? "on" : "off")]));
         return true;
       }
     } else if (

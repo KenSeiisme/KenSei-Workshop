@@ -418,5 +418,45 @@
   "site.ocr.4": {
     "en": "recognizing text",
     "zh-Hant": "正在辨識文字"
+  },
+  "site.extra.e642b12901a6": {
+    "en": "mode",
+    "zh-Hant": "模式"
+  },
+  "site.extra.00c25d6301a7": {
+    "en": "modes",
+    "zh-Hant": "模式"
+  },
+  "site.extra.c54a061dfcc1": {
+    "en": "points",
+    "zh-Hant": "分"
+  },
+  "site.extra.59f006d63bd0": {
+    "en": "seconds",
+    "zh-Hant": "秒"
+  },
+  "site.extra.1ac7d61d1d29": {
+    "en": "attempts",
+    "zh-Hant": "次嘗試"
+  },
+  "site.extra.d81c55f49c5b": {
+    "en": "saved",
+    "zh-Hant": "節省"
+  },
+  "site.extra.6ac9a32c0ca8": {
+    "en": "cards",
+    "zh-Hant": "張卡片"
+  },
+  "site.extra.8367cd66fdd1": {
+    "en": "card",
+    "zh-Hant": "張卡片"
+  },
+  "site.extra.3495e757855a": {
+    "en": "White",
+    "zh-Hant": "白棋"
+  },
+  "site.extra.c6cfe6e4f129": {
+    "en": "Black",
+    "zh-Hant": "黑棋"
   }
 }
