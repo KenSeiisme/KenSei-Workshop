@@ -13,7 +13,8 @@
   ],
   "profiles": [
     ["tests/database/profiles-database.mjs"],
-    ["tests/browser/profiles.cjs"]
+    ["tests/browser/profiles.cjs"],
+    ["tests/browser/account-ui.cjs"]
   ],
   "daily": [
     ["tests/unit/daily-core.mjs"],
