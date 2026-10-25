@@ -54,7 +54,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     await p.waitForFunction(() =>
       document
         .querySelector("#game-leaderboard-status")
-        .textContent.includes("Top 50"),
+        .textContent.includes("ranked players"),
     );
     await gameClick(p, "#game-start");
     await p.waitForTimeout(700);
@@ -161,6 +161,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
       "app.js",
       "games.css",
       "game-neon.css",
+      "game-play-shell.css",
       "puzzle-games.css",
       "arcade-games.css",
       "board-games.css",
@@ -182,6 +183,8 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
       "game-scripts/board-ai-worker.js",
       "game-scripts/new-game-ui.js",
       "game-scripts/games.js",
+      "game-scripts/leaderboard.js",
+      "game-scripts/play-shell.js",
       "game-scripts/session-client.js",
       "tool-scripts/record-store.js",
       "tool-scripts/profile.js",

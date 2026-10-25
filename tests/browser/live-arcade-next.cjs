@@ -54,7 +54,7 @@ const digest = (bytes) =>
         assert.equal(await p.locator("#game-milestones").count(), 0);
         await p.click("#pong-create");
         await p.waitForSelector("#auth-dialog[open]");
-        await p.click(".dialog-close");
+        await p.click("#auth-dialog .dialog-close");
       } else {
         assert.match(
           await p.locator("#game-status").innerText(),

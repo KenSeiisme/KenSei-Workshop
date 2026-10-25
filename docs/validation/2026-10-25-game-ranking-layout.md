@@ -27,3 +27,12 @@
 运行入口：`pnpm test:game-shell`；原游戏回归包括 `tests/browser/games.cjs`、`games-expansion.cjs`、`game-experience.cjs`、`arcade-next.cjs`、`game-neon.cjs`、`game-visuals.cjs`。功能测试隔离外部字体请求，实际字体布局另以正常浏览器预览检查。截图和报告保存在忽略的 `_qa` 中。
 
 测试没有写入正式成绩或创建正式账号。本次没有后端更新，因此不重复部署 Supabase 服务。发布使用现有 GitHub 分支触发 Vercel 自动构建；正式站另查 12 个游戏入口、榜单、代表性开局、关键资源、Search Console 标记和 Sitemap。
+
+## 正式站结果
+
+已通过现有 GitHub → Vercel 集成发布到 https://kensei-workshop.vercel.app/ 。
+
+- 52 个正常页面及 7 个关键文件全部返回 200，内容与通过测试的构建一致（仅规范化 Windows/Linux 换行）；包含新榜单模块、共享舞台、样式、robots 与 Sitemap。
+- 三组匿名正式站浏览器检查通过：12 款路由、游客开局/暂停/刷新恢复、真实榜单读取、旧存档、棋类 Worker、Block Drop、Pong 登录守卫、九款 Profile 成绩和已有公开成就、移动端与实际脚本哈希。
+- 另以正常字体检查 1366×768 的 2048 与 360×800 的扫雷，确认开局选择、Start、自动专注及常驻榜单；截图在 `_qa/ranking-production-1366.png` 与 `_qa/ranking-production-360.png`。
+- 正式验收没有创建账号、房间或公开成绩，没有上传游客存档。登录参榜、重放、失败重试及双人房间使用隔离的本机数据库/测试桥验收。

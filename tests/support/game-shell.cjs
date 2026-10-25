@@ -46,6 +46,14 @@ async function gameSelect(page, selector, value) {
       await page.click("#game-board-collapse");
     return page.selectOption(selector, value);
   }
+  if (
+    selector === "#game-difficulty" &&
+    (await page.locator("#game-difficulty option").count()) === 1
+  ) {
+    if ((await page.inputValue(selector)) !== value)
+      throw Error("This game has only one setup option.");
+    return value;
+  }
   if (selector === "#game-mode")
     throw Error(
       "Mode selection was removed. Use guest play or pause/resume to test local-only games.",
