@@ -472,24 +472,14 @@ export function createGamePresenter(root, game) {
             .join(":")
         : root.querySelector("#game-clock").textContent;
     root.querySelector("#game-result-best").textContent = boardGame
-      ? "Private match"
+      ? "Local match"
       : `Local best · ${root.querySelector("#game-best").textContent}`;
-    if (root.querySelector("#game-mode").value === "private")
-      setSubmission(
-        "private",
-        "Private result · not submitted to a leaderboard",
-      );
+    if (root.dataset.runEligibility !== "ranked")
+      setSubmission("private", "Local only · not submitted to a leaderboard");
   }
   function commit(state) {
     const before = ticket?.before,
       changed = ticket?.changed;
-    const setup = root.querySelector("#game-setup");
-    if (setup && running) setup.open = false;
-    const mode = root.querySelector("#game-mode"),
-      difficulty = root.querySelector("#game-difficulty");
-    if (root.querySelector("#game-mode-summary"))
-      root.querySelector("#game-mode-summary").textContent =
-        `${mode.value === "public" ? "Public · Ranked" : "Private"} / ${difficulty.selectedOptions[0]?.textContent || ""}`;
     updateResult(state);
     if (game === "connect-four" && state.status === "won")
       winningCells(state.board).forEach((i) =>

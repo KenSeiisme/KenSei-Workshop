@@ -1,0 +1,58 @@
+<aside
+  class="panel game-leaderboard game-rank-panel"
+  id="game-rank-panel"
+  aria-labelledby="leaderboard-title"
+>
+  <div class="game-section-heading">
+    <h2 id="leaderboard-title">Leaderboard<span class="accent">.</span></h2>
+    <button
+      type="button"
+      id="game-board-collapse"
+      class="text-link"
+      aria-expanded="true"
+      aria-controls="game-leaderboard-content"
+    >
+      Hide
+    </button>
+  </div>
+  <div id="game-my-rank"></div>
+  <div id="game-leaderboard-content">
+    <div class="game-board-tools">
+      <span id="game-board-difficulty" class="game-board-difficulty"></span>
+      <button type="button" id="game-board-refresh" class="text-link">
+        Refresh
+      </button>
+    </div>
+    <label class="game-rules-selector" ${archive_hidden}
+      >Rules<select id="game-board-version">
+        <option value="current">Current rules</option>
+        <option value="1">Previous rules · v1</option>
+      </select></label
+    >
+    <p id="game-board-note" class="muted small">
+      One verified best per player.
+    </p>
+    <p id="game-leaderboard-status" class="muted small" role="status">
+      Loading leaderboard…
+    </p>
+    <div
+      id="game-leaderboard"
+      class="game-leaderboard-list"
+      tabindex="0"
+      aria-label="Leaderboard results"
+    ></div>
+    <button
+      type="button"
+      id="game-board-more"
+      class="button secondary"
+      aria-expanded="false"
+      aria-controls="game-leaderboard"
+      hidden
+    >
+      Show Top 50
+    </button>
+    <p class="muted small game-rank-disclaimer">
+      Verified results only. Your best on this device may differ.
+    </p>
+  </div>
+</aside>

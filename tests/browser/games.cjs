@@ -69,6 +69,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       },
       { id: user },
     );
+    // Functional checks do not depend on an external font service.
+    await c.route("https://fonts.googleapis.com/**", (route) =>
+      route.fulfill({ contentType: "text/css", body: "" }),
+    );
     await c.route(
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
       (r) =>
@@ -131,7 +135,26 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     p = await guest.newPage();
   const open = async (page, slug) => {
     await page.goto(base + "/games/" + slug + "/");
-    await page.waitForSelector("[data-game][data-ready=true]");
+    await page
+      .waitForSelector("[data-game][data-ready=true]")
+      .catch(async (error) => {
+        console.error(
+          slug,
+          await page.evaluate(async () => ({
+            ready: window.KenseiWorkspace?.ready,
+            toast: document.querySelector(".toast")?.textContent,
+            status: document.querySelector("#game-status")?.textContent,
+            module: await Promise.race([
+              import("/game-scripts/games.js").then(
+                () => "loaded",
+                (e) => String(e.stack),
+              ),
+              new Promise((r) => setTimeout(() => r("pending"), 1000)),
+            ]),
+          })),
+        );
+        throw error;
+      });
   };
   try {
     await p.goto(base + "/games/");
@@ -143,7 +166,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await p.click('[data-game-filter="puzzle"]');
     assert.equal(await p.locator("[data-game-card]:visible").count(), 6);
     await open(p, "2048");
-    assert.equal(await p.inputValue("#game-mode"), "private");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     assert.equal(await p.locator(".tile").count(), 0);
     assert.equal(calls.filter((c) => c.name === "function:start").length, 0);
     await gameClick(p, "#game-start");
@@ -178,7 +204,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await p.waitForSelector("[data-game][data-ready=true]");
     await p.waitForSelector("#game-restore:not([hidden])");
     await p.click("#game-restore");
-    assert.equal(await p.inputValue("#game-mode"), "private");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     await p.goto(base + "/games/");
     await p.waitForSelector(".saved-game-row");
     assert.match(await p.locator("#game-saves").innerText(), /2048/);
@@ -188,7 +217,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     const account = await context(A),
       q = await account.newPage();
     await open(q, "memory-match");
-    assert.equal(await q.inputValue("#game-mode"), "public");
+    assert.equal(
+      await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "ranked",
+    );
     await gameClick(q, "#game-start");
     await q.waitForSelector(".memory-card");
     let s = create("memory-match", "normal", Number(lastSession.seed));
@@ -198,10 +230,15 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await q.waitForFunction(() =>
       document
         .querySelector("#game-status")
-        .textContent.includes("Public result verified"),
+        .textContent.includes("Verified result accepted"),
     );
     await q.waitForFunction(() =>
       document.querySelector("#game-my-rank").textContent.includes("rank: #1"),
+    );
+    await q.waitForFunction(() =>
+      document
+        .querySelector("[data-shell-mode]")
+        .textContent.includes("Verified"),
     );
     assert.match(await q.locator("#game-score").innerText(), /^8$/);
     assert.equal(
@@ -235,7 +272,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await q.waitForFunction(() =>
       document
         .querySelector("#game-status")
-        .textContent.includes("Public result verified"),
+        .textContent.includes("Verified result accepted"),
     );
     await q.waitForFunction(() =>
       document.querySelector("#game-my-rank").textContent.includes("rank: #1"),
@@ -247,8 +284,14 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await gameClick(q, "#game-start");
     await q.waitForSelector("canvas");
     await q.click("#game-pause");
-    assert.equal(await q.inputValue("#game-mode"), "private");
-    assert.match(await q.locator("#game-status").innerText(), /Private/);
+    assert.equal(
+      await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
+    assert.match(
+      await q.locator("#game-status").innerText(),
+      /Local only|local only/,
+    );
     assert.ok(calls.some((x) => x.name === "function:abandon"));
     await q.click("#game-resume");
     await q.waitForTimeout(500);
@@ -270,9 +313,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     console.log("PASS Public pause downgrade, abandonment and background stop");
     await open(q, "2048");
     failSync = true;
-    await gameSelect(q, "#game-mode", "private");
     await gameClick(q, "#game-start");
-    await gameClick(q, ".game-save-panel>summary");
+    await q.click("#game-pause");
+    await q.click("#game-resume");
     await q.waitForTimeout(1400);
     assert.match(
       await q.locator("#game-save-status").innerText(),
@@ -282,7 +325,6 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     loseAck = true;
     await gameClick(q, "#game-save-retry");
     await q.waitForTimeout(700);
-    await gameClick(q, "#game-save-retry");
     await q.waitForFunction(() =>
       document
         .querySelector("#game-save-status")
@@ -317,7 +359,6 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     );
     await q.focus("#game-board");
     await q.keyboard.press("ArrowLeft");
-    await gameClick(q, "#game-save-retry");
     await q.waitForFunction(() =>
       document
         .querySelector("#game-status")
@@ -361,7 +402,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await bpage.waitForFunction(() =>
       document
         .querySelector("#game-status")
-        .textContent.includes("Public result verified"),
+        .textContent.includes("Verified result accepted"),
     );
     assert.equal(
       (

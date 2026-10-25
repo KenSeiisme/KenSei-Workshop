@@ -123,22 +123,23 @@
     Private game progress and personal bests save on this device. Signed-in
     account saves sync privately to Supabase, isolated from guest saves. Guest
     saves copy to an account only when requested. New signed-in games that
-    support rankings default to Public; you may choose Private. Connect Four and
-    Reversi stay Private. Their computer opponents run in a browser worker, and
-    local two-player matches use the same device. Public runs send a versioned
-    action replay to Supabase for verification and publish your current profile
-    name, avatar, result and date. Replays are not public and are not retained
-    after verification. Paused, hidden or restored games continue privately and
-    cannot enter the board. Pending completed submissions stay on this device
-    for retry, isolated by account. Leaderboards are casual and cannot prevent
-    automated play. Game saves can be deleted in Games. Sound defaults to 35%
-    and starts only after a game gesture; mute, volume and Effects preferences
-    remain on this device. Brick Breaker current and Previous rules rankings are
-    separate; legacy saves and results are retained. Profile pages include
-    qualifying game bests and unlocked milestone badges with dates. Only
-    server-verified Public results count toward the 30 milestones and personal
-    progress; locked milestone progress is visible only to its owner. Historical
-    badges use only provable results.
+    support rankings automatically submit eligible completed results. Guests can
+    play without signing in; old local results are not uploaded to rankings.
+    Connect Four and Reversi are local-only matches. Their computer opponents
+    run in a browser worker, and local two-player matches use the same device.
+    Public runs send a versioned action replay to Supabase for verification and
+    publish your current profile name, avatar, result and date. Replays are not
+    public and are not retained after verification. Paused, hidden or restored
+    games continue privately and cannot enter the board. Pending completed
+    submissions stay on this device for retry, isolated by account. Leaderboards
+    are casual and cannot prevent automated play. Game saves can be deleted in
+    Games. Sound defaults to 35% and starts only after a game gesture; mute,
+    volume and Effects preferences remain on this device. Brick Breaker current
+    and Previous rules rankings are separate; legacy saves and results are
+    retained. Profile pages include qualifying game bests and unlocked milestone
+    badges with dates. Only server-verified Public results count toward the 30
+    milestones and personal progress; locked milestone progress is visible only
+    to its owner. Historical badges use only provable results.
   </p>
   <h3>Online friend Pong</h3>
   <p>

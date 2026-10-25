@@ -46,7 +46,10 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     );
     await p.goto(base + "/games/2048/");
     await p.waitForSelector('[data-game][data-ready="true"]');
-    assert.equal(await p.inputValue("#game-mode"), "private");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     assert.equal(await p.locator(".tile").count(), 0);
     await p.waitForFunction(() =>
       document
@@ -67,7 +70,10 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     await p.reload();
     await p.waitForSelector("#game-restore:not([hidden])");
     await p.click("#game-restore");
-    assert.equal(await p.inputValue("#game-mode"), "private");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     await p.goto(base + "/games/");
     await p.waitForSelector(".saved-game-row");
     await p.fill("#game-search", "snake");

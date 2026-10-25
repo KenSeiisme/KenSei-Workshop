@@ -100,6 +100,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
         subscriptions.get(page).add(topic);
       } else subscriptions.get(page).delete(topic);
     });
+    // Functional checks do not depend on an external font service.
+    await c.route("https://fonts.googleapis.com/**", (route) =>
+      route.fulfill({ contentType: "text/css", body: "" }),
+    );
     await c.route(
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
       (r) =>
@@ -155,10 +159,13 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     const p = await context(A);
     await p.goto(base + "/games/block-drop/");
     await p.waitForSelector("[data-game][data-ready=true]");
-    assert.equal(await p.inputValue("#game-mode"), "public");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "ranked",
+    );
     await gameClick(p, "#game-start");
     await p.waitForSelector(".drop-canvas");
-    assert.match(await p.innerText("#game-status"), /Public game/);
+    assert.match(await p.innerText("#game-status"), /Ranked game/);
     failFinishOnce = true;
     for (let i = 0; i < 35; i++) {
       if (

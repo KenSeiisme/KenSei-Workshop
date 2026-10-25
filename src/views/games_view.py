@@ -14,14 +14,14 @@ HELP = {
         " Clear 1/2/3/4 lines for 100/300/500/800 × level; soft drop adds 1 per"
         " cell and hard drop 2. Every 10 lines increases level. Classic ends "
         "when the stack reaches the top. Sprint ranks completed 40-line runs by"
-        " server time. Pause and restore are Private."
+        " server time. Paused and restored games are local only."
     ),
     "pong": "Create an online invitation room. Both players sign in and press Ready. First to seven points wins.",
     "sudoku": (
         "Fill each row, column and 3 × 3 box with digits 1–9. Select a cell and"
         " use the number pad or keyboard. Pencil notes are available in either "
-        "mode. Conflicts show duplicates, not hidden answers. Private provides "
-        "one-step Undo and a one-cell Hint. Complete a Public puzzle without "
+        "mode. Conflicts show duplicates, not hidden answers. Local-only play provides "
+        "one-step Undo and a one-cell Hint. Complete a ranked puzzle without "
         "hints or interruption to enter its difficulty board."
     ),
     "nonogram": (
@@ -29,7 +29,7 @@ HELP = {
         "order. Separate runs with at least one empty square. Switch Fill / "
         "Mark or use X to mark an empty square; drag to paint. A matching clue "
         "line is highlighted. Scroll the clue area to pan larger boards. "
-        "Private provides Undo and a one-cell Hint. Only a completed Public "
+        "Local-only play provides Undo and a one-cell Hint. Only a completed ranked "
         "puzzle can rank."
     ),
     "block-puzzle": (
@@ -49,13 +49,13 @@ HELP = {
         "using three shared lives. A new ball waits for your launch after a "
         "miss. The five-minute active-play limit includes waiting to launch. "
         "Only natural endings, time limit or all three cleared stages finish "
-        "Public runs."
+        "ranked runs."
     ),
     "connect-four": (
         "Drop a piece into one of seven columns. Connect four horizontally, "
         "vertically or diagonally to win. A full board without a winner is a "
         "draw. Choose three computer difficulties or two players on this "
-        "device. Choose first or second before starting. Private only: pause, "
+        "device. Choose first or second before starting. Local only: pause, "
         "continue and undo your last human turn (one move for two players)."
     ),
     "reversi": (
@@ -63,13 +63,13 @@ HELP = {
         "and flip opponent discs along a row, column or diagonal. The opponent "
         "is skipped automatically if no move is legal. When neither player can "
         "move, the larger disc count wins; equal counts draw. Choose a computer"
-        " difficulty or two local players. Private only, with save and Undo."
+        " difficulty or two local players. Local only, with save and Undo."
     ),
     "2048": (
         "Use arrow keys, WASD, swipe, or the direction buttons. Equal tiles "
         "merge once per move; their new value adds to your score. New tiles are"
         " 2 (90%) or 4 (10%). Reaching 2048 is a milestone: keep playing until "
-        "no moves remain. One-step Undo is available in Private."
+        "no moves remain. One-step Undo is available during local-only play."
     ),
     "minesweeper": (
         "Reveal every safe square to win. Your first reveal and its neighbors "
@@ -101,7 +101,7 @@ DETAILS = {
     "pong": (
         "12",
         "A friend on the other side.",
-        "Online friends · Private",
+        "Online friends · Casual",
         "Pointer / touch / keys",
     ),
     "sudoku": ("05", "A little room for logic.", "3 difficulties", "Keys / number pad"),
@@ -359,16 +359,13 @@ def game_page(game):
     slug, name = game["slug"], game["name"]
     number, tagline, spec, controls = DETAILS[slug]
     private_only = game["category"] == "Board"
-    mode_options = '<option value="private">Private · saved progress</option>' + (
-        "" if private_only else '<option value="public">Public · Ranked</option>'
-    )
     first_side = (
         '<label>Play as<select id="game-human-side"><option value="1">First player</option><option value="2">Second player</option></select></label>'
         if private_only
         else ""
     )
     hint = (
-        '<button class="button secondary" id="game-hint" disabled>Hint · Private</button>'
+        '<button class="button secondary" id="game-hint" disabled>Hint · local only</button>'
         if slug in ("sudoku", "nonogram")
         else ""
     )
@@ -397,7 +394,6 @@ def game_page(game):
         name=name,
         tagline=tagline,
         description=game["description"],
-        mode_options=mode_options,
         difficulty_label="Opponent" if private_only else "Difficulty",
         first_side=first_side,
         mine_mode=mine_mode,
@@ -411,5 +407,13 @@ def game_page(game):
         milestones=milestones,
         board_info=board_info,
         archive_hidden="" if slug == "brick-breaker" else "hidden",
+        leaderboard=(
+            ""
+            if private_only
+            else render_template(
+                "games/leaderboard.html",
+                archive_hidden="" if slug == "brick-breaker" else "hidden",
+            )
+        ),
         help_text=HELP[slug],
     )

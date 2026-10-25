@@ -69,6 +69,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       },
       { id: user },
     );
+    // Functional checks do not depend on an external font service.
+    await c.route("https://fonts.googleapis.com/**", (route) =>
+      route.fulfill({ contentType: "text/css", body: "" }),
+    );
     await c.route(
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
       (r) =>
@@ -174,7 +178,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     page.waitForFunction(() =>
       document
         .querySelector("#game-status")
-        .textContent.includes("Public result verified"),
+        .textContent.includes("Verified result accepted"),
     );
   const pieces = (page, player) =>
     page.locator(`.board-cell[data-piece="${player}"]`).count();
@@ -204,7 +208,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       "reversi",
     ]) {
       await open(p, slug);
-      assert.equal(await p.inputValue("#game-mode"), "private");
+      assert.equal(
+        await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+        "local",
+      );
       assert.equal(
         await p
           .locator(
@@ -247,7 +254,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     await gameSelect(p, "#game-difficulty", "easy");
     await p.waitForSelector("#game-restore:not([hidden])");
     await p.click("#game-restore");
-    assert.equal(await p.inputValue("#game-mode"), "private");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     assert.ok(await p.locator(".sudoku-notes").count());
     console.log(
       "PASS twelve-game catalog, six guest idle pages, legacy save compatibility and Sudoku notes/hint/undo/explicit Private restore",
@@ -262,7 +272,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       "brick-breaker",
     ]) {
       await open(q, slug);
-      assert.equal(await q.inputValue("#game-mode"), "public");
+      assert.equal(
+        await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+        "ranked",
+      );
     }
     await open(q, "sudoku");
     await gameSelect(q, "#game-difficulty", "easy");
@@ -497,7 +510,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     assert.equal(await p.locator("#game-clock").innerText(), clockPaused);
     await p.click("#game-resume");
     await p.waitForTimeout(400);
-    assert.equal(await p.inputValue("#game-mode"), "private");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     await p.screenshot({
       path: "_qa/games-expansion-brick.png",
       fullPage: true,
@@ -510,11 +526,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       (c) => c.name === "function:start",
     ).length;
     await open(q, "connect-four");
-    assert.equal(await q.inputValue("#game-mode"), "private");
     assert.equal(
-      await q.locator('#game-mode option[value="public"]').count(),
-      0,
+      await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
     );
+    assert.equal(await q.locator("#game-mode").count(), 0);
     await gameSelect(q, "#game-human-side", "2");
     await gameSelect(q, "#game-difficulty", "ai-easy");
     await gameClick(q, "#game-start");
@@ -551,7 +567,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
         document.querySelectorAll('.board-cell[data-piece="2"]').length === 1,
     );
     await open(q, "reversi");
-    assert.equal(await q.inputValue("#game-mode"), "private");
+    assert.equal(
+      await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     await gameSelect(q, "#game-difficulty", "local");
     await gameClick(q, "#game-start");
     assert.equal(await q.locator(".board-cell.is-legal").count(), 4);

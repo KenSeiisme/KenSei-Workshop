@@ -125,4 +125,6 @@ pnpm format:check
 
 Games 使用独立的霓虹舞台与动画表现层；`Effects: Auto / Reduced / Off` 仅在本机保存偏好，Auto 遵循系统减少动态效果设置。新增的 `pnpm test:game-neon` 检查动画、节点稳定性、输入一致性及响应式布局；详情见 [霓虹游戏验收](docs/validation/2026-10-23-neon-games.md)。
 
-12 款游戏页使用棋盘优先布局：进入后可从棋盘内 Start／Continue，开局自动收起网站导航进入专注模式；Exit focus 只改变布局。模式、音量、榜单、保存和 Help 从设置或菜单进入。`pnpm test:game-shell` 检查首屏尺寸、触控、存档恢复及 Public 资格，详情见 [游戏舞台验收](docs/validation/2026-10-25-board-first-games.md)。
+12 款游戏页使用棋盘优先布局：进入后可从棋盘内 Start／Continue，开局自动收起网站导航进入专注模式；Exit focus 只改变布局。难度与 Start 位于开局卡；声音和 Help 从设置或菜单进入，排行榜在宽屏舞台旁显示。`pnpm test:game-shell` 检查首屏尺寸、触控、存档恢复及 Public 资格，详情见 [游戏舞台验收](docs/validation/2026-10-25-board-first-games.md)。
+
+游戏页的难度与开始按钮位于同一张开局卡；桌面宽度达到 1100px 时右侧常驻排行榜，较窄屏幕在棋盘下方展示。模式不再手动选择：游客直接玩，登录后的新局自动参榜；暂停或续玩只保留本机成绩。原有自动存档、Continue playing、旧记录及提交重试继续兼容。`pnpm test:game-shell` 同时覆盖布局、榜单读取与资格恢复。

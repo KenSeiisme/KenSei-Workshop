@@ -1,6 +1,6 @@
 import { mountAudio, unlockAudio, stopAudio, observeAudio } from "./audio.js";
 import { api, esc } from "/tool-scripts/common.js";
-import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
+import { ensureProfile } from "/tool-scripts/profile-service.js";
 import {
   createRecordStore,
   recordSignature,
@@ -30,6 +30,7 @@ import { mountEffects, bindCardDemos } from "./effects.js";
 import { INPUTS as DROP_INPUTS } from "./block-drop-engine.js";
 import { mountAchievements } from "./achievements.js";
 import { mountPlayShell } from "./play-shell.js";
+import { mountLeaderboard } from "./leaderboard.js";
 mountEffects();
 mountAudio();
 
@@ -37,22 +38,6 @@ const $ = (s) => document.querySelector(s),
   store = createRecordStore("game", validateSave, { syncDelay: 500 });
 const root = $("[data-game]"),
   game = root?.dataset.game;
-// 折叠进度面板仍显示保存状态，失败信息与重试入口留在原区域。
-if (game) {
-  const source = $("#game-save-status"),
-    summary = document.createElement("small");
-  summary.className = "game-save-summary";
-  $(".game-save-panel>summary").append(summary);
-  const update = () => {
-    summary.textContent = source.textContent;
-  };
-  new MutationObserver(update).observe(source, {
-    childList: true,
-    characterData: true,
-    subtree: true,
-  });
-  update();
-}
 const owner = () => api.user?.id || "guest";
 const clock = (ms) =>
   `${Math.floor(ms / 60000)
@@ -80,10 +65,24 @@ let running = false,
   busy = false,
   mineMode = "reveal",
   audioSnapshot = null,
-  player;
+  player,
+  localFallbackAvailable = false,
+  startFailed = false,
+  submissionStatus = "local";
 const presenter = game ? createGamePresenter(root, game) : null;
 const milestones = mountAchievements(game);
-const avatarSignatures = new WeakMap();
+const rankedBoard = mountLeaderboard(root, game, displayResult);
+const newRunIsRanked = () => !!api.user && isRanked(game);
+const currentRunIsRanked = () =>
+  !!publicSession || !!pending || submissionStatus === "verified";
+const eligibilityLabel = () => {
+  if (!active) return newRunIsRanked() ? "Ranked" : "Local only";
+  if (pending)
+    return submissionStatus === "failed" ? "Submission pending" : "Verifying";
+  if (submissionStatus === "verified") return "Verified";
+  if (submissionStatus === "unqualified") return "Not ranked";
+  return publicSession ? "Ranked" : "Local only";
+};
 const isBoard = () => game && !isRanked(game);
 const undoable = () =>
   ["2048", "sudoku", "nonogram", "connect-four", "reversi"].includes(game);
@@ -106,7 +105,7 @@ function coverGame() {
     running &&
     publicSession &&
     !confirm(
-      "Opening this panel pauses your Public run and makes it Private. Continue?",
+      "Opening this panel pauses your ranked run. It will continue locally without ranking. Continue?",
     )
   )
     return false;
@@ -118,6 +117,11 @@ function syncShell() {
   const saved =
     !active &&
     store.rows().find((row) => row.id === $("#game-restore").dataset.id);
+  root.dataset.runEligibility = (
+    active ? currentRunIsRanked() : newRunIsRanked()
+  )
+    ? "ranked"
+    : "local";
   shell?.update({
     state: !active
       ? "ready"
@@ -126,7 +130,12 @@ function syncShell() {
         : active.status === "playing"
           ? "paused"
           : "complete",
-    label: `${$("#game-mode").value === "public" ? "Public" : "Private"} · ${rules(game, difficulty()).label}`,
+    label: `${eligibilityLabel()} · ${rules(game, difficulty()).label}`,
+    startFailed,
+    localFallback: localFallbackAvailable,
+    saveInfo: saved
+      ? `${rules(game, saved.data.difficulty).label} · ${new Date(saved.updated_at).toLocaleString()} · Local only`
+      : "",
     busy,
     pending: !!pending,
     saveId: $("#game-restore").hidden ? "" : $("#game-restore").dataset.id,
@@ -225,6 +234,12 @@ function displayResult(row, slug) {
 function saveLine() {
   const el = $("#game-save-status");
   if (el) el.textContent = store.saveState();
+  if (game) {
+    const failed = /fail|error|unavailable/i.test(el?.textContent || "");
+    $("#game-save-retry").hidden = !failed;
+    $("#game-save-line").hidden =
+      !active && $("#game-restore").hidden && !failed;
+  }
   if (activeId && lastWritten) {
     const row = store.rows().find((x) => x.id === activeId);
     if (row && recordSignature(row.data) === lastWritten)
@@ -244,6 +259,8 @@ async function persist() {
   } catch (e) {
     $("#game-save-status").textContent =
       `Save failed · ${e.message} Keep this page open and retry.`;
+    $("#game-save-retry").hidden = false;
+    $("#game-save-line").hidden = false;
   }
 }
 function queueSave() {
@@ -263,7 +280,6 @@ function readyUI() {
   if (!active) {
     presenter.reset();
     shell?.restorePreview();
-    if ($("#game-setup")) $("#game-setup").open = true;
     root.dataset.runState = "ready";
     $("#game-run-label").textContent = "Ready to play";
     if ($("#game-status").textContent.trim() === "Loading game…")
@@ -284,12 +300,17 @@ function readyUI() {
     priorBest(game, difficulty()),
     game,
   );
-  $("#game-mode-note").textContent =
-    $("#game-mode").value === "public"
-      ? "Public · sign-in required; completed uninterrupted runs submit automatically."
-      : isBoard()
-        ? "Private · play a computer opponent or take turns on this device. Progress saves automatically."
-        : "Private · pause, undo where available, and continue saved progress.";
+  $("#game-eligibility-note").textContent = newRunIsRanked()
+    ? "New games rank automatically after verification."
+    : isBoard()
+      ? "Play locally. Progress saves automatically."
+      : "Local best on this device. Sign in for ranked results.";
+  const setup = $("#game-setup");
+  const oneOption = $("#game-difficulty").options.length === 1;
+  setup.classList.toggle("has-one-option", oneOption);
+  $("#game-sign-in").hidden = !!api.user || isBoard();
+  if (row) $("#game-save-line").hidden = false;
+  saveLine();
   syncShell();
 }
 const SHAPES = [
@@ -308,6 +329,7 @@ const SHAPES = [
 ];
 function draw(reason = "view", event = null) {
   if (!active) return;
+  root.dataset.runEligibility = currentRunIsRanked() ? "ranked" : "local";
   observeAudio(audioSnapshot, active, event || {});
   audioSnapshot = structuredClone(active);
   presenter.prepare(active, { running, reason, event });
@@ -321,9 +343,9 @@ function draw(reason = "view", event = null) {
       ? "paused"
       : "complete";
   $("#game-run-label").textContent = running
-    ? `${publicSession ? "Public" : "Private"} · Playing`
+    ? `${publicSession ? "Ranked" : "Local only"} · Playing`
     : active.status === "playing"
-      ? "Private · Paused"
+      ? "Local only · Paused"
       : "Game complete";
   if (game === "2048") presenter.render2048(board, active);
   if (game === "minesweeper") {
@@ -415,9 +437,9 @@ function draw(reason = "view", event = null) {
   $("#game-run-label").dataset.rulesVersion = String(active.version);
   if (game === "brick-breaker")
     $("#game-clock").previousElementSibling.textContent = "Time left";
-  $("#game-settings-change").hidden = active.status !== "playing";
-  $("#game-mode").disabled = $("#game-difficulty").disabled =
-    active.status === "playing";
+  $("#game-settings-change").hidden = false;
+  $("#game-settings-change").disabled = !!pending || busy;
+  $("#game-difficulty").disabled = active.status === "playing";
   if ($("#game-human-side"))
     $("#game-human-side").disabled = active.status === "playing";
   $("#game-best").textContent = displayResult(
@@ -432,10 +454,10 @@ function downgrade(reason) {
   if (!publicSession) return;
   const id = publicSession.id;
   publicSession = null;
+  submissionStatus = "local";
   events = [];
-  $("#game-mode").value = "private";
   sessionCall("abandon", { session_id: id }).catch(() => {});
-  status(`${reason} This run is now Private and can continue.`);
+  status(`${reason} This run is now local only and can continue.`);
 }
 function pause(reason = "Paused.") {
   stopAudio();
@@ -450,12 +472,12 @@ function pause(reason = "Paused.") {
   $("#game-overlay").hidden = false;
   $("#game-overlay-title").textContent = "Paused";
   $("#game-overlay-note").textContent = wasPublic
-    ? `${reason} Public qualification ended. Continue as a Private game.`
-    : `${reason} Progress is kept for Private play.`;
+    ? `${reason} Ranking eligibility ended. Continue locally.`
+    : `${reason} Progress is kept for local play.`;
   status(
     wasPublic
-      ? "Paused · now Private. Continue when ready."
-      : "Paused · Private progress retained.",
+      ? "Paused · Local only. Continue when ready."
+      : "Paused · Progress retained.",
   );
   draw();
   persist();
@@ -469,7 +491,7 @@ function resume() {
   started = performance.now();
   lastFrame = started;
   running = true;
-  status("Private game in progress.");
+  status("Local only · Game in progress.");
   draw();
   $("#game-board").focus({ preventScroll: true });
   frameId = requestAnimationFrame(frame);
@@ -478,32 +500,35 @@ async function submit() {
   if (!pending || busy || pending.owner !== owner()) return;
   busy = true;
   $("#game-submit-retry").hidden = true;
-  status("Verifying your completed Public run…");
-  presenter.setSubmission("verifying", "Verifying Public result…");
+  submissionStatus = "verifying";
+  status("Verifying your completed run…");
+  presenter.setSubmission("verifying", "Verifying result…");
   const submitted = pending;
   try {
     const result = await sessionCall("finish", submitted.body);
+    submissionStatus = result.qualified ? "verified" : "unqualified";
     await pendingResult(game, null, true).catch(() => {});
     if (pending === submitted) pending = null;
     $("#game-submit-discard").hidden = true;
     status(
       result.qualified
-        ? `Public result verified · ${displayResult(result, game)}. Best results appear on the board.`
+        ? `Verified result accepted · ${displayResult(result, game)}. Best results appear on the board.`
         : result.reason ||
             "Game complete. This result did not qualify for the public board.",
     );
     presenter.setSubmission(
       result.qualified ? "verified" : "unqualified",
       result.qualified
-        ? "Verified · Public result accepted"
+        ? "Verified · Ranked result accepted"
         : result.reason || "Not eligible for the public board",
     );
     await leaderboard();
     await milestones.accepted(result, submitted.body.session_id);
   } catch (e) {
+    submissionStatus = "failed";
     status(
       e.message +
-        " Your result is retained; retry submission or keep it Private.",
+        " Your result is retained; retry submission or keep it locally.",
     );
     presenter.setSubmission(
       "failed",
@@ -548,7 +573,7 @@ async function finish() {
       },
     };
     publicSession = null;
-    presenter.setSubmission("verifying", "Verifying Public result…");
+    presenter.setSubmission("verifying", "Verifying result…");
   }
   await persist();
   if (completed && pending === completed && owner() === completed.owner) {
@@ -653,11 +678,11 @@ function action(event) {
   if (active.status !== "playing") finish();
   return true;
 }
-async function start() {
+async function start({ localOnly = false } = {}) {
   unlockAudio();
   if (busy) return;
   if (pending) {
-    status("Retry the pending Public result before starting another run.");
+    status("Retry the pending ranked result before starting another run.");
     $("#game-submit-retry").hidden = false;
     return;
   }
@@ -681,23 +706,20 @@ async function start() {
   }
   ui?.reset();
   presenter.reset();
-  const mode = isBoard() ? "private" : $("#game-mode").value,
+  const mode = !localOnly && newRunIsRanked() ? "public" : "private",
     diff = difficulty();
   downgrade("The previous run was restarted.");
-  $("#game-mode").value = mode;
-  if (mode === "public" && !api.user) {
-    api.openAuth(location.pathname);
-    return;
-  }
   busy = true;
   $("#game-start").disabled = true;
+  localFallbackAvailable = false;
+  startFailed = false;
   syncShell();
   try {
     let seed = crypto.getRandomValues(new Uint32Array(1))[0] || 1,
       nextSession = null;
     if (mode === "public") {
       await ensureProfile();
-      status("Starting a verified Public session…");
+      status("Starting a verified ranked session…");
       nextSession = await sessionCall("start", {
         game,
         difficulty: diff,
@@ -711,6 +733,7 @@ async function start() {
     active = create(game, diff, seed);
     if (isBoard()) active.humanSide = Number($("#game-human-side").value);
     publicSession = nextSession;
+    submissionStatus = nextSession ? "ranked" : "local";
     events = [];
     undo = null;
     accumulated = 0;
@@ -723,22 +746,28 @@ async function start() {
     $("#game-restore").hidden = true;
     status(
       mode === "public"
-        ? "Public game in progress. Stay on this page to remain eligible."
-        : "Private game in progress. Progress saves automatically.",
+        ? "Ranked game in progress. Stay on this page to remain eligible."
+        : "Local only · Game in progress. Progress saves automatically.",
     );
     draw();
     queueSave();
     $("#game-board").focus({ preventScroll: true });
     frameId = requestAnimationFrame(frame);
   } catch (e) {
-    status(e.message);
+    startFailed = true;
+    localFallbackAvailable = mode === "public";
+    status(
+      e.message +
+        (localFallbackAvailable
+          ? " Retry, or choose Play locally without ranking."
+          : " Retry when ready."),
+    );
     if (active?.status === "playing") {
       publicSession = null;
-      $("#game-mode").value = "private";
       $("#game-overlay").hidden = false;
       $("#game-overlay-title").textContent = "Previous game kept";
       $("#game-overlay-note").textContent =
-        "The new game could not start. Retry, or continue your previous position privately.";
+        "The new game could not start. Retry, or continue your previous position locally.";
       draw();
     }
   } finally {
@@ -760,6 +789,7 @@ async function restore() {
     revision = row.revision;
     accumulated = data.elapsed;
     publicSession = null;
+    submissionStatus = "local";
     events = [];
     undo = null;
     ui?.reset();
@@ -767,7 +797,6 @@ async function restore() {
     if ($("#game-human-side"))
       $("#game-human-side").value = String(active.humanSide || 1);
     $("#game-difficulty").value = data.difficulty;
-    $("#game-mode").value = "private";
     $("#game-restore").hidden = true;
     resume();
     draw();
@@ -779,69 +808,7 @@ async function restore() {
   }
 }
 async function leaderboard() {
-  if (!game || !isRanked(game)) return;
-  const mode = difficulty(),
-    boardVersion = $("#game-board-version")?.value || "current",
-    dest = $("#game-leaderboard"),
-    note = $("#game-leaderboard-status");
-  note.textContent = "Loading leaderboard…";
-  $("#game-board-note").textContent =
-    game === "memory-match"
-      ? "Fewer attempts, then faster completion."
-      : timeScored(game)
-        ? "Completed puzzles · fastest time first."
-        : game === "2048"
-          ? "Highest score, then largest tile."
-          : game === "brick-breaker"
-            ? "Most points, then faster completion."
-            : game === "block-puzzle"
-              ? "Most points · each cleared line adds 10."
-              : "Highest score for this speed.";
-  try {
-    if (!api.client)
-      throw Error("Leaderboard service unavailable. Private play still works.");
-    const { data, error } = await api.client.rpc(
-      boardVersion === "current"
-        ? "get_game_leaderboard"
-        : "get_game_leaderboard_history",
-      {
-        game,
-        difficulty: mode,
-        ...(boardVersion === "current"
-          ? {}
-          : { rules_version: Number(boardVersion) }),
-      },
-    );
-    if (error) throw error;
-    if (
-      difficulty() !== mode ||
-      ($("#game-board-version")?.value || "current") !== boardVersion
-    )
-      return;
-    patchMarkup(
-      dest,
-      data.top.length
-        ? `<table><caption>${esc(rules(game, mode).label)} · rules v${Number(data.version)}</caption><thead><tr><th>#</th><th>Player</th><th>Result</th></tr></thead><tbody>${data.top.map((r) => `<tr data-player-id="${esc(r.public_id)}" data-rank="${Number(r.rank)}" class="${data.me?.public_id === r.public_id ? "is-me" : ""}"><td>${Number(r.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(r.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(r.public_id)}" data-preserve aria-hidden="true"></span>${esc(r.nickname)}</a><small>${esc(new Date(r.achieved_at).toLocaleDateString())}</small></td><td>${esc(displayResult(r, game))}</td></tr>`).join("")}</tbody></table>`
-        : `<div class="game-empty-state">${gameIcon(game)}<strong>A spot for your first best.</strong><p>No verified results yet. Complete a Public game to make the first little mark.</p></div>`,
-    );
-    for (const row of data.top) {
-      const avatar = dest.querySelector(
-        `[data-game-avatar="${CSS.escape(row.public_id)}"]`,
-      );
-      const signature = JSON.stringify(row.profile);
-      if (avatarSignatures.get(avatar) !== signature) {
-        paintAvatar(avatar, row.profile);
-        avatarSignatures.set(avatar, signature);
-      }
-    }
-    $("#game-my-rank").innerHTML = data.me
-      ? `<p class="game-my-result">Your rank: #${Number(data.me.rank)} · ${esc(displayResult(data.me, game))}</p>`
-      : '<p class="muted">No qualifying Public result for this difficulty yet.</p>';
-    note.textContent = `${boardVersion === "current" ? "Current rules" : "Previous rules · archived"} · Top 50 · one best result per player.`;
-  } catch {
-    note.textContent =
-      "Leaderboard could not load. Use Refresh to retry; Private play is available.";
-  }
+  return rankedBoard.refresh();
 }
 async function renderSaves() {
   const node = $("#game-saves");
@@ -851,10 +818,10 @@ async function renderSaves() {
     ? rows
         .map(
           (r) =>
-            `<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? " · conflict copy" : ""}</strong><small>${r.data.game === "brick-breaker" && r.data.state.version === 1 ? "Legacy rules · v1 · " : ""}Private · ${esc(new Date(r.updated_at).toLocaleString())} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
+            `<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? " · conflict copy" : ""}</strong><small>${r.data.game === "brick-breaker" && r.data.state.version === 1 ? "Legacy rules · v1 · " : ""}Local only · ${esc(new Date(r.updated_at).toLocaleString())} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
         )
         .join("")
-    : '<div class="game-empty-state"><strong>A fresh start is a good start.</strong><p>No unfinished games yet. Pick a game above; your Private progress will appear here.</p></div>';
+    : '<div class="game-empty-state"><strong>A fresh start is a good start.</strong><p>No unfinished games yet. Pick a game above; your saved games will appear here.</p></div>';
   $("#games-more").hidden = !store.hasMore();
   saveLine();
   $("#games-copy-guest").hidden =
@@ -901,7 +868,7 @@ async function initDirectory() {
   $("#games-clear").onclick = guard(async () => {
     if (
       !confirm(
-        "Clear all Private progress and local bests for this identity? Public leaderboard results remain.",
+        "Clear all saved games and local bests for this identity? Public leaderboard results remain.",
       )
     )
       return;
@@ -939,18 +906,21 @@ function bindGame() {
     .map(([id, m]) => `<option value="${id}">${esc(m.label)}</option>`)
     .join("");
   $("#game-difficulty").value = GAMES[game].default;
-  $("#game-mode").value = api.user && isRanked(game) ? "public" : "private";
   $("#game-best").parentElement.hidden = isBoard();
   if ($("#game-hint")) $("#game-hint").onclick = () => ui?.hint();
-  $("#game-start").onclick = start;
+  $("#game-start").onclick = () => start();
+  $("#game-start-local").onclick = () => {
+    if (localFallbackAvailable) start({ localOnly: true });
+  };
+  $("#game-sign-in").onclick = () => api.openAuth(location.pathname);
   $("#game-pause").onclick = () => pause();
   $("#game-resume").onclick = resume;
   $("#game-settings-change").onclick = async () => {
-    if (busy) return;
+    if (busy || pending) return;
     if (
       publicSession &&
       !confirm(
-        "Changing settings ends Public qualification. Keep this position Private and choose new settings?",
+        "Changing setup ends ranking eligibility. Keep this position saved and choose new settings?",
       )
     )
       return;
@@ -959,19 +929,21 @@ function bindGame() {
     ui?.reset();
     presenter.reset();
     active = null;
+    localFallbackAvailable = false;
+    startFailed = false;
     activeId = null;
     undo = null;
     lastWritten = "";
     $("#game-overlay").hidden = true;
-    $("#game-mode").disabled = $("#game-difficulty").disabled = false;
+    $("#game-difficulty").disabled = false;
     if ($("#game-human-side")) $("#game-human-side").disabled = false;
     $("#game-settings-change").hidden = true;
     $("#game-start").textContent = "Start game →";
     shell?.restorePreview();
-    status("Position saved privately. Choose settings for your next game.");
+    status("Position saved. Choose settings for your next game.");
     readyUI();
     shell?.closeDialogs();
-    shell?.openSettings();
+    shell?.focusSetup();
   };
   $("#game-restore").onclick = restore;
   $("#game-submit-retry").onclick = submit;
@@ -979,18 +951,19 @@ function bindGame() {
     if (
       busy ||
       !confirm(
-        "Keep this result Private and discard the pending Public submission?",
+        "Keep this result locally and discard its pending ranked submission?",
       )
     )
       return;
     await pendingResult(game, null, true);
     pending = null;
+    submissionStatus = "local";
     presenter.setSubmission(
       "private",
-      "Public submission discarded · kept Private",
+      "Ranked submission discarded · Local only",
     );
     $("#game-submit-retry").hidden = $("#game-submit-discard").hidden = true;
-    status("Public submission discarded. Your Private result remains saved.");
+    status("Submission discarded. Your result remains saved locally.");
     syncShell();
   };
   $("#game-save-retry").onclick = async () => {
@@ -998,22 +971,14 @@ function bindGame() {
     await store.flush();
     saveLine();
   };
-  $("#game-board-refresh").onclick = leaderboard;
-  if ($("#game-board-version")) $("#game-board-version").onchange = leaderboard;
   const report = $("#game-result");
   if (report) $(".game-board-shell").append(report);
-  const narrow = matchMedia("(max-width: 760px)");
-  const rankPanel = $("#game-rank-panel");
-  const fitSide = () => {
-    if (rankPanel) rankPanel.open = false;
-  };
-  fitSide();
-  narrow.addEventListener("change", fitSide);
   $("#game-difficulty").onchange = () => {
+    localFallbackAvailable = false;
+    startFailed = false;
     readyUI();
     leaderboard();
   };
-  $("#game-mode").onchange = readyUI;
   $("#game-help").onclick = () => {
     if (!coverGame()) return;
     shell?.closeDialogs();
@@ -1030,7 +995,7 @@ function bindGame() {
       undo = null;
       draw();
       queueSave();
-      status("One move undone · Private.");
+      status("One move undone · Local only.");
     };
   for (const b of document.querySelectorAll("[data-dir]"))
     b.onclick = () => {
@@ -1166,7 +1131,7 @@ try {
     if (pending) {
       $("#game-submit-retry").hidden = $("#game-submit-discard").hidden = false;
       status(
-        "A completed Public result is waiting. Retry submission or keep it Private before a new game.",
+        "A completed ranked result is waiting. Retry submission or keep it locally before a new game.",
       );
     }
     syncShell();
@@ -1184,10 +1149,9 @@ try {
         $("#game-difficulty").value = r.data.difficulty;
         $("#game-restore").dataset.id = r.id;
         $("#game-restore").hidden = false;
-        status(
-          "Saved game ready. Choose Continue saved game to play privately.",
-        );
+        status("Saved game ready. Continue locally, or start a new game.");
         syncShell();
+        leaderboard();
       }
     }
   } else renderSaves();

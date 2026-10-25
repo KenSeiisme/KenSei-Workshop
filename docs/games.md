@@ -29,7 +29,7 @@ Board computer search runs in a cancellable browser Worker. First/second-player 
 
 Private progress uses the revision-aware IndexedDB queue under the `game` kind, with its own database and save RPCs. Account and guest scopes remain separate. Autosave runs at most every 500 ms during continuous play; server conflicts retain a distinct copy. Guest progress requires explicit Copy to account. Public session IDs are never included in resumable progress.
 
-Guests default to Private. Signed-in players default to Public for new ranked-capable games; existing or restored games remain Private. Pausing, backgrounding, refreshing or restoring a Public run removes its Public eligibility. Sudoku notes do not enter ranked action logs; hints and undo are Private only. Board games always remain Private.
+Guests play locally. Signed-in players automatically start a Public verification session for each new ranked-capable game; there is no Public/Private selector. Existing, paused or restored games remain local only. A failed ranked start offers Retry or an explicit Play locally fallback; the next new game attempts ranking again. Pausing, backgrounding, refreshing or restoring a Public run removes its Public eligibility. Sudoku notes do not enter ranked action logs; hints and undo are Private only. Board games always remain Private.
 
 `games-session` exposes `/start`, `/finish` and `/abandon`. JWT verification remains enabled, and the handler additionally checks the current user with Supabase Auth. Only server credentials can call `games_admin`; clients cannot write ranked scores. Each account has one active Public session, 12 starts per minute, a two-hour expiry, a 20,000-action replay limit and a 512 KB request limit. Replays are verified transiently, not stored in the database. Completed responses are idempotent. These casual boards do not prevent automated solving.
 
@@ -80,3 +80,11 @@ The game stage and public game record use `game-neon.css`. The client-only prese
 `Effects: Auto / Reduced / Off` uses the local key `kensei-game-effects-v1`, shared across game/Profile pages and browser tabs. Auto follows the system reduced-motion preference. Pause, restart, undo, navigation, backgrounding and preference changes cancel decorative animation. A restored game does not replay old celebration effects.
 
 Run `pnpm test:game-neon` in addition to game regressions. Set `RECORD_GAME_VIDEO=1` to produce an ignored demonstration video after installing Playwright's optional FFmpeg encoder. See the [neon validation record](validation/2026-10-23-neon-games.md) for coverage and evidence.
+
+## Inline setup and ranking rail
+
+Game pages place difficulty and opponent/side selections in the board's start card. Start game remains primary; Continue saved game is secondary and identifies the save time and Legacy rules. Only one real set of setup controls exists. Sound and Effects stay in Settings; New game setup returns to the start card after the existing confirmation and save flow.
+
+The nine ranked games show a 300px leaderboard rail at widths of 1100px or more, including focus mode. Narrower screens put it below the board and controls. Top 10 is the default; Show Top 50 expands cached rows, and the player's own rank remains visible when the list is collapsed. Ranking controls never pause, restart or reclassify a run. Refreshes are event-driven, ignore obsolete responses, preserve valid rows on same-board failure, and do not create sessions.
+
+There is no separate Private progress panel. Autosave, account isolation, conflict copies, Continue playing and guest import retain their original formats and APIs. Ranked/Local only/Verifying/Verified describe the current run, while local best and verified ranking best remain distinct. Only qualified server-confirmed completions enter public boards and milestones.

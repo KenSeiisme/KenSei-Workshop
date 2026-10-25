@@ -17,7 +17,9 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     start = $("#game-start"),
     restore = $("#game-restore"),
     retry = $("#game-submit-retry"),
-    discard = $("#game-submit-discard");
+    discard = $("#game-submit-discard"),
+    localStart = $("#game-start-local"),
+    saveLine = $("#game-save-line");
   let state = "ready",
     focus = false,
     frame = 0,
@@ -83,6 +85,18 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     closeDialogs();
     dialog.showModal();
   }
+  function focusSetup() {
+    const target = [
+      ...root.querySelectorAll("#game-setup select, #game-start"),
+    ].find((node) => !node.disabled && node.getClientRects().length);
+    target?.focus({ preventScroll: true });
+  }
+  for (const button of root.querySelectorAll("[data-shell-setup]"))
+    button.addEventListener("click", () => {
+      if (!entry) openDialog(settings);
+      else if (state === "ready") focusSetup();
+      else openDialog(menu);
+    });
   for (const button of root.querySelectorAll("[data-shell-settings]"))
     button.addEventListener("click", () => openDialog(settings));
   for (const button of root.querySelectorAll("[data-shell-menu]"))
@@ -132,17 +146,23 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
       move(restore, entryActions);
       move(retry, entryActions);
       move(discard, entryActions);
+      move(localStart, entryActions);
+      move(saveLine, entry);
       move(status, $("[data-shell-entry-message]"));
       if (start) {
-        const saved = restore && !restore.hidden;
-        start.textContent = saved ? "New game" : "Start game →";
-        start.classList.toggle("primary", !saved && !next.pending);
-        start.classList.toggle("secondary", !!saved || !!next.pending);
+        start.textContent = next.startFailed ? "Retry start" : "Start game →";
+        start.classList.toggle("primary", !next.pending);
+        start.classList.toggle("secondary", !!next.pending);
       }
       if (restore)
         restore.textContent = next.legacy
-          ? "Continue · Legacy · Private"
-          : "Continue · Private";
+          ? "Continue saved game · Legacy"
+          : "Continue saved game";
+      const detail = $("#game-save-detail");
+      if (detail) {
+        detail.hidden = !next.saveInfo || !!restore?.hidden;
+        detail.textContent = next.saveInfo || "";
+      }
       const summary = $("#game-mode-summary");
       if (summary)
         summary.textContent = next.legacy ? `${label} · Legacy rules` : label;
@@ -153,12 +173,24 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
       move(start, destination);
       move(retry, state === "complete" ? resultActions : entryActions);
       move(discard, state === "complete" ? resultActions : entryActions);
+      move(localStart, destination);
+      move(saveLine, $("[data-shell-status-slot]"));
+      if (next.startFailed && start) start.textContent = "Retry start";
+    }
+    const setupButton = $("#game-settings-change");
+    if (setupButton) {
+      setupButton.hidden = state === "ready";
+      setupButton.disabled = !!next.busy || !!next.pending;
+    }
+    if (localStart) {
+      localStart.hidden = !next.localFallback;
+      localStart.disabled = !!next.busy;
     }
     if (start) start.disabled = !!next.busy || !!next.pending;
     if (restore) {
       restore.disabled = !!next.busy;
-      restore.classList.toggle("primary", !next.pending);
-      restore.classList.toggle("secondary", !!next.pending);
+      restore.classList.remove("primary");
+      restore.classList.add("secondary");
     }
     if (state === "playing" && oldState !== "playing") {
       closeDialogs();
@@ -210,6 +242,7 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     closeDialogs,
     requestSize,
     openSettings: () => openDialog(settings),
+    focusSetup,
     restorePreview() {
       if (board && !board.querySelector("[data-shell-preview]")) {
         board.className = initialClass;

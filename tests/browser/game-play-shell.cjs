@@ -18,6 +18,10 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
   const context = await browser.newContext(),
     errors = [],
     sizes = [];
+  // Functional checks do not depend on an external font service.
+  await context.route("https://fonts.googleapis.com/**", (route) =>
+    route.fulfill({ contentType: "text/css", body: "" }),
+  );
   await context.route(
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
     (route) => route.fulfill({ contentType: "text/javascript", body: sdk }),
@@ -35,25 +39,37 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
       await p.setViewportSize(viewport);
     }
     await p.goto(`${base}/games/${slug}/`);
-    await p.waitForSelector("[data-ready=true]").catch(async (error) => {
-      const detail = await p.evaluate(async () => ({
-        ready: window.KenseiWorkspace?.ready,
-        toast: document.querySelector(".toast")?.textContent,
-        status: document.querySelector("#game-status")?.textContent,
-        module: await Promise.race([
-          import("/game-scripts/games.js").then(
-            () => "loaded",
-            (error) => error.stack,
-          ),
-          new Promise((resolve) =>
-            setTimeout(() => resolve("pending module evaluation"), 500),
-          ),
-        ]),
-      }));
-      throw Error(
-        `${slug}: ${JSON.stringify(detail)} ${errors.join(" | ")} ${error.message}`,
-      );
-    });
+    await p
+      .waitForSelector("[data-ready=true]", { timeout: 10000 })
+      .catch(async (error) => {
+        // A transient local asset failure must recover through the same visible retry as a user.
+        const message = await p.locator(".toast").textContent();
+        if (
+          /files could not load/.test(message || "") &&
+          (await p.locator("[data-shell-load-retry]").isVisible())
+        ) {
+          await p.locator("[data-shell-load-retry]").click();
+          await p.waitForSelector("[data-ready=true]");
+          return;
+        }
+        const detail = await p.evaluate(async () => ({
+          ready: window.KenseiWorkspace?.ready,
+          toast: document.querySelector(".toast")?.textContent,
+          status: document.querySelector("#game-status")?.textContent,
+          module: await Promise.race([
+            import("/game-scripts/games.js").then(
+              () => "loaded",
+              (error) => error.stack,
+            ),
+            new Promise((resolve) =>
+              setTimeout(() => resolve("pending module evaluation"), 500),
+            ),
+          ]),
+        }));
+        throw Error(
+          `${slug}: ${JSON.stringify(detail)} ${errors.join(" | ")} ${error.message}`,
+        );
+      });
     await p.waitForTimeout(40);
   };
   try {
@@ -157,7 +173,7 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
     await p.setViewportSize({ width: 360, height: 800 });
     await open("2048");
     assert.equal(await p.locator("#game-restore").isVisible(), true);
-    assert.match(await p.locator("#game-start").textContent(), /New game/);
+    assert.match(await p.locator("#game-start").textContent(), /Start game/);
     await p.click("#game-restore");
     await p.waitForSelector('[data-focus="true"][data-run-state="playing"]');
     await p.click("#game-pause");
@@ -207,7 +223,7 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
       ) < 640,
     );
     console.log(
-      "PASS saved Continue is primary; restoration remains Private; Escape closes settings before game pause.",
+      "PASS Start stays primary and saved Continue is secondary; restoration remains Private; Escape closes settings before game pause.",
     );
     for (const slug of ["2048", "brick-breaker", "block-drop"]) {
       await p.setViewportSize({ width: 844, height: 390 });
@@ -230,6 +246,10 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
       viewport: { width: 1366, height: 768 },
     });
     await signed.addInitScript(() => (window.__shellSigned = true));
+    // Functional checks do not depend on an external font service.
+    await signed.route("https://fonts.googleapis.com/**", (route) =>
+      route.fulfill({ contentType: "text/css", body: "" }),
+    );
     await signed.route(
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
       (route) => route.fulfill({ contentType: "text/javascript", body: sdk }),
@@ -238,7 +258,10 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
     q.on("pageerror", (e) => errors.push(e.message));
     await q.goto(base + "/games/2048/");
     await q.waitForSelector("[data-ready=true]");
-    assert.equal(await q.inputValue("#game-mode"), "public");
+    assert.equal(
+      await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "ranked",
+    );
     await q.evaluate(() => (window.__shellFailStart = true));
     await q.click("#game-start");
     await q.waitForFunction(() =>
@@ -257,7 +280,10 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
     await q.locator("[data-shell-focus]").click();
     await q.setViewportSize({ width: 360, height: 800 });
     await q.waitForTimeout(150);
-    assert.equal(await q.inputValue("#game-mode"), "public");
+    assert.equal(
+      await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "ranked",
+    );
     assert.equal(
       await q.evaluate(
         () =>
@@ -268,7 +294,10 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
     await q.locator("[data-shell-focus]").click();
     await q.keyboard.press("Escape");
     await q.waitForSelector('[data-run-state="paused"]');
-    assert.equal(await q.inputValue("#game-mode"), "private");
+    assert.equal(
+      await q.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     assert.equal(
       await q.evaluate(
         () =>

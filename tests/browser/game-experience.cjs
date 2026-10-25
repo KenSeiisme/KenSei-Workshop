@@ -85,6 +85,10 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8"));
       },
     ],
   };
+  // Functional checks do not depend on an external font service.
+  await context.route("https://fonts.googleapis.com/**", (route) =>
+    route.fulfill({ contentType: "text/css", body: "" }),
+  );
   await context.route(
     "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
     (r) =>
@@ -171,10 +175,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8"));
       await page.locator("[data-audio-toggle]").getAttribute("aria-pressed"),
       "true",
     );
-    assert.equal(
-      await page.locator("#game-rank-panel").evaluate((n) => n.open),
-      false,
-    );
+    assert.equal(await page.locator("#game-rank-panel").isVisible(), true);
     await gameClick(page, "#game-start");
     await page.waitForSelector(".brick-canvas");
     await page.waitForTimeout(550);
@@ -260,7 +261,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8"));
     await page.waitForSelector(".brick-rules");
     assert.match(await page.locator(".brick-rules").innerText(), /Legacy/);
     await page.click("#game-pause");
-    await gameClick(page, "#game-rank-panel>summary");
+    assert.equal(await page.locator("#game-rank-panel").isVisible(), true);
     await gameSelect(page, "#game-board-version", "1");
     await page.waitForFunction(() =>
       document

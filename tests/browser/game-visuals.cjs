@@ -66,6 +66,10 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await context.addInitScript((p) => {
       window.__publicFixture = p;
     }, profile);
+    // Functional checks do not depend on an external font service.
+    await context.route("https://fonts.googleapis.com/**", (route) =>
+      route.fulfill({ contentType: "text/css", body: "" }),
+    );
     await context.route(
       "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
       (r) =>
@@ -134,11 +138,8 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     for (const game of ["2048", "minesweeper", "snake", "memory-match"]) {
       await p.goto(base + `/games/${game}/`);
       await p.waitForSelector('[data-game][data-ready="true"]');
-      assert.equal(
-        await p.locator("#game-rank-panel").evaluate((n) => n.open),
-        false,
-      );
-      await gameClick(p, "#game-rank-panel>summary");
+      assert.equal(await p.locator("#game-rank-panel").isVisible(), true);
+      assert.equal(await p.locator("#game-rank-panel").isVisible(), true);
       await p.waitForSelector("#game-leaderboard tbody tr");
       assert.equal(
         await p.locator("#game-run-label").innerText(),
@@ -151,7 +152,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       await gameClick(p, "#game-start");
       assert.match(
         await p.locator("#game-run-label").innerText(),
-        /Private · Playing/,
+        /Local only · Playing/,
       );
       if (game === "snake") {
         await p

@@ -64,7 +64,10 @@ const digest = (bytes) =>
     }
     await p.goto(base + "/games/block-drop/");
     await p.waitForSelector("[data-ready=true]");
-    assert.equal(await p.inputValue("#game-mode"), "private");
+    assert.equal(
+      await p.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     await gameClick(p, "#game-start");
     await p.locator("#game-board").press("Space");
     await p.click("#game-pause");

@@ -288,7 +288,10 @@ const seed = 12345,
       await p.locator("#game-result-title").innerText(),
       /Player 1 wins/,
     );
-    assert.match(await p.locator("#game-result-public").innerText(), /Private/);
+    assert.match(
+      await p.locator("#game-result-public").innerText(),
+      /Local only|Local match/,
+    );
     assert.ok(
       Number(await p.locator("[data-game]").getAttribute("data-particles")) <=
         120,

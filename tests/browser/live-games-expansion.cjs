@@ -113,7 +113,10 @@ const slugs = [
     await gameSelect(page, "#game-difficulty", record.difficulty);
     await page.waitForSelector("#game-restore:not([hidden])");
     await page.click("#game-restore");
-    assert.equal(await page.inputValue("#game-mode"), "private");
+    assert.equal(
+      await page.locator("[data-game]").getAttribute("data-run-eligibility"),
+      "local",
+    );
     return paused;
   };
   try {
@@ -124,7 +127,10 @@ const slugs = [
     assert.equal(await page.locator("[data-game-card]:visible").count(), 2);
     for (const slug of slugs) {
       await open(slug);
-      assert.equal(await page.inputValue("#game-mode"), "private");
+      assert.equal(
+        await page.locator("[data-game]").getAttribute("data-run-eligibility"),
+        "local",
+      );
       assert.equal(
         await page
           .locator(
@@ -136,10 +142,7 @@ const slugs = [
       assert.equal(await page.locator("#game-clock").innerText(), "00:00");
       assert.equal(await page.isDisabled("#game-pause"), true);
       if (["connect-four", "reversi"].includes(slug))
-        assert.equal(
-          await page.locator('#game-mode option[value="public"]').count(),
-          0,
-        );
+        assert.equal(await page.locator("#game-mode").count(), 0);
     }
     console.log(
       "PASS live ten-game catalog and six anonymous pages: Private defaults, no automatic game or computer start.",

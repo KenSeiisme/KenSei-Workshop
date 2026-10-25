@@ -1,4 +1,4 @@
-// Follow the visible settings/menu controls after the board-first layout change.
+// Exercise visible inline setup and the game menus; ranking controls never pause play.
 async function closePanels(page) {
   for (const dialog of await page
     .locator("[data-play-shell] dialog[open]")
@@ -40,71 +40,49 @@ async function gameSelect(page, selector, value) {
       .last()
       .click();
   }
-  if (
-    !["#game-mode", "#game-difficulty", "#game-human-side"].includes(selector)
-  ) {
-    if (!(await page.locator("[data-shell-info-dialog][open]").count())) {
-      await openMenu(page);
-      await page.locator("[data-shell-menu-dialog] [data-shell-info]").click();
-    }
-    if (!(await page.locator("#game-rank-panel").evaluate((node) => node.open)))
-      await page.locator("#game-rank-panel>summary").click();
+  if (selector === "#game-board-version") {
+    await closePanels(page);
+    if (!(await page.locator("#game-leaderboard-content").isVisible()))
+      await page.click("#game-board-collapse");
     return page.selectOption(selector, value);
   }
-  await openSettings(page);
-  const setup = page.locator("#game-setup");
-  if (!(await setup.evaluate((node) => node.open)))
-    await setup.locator("summary").click();
-  await page.selectOption(selector, value);
-  await page
-    .locator("[data-shell-settings-dialog] [data-shell-close]")
-    .last()
-    .click();
+  if (selector === "#game-mode")
+    throw Error(
+      "Mode selection was removed. Use guest play or pause/resume to test local-only games.",
+    );
+  await closePanels(page);
+  if (!(await page.locator("[data-shell-entry]").isVisible())) {
+    await openMenu(page);
+    await page.click("#game-settings-change");
+  }
+  return page.selectOption(selector, value);
 }
 async function gameClick(page, selector) {
-  if (
-    selector.includes("game-rank-panel") ||
-    selector.includes("game-save-panel") ||
-    [
-      "#game-board-refresh",
-      "#game-save-retry",
-      "#game-milestones>summary",
-    ].includes(selector)
-  ) {
-    if (!(await page.locator("[data-shell-info-dialog][open]").count())) {
-      await openMenu(page);
-      await page.locator("[data-shell-menu-dialog] [data-shell-info]").click();
-    }
-    if (
-      selector === "#game-board-refresh" &&
-      !(await page.locator("#game-rank-panel").evaluate((node) => node.open))
-    )
-      await page.locator("#game-rank-panel>summary").click();
+  if (selector === "#game-milestones>summary") {
+    await openMenu(page);
+    await page.locator("[data-shell-menu-dialog] [data-shell-info]").click();
   } else if (
     ["#game-settings-change", "#game-help", "#pong-leave"].includes(selector)
   )
     await openMenu(page);
   else if (selector === "#game-start") {
+    const state = await page
+      .locator("[data-play-shell]")
+      .getAttribute("data-shell-state");
+    const replacesSave =
+      state === "ready" && (await page.locator("#game-restore").isVisible());
     if (
       !page.listenerCount("dialog") &&
-      /New game|Restart/.test(await page.locator(selector).textContent())
+      (replacesSave || ["playing", "paused"].includes(state))
     )
       page.once("dialog", (dialog) => dialog.accept());
-    const parent = await page
+    const inClosedDialog = await page
       .locator(selector)
-      .evaluate(
-        (node) =>
-          node.closest("dialog")?.hasAttribute("open") ||
-          !node.closest("dialog"),
-      );
-    if (!parent) await openMenu(page);
-    else if (
-      !(await page
-        .locator(selector)
-        .evaluate((node) => !!node.closest("dialog[open]")))
-    )
-      await closePanels(page);
-  }
+      .evaluate((node) => !!node.closest("dialog:not([open])"));
+    if (inClosedDialog) await openMenu(page);
+    else await closePanels(page);
+  } else if (["#game-board-refresh", "#game-save-retry"].includes(selector))
+    await closePanels(page);
   return page.click(selector);
 }
 module.exports = { gameSelect, gameClick, closePanels, openSettings, openMenu };
