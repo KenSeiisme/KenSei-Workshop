@@ -1,0 +1,23 @@
+<fieldset class="game-shell-preferences">
+  <legend>Sound &amp; display</legend>
+  <label
+    >Volume<input
+      type="range"
+      min="0"
+      max="100"
+      value="35"
+      data-audio-volume
+      aria-label="Game volume"
+  /></label>
+  <label class="game-effects-control"
+    >Effects<select data-effects-select aria-label="Game effects">
+      <option value="auto">Auto</option>
+      <option value="reduced">Reduced</option>
+      <option value="off">Off</option>
+    </select></label
+  >
+  <p class="muted small">
+    Preferences stay on this device. Playing continues while these settings are
+    open.
+  </p>
+</fieldset>

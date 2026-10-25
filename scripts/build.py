@@ -228,6 +228,8 @@ def layout(
     )
     if game_css or profile_css:
         profile_css += '<link rel="stylesheet" href="/game-neon.css"><link rel="stylesheet" href="/game-next.css"><link rel="stylesheet" href="/game-experience.css">'
+    if "data-play-shell" in content:
+        profile_css += '<link rel="stylesheet" href="/game-play-shell.css">'
     tool_css = (
         '<link rel="stylesheet" href="/tool-experience.css">'
         if "data-tool=" in content

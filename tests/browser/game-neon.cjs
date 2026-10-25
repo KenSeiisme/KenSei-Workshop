@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 const assert = require("node:assert/strict"),
   fs = require("node:fs");
 const { chromium } = require("../support/browser.cjs");
@@ -156,7 +157,7 @@ const seed = 12345,
       "full",
     );
     assert.equal(await p.locator(".tile").count(), 0);
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.evaluate(
       () => (window.__tile = document.querySelector('.tile[data-cell="0"]')),
     );
@@ -189,7 +190,7 @@ const seed = 12345,
     const off = await context("off"),
       q = await off.newPage();
     await open(q, "2048");
-    await q.click("#game-start");
+    await gameClick(q, "#game-start");
     for (const dir of directions)
       await q.keyboard.press(
         ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"][dir],
@@ -206,7 +207,7 @@ const seed = 12345,
     );
 
     await open(p, "memory-match");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     const memory = engine.create("memory-match", "normal", seed),
       pair = memory.cards.flatMap((v, i) => (v === 0 ? [i] : [])),
       different = memory.cards.findIndex((v) => v !== memory.cards[0]);
@@ -253,8 +254,8 @@ const seed = 12345,
     );
 
     await open(p, "connect-four");
-    await p.selectOption("#game-difficulty", "local");
-    await p.click("#game-start");
+    await gameSelect(p, "#game-difficulty", "local");
+    await gameClick(p, "#game-start");
     await p.evaluate(
       () =>
         (window.__disc = document.querySelector(
@@ -303,8 +304,8 @@ const seed = 12345,
     );
 
     await open(p, "reversi");
-    await p.selectOption("#game-difficulty", "local");
-    await p.click("#game-start");
+    await gameSelect(p, "#game-difficulty", "local");
+    await gameClick(p, "#game-start");
     await p.locator('[data-disc="19"]').click();
     assert.ok((await p.locator(".reversi-old-face").count()) > 0);
     await p.waitForTimeout(350);
@@ -314,7 +315,7 @@ const seed = 12345,
     await shot(p, "reversi", 360);
 
     await open(p, "sudoku");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     const sudoku = engine.create("sudoku", "normal", seed),
       empty = sudoku.board.findIndex((v) => !v);
     await p.evaluate(
@@ -341,14 +342,14 @@ const seed = 12345,
     await p.click("#game-resume");
     await shot(p, "sudoku", 360);
     await open(p, "nonogram");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.click('[data-puzzle-cell="0"]');
     await p.click('[data-puzzle-paint="mark"]');
     await p.click('[data-puzzle-cell="1"]');
     await shot(p, "nonogram", 360);
 
     await open(p, "block-puzzle");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.locator('[data-block-slot="0"]').click();
     await p.locator('[data-block-cell="0"]').click();
     assert.ok(
@@ -361,7 +362,7 @@ const seed = 12345,
     );
 
     await open(p, "snake");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.waitForTimeout(650);
     await p.click("#game-pause");
     assert.ok(
@@ -379,7 +380,7 @@ const seed = 12345,
       "Snake draws fractional positions between unchanged fixed ticks and snaps/pauses to the canonical state.",
     );
     await open(p, "brick-breaker");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.click("[data-brick-launch]");
     const frameStats = await p.evaluate(
       () =>
@@ -412,7 +413,7 @@ const seed = 12345,
 
     for (const slug of slugs) {
       await open(p, slug);
-      await p.click("#game-start");
+      await gameClick(p, "#game-start");
       for (const width of [320, 360, 768, 1440]) {
         await p.setViewportSize({ width, height: 1000 });
         assert.ok(
@@ -428,7 +429,7 @@ const seed = 12345,
       "All ten active game layouts fit 320/360/768/1440px; real Brick canvas frame sample recorded.",
     );
     await open(p, "2048");
-    await p.selectOption("[data-effects-select]", "off");
+    await gameSelect(p, "[data-effects-select]", "off");
     await p.reload();
     await p.waitForSelector('[data-game][data-ready="true"]');
     assert.equal(await p.inputValue("[data-effects-select]"), "off");
@@ -439,13 +440,13 @@ const seed = 12345,
       await r.locator("html").getAttribute("data-game-effects"),
       "reduced",
     );
-    await r.click("#game-start");
+    await gameClick(r, "#game-start");
     await r.keyboard.press("ArrowLeft");
     assert.equal(await r.locator(".moving-tile").count(), 0);
     await reduced.close();
     await p.goto(base + "/games/");
     await p.waitForSelector('[data-games-directory][data-ready="true"]');
-    await p.selectOption("[data-effects-select]", "auto");
+    await gameSelect(p, "[data-effects-select]", "auto");
     await p.locator('[data-game-theme="2048"] .game-cover').hover();
     assert.equal(
       await p
@@ -471,12 +472,12 @@ const seed = 12345,
     );
     const sibling = await c.newPage();
     await open(sibling, "2048");
-    await sibling.selectOption("[data-effects-select]", "off");
+    await gameSelect(sibling, "[data-effects-select]", "off");
     await p.waitForFunction(
       () => document.documentElement.dataset.gameEffects === "off",
     );
     await sibling.close();
-    await p.selectOption("[data-effects-select]", "auto");
+    await gameSelect(p, "[data-effects-select]", "auto");
     checks.push(
       "Live system preference changes and cross-tab settings cancel decorations without starting or replacing games.",
     );

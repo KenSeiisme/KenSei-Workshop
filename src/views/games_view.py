@@ -1,6 +1,7 @@
 """Games remain independent from the tool catalog and workspace."""
 
 from template_renderer import render_template
+from game_previews import idle_preview
 from html import escape
 from pong_view import VIEW as PONG_VIEW
 
@@ -386,6 +387,10 @@ def game_page(game):
     )
     return render_template(
         "games/page.html",
+        toolbar=render_template(
+            "games/play-toolbar.html", name=name, sound_id="game-sound"
+        ),
+        preferences=render_template("games/play-preferences.html"),
         slug=slug,
         number=number,
         category=game["category"].upper(),
@@ -396,7 +401,7 @@ def game_page(game):
         difficulty_label="Opponent" if private_only else "Difficulty",
         first_side=first_side,
         mine_mode=mine_mode,
-        preview=preview(game["preview"]),
+        preview=idle_preview(slug),
         spec=spec,
         controls=controls,
         directions=directions,

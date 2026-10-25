@@ -2,6 +2,7 @@ import { api, esc } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import { mountEffects, effectsMode } from "./effects.js";
 import { mountAudio, unlockAudio, stopAudio, playCue } from "./audio.js";
+import { mountPlayShell } from "./play-shell.js";
 import {
   createPong,
   advancePong,
@@ -14,8 +15,12 @@ mountAudio();
 const $ = (s) => document.querySelector(s),
   root = $("[data-pong]"),
   canvas = $(".pong-canvas");
-const roomForm = $(".pong-join-panel");
-if (roomForm) $(".pong-player-row").before(roomForm);
+const shell = mountPlayShell(root, {
+  beforeCover: () => {
+    if (room?.status === "playing") operation("pause");
+    return true;
+  },
+});
 const clock = (t) =>
   `${Math.floor(t / 60)
     .toString()
@@ -81,6 +86,15 @@ function overlay(title, note = "") {
 function renderRoom() {
   root.dataset.pongState = room?.status || "ready";
   const live = room && !["closed", "interrupted"].includes(room.status);
+  shell?.update({
+    state: room
+      ? room.status === "playing"
+        ? "playing"
+        : room.status
+      : "ready",
+    label: room ? `Private · ${room.status}` : "Online · Friends",
+    session: live ? room.id : null,
+  });
   $("#pong-create").disabled = busy || !!live;
   $("#pong-join").disabled = busy || !!live;
   $("#pong-invite").hidden = !live;
@@ -682,6 +696,12 @@ window.addEventListener("keyup", (e) => {
 });
 canvas.addEventListener("blur", () => keys.clear());
 $("#pong-create").onclick = () => operation("create");
+$("[data-pong-join-open]").onclick = () => {
+  $(".pong-join-fields").hidden = !$(".pong-join-fields").hidden;
+  if (!$(".pong-join-fields").hidden)
+    $("#pong-code").focus({ preventScroll: true });
+  shell?.requestSize();
+};
 $("#pong-join").onclick = () =>
   operation("join", { code: $("#pong-code").value });
 $("#pong-ready").onclick = () => operation("ready");
@@ -758,7 +778,10 @@ authTimer = setInterval(() => {
     );
 }, 1000);
 const invitation = new URLSearchParams(location.search).get("room");
-if (invitation) $("#pong-code").value = invitation.slice(0, 8).toUpperCase();
+if (invitation) {
+  $("#pong-code").value = invitation.slice(0, 8).toUpperCase();
+  $(".pong-join-fields").hidden = false;
+}
 root.dataset.ready = "true";
 renderRoom();
 requestAnimationFrame(frame);

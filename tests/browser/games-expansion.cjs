@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 const assert = require("node:assert/strict");
 const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
@@ -216,12 +217,12 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     assert.equal(calls.filter((c) => c.name === "function:start").length, 0);
     // An original game save remains readable after installing the expanded registry.
     await open(p, "2048");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     const oldSave = await waitSave(p, "2048", () => true);
     assert.equal(oldSave.state.board.length, 16);
     await open(p, "sudoku");
-    await p.selectOption("#game-difficulty", "easy");
-    await p.click("#game-start");
+    await gameSelect(p, "#game-difficulty", "easy");
+    await gameClick(p, "#game-start");
     let record = await waitSave(p, "sudoku", () => true),
       editable = record.state.givens.findIndex((v) => !v);
     await p.click(`[data-puzzle-cell="${editable}"]`);
@@ -243,7 +244,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     await p.click("#game-pause");
     await p.reload();
     await p.waitForSelector("[data-game][data-ready=true]");
-    await p.selectOption("#game-difficulty", "easy");
+    await gameSelect(p, "#game-difficulty", "easy");
     await p.waitForSelector("#game-restore:not([hidden])");
     await p.click("#game-restore");
     assert.equal(await p.inputValue("#game-mode"), "private");
@@ -264,8 +265,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       assert.equal(await q.inputValue("#game-mode"), "public");
     }
     await open(q, "sudoku");
-    await q.selectOption("#game-difficulty", "easy");
-    await q.click("#game-start");
+    await gameSelect(q, "#game-difficulty", "easy");
+    await gameClick(q, "#game-start");
     await q.waitForSelector(".sudoku-cell");
     let session = sessions.at(-1),
       puzzle = engine.create("sudoku", "easy", Number(session.seed));
@@ -300,8 +301,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     );
 
     await open(q, "nonogram");
-    await q.selectOption("#game-difficulty", "easy");
-    await q.click("#game-start");
+    await gameSelect(q, "#game-difficulty", "easy");
+    await gameClick(q, "#game-start");
     await q.waitForSelector(".nonogram-cell");
     session = sessions.at(-1);
     puzzle = engine.create("nonogram", "easy", Number(session.seed));
@@ -351,8 +352,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     );
 
     await open(p, "nonogram");
-    await p.selectOption("#game-difficulty", "hard");
-    await p.click("#game-start");
+    await gameSelect(p, "#game-difficulty", "hard");
+    await gameClick(p, "#game-start");
     await p.waitForSelector(".nonogram-cell");
     await p.click('[data-puzzle-cell="0"]');
     await p.keyboard.press("x");
@@ -392,7 +393,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     );
 
     await open(p, "block-puzzle");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     record = await waitSave(p, "block-puzzle", () => true);
     let block = record.state;
     const placement = (s) => {
@@ -454,7 +455,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     );
 
     await open(p, "brick-breaker");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.waitForSelector(".brick-canvas");
     assert.equal(await p.locator(".brick-launch").isEnabled(), true);
     assert.ok(
@@ -514,9 +515,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       await q.locator('#game-mode option[value="public"]').count(),
       0,
     );
-    await q.selectOption("#game-human-side", "2");
-    await q.selectOption("#game-difficulty", "ai-easy");
-    await q.click("#game-start");
+    await gameSelect(q, "#game-human-side", "2");
+    await gameSelect(q, "#game-difficulty", "ai-easy");
+    await gameClick(q, "#game-start");
     await q.waitForFunction(
       () =>
         document.querySelectorAll('.board-cell[data-piece="1"]').length === 1,
@@ -532,17 +533,16 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     assert.equal(await pieces(q, 1), 1);
     assert.equal(await pieces(q, 2), 0);
     await q.click("#game-pause");
-    await q.click("#game-settings-change");
-    await q.selectOption("#game-difficulty", "local");
-    await q.click("#game-start");
+    await gameClick(q, "#game-settings-change");
+    await gameSelect(q, "#game-difficulty", "local");
+    await gameClick(q, "#game-start");
     for (const column of [0, 1, 0, 1, 0, 1, 0])
       await q.locator(`[data-drop="${column}"]`).first().click();
     assert.match(await q.locator(".board-turn").innerText(), /Player 1 wins/);
     assert.equal(await pieces(q, 1), 4);
-    await q.locator("#game-setup > summary").click();
-    await q.selectOption("#game-difficulty", "ai-easy");
-    await q.selectOption("#game-human-side", "1");
-    await q.click("#game-start");
+    await gameSelect(q, "#game-difficulty", "ai-easy");
+    await gameSelect(q, "#game-human-side", "1");
+    await gameClick(q, "#game-start");
     assert.equal(await pieces(q, 1), 0);
     assert.equal(await pieces(q, 2), 0);
     await q.locator('[data-drop="3"]').first().click();
@@ -552,8 +552,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     );
     await open(q, "reversi");
     assert.equal(await q.inputValue("#game-mode"), "private");
-    await q.selectOption("#game-difficulty", "local");
-    await q.click("#game-start");
+    await gameSelect(q, "#game-difficulty", "local");
+    await gameClick(q, "#game-start");
     assert.equal(await q.locator(".board-cell.is-legal").count(), 4);
     let reversi = boards.create("reversi", "local", 1),
       sawPass = false,
@@ -603,8 +603,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     });
     const z = await cancellation.newPage();
     await open(z, "connect-four");
-    await z.selectOption("#game-human-side", "2");
-    await z.click("#game-start");
+    await gameSelect(z, "#game-human-side", "2");
+    await gameClick(z, "#game-start");
     await z.click("#game-pause");
     await z.waitForTimeout(1800);
     assert.equal(await pieces(z, 1), 0);
@@ -614,13 +614,13 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
         document.querySelectorAll('.board-cell[data-piece="1"]').length === 1,
     );
     await z.click("#game-pause");
-    await z.click("#game-settings-change");
-    await z.selectOption("#game-human-side", "2");
-    await z.click("#game-start");
+    await gameClick(z, "#game-settings-change");
+    await gameSelect(z, "#game-human-side", "2");
+    await gameClick(z, "#game-start");
     await z.click("#game-pause");
-    await z.click("#game-settings-change");
-    await z.selectOption("#game-human-side", "1");
-    await z.click("#game-start");
+    await gameClick(z, "#game-settings-change");
+    await gameSelect(z, "#game-human-side", "1");
+    await gameClick(z, "#game-start");
     await z.waitForTimeout(1800);
     assert.equal(await pieces(z, 1), 0);
     assert.equal(await pieces(z, 2), 0);
@@ -640,10 +640,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       ]) {
         await open(p, slug);
         if (slug === "nonogram")
-          await p.selectOption("#game-difficulty", "hard");
+          await gameSelect(p, "#game-difficulty", "hard");
         if (["connect-four", "reversi"].includes(slug))
-          await p.selectOption("#game-difficulty", "local");
-        await p.click("#game-start");
+          await gameSelect(p, "#game-difficulty", "local");
+        await gameClick(p, "#game-start");
         assert.ok(
           await p.evaluate(
             () => document.documentElement.scrollWidth <= innerWidth,

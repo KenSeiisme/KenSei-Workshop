@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 // Anonymous production acceptance: no mocks, production accounts or ranked results.
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
@@ -64,7 +65,7 @@ const digest = (bytes) =>
     await p.goto(base + "/games/block-drop/");
     await p.waitForSelector("[data-ready=true]");
     assert.equal(await p.inputValue("#game-mode"), "private");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.locator("#game-board").press("Space");
     await p.click("#game-pause");
     await p.waitForTimeout(700);

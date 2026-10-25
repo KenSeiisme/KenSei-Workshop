@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("../support/browser.cjs");
@@ -137,7 +138,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
         await p.locator("#game-rank-panel").evaluate((n) => n.open),
         false,
       );
-      await p.locator("#game-rank-panel>summary").click();
+      await gameClick(p, "#game-rank-panel>summary");
       await p.waitForSelector("#game-leaderboard tbody tr");
       assert.equal(
         await p.locator("#game-run-label").innerText(),
@@ -146,8 +147,8 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       for (const width of [320, 360, 768, 1440])
         await fit(width, game + " ready");
       if (game === "minesweeper")
-        await p.selectOption("#game-difficulty", "expert");
-      await p.click("#game-start");
+        await gameSelect(p, "#game-difficulty", "expert");
+      await gameClick(p, "#game-start");
       assert.match(
         await p.locator("#game-run-label").innerText(),
         /Private · Playing/,
@@ -211,7 +212,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       await shot("games-visual-" + game, game === "memory-match" ? 360 : 1440);
       if (game !== "snake") await p.click("#game-pause");
       assert.match(await p.locator("#game-run-label").innerText(), /Paused/);
-      await p.click("#game-settings-change");
+      await gameClick(p, "#game-settings-change");
       await p.waitForFunction(
         () =>
           document.querySelector("#game-run-label").textContent ===

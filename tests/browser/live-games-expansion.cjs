@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 // Real anonymous checks only: no mocks, account session, or production writes.
 const assert = require("node:assert/strict");
 const { chromium } = require("../support/browser.cjs");
@@ -109,7 +110,7 @@ const slugs = [
       0,
       `${slug}: restore is explicit`,
     );
-    await page.selectOption("#game-difficulty", record.difficulty);
+    await gameSelect(page, "#game-difficulty", record.difficulty);
     await page.waitForSelector("#game-restore:not([hidden])");
     await page.click("#game-restore");
     assert.equal(await page.inputValue("#game-mode"), "private");
@@ -145,7 +146,7 @@ const slugs = [
     );
 
     await open("sudoku");
-    await page.click("#game-start");
+    await gameClick(page, "#game-start");
     let record = await waitSave("sudoku");
     const editable = record.state.givens.findIndex((digit) => !digit);
     await page.click(`[data-puzzle-cell="${editable}"]`);
@@ -164,7 +165,7 @@ const slugs = [
     );
 
     await open("nonogram");
-    await page.click("#game-start");
+    await gameClick(page, "#game-start");
     await page.waitForSelector(".nonogram-cell");
     await page.click('[data-puzzle-cell="0"]');
     record = await waitSave("nonogram", (row) => row.state.board[0] === 1);
@@ -175,7 +176,7 @@ const slugs = [
     );
 
     await open("block-puzzle");
-    await page.click("#game-start");
+    await gameClick(page, "#game-start");
     await page.waitForSelector(".block-cell");
     await page.click('[data-block-slot="0"]');
     await page.waitForTimeout(360);
@@ -195,7 +196,7 @@ const slugs = [
     );
 
     await open("brick-breaker");
-    await page.click("#game-start");
+    await gameClick(page, "#game-start");
     await page.waitForSelector(".brick-canvas:not([hidden])");
     await page.click("[data-brick-launch]");
     await page.locator(".brick-canvas").evaluate((canvas) => {
@@ -238,9 +239,9 @@ const slugs = [
     );
 
     await open("connect-four");
-    await page.selectOption("#game-difficulty", "ai-easy");
-    await page.selectOption("#game-human-side", "2");
-    await page.click("#game-start");
+    await gameSelect(page, "#game-difficulty", "ai-easy");
+    await gameSelect(page, "#game-human-side", "2");
+    await gameClick(page, "#game-start");
     await page.waitForFunction(
       () =>
         document.querySelectorAll('.board-cell[data-piece="1"]').length === 1,
@@ -260,8 +261,8 @@ const slugs = [
     assert.equal(await page.locator('.board-cell[data-piece="2"]').count(), 1);
     assert.equal(await page.inputValue("#game-human-side"), "2");
     await open("connect-four");
-    await page.selectOption("#game-difficulty", "local");
-    await page.click("#game-start");
+    await gameSelect(page, "#game-difficulty", "local");
+    await gameClick(page, "#game-start");
     for (const column of [0, 1, 0, 1, 0, 1, 0])
       await page.locator(`[data-drop="${column}"]`).first().click();
     assert.match(
@@ -270,8 +271,8 @@ const slugs = [
     );
 
     await open("reversi");
-    await page.selectOption("#game-difficulty", "ai-easy");
-    await page.click("#game-start");
+    await gameSelect(page, "#game-difficulty", "ai-easy");
+    await gameClick(page, "#game-start");
     await page.locator(".board-cell.is-legal").first().click();
     record = await waitSave(
       "reversi",
@@ -289,8 +290,8 @@ const slugs = [
       discs[1],
     );
     await open("reversi");
-    await page.selectOption("#game-difficulty", "local");
-    await page.click("#game-start");
+    await gameSelect(page, "#game-difficulty", "local");
+    await gameClick(page, "#game-start");
     await page.locator('[data-disc="19"]').focus();
     await page.keyboard.press("Enter");
     record = await waitSave("reversi", (row) => row.state.moves === 1, "local");

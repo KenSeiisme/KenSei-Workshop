@@ -3,113 +3,28 @@
   data-game="${slug}"
   data-game-theme="${slug}"
   data-run-state="ready"
+  data-shell-state="ready"
+  data-play-shell
 >
-  <div class="game-page-heading">
-    <div>
-      <a class="back-link" href="/games/">← Game select</a>
-      <div class="eyebrow">
-        <span class="game-live-dot"></span> STATION ${number} / ${category}
-      </div>
-      <h1>${name}<span class="accent">.</span></h1>
-      <p>${tagline} <span class="muted">${description}</span></p>
-    </div>
-    <div class="game-heading-tools">
-      <div class="game-audio-controls">
-        <button
-          type="button"
-          class="button secondary"
-          id="game-sound"
-          data-audio-toggle
-          aria-pressed="true"
-        >
-          Sound on</button
-        ><label
-          >Volume<input
-            type="range"
-            min="0"
-            max="100"
-            value="35"
-            data-audio-volume
-            aria-label="Game volume"
-        /></label>
-      </div>
-      <label class="game-effects-control"
-        >Effects<select data-effects-select aria-label="Game effects">
-          <option value="auto">Auto</option>
-          <option value="reduced">Reduced</option>
-          <option value="off">Off</option>
-        </select></label
-      >
-    </div>
-  </div>
+  ${toolbar}
   <div class="game-layout">
     <section class="panel game-play">
-      <div class="game-play-topline">
-        <span class="eyebrow">PLAYER STATION / ${number}</span
-        ><span id="game-run-label" class="game-run-label">Ready to play</span>
-      </div>
-      <details class="game-setup" id="game-setup" open>
-        <summary>
-          <span>Game setup</span
-          ><span id="game-mode-summary">Choose your run</span
-          ><span aria-hidden="true">⌄</span>
-        </summary>
-        <div class="game-settings">
-          <label
-            >Mode<select id="game-mode">
-              ${mode_options}
-            </select></label
-          ><label
-            >${difficulty_label}<select id="game-difficulty"></select></label
-          >${first_side}
-        </div>
-        <p id="game-mode-note" class="muted">
-          Private games can pause and continue later.
-        </p>
-      </details>
       <div class="game-metrics" aria-label="Live game statistics">
         <div class="game-primary-metric">
           <span id="game-score-label">Score</span
           ><strong id="game-score">—</strong>
         </div>
         <div><span>Time</span><strong id="game-clock">00:00</strong></div>
-        <div><span>Local best</span><strong id="game-best">—</strong></div>
+        <span id="game-run-label" class="game-run-label">Ready to play</span>
       </div>
-      ${mine_mode}
-      <section
-        id="game-result"
-        class="game-result"
-        aria-label="Game result"
-        hidden
-      >
-        <div>
-          <span class="eyebrow">RUN REPORT</span>
-          <h2 id="game-result-title">Run complete</h2>
-          <strong id="game-result-value"></strong>
-        </div>
-        <div class="game-result-meta">
-          <span>Time <b id="game-result-time"></b></span
-          ><span id="game-result-best"></span
-          ><span id="game-result-public" data-submission="private" role="status"
-            >Private result</span
-          >
-        </div>
-      </section>
       <div class="game-board-shell">
-        <span class="game-stage-corner corner-a" aria-hidden="true"></span
-        ><span class="game-stage-corner corner-b" aria-hidden="true"></span>
         <div
           id="game-board"
           tabindex="0"
           role="group"
           aria-label="${name} board"
         >
-          <div class="game-ready-art">${preview}</div>
-          <div class="game-board-empty">
-            <strong>Your next little challenge.</strong>
-            <p>Choose your setup. Press Start game.</p>
-            <span>${spec} · ${controls}</span>
-          </div>
+          <div class="game-idle-preview" data-shell-preview>${preview}</div>
         </div>
         <canvas
           class="game-fx"
@@ -118,6 +33,33 @@
           height="1"
         ></canvas>
         <div class="game-fx-labels" aria-hidden="true"></div>
+        <section
+          class="game-entry-panel"
+          data-shell-entry
+          aria-label="Start ${name}"
+        >
+          <span class="game-preview-label">Ready preview</span>
+          <strong id="game-mode-summary">Choose your run</strong>
+          <div class="game-entry-actions" data-shell-entry-actions>
+            <button class="button primary" id="game-start" disabled>
+              Start game →
+            </button>
+            <button id="game-restore" class="button primary" hidden>
+              Continue · Private
+            </button>
+            <button id="game-submit-retry" class="button primary" hidden>
+              Retry Public submission
+            </button>
+            <button id="game-submit-discard" class="button secondary" hidden>
+              Keep pending result Private
+            </button>
+          </div>
+          <button type="button" class="text-link" data-shell-settings>
+            Change setup
+          </button>
+          <div data-shell-entry-message></div>
+          <a href="" class="text-link" data-shell-load-retry>Reload game</a>
+        </section>
         <div id="game-overlay" hidden>
           <span class="eyebrow">TAKE A BREATHER</span>
           <h2 id="game-overlay-title">Paused</h2>
@@ -126,29 +68,121 @@
             Continue privately →
           </button>
         </div>
+        <section
+          id="game-result"
+          class="game-result"
+          aria-label="Game result"
+          hidden
+        >
+          <div>
+            <span class="eyebrow">RUN REPORT</span>
+            <h2 id="game-result-title">Run complete</h2>
+            <strong id="game-result-value"></strong>
+          </div>
+          <div class="game-result-meta">
+            <span>Time <b id="game-result-time"></b></span
+            ><span id="game-result-best"></span
+            ><span
+              id="game-result-public"
+              data-submission="private"
+              role="status"
+              >Private result</span
+            >
+          </div>
+          <div class="game-entry-actions" data-shell-result-actions></div>
+        </section>
       </div>
       <div class="game-control-deck">
-        ${directions}
+        ${mine_mode}${directions}
         <div class="game-actions">
-          <button class="button primary" id="game-start">Start game →</button
-          ><button class="button secondary" id="game-pause" disabled>
-            Pause</button
-          ><button class="button secondary" id="game-settings-change" hidden>
-            Change settings</button
+          <button class="button primary" id="game-pause" disabled>Pause</button
+          ><button class="button secondary" type="button" data-shell-menu>
+            Menu</button
           >${undo}${hint}
         </div>
       </div>
-      <p id="game-status" role="status" aria-live="polite">
-        Ready when you are.
-      </p>
-      <button id="game-restore" class="button secondary" hidden>
-        Continue saved game · Private</button
-      ><button id="game-submit-retry" class="button secondary" hidden>
-        Retry Public submission</button
-      ><button id="game-submit-discard" class="button secondary" hidden>
-        Keep pending result Private
-      </button>
+      <div data-shell-status-slot>
+        <p id="game-status" role="status" aria-live="polite">Loading game…</p>
+      </div>
     </section>
+  </div>
+  <dialog
+    class="game-shell-dialog"
+    data-shell-settings-dialog
+    aria-labelledby="game-settings-title"
+  >
+    <button
+      type="button"
+      class="dialog-close icon-button"
+      data-shell-close
+      aria-label="Close settings"
+    >
+      ×
+    </button>
+    <h2 id="game-settings-title">Game settings</h2>
+    <details class="game-setup" id="game-setup" open>
+      <summary>Mode &amp; difficulty</summary>
+      <div class="game-settings">
+        <label
+          >Mode<select id="game-mode">
+            ${mode_options}
+          </select></label
+        ><label>${difficulty_label}<select id="game-difficulty"></select></label
+        >${first_side}
+      </div>
+      <p id="game-mode-note" class="muted">
+        Private games can pause and continue later.
+      </p>
+    </details>
+    ${preferences}
+    <button type="button" class="button secondary" data-shell-menu>
+      Help &amp; game menu
+    </button>
+    <button class="button primary" type="button" data-shell-close>Done</button>
+  </dialog>
+  <dialog
+    class="game-shell-dialog"
+    data-shell-menu-dialog
+    aria-labelledby="game-menu-title"
+  >
+    <button
+      type="button"
+      class="dialog-close icon-button"
+      data-shell-close
+      aria-label="Close menu"
+    >
+      ×
+    </button>
+    <h2 id="game-menu-title">Game menu</h2>
+    <div class="game-menu-actions" data-shell-menu-actions>
+      <button class="button secondary" id="game-settings-change" hidden>
+        Change settings</button
+      ><button class="button secondary" id="game-help">
+        Controls &amp; Help</button
+      ><button class="button secondary" type="button" data-shell-info>
+        Scores &amp; progress
+      </button>
+    </div>
+    <p class="muted small">
+      Play continues while this menu is open. Pausing or opening Help makes a
+      Public run Private.
+    </p>
+  </dialog>
+  <dialog
+    class="game-shell-dialog game-shell-info"
+    data-shell-info-dialog
+    aria-label="Scores and progress"
+  >
+    <button
+      type="button"
+      class="dialog-close icon-button"
+      data-shell-close
+      aria-label="Close scores and progress"
+    >
+      ×
+    </button>
+    <h2>Scores &amp; progress</h2>
+    <p class="game-local-best">Local best <strong id="game-best">—</strong></p>
     <aside class="game-side">
       <details class="panel game-save-panel">
         <summary>Saved progress</summary>
@@ -200,16 +234,14 @@
       <details class="panel game-help-panel">
         <summary>Controls &amp; Help</summary>
         <p>${help_text}</p>
-        <button class="text-link" id="game-help">
-          Saving and Public rules ↗
-        </button>
       </details>
     </aside>
-  </div>
-  <dialog id="game-help-dialog">
+  </dialog>
+  <dialog id="game-help-dialog" class="game-shell-dialog">
     <button class="dialog-close icon-button" aria-label="Close help">×</button>
     <div class="eyebrow">QUICK START GUIDE</div>
     <h2>How to play ${name}</h2>
+    <p>${description}</p>
     <p>${help_text}</p>
     <p>
       Controls work while the board is focused. Private progress saves

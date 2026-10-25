@@ -79,6 +79,7 @@
     ["tests/database/game-experience.mjs"],
     ["tests/browser/game-experience.cjs"]
   ],
+  "game-shell": [["tests/browser/game-play-shell.cjs"]],
   "arcade-next": [
     ["tests/unit/block-drop.mjs"],
     ["tests/unit/pong.mjs"],

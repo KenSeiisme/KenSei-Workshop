@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 const assert = require("node:assert/strict");
 const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
@@ -155,7 +156,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     await p.goto(base + "/games/block-drop/");
     await p.waitForSelector("[data-game][data-ready=true]");
     assert.equal(await p.inputValue("#game-mode"), "public");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.waitForSelector(".drop-canvas");
     assert.match(await p.innerText("#game-status"), /Public game/);
     failFinishOnce = true;
@@ -190,7 +191,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       ),
       countBefore,
     );
-    await p.locator("#game-milestones").evaluate((n) => (n.open = true));
+    await gameClick(p, "#game-milestones>summary");
     assert.match(await p.innerText("#game-milestones"), /First verified/);
     await p.goto(base + "/games/");
     await p.waitForFunction(
@@ -213,6 +214,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       () => !document.querySelector("#pong-invite").hidden,
     );
     const code = await host.innerText("#pong-invite-code");
+    await guest.locator("[data-pong-join-open]").click();
     await guest.fill("#pong-code", code);
     await guest.click("#pong-join");
     await guest.waitForFunction(() =>
@@ -343,6 +345,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       () => !document.querySelector("#pong-invite").hidden,
     );
     const code2 = await host2.innerText("#pong-invite-code");
+    await guest2.locator("[data-pong-join-open]").click();
     await guest2.fill("#pong-code", code2);
     await guest2.click("#pong-join");
     await host2.waitForFunction(
@@ -416,7 +419,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     );
     assert.match(await guest.innerText("#pong-room-state"), /Paused/);
     host.on("dialog", (d) => d.accept());
-    await host.click("#pong-leave");
+    await gameClick(host, "#pong-leave");
     await guest.waitForFunction(() =>
       document.querySelector("#pong-room-state").textContent.includes("Closed"),
     );
@@ -427,7 +430,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     for (const page of [host2, guest2]) {
       page.on("dialog", (d) => d.accept());
     }
-    await host2.click("#pong-leave");
+    await gameClick(host2, "#pong-leave");
     assert.deepEqual(errors, []);
     console.log(
       JSON.stringify({

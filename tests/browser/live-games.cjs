@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
   crypto = require("node:crypto"),
@@ -52,7 +53,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
         .querySelector("#game-leaderboard-status")
         .textContent.includes("Top 50"),
     );
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.waitForTimeout(700);
     assert.equal(await p.locator(".tile").count(), 16);
     await p.focus("#game-board");
@@ -73,7 +74,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     assert.equal(await p.locator("[data-game-card]:visible").count(), 1);
     await p.goto(base + "/games/memory-match/");
     await p.waitForSelector('[data-game][data-ready="true"]');
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.waitForTimeout(750);
     const cards = await p.evaluate(async () => {
       const r = indexedDB.open("kensei-record-game-v1");
@@ -99,7 +100,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     assert.equal(await p.locator("#game-score").innerText(), "8");
     await p.goto(base + "/games/minesweeper/");
     await p.waitForSelector('[data-game][data-ready="true"]');
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.click('[data-mine-mode="flag"]');
     await p.click('[data-cell="0"]');
     assert.match(await p.locator("#mine-count").innerText(), /1 flags/);
@@ -113,7 +114,7 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
     await p.click("#game-pause");
     await p.goto(base + "/games/snake/");
     await p.waitForSelector('[data-game][data-ready="true"]');
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.waitForTimeout(300);
     await p.click("#game-pause");
     assert.equal(await p.locator("#game-overlay").isVisible(), true);

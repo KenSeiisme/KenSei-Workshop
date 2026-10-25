@@ -1,50 +1,14 @@
 <section
   class="container page-section games-page neon-arcade"
   data-pong
+  data-pong-state="ready"
+  data-shell-state="ready"
   data-game-theme="pong"
+  data-play-shell
 >
-  <div class="game-page-heading">
-    <div>
-      <a class="back-link" href="/games/">← Game select</a>
-      <div class="eyebrow">STATION 12 / ONLINE ARCADE</div>
-      <h1>Pong<span class="accent">.</span></h1>
-      <p>A good rally. A friend on the other side.</p>
-    </div>
-    <div class="game-heading-tools">
-      <div class="game-audio-controls">
-        <button
-          type="button"
-          class="button secondary"
-          id="pong-sound"
-          data-audio-toggle
-          aria-pressed="true"
-        >
-          Sound on</button
-        ><label
-          >Volume<input
-            type="range"
-            min="0"
-            max="100"
-            value="35"
-            data-audio-volume
-            aria-label="Game volume"
-        /></label>
-      </div>
-      <label class="game-effects-control"
-        >Effects<select data-effects-select aria-label="Game effects">
-          <option value="auto">Auto</option>
-          <option value="reduced">Reduced</option>
-          <option value="off">Off</option>
-        </select></label
-      >
-    </div>
-  </div>
+  ${toolbar}
   <div class="pong-layout">
     <section class="panel game-play">
-      <div class="game-play-topline">
-        <span class="eyebrow">FRIENDS / PRIVATE ROOM</span
-        ><span class="game-run-label" id="pong-room-state">Not connected</span>
-      </div>
       <div class="pong-player-row">
         <div class="pong-player">
           <span class="avatar-badge" id="pong-host-avatar"></span
@@ -59,7 +23,8 @@
           ><strong id="pong-guest-name">Waiting for a friend</strong>
         </div>
       </div>
-      <div class="pong-stage">
+
+      <div class="pong-stage game-board-shell">
         <canvas
           class="pong-canvas"
           width="960"
@@ -72,12 +37,51 @@
           <strong id="pong-overlay-title">Bring a friend.</strong>
           <p id="pong-overlay-note">Create or join a private room to play.</p>
         </div>
+        <section class="pong-join-panel" aria-label="Pong room">
+          <div class="pong-room-form">
+            <button class="button primary" id="pong-create">
+              Create room →</button
+            ><button class="button secondary" type="button" data-pong-join-open>
+              Join room
+            </button>
+            <div class="pong-join-fields" hidden>
+              <label
+                >Room code<input
+                  id="pong-code"
+                  maxlength="8"
+                  autocomplete="off"
+                  autocapitalize="characters"
+                  spellcheck="false"
+                  placeholder="8-character code" /></label
+              ><button class="button secondary" id="pong-join">
+                Join room
+              </button>
+            </div>
+          </div>
+          <div id="pong-invite" hidden>
+            <p class="muted">Invite your friend</p>
+            <p class="pong-invite" id="pong-invite-code"></p>
+            <button class="button secondary" id="pong-copy">
+              Copy invite link
+            </button>
+          </div>
+        </section>
       </div>
       <div class="pong-connection">
-        <span id="pong-connection-status"
+        <span id="pong-room-state">Not connected</span
+        ><span id="pong-connection-status"
           >No game traffic before joining a room.</span
         ><span id="pong-time">00:00 / 10:00</span
         ><span id="pong-latency">Latency —</span>
+      </div>
+      <div class="pong-room-controls">
+        <button class="button primary" id="pong-ready" disabled>Ready →</button
+        ><button class="button secondary" id="pong-pause" disabled>Pause</button
+        ><button class="button secondary" type="button" data-shell-menu>
+          Menu</button
+        ><button class="button secondary" id="pong-retry" hidden>
+          Retry connection
+        </button>
       </div>
       <p
         class="pong-room-message"
@@ -87,73 +91,91 @@
       >
         Sign in with Google to create or join a room.
       </p>
-      <div class="pong-room-controls">
-        <button class="button primary" id="pong-ready" disabled>Ready →</button
-        ><button class="button secondary" id="pong-pause" disabled>Pause</button
-        ><button class="button secondary" id="pong-leave" disabled>
-          Leave room</button
-        ><button class="button secondary" id="pong-retry" hidden>
-          Retry connection
-        </button>
-      </div>
       <p class="pong-mobile-hint">
-        A wider court plays best in landscape. Drag anywhere on the court to
-        move your paddle.
+        A wider court plays best in landscape. Drag on the court to move your
+        paddle.
       </p>
-      <p class="arcade-control-note">
-        Move the pointer, drag, or focus the court and use ↑ / ↓ or W / S. First
-        to 7 points.
-      </p>
+      <a href="" class="text-link" data-shell-load-retry>Reload game</a>
     </section>
-    <aside class="game-side">
-      <section class="panel pong-join-panel">
-        <div class="eyebrow">A ROOM FOR TWO</div>
-        <h2>Meet at the table.</h2>
-        <div class="pong-room-form">
-          <button class="button primary" id="pong-create">Create room →</button
-          ><label
-            >Room code<input
-              id="pong-code"
-              maxlength="8"
-              autocomplete="off"
-              autocapitalize="characters"
-              spellcheck="false"
-              placeholder="8-character code" /></label
-          ><button class="button secondary" id="pong-join">Join room</button>
-        </div>
-        <div id="pong-invite" hidden>
-          <p class="muted">Invite your friend</p>
-          <p class="pong-invite" id="pong-invite-code"></p>
-          <button class="button secondary" id="pong-copy">
-            Copy invite link
-          </button>
-        </div>
-        <p class="pong-room-hint">
-          Both players sign in with Google. Two rooms can be open at a time.
-          Waiting rooms expire after 15 minutes.
-        </p>
-      </section>
-      <details class="panel">
-        <summary>Controls &amp; Help</summary>
-        <div class="eyebrow">KEEP IT FRIENDLY</div>
-        <h2>A little rally.</h2>
-        <ul class="pong-facts">
-          <li>Both players press Ready to start or resume.</li>
-          <li>
-            First to 7 wins. After 10 minutes, the higher score wins; equal
-            scores draw.
-          </li>
-          <li>
-            Switching away pauses the match. Reconnect within 15 seconds after a
-            lost connection.
-          </li>
-          <li>
-            A pause lasts up to 60 seconds. Online matches are temporary and do
-            not enter Continue playing.
-          </li>
-          <li>This casual room has no Public rank or achievements.</li>
-        </ul>
-      </details>
-    </aside>
   </div>
+  <dialog
+    class="game-shell-dialog"
+    data-shell-settings-dialog
+    aria-label="Pong settings"
+  >
+    <button
+      type="button"
+      class="dialog-close icon-button"
+      data-shell-close
+      aria-label="Close settings"
+    >
+      ×
+    </button>
+    <h2>Pong settings</h2>
+    ${preferences}
+    <button type="button" class="button secondary" data-shell-menu>
+      Help &amp; game menu</button
+    ><button type="button" class="button primary" data-shell-close>Done</button>
+  </dialog>
+  <dialog
+    class="game-shell-dialog"
+    data-shell-menu-dialog
+    aria-label="Pong menu"
+  >
+    <button
+      type="button"
+      class="dialog-close icon-button"
+      data-shell-close
+      aria-label="Close menu"
+    >
+      ×
+    </button>
+    <h2>Pong menu</h2>
+    <div class="game-menu-actions">
+      <button class="button secondary" id="pong-leave" disabled>
+        Leave room</button
+      ><button class="button secondary" type="button" data-shell-info>
+        Controls &amp; Help
+      </button>
+    </div>
+  </dialog>
+  <dialog
+    class="game-shell-dialog game-shell-info"
+    data-shell-info-dialog
+    aria-label="Pong help"
+  >
+    <button
+      type="button"
+      class="dialog-close icon-button"
+      data-shell-close
+      aria-label="Close help"
+    >
+      ×
+    </button>
+    <h2>A room for two.</h2>
+    <p>
+      Both players sign in with Google. Two rooms can be open at a time. Waiting
+      rooms expire after 15 minutes.
+    </p>
+    <ul class="pong-facts">
+      <li>Both players press Ready to start or resume.</li>
+      <li>
+        First to 7 wins. After 10 minutes, the higher score wins; equal scores
+        draw.
+      </li>
+      <li>
+        Switching away pauses the match. Reconnect within 15 seconds after a
+        lost connection.
+      </li>
+      <li>
+        A pause lasts up to 60 seconds. Online matches are temporary and do not
+        enter Continue playing.
+      </li>
+      <li>This casual room has no Public rank or achievements.</li>
+    </ul>
+    <p>
+      Move the pointer, drag, or focus the court and use ↑ / ↓ or W / S. First
+      to 7 points.
+    </p>
+  </dialog>
 </section>

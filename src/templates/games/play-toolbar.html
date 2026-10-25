@@ -1,0 +1,31 @@
+<div class="game-page-heading game-shell-toolbar">
+  <a class="back-link" href="/games/" aria-label="Back to Games"
+    >← <span>Games</span></a
+  >
+  <h1>${name}</h1>
+  <button
+    class="game-shell-mode"
+    type="button"
+    data-shell-settings
+    aria-label="Game mode and settings"
+  >
+    <span data-shell-mode>Ready to play</span><span aria-hidden="true">⌄</span>
+  </button>
+  <div class="game-heading-tools">
+    <button
+      type="button"
+      class="icon-button game-shell-sound"
+      id="${sound_id}"
+      data-audio-toggle
+      aria-pressed="true"
+    >
+      Sound on
+    </button>
+    <button type="button" class="button secondary" data-shell-settings>
+      Settings
+    </button>
+    <button type="button" class="button secondary" data-shell-focus hidden>
+      Exit focus
+    </button>
+  </div>
+</div>

@@ -61,11 +61,17 @@ Build the Edge artifact from `supabase/functions/games-session/index.ts` with es
 
 ## Board-first experience and sound
 
-`game-experience.css` centers the stable board and keeps HUD/active controls together. Saved progress, Milestones, leaderboards and Help start folded below; save state remains visible in the progress summary. Brick Breaker has direct pointer/touch movement, focused keyboard controls and mobile buttons, without a paddle slider. V2 shows ball count, falling powerups and timed buffs.
+Single-game pages opt into `play-shell.js` and `game-play-shell.css`. A compact heading and HUD sit above a fixed, presentation-only ready preview. Start/Continue live inside the stage; settings, sound preferences, scores, saves and Help use dialogs. Current-difficulty saves offer Continue privately, including Legacy saves; New game confirms replacement. The Games catalog, Profile and tool layouts do not opt in.
+
+Starting or restoring automatically focuses the game; Pong focuses after creating or joining a room. Focus hides the site header/footer using page layout, never browser fullscreen or orientation locking. Exit focus changes layout without pausing or changing Public eligibility. Settings and the action menu keep the clock running. Help/progress panels pause; Public players confirm the downgrade first. Escape closes a dialog before reaching the existing board pause handler. Board nodes and logical canvas coordinates survive focus/viewport changes.
+
+The shell budgets board space from the actual viewport and visible controls. Large minefields and Nonograms scroll inside their containers. Short landscape layouts place Block Drop and Brick Breaker controls beside their canvases. `game_previews.py` creates fixed SVG artwork without calling engines, RNG, save APIs or session endpoints. Brick Breaker keeps direct pointer/touch movement and mobile buttons, without a paddle slider; v2 continues to show ball count, falling powerups and timed buffs.
 
 `audio.js` synthesizes Web Audio cues independently of rules and Effects. Defaults are on at 35%, unlocked only by Start, Ready, resume or sound controls. `kensei-game-audio-v1` remembers mute/volume across games and tabs. Import, previews and page load stay silent; pause, navigation and hidden pages stop voices. At most eight voices and per-cue cooldowns bound collision noise. No audio assets or music are fetched. Result/verification updates never wait for decorative effects.
 
 Run `pnpm test:game-experience` for versioned replay, audio, database and browser regression. See the [experience validation record](validation/2026-10-23-game-experience.md).
+
+Run `pnpm test:game-shell` against a local preview for all twelve ready screens, five viewport sizes, focus/restore behavior, short landscape and Public session guards. Existing browser regressions use `tests/support/game-shell.cjs` to follow the visible settings and menu actions; they retain the same rules, score, sync and ownership assertions.
 
 ## Neon presentation
 

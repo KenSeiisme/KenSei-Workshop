@@ -29,6 +29,7 @@ import { patchMarkup } from "./dom.js";
 import { mountEffects, bindCardDemos } from "./effects.js";
 import { INPUTS as DROP_INPUTS } from "./block-drop-engine.js";
 import { mountAchievements } from "./achievements.js";
+import { mountPlayShell } from "./play-shell.js";
 mountEffects();
 mountAudio();
 
@@ -99,6 +100,39 @@ const ui = game
       paintBrick: (canvas, state) => presenter.paintBrick(canvas, state),
     })
   : null;
+const shell = mountPlayShell(root, { beforeCover: coverGame });
+function coverGame() {
+  if (
+    running &&
+    publicSession &&
+    !confirm(
+      "Opening this panel pauses your Public run and makes it Private. Continue?",
+    )
+  )
+    return false;
+  pause("A game panel was opened.");
+  return true;
+}
+function syncShell() {
+  if (!game || !$("#game-difficulty").value) return;
+  const saved =
+    !active &&
+    store.rows().find((row) => row.id === $("#game-restore").dataset.id);
+  shell?.update({
+    state: !active
+      ? "ready"
+      : running
+        ? "playing"
+        : active.status === "playing"
+          ? "paused"
+          : "complete",
+    label: `${$("#game-mode").value === "public" ? "Public" : "Private"} · ${rules(game, difficulty()).label}`,
+    busy,
+    pending: !!pending,
+    saveId: $("#game-restore").hidden ? "" : $("#game-restore").dataset.id,
+    legacy: saved?.data?.state?.version === 1 && game === "brick-breaker",
+  });
+}
 function statusMessage(message) {
   status(message);
 }
@@ -228,9 +262,12 @@ function readyUI() {
     $("#game-human-side").closest("label").hidden = difficulty() === "local";
   if (!active) {
     presenter.reset();
+    shell?.restorePreview();
     if ($("#game-setup")) $("#game-setup").open = true;
     root.dataset.runState = "ready";
     $("#game-run-label").textContent = "Ready to play";
+    if ($("#game-status").textContent.trim() === "Loading game…")
+      status("Ready when you are.");
   }
   const row = store
     .rows()
@@ -253,6 +290,7 @@ function readyUI() {
       : isBoard()
         ? "Private · play a computer opponent or take turns on this device. Progress saves automatically."
         : "Private · pause, undo where available, and continue saved progress.";
+  syncShell();
 }
 const SHAPES = [
   '<path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/>',
@@ -320,7 +358,7 @@ function draw(reason = "view", event = null) {
     const m = rules(game, active.difficulty);
     patchMarkup(
       board,
-      `<div class="memory-grid" style="grid-template-columns:repeat(${m.cols},minmax(0,1fr))">${active.cards
+      `<div class="memory-grid" style="grid-template-columns:repeat(${m.cols},minmax(0,1fr));--memory-ratio:${(m.cols * m.cols * 0.82) / (m.pairs * 2)}">${active.cards
         .map((n, i) => {
           const matched = active.matched.includes(i),
             up = matched || active.faceUp.includes(i);
@@ -388,6 +426,7 @@ function draw(reason = "view", event = null) {
   );
   presenter.commit(active);
   milestones.update(active, !!publicSession);
+  syncShell();
 }
 function downgrade(reason) {
   if (!publicSession) return;
@@ -432,7 +471,7 @@ function resume() {
   running = true;
   status("Private game in progress.");
   draw();
-  $("#game-board").focus();
+  $("#game-board").focus({ preventScroll: true });
   frameId = requestAnimationFrame(frame);
 }
 async function submit() {
@@ -474,6 +513,7 @@ async function submit() {
     $("#game-submit-discard").hidden = false;
   } finally {
     busy = false;
+    syncShell();
   }
 }
 async function finish() {
@@ -622,6 +662,14 @@ async function start() {
     return;
   }
   if (
+    !active &&
+    !$("#game-restore").hidden &&
+    !confirm(
+      "Start a new game and replace the saved position for this difficulty?",
+    )
+  )
+    return;
+  if (
     active?.status === "playing" &&
     !confirm("Restart this game? Your current position will be replaced.")
   )
@@ -643,6 +691,7 @@ async function start() {
   }
   busy = true;
   $("#game-start").disabled = true;
+  syncShell();
   try {
     let seed = crypto.getRandomValues(new Uint32Array(1))[0] || 1,
       nextSession = null;
@@ -679,7 +728,7 @@ async function start() {
     );
     draw();
     queueSave();
-    $("#game-board").focus();
+    $("#game-board").focus({ preventScroll: true });
     frameId = requestAnimationFrame(frame);
   } catch (e) {
     status(e.message);
@@ -695,10 +744,13 @@ async function start() {
   } finally {
     busy = false;
     $("#game-start").disabled = false;
+    syncShell();
   }
 }
 async function restore() {
   if (busy || running) return;
+  busy = true;
+  syncShell();
   try {
     const row = await store.get($("#game-restore").dataset.id);
     if (!row) throw Error("That save was removed. Refresh saves to try again.");
@@ -721,6 +773,9 @@ async function restore() {
     draw();
   } catch (e) {
     status(e.message);
+  } finally {
+    busy = false;
+    syncShell();
   }
 }
 async function leaderboard() {
@@ -912,10 +967,11 @@ function bindGame() {
     if ($("#game-human-side")) $("#game-human-side").disabled = false;
     $("#game-settings-change").hidden = true;
     $("#game-start").textContent = "Start game →";
-    $("#game-board").innerHTML =
-      '<p class="game-board-empty">Choose your settings, then start a new game.<br>Your previous position remains in Games.</p>';
+    shell?.restorePreview();
     status("Position saved privately. Choose settings for your next game.");
     readyUI();
+    shell?.closeDialogs();
+    shell?.openSettings();
   };
   $("#game-restore").onclick = restore;
   $("#game-submit-retry").onclick = submit;
@@ -935,6 +991,7 @@ function bindGame() {
     );
     $("#game-submit-retry").hidden = $("#game-submit-discard").hidden = true;
     status("Public submission discarded. Your Private result remains saved.");
+    syncShell();
   };
   $("#game-save-retry").onclick = async () => {
     await persist();
@@ -958,7 +1015,8 @@ function bindGame() {
   };
   $("#game-mode").onchange = readyUI;
   $("#game-help").onclick = () => {
-    pause("Help was opened.");
+    if (!coverGame()) return;
+    shell?.closeDialogs();
     $("#game-help-dialog").showModal();
   };
   $("#game-help-dialog .dialog-close").onclick = () =>
@@ -980,14 +1038,14 @@ function bindGame() {
         type: game === "snake" ? "turn" : "move",
         dir: Number(b.dataset.dir),
       });
-      $("#game-board").focus();
+      $("#game-board").focus({ preventScroll: true });
     };
   for (const b of document.querySelectorAll("[data-mine-mode]"))
     b.onclick = () => {
       mineMode = b.dataset.mineMode;
       for (const x of document.querySelectorAll("[data-mine-mode]"))
         x.setAttribute("aria-pressed", String(x === b));
-      $("#game-board").focus();
+      $("#game-board").focus({ preventScroll: true });
     };
   const board = $("#game-board");
   board.onclick = (e) => {
@@ -1111,6 +1169,7 @@ try {
         "A completed Public result is waiting. Retry submission or keep it Private before a new game.",
       );
     }
+    syncShell();
     root.dataset.ready = "true";
     leaderboard();
   } else await initDirectory();
@@ -1128,6 +1187,7 @@ try {
         status(
           "Saved game ready. Choose Continue saved game to play privately.",
         );
+        syncShell();
       }
     }
   } else renderSaves();

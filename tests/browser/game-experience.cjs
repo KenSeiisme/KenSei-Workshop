@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 const assert = require("node:assert/strict"),
   fs = require("node:fs");
 const { chromium } = require("../support/browser.cjs");
@@ -174,7 +175,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8"));
       await page.locator("#game-rank-panel").evaluate((n) => n.open),
       false,
     );
-    await page.click("#game-start");
+    await gameClick(page, "#game-start");
     await page.waitForSelector(".brick-canvas");
     await page.waitForTimeout(550);
     assert.equal((await current()).version, 2);
@@ -259,8 +260,8 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8"));
     await page.waitForSelector(".brick-rules");
     assert.match(await page.locator(".brick-rules").innerText(), /Legacy/);
     await page.click("#game-pause");
-    await page.locator("#game-rank-panel>summary").click();
-    await page.selectOption("#game-board-version", "1");
+    await gameClick(page, "#game-rank-panel>summary");
+    await gameSelect(page, "#game-board-version", "1");
     await page.waitForFunction(() =>
       document
         .querySelector("#game-leaderboard-status")
@@ -288,7 +289,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8"));
           slug + " overflow " + width,
         );
         if (slug !== "pong") {
-          await page.click("#game-start");
+          await gameClick(page, "#game-start");
           await page.waitForTimeout(40);
           assert(
             await page.evaluate(

@@ -1,3 +1,4 @@
+const { gameSelect, gameClick } = require("../support/game-shell.cjs");
 const assert = require("node:assert/strict"),
   fs = require("node:fs"),
   { chromium } = require("../support/browser.cjs");
@@ -145,7 +146,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     assert.equal(await p.inputValue("#game-mode"), "private");
     assert.equal(await p.locator(".tile").count(), 0);
     assert.equal(calls.filter((c) => c.name === "function:start").length, 0);
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.waitForTimeout(700);
     assert.equal(await p.locator(".tile").count(), 16);
     let saved = await p.evaluate(async () => {
@@ -188,7 +189,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       q = await account.newPage();
     await open(q, "memory-match");
     assert.equal(await q.inputValue("#game-mode"), "public");
-    await q.click("#game-start");
+    await gameClick(q, "#game-start");
     await q.waitForSelector(".memory-card");
     let s = create("memory-match", "normal", Number(lastSession.seed));
     for (let pair = 0; pair < 8; pair++)
@@ -221,7 +222,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       "PASS logged-in Public default, complete matching game, actual server replay, automatic score and Profile game best",
     );
     await open(q, "minesweeper");
-    await q.click("#game-start");
+    await gameClick(q, "#game-start");
     await q.waitForSelector(".mines-grid");
     s = create("minesweeper", "beginner", Number(lastSession.seed));
     apply(s, { type: "reveal", index: 40 });
@@ -243,7 +244,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       "PASS first-safe reveal, complete minefield and server-timed winning result",
     );
     await open(q, "snake");
-    await q.click("#game-start");
+    await gameClick(q, "#game-start");
     await q.waitForSelector("canvas");
     await q.click("#game-pause");
     assert.equal(await q.inputValue("#game-mode"), "private");
@@ -269,9 +270,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     console.log("PASS Public pause downgrade, abandonment and background stop");
     await open(q, "2048");
     failSync = true;
-    await q.selectOption("#game-mode", "private");
-    await q.click("#game-start");
-    await q.locator(".game-save-panel>summary").click();
+    await gameSelect(q, "#game-mode", "private");
+    await gameClick(q, "#game-start");
+    await gameClick(q, ".game-save-panel>summary");
     await q.waitForTimeout(1400);
     assert.match(
       await q.locator("#game-save-status").innerText(),
@@ -279,9 +280,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     );
     failSync = false;
     loseAck = true;
-    await q.click("#game-save-retry");
+    await gameClick(q, "#game-save-retry");
     await q.waitForTimeout(700);
-    await q.click("#game-save-retry");
+    await gameClick(q, "#game-save-retry");
     await q.waitForFunction(() =>
       document
         .querySelector("#game-save-status")
@@ -316,7 +317,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     );
     await q.focus("#game-board");
     await q.keyboard.press("ArrowLeft");
-    await q.click("#game-save-retry");
+    await gameClick(q, "#game-save-retry");
     await q.waitForFunction(() =>
       document
         .querySelector("#game-status")
@@ -340,7 +341,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     console.log("PASS independent device edits preserve a conflict copy");
     await open(bpage, "memory-match");
     loseFinishAck = true;
-    await bpage.click("#game-start");
+    await gameClick(bpage, "#game-start");
     await bpage.waitForSelector(".memory-card");
     s = create("memory-match", "normal", Number(lastSession.seed));
     for (let pair = 0; pair < 8; pair++)
@@ -381,8 +382,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       for (const slug of ["2048", "minesweeper", "snake", "memory-match"]) {
         await open(p, slug);
         if (slug === "minesweeper")
-          await p.selectOption("#game-difficulty", "expert");
-        await p.click("#game-start");
+          await gameSelect(p, "#game-difficulty", "expert");
+        await gameClick(p, "#game-start");
         await p.waitForTimeout(80);
         assert.ok(
           await p.evaluate(
@@ -395,7 +396,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     }
     await p.setViewportSize({ width: 1440, height: 1100 });
     await open(p, "2048");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.evaluate(() => window.scrollTo(0, 0));
     await p.screenshot({ path: "_qa/games-2048-desktop.png", fullPage: true });
     await p.goto(base + "/games/");
@@ -406,21 +407,21 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     });
     await p.setViewportSize({ width: 360, height: 900 });
     await open(p, "memory-match");
-    await p.selectOption("#game-difficulty", "hard");
-    await p.click("#game-start");
+    await gameSelect(p, "#game-difficulty", "hard");
+    await gameClick(p, "#game-start");
     assert.ok(
       (await p.locator(".memory-card").first().boundingBox()).width >= 44,
     );
     await p.evaluate(() => window.scrollTo(0, 0));
     await p.screenshot({ path: "_qa/games-memory-mobile.png", fullPage: true });
-    assert.ok((await p.locator("#game-start").boundingBox()).width >= 200);
-    await p.click("#game-settings-change");
+    assert.ok((await p.locator("#game-pause").boundingBox()).height >= 44);
+    await gameClick(p, "#game-settings-change");
     assert.equal(await p.isEnabled("#game-difficulty"), true);
-    await p.selectOption("#game-difficulty", "easy");
-    await p.click("#game-start");
+    await gameSelect(p, "#game-difficulty", "easy");
+    await gameClick(p, "#game-start");
     assert.equal(await p.locator(".memory-card").count(), 12);
     await open(p, "minesweeper");
-    await p.click("#game-start");
+    await gameClick(p, "#game-start");
     await p.click('[data-mine-mode="flag"]');
     await p.click('[data-cell="0"]');
     assert.match(
@@ -522,7 +523,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     );
     const blockedPage = await blocked.newPage();
     await open(blockedPage, "2048");
-    await blockedPage.click("#game-start");
+    await gameClick(blockedPage, "#game-start");
     await blockedPage.waitForTimeout(600);
     assert.equal(await blockedPage.locator(".tile").count(), 16);
     assert.match(
