@@ -7,6 +7,8 @@ import json
 import subprocess
 import sys
 import tempfile
+import xml.etree.ElementTree as ET
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "src"
@@ -100,8 +102,34 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
         parser = VerificationTags()
         parser.feed(path.read_text(encoding="utf-8"))
         assert parser.tags == [(True, verification)], str(path.relative_to(output))
+    site_url = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))[
+        "site_url"
+    ].rstrip("/")
+    namespace = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+    sitemap = ET.parse(output / "sitemap.xml").getroot()
+    assert sitemap.tag == namespace + "urlset"
+    locations = [entry.findtext(namespace + "loc") for entry in sitemap]
+    expected_locations = set()
+    for path in pages:
+        relative = path.relative_to(output)
+        if relative.parts[0] in {"workspace", "auth", "profile", "404", "404.html"}:
+            continue
+        assert path.name == "index.html", str(relative)
+        route = relative.parent.as_posix()
+        expected_locations.add(site_url + ("/" if route == "." else f"/{route}/"))
+    assert len(locations) == len(set(locations)), "Duplicate sitemap URLs"
+    assert set(locations) == expected_locations, "Sitemap differs from public pages"
+    for location in locations:
+        url = urlsplit(location)
+        assert url.scheme == "https" and url.netloc == urlsplit(site_url).netloc
+        assert not url.query and not url.fragment and url.path.endswith("/")
+    robots = (output / "robots.txt").read_text(encoding="utf-8")
+    assert robots.count(f"Sitemap: {site_url}/sitemap.xml") == 1
+    for route in ("workspace", "auth", "profile"):
+        assert f"Disallow: /{route}/" in robots
     print(
         f"PASS clean build: {len(tools)} tools, {len(games)} games, "
-        f"ownership tag in the head of all {len(pages)} pages, unchanged public "
+        f"ownership tag in the head of all {len(pages)} pages, "
+        f"{len(locations)} public sitemap URLs and robots declaration, unchanged public "
         "asset paths, complete vendor assets and no private source files."
     )

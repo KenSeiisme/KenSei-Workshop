@@ -5,6 +5,7 @@ import json
 import shutil
 import sys
 import argparse
+import xml.etree.ElementTree as ET
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -434,8 +435,25 @@ for route, (title, body, active) in pages.items():
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(layout(title, body, active), encoding="utf-8")
 (OUT / "404.html").write_text(layout(*pages["404"][:2]), encoding="utf-8")
+
+# 直接使用页面目录生成公开网址；不收录账号页面、登录回调或错误页。
+site_url = SITE["site_url"].rstrip("/")
+sitemap_namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
+ET.register_namespace("", sitemap_namespace)
+sitemap = ET.Element(f"{{{sitemap_namespace}}}urlset")
+for route in pages:
+    if route.split("/")[0] in {"workspace", "auth", "profile", "404"}:
+        continue
+    entry = ET.SubElement(sitemap, f"{{{sitemap_namespace}}}url")
+    location = ET.SubElement(entry, f"{{{sitemap_namespace}}}loc")
+    location.text = site_url + (f"/{route}/" if route else "/")
+ET.indent(sitemap, space="  ")
+ET.ElementTree(sitemap).write(
+    OUT / "sitemap.xml", encoding="utf-8", xml_declaration=True
+)
 (OUT / "robots.txt").write_text(
-    "User-agent: *\nAllow: /\nDisallow: /workspace/\nDisallow: /auth/\nDisallow: /profile/\n",
+    "User-agent: *\nAllow: /\nDisallow: /workspace/\nDisallow: /auth/\nDisallow: /profile/\n"
+    f"\nSitemap: {site_url}/sitemap.xml\n",
     encoding="utf-8",
 )
 print(f"Built {len(pages)} pages in {OUT}")

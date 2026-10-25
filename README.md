@@ -20,7 +20,7 @@ KenSei Workshop/
 │  ├─ templates/        可直接阅读的 HTML 布局、页面与工具片段
 │  ├─ views/            Python 页面组合、工具说明与模板参数
 │  └─ vendor/           固定版本第三方脚本、OCR 模型、WASM、许可证
-├─ data/                工具、游戏目录、站点验证配置和 OCR 模型版本锁定
+├─ data/                工具、游戏目录、正式网址、站点验证配置和 OCR 模型版本锁定
 ├─ scripts/             构建、预览、依赖打包和测试入口
 ├─ tests/               unit / database / browser / support
 ├─ supabase/            数据库 schema / migrations / checks
@@ -66,18 +66,18 @@ pnpm test:browser
 
 ## 修改什么，去哪里
 
-| 修改内容                     | 文件位置                                       |
-| ---------------------------- | ---------------------------------------------- |
-| 工具名称、分类、搜索内容     | `data/tools.json`                              |
-| 某个工具的功能               | `src/tools/<工具标识>.js`                      |
-| 工具表单与游戏页面 HTML      | `src/templates/tools/`、`src/templates/games/` |
-| 导航、公共布局、首页         | `src/templates/site/`、`src/templates/pages/`  |
-| 页面组合、工具说明和模板参数 | `src/views/`、`scripts/build.py`               |
-| Google Search Console 验证码 | `data/site.json`                               |
-| 网站和工具外观               | `src/styles/`                                  |
-| 数据库升级                   | `supabase/migrations/`                         |
-| 数据库权限验证               | `supabase/checks/`                             |
-| 第三方依赖打包               | `scripts/vendor*.mjs`                          |
+| 修改内容                         | 文件位置                                       |
+| -------------------------------- | ---------------------------------------------- |
+| 工具名称、分类、搜索内容         | `data/tools.json`                              |
+| 某个工具的功能                   | `src/tools/<工具标识>.js`                      |
+| 工具表单与游戏页面 HTML          | `src/templates/tools/`、`src/templates/games/` |
+| 导航、公共布局、首页             | `src/templates/site/`、`src/templates/pages/`  |
+| 页面组合、工具说明和模板参数     | `src/views/`、`scripts/build.py`               |
+| 正式网址与 Search Console 验证码 | `data/site.json`                               |
+| 网站和工具外观                   | `src/styles/`                                  |
+| 数据库升级                       | `supabase/migrations/`                         |
+| 数据库权限验证                   | `supabase/checks/`                             |
+| 第三方依赖打包                   | `scripts/vendor*.mjs`                          |
 
 修改源码后重新构建。不要直接修改 `dist`；它随时可以由源码重新生成。`src/vendor` 内的语言包和 WASM 是本机 OCR、PDF 等工具的运行依赖，源码包和许可证也需要保留。更新依赖时使用 `pnpm vendor`，并提交相应的源码产物、版本锁和许可证。
 
@@ -96,6 +96,10 @@ pnpm format:check
 ## Google Search Console
 
 `data/site.json` 保存 HTML 验证码，`src/templates/site/layout.html` 将标记放在所有站点页面的 `<head>` 内。提交并等待现有 Vercel 自动部署后，在 Search Console 的 `https://kensei-workshop.vercel.app/` 网址前缀资源中点击验证；站点验证成功后仍应保留标记。`pnpm test:structure` 会检查每个页面的标记位置和内容。
+
+`data/site.json` 的 `site_url` 指定正式站根网址。每次构建会从实际页面目录自动生成 `/sitemap.xml`，收录首页、工具、游戏、作品、隐私及开源致谢页面，排除 Workspace、Profile、登录回调和错误页；新增工具或游戏无需手动补网址。所有链接使用正式站 HTTPS 网址及尾斜线，不填写无法准确维护的更新时间。
+
+`/robots.txt` 保留现有抓取规则并声明 Sitemap 地址。部署后，在 Search Console 的 **Sitemaps** 中提交 `sitemap.xml`，即可查看 Google 的读取状态；提交不代表已经收录。`pnpm test:structure` 同时检查 XML、公开页面覆盖、排除项、重复网址及 robots 声明。robots 规则只管理抓取，私人数据仍由登录和数据库权限保护。
 
 ## 数据和部署
 
