@@ -8,11 +8,14 @@ let files = [],
   manual = new Map(),
   active = false;
 function options() {
-  return Object.fromEntries(
-    ["prefix", "suffix", "find", "replace", "case", "start", "digits"]
-      .map((k) => [k, $("#rename-" + k).value])
-      .concat([["number", $("#rename-number").checked]]),
-  );
+  return {
+    rules: window.KenseiRenameRules || [],
+    ...Object.fromEntries(
+      ["prefix", "suffix", "find", "replace", "case", "start", "digits"]
+        .map((k) => [k, $("#rename-" + k).value])
+        .concat([["number", $("#rename-number").checked]]),
+    ),
+  };
 }
 function render() {
   if (active) return;
@@ -21,7 +24,10 @@ function render() {
   out.replaceChildren();
   try {
     preview = renamed(
-      files.map((file) => ({ name: file.name })),
+      files.map((file) => ({
+        name: file.name,
+        lastModified: file.lastModified,
+      })),
       { ...options() },
     );
     files.forEach((file, i) => {
@@ -177,3 +183,17 @@ $("#rename-download").onclick = () => {
 $("#cancel-job").onclick = () =>
   finish("Cancelled. Your preview is still here.");
 window.addEventListener("pagehide", () => worker?.terminate());
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["file-renamer"] = {
+  get preview() {
+    return preview;
+  },
+  get files() {
+    return files;
+  },
+  changed() {
+    manual.clear();
+    render();
+  },
+};

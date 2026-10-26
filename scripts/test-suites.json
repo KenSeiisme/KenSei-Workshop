@@ -111,5 +111,11 @@
     ["tests/browser/shared-whiteboards.cjs"],
     ["tests/browser/network-dashboard.cjs"],
     ["tests/browser/sixth-whiteboard.cjs"]
+  ],
+  "advanced-p1": [
+    ["tests/unit/advanced-p1.mjs"],
+    ["tests/browser/advanced-p1.cjs"],
+    ["tests/browser/advanced-p1-files.cjs"],
+    ["tests/browser/ocr-lifecycle.cjs"]
   ]
 }

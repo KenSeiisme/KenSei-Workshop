@@ -1,5 +1,6 @@
 import {
   diffChars,
+  diffWords,
   diffLines,
   createTwoFilesPatch,
 } from "/vendor/diff/index.js";
@@ -21,7 +22,9 @@ self.onmessage = ({
     const changes =
       mode === "characters"
         ? diffChars(a, b, options)
-        : diffLines(a, b, options);
+        : mode === "words"
+          ? diffWords(a, b, options)
+          : diffLines(a, b, options);
     if (!changes)
       throw new Error("These texts differ too much. Compare smaller sections.");
     const patch = createTwoFilesPatch(

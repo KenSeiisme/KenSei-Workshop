@@ -1145,6 +1145,8 @@
       : import("/tool-scripts/" + slug + ".js");
     loaded
       .then(async () => {
+        const advanced = await import("/tool-scripts/advanced-bootstrap.js");
+        await advanced.initAdvanced(slug);
         const ui = await import("/tool-scripts/tool-ui.js");
         await ui.initToolUI();
         document.querySelector("[data-tool]").dataset.ready = "true";

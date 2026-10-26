@@ -1,3 +1,4 @@
+import { applyRenameRules } from "./rename-rules.js";
 export function renamed(files, options) {
   const start = Number(options.start),
     digits = Number(options.digits);
@@ -21,6 +22,7 @@ export function renamed(files, options) {
       : base;
     if (options.case === "lower") text = text.toLocaleLowerCase("en");
     if (options.case === "upper") text = text.toLocaleUpperCase("en");
+    text = applyRenameRules(text, file, i, options.rules || []);
     const name =
       (options.prefix || "") +
       (options.number ? String(start + i).padStart(digits, "0") + "_" : "") +

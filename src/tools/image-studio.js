@@ -1,3 +1,6 @@
+import { targetCompression } from "./target-compression.js";
+import { el, field, row, button } from "./advanced-ui.js";
+import { sendControl, receiveHandoff } from "./handoff.js";
 import "./image-editor.js";
 import {
   $,
@@ -19,6 +22,26 @@ let files = [],
   results = [],
   generation = 0,
   presetWidth = null;
+const failedIndices = new Set();
+let retryOnly = false;
+const targetSize = el("input", "", {
+  type: "number",
+  min: 1,
+  max: 20480,
+  placeholder: "Optional",
+  id: "image-target-kib",
+});
+targetSize.dataset.lock = "";
+const targetField = field("Target size per image (KiB)", targetSize);
+document.querySelector("#format-note").after(targetField);
+const retryFailed = button("Retry failed images", () => {
+  retryOnly = true;
+  document.querySelector("#image-process").click();
+});
+retryFailed.id = "image-retry-failed";
+retryFailed.hidden = true;
+document.querySelector("#image-zip").after(retryFailed);
+targetSize.oninput = () => clearResults();
 const w = $("#image-width"),
   h = $("#image-height"),
   format = $("#image-format"),
@@ -33,7 +56,13 @@ function fileState(index, state) {
 function clearResults() {
   fileState(-1, "Waiting");
   generation++;
-  results.forEach((x) => URL.revokeObjectURL(x.url));
+  results.forEach((x) => {
+    URL.revokeObjectURL(x.url);
+    if (x.originalUrl) URL.revokeObjectURL(x.originalUrl);
+  });
+  failedIndices.clear();
+  retryFailed.hidden = true;
+  document.querySelectorAll("#image-send").forEach((n) => n.remove());
   results = [];
   const summary = document.querySelector("#image-batch-summary");
   if (summary) {
@@ -123,6 +152,7 @@ h.addEventListener("input", () => {
 });
 function formatChanged() {
   quality.disabled = format.value === "image/png";
+  targetSize.disabled = quality.disabled;
   uiText(
     $("#format-note"),
     quality.disabled
@@ -147,6 +177,8 @@ $("#cancel-job").onclick = () => {
   );
 };
 $("#image-process").onclick = async () => {
+  if (!targetSize.disabled && !targetSize.checkValidity())
+    return toast(uiMsg("Choose a target from 1 to 20,480 KiB."));
   const width = +w.value,
     height = +h.value;
   if (
@@ -161,7 +193,17 @@ $("#image-process").onclick = async () => {
     return toast(
       uiMsg("Use whole dimensions from 1–12,000 px, up to 40 megapixels."),
     );
-  clearResults();
+  const onlyFailed = retryOnly;
+  retryOnly = false;
+  const indices = onlyFailed ? [...failedIndices] : files.map((_, i) => i);
+  if (!onlyFailed) clearResults();
+  else {
+    generation++;
+    for (const i of indices)
+      document
+        .querySelectorAll(`[data-image-result="${i}"]`)
+        .forEach((n) => n.remove());
+  }
   const job = generation,
     mime = format.value,
     q = +quality.value / 100;
@@ -169,7 +211,7 @@ $("#image-process").onclick = async () => {
   try {
     let scaler = null,
       browserResize = false;
-    for (let i = 0; i < files.length; i++) {
+    for (const i of indices) {
       if (job !== generation) break;
       uiText(
         $("#image-result"),
@@ -230,7 +272,21 @@ $("#image-process").onclick = async () => {
               drawNative();
             }
           }
-          blob = await canvasBlob(canvas, mime, q);
+          const compressed = await targetCompression(
+            (v) => canvasBlob(canvas, mime, v),
+            q,
+            mime !== "image/png" && +targetSize.value > 0
+              ? +targetSize.value * 1024
+              : 0,
+            () => job === generation,
+          );
+          blob = compressed.blob;
+          if (!compressed.met)
+            toast(
+              uiMsg(
+                "Target size could not be reached at these dimensions. The smallest tested output is kept.",
+              ),
+            );
         } catch (e) {
           if (e.name === "SecurityError")
             throw new Error(
@@ -254,7 +310,16 @@ $("#image-process").onclick = async () => {
               ext,
           ),
           url = URL.createObjectURL(blob);
-        results.push({ name, blob, url, sourceSize: files[i].size });
+        failedIndices.delete(i);
+        const originalUrl = URL.createObjectURL(files[i]);
+        results.push({
+          name,
+          blob,
+          url,
+          originalUrl,
+          sourceIndex: i,
+          sourceSize: files[i].size,
+        });
         const summary = document.querySelector("#image-batch-summary");
         if (summary) {
           const inputBytes = results.reduce((n, r) => n + r.sourceSize, 0),
@@ -279,14 +344,25 @@ $("#image-process").onclick = async () => {
         const diff = (1 - blob.size / files[i].size) * 100;
         $("#batch-results").insertAdjacentHTML(
           "beforeend",
-          uiHtml`<div class="saved-row"><div><strong>${esc(files[i].name)}</strong><p>${targetWidth} × ${targetHeight} · ${size(files[i].size)} → ${size(blob.size)} · ${Math.abs(diff).toFixed(0)}% ${diff >= 0 ? "smaller" : "larger"}</p></div><a class="text-link" href="${url}" download="${esc(name)}">Download ↓</a></div>`,
+          uiHtml`<div class="saved-row" data-image-result="${i}"><div><strong>${esc(files[i].name)}</strong><p>${targetWidth} × ${targetHeight} · ${size(files[i].size)} → ${size(blob.size)} · ${Math.abs(diff).toFixed(0)}% ${diff >= 0 ? "smaller" : "larger"}</p></div><a class="text-link" href="${url}" download="${esc(name)}">Download ↓</a></div>`,
         );
+        const comparison = el("details");
+        comparison.dataset.imageResult = i;
+        comparison.append(el("summary", "Compare original and result"));
+        const pictures = el("div", "", { class: "compare-images" });
+        pictures.append(
+          el("img", "", { src: originalUrl, alt: files[i].name }),
+          el("img", "", { src: url, alt: name }),
+        );
+        comparison.append(pictures);
+        $("#batch-results").append(comparison);
         fileState(i, "Complete");
       } catch (e) {
+        failedIndices.add(i);
         fileState(i, "Failed");
         $("#batch-results").insertAdjacentHTML(
           "beforeend",
-          uiHtml`<div class="saved-row error-text">${esc(files[i].name)}: ${esc(e.message)}</div>`,
+          uiHtml`<div class="saved-row error-text" data-image-result="${i}">${esc(files[i].name)}: ${esc(e.message)}</div>`,
         );
       }
     }
@@ -301,7 +377,7 @@ $("#image-process").onclick = async () => {
     uiText(
       $("#image-result"),
       uiMsg("{0} · {1} of {2} images ready.{3}", [
-        outcome,
+        uiMsg(outcome),
         results.length,
         files.length,
         completed && results.length < files.length
@@ -309,6 +385,21 @@ $("#image-process").onclick = async () => {
           : "",
       ]),
     );
+    retryFailed.hidden = !failedIndices.size;
+    document.querySelector("#image-send")?.remove();
+    if (results.length) {
+      const control = sendControl(
+        $("#batch-results"),
+        () => ({
+          kind: "files",
+          files: results.map(
+            (r) => new File([r.blob], r.name, { type: r.blob.type }),
+          ),
+        }),
+        ["image-to-text", "pdf-toolkit", "file-renamer"],
+      );
+      control.id = "image-send";
+    }
     if (results.length) {
       const first = results[0];
       $("#image-download").href = first.url;
@@ -324,6 +415,7 @@ $("#image-process").onclick = async () => {
   }
 };
 function formatChangedQuality() {
+  targetSize.disabled = format.value === "image/png";
   quality.disabled = format.value === "image/png";
 }
 $("#image-zip").onclick = async (e) => {
@@ -382,4 +474,10 @@ applyPreset();
 window.addEventListener("workspace-ready", applyPreset);
 window.addEventListener("beforeunload", () =>
   results.forEach((x) => URL.revokeObjectURL(x.url)),
+);
+
+receiveHandoff(
+  "image-studio",
+  (p) => load(p.files),
+  () => files.length > 0,
 );

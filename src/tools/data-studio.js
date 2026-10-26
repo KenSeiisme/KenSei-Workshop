@@ -149,3 +149,20 @@ $("#cancel-job").onclick = () => {
 };
 window.addEventListener("pagehide", () => worker?.terminate());
 render();
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["data-studio"] = {
+  get table() {
+    return table;
+  },
+  get page() {
+    return page;
+  },
+  set page(v) {
+    page = v;
+  },
+  render,
+  useRenderer(fn) {
+    render = fn;
+  },
+};

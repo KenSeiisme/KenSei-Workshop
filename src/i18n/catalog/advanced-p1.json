@@ -1,0 +1,546 @@
+{
+  "m_9665c8fc117b": {
+    "en": "Table editing and export",
+    "zh-Hant": "表格編輯與匯出"
+  },
+  "m_1adca7bb6b33": {
+    "en": "Filter rows",
+    "zh-Hant": "篩選資料列"
+  },
+  "m_9875877524a5": {
+    "en": "Original order",
+    "zh-Hant": "原始順序"
+  },
+  "m_c37353c40fab": {
+    "en": "Text A–Z",
+    "zh-Hant": "文字 A–Z"
+  },
+  "m_8afc7044d967": {
+    "en": "Numeric ascending",
+    "zh-Hant": "數值遞增"
+  },
+  "m_58ae1cce0f75": {
+    "en": "Filter all columns",
+    "zh-Hant": "篩選所有欄位"
+  },
+  "m_e320e8c6ef9c": {
+    "en": "Sort column",
+    "zh-Hant": "排序欄位"
+  },
+  "m_0a588ad42207": {
+    "en": "Remove exact duplicate rows",
+    "zh-Hant": "移除完全重複的資料列"
+  },
+  "m_5fbe2fac700c": {
+    "en": "Remove duplicate rows from the full table?",
+    "zh-Hant": "要移除整張表格中的重複資料列嗎？"
+  },
+  "m_dc2529891306": {
+    "en": "Download current view CSV",
+    "zh-Hant": "下載目前檢視的 CSV"
+  },
+  "m_0c2b3a8d0737": {
+    "en": "Preview a CSV table first.",
+    "zh-Hant": "請先預覽 CSV 表格。"
+  },
+  "m_794578463e99": {
+    "en": "Export preview: {0} rows × {1} columns. Original values remain strings.",
+    "zh-Hant": "匯出預覽：{0} 列 × {1} 欄。原始值會保留為字串。"
+  },
+  "m_87ddca497ba6": {
+    "en": "Build JSON tree",
+    "zh-Hant": "建立 JSON 樹狀檢視"
+  },
+  "m_46a8497ffc25": {
+    "en": "JSON nesting exceeds 100 levels.",
+    "zh-Hant": "JSON 巢狀結構超過 100 層。"
+  },
+  "m_720ff4160412": {
+    "en": "Copy path",
+    "zh-Hant": "複製路徑"
+  },
+  "m_1e2749c637b6": {
+    "en": "Select table columns first.",
+    "zh-Hant": "請先選擇表格欄位。"
+  },
+  "m_e8c9bb0b2c23": {
+    "en": "Batch verification",
+    "zh-Hant": "批次驗證"
+  },
+  "m_126419c34b9d": {
+    "en": "Import checksum manifest",
+    "zh-Hant": "匯入檢查碼清單"
+  },
+  "m_32b6853445de": {
+    "en": "Show duplicate groups only",
+    "zh-Hant": "只顯示重複檔案群組"
+  },
+  "m_e41f464f146e": {
+    "en": "Download verification CSV",
+    "zh-Hant": "下載驗證結果 CSV"
+  },
+  "m_50009ce1da4d": {
+    "en": "File",
+    "zh-Hant": "檔案"
+  },
+  "m_7140f4f19dec": {
+    "en": "Verification",
+    "zh-Hant": "驗證結果"
+  },
+  "m_622eb4a9fed9": {
+    "en": "Use a checksum manifest up to 1 MB.",
+    "zh-Hant": "請使用不超過 1 MB 的檢查碼清單。"
+  },
+  "m_28cccd97aa72": {
+    "en": "Ordered rename rules",
+    "zh-Hant": "依序套用重新命名規則"
+  },
+  "m_95e154398a4b": {
+    "en": "Replace",
+    "zh-Hant": "取代"
+  },
+  "m_9469c3dde0ed": {
+    "en": "Name template",
+    "zh-Hant": "名稱範本"
+  },
+  "m_822b2ae4542b": {
+    "en": "Find",
+    "zh-Hant": "尋找"
+  },
+  "m_93ff492b18f2": {
+    "en": "Value or {original}_{n:03}_{date}",
+    "zh-Hant": "輸入值或 {original}_{n:03}_{date}"
+  },
+  "m_62845f31a2fe": {
+    "en": "Rule",
+    "zh-Hant": "規則"
+  },
+  "m_a27cff51a2e0": {
+    "en": "Add rule",
+    "zh-Hant": "新增規則"
+  },
+  "m_119056d47b4f": {
+    "en": "Use at most 20 rename rules.",
+    "zh-Hant": "最多可使用 20 項重新命名規則。"
+  },
+  "m_6b811f6ee0c4": {
+    "en": "Templates: {name}, {original}, {n:03}, {date}. Dates use file modification time in this device timezone.",
+    "zh-Hant": "範本：{name}、{original}、{n:03}、{date}。日期採用此裝置時區的檔案修改時間。"
+  },
+  "m_0a5504e99fe3": {
+    "en": "Download name mapping CSV",
+    "zh-Hant": "下載名稱對照 CSV"
+  },
+  "m_9bb725005055": {
+    "en": "Before",
+    "zh-Hant": "變更前"
+  },
+  "m_7b68fe551085": {
+    "en": "After",
+    "zh-Hant": "變更後"
+  },
+  "m_40b47b729376": {
+    "en": "Page workspace",
+    "zh-Hant": "頁面工作區"
+  },
+  "m_f9e3dfc2c5a3": {
+    "en": "Select all pages",
+    "zh-Hant": "選取所有頁面"
+  },
+  "m_4d331e0b0e3d": {
+    "en": "Clear page selection",
+    "zh-Hant": "清除頁面選取"
+  },
+  "m_7cafcbce7599": {
+    "en": "Move picked pages up",
+    "zh-Hant": "上移勾選頁面"
+  },
+  "m_f10e043db91f": {
+    "en": "Move picked pages down",
+    "zh-Hant": "下移勾選頁面"
+  },
+  "m_d7b3057baeef": {
+    "en": "Pick page for moving",
+    "zh-Hant": "勾選要移動的頁面"
+  },
+  "m_721d49626b19": {
+    "en": "Select up to 20 pages for transfer.",
+    "zh-Hant": "最多可選取 20 頁進行傳送。"
+  },
+  "m_93a0b80730d7": {
+    "en": "Processing page {0} of {1}…",
+    "zh-Hant": "正在處理第 {0} 頁，共 {1} 頁…"
+  },
+  "m_7e9e6d41e3c9": {
+    "en": "Text extracted. Scanned pages may need OCR.",
+    "zh-Hant": "文字已擷取。掃描頁面可能需要使用 OCR 辨識。"
+  },
+  "m_fe44f76962ca": {
+    "en": "Page images ready.",
+    "zh-Hant": "頁面圖片已準備就緒。"
+  },
+  "m_5e8967dc418b": {
+    "en": "Page images ready for transfer.",
+    "zh-Hant": "頁面圖片已準備就緒，可傳送至其他工具。"
+  },
+  "m_2eceada7eec0": {
+    "en": "Extract selected-page text",
+    "zh-Hant": "擷取所選頁面的文字"
+  },
+  "m_fbab58d550a3": {
+    "en": "Prepare selected-page images",
+    "zh-Hant": "準備所選頁面的圖片"
+  },
+  "m_8ae6367f87bd": {
+    "en": "Download extracted text",
+    "zh-Hant": "下載已擷取文字"
+  },
+  "m_d516c5fa51c9": {
+    "en": "Aligned comparison",
+    "zh-Hant": "並排對齊比較"
+  },
+  "m_a5e84566cc0b": {
+    "en": "Previous difference",
+    "zh-Hant": "上一處差異"
+  },
+  "m_2c6124353e66": {
+    "en": "Next difference",
+    "zh-Hant": "下一處差異"
+  },
+  "m_5893c87af933": {
+    "en": "Replace the current content with the received result?",
+    "zh-Hant": "要以收到的結果取代目前內容嗎？"
+  },
+  "m_5c71b8cd7822": {
+    "en": "Choose a folder",
+    "zh-Hant": "選擇資料夾"
+  },
+  "m_d7584885b28c": {
+    "en": "Archive selection",
+    "zh-Hant": "壓縮檔項目選取"
+  },
+  "m_27faadffed5b": {
+    "en": "Search paths",
+    "zh-Hant": "搜尋路徑"
+  },
+  "m_ffa781bea8c4": {
+    "en": "Search archive",
+    "zh-Hant": "搜尋壓縮檔"
+  },
+  "m_7d84366cbc55": {
+    "en": "Select visible files",
+    "zh-Hant": "選取目前顯示的檔案"
+  },
+  "m_cea4d2e010b8": {
+    "en": "Clear selection",
+    "zh-Hant": "清除選取"
+  },
+  "m_54d4ec653517": {
+    "en": "Prepare selected files",
+    "zh-Hant": "準備所選檔案"
+  },
+  "m_59504c94a4bb": {
+    "en": "Repack selected files",
+    "zh-Hant": "重新壓縮所選檔案"
+  },
+  "m_d735d5c0a830": {
+    "en": "Selected files are ready.",
+    "zh-Hant": "所選檔案已準備就緒。"
+  },
+  "m_34710e9211d0": {
+    "en": "This result is not compatible with the selected tool.",
+    "zh-Hant": "這項結果無法用於所選工具。"
+  },
+  "m_07e20193c0b6": {
+    "en": "This text exceeds the receiving tool limit. Select a smaller part or download it.",
+    "zh-Hant": "這段文字超過接收工具的限制。請選取較小的部分，或下載文字。"
+  },
+  "m_ec5fa75e1804": {
+    "en": "These files exceed the receiving tool limits. Choose fewer or smaller files.",
+    "zh-Hant": "這些檔案超過接收工具的限制。請減少檔案數量，或選擇較小的檔案。"
+  },
+  "m_acbc0e7b79e4": {
+    "en": "This file format is not supported by the receiving tool.",
+    "zh-Hant": "接收工具不支援此檔案格式。"
+  },
+  "m_7b184fcc7fdb": {
+    "en": "Choose a video recording for Subtitle Studio.",
+    "zh-Hant": "請選擇影片錄製檔案以傳送至 Subtitle Studio。"
+  },
+  "m_371d99b6ca09": {
+    "en": "Send PDFs and images separately.",
+    "zh-Hant": "請分開傳送 PDF 與圖片。"
+  },
+  "m_9bcbb3bc11e2": {
+    "en": "Send to",
+    "zh-Hant": "傳送至"
+  },
+  "m_56af5ed7c9b0": {
+    "en": "Direct transfer is unavailable. Download and import the result instead.",
+    "zh-Hant": "無法直接傳送。請下載結果後，再匯入接收工具。"
+  },
+  "m_1c870864e687": {
+    "en": "Result received. The original stays here.",
+    "zh-Hant": "結果已接收。原始內容會保留在此處。"
+  },
+  "m_66984248c3f9": {
+    "en": "Open receiving tool",
+    "zh-Hant": "開啟接收工具"
+  },
+  "m_7e43cee124e8": {
+    "en": "Keep this tab open until the receiving tool confirms the transfer.",
+    "zh-Hant": "請保持此分頁開啟，直到接收工具確認傳送完成。"
+  },
+  "m_862459dd9ac0": {
+    "en": "Transfer unavailable. Import the original file or copy the text.",
+    "zh-Hant": "無法傳送。請匯入原始檔案，或複製文字。"
+  },
+  "m_1a5cb53b78ff": {
+    "en": "Transfer expired or the source tab was closed. Send the result again.",
+    "zh-Hant": "傳送已逾時，或來源分頁已關閉。請重新傳送結果。"
+  },
+  "m_96c25a133805": {
+    "en": "The account or transfer changed. Send the result again.",
+    "zh-Hant": "帳號或傳送狀態已變更。請重新傳送結果。"
+  },
+  "m_e560c31c017b": {
+    "en": "Result received. Review the input, then start processing.",
+    "zh-Hant": "結果已接收。請檢查輸入內容，再開始處理。"
+  },
+  "m_fcb3c748a5df": {
+    "en": "Use rename rule text up to 200 characters.",
+    "zh-Hant": "重新命名規則的文字不可超過 200 個字元。"
+  },
+  "m_2fd686c7082e": {
+    "en": "Unknown rename rule.",
+    "zh-Hant": "無法辨識此重新命名規則。"
+  },
+  "m_3efda02a84b0": {
+    "en": "Choose a KenSei checksum JSON manifest.",
+    "zh-Hant": "請選擇 KenSei 檢查碼 JSON 清單。"
+  },
+  "m_e44274645dbc": {
+    "en": "Use SHA256SUMS or SHA512SUMS lines.",
+    "zh-Hant": "請使用 SHA256SUMS 或 SHA512SUMS 格式的資料列。"
+  },
+  "m_723226db5da5": {
+    "en": "Use at most 10,000 checksum entries.",
+    "zh-Hant": "最多可使用 10,000 筆檢查碼資料。"
+  },
+  "m_a8fba269e880": {
+    "en": "The checksum manifest contains an invalid entry.",
+    "zh-Hant": "檢查碼清單包含無效的項目。"
+  },
+  "m_6be36ca49ee8": {
+    "en": "Missing",
+    "zh-Hant": "缺少檔案"
+  },
+  "m_70a8b6912f2e": {
+    "en": "Ambiguous",
+    "zh-Hant": "有多個同名檔案"
+  },
+  "m_3189cbdd5acb": {
+    "en": "Run required algorithm",
+    "zh-Hant": "請執行所需的演算法"
+  },
+  "m_03c0e806becb": {
+    "en": "Match",
+    "zh-Hant": "相符"
+  },
+  "m_0dae606d69d9": {
+    "en": "Mismatch",
+    "zh-Hant": "不相符"
+  },
+  "m_ac3f22cbbd30": {
+    "en": "Not in manifest",
+    "zh-Hant": "不在清單中"
+  },
+  "m_813657243e96": {
+    "en": "Batch and recognition settings",
+    "zh-Hant": "批次與辨識設定"
+  },
+  "m_2dd4db18bd46": {
+    "en": "PDF pages to recognize (up to 20)",
+    "zh-Hant": "要辨識的 PDF 頁面（最多 20 頁）"
+  },
+  "m_e8506f131302": {
+    "en": "Current image or page",
+    "zh-Hant": "目前圖片或頁面"
+  },
+  "m_c3613b1704f5": {
+    "en": "Rotate",
+    "zh-Hant": "旋轉"
+  },
+  "m_93638ea9e0b0": {
+    "en": "Grayscale",
+    "zh-Hant": "灰階"
+  },
+  "m_0da627ada476": {
+    "en": "Threshold",
+    "zh-Hant": "黑白二值化"
+  },
+  "m_21fda8ec0c96": {
+    "en": "Threshold level",
+    "zh-Hant": "二值化閾值"
+  },
+  "m_a9fdf276fb7a": {
+    "en": "Crop percentages: left, top, width, height.",
+    "zh-Hant": "裁切百分比：左側位置、頂端位置、寬度、高度。"
+  },
+  "m_926a874c1f16": {
+    "en": "Left %",
+    "zh-Hant": "左側位置 %"
+  },
+  "m_fd69b0d8036b": {
+    "en": "Top %",
+    "zh-Hant": "頂端位置 %"
+  },
+  "m_5753396bb221": {
+    "en": "Width %",
+    "zh-Hant": "寬度 %"
+  },
+  "m_86e7f4b1241b": {
+    "en": "Height %",
+    "zh-Hant": "高度 %"
+  },
+  "m_d10425137e24": {
+    "en": "Preview preprocessing",
+    "zh-Hant": "預覽前處理結果"
+  },
+  "m_55f6eb106f04": {
+    "en": "Retry failed items",
+    "zh-Hant": "重試失敗項目"
+  },
+  "m_351c1e22b55b": {
+    "en": "This result exceeds the draft limit. The full text can still be downloaded.",
+    "zh-Hant": "這項結果超過草稿的字數上限，仍可下載完整文字。"
+  },
+  "m_3e74fe245f58": {
+    "en": "Open result",
+    "zh-Hant": "開啟結果"
+  },
+  "m_5a07465650e9": {
+    "en": "Choose one PDF up to 50 MB, or a batch of images.",
+    "zh-Hant": "請選擇一份不超過 50 MB 的 PDF，或一批圖片。"
+  },
+  "m_ea4e4f917613": {
+    "en": "Files ready. Choose settings, then extract text.",
+    "zh-Hant": "檔案已準備就緒。請選擇設定，再擷取文字。"
+  },
+  "m_b6fcc2c53da8": {
+    "en": "The selected page range is invalid.",
+    "zh-Hant": "所選頁面範圍無效。"
+  },
+  "m_5e593983bafa": {
+    "en": "Select up to 20 pages for recognition.",
+    "zh-Hant": "最多可選取 20 頁進行辨識。"
+  },
+  "m_b64e4e2ee4b9": {
+    "en": "The PDF page is too large to render.",
+    "zh-Hant": "PDF 頁面過大，無法產生預覽。"
+  },
+  "m_30518de1bce1": {
+    "en": "Choose a crop inside the image and a threshold from 0 to 255.",
+    "zh-Hant": "請將裁切範圍設在圖片內，並輸入 0 至 255 的二值化閾值。"
+  },
+  "m_0931193c65eb": {
+    "en": "Recognition engine could not load. Retry the item.",
+    "zh-Hant": "無法載入辨識引擎。請重試此項目。"
+  },
+  "m_c85e84baa120": {
+    "en": "Choose files or failed items first.",
+    "zh-Hant": "請先選擇檔案或失敗項目。"
+  },
+  "m_f7b65e9bbc7a": {
+    "en": "Low confidence. Review the recognized text carefully.",
+    "zh-Hant": "辨識可信度偏低，請仔細檢查辨識文字。"
+  },
+  "m_d54b8fa5b825": {
+    "en": "Recognition finished. Review each result before use.",
+    "zh-Hant": "辨識完成。使用前請檢查每項結果。"
+  },
+  "m_8ed500b134fa": {
+    "en": "Download all recognized text",
+    "zh-Hant": "下載所有辨識文字"
+  },
+  "m_59be71333c96": {
+    "en": "Optional",
+    "zh-Hant": "選填"
+  },
+  "m_7572c4a16134": {
+    "en": "Target size per image (KiB)",
+    "zh-Hant": "每張圖片的目標大小（KiB）"
+  },
+  "m_b2a5e7023cf4": {
+    "en": "Retry failed images",
+    "zh-Hant": "重試失敗的圖片"
+  },
+  "m_12e77f4690ce": {
+    "en": "Choose a target from 1 to 20,480 KiB.",
+    "zh-Hant": "請輸入 1 至 20,480 KiB 的目標大小。"
+  },
+  "m_f16a52a645f6": {
+    "en": "Target size could not be reached at these dimensions. The smallest tested output is kept.",
+    "zh-Hant": "以目前尺寸無法達到目標大小，已保留測試所得的最小檔案。"
+  },
+  "m_18e190cf97e8": {
+    "en": "Compare original and result",
+    "zh-Hant": "比較原始圖片與結果"
+  },
+  "m_77226ff72858": {
+    "en": "Select 1–100 archive files.",
+    "zh-Hant": "請選取 1 至 100 個壓縮檔內的檔案。"
+  },
+  "m_e8239a85cbd1": {
+    "en": "Select files totaling at most 100 MB.",
+    "zh-Hant": "所選檔案的總大小不可超過 100 MB。"
+  },
+  "m_a4bba4e9dcb9": {
+    "en": "Selected expanded content exceeds 100 MB.",
+    "zh-Hant": "所選內容解壓縮後超過 100 MB。"
+  },
+  "m_5500c4b97b63": {
+    "en": "{0}% confidence",
+    "zh-Hant": "可信度 {0}%"
+  },
+  "m_d3e56846287f": {
+    "en": "Packing {0}",
+    "zh-Hant": "正在壓縮 {0}"
+  },
+  "m_3228bec13f89": {
+    "en": "Checking {0}",
+    "zh-Hant": "正在檢查 {0}"
+  },
+  "m_ff6a95bc3909": {
+    "en": "Extracting {0}",
+    "zh-Hant": "正在解壓縮 {0}"
+  },
+  "m_c04fe02f2a89": {
+    "en": "Transferred content stays temporary. Save a draft or download it to keep it.",
+    "zh-Hant": "傳來的內容僅暫存於此頁。請儲存草稿或下載以保留。"
+  },
+  "m_ea6e570c23a1": {
+    "en": "Send to transfers selected results directly between same-site tabs using temporary memory. Keep the source tab open until receipt. Transfer links expire after five minutes or receipt; files are not uploaded or added to local recovery. Explicitly saved text drafts still use your private workspace.",
+    "zh-Hant": "Send to 透過暫存記憶體，在本站標籤頁之間直接傳遞選取的結果。收到前請保留來源標籤頁。傳遞連結會在五分鐘後或接收完成後失效；檔案不會上傳或加入本機恢復紀錄。明確儲存的文字草稿仍使用你的私人工作區。"
+  },
+  "m_fea7e7d5066e": {
+    "en": "Clipboard unavailable. Copy the text shown below.",
+    "zh-Hant": "無法存取剪貼簿，請複製下方顯示的文字。"
+  },
+  "m_d00c5ffec5f8": {
+    "en": "Recognition failed. Check each item and retry.",
+    "zh-Hant": "辨識失敗，請檢查各項結果後重試。"
+  },
+  "m_5dd4c56d24e2": {
+    "en": "Up to 20 images / 100 MB, or one PDF / 50 MB / 200 pages with up to 20 selected pages per run.",
+    "zh-Hant": "最多 20 張圖片／共 100 MB，或一份 50 MB／200 頁以內的 PDF，每次最多辨識選定的 20 頁。"
+  },
+  "m_b8befbe29f9b": {
+    "en": "Settings changed. Extract the text again.",
+    "zh-Hant": "設定已變更，請重新擷取文字。"
+  },
+  "m_94f189bee049": {
+    "en": "Settings changed. Prepare the page images again.",
+    "zh-Hant": "設定已變更，請重新準備頁面圖片。"
+  }
+}

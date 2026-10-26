@@ -50,6 +50,9 @@ $("#compare-run").onclick = () => {
     worker.terminate();
     worker = null;
     if (data.error) return status(data.error, true);
+    window.dispatchEvent(
+      new CustomEvent("compare-ready", { detail: data.changes }),
+    );
     patch = data.patch;
     const characters = $("#compare-mode").value === "characters";
     $("#compare-output").classList.toggle("diff-characters", characters);

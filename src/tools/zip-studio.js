@@ -3,11 +3,14 @@ import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiAttr } from "../site/ui.js";
 
 let worker = null,
   active = false,
-  opened = false;
+  opened = false,
+  archiveEntries = [];
 function stop(message) {
   worker?.terminate();
   worker = null;
   opened = false;
+  archiveEntries = [];
+  window.dispatchEvent(new Event("zip-closed"));
   active = false;
   busy(false);
   $("#zip-entries").replaceChildren();
@@ -41,6 +44,8 @@ function create() {
       opened = true;
       busy(false);
       $("#zip-progress").value = 100;
+      archiveEntries = data.entries;
+      window.dispatchEvent(new Event("zip-opened"));
       const list = $("#zip-entries");
       list.replaceChildren();
       for (const entry of data.entries) {
@@ -74,6 +79,12 @@ function create() {
           data.entries.length,
           uiMsg(" entries checked. Select a file to download."),
         ]),
+      );
+    } else if (data.type === "selected") {
+      active = false;
+      busy(false);
+      window.dispatchEvent(
+        new CustomEvent("zip-selection-ready", { detail: data.files }),
       );
     } else if (data.type === "extracted") {
       download(data.blob, data.name);
@@ -123,3 +134,16 @@ $("#cancel-job").onclick = () => {
   $("#zip-progress").value = 0;
 };
 window.addEventListener("pagehide", () => stop());
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["zip-studio"] = {
+  get entries() {
+    return archiveEntries;
+  },
+  extract(indices) {
+    if (active || !opened) throw Error("Open an archive first.");
+    active = true;
+    busy(true);
+    worker.postMessage({ action: "extract-many", indices });
+  },
+};

@@ -534,3 +534,34 @@ $("#pdf-output-download").onclick = () => {
       "kensei-" + operation.value + ".pdf",
     );
 };
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["pdf-toolkit"] = {
+  get pages() {
+    return pages;
+  },
+  get sources() {
+    return sources;
+  },
+  get revision() {
+    return revision;
+  },
+  documentFor: previewDocument,
+  ranges,
+  changed() {
+    revision++;
+    clearEnhanced();
+    render();
+  },
+  next() {
+    return ++revision;
+  },
+  async loadFiles(fs) {
+    operation.value = fs[0]?.type === "application/pdf" ? "organize" : "images";
+    mode();
+    const dt = new DataTransfer();
+    fs.forEach((f) => dt.items.add(f));
+    fileInput.files = dt.files;
+    await fileInput.onchange({ target: fileInput });
+  },
+};

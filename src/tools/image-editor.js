@@ -1,3 +1,4 @@
+import { sendControl } from "./handoff.js";
 import { $, image, canvasBlob, download } from "./common.js";
 import { uiText } from "../site/ui.js";
 
@@ -47,6 +48,7 @@ const note = (s, error = false) => {
 function clear() {
   if (previewURL) URL.revokeObjectURL(previewURL);
   previewURL = previewBlob = null;
+  document.querySelector("#image-edit-send")?.remove();
   $("#edit-preview").hidden = true;
   $("#edit-download").disabled = true;
 }
@@ -231,6 +233,25 @@ $("#edit-run").onclick = async () => {
     $("#edit-preview").src = previewURL;
     $("#edit-preview").hidden = false;
     $("#edit-download").disabled = false;
+    const transfer = sendControl(
+      $("#edit-download").parentElement,
+      () => ({
+        kind: "files",
+        files: [
+          new File(
+            [previewBlob],
+            (current?.name.replace(/\.[^.]+$/, "") || "image") +
+              "-edited." +
+              { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" }[
+                previewBlob.type
+              ],
+            { type: previewBlob.type },
+          ),
+        ],
+      }),
+      ["image-to-text", "pdf-toolkit", "file-renamer"],
+    );
+    transfer.id = "image-edit-send";
     note(
       "Preview ready · " +
         width +

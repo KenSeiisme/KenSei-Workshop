@@ -1320,3 +1320,127 @@ progress {
     font-size: 10px;
   }
 }
+
+.advanced-panel {
+  min-width: 0;
+}
+.advanced-panel h3 {
+  margin-top: 20px;
+}
+.advanced-panel input,
+.advanced-panel select,
+.advanced-panel textarea {
+  max-width: 100%;
+}
+.advanced-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.advanced-list {
+  max-height: 440px;
+  overflow: auto;
+}
+.advanced-result {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.advanced-panel .action-row {
+  flex-wrap: wrap;
+}
+.handoff-controls {
+  margin: 16px 0;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.handoff-controls > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.handoff-controls .button {
+  font-size: 12px;
+  padding: 8px 12px;
+  min-height: 44px;
+}
+.compare-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.compare-images img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  background: #211b29;
+}
+.advanced-panel td input {
+  min-width: 100px;
+  padding: 6px;
+}
+.advanced-panel pre {
+  max-width: 100%;
+  overflow: auto;
+}
+.pdf-page-row[draggable="true"] {
+  cursor: grab;
+}
+.pdf-thumb {
+  width: 65px;
+  max-height: 85px;
+  object-fit: contain;
+}
+.compare-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.compare-columns pre {
+  overflow: auto;
+  max-height: 480px;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.advanced-columns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.advanced-columns label {
+  font-size: 12px;
+}
+.review-summary {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.touch-point {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #d6b6ec88;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+@media (max-width: 600px) {
+  .advanced-grid {
+    grid-template-columns: 1fr;
+  }
+  .compare-images {
+    grid-template-columns: 1fr;
+  }
+  .compare-columns {
+    grid-template-columns: 1fr;
+  }
+  .advanced-panel {
+    padding: 18px;
+  }
+}
+
+.advanced-panel {
+  overflow-wrap: anywhere;
+}
+.advanced-panel label {
+  min-width: 0;
+}

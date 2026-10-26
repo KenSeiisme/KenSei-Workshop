@@ -160,3 +160,13 @@ $("#cancel-job").onclick = () => {
   status(uiMsg("Cancelled. No checksums were saved."));
 };
 window.addEventListener("pagehide", finish);
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["file-check"] = {
+  get files() {
+    return files;
+  },
+  get results() {
+    return results;
+  },
+};

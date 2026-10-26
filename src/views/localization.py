@@ -300,6 +300,10 @@ def source_files(route):
         files.add(
             "src/games/pong.js" if route == "games/pong" else "src/games/games.js"
         )
+    if route.startswith("tools/"):
+        advanced = "src/tools/advanced-" + route.split("/")[-1] + ".js"
+        if (ROOT / advanced).is_file():
+            files.add(advanced)
     pending = list(files)
     while pending:
         name = pending.pop()

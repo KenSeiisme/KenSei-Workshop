@@ -38,7 +38,7 @@ HELP = {
         "Both inputs and optional recovery remain on this device.",
     ),
     "image-to-text": (
-        "One local image; English, simplified Chinese, traditional Chinese and Malay.",
+        "Up to 20 images / 100 MB, or one PDF / 50 MB / 200 pages with up to 20 selected pages per run.",
         "Only selected language packs download and cache. Cancel or retry without losing your edited result.",
         "Images stay local. Recognized text uploads only when you manually save a signed-in draft.",
     ),

@@ -252,6 +252,36 @@ onmessage = async (event) => {
           index,
         })),
       });
+    } else if (action === "extract-many") {
+      const chosen = event.data.indices;
+      if (
+        !Array.isArray(chosen) ||
+        !chosen.length ||
+        chosen.length > 100 ||
+        new Set(chosen).size !== chosen.length
+      )
+        fail("Select 1–100 archive files.");
+      const selected = chosen.map((i) => entries?.[i]);
+      if (
+        selected.some((e) => !e || e.name.endsWith("/")) ||
+        selected.reduce((n, e) => n + e.expanded, 0) > MAX_INPUT
+      )
+        fail("Select files totaling at most 100 MB.");
+      const outputs = [];
+      let actual = 0;
+      for (const e of selected) {
+        const blob = await decode(e, true, (n) => {
+          actual += n;
+          if (actual > MAX_INPUT)
+            fail("Selected expanded content exceeds 100 MB.");
+        });
+        outputs.push({ name: e.name, blob });
+        send("progress", {
+          value: (outputs.length / selected.length) * 100,
+          message: "Extracting " + e.name,
+        });
+      }
+      send("selected", { files: outputs });
     } else if (action === "extract") {
       const entry = entries?.[index];
       if (!entry || entry.name.endsWith("/"))

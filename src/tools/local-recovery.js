@@ -281,7 +281,7 @@ export async function initRecovery(root, tool) {
   }
   async function save() {
     const owner = scope;
-    if (!enabled || !current(owner)) return;
+    if (!enabled || !current(owner) || window.KenseiTemporaryHandoff) return;
     const values = Object.fromEntries(
         fields.map((n) => [n.id, n.type === "checkbox" ? n.checked : n.value]),
       ),
@@ -327,6 +327,14 @@ export async function initRecovery(root, tool) {
   }
   function schedule() {
     clearTimeout(timer);
+    if (window.KenseiTemporaryHandoff) {
+      message(
+        uiMsg(
+          "Transferred content stays temporary. Save a draft or download it to keep it.",
+        ),
+      );
+      return;
+    }
     if (enabled) {
       message(
         uiMsg(
@@ -404,6 +412,19 @@ export async function initRecovery(root, tool) {
   scope = api.user?.id || "guest";
   await refresh();
   toggle.disabled = clear.disabled = false;
+  const temporary = () => {
+    if (window.KenseiTemporaryHandoff) {
+      clearTimeout(timer);
+      toggle.disabled = true;
+      message(
+        uiMsg(
+          "Transferred content stays temporary. Save a draft or download it to keep it.",
+        ),
+      );
+    }
+  };
+  window.addEventListener("handoff-temporary", temporary);
+  temporary();
   panel.dataset.recoveryReady = "true";
   if (!state.classList.contains("recovery-error"))
     message(
