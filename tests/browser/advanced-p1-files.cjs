@@ -64,15 +64,11 @@ const { chromium } = require("../support/browser.cjs");
     await p.waitForFunction(
       () => !document.querySelector("#check-download").disabled,
     );
-    await p
-      .locator(".advanced-panel input[type=file]")
-      .setInputFiles({
-        name: "SHA256SUMS",
-        mimeType: "text/plain",
-        buffer: Buffer.from(
-          digest + "  sample.txt\n" + digest + "  missing.txt",
-        ),
-      });
+    await p.locator(".advanced-panel input[type=file]").setInputFiles({
+      name: "SHA256SUMS",
+      mimeType: "text/plain",
+      buffer: Buffer.from(digest + "  sample.txt\n" + digest + "  missing.txt"),
+    });
     await p.waitForFunction(() =>
       document.querySelector(".advanced-panel").textContent.includes("Missing"),
     );

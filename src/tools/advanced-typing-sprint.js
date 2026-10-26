@@ -20,13 +20,16 @@ export function init() {
     summary = el("summary", "Practice settings"),
     trend = el("div"),
     error = button("Practice mistakes from this run", () => {
+      $("#typing-language").value = lastLanguage;
+      $("#typing-language").dispatchEvent(new Event("change"));
       text.value = lastErrors;
       window.KenseiPractice.text = lastErrors;
       $("#typing-mode").value = "practice";
       $("#typing-mode").dispatchEvent(new Event("change"));
       wrap.open = true;
     });
-  let lastErrors = "";
+  let lastErrors = "",
+    lastLanguage = "en";
   error.hidden = true;
   wrap.append(summary, row(field("Practice duration", duration)), text);
   $("#typing-setup").append(wrap);
@@ -82,8 +85,9 @@ export function init() {
     attributeFilter: ["data-typing-state"],
   });
   window.addEventListener("practice-completed", (e) => {
-    const { source, typed, score } = e.detail,
-      a = [...source],
+    const { source, typed, score } = e.detail;
+    lastLanguage = e.detail.language;
+    const a = [...source],
       b = [...typed];
     lastErrors = [
       ...new Set(a.filter((c, i) => i < b.length && c !== b[i])),

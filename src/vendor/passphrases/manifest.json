@@ -1,0 +1,30 @@
+{
+  "name": "EFF's Long Wordlist",
+  "creator": "Electronic Frontier Foundation",
+  "sourceUrl": "https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt",
+  "informationUrl": "https://www.eff.org/dice",
+  "originalSha256": "addd35536511597a02fa0a9ff1e5284677b8883b83e986e43f15a3db996b903e",
+  "originalBytes": 108800,
+  "originalEncoding": "UTF-8",
+  "wordCount": 7776,
+  "uniqueWordCount": 7776,
+  "diceCount": 5,
+  "facesPerDie": 6,
+  "license": "CC-BY-4.0",
+  "licenseName": "Creative Commons Attribution 4.0 International",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "licensePolicyUrl": "https://www.eff.org/copyright",
+  "licensePolicyVerifiedOn": "2026-10-26",
+  "licenseBasis": "Current EFF copyright policy for original EFF website material; no separate license notice in the source text.",
+  "changes": "Removed five-dice lookup codes; serialized the words as a UTF-8 JSON array; original spelling and order retained.",
+  "files": {
+    "words.json": {
+      "sha256": "b1efbd7f22d9cef3d84acd96a3e4ae803e67f4e7f60c371368c0cd53e37ac1a7",
+      "bytes": 101027
+    },
+    "NOTICE.txt": {
+      "sha256": "64fe6611618de1f889521bdeee1e76b8fa076d0d82de1b812a45675a2b456211",
+      "bytes": 1435
+    }
+  }
+}

@@ -115,6 +115,7 @@ export function publicReport(row) {
   return {
     id: row.id,
     date: row.date,
+    ...(typeof row.label === "string" ? { label: row.label.slice(0, 80) } : {}),
     version: row.version || 1,
     metrics,
     used: numeric(row.used) || 0,

@@ -56,9 +56,12 @@ export function init() {
     proposed = null;
     apply.disabled = true;
     undo.disabled = !history.length;
+    document.querySelector("#text-undo").disabled = !history.length;
   });
   const apply = button("Apply changes", () => {
     if (proposed === null || input.value !== base) return;
+    if (proposed.length > 100000)
+      throw Error("Use at most 100,000 characters.");
     setValue(input, proposed);
   });
   const undo = button("Undo last edit", () => {
@@ -68,6 +71,24 @@ export function init() {
     input.value = value;
     input.dispatchEvent(new Event("input", { bubbles: true }));
   });
+  document.querySelector("#text-undo").addEventListener(
+    "click",
+    (e) => {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      undo.click();
+    },
+    true,
+  );
+  document.querySelector("#text-clear").addEventListener(
+    "click",
+    (e) => {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      setValue(input, "");
+    },
+    true,
+  );
   apply.disabled = undo.disabled = true;
   document.querySelectorAll("[data-transform]").forEach((b) =>
     b.addEventListener(

@@ -8,6 +8,14 @@
 
 白板另提供邀请制共享房间：最多四个已登录账号共同绘画，与私人白板分开保存，并与 Pong 共用两间同时活跃房间的容量。
 
+## 进阶工具
+
+28 个工具按文件数据、学习写作、音视频、日常工具四批升级。兼容结果可通过本机 `Send to` 在同站标签页之间传递；文件只留在内存，不上传或进入恢复记录。
+
+各页扩展集中在 `src/tools/advanced-<tool>.js`，由 `advanced-bootstrap.js` 按路由加载；纯计算、日历、编码和数据校验逻辑独立为小模块。原有路由、存档及 Ranked 接口继续保留。
+
+分批验收命令：`pnpm test:advanced-p1`、`pnpm test:advanced-p2`、`pnpm test:advanced-p3`、`pnpm test:advanced-p4`。数据库测试使用隔离的 PostgreSQL 环境；详细边界与验收记录见 `docs/validation/`。
+
 ## 文件夹怎么找
 
 ```text

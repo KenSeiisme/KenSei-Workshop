@@ -112,7 +112,7 @@ HELP = {
         "File contents and names are not uploaded or added to recovery.",
     ),
     "audio-studio": (
-        "One file / 50 MB / 5 minutes / 128 MB decoded PCM; mono or stereo.",
+        "One clip or up to ten joined files / 50 MB combined / 5 minutes / 128 MB decoded PCM; mono or stereo.",
         (
             "Record or import, select a waveform range, preview and export MP3/WAV."
             " Other input formats depend on your browser."

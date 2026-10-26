@@ -13,11 +13,14 @@ import { uiMsg, uiJoin, uiError, uiHtml } from "../site/ui.js";
 const input = $("#markdown-input");
 let parser = null,
   rendered = "",
+  documentHeadings = [],
   debounce;
 function render() {
   if (!parser) return;
+  documentHeadings = [];
   rendered = parser.render(input.value);
   $("#markdown-preview").innerHTML = rendered;
+  window.dispatchEvent(new Event("markdown-rendered"));
 }
 const changed = draftEditor("markdown-studio", input, () => {
   clearTimeout(debounce);
@@ -27,6 +30,29 @@ async function initialize() {
   try {
     const make = await library("markdown-it.js", "markdownit");
     parser = make({ html: false, linkify: true, typographer: false });
+    parser.renderer.rules.heading_open = (tokens, i, options, env, self) => {
+      const text = (tokens[i + 1]?.children || [])
+        .filter((t) => ["text", "code_inline"].includes(t.type))
+        .map((t) => t.content)
+        .join("");
+      const slug =
+        text
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}\s-]/gu, "")
+          .trim()
+          .replace(/\s+/g, "-") || "section";
+      env.headingIds ||= new Map();
+      const count = env.headingIds.get(slug) || 0;
+      env.headingIds.set(slug, count + 1);
+      const id = slug + (count ? "-" + count : "");
+      tokens[i].attrSet("id", id);
+      documentHeadings.push({
+        text,
+        id,
+        level: Number(tokens[i].tag.slice(1)),
+      });
+      return self.renderToken(tokens, i, options);
+    };
     // 不在预览或导出 HTML 中自动请求远程图片。
     parser.renderer.rules.image = (tokens, i) =>
       uiHtml`<span class="blocked-image">[Image: ${esc(tokens[i].content || "remote resource blocked")}]</span>`;
@@ -35,7 +61,8 @@ async function initialize() {
       ((tokens, i, options, env, self) => self.renderToken(tokens, i, options));
     parser.renderer.rules.link_open = (tokens, i, options, env, self) => {
       tokens[i].attrSet("rel", "noopener noreferrer");
-      tokens[i].attrSet("target", "_blank");
+      if (!tokens[i].attrGet("href")?.startsWith("#"))
+        tokens[i].attrSet("target", "_blank");
       return linkOpen(tokens, i, options, env, self);
     };
     render();
@@ -75,4 +102,12 @@ $("#markdown-html").onclick = () => {
     filename($("#draft-name").value || "kensei-document") + ".html",
     "text/html;charset=utf-8",
   );
+};
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["markdown-studio"] = {
+  render,
+  get headings() {
+    return documentHeadings;
+  },
 };

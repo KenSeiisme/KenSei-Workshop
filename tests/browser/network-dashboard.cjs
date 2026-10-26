@@ -96,6 +96,7 @@ const legacy = {
       await p.textContent("#network-samples"),
       /Legacy summary only/,
     );
+    await p.getByPlaceholder("For example: Home Wi-Fi").fill("Lab Wi-Fi");
     await p.click("#network-start");
     await p.waitForFunction(
       () =>
@@ -118,6 +119,8 @@ const legacy = {
       ),
       row = stored.find((x) => x.version === 2);
     assert.ok(row);
+    assert.equal(row.label, "Lab Wi-Fi");
+    await p.getByLabel("Tests to overlay").selectOption([row.id, "legacy"]);
     assert.equal(row.stats.idle.count, 20);
     assert.ok(
       row.samples.download.length >= 1 && row.samples.upload.length >= 1,

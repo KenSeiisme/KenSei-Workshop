@@ -1,4 +1,13 @@
 const routes = new Set([
+  "qr-studio",
+  "color-studio",
+  "unit-converter",
+  "password-generator",
+  "calculator-studio",
+  "decision-studio",
+  "answer-book",
+  "network-test",
+  "device-check",
   "pdf-toolkit",
   "zip-studio",
   "file-renamer",

@@ -60,6 +60,7 @@ const fmt = (n, suffix = "") =>
     ? n.toFixed(2) + suffix
     : uiMsg("Unavailable");
 function saveHistory() {
+  window.dispatchEvent(new Event("network-history-changed"));
   try {
     localStorage.setItem(key, JSON.stringify(history.map(publicReport)));
   } catch {
@@ -724,6 +725,7 @@ window.addEventListener("message", (event) => {
     const ip = connection.ip;
     last = publicReport({
       ...d,
+      label: window.KenseiNetworkLabel || "",
       id: crypto.randomUUID(),
       version: 2,
       date: d.date,
@@ -981,3 +983,10 @@ window.addEventListener("locale-change", () => {
 paintConnection();
 paint({});
 showHistory();
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["network-test"] = {
+  get history() {
+    return history;
+  },
+};

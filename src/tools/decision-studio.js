@@ -1,6 +1,6 @@
 import { $, api, esc, toast } from "./common.js";
 import { randomIndex, shuffle } from "./sprint-core.js";
-import { wheelTarget } from "./decision-motion.js";
+import { wheelTarget, weightedIndex } from "./decision-motion.js";
 import * as store from "./personal-store.js";
 import { historyView, decisionRow } from "./history-view.js";
 import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiHtml } from "../site/ui.js";
@@ -14,6 +14,8 @@ let id = null,
   dirty = false,
   drawn = new Set(),
   generation = 0;
+let weightMap = new Map();
+const weights = () => options().map((label) => weightMap.get(label) ?? 1);
 let finishSpin = null;
 function cancelSpin() {
   generation++;
@@ -46,16 +48,19 @@ function data() {
   )
     throw new Error("Use 1–200 options, up to 200 characters each.");
   if (new Set(list).size !== list.length)
-    throw new Error("Use unique options so every option has an equal chance.");
+    throw new Error("Use unique option names.");
   const count = +$("#decision-group-count").value;
   if (
     $("#decision-mode").value === "groups" &&
     (!Number.isInteger(count) || count < 1 || count > list.length)
   )
     throw new Error("Choose between 1 and " + list.length + " groups.");
+  if (weights().some((w) => !Number.isInteger(w) || w < 1 || w > 100))
+    throw Error("Weights must be whole numbers from 1 to 100.");
   return {
     name,
     options: list,
+    weights: weights(),
     mode: $("#decision-mode").value,
     noRepeat: $("#decision-no-repeat").checked,
     groupCount: count,
@@ -94,7 +99,7 @@ function redraw() {
     const canvas = document.createElement("canvas");
     if (!canvas.getContext("2d")) throw new Error();
     wheel = new Wheel($("#decision-wheel"), {
-      items: list.map((label) => ({ label, weight: 1 })),
+      items: list.map((label, i) => ({ label, weight: weights()[i] })),
       isInteractive: false,
       itemBackgroundColors: ["#d6b6ec", "#a88cc3", "#efc6db", "#b9bce8"],
       itemLabelColors: ["#21152d"],
@@ -124,6 +129,7 @@ function edit() {
   $("#decision-run").disabled = false;
   mode();
   redraw();
+  window.dispatchEvent(new Event("decision-opened"));
 }
 fields.forEach((s) => $(s).addEventListener("input", edit));
 function reopen(record) {
@@ -136,6 +142,9 @@ function reopen(record) {
     noRepeat: false,
     groupCount: 2,
   };
+  weightMap = new Map(
+    d.options.map((label, i) => [label, d.weights?.[i] ?? 1]),
+  );
   $("#decision-name").value = d.name;
   $("#decision-options").value = d.options.join("\n");
   $("#decision-mode").value = d.mode;
@@ -148,6 +157,7 @@ function reopen(record) {
   uiText($("#decision-result"), uiMsg("Your next possibility starts here."));
   mode();
   redraw();
+  window.dispatchEvent(new Event("decision-opened"));
 }
 historyView("decision", $("#decision-history"), decisionRow);
 $("#decision-history").addEventListener("click", (e) => {
@@ -210,7 +220,8 @@ $("#decision-run").addEventListener("click", async () => {
     );
     return;
   }
-  const winner = candidates[randomIndex(candidates.length)];
+  const winner =
+    candidates[weightedIndex(candidates.map((c) => d.weights[c.index]))];
   if (d.mode === "draw") {
     if (d.noRepeat) drawn.add(winner.index);
     uiText(result, winner.label);
@@ -218,7 +229,7 @@ $("#decision-run").addEventListener("click", async () => {
       $("#decision-note"),
       d.noRepeat
         ? uiMsg("{0} options remain.", [d.options.length - drawn.size])
-        : uiMsg("Every option had an equal chance."),
+        : uiMsg("Options were drawn using their configured weights."),
     );
     return;
   }
@@ -228,7 +239,7 @@ $("#decision-run").addEventListener("click", async () => {
   uiText(result, uiMsg("Turning possibilities…"));
   if (wheel) {
     const currentWheel = wheel;
-    const target = wheelTarget(d.options.length, winner.index, wheel.rotation);
+    const target = wheelTarget(d.weights, winner.index, wheel.rotation);
     try {
       if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
         currentWheel.stop();
@@ -311,3 +322,27 @@ if (requested && !found)
     $("#decision-note"),
     uiMsg("That scheme is not available in this workspace."),
   );
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["decision-studio"] = {
+  options,
+  weights,
+  setWeight(label, value) {
+    weightMap.set(label, value);
+    edit();
+  },
+  importOptions(list, values) {
+    list = list.map((s) => s.trim());
+    if (
+      !list.length ||
+      list.length > 200 ||
+      new Set(list).size !== list.length ||
+      list.some((s) => !s || s.length > 200 || /[\r\n]/.test(s)) ||
+      values.some((w) => !Number.isInteger(w) || w < 1 || w > 100)
+    )
+      throw Error("Use unique options and integer weights from 1 to 100.");
+    weightMap = new Map(list.map((s, i) => [s, values[i]]));
+    $("#decision-options").value = list.join("\n");
+    edit();
+  },
+};

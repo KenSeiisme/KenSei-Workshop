@@ -1,4 +1,10 @@
-export function calculate(math, expression, mode = "deg", ans = "0") {
+export function calculate(
+  math,
+  expression,
+  mode = "deg",
+  ans = "0",
+  variables = {},
+) {
   if (!expression.trim() || expression.length > 1000)
     throw Error("Enter an expression of up to 1,000 characters.");
   if (/%\s*[\dA-Za-z.(]/.test(expression))
@@ -43,7 +49,9 @@ export function calculate(math, expression, mode = "deg", ans = "0") {
         approx = true;
         return math.bignumber(math[n.name]);
       }
-      throw Error("Use pi, e or ans; variables are not supported.");
+      if (Object.hasOwn(variables, n.name))
+        return math.bignumber(variables[n.name]);
+      throw Error("Use pi, e, ans or a variable defined on this page.");
     }
     const args = (n.args || []).map((x) => run(x, depth + 1));
     let result;

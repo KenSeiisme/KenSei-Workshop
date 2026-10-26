@@ -415,7 +415,7 @@ function adapt(tool, root) {
           .filter(Boolean);
         uiText(
           node,
-          uiMsg("{0} unique options · {1}. Each option has equal chance.", [
+          uiMsg("{0} unique options · {1}. Custom weights apply to draws.", [
             new Set(options).size,
             $("#decision-mode").selectedOptions[0].textContent,
           ]),

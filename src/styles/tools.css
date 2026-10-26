@@ -1492,3 +1492,63 @@ progress {
     background: white !important;
   }
 }
+
+.qr-batch-previews {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 18px;
+}
+.qr-batch-previews > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.qr-batch-previews svg,
+.qr-batch-previews canvas {
+  max-width: 100%;
+  height: auto;
+}
+.key-matrix {
+  display: grid;
+  gap: 6px;
+  max-width: 100%;
+  overflow: auto;
+}
+.key-matrix > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.key-matrix kbd {
+  padding: 6px;
+  min-width: 22px;
+  border: 1px solid #67536f;
+  border-radius: 5px;
+  font-size: 10px;
+}
+.key-matrix .received {
+  border-color: #d6b6ec;
+}
+.key-matrix .pressed {
+  background: #d6b6ec;
+  color: #21152d;
+}
+.touch-test-surface {
+  position: relative;
+  min-height: 240px;
+  overflow: hidden;
+  border: 2px dashed #8b6e9b;
+  border-radius: 16px;
+  margin-top: 15px;
+}
+.touch-point {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #d6b6ec;
+  color: #21152d;
+  pointer-events: none;
+}

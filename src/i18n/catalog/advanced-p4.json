@@ -1,0 +1,406 @@
+{
+  "m_52e28c66c3c5": {
+    "en": "Contact, email and batch codes",
+    "zh-Hant": "聯絡人、電子郵件與批次二維碼"
+  },
+  "m_56b934fcd244": {
+    "en": "Contact card",
+    "zh-Hant": "聯絡人名片"
+  },
+  "m_969ccbd3cf63": {
+    "en": "Email",
+    "zh-Hant": "電子郵件"
+  },
+  "m_dfb82fe666b0": {
+    "en": "One text or URL per line; up to 50",
+    "zh-Hant": "每行輸入一段文字或網址，最多 50 筆"
+  },
+  "m_796120837694": {
+    "en": "PNG",
+    "zh-Hant": "PNG"
+  },
+  "m_3edb66ea075e": {
+    "en": "SVG",
+    "zh-Hant": "SVG"
+  },
+  "m_411e083ac99b": {
+    "en": "Download QR ZIP",
+    "zh-Hant": "下載二維碼 ZIP"
+  },
+  "m_6eb7f4f81aa9": {
+    "en": "Additional content type",
+    "zh-Hant": "其他內容類型"
+  },
+  "m_ddec0fc313b4": {
+    "en": "Contact name",
+    "zh-Hant": "聯絡人姓名"
+  },
+  "m_63dceb8800b2": {
+    "en": "Phone",
+    "zh-Hant": "電話"
+  },
+  "m_f2488fd4ef4a": {
+    "en": "Email address",
+    "zh-Hant": "電子郵件位址"
+  },
+  "m_848f0ca2c125": {
+    "en": "Email subject",
+    "zh-Hant": "電子郵件主旨"
+  },
+  "m_f69ea3f5d424": {
+    "en": "Email body",
+    "zh-Hant": "電子郵件內文"
+  },
+  "m_770dcf207300": {
+    "en": "Use content in generator",
+    "zh-Hant": "將內容套用至產生器"
+  },
+  "m_1f666690c129": {
+    "en": "Enter a contact name.",
+    "zh-Hant": "請輸入聯絡人姓名。"
+  },
+  "m_8a966af884a0": {
+    "en": "Enter a valid email address.",
+    "zh-Hant": "請輸入有效的電子郵件位址。"
+  },
+  "m_469cb4c24c39": {
+    "en": "Batch text / URL QR codes",
+    "zh-Hant": "批次文字／網址二維碼"
+  },
+  "m_e9074570532f": {
+    "en": "Batch format",
+    "zh-Hant": "批次輸出格式"
+  },
+  "m_7a1c08fddace": {
+    "en": "Generate batch preview",
+    "zh-Hant": "產生批次預覽"
+  },
+  "m_8d5229c1d4f0": {
+    "en": "Use 1–50 entries, up to 2,000 characters each.",
+    "zh-Hant": "請輸入 1 至 50 筆資料，每筆最多 2,000 個字元。"
+  },
+  "m_db540a00dd6e": {
+    "en": "Cancel batch",
+    "zh-Hant": "取消批次處理"
+  },
+  "m_55efa29d9a38": {
+    "en": "Image colors and palette export",
+    "zh-Hant": "圖片取色與色盤匯出"
+  },
+  "m_503014d25768": {
+    "en": "Click an image pixel to select its color",
+    "zh-Hant": "按一下圖片中的像素以選取顏色"
+  },
+  "m_08795ba031bc": {
+    "en": "Contrast",
+    "zh-Hant": "對比度"
+  },
+  "m_8188fe464abe": {
+    "en": "This image has no visible colors.",
+    "zh-Hant": "此圖片沒有可見的顏色。"
+  },
+  "m_8aac189afc32": {
+    "en": "Local image",
+    "zh-Hant": "本機圖片"
+  },
+  "m_7cb0bf31ffa3": {
+    "en": "Export palette CSS",
+    "zh-Hant": "匯出色盤 CSS"
+  },
+  "m_a401f5d4e665": {
+    "en": "Export palette JSON",
+    "zh-Hant": "匯出色盤 JSON"
+  },
+  "m_255f87c9ff8b": {
+    "en": "Multiple conversions",
+    "zh-Hant": "多單位換算"
+  },
+  "m_8f27a645d134": {
+    "en": "Saved combinations",
+    "zh-Hant": "已儲存的換算組合"
+  },
+  "m_2ba4ee852fa2": {
+    "en": "Choose 2–15 significant digits.",
+    "zh-Hant": "請選擇 2 至 15 位有效數字。"
+  },
+  "m_758407b6f6bd": {
+    "en": "Significant digits",
+    "zh-Hant": "有效數字位數"
+  },
+  "m_85b2d6464f93": {
+    "en": "Save combination on this device",
+    "zh-Hant": "在此裝置儲存換算組合"
+  },
+  "m_0aad52888847": {
+    "en": "Clear saved combinations",
+    "zh-Hant": "清除已儲存的換算組合"
+  },
+  "m_4eb9aaa9ef0e": {
+    "en": "Choose six to eight words from the fixed EFF list.",
+    "zh-Hant": "請從固定的 EFF 詞表中選擇六至八個詞。"
+  },
+  "m_6848d5ac95cf": {
+    "en": "Random characters",
+    "zh-Hant": "隨機字元"
+  },
+  "m_ba62975f43c7": {
+    "en": "Random word passphrase",
+    "zh-Hant": "隨機詞組通關密語"
+  },
+  "m_d02980279ad3": {
+    "en": "6 words",
+    "zh-Hant": "6 個詞"
+  },
+  "m_4c2ddc76fd5a": {
+    "en": "7 words",
+    "zh-Hant": "7 個詞"
+  },
+  "m_4f599b3c111f": {
+    "en": "8 words",
+    "zh-Hant": "8 個詞"
+  },
+  "m_992090682c77": {
+    "en": "Generator mode",
+    "zh-Hant": "產生模式"
+  },
+  "m_653913ac0e67": {
+    "en": "Word count",
+    "zh-Hant": "詞數"
+  },
+  "m_dca3dbfc13cd": {
+    "en": "Word list could not load. Retry when connected.",
+    "zh-Hant": "無法載入詞表。請在連線後重試。"
+  },
+  "m_1c41ed60fe80": {
+    "en": "Ready. This passphrase exists only on this page.",
+    "zh-Hant": "已就緒。此通關密語僅存在於此頁面。"
+  },
+  "m_242bd3703405": {
+    "en": "Passphrases use EFF's Long Wordlist (7,776 words), licensed under CC BY 4.0.",
+    "zh-Hant": "通關密語使用電子前哨基金會（EFF）的長詞表（7,776 個詞），依 CC BY 4.0 授權。"
+  },
+  "m_7e7c2678af1e": {
+    "en": "Calculation sheet",
+    "zh-Hant": "運算工作表"
+  },
+  "m_565624bece62": {
+    "en": "Calculate lines",
+    "zh-Hant": "計算各行"
+  },
+  "m_6d40b490b80c": {
+    "en": "Calculation stopped. Simplify the sheet and retry.",
+    "zh-Hant": "計算已停止。請簡化工作表後重試。"
+  },
+  "m_d7852cd0d245": {
+    "en": "Line",
+    "zh-Hant": "行號"
+  },
+  "m_81f6a5755365": {
+    "en": "Expressions and page-only variables",
+    "zh-Hant": "運算式與僅限本頁使用的變數"
+  },
+  "m_ff6777332502": {
+    "en": "Clear page variables",
+    "zh-Hant": "清除本頁變數"
+  },
+  "m_96f1f7356826": {
+    "en": "Copy expressions and results",
+    "zh-Hant": "複製運算式與結果"
+  },
+  "m_c98d950b436f": {
+    "en": "Inputs changed. Calculate again.",
+    "zh-Hant": "輸入已變更。請重新計算。"
+  },
+  "m_f9926e84a0bf": {
+    "en": "Choice weights and CSV",
+    "zh-Hant": "選項權重與 CSV"
+  },
+  "m_6c88b3e9fcd4": {
+    "en": "Weights apply to wheel and random draw. Groups remain balanced.",
+    "zh-Hant": "轉盤與隨機抽取會套用權重，分組仍會平均分配。"
+  },
+  "m_2d28767143dc": {
+    "en": "Import option / weight CSV",
+    "zh-Hant": "匯入選項／權重 CSV"
+  },
+  "m_c2f4eb54ee67": {
+    "en": "Export choice CSV",
+    "zh-Hant": "匯出選項 CSV"
+  },
+  "m_184042b8d0ef": {
+    "en": "CSV needs an option column and optional weight column.",
+    "zh-Hant": "CSV 須包含 option 欄位，可另加 weight 欄位。"
+  },
+  "m_8045bce269bb": {
+    "en": "Filter loaded answer history",
+    "zh-Hant": "篩選已載入的答案紀錄"
+  },
+  "m_90b4f497251b": {
+    "en": "Search answers",
+    "zh-Hant": "搜尋答案"
+  },
+  "m_3033ce280484": {
+    "en": "Favorites only",
+    "zh-Hant": "只顯示收藏"
+  },
+  "m_22a1bd63c025": {
+    "en": "Filters apply to history already loaded on this device. Load more to include older answers.",
+    "zh-Hant": "篩選只套用至此裝置已載入的紀錄。要包含較舊的答案，請載入更多。"
+  },
+  "m_a668022aed26": {
+    "en": "Keyword",
+    "zh-Hant": "關鍵字"
+  },
+  "m_3813fd079009": {
+    "en": "From date",
+    "zh-Hant": "起始日期"
+  },
+  "m_485348889fed": {
+    "en": "To date",
+    "zh-Hant": "結束日期"
+  },
+  "m_ff3cc09465c4": {
+    "en": "Export filtered TXT",
+    "zh-Hant": "匯出篩選結果 TXT"
+  },
+  "m_bc2b0028c6cf": {
+    "en": "Favorite current answer",
+    "zh-Hant": "收藏目前答案"
+  },
+  "m_b3af04a0d479": {
+    "en": "Network labels and history trends",
+    "zh-Hant": "網路標籤與測試趨勢"
+  },
+  "m_8ca922bcf4a2": {
+    "en": "For example: Home Wi-Fi",
+    "zh-Hant": "例如：家用 Wi-Fi"
+  },
+  "m_35af6da510e5": {
+    "en": "Tests to overlay",
+    "zh-Hant": "疊加顯示的測試"
+  },
+  "m_53d987d72e3a": {
+    "en": "Actual completed test samples",
+    "zh-Hant": "已完成測試的實際取樣資料"
+  },
+  "m_1682600e82eb": {
+    "en": "Recent twenty completed tests trend",
+    "zh-Hant": "最近二十次已完成測試的趨勢"
+  },
+  "m_c6f6b13cfcea": {
+    "en": "Date / label",
+    "zh-Hant": "日期／標籤"
+  },
+  "m_f6e2546e2945": {
+    "en": "Label for the next completed test",
+    "zh-Hant": "下次完成測試的標籤"
+  },
+  "m_cc0006847932": {
+    "en": "Update history view",
+    "zh-Hant": "更新歷史紀錄檢視"
+  },
+  "m_0ca9a760c557": {
+    "en": "Recent completed tests",
+    "zh-Hant": "最近完成的測試"
+  },
+  "m_f57d9ea6df40": {
+    "en": "{0} · download / upload",
+    "zh-Hant": "{0} · 下載／上傳"
+  },
+  "m_69f689509987": {
+    "en": "Touch",
+    "zh-Hant": "觸控"
+  },
+  "m_ed9de5cd13e3": {
+    "en": "Multi-touch test area",
+    "zh-Hant": "多點觸控測試區"
+  },
+  "m_cf61a3d5972e": {
+    "en": "Drag distance: {0} px",
+    "zh-Hant": "拖曳距離：{0} px"
+  },
+  "m_52e75396c387": {
+    "en": "Double-click received.",
+    "zh-Hant": "已收到雙擊。"
+  },
+  "m_a3ee15595def": {
+    "en": "Multi-touch",
+    "zh-Hant": "多點觸控"
+  },
+  "m_19699a22e1e1": {
+    "en": "Start touch test",
+    "zh-Hant": "開始觸控測試"
+  },
+  "m_49f3c81536ef": {
+    "en": "{0} active touch points",
+    "zh-Hant": "目前有 {0} 個觸控點"
+  },
+  "m_f5bdd364539e": {
+    "en": "Touch the area with multiple fingers.",
+    "zh-Hant": "請以多根手指觸碰測試區。"
+  },
+  "m_8b772f1502ba": {
+    "en": "Stop touch test",
+    "zh-Hant": "停止觸控測試"
+  },
+  "m_9ea07a43664b": {
+    "en": "Use up to 100 lines and 20,000 characters.",
+    "zh-Hant": "最多可輸入 100 行、20,000 個字元。"
+  },
+  "m_eb9ee9460067": {
+    "en": "This variable name is reserved.",
+    "zh-Hant": "此變數名稱已保留。"
+  },
+  "m_602fdb598151": {
+    "en": "Weights must be whole numbers from 1 to 100.",
+    "zh-Hant": "權重必須為 1 至 100 的整數。"
+  },
+  "m_f43dd2a3b565": {
+    "en": "Invalid wheel selection.",
+    "zh-Hant": "轉盤選取無效。"
+  },
+  "m_f3e0937167cd": {
+    "en": "Invalid weighted selection.",
+    "zh-Hant": "加權選取無效。"
+  },
+  "m_f987306ac358": {
+    "en": "Use unique option names.",
+    "zh-Hant": "選項名稱不可重複。"
+  },
+  "m_aa49337fb706": {
+    "en": "Options were drawn using their configured weights.",
+    "zh-Hant": "已依設定的權重抽取選項。"
+  },
+  "m_74a53ec73a01": {
+    "en": "Use unique options and integer weights from 1 to 100.",
+    "zh-Hant": "請使用不重複的選項，並將權重設為 1 至 100 的整數。"
+  },
+  "m_d5905c817b99": {
+    "en": "{0} unique options · {1}. Custom weights apply to draws.",
+    "zh-Hant": "{0} 個不重複選項 · {1}。抽取時會套用自訂權重。"
+  },
+  "m_e8a163a85cc1": {
+    "en": "Use pi, e, ans or a variable defined on this page.",
+    "zh-Hant": "請使用 pi、e、ans，或本頁已定義的變數。"
+  },
+  "m_10f30571ce9e": {
+    "en": "No samples available for the selected tests.",
+    "zh-Hant": "所選測試沒有可用的樣本。"
+  },
+  "m_e69c79859f5b": {
+    "en": "JSON tree",
+    "zh-Hant": "JSON 樹狀檢視"
+  },
+  "m_a62a0f94e57a": {
+    "en": "One clip or up to ten joined files / 50 MB combined / 5 minutes / 128 MB decoded PCM; mono or stereo.",
+    "zh-Hant": "單一音檔或最多十個拼接音檔／合計 50 MB／5 分鐘／解碼 PCM 上限 128 MB；單／雙聲道。"
+  },
+  "m_f5859629bcfd": {
+    "en": "Image, PDF, ZIP, QR, Markdown, color, unit conversion, text comparison and OCR processing happen in your browser. ZIP contents are checked and extracted locally; archive files are never uploaded. Password Generator uses cryptographic randomness and does not save, log or upload generated passwords or word passphrases. Copying a password places it on your device clipboard. Images, PDF files, QR content, Wi-Fi passwords and logos are not uploaded or saved to your workspace. QR appearance presets contain only colors and size. OCR downloads only the language packs you choose, and caches them in your browser. Existing text tools send text to cloud storage only when you explicitly save a signed-in draft. Answer Book and Decision Studio automatically save new or edited records: locally first, then privately to your signed-in account. Answer Book questions are never saved. Guest history is not automatically uploaded when you sign in.",
+    "zh-Hant": "圖片、PDF、ZIP、QR、Markdown、色彩、單位換算、文字比較及 OCR 都在瀏覽器中處理。ZIP 內容在本機檢查與解壓縮，壓縮包不會上傳。Password Generator 使用密碼學安全隨機數，不會儲存、記錄或上傳產生的密碼或單詞口令。複製密碼會將它放入裝置的剪貼簿。圖片、PDF 檔案、QR 內容、Wi-Fi 密碼及 Logo 不會上傳或儲存至工作區。QR 外觀預設只包含色彩與尺寸。OCR 只下載你選擇的語言包，並快取在瀏覽器中。既有文字工具只會在你明確儲存已登入的草稿時，將文字傳至雲端。Answer Book 和 Decision Studio 會自動儲存新增或編輯的記錄：先存於本機，再私下同步至已登入的帳號。答案之書的問題不會儲存。登入時不會自動上傳訪客歷史。"
+  },
+  "m_3278d37d88cb": {
+    "en": "Learning cards, review mastery and due dates are stored in IndexedDB on this device. Signed-in card decks sync privately to your account; guest decks are not automatically uploaded. Private decks are excluded from public profiles. Conflicts retain copies, and deleted cloud decks keep empty synchronization tombstones. Calculator history stays on this device. File checksums, subtitle files and local preview videos are processed here without uploads. Download subtitle edits before leaving. PDF information cleanup covers the standard Info dictionary and document/page XMP only.",
+    "zh-Hant": "學習卡、複習熟練度及到期日期儲存在此裝置的 IndexedDB。登入後，牌組會私下同步至帳號，訪客牌組不會自動上傳。私人牌組不會出現在公開個人檔案。衝突時會保留副本；已刪除的雲端牌組會留下不含內容的同步刪除標記。計算機歷史只保留在此裝置。檔案校驗碼、字幕檔及本機預覽影片都在這裡處理，不會上傳。離開前請下載字幕修改。PDF 資訊清理僅涵蓋標準 Info 字典及文件／頁面的 XMP。"
+  }
+}

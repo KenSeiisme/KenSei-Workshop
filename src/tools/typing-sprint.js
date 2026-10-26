@@ -253,7 +253,9 @@ $("#typing-start").addEventListener("click", async () => {
     if (actor() !== owner) throw new Error("Account changed. Please reload.");
     const session = ranked
       ? await rpc("start_typing_test", { language: lang })
-      : await practicePassage(lang, owner);
+      : window.KenseiPractice?.text?.trim()
+        ? { duration: 60, text: window.KenseiPractice.text, version: 1 }
+        : await practicePassage(lang, owner);
     if (actor() !== owner || token !== epoch) return;
     if ((ranked && session.duration !== 60) || typeof session.text !== "string")
       throw new Error("The test service returned an invalid session.");

@@ -818,16 +818,19 @@
           id = completedId || uid();
         round++;
         completedId = null;
+        const completedData = {
+          minutes: duration,
+          completedAt: new Date().toISOString(),
+          ...(activeTask ? { task: structuredClone(activeTask) } : {}),
+        };
+        localSave({
+          id,
+          type: "session",
+          data: { ...completedData, pending: true },
+          updated_at: completedData.completedAt,
+        });
         try {
-          await saveItem(
-            "session",
-            {
-              minutes: duration,
-              completedAt: new Date().toISOString(),
-              ...(activeTask ? { task: structuredClone(activeTask) } : {}),
-            },
-            id,
-          );
+          await saveItem("session", completedData, id);
           uiText(
             $("#timer-summary"),
             uiMsg("{0} minutes of focus, saved. Nicely done.", [duration]),

@@ -11,6 +11,7 @@ function stop() {
   controller?.abort();
   controller = null;
   active = null;
+  window.dispatchEvent(new Event("device-stopped"));
   pressed.clear();
   $("#keyboard-keys").replaceChildren();
   uiText($("#keyboard-last"), uiMsg("Press a key after starting."));
@@ -62,8 +63,9 @@ $$("[data-device-tab]").forEach((b, index) => {
           e.key === "Home"
             ? 0
             : e.key === "End"
-              ? 2
-              : (index + (e.key === "ArrowRight" ? 1 : 2)) % 3;
+              ? buttons.length - 1
+              : (index + (e.key === "ArrowRight" ? 1 : buttons.length - 1)) %
+                buttons.length;
       tab(buttons[i].dataset.deviceTab);
       buttons[i].focus();
     }
@@ -228,3 +230,11 @@ if (matchMedia("(pointer: coarse)").matches)
       "Touch device detected. Screen checks work here; physical keyboard and mouse checks need connected hardware.",
     ),
   );
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["device-check"] = {
+  stop,
+  get active() {
+    return active;
+  },
+};

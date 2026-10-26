@@ -1,4 +1,5 @@
-import { $, copy, api } from "./common.js";
+import { copyText } from "./advanced-ui.js";
+import { $, api } from "./common.js";
 import { answers } from "./answers.js";
 import { randomIndex } from "./sprint-core.js";
 import * as store from "./personal-store.js";
@@ -61,10 +62,11 @@ $("#answer-draw").addEventListener("click", async () => {
     );
   if (token !== generation || expected !== actor()) return;
   current = next;
+  window.KenseiCurrentAnswerId = null;
   show();
   let saved = true;
   try {
-    store.put("answer", current);
+    window.KenseiCurrentAnswerId = store.put("answer", current).id;
   } catch {
     saved = false;
   }
@@ -94,7 +96,7 @@ $("#answer-draw").addEventListener("click", async () => {
 });
 $("#answer-copy").addEventListener("click", () => {
   if (current)
-    copy(
+    copyText(
       $("#answer-language").value === "en"
         ? current.en
         : $("#answer-language").value === "zh"
@@ -112,6 +114,7 @@ window.addEventListener("workspace-ready", () => {
   owner = actor();
   cancelTurn();
   current = null;
+  window.KenseiCurrentAnswerId = null;
   uiText($("#answer-en"), uiMsg("A new page is waiting."));
   uiText($("#answer-zh"), "新的一页正在等你。");
   $("#answer-copy").disabled = true;

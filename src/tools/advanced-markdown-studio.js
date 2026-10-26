@@ -6,23 +6,15 @@ export function init() {
     preview = document.querySelector("#markdown-preview");
   const p = panel("Writing tools", input.closest(".panel")),
     outline = el("nav", "", { "aria-label": "Document outline" });
+  const ctx = window.KenseiAdvancedContexts["markdown-studio"];
   function headings() {
-    return [...input.value.matchAll(/^(#{1,6})\s+(.+)$/gm)].map((m) => ({
-      level: m[1].length,
-      text: m[2],
-      index: m.index,
-    }));
+    return ctx.headings;
   }
   function update() {
     outline.replaceChildren();
     for (const [index, h] of headings().entries()) {
       const b = button("", () => {
-        input.focus();
-        input.setSelectionRange(h.index, h.index + h.text.length + h.level + 1);
-        const target = [...preview.querySelectorAll("h1,h2,h3,h4,h5,h6")][
-          index
-        ];
-        target?.scrollIntoView({ block: "nearest" });
+        document.getElementById(h.id)?.scrollIntoView({ block: "nearest" });
       });
       b.textContent = h.text;
       b.style.marginInlineStart = (h.level - 1) * 10 + "px";
@@ -54,7 +46,15 @@ export function init() {
         insert(
           "\n" +
             headings()
-              .map((h) => "  ".repeat(h.level - 1) + "- " + h.text)
+              .map(
+                (h) =>
+                  "  ".repeat(h.level - 1) +
+                  "- [" +
+                  h.text.replace(/[\[\]]/g, "") +
+                  "](#" +
+                  encodeURIComponent(h.id) +
+                  ")",
+              )
               .join("\n") +
             "\n",
         ),
@@ -63,6 +63,6 @@ export function init() {
     ),
     outline,
   );
-  input.addEventListener("input", () => setTimeout(update, 150));
+  window.addEventListener("markdown-rendered", update);
   update();
 }

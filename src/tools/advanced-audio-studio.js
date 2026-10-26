@@ -143,9 +143,10 @@ export function init() {
         const info = shapeSamples(data, 44100, fi, fo, normalize.checked),
           blob = pcmWav(data, 44100);
         buffers = [];
-        await ctx.loadAudio(
+        const opened = await ctx.loadAudio(
           new File([blob], "joined-audio.wav", { type: "audio/wav" }),
         );
+        if (!opened || token !== generation) return;
         uiText(
           note,
           uiMsg("Preview ready: {0} seconds · peak {1}", [

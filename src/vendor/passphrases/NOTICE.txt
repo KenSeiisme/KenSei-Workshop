@@ -1,0 +1,32 @@
+EFF's Long Wordlist
+Electronic Frontier Foundation (EFF)
+
+Original source:
+https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt
+Official wordlist information:
+https://www.eff.org/dice
+
+License: Creative Commons Attribution 4.0 International (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+Full license terms:
+https://creativecommons.org/licenses/by/4.0/legalcode.en
+
+EFF's current copyright policy, verified on 2026-10-26, licenses original
+EFF website material under CC BY 4.0 unless otherwise noted:
+https://www.eff.org/copyright
+No separate license notice appears in the original plain-text wordlist.
+
+Attribution: EFF's Long Wordlist by the Electronic Frontier Foundation,
+licensed under CC BY 4.0. Source and license links are provided above.
+
+Changes made for this distribution: the five-dice lookup codes were removed
+and the 7,776 words were serialized as a UTF-8 JSON array. Original word
+spellings and order are preserved. No words were added, removed or edited.
+
+CC BY 4.0 permits sharing and adaptation, including commercial use, subject
+to its terms. Give appropriate credit, link to the license, indicate changes,
+and retain applicable attribution and license notices when redistributing.
+Do not impose additional legal or technical restrictions that prevent uses
+the license permits. The linked legal code contains the full license terms.
+
+This distribution and its use do not imply endorsement by EFF.

@@ -1,3 +1,4 @@
+import { qrByteText } from "./qr-extra-core.js";
 import {
   $,
   $$,
@@ -97,7 +98,7 @@ $("#qr-generate").onclick = async (e) => {
       width,
       height: width,
       type: "svg",
-      data,
+      data: qrByteText(data),
       margin: 16,
       qrOptions: { errorCorrectionLevel: logo ? "H" : "M" },
       dotsOptions: { color: $("#qr-dark").value, type: "square" },
@@ -164,3 +165,6 @@ function loadPreset() {
 }
 loadPreset();
 window.addEventListener("workspace-ready", loadPreset);
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["qr-studio"] = {};

@@ -12,6 +12,7 @@ export function init() {
       const tag = completedTag;
       if (!tag || tag.owner !== (api.user?.id || "guest")) return;
       const plan = await store.get(tag.planId);
+      if (tag.owner !== (api.user?.id || "guest")) return;
       if (!plan) throw Error("This plan is unavailable.");
       await store.put(
         {
@@ -21,6 +22,7 @@ export function init() {
           ),
         },
         plan.id,
+        tag.owner,
       );
       done.hidden = true;
       await refresh();

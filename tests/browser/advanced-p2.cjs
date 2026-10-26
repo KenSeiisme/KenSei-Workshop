@@ -54,7 +54,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
     await p
       .getByRole("button", { name: "Insert contents", exact: true })
       .click();
-    assert((await p.inputValue("#markdown-input")).includes("- Heading"));
+    assert(
+      (await p.inputValue("#markdown-input")).includes("- [Heading](#heading)"),
+    );
     await open("flashcards");
     await p.click("#deck-new");
     await p.waitForFunction(

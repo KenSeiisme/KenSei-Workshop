@@ -42,14 +42,12 @@ export function init() {
         throw Error("Choose different front and back columns.");
       await ctx.importDeck({
         name: uiRender(uiMsg("Imported deck")),
-        cards: table
-          .slice(1)
-          .map((r) => ({
-            id: crypto.randomUUID(),
-            front: r[+front.value] || "",
-            back: r[+back.value] || "",
-            known: false,
-          })),
+        cards: table.slice(1).map((r) => ({
+          id: crypto.randomUUID(),
+          front: r[+front.value] || "",
+          back: r[+back.value] || "",
+          known: false,
+        })),
       });
       table = null;
     }),
