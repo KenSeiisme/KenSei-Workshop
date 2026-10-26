@@ -318,3 +318,38 @@
     max-width: 88px;
   }
 }
+/* A native link covers the card; independent actions stay above its hit area. */
+.tool-card,
+.game-card {
+  position: relative;
+  isolation: isolate;
+}
+.card-primary-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+.tool-card button,
+.game-card button {
+  position: relative;
+  z-index: 2;
+}
+.tool-card:focus-within,
+.game-card:focus-within {
+  border-color: #d6b6ec;
+  box-shadow: 0 0 0 2px #d6b6ec55;
+}
+.card-primary-link:focus-visible {
+  outline: none;
+}
+.card-primary-link:focus-visible::after {
+  outline: 2px solid #d6b6ec;
+  outline-offset: 4px;
+}
+.tool-card .favorite,
+.tool-card [data-delete] {
+  min-width: 44px;
+  min-height: 44px;
+}

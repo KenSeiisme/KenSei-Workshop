@@ -53,7 +53,8 @@
     "test:arcade-next": "node scripts/test.mjs arcade-next",
     "test:game-experience": "node scripts/test.mjs game-experience",
     "test:game-shell": "node scripts/test.mjs game-shell",
-    "test:bilingual": "node scripts/test.mjs bilingual"
+    "test:bilingual": "node scripts/test.mjs bilingual",
+    "test:typing-experience": "node scripts/test.mjs typing-experience"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

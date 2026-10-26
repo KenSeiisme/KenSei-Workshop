@@ -166,7 +166,11 @@ def heading(tool, star):
     slug, _, name, _, description, category = tool
     limits, usage, privacy = HELP[slug]
     return render_template(
-        "tools/heading.html",
+        (
+            "tools/typing-heading.html"
+            if slug == "typing-sprint"
+            else "tools/heading.html"
+        ),
         category=escape(category.upper()),
         name=escape(name),
         description=escape(description),

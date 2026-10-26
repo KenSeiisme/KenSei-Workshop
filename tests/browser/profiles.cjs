@@ -379,7 +379,12 @@ const sdk = `export function createClient(){const initial=window.__qaUser,actor=
         );
         await typing
           .locator("#typing-input")
-          .fill("Morning light settles on the workshop desk.");
+          .fill(
+            (await typing.locator("#typing-passage").textContent()).slice(
+              0,
+              60,
+            ),
+          );
         await chain;
         await db.query(
           "update public.typing_test_sessions set started_at=clock_timestamp()-interval '61 seconds' where user_id=$1",
@@ -437,7 +442,11 @@ const sdk = `export function createClient(){const initial=window.__qaUser,actor=
         assert(await p.locator("#typing-input").isDisabled());
         await p.locator("#typing-mode").selectOption("practice");
         await p.locator("#typing-start").click();
+        await p.waitForFunction(
+          () => !document.querySelector("#typing-input").disabled,
+        );
         assert(await p.locator("#typing-input").isEnabled());
+        p.once("dialog", (dialog) => dialog.accept());
         await p.locator("#typing-abort").click();
         failEnsure = false;
         await p.close();

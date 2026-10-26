@@ -230,8 +230,10 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
       async () => {
         await decision.evaluate(async () => {
           const { Wheel } = await import("/vendor/spin-wheel.js");
-          const original = Wheel.prototype.spinToItem;
-          Wheel.prototype.spinToItem = function (index, ...args) {
+          const original = Wheel.prototype.spinTo;
+          Wheel.prototype.spinTo = function (rotation, ...args) {
+            const angle = ((-rotation % 360) + 360) % 360;
+            const index = Math.floor(angle / (360 / this.items.length));
             const rest = this.onRest;
             this.onRest = (e) => {
               window.__wheelRest = {
@@ -241,7 +243,7 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
               };
               rest?.(e);
             };
-            return original.call(this, index, ...args);
+            return original.call(this, rotation, ...args);
           };
         });
         await decision.emulateMedia({ reducedMotion: "no-preference" });
@@ -375,7 +377,12 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
         await typing.locator("#typing-mode").selectOption("practice");
         await typing.locator("#typing-language").selectOption("zh");
         await typing.locator("#typing-start").click();
-        const text = "清晨的光";
+        await typing.waitForFunction(
+          () => !document.querySelector("#typing-input").disabled,
+        );
+        const text = (
+          await typing.locator("#typing-passage").textContent()
+        ).slice(0, 4);
         await typing.locator("#typing-input").evaluate((el, value) => {
           el.dispatchEvent(
             new CompositionEvent("compositionstart", { bubbles: true }),
@@ -400,7 +407,7 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
           await typing.locator("#typing-speed").textContent(),
           "4.0",
         );
-        await typing.locator("#typing-input").fill(text + "错");
+        await typing.locator("#typing-input").fill(text + "#");
         assert.equal(await typing.locator(".typed-error").count(), 1);
         await typing.locator("#typing-input").evaluate((el) => {
           el.dispatchEvent(
@@ -426,6 +433,7 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
           1,
         );
         await typing.locator("#typing-start").click();
+        typing.once("dialog", (dialog) => dialog.accept());
         await typing.locator("#typing-abort").click();
         assert.equal(
           await typing.locator("#typing-practice-history .saved-row").count(),
@@ -456,7 +464,9 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
         assert(pasted);
         await p
           .locator("#typing-input")
-          .fill("Morning light settles on the workshop desk.");
+          .fill(
+            (await p.locator("#typing-passage").textContent()).slice(0, 60),
+          );
         await chain;
         await db.exec(
           "update public.typing_test_sessions set started_at=clock_timestamp()-interval '61 seconds'",

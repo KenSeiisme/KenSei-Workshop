@@ -1,15 +1,69 @@
 import { $, api, esc, toast } from "./common.js";
 import { practiceTexts } from "./sprint-content.js";
+import { practicePassage } from "./typing-content.js";
 import { scoreText } from "./sprint-core.js";
 import { ready } from "./personal-store.js";
 import { ensureProfile, paintAvatar } from "./profile-service.js";
-import { uiDate, uiMsg, uiJoin, uiError, uiText, uiHtml } from "../site/ui.js";
+import {
+  uiDate,
+  uiMsg,
+  uiJoin,
+  uiError,
+  uiText,
+  uiHtml,
+  uiConfirm,
+} from "../site/ui.js";
 
 let run = null,
   interval,
   committed = "",
   composing = false,
-  boardToken = 0;
+  boardToken = 0,
+  pending = null,
+  submitting = false,
+  starting = false,
+  expanded = false,
+  focused = false,
+  epoch = 0;
+const root = $("[data-tool='typing-sprint']");
+root.dataset.typingState = "ready";
+function focus(value) {
+  focused = !!value;
+  document.body.classList.toggle("typing-is-focused", focused);
+  $("#typing-focus").hidden = false;
+  $("#typing-focus").setAttribute("aria-pressed", String(focused));
+  uiText($("#typing-focus"), focused ? uiMsg("Exit focus") : uiMsg("Focus"));
+}
+$("#typing-focus").onclick = () => {
+  focus(!focused);
+  if (run) $("#typing-input").focus({ preventScroll: true });
+};
+$("#typing-settings-open").onclick = () => $("#typing-settings").showModal();
+$("#typing-settings-close").onclick = () => $("#typing-settings").close();
+$("#typing-settings").addEventListener("close", () =>
+  $("#typing-settings-open").focus({ preventScroll: true }),
+);
+const localeSelect = $("#typing-settings [data-language-select]");
+localeSelect.value = window.KenseiI18n?.getLocale() || "en";
+function saveSetup() {
+  try {
+    sessionStorage.setItem(
+      "kensei:typing:setup",
+      JSON.stringify({ language: language(), mode: $("#typing-mode").value }),
+    );
+  } catch {}
+}
+function showBoardRows() {
+  [...$("#leaderboard-rows").rows].forEach((row, index) => {
+    row.hidden = !expanded && index >= 10;
+  });
+  $("#leaderboard-expand").hidden = $("#leaderboard-rows").rows.length <= 10;
+  $("#leaderboard-expand").setAttribute("aria-expanded", String(expanded));
+  uiText(
+    $("#leaderboard-expand"),
+    expanded ? uiMsg("Show Top 10") : uiMsg("Show Top 50"),
+  );
+}
 const language = () => $("#typing-language").value,
   actor = () => api.user?.id || "guest";
 const practiceKey = () => "kensei-workshop:typing:v1:" + actor();
@@ -82,14 +136,15 @@ async function board() {
     if (token !== boardToken) return;
     uiText(
       $("#leaderboard-version"),
-      uiMsg("{0} · text version {1} · 60 seconds · 95% accuracy required", [
+      uiMsg("{0} · board v{1} · 60 seconds · 95% accuracy required", [
         lang === "zh" ? "中文" : uiMsg("English"),
         data.version || "—",
       ]),
     );
     const row = (x) =>
-      uiHtml`<tr><td>${Number(x.rank)}</td><td>${x.public_id ? uiHtml`<a class="text-link" href="/profile/?id=${encodeURIComponent(x.public_id)}">${esc(x.nickname)}</a>` : esc(x.nickname)}</td><td>${Number(x.speed).toFixed(1)}</td><td>${Number(x.accuracy).toFixed(2)}%</td><td>${uiDate(new Date(x.achieved_at), { year: "numeric", month: "short", day: "numeric" })}</td></tr>`;
+      uiHtml`<tr class="${data.me?.public_id === x.public_id && x.public_id ? "is-me" : ""}"><td>${Number(x.rank)}</td><td>${x.public_id ? uiHtml`<a class="text-link" href="/profile/?id=${encodeURIComponent(x.public_id)}">${esc(x.nickname)}</a>` : esc(x.nickname)}</td><td>${Number(x.speed).toFixed(1)}</td><td>${Number(x.accuracy).toFixed(2)}%</td><td>${uiDate(new Date(x.achieved_at), { month: "short", day: "numeric" })}</td></tr>`;
     $("#leaderboard-rows").innerHTML = (data.top || []).map(row).join("");
+    showBoardRows();
     uiText(
       $("#leaderboard-status"),
       data.top?.length
@@ -112,6 +167,7 @@ async function board() {
   } catch {
     if (token === boardToken) {
       $("#leaderboard-rows").innerHTML = "";
+      showBoardRows();
       uiText(
         $("#leaderboard-status"),
         uiMsg(
@@ -133,6 +189,7 @@ function player() {
   } else uiText($("#typing-player"), uiMsg("Your profile is connecting…"));
 }
 async function mode() {
+  saveSetup();
   const ranked = $("#typing-mode").value === "ranked";
   if (!run)
     uiText(
@@ -173,15 +230,19 @@ async function mode() {
 }
 window.addEventListener("profile-updated", player);
 $("#typing-start").addEventListener("click", async () => {
-  if (run) return;
+  if (run || starting || pending) return;
   const ranked = $("#typing-mode").value === "ranked",
     lang = language(),
-    owner = actor();
+    owner = actor(),
+    token = epoch;
   if (ranked && !api.user) {
     api.openAuth("/tools/typing-sprint/");
     return;
   }
   $("#typing-start").disabled = true;
+  starting = true;
+  $("#typing-language").disabled = true;
+  $("#typing-mode").disabled = true;
   uiText(
     $("#typing-status"),
     ranked ? uiMsg("Starting a server session…") : uiMsg("Starting practice…"),
@@ -191,8 +252,8 @@ $("#typing-start").addEventListener("click", async () => {
     if (actor() !== owner) throw new Error("Account changed. Please reload.");
     const session = ranked
       ? await rpc("start_typing_test", { language: lang })
-      : { text: practiceTexts[lang], duration: 60 };
-    if (actor() !== owner) return;
+      : await practicePassage(lang, owner);
+    if (actor() !== owner || token !== epoch) return;
     if (session.duration !== 60 || typeof session.text !== "string")
       throw new Error("The test service returned an invalid session.");
     run = {
@@ -208,6 +269,15 @@ $("#typing-start").addEventListener("click", async () => {
     composing = false;
     $("#typing-input").value = "";
     uiText($("#typing-result"), "");
+    $("#typing-result").hidden = true;
+    $("#typing-preview-label").hidden = true;
+    $("#typing-setup").hidden = true;
+    root.dataset.typingState = "running";
+    uiText(
+      $("#typing-run-label"),
+      ranked ? uiMsg("Ranked") : uiMsg("Practice"),
+    );
+    focus(true);
     lock(true);
     $("#typing-input").focus();
     uiText(
@@ -219,11 +289,17 @@ $("#typing-start").addEventListener("click", async () => {
     interval = setInterval(meter, 100);
     meter();
   } catch (e) {
+    if (token !== epoch) return;
     uiText(
       $("#typing-status"),
       uiError(e) || uiMsg("Test could not start. Please retry."),
     );
     $("#typing-start").disabled = false;
+  } finally {
+    if (token === epoch) {
+      starting = false;
+      if (!run) lock(false);
+    }
   }
 });
 async function finish() {
@@ -234,6 +310,9 @@ async function finish() {
   clearInterval(interval);
   composing = false;
   lock(false);
+  root.dataset.typingState = "finished";
+  $("#typing-setup").hidden = false;
+  $("#typing-result").hidden = false;
   $("#typing-input").disabled = true;
   $("#typing-input").value = text;
   uiText($("#typing-time"), "0");
@@ -256,48 +335,16 @@ async function finish() {
     return;
   }
   if (completed.ranked) {
-    $("#typing-start").disabled = true;
-    uiText(
-      $("#typing-status"),
-      uiMsg("Submitting your completed run for server verification…"),
-    );
-    try {
-      const result = await rpc("finish_typing_test", {
-        sessionId: completed.sessionId,
-        typedText: text.normalize("NFC"),
-      });
-      if (actor() !== completed.owner) return;
-      uiText(
-        $("#typing-result"),
-        uiMsg("{0} {1} · {2}% accuracy.", [
-          Number(result.speed).toFixed(1),
-          completed.language === "zh" ? "CPM" : "WPM",
-          Number(result.accuracy).toFixed(2),
-        ]),
-      );
+    if (!text.length) {
+      uiText($("#typing-run-label"), uiMsg("Not ranked"));
       uiText(
         $("#typing-status"),
-        result.qualified
-          ? uiMsg(
-              "Verified. Your best score is eligible for this text version’s board.",
-            )
-          : uiMsg(
-              "Verified, but below 95% accuracy. This score is not on the public board.",
-            ),
+        uiMsg("No committed text. This test was not submitted."),
       );
-      board();
-    } catch (e) {
-      uiText(
-        $("#typing-status"),
-        uiJoin([
-          uiMsg("Could not confirm submission: "),
-          uiError(e) || uiMsg("connection failed"),
-          ". Refresh the leaderboard to check your best score.",
-        ]),
-      );
-    } finally {
-      $("#typing-start").disabled = false;
+      return;
     }
+    pending = { ...completed, typedText: text.normalize("NFC") };
+    await submitPending();
   } else {
     try {
       localStorage.setItem(
@@ -325,7 +372,75 @@ async function finish() {
         ),
       );
     }
+    uiText($("#typing-run-label"), uiMsg("Local only"));
     renderHistory();
+  }
+}
+async function submitPending() {
+  if (!pending || submitting || actor() !== pending.owner) return;
+  const completed = pending,
+    token = epoch;
+  submitting = true;
+  $("#typing-start").disabled = true;
+  $("#typing-language").disabled = true;
+  $("#typing-mode").disabled = true;
+  $("#typing-submit-retry").hidden = true;
+  $("#typing-submit-discard").hidden = true;
+  uiText($("#typing-run-label"), uiMsg("Verifying"));
+  uiText(
+    $("#typing-status"),
+    uiMsg("Submitting your completed run for server verification…"),
+  );
+  try {
+    const result = await rpc("finish_typing_test", {
+      sessionId: completed.sessionId,
+      typedText: completed.typedText,
+    });
+    if (actor() !== completed.owner || token !== epoch) return;
+    pending = null;
+    uiText(
+      $("#typing-run-label"),
+      result.qualified ? uiMsg("Verified") : uiMsg("Not ranked"),
+    );
+    uiText(
+      $("#typing-result"),
+      uiMsg("{0} {1} · {2}% accuracy.", [
+        Number(result.speed).toFixed(1),
+        completed.language === "zh" ? "CPM" : "WPM",
+        Number(result.accuracy).toFixed(2),
+      ]),
+    );
+    uiText(
+      $("#typing-status"),
+      result.qualified
+        ? uiMsg(
+            "Verified. Your best score is eligible for this text version’s board.",
+          )
+        : uiMsg(
+            "Verified, but below 95% accuracy. This score is not on the public board.",
+          ),
+    );
+    board();
+  } catch (e) {
+    if (actor() !== completed.owner || token !== epoch) return;
+    uiText($("#typing-run-label"), uiMsg("Submission pending"));
+    $("#typing-submit-retry").hidden = false;
+    $("#typing-submit-discard").hidden = false;
+    uiText(
+      $("#typing-status"),
+      uiJoin([
+        uiMsg("Could not confirm submission: "),
+        uiError(e) || uiMsg("connection failed"),
+        uiMsg(". Retry submission or keep the result on this page."),
+      ]),
+    );
+  } finally {
+    if (token === epoch) {
+      submitting = false;
+      $("#typing-start").disabled = !!pending;
+      $("#typing-language").disabled = !!pending;
+      $("#typing-mode").disabled = !!pending;
+    }
   }
 }
 function abort() {
@@ -334,13 +449,33 @@ function abort() {
   clearInterval(interval);
   composing = false;
   lock(false);
+  root.dataset.typingState = "finished";
+  $("#typing-setup").hidden = false;
+  uiText($("#typing-run-label"), uiMsg("Cancelled"));
   $("#typing-input").disabled = true;
   uiText(
     $("#typing-status"),
     uiMsg("Test aborted. No score was saved or submitted."),
   );
 }
-$("#typing-abort").addEventListener("click", abort);
+$("#typing-abort").addEventListener("click", () => {
+  if (uiConfirm(uiMsg("Abort this test? No score will be submitted."))) abort();
+});
+$("#typing-submit-retry").onclick = submitPending;
+$("#typing-submit-discard").onclick = () => {
+  if (submitting) return;
+  pending = null;
+  $("#typing-submit-retry").hidden = true;
+  $("#typing-submit-discard").hidden = true;
+  $("#typing-start").disabled = false;
+  $("#typing-language").disabled = false;
+  $("#typing-mode").disabled = false;
+  uiText($("#typing-run-label"), uiMsg("Local only"));
+  uiText(
+    $("#typing-status"),
+    uiMsg("Result kept on this page without verified ranking."),
+  );
+};
 const input = $("#typing-input");
 input.addEventListener("compositionstart", () => {
   composing = true;
@@ -387,9 +522,15 @@ $("#typing-language").addEventListener("change", () => {
   const lang = language();
   uiText($("#typing-unit"), lang === "zh" ? "CPM" : "WPM");
   passage(practiceTexts[lang]);
+  saveSetup();
+  $("#typing-preview-label").hidden = false;
   board();
 });
 $("#leaderboard-refresh").addEventListener("click", board);
+$("#leaderboard-expand").onclick = () => {
+  expanded = !expanded;
+  showBoardRows();
+};
 $("#typing-clear-practice").addEventListener("click", () => {
   try {
     localStorage.removeItem(practiceKey());
@@ -401,10 +542,45 @@ $("#typing-clear-practice").addEventListener("click", () => {
 document.addEventListener("visibilitychange", () => {
   if (run) meter();
 });
-window.addEventListener("pagehide", abort);
-passage(practiceTexts.en);
+window.addEventListener("pagehide", () => {
+  epoch++;
+  abort();
+  lock(false);
+  pending = null;
+  starting = false;
+  submitting = false;
+  $("#typing-submit-retry").hidden = true;
+  $("#typing-submit-discard").hidden = true;
+  $("#typing-start").disabled = false;
+  document.body.classList.remove("typing-is-focused");
+});
+try {
+  const setup = JSON.parse(sessionStorage.getItem("kensei:typing:setup"));
+  if (["en", "zh"].includes(setup?.language))
+    $("#typing-language").value = setup.language;
+  // Every page visit still defaults to Public; only the selected test language survives login.
+} catch {}
+passage(practiceTexts[language()]);
+uiText($("#typing-unit"), language() === "zh" ? "CPM" : "WPM");
 await ready;
 $("#typing-start").disabled = false;
 renderHistory();
 mode();
 board();
+let previousOwner = actor();
+window.addEventListener("workspace-ready", () => {
+  if (actor() === previousOwner) return;
+  previousOwner = actor();
+  epoch++;
+  starting = false;
+  submitting = false;
+  abort();
+  lock(false);
+  pending = null;
+  $("#typing-submit-retry").hidden = true;
+  $("#typing-submit-discard").hidden = true;
+  $("#typing-start").disabled = false;
+  renderHistory();
+  mode();
+  board();
+});

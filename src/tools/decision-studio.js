@@ -1,5 +1,6 @@
 import { $, api, esc, toast } from "./common.js";
 import { randomIndex, shuffle } from "./sprint-core.js";
+import { wheelTarget } from "./decision-motion.js";
 import * as store from "./personal-store.js";
 import { historyView, decisionRow } from "./history-view.js";
 import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiHtml } from "../site/ui.js";
@@ -13,6 +14,13 @@ let id = null,
   dirty = false,
   drawn = new Set(),
   generation = 0;
+let finishSpin = null;
+function cancelSpin() {
+  generation++;
+  wheel?.stop();
+  finishSpin?.(false);
+  busy = false;
+}
 const fields = [
   "#decision-name",
   "#decision-options",
@@ -112,9 +120,7 @@ function edit() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(save, 500);
   drawn.clear();
-  generation++;
-  wheel?.stop();
-  busy = false;
+  cancelSpin();
   $("#decision-run").disabled = false;
   mode();
   redraw();
@@ -137,9 +143,7 @@ function reopen(record) {
   $("#decision-group-count").value = d.groupCount;
   dirty = false;
   drawn.clear();
-  generation++;
-  wheel?.stop();
-  busy = false;
+  cancelSpin();
   $("#decision-run").disabled = false;
   uiText($("#decision-result"), uiMsg("Your next possibility starts here."));
   mode();
@@ -222,18 +226,43 @@ $("#decision-run").addEventListener("click", async () => {
   busy = true;
   $("#decision-run").disabled = true;
   uiText(result, uiMsg("Turning possibilities…"));
-  if (wheel && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (wheel) {
+    const currentWheel = wheel;
+    const target = wheelTarget(d.options.length, winner.index, wheel.rotation);
     try {
-      await new Promise((resolve) => {
-        let timer;
-        wheel.onRest = () => {
-          clearTimeout(timer);
-          resolve();
-        };
-        wheel.spinToItem(winner.index, 2600, true, 2, 1);
-        timer = setTimeout(resolve, 3000);
-      });
-    } catch {}
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        currentWheel.stop();
+        currentWheel.rotation = target.rotation;
+      } else {
+        await new Promise((resolve) => {
+          let timer,
+            settled = false;
+          const complete = (settle = true) => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timer);
+            currentWheel.onRest = null;
+            if (finishSpin === complete) finishSpin = null;
+            if (settle && token === generation) {
+              currentWheel.stop();
+              currentWheel.rotation = target.rotation;
+            }
+            resolve();
+          };
+          finishSpin = complete;
+          currentWheel.onRest = () => complete();
+          currentWheel.spinTo(
+            target.rotation,
+            target.duration,
+            (t) => 1 - (1 - t) ** 4,
+          );
+          timer = setTimeout(() => complete(), target.duration + 400);
+        });
+      }
+    } catch {
+      finishSpin?.();
+      if (token === generation) currentWheel.rotation = target.rotation;
+    }
   }
   if (token !== generation) return;
   uiText(result, winner.label);
@@ -246,7 +275,10 @@ window.addEventListener("personal-conflict", (e) => {
     history.replaceState(null, "", "?scheme=" + id);
   }
 });
-window.addEventListener("pagehide", save);
+window.addEventListener("pagehide", () => {
+  save();
+  cancelSpin();
+});
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) save();
 });

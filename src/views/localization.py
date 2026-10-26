@@ -242,6 +242,8 @@ def styles(route):
             files.append("planner.css")
         if slug == "whiteboard":
             files.append("whiteboard.css")
+        if slug == "typing-sprint":
+            files.append("typing-sprint.css")
         if slug in ["audio-studio", "screen-recorder", "qr-studio"]:
             files.append("media.css")
     if route == "workspace":

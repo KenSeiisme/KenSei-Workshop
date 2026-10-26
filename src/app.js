@@ -935,7 +935,7 @@
         .filter((x) => tools[x.data.slug])
         .map((x) => {
           const t = tools[x.data.slug];
-          return uiHtml`<article class="tool-card"><div class="tool-card-top"><span class="small-tag">${uiFrom(t.category)}</span><button class="text-link" data-delete="${escape(x.id)}">Remove</button></div><a href="/tools/${x.data.slug}/"><h3>${uiFrom(t.name)} ↗</h3></a><p>${uiFrom(t.description)}</p></article>`;
+          return uiHtml`<article class="tool-card"><div class="tool-card-top"><span class="small-tag">${uiFrom(t.category)}</span><button class="text-link" data-delete="${escape(x.id)}">Remove</button></div><a class="card-primary-link" href="/tools/${x.data.slug}/"><h3>${uiFrom(t.name)} ↗</h3></a><p>${uiFrom(t.description)}</p></article>`;
         })
         .join("") ||
       uiHtml(

@@ -97,5 +97,10 @@
     ["tests/browser/localization.cjs"],
     ["tests/browser/localization-games.cjs"],
     ["tests/browser/localization-profile.cjs"]
+  ],
+  "typing-experience": [
+    ["tests/unit/typing-experience.mjs"],
+    ["tests/database/random-typing.mjs"],
+    ["tests/browser/typing-experience.cjs"]
   ]
 }

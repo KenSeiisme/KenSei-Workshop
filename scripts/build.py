@@ -64,6 +64,9 @@ if not arguments.pages_only:
     for path in (SOURCE / "styles").glob("*.css"):
         shutil.copy2(path, OUT / path.name)
     shutil.copytree(SOURCE / "assets", OUT / "assets", dirs_exist_ok=True)
+    shutil.copy2(
+        ROOT / "data/typing-sentences.json", OUT / "assets/typing-sentences.json"
+    )
 
     # 源码归类不改变公开资源网址，现有链接和浏览器存档继续可用。
     for source, public in (

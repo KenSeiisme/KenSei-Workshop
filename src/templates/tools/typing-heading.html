@@ -1,0 +1,73 @@
+<header class="typing-toolbar">
+  <a href="/tools/" class="back-link">← Tools</a>
+  <h1>${name}</h1>
+  <div class="typing-toolbar-actions">
+    <button
+      class="button secondary"
+      id="typing-focus"
+      hidden
+      aria-pressed="false"
+    >
+      Focus
+    </button>
+    <button
+      class="button secondary"
+      id="typing-settings-open"
+      aria-haspopup="dialog"
+    >
+      Settings
+    </button>
+    <button class="button secondary" data-open-help aria-haspopup="dialog">
+      Help
+    </button>
+    <button
+      class="favorite icon-button"
+      data-favorite="${slug}"
+      aria-label="Favorite ${name}"
+      aria-pressed="false"
+    >
+      ${star}
+    </button>
+  </div>
+</header>
+<dialog class="tool-help-dialog" id="tool-help">
+  <button class="button secondary" data-close-help aria-label="Close help">
+    Close ×
+  </button>
+  <h2>${name}</h2>
+  <p>${description}</p>
+  <h3>Limits &amp; requirements</h3>
+  <p>${limits}</p>
+  <h3>How it works</h3>
+  <p>${usage}</p>
+  <h3>Saving &amp; privacy</h3>
+  <p>${privacy}</p>
+  <p>
+    The clock keeps running in the background and while menus are open. There is
+    no pause.
+  </p>
+</dialog>
+<dialog class="tool-help-dialog" id="typing-settings">
+  <button class="button secondary" id="typing-settings-close">Close ×</button>
+  <h2>Settings</h2>
+  <label
+    >Interface language<select
+      data-language-select
+      aria-label="Interface language"
+    >
+      <option value="en">English</option>
+      <option value="zh-Hant">繁體中文</option>
+    </select></label
+  >
+  <p>Interface language does not change your test passage or timer.</p>
+</dialog>
+<div
+  class="tool-feedback"
+  data-state="ready"
+  role="status"
+  aria-live="polite"
+  hidden
+>
+  <span class="tool-state-label">Ready</span>
+  <p class="tool-state-message">${privacy}</p>
+</div>

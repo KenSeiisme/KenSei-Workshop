@@ -1,0 +1,969 @@
+{
+  "revision": 1,
+  "languages": {
+    "en": [
+      {
+        "id": "en-001",
+        "text": "Morning light reaches the kitchen table while a warm cup of tea waits beside an open notebook."
+      },
+      {
+        "id": "en-002",
+        "text": "A quiet walk before breakfast gives us time to notice the trees and think about the day ahead."
+      },
+      {
+        "id": "en-003",
+        "text": "We put our keys in the same small bowl so leaving the house feels simple and calm each morning."
+      },
+      {
+        "id": "en-004",
+        "text": "The first task on the list is small enough to finish before the rest of the house wakes up."
+      },
+      {
+        "id": "en-005",
+        "text": "Fresh towels hang near the window where the soft morning breeze can reach every corner."
+      },
+      {
+        "id": "en-006",
+        "text": "A clean desk and a little space by the lamp make it easier to begin a thoughtful piece of work."
+      },
+      {
+        "id": "en-007",
+        "text": "Our neighbor opens the garden gate and waves as the street slowly fills with familiar sounds."
+      },
+      {
+        "id": "en-008",
+        "text": "The smell of toast drifts through the room while someone sets a plate beside the fruit bowl."
+      },
+      {
+        "id": "en-009",
+        "text": "We check the weather before choosing a jacket and leave an umbrella near the front door."
+      },
+      {
+        "id": "en-010",
+        "text": "A favorite song plays softly as we water the plants and clear the dishes from the table."
+      },
+      {
+        "id": "en-011",
+        "text": "The bus stop is close enough for a short walk that helps us settle into the rhythm of the day."
+      },
+      {
+        "id": "en-012",
+        "text": "Before we leave home, we pause to make sure the windows are closed and the plants have water."
+      },
+      {
+        "id": "en-013",
+        "text": "A simple plan helps the team agree on the next step without turning every question into a meeting."
+      },
+      {
+        "id": "en-014",
+        "text": "We leave clear notes beside the draft so the next person can understand what still needs attention."
+      },
+      {
+        "id": "en-015",
+        "text": "The best part of a shared project is watching a small idea become useful through patient work."
+      },
+      {
+        "id": "en-016",
+        "text": "A short break by the window gives tired eyes a rest and often brings a fresh thought to mind."
+      },
+      {
+        "id": "en-017",
+        "text": "We read the whole message before writing a reply that answers the question in a friendly way."
+      },
+      {
+        "id": "en-018",
+        "text": "An empty corner of the notebook becomes a good place to sketch the shape of a possible solution."
+      },
+      {
+        "id": "en-019",
+        "text": "The team keeps a short list of open questions so useful details do not disappear between tasks."
+      },
+      {
+        "id": "en-020",
+        "text": "We save a clean copy of the file before trying a change that might lead in a new direction."
+      },
+      {
+        "id": "en-021",
+        "text": "A clear name on each folder helps everyone find the right document without asking around."
+      },
+      {
+        "id": "en-022",
+        "text": "The afternoon feels easier when we finish a difficult task before opening a new set of messages."
+      },
+      {
+        "id": "en-023",
+        "text": "We compare the finished work with the original request and check that the important details match."
+      },
+      {
+        "id": "en-024",
+        "text": "A thoughtful question can reveal a small problem while there is still plenty of time to fix it."
+      },
+      {
+        "id": "en-025",
+        "text": "The library has a quiet table near the shelves where we can read without rushing through a chapter."
+      },
+      {
+        "id": "en-026",
+        "text": "We close the book for a moment and explain the main idea in our own words to see what we understand."
+      },
+      {
+        "id": "en-027",
+        "text": "A new subject feels less distant when we connect it with something familiar from everyday life."
+      },
+      {
+        "id": "en-028",
+        "text": "The teacher gives a simple example that turns a difficult idea into a clear picture in our minds."
+      },
+      {
+        "id": "en-029",
+        "text": "We write a short question beside each section and return to it after reading the chapter again."
+      },
+      {
+        "id": "en-030",
+        "text": "A study group works well when everyone has time to speak and explain a different point of view."
+      },
+      {
+        "id": "en-031",
+        "text": "The notes look clearer after we remove repeated words and keep a useful example beside each idea."
+      },
+      {
+        "id": "en-032",
+        "text": "We choose a steady place to study and leave the phone in a bag until the short session is over."
+      },
+      {
+        "id": "en-033",
+        "text": "Learning a little each day gives us a stronger foundation than trying to remember everything at once."
+      },
+      {
+        "id": "en-034",
+        "text": "A careful look at an old mistake can teach us more than quickly moving on to the next exercise."
+      },
+      {
+        "id": "en-035",
+        "text": "We gather the papers for tomorrow before putting the books away and taking a proper evening break."
+      },
+      {
+        "id": "en-036",
+        "text": "The last page of the notebook holds a list of ideas that we would like to explore when there is time."
+      },
+      {
+        "id": "en-037",
+        "text": "The path beside the river stays cool under the trees even when the afternoon sun grows bright."
+      },
+      {
+        "id": "en-038",
+        "text": "A small bird lands on the fence and waits quietly while the leaves move in the breeze behind it."
+      },
+      {
+        "id": "en-039",
+        "text": "We follow the walking trail until the sound of traffic gives way to the softer sound of running water."
+      },
+      {
+        "id": "en-040",
+        "text": "Clouds gather over the hills and leave wide patches of shade across the fields below the road."
+      },
+      {
+        "id": "en-041",
+        "text": "After the rain, the garden smells fresh and tiny drops of water rest along the edges of the leaves."
+      },
+      {
+        "id": "en-042",
+        "text": "A narrow bridge crosses the stream where smooth stones can still be seen beneath the clear water."
+      },
+      {
+        "id": "en-043",
+        "text": "The beach is quiet in the early morning, with only a few walkers leaving soft marks in the sand."
+      },
+      {
+        "id": "en-044",
+        "text": "We sit under a wide tree and watch the light change as the wind moves the branches above us."
+      },
+      {
+        "id": "en-045",
+        "text": "The flowers near the gate open slowly as the morning becomes warm and the garden fills with color."
+      },
+      {
+        "id": "en-046",
+        "text": "A cool breeze reaches the hilltop and carries the distant sound of a bell from the town below."
+      },
+      {
+        "id": "en-047",
+        "text": "The trail turns gently through the woods before opening onto a field full of light and tall grass."
+      },
+      {
+        "id": "en-048",
+        "text": "Even a small patch of green beside a busy road can offer a peaceful place to rest for a moment."
+      },
+      {
+        "id": "en-049",
+        "text": "The market opens early, and the first shoppers stop to choose fresh vegetables for the evening meal."
+      },
+      {
+        "id": "en-050",
+        "text": "We taste the soup before adding more salt and give the gentle flavors enough time to come together."
+      },
+      {
+        "id": "en-051",
+        "text": "A basket of bread sits in the middle of the table so everyone can reach a piece during lunch."
+      },
+      {
+        "id": "en-052",
+        "text": "Cooking becomes easier when the ingredients are ready and the counter has enough clear space."
+      },
+      {
+        "id": "en-053",
+        "text": "The recipe leaves room for small changes, so we use the vegetables that are already in the kitchen."
+      },
+      {
+        "id": "en-054",
+        "text": "We wash the fruit and place it in a bright bowl where it is easy to choose a healthy afternoon snack."
+      },
+      {
+        "id": "en-055",
+        "text": "A warm meal shared at the end of the day gives everyone a chance to talk about what happened."
+      },
+      {
+        "id": "en-056",
+        "text": "The smell of fresh bread brings people toward the kitchen long before the tray is ready to serve."
+      },
+      {
+        "id": "en-057",
+        "text": "We keep the meal simple so there is more time to enjoy the company and less time spent washing dishes."
+      },
+      {
+        "id": "en-058",
+        "text": "A little lemon gives the cool drink a fresh taste that feels welcome after a walk in warm weather."
+      },
+      {
+        "id": "en-059",
+        "text": "The family takes turns choosing dinner so each week includes a few old favorites and something new."
+      },
+      {
+        "id": "en-060",
+        "text": "We fold the cloth after lunch and leave the table ready for a quiet cup of tea later in the day."
+      },
+      {
+        "id": "en-061",
+        "text": "The train arrives while the sky is still pale, and a few passengers carry breakfast in paper bags."
+      },
+      {
+        "id": "en-062",
+        "text": "We choose a seat by the window and watch the houses slowly give way to open fields beyond the town."
+      },
+      {
+        "id": "en-063",
+        "text": "A clear map near the station entrance helps visitors choose the right path before leaving the platform."
+      },
+      {
+        "id": "en-064",
+        "text": "The driver waits until every passenger is seated before closing the door and returning to the road."
+      },
+      {
+        "id": "en-065",
+        "text": "We leave a little extra time for the journey so a busy crossing does not turn the whole morning into a rush."
+      },
+      {
+        "id": "en-066",
+        "text": "A small cafe beside the station gives early travelers a warm place to wait before the next train."
+      },
+      {
+        "id": "en-067",
+        "text": "The street signs become familiar after a few walks, and the neighborhood starts to feel like home."
+      },
+      {
+        "id": "en-068",
+        "text": "We step aside to let people leave the train before moving through the open doors with our bags."
+      },
+      {
+        "id": "en-069",
+        "text": "A friendly shop owner points toward the park and suggests a quieter route through the old streets."
+      },
+      {
+        "id": "en-070",
+        "text": "The bus turns past the school as children gather near the gate and parents wave from the sidewalk."
+      },
+      {
+        "id": "en-071",
+        "text": "We keep the return ticket in an easy place to find and enjoy the rest of the journey without worry."
+      },
+      {
+        "id": "en-072",
+        "text": "A short trip to a nearby town can feel like an adventure when we take time to notice something new."
+      },
+      {
+        "id": "en-073",
+        "text": "The little shop has a shelf of handmade cups that look different from every side of the room."
+      },
+      {
+        "id": "en-074",
+        "text": "We choose a soft color for the background so the small details can stand out without feeling busy."
+      },
+      {
+        "id": "en-075",
+        "text": "A rough sketch helps us explore an idea before we spend too much time polishing the final version."
+      },
+      {
+        "id": "en-076",
+        "text": "The first attempt does not have to be perfect, because each careful change teaches us what works."
+      },
+      {
+        "id": "en-077",
+        "text": "We arrange the pieces on the floor and move them around until the whole pattern feels balanced."
+      },
+      {
+        "id": "en-078",
+        "text": "An old box becomes a useful place to keep brushes, spare paper, and a collection of bright pencils."
+      },
+      {
+        "id": "en-079",
+        "text": "The camera stays in the bag for a moment while we look at how the light falls across the scene."
+      },
+      {
+        "id": "en-080",
+        "text": "We try a simpler shape when the original design begins to hide the idea that matters most."
+      },
+      {
+        "id": "en-081",
+        "text": "A familiar tune sounds different when a friend plays it slowly on a quiet evening at home."
+      },
+      {
+        "id": "en-082",
+        "text": "The wall beside the desk holds small sketches that remind us of projects we would like to finish."
+      },
+      {
+        "id": "en-083",
+        "text": "We set the work aside for a night and return with fresh eyes before making the final choice."
+      },
+      {
+        "id": "en-084",
+        "text": "A handmade gift carries the quiet care of the person who chose the colors and put each part together."
+      },
+      {
+        "id": "en-085",
+        "text": "The phone stays on the shelf during dinner so we can listen carefully to the stories around the table."
+      },
+      {
+        "id": "en-086",
+        "text": "We check a message before sending it and make sure the tone matches what we really want to say."
+      },
+      {
+        "id": "en-087",
+        "text": "A clear screen and a comfortable chair make a long writing session easier on both the eyes and the back."
+      },
+      {
+        "id": "en-088",
+        "text": "The simple tool does one useful job well and leaves the rest of the page calm and easy to understand."
+      },
+      {
+        "id": "en-089",
+        "text": "We keep a spare copy of important notes so a broken device does not take away the work we care about."
+      },
+      {
+        "id": "en-090",
+        "text": "A helpful reminder appears at the right time and gives us a gentle chance to return to a planned task."
+      },
+      {
+        "id": "en-091",
+        "text": "The new button is easier to find after we give it a clear label and enough space around its edges."
+      },
+      {
+        "id": "en-092",
+        "text": "We turn down the screen light as the evening grows darker and choose a quieter task before bed."
+      },
+      {
+        "id": "en-093",
+        "text": "A short guide with clear steps can help a new visitor feel confident before trying an unfamiliar tool."
+      },
+      {
+        "id": "en-094",
+        "text": "The file opens in the same place where we left it, making it simple to continue without searching."
+      },
+      {
+        "id": "en-095",
+        "text": "We close the extra tabs once the research is finished and leave only the page needed for the next step."
+      },
+      {
+        "id": "en-096",
+        "text": "A careful review of the settings helps us choose what to share and what should stay on this device."
+      },
+      {
+        "id": "en-097",
+        "text": "A friend arrives with fresh fruit and stays long enough to help us prepare a simple meal together."
+      },
+      {
+        "id": "en-098",
+        "text": "We listen to the whole story before offering advice, because sometimes being heard is enough."
+      },
+      {
+        "id": "en-099",
+        "text": "The group chooses a quiet table where everyone can join the conversation without raising their voice."
+      },
+      {
+        "id": "en-100",
+        "text": "A kind message sent after a difficult day can help someone feel remembered and a little less alone."
+      },
+      {
+        "id": "en-101",
+        "text": "We share the work fairly and leave time for a final check that includes every member of the group."
+      },
+      {
+        "id": "en-102",
+        "text": "The game ends with laughter as we put the pieces back in the box and make room for another round."
+      },
+      {
+        "id": "en-103",
+        "text": "A familiar face at the corner shop makes an ordinary walk through the neighborhood feel welcoming."
+      },
+      {
+        "id": "en-104",
+        "text": "We ask what would be helpful instead of guessing, and the answer often turns out to be quite simple."
+      },
+      {
+        "id": "en-105",
+        "text": "The best conversations leave enough space for a pause and a chance to think before the next reply."
+      },
+      {
+        "id": "en-106",
+        "text": "A small act of care can turn a shared room into a place where people feel comfortable and respected."
+      },
+      {
+        "id": "en-107",
+        "text": "We make a plan that leaves room for different needs so everyone can enjoy the afternoon together."
+      },
+      {
+        "id": "en-108",
+        "text": "The evening passes gently while old friends talk about recent changes and remember a few happy moments."
+      },
+      {
+        "id": "en-109",
+        "text": "The house grows quiet after dinner, and we take a few minutes to put the kitchen back in order."
+      },
+      {
+        "id": "en-110",
+        "text": "We leave a glass of water beside the bed and place the clothes for tomorrow on the chair near the door."
+      },
+      {
+        "id": "en-111",
+        "text": "The evening walk is short, but the cooler air helps us leave the busy parts of the day behind."
+      },
+      {
+        "id": "en-112",
+        "text": "A soft lamp gives enough light for reading while the rest of the room begins to settle into darkness."
+      },
+      {
+        "id": "en-113",
+        "text": "We look back at what went well and choose a small thing that could make tomorrow feel easier."
+      },
+      {
+        "id": "en-114",
+        "text": "The final task can wait until morning when a clear mind will make it easier to finish with care."
+      },
+      {
+        "id": "en-115",
+        "text": "A quiet hour without a screen gives us time to read, stretch, or simply listen to the rain outside."
+      },
+      {
+        "id": "en-116",
+        "text": "We close the curtains after the last light fades and let the room become a restful place again."
+      },
+      {
+        "id": "en-117",
+        "text": "The book stays open beside the chair as we pause to enjoy the steady sound of the evening rain."
+      },
+      {
+        "id": "en-118",
+        "text": "A simple routine at the end of the day helps us rest without carrying every unfinished thought to bed."
+      },
+      {
+        "id": "en-119",
+        "text": "We thank each other for the small things that made the day easier and leave the next plan for tomorrow."
+      },
+      {
+        "id": "en-120",
+        "text": "The street becomes still as the lights in nearby windows go out and a cool breeze moves through the trees."
+      }
+    ],
+    "zh": [
+      {
+        "id": "zh-001",
+        "text": "清晨的阳光从窗帘旁照进房间，我们打开窗户，让新鲜的空气陪着今天的计划慢慢开始。"
+      },
+      {
+        "id": "zh-002",
+        "text": "早餐的热气在桌边轻轻升起，一家人坐下来分享食物，也聊起各自今天需要完成的小事。"
+      },
+      {
+        "id": "zh-003",
+        "text": "出门之前把钥匙放进常用的口袋，再检查一次门窗，就能带着轻松的心情走向熟悉的街道。"
+      },
+      {
+        "id": "zh-004",
+        "text": "桌上的笔记本还留着昨天的想法，我们先选一件容易完成的小事，为新的一天找到节奏。"
+      },
+      {
+        "id": "zh-005",
+        "text": "窗边的植物长出柔软的新叶，每天花一点时间照顾它们，也让忙碌的生活多了一份安静。"
+      },
+      {
+        "id": "zh-006",
+        "text": "房间收拾整齐以后，书本和杯子都回到原来的位置，寻找东西也不再需要花费太多时间。"
+      },
+      {
+        "id": "zh-007",
+        "text": "楼下传来早餐店开门的声音，附近的居民陆续走来，让原本安静的街口渐渐有了热闹的气息。"
+      },
+      {
+        "id": "zh-008",
+        "text": "雨伞放在门口容易拿到的地方，就算天气突然改变，我们也能从容安排接下来的行程。"
+      },
+      {
+        "id": "zh-009",
+        "text": "一杯温水和片刻安静让身体慢慢醒来，不必急着处理消息，也能好好开始今天的生活。"
+      },
+      {
+        "id": "zh-010",
+        "text": "整理衣柜时留下常穿又舒服的衣服，让每天早上的选择简单一点，也给房间多留一些空间。"
+      },
+      {
+        "id": "zh-011",
+        "text": "上班路上的树荫随着风轻轻摇动，我们放慢脚步，听见远处传来清楚而熟悉的鸟叫声。"
+      },
+      {
+        "id": "zh-012",
+        "text": "把午餐和需要的资料一起放进包里，再向家人道声再见，普通的早晨也可以过得很踏实。"
+      },
+      {
+        "id": "zh-013",
+        "text": "开始工作前先确认任务的重点，把需要讨论的问题写下来，团队就能用更清楚的方式合作。"
+      },
+      {
+        "id": "zh-014",
+        "text": "同事在草稿旁留下简短的说明，让接手的人不用反复询问，也能理解这份工作的下一步。"
+      },
+      {
+        "id": "zh-015",
+        "text": "遇到难题时暂时离开座位走一走，有时换一个角度看待问题，就能发现原本没有注意的线索。"
+      },
+      {
+        "id": "zh-016",
+        "text": "我们把复杂的计划拆成几件小事，依照轻重缓急慢慢完成，让进度在每天的努力中向前移动。"
+      },
+      {
+        "id": "zh-017",
+        "text": "发送消息之前认真读一遍内容，确认意思表达清楚，也给收到的人留下友善而直接的印象。"
+      },
+      {
+        "id": "zh-018",
+        "text": "会议结束后及时整理共同决定的事情，再把负责的人和期限写清楚，后续合作会更加顺畅。"
+      },
+      {
+        "id": "zh-019",
+        "text": "把文件放进名称明确的文件夹，不只方便自己寻找，也能帮助团队减少重复确认的时间。"
+      },
+      {
+        "id": "zh-020",
+        "text": "工作进行到一半时检查最初的目标，可以及时调整方向，避免花很多力气却偏离真正的需求。"
+      },
+      {
+        "id": "zh-021",
+        "text": "桌面留下一块足够写字的空间，常用的用品摆在伸手可及的地方，处理事情就会顺手许多。"
+      },
+      {
+        "id": "zh-022",
+        "text": "认真听完别人的意见再提出想法，能够减少不必要的误会，也让讨论有机会找到新的方向。"
+      },
+      {
+        "id": "zh-023",
+        "text": "完成一份报告以后先休息片刻，再用读者的角度检查内容，往往能发现需要补充的小细节。"
+      },
+      {
+        "id": "zh-024",
+        "text": "忙碌的时候也记得喝水和伸展身体，短暂的休息不是浪费时间，而是为了更稳定地继续工作。"
+      },
+      {
+        "id": "zh-025",
+        "text": "图书馆靠窗的位置有柔和的光线，我们把书本摊开，给自己留一段不被打扰的学习时间。"
+      },
+      {
+        "id": "zh-026",
+        "text": "读完一个章节以后先合上书，用自己的话说出重点，就能知道哪些内容还需要再次理解。"
+      },
+      {
+        "id": "zh-027",
+        "text": "新知识如果能连到生活里的例子，原本抽象的概念就会变得具体，也更容易在以后想起来。"
+      },
+      {
+        "id": "zh-028",
+        "text": "老师用简单的故事说明复杂的问题，让同学从熟悉的情境出发，一步一步找到其中的道理。"
+      },
+      {
+        "id": "zh-029",
+        "text": "学习笔记不必写得很多，把关键想法和一个清楚的例子放在一起，就能帮助之后的复习。"
+      },
+      {
+        "id": "zh-030",
+        "text": "讨论作业时让每个人都有表达的机会，不同的想法放在一起，常常比独自思考得到更多线索。"
+      },
+      {
+        "id": "zh-031",
+        "text": "遇到不会的问题先标记下来，等到整理完整个章节以后，再回头寻找它与其他内容之间的关系。"
+      },
+      {
+        "id": "zh-032",
+        "text": "每天固定读一点书比临时赶进度轻松，稳定的积累会让陌生的知识慢慢变成可以使用的能力。"
+      },
+      {
+        "id": "zh-033",
+        "text": "把过去做错的题目重新想一遍，理解当时遗漏的条件，下一次面对类似问题就会更有把握。"
+      },
+      {
+        "id": "zh-034",
+        "text": "学习累了就看看窗外的远处，让眼睛得到休息，再带着比较清醒的思路回到眼前的内容。"
+      },
+      {
+        "id": "zh-035",
+        "text": "准备明天的课程时先整理需要的资料，也简单看一遍标题，让上课时能够更容易抓住重点。"
+      },
+      {
+        "id": "zh-036",
+        "text": "一本笔记最后留下空白的几页，用来记录想继续探索的问题，也为之后的学习保留一点期待。"
+      },
+      {
+        "id": "zh-037",
+        "text": "河边的小路被高大的树木遮住阳光，即使到了下午，走在这里仍然能感受到舒服的凉意。"
+      },
+      {
+        "id": "zh-038",
+        "text": "一只小鸟落在花园的围栏上，安静地看着四周，身后的叶子随着微风轻轻摆动。"
+      },
+      {
+        "id": "zh-039",
+        "text": "沿着步道往前走，街上的车声逐渐变远，取而代之的是流水穿过石头时清楚而平稳的声音。"
+      },
+      {
+        "id": "zh-040",
+        "text": "山边的云慢慢聚在一起，把大片柔和的影子留在田野，也让午后的景色多了一些变化。"
+      },
+      {
+        "id": "zh-041",
+        "text": "雨后的泥土带着清新的味道，叶片边缘还挂着细小水珠，在阳光下映出一点明亮的光。"
+      },
+      {
+        "id": "zh-042",
+        "text": "木桥下的溪水十分清澈，可以看见水底圆滑的石头，也能听见水流经过桥边的轻声回响。"
+      },
+      {
+        "id": "zh-043",
+        "text": "清晨的海边只有零散的行人，大家沿着潮水留下的痕迹慢慢走，把新的脚印留在柔软沙地。"
+      },
+      {
+        "id": "zh-044",
+        "text": "我们坐在树下休息，看着枝叶之间的光影不断变化，忽然觉得安静的片刻也能让人满足。"
+      },
+      {
+        "id": "zh-045",
+        "text": "门口的花朵随着天气变暖渐渐开放，为原本普通的墙角带来鲜明颜色，也吸引了经过的目光。"
+      },
+      {
+        "id": "zh-046",
+        "text": "走到山坡上以后停下来吹一会儿风，远处的小镇安静地铺展开来，熟悉的烦恼也暂时变远。"
+      },
+      {
+        "id": "zh-047",
+        "text": "树林里的道路缓缓转弯，穿过一段阴凉之后，眼前忽然出现被阳光照亮的草地和开阔天空。"
+      },
+      {
+        "id": "zh-048",
+        "text": "城市里小小的公园也能成为休息的地方，只要放慢脚步，就能发现日常之间藏着自然的气息。"
+      },
+      {
+        "id": "zh-049",
+        "text": "市场刚开门的时候特别清爽，摊主把蔬菜整齐摆好，等待早起的人们来挑选今晚餐桌上的食材。"
+      },
+      {
+        "id": "zh-050",
+        "text": "汤煮好以后先尝一口，再决定是否需要调味，让每一种食材原来的味道都有机会被认真品尝。"
+      },
+      {
+        "id": "zh-051",
+        "text": "新鲜的面包放在桌子中央，大家边吃边聊，简单的午餐也因为有人陪伴而变得温暖起来。"
+      },
+      {
+        "id": "zh-052",
+        "text": "做饭之前先把食材洗净切好，清出足够使用的台面，接下来的步骤就不会显得手忙脚乱。"
+      },
+      {
+        "id": "zh-053",
+        "text": "食谱可以提供方向，也可以依照家里现有的材料调整，让每一顿饭都带着一点自己的想法。"
+      },
+      {
+        "id": "zh-054",
+        "text": "洗好的水果放进明亮的碗里，摆在容易看见的位置，下午休息时就能随手选择清爽的小点心。"
+      },
+      {
+        "id": "zh-055",
+        "text": "忙完一天以后坐下来吃顿热饭，听听家人今天发生的事情，让平常的晚上多了一份踏实。"
+      },
+      {
+        "id": "zh-056",
+        "text": "烤箱里传出面包的香味，大家还没有看见托盘，就已经顺着气味走到厨房旁边等待。"
+      },
+      {
+        "id": "zh-057",
+        "text": "聚餐不一定需要准备复杂的菜肴，把食物安排得简单一些，就能把更多时间留给聊天和陪伴。"
+      },
+      {
+        "id": "zh-058",
+        "text": "温水里放上一片新鲜柠檬，淡淡的清香随着热气散开，走了一段路以后喝起来格外舒服。"
+      },
+      {
+        "id": "zh-059",
+        "text": "家人轮流决定晚餐的内容，让每个人熟悉的味道都有机会出现在餐桌，也偶尔尝试新的搭配。"
+      },
+      {
+        "id": "zh-060",
+        "text": "午饭以后把桌布叠好放回柜子，让干净的桌面静静等待傍晚的茶杯和接下来轻松的谈话。"
+      },
+      {
+        "id": "zh-061",
+        "text": "清晨的列车进站时天空还很明亮，乘客带着简单的早餐，安静地寻找能够坐下休息的位置。"
+      },
+      {
+        "id": "zh-062",
+        "text": "坐在靠窗的座位上看风景，密集的房屋逐渐变成开阔田野，旅途也在缓慢变化的画面中展开。"
+      },
+      {
+        "id": "zh-063",
+        "text": "车站入口的地图标得清楚，第一次来到这里的人，也能先看明白方向再从容走向要去的地方。"
+      },
+      {
+        "id": "zh-064",
+        "text": "司机等乘客坐稳以后才关上车门，车辆平稳地回到道路，让短短的一段行程也多了一份安心。"
+      },
+      {
+        "id": "zh-065",
+        "text": "出发时多留一点时间，就算遇到人多的路口也不用着急，可以按照自己的步调继续往前走。"
+      },
+      {
+        "id": "zh-066",
+        "text": "车站旁的小店早早亮起灯，为等车的人提供热茶，也让清冷的早晨有了一个温暖的落脚处。"
+      },
+      {
+        "id": "zh-067",
+        "text": "在同一片街区多走几次，道路和店面就会慢慢变得熟悉，原本陌生的地方也开始有了家的感觉。"
+      },
+      {
+        "id": "zh-068",
+        "text": "等车上的人先走下来，再跟着队伍从容上车，一个简单的习惯就能让大家的通行更加顺畅。"
+      },
+      {
+        "id": "zh-069",
+        "text": "问路时遇到热心的店主，他指向前面的公园，也提醒我们可以沿着安静的小巷绕开拥挤的人群。"
+      },
+      {
+        "id": "zh-070",
+        "text": "公交车经过学校门口，孩子们背着书包走向校园，路边的家长轻轻挥手，开始各自一天的安排。"
+      },
+      {
+        "id": "zh-071",
+        "text": "把回程需要的车票放在容易找到的地方，就可以暂时放下担心，安心欣赏一路经过的风景。"
+      },
+      {
+        "id": "zh-072",
+        "text": "不必走到很远的地方，周末去附近的小镇看看，只要愿意留心，也能发现平常生活以外的新鲜。"
+      },
+      {
+        "id": "zh-073",
+        "text": "小店的木架上摆着手工做的杯子，每一只的颜色都略有不同，让人想捧起来慢慢观察细节。"
+      },
+      {
+        "id": "zh-074",
+        "text": "画面背景选择柔和一点的颜色，就能让重要的内容自然被看见，不必用太多装饰吸引注意。"
+      },
+      {
+        "id": "zh-075",
+        "text": "正式制作之前先画一张简单的草图，把大致想法放在纸上，后面的修改就会更有方向。"
+      },
+      {
+        "id": "zh-076",
+        "text": "第一次尝试不必追求完美，保留愿意调整的心情，每一次认真修改都会帮助作品变得更清楚。"
+      },
+      {
+        "id": "zh-077",
+        "text": "把不同的图案摆在地上反复比较，移动几次以后，原本零散的部分慢慢找到舒服而平衡的位置。"
+      },
+      {
+        "id": "zh-078",
+        "text": "旧盒子整理一下就能装画笔和纸张，把常用的材料收在一起，下次想动手时就不需要到处寻找。"
+      },
+      {
+        "id": "zh-079",
+        "text": "拿起相机之前先看看周围的光线，感受明暗落在景物上的方式，再决定怎样留下眼前的画面。"
+      },
+      {
+        "id": "zh-080",
+        "text": "如果复杂的形状遮住了最初的想法，可以试着删去一些细节，让真正重要的部分重新变得明显。"
+      },
+      {
+        "id": "zh-081",
+        "text": "朋友在安静的晚上轻轻弹奏熟悉的旋律，同一首曲子因为速度不同，也带来与平常不一样的感觉。"
+      },
+      {
+        "id": "zh-082",
+        "text": "书桌旁贴着几张还没有完成的小草图，提醒我们曾经喜欢的想法，也等待以后有空慢慢继续。"
+      },
+      {
+        "id": "zh-083",
+        "text": "作品完成以后先放到一旁，隔天再用新的目光看一遍，往往更容易决定最后应该保留什么。"
+      },
+      {
+        "id": "zh-084",
+        "text": "亲手准备的礼物不一定贵重，从颜色到包装都藏着用心，让收到的人感受到被认真记住的温暖。"
+      },
+      {
+        "id": "zh-085",
+        "text": "吃饭时把手机放到旁边的架子上，就能专心听清桌边的谈话，也更容易注意到身边人的心情。"
+      },
+      {
+        "id": "zh-086",
+        "text": "按下发送以前检查一遍消息，确认语气和意思都合适，可以减少误解，也让沟通更加舒服。"
+      },
+      {
+        "id": "zh-087",
+        "text": "屏幕保持清楚，椅子调整到舒服的位置，长时间写字的时候，眼睛和肩膀就不容易感到疲倦。"
+      },
+      {
+        "id": "zh-088",
+        "text": "一个好用的小工具只要把主要事情做好，再把页面安排得清楚，第一次使用的人也能很快理解。"
+      },
+      {
+        "id": "zh-089",
+        "text": "重要的笔记多保留一份副本，就算设备临时出了问题，也不必担心辛苦整理的内容突然不见。"
+      },
+      {
+        "id": "zh-090",
+        "text": "合适的提醒出现在需要的时候，不催促也不打断太久，只是轻轻帮助我们回到原本安排的事情。"
+      },
+      {
+        "id": "zh-091",
+        "text": "按钮写上清楚的名称，再给周围留一点空间，就能让需要的人更容易找到下一步应该怎样操作。"
+      },
+      {
+        "id": "zh-092",
+        "text": "晚上把屏幕亮度调低一些，再选择比较安静的事情处理，让身体慢慢从忙碌的状态回到休息。"
+      },
+      {
+        "id": "zh-093",
+        "text": "操作说明如果能用简单的步骤写清楚，第一次接触陌生功能的人，也能带着信心开始尝试。"
+      },
+      {
+        "id": "zh-094",
+        "text": "再次打开文件时还能回到上次阅读的位置，就不必重新翻找，可以直接接着原来的思路继续。"
+      },
+      {
+        "id": "zh-095",
+        "text": "查完资料以后把多余的页面关掉，只留下下一步需要使用的内容，让注意力慢慢回到眼前。"
+      },
+      {
+        "id": "zh-096",
+        "text": "仔细看一遍保存设置，决定哪些内容可以分享，哪些只留在本机，也是在照顾自己的日常资料。"
+      },
+      {
+        "id": "zh-097",
+        "text": "朋友带着水果过来做客，留下来一起准备晚饭，厨房因为有人帮忙，也多了几句轻松的玩笑。"
+      },
+      {
+        "id": "zh-098",
+        "text": "别人讲述烦恼的时候先认真听完，不急着给出建议，有时被理解本身就能带来不少安慰。"
+      },
+      {
+        "id": "zh-099",
+        "text": "大家选了一张安静的桌子坐下，每个人都能自然加入聊天，不用提高声音也能听清彼此的话。"
+      },
+      {
+        "id": "zh-100",
+        "text": "忙碌的一天结束后收到一句关心，会让人知道自己没有被忘记，也让普通的晚上多一点温暖。"
+      },
+      {
+        "id": "zh-101",
+        "text": "小组合作时把工作分得公平一些，再留出共同检查的时间，让每个人的努力都能被认真看见。"
+      },
+      {
+        "id": "zh-102",
+        "text": "游戏结束以后大家笑着把棋子放回盒子，挪开桌上的杯子，准备再玩一局轻松而熟悉的对局。"
+      },
+      {
+        "id": "zh-103",
+        "text": "经过街角的小店时遇见熟悉的面孔，简单打个招呼，就让原本平常的散步多了一点亲切。"
+      },
+      {
+        "id": "zh-104",
+        "text": "想帮忙的时候先问对方需要什么，答案也许比自己猜想的简单，却能够真正减轻眼前的负担。"
+      },
+      {
+        "id": "zh-105",
+        "text": "舒服的谈话容得下一点沉默，让大家有时间整理想法，再带着认真而清楚的回应继续交流。"
+      },
+      {
+        "id": "zh-106",
+        "text": "把共享空间用完以后整理干净，是一种很小的体贴，也能让后来的人感到方便和被尊重。"
+      },
+      {
+        "id": "zh-107",
+        "text": "安排聚会时给不同的需求留一点余地，就能让每个人都轻松参与，不必勉强自己配合所有事情。"
+      },
+      {
+        "id": "zh-108",
+        "text": "老朋友坐在一起聊起最近的变化，也想起过去快乐的小事，安静的夜晚就在熟悉的声音里过去。"
+      },
+      {
+        "id": "zh-109",
+        "text": "晚饭以后屋子慢慢安静下来，我们花一点时间整理厨房，让明天早上也能从干净的空间开始。"
+      },
+      {
+        "id": "zh-110",
+        "text": "睡前把水杯放在床边，再准备好明天要穿的衣服，几个简单的动作就能减少早晨匆忙的感觉。"
+      },
+      {
+        "id": "zh-111",
+        "text": "晚上的散步不用走得很远，吹一会儿凉风，看看路边的灯光，就能把白天忙碌的心情放下。"
+      },
+      {
+        "id": "zh-112",
+        "text": "一盏柔和的小灯照着书页，房间其他地方渐渐暗下来，让人自然想放慢阅读的速度和呼吸。"
+      },
+      {
+        "id": "zh-113",
+        "text": "回想今天做得不错的事情，再挑一件明天可以改善的小事，不苛求自己，也不忘记继续向前。"
+      },
+      {
+        "id": "zh-114",
+        "text": "最后一项任务如果需要清醒的思考，不妨留到明早再处理，今晚先让自己得到完整而安稳的休息。"
+      },
+      {
+        "id": "zh-115",
+        "text": "睡前留一点不看屏幕的时间，可以读书、伸展身体，或者只是安静听听窗外持续落下的雨声。"
+      },
+      {
+        "id": "zh-116",
+        "text": "天色完全暗下来以后轻轻拉上窗帘，把白天的热闹留在外面，让房间重新成为适合休息的地方。"
+      },
+      {
+        "id": "zh-117",
+        "text": "书本还摊在椅子旁边，我们暂时停下阅读，听屋檐上的雨声慢慢连成平稳而柔和的节奏。"
+      },
+      {
+        "id": "zh-118",
+        "text": "每天结束时有一套简单的习惯，就能慢慢放下还没有完成的事情，不必把所有念头都带到床上。"
+      },
+      {
+        "id": "zh-119",
+        "text": "向家人说声晚安，也感谢今天那些细小的照顾，让平常的一天在温柔而踏实的心情里结束。"
+      },
+      {
+        "id": "zh-120",
+        "text": "附近窗户的灯陆续熄灭，街道变得安静，只剩微风经过树梢的声音，陪着城市慢慢进入夜晚。"
+      }
+    ]
+  }
+}

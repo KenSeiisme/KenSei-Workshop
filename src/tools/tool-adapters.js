@@ -511,22 +511,6 @@ function adapt(tool, root) {
       break;
     }
     case "typing-sprint": {
-      const mode = $("#typing-mode"),
-        note = summary($("#typing-account"), "typing-mode-note");
-      const update = () => {
-        uiText(
-          note,
-          mode.value === "ranked"
-            ? uiMsg(
-                "Public · Sign in, then start a 60-second test. Qualifying scores appear on the public board.",
-              )
-            : uiMsg(
-                "Practice · Private, available without signing in. Results stay on this device.",
-              ),
-        );
-      };
-      mode.addEventListener("change", update);
-      update();
       observeText($("#typing-status"), () =>
         root.classList.toggle(
           "tool-session-active",

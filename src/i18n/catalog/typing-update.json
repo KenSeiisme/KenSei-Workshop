@@ -1,0 +1,82 @@
+{
+  "m_37009aa83f62": {
+    "en": "← Tools",
+    "zh-Hant": "← 工具"
+  },
+  "m_75f6686b3fe3": {
+    "en": "Typing arena",
+    "zh-Hant": "打字測試區"
+  },
+  "m_c366e340bf65": {
+    "en": "Live test statistics",
+    "zh-Hant": "即時測試數據"
+  },
+  "m_eb758b54cc0a": {
+    "en": "Typing leaderboard",
+    "zh-Hant": "打字排行榜"
+  },
+  "m_cf747885937a": {
+    "en": "Example preview · a new passage is chosen at Start",
+    "zh-Hant": "示例預覽 · 按開始後選取新文本"
+  },
+  "m_00c504ff2933": {
+    "en": "Test language",
+    "zh-Hant": "測試語言"
+  },
+  "m_1ed186fe23db": {
+    "en": "Ranking rules",
+    "zh-Hant": "排行榜規則"
+  },
+  "m_7777b4c5591f": {
+    "en": "One best score per account and language. Previous scores remain on this board. Random passages use similar vocabulary and punctuation, but difficulty may vary.",
+    "zh-Hant": "每個帳號及語言顯示一項最佳成績。舊成績繼續保留。隨機文本採用相近的用字與標點，但難度可能略有不同。"
+  },
+  "m_8ddb308eb7f3": {
+    "en": "The clock keeps running in the background and while menus are open. There is no pause.",
+    "zh-Hant": "切到背景或開啟選單時仍會繼續計時，測試無法暫停。"
+  },
+  "m_8027f432a7fb": {
+    "en": "Interface language",
+    "zh-Hant": "介面語言"
+  },
+  "m_f88c329b4f9c": {
+    "en": "Interface language does not change your test passage or timer.",
+    "zh-Hant": "切換介面語言不會更改測試文本或計時。"
+  },
+  "m_f9e64c3bb271": {
+    "en": "Result kept on this page without verified ranking.",
+    "zh-Hant": "結果保留在本頁，未經驗證，不會加入排行榜。"
+  },
+  "m_fdff1e3718ab": {
+    "en": "Abort this test? No score will be submitted.",
+    "zh-Hant": "要中止這次測試嗎？成績不會提交。"
+  },
+  "m_f69b7d34ba41": {
+    "en": "No committed text. This test was not submitted.",
+    "zh-Hant": "沒有已確認的輸入文字，本次測試未提交。"
+  },
+  "m_9b3b2695e0f2": {
+    "en": ". Retry submission or keep the result on this page.",
+    "zh-Hant": "。可重試提交，或將結果保留在本頁。"
+  },
+  "m_c7e357b0479e": {
+    "en": "The passage library is unavailable. Please retry.",
+    "zh-Hant": "文本庫暫時無法載入，請重試。"
+  },
+  "m_194950f0c3a7": {
+    "en": "Invalid passage library.",
+    "zh-Hant": "文本庫格式無效，請重試。"
+  },
+  "m_9566a71734eb": {
+    "en": "Invalid passage length.",
+    "zh-Hant": "文本長度無效，請重試。"
+  },
+  "m_5e0e7bf3eefc": {
+    "en": "{0} · board v{1} · 60 seconds · 95% accuracy required",
+    "zh-Hant": "{0} · 排行榜版本 {1} · 60 秒 · 準確率須達 95%"
+  },
+  "m_b79cac926e0b": {
+    "en": "Help",
+    "zh-Hant": "說明"
+  }
+}

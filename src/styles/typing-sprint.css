@@ -1,0 +1,292 @@
+/* Compact arena and local focus layout, independent of game pause rules. */
+[data-tool="typing-sprint"] {
+  padding-top: 12px;
+  padding-bottom: 28px;
+}
+.typing-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.typing-toolbar .back-link {
+  margin: 0;
+  font-size: 12px;
+}
+.typing-toolbar h1 {
+  font: 600 clamp(16px, 2vw, 22px)/1.2 var(--display);
+  margin: 0;
+}
+.typing-toolbar-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  align-items: center;
+}
+.typing-toolbar-actions .button {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.typing-toolbar .favorite {
+  width: 44px;
+  height: 44px;
+}
+.typing-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+.typing-stage.panel {
+  padding: 16px;
+  border-color: #d6b6ec35;
+  background:
+    radial-gradient(ellipse at 10% 0, #633e8029, transparent 60%), #17131d;
+  box-shadow: 0 12px 42px #0003;
+}
+.typing-hud {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 4vw, 44px);
+  border-bottom: 1px solid var(--line);
+  padding: 0 4px 12px;
+}
+.typing-hud > div {
+  display: grid;
+}
+.typing-hud strong {
+  font: 600 clamp(24px, 3vw, 34px)/1.15 var(--display);
+  color: #e8d3f5;
+}
+.typing-hud span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.typing-hud > .small-tag {
+  margin-left: auto;
+}
+.typing-preview-label {
+  font-size: 10px;
+  color: #b6a4c2;
+  padding-top: 12px;
+  margin: 0;
+}
+.typing-stage .typing-passage {
+  font:
+    clamp(17px, 2vw, 21px)/1.9 ui-monospace,
+    monospace;
+  padding: 16px 4px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  height: clamp(125px, 23dvh, 220px);
+  margin: 0;
+  overflow: auto;
+}
+.typing-entry {
+  padding: 14px;
+  background: #ffffff04;
+  border: 1px solid #d6b6ec22;
+  border-radius: 12px;
+}
+.typing-entry .sprint-controls {
+  gap: 10px;
+}
+.typing-entry label {
+  flex: 1 1 150px;
+  display: grid;
+  gap: 5px;
+  font-size: 11px;
+}
+.typing-entry select {
+  width: 100%;
+}
+.typing-entry .primary {
+  flex: 1 1 200px;
+  justify-content: center;
+  margin: 0;
+}
+.typing-account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  margin: 10px 0 0;
+  flex-wrap: wrap;
+}
+.typing-input-label {
+  display: grid;
+  gap: 7px;
+  margin-top: 14px;
+}
+.typing-input-label textarea {
+  display: block;
+  width: 100%;
+  resize: vertical;
+  min-height: 110px;
+  height: 14dvh;
+  max-height: 240px;
+  font:
+    17px/1.6 ui-monospace,
+    monospace;
+}
+[data-typing-state="ready"] .typing-input-label {
+  display: none;
+}
+.typing-result {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #d6b6ec55;
+  border-radius: 12px;
+  background: #d6b6ec0a;
+  font: 500 clamp(18px, 2vw, 24px)/1.5 var(--display);
+  overflow-wrap: anywhere;
+}
+.typing-current-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.typing-current-actions:has(button:not([hidden])) {
+  margin-top: 12px;
+}
+#typing-status {
+  margin: 12px 0 0;
+}
+.typing-board.panel {
+  padding: 16px;
+}
+.typing-board h2 {
+  font: 600 17px var(--display);
+  margin: 0;
+}
+.typing-board .section-heading {
+  margin: 0 0 12px;
+  align-items: center;
+  gap: 8px;
+}
+.typing-board .leaderboard {
+  min-width: 0;
+  table-layout: fixed;
+  font-size: 11px;
+}
+.typing-board .leaderboard th,
+.typing-board .leaderboard td {
+  padding: 9px 4px;
+  overflow-wrap: anywhere;
+}
+.typing-board .leaderboard th:first-child {
+  width: 24px;
+}
+.typing-board .leaderboard th:nth-child(2) {
+  width: auto;
+}
+.typing-board .leaderboard th:nth-child(3) {
+  width: 40px;
+}
+.typing-board .leaderboard th:nth-child(4) {
+  width: 58px;
+}
+.typing-board .leaderboard td:nth-child(3),
+.typing-board .leaderboard td:nth-child(4) {
+  white-space: nowrap;
+}
+.typing-board .leaderboard th:last-child {
+  width: 19%;
+}
+.typing-board .leaderboard tr.is-me {
+  background: #d6b6ec14;
+}
+.typing-my-rank {
+  padding: 12px;
+  background: #d6b6ec0a;
+  border: 1px solid #d6b6ec24;
+  border-radius: 10px;
+}
+.typing-history summary,
+.typing-board summary {
+  min-height: 44px;
+  cursor: pointer;
+  display: list-item;
+  align-content: center;
+}
+.typing-history.panel {
+  margin-top: 18px;
+}
+[data-tool="typing-sprint"] > .tool-feedback {
+  display: none;
+}
+body.typing-is-focused .header,
+body.typing-is-focused .footer {
+  display: none;
+}
+body.typing-is-focused [data-tool="typing-sprint"] {
+  padding-top: 10px;
+}
+body.typing-is-focused .typing-history {
+  display: none;
+}
+@media (min-width: 1100px) {
+  .typing-layout {
+    grid-template-columns: minmax(0, 1fr) 310px;
+  }
+  .typing-board {
+    position: sticky;
+    top: 90px;
+  }
+  body.typing-is-focused .typing-board {
+    top: 12px;
+  }
+}
+@media (max-width: 600px) {
+  .typing-toolbar {
+    gap: 7px;
+  }
+  .typing-toolbar-actions {
+    gap: 4px;
+  }
+  .typing-toolbar-actions .button {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+  .typing-toolbar h1 {
+    flex: 1;
+  }
+  .typing-toolbar-actions {
+    width: 100%;
+    justify-content: end;
+  }
+  .typing-stage.panel {
+    padding: 12px;
+  }
+  .typing-entry {
+    padding: 10px;
+  }
+  .typing-entry label {
+    flex-basis: 100px;
+  }
+  .typing-entry .primary {
+    flex-basis: 100%;
+  }
+  .typing-hud {
+    gap: 18px;
+  }
+  .typing-hud strong {
+    font-size: 26px;
+  }
+  .typing-stage .typing-passage {
+    height: 125px;
+  }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .typing-stage .typing-passage {
+    height: 85px;
+  }
+  .typing-hud strong {
+    font-size: 23px;
+  }
+  .typing-input-label textarea {
+    min-height: 80px;
+  }
+}

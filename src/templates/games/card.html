@@ -5,21 +5,21 @@
   data-category="${category_key}"
   data-search="${search_text}"
 >
-  <a href="/games/${slug}/" class="game-cover" aria-label="Play ${name}"
-    ><span class="game-card-number">${station}</span>${preview}<span
+  <div class="game-cover" aria-hidden="true">
+    <span class="game-card-number">${station}</span>${preview}<span
       class="small-tag"
       >${category}</span
-    ><span class="game-demo-label">DEMO PREVIEW</span></a
-  >
+    ><span class="game-demo-label">DEMO PREVIEW</span>
+  </div>
   <div class="game-card-copy">
     <p class="game-card-kicker">${tagline}</p>
-    <h2><a href="/games/${slug}/">${name}</a></h2>
+    <h2><a href="/games/${slug}/" class="card-primary-link">${name}</a></h2>
     <p>${description}</p>
     <div class="game-card-meta">
       <span>${spec}</span><span>${play_mode}</span>
     </div>
-    <a href="/games/${slug}/" class="game-card-play"
-      >Play game <span aria-hidden="true">↗</span></a
+    <span class="game-card-play" aria-hidden="true"
+      >Play game <span>↗</span></span
     >
   </div>
 </article>
