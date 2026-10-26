@@ -99,7 +99,7 @@ const sdk = `export function createClient(){let listener;return {auth:{getSessio
   }
   async function open(c, path) {
     const p = await c.newPage();
-    await p.goto(base + path);
+    await p.goto(base + path, { waitUntil: "domcontentloaded" });
     return p;
   }
   async function ready(p) {
@@ -121,7 +121,7 @@ const sdk = `export function createClient(){let listener;return {auth:{getSessio
       .first()
       .click({ modifiers: ["Control"] });
     const popup = await popupReady;
-    await popup.waitForLoadState();
+    await popup.waitForLoadState("domcontentloaded");
     assert(popup.url().includes("/tools/"));
     assert(p.url().endsWith("/tools/"));
     await popup.close();
