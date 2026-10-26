@@ -104,7 +104,7 @@ function passage(source, typed = "") {
 }
 function meter() {
   if (!run) return;
-  const s = scoreText(run.text, committed, run.language),
+  const s = scoreText(run.text, committed, run.language, run.duration),
     remaining = Math.max(0, Math.ceil((run.deadline - Date.now()) / 1000));
   uiText($("#typing-time"), remaining);
   uiText($("#typing-speed"), s.speed.toFixed(1));
@@ -115,6 +115,7 @@ function meter() {
 function lock(locked) {
   $("#typing-language").disabled = locked;
   $("#typing-mode").disabled = locked;
+  window.dispatchEvent(new Event("typing-lock-changed"));
   $("#typing-start").disabled = locked;
   $("#typing-abort").hidden = !locked;
   $("#typing-input").disabled = !locked;
@@ -254,16 +255,22 @@ $("#typing-start").addEventListener("click", async () => {
       ? await rpc("start_typing_test", { language: lang })
       : await practicePassage(lang, owner);
     if (actor() !== owner || token !== epoch) return;
-    if (session.duration !== 60 || typeof session.text !== "string")
+    if ((ranked && session.duration !== 60) || typeof session.text !== "string")
       throw new Error("The test service returned an invalid session.");
     run = {
       ranked,
       owner,
       language: lang,
-      text: session.text.normalize("NFC"),
+      text: (!ranked && window.KenseiPractice?.text?.trim()
+        ? window.KenseiPractice.text
+        : session.text
+      ).normalize("NFC"),
       sessionId: session.sessionId,
       version: session.version,
-      deadline: Date.now() + 60000,
+      duration: ranked ? 60 : Number(window.KenseiPractice?.duration || 60),
+      deadline:
+        Date.now() +
+        (ranked ? 60 : Number(window.KenseiPractice?.duration || 60)) * 1000,
     };
     committed = "";
     composing = false;
@@ -316,8 +323,24 @@ async function finish() {
   $("#typing-input").disabled = true;
   $("#typing-input").value = text;
   uiText($("#typing-time"), "0");
-  uiText($("#typing-start"), uiMsg("Start another 60-second test →"));
-  const score = scoreText(completed.text, text, completed.language);
+  uiText($("#typing-start"), uiMsg("Start another test →"));
+  const score = scoreText(
+    completed.text,
+    text,
+    completed.language,
+    completed.duration,
+  );
+  if (!completed.ranked)
+    window.dispatchEvent(
+      new CustomEvent("practice-completed", {
+        detail: {
+          source: completed.text,
+          typed: text,
+          language: completed.language,
+          score,
+        },
+      }),
+    );
   uiText(
     $("#typing-result"),
     uiMsg("{0} {1} · {2}% accuracy · {3} correct characters.", [
@@ -353,6 +376,7 @@ async function finish() {
           [
             {
               ...score,
+              duration: completed.duration,
               language: completed.language,
               date: new Date().toISOString(),
             },

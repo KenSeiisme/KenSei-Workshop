@@ -1,6 +1,11 @@
 import { $, status, downloadText, library, api } from "./common.js";
 import * as store from "./flashcard-store.js";
-import { validateDeck, shuffled } from "./flashcard-core.js";
+import {
+  validateDeck,
+  shuffled,
+  gradeCard,
+  cardDue,
+} from "./flashcard-core.js";
 import {
   uiMsg,
   uiJoin,
@@ -10,6 +15,8 @@ import {
   uiConfirm,
 } from "../site/ui.js";
 
+let reviewedTotal = 0,
+  reviewedKnown = 0;
 let deck = null,
   cardId = null,
   timer = null,
@@ -116,6 +123,7 @@ async function saveEdits() {
         c.front = front;
         c.back = back;
         c.known = false;
+        c.review = { stage: 0, dueAt: null, lastReviewedAt: null };
       }
     }
   }
@@ -171,6 +179,10 @@ $("#card-save").onclick = async () => {
         front,
         back,
         known: old?.front === front && old?.back === back ? old.known : false,
+        review:
+          old?.front === front && old?.back === back && old.review
+            ? old.review
+            : { stage: 0, dueAt: null, lastReviewedAt: null },
       });
     deck = await store.put(validateDeck(data), deck.id, scope);
     cardId = id;
@@ -233,7 +245,11 @@ $("#deck-reset").onclick = async () => {
     deck = await store.put(
       {
         ...deck.data,
-        cards: deck.data.cards.map((c) => ({ ...c, known: false })),
+        cards: deck.data.cards.map((c) => ({
+          ...c,
+          known: false,
+          review: { stage: 0, dueAt: null, lastReviewedAt: null },
+        })),
       },
       deck.id,
       scope,
@@ -335,8 +351,21 @@ function showReview() {
   const c = deck?.data.cards.find((c) => c.id === review[position]);
   if (!c) {
     resetReview();
-    uiText($("#study-progress"), uiMsg("Review complete. Mastery is saved."));
     cards();
+    uiText(
+      $("#study-progress"),
+      uiJoin([
+        deck.data.cards.filter((c) => c.known).length +
+          " / " +
+          deck.data.cards.length,
+        uiMsg(" known"),
+        " · ",
+        uiMsg("Review complete. {0} cards reviewed; {1} known.", [
+          reviewedTotal,
+          reviewedKnown,
+        ]),
+      ]),
+    );
     return;
   }
   $("#study-card").disabled = false;
@@ -364,10 +393,11 @@ $("#study-start").onclick = async () => {
   await saveEdits();
   if (!deck) return;
   const ids = deck.data.cards
-    .filter((c) => !$("#study-unknown").checked || !c.known)
+    .filter((c) => !$("#study-unknown").checked || cardDue(c))
     .map((c) => c.id);
   review = $("#study-shuffle").checked ? shuffled(ids) : ids;
   position = 0;
+  reviewedTotal = reviewedKnown = 0;
   flipped = false;
   showReview();
 };
@@ -386,12 +416,14 @@ for (const [id, known] of [
         {
           ...deck.data,
           cards: deck.data.cards.map((c) =>
-            c.id === review[position] ? { ...c, known } : c,
+            c.id === review[position] ? gradeCard(c, known) : c,
           ),
         },
         deck.id,
         scope,
       );
+      reviewedTotal++;
+      if (known) reviewedKnown++;
       position++;
       flipped = false;
       cards();
@@ -464,3 +496,11 @@ window.addEventListener("beforeunload", (e) => {
   }
 });
 initialize();
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts.flashcards = {
+  importDeck: async (data) => {
+    const row = await store.put(validateDeck(data));
+    await open(row.id);
+  },
+};

@@ -268,6 +268,23 @@ export function init() {
     }
     parent.append(node);
   }
+  sendControl(
+    p,
+    () =>
+      ctx.table
+        ? {
+            kind: "files",
+            files: [
+              new File(
+                [rawCSV({ headers: selectedHeaders(), rows: selectedRows() })],
+                "data.csv",
+                { type: "text/csv" },
+              ),
+            ],
+          }
+        : null,
+    ["flashcards"],
+  );
   window.KenseiDataView = () =>
     ctx.table ? { headers: selectedHeaders(), rows: selectedRows() } : null;
 }

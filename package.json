@@ -56,7 +56,8 @@
     "test:bilingual": "node scripts/test.mjs bilingual",
     "test:typing-experience": "node scripts/test.mjs typing-experience",
     "test:tool-motion-shared": "node scripts/test.mjs tool-motion-shared",
-    "test:advanced-p1": "node scripts/test.mjs advanced-p1"
+    "test:advanced-p1": "node scripts/test.mjs advanced-p1",
+    "test:advanced-p2": "node scripts/test.mjs advanced-p2"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

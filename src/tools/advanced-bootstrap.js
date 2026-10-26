@@ -7,6 +7,12 @@ const routes = new Set([
   "text-compare",
   "text-toolkit",
   "markdown-studio",
+  "flashcards",
+  "study-planner",
+  "focus-timer",
+  "time-studio",
+  "whiteboard",
+  "typing-sprint",
 ]);
 export async function initAdvanced(slug) {
   if (routes.has(slug)) {

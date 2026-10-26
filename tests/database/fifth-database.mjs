@@ -61,6 +61,65 @@ assert.equal(
     .revision,
   1,
 );
+const reviewId = crypto.randomUUID();
+// Review metadata survives a legacy client save; explicit resets remain possible.
+const scheduled = {
+  stage: 3,
+  dueAt: "2026-11-02T00:00:00.000Z",
+  lastReviewedAt: "2026-10-26T00:00:00.000Z",
+};
+const graded = await as("authenticated", a, () =>
+  rpc("save_private_record", {
+    ...args,
+    record_id: reviewId,
+    base_revision: 0,
+    operation_id: crypto.randomUUID(),
+    payload: { name: "Scheduled", cards: [{ ...card, review: scheduled }] },
+  }),
+);
+assert.deepEqual(graded.data.cards[0].review, scheduled);
+const legacy = await as("authenticated", a, () =>
+  rpc("save_private_record", {
+    ...args,
+    record_id: reviewId,
+    base_revision: 1,
+    operation_id: crypto.randomUUID(),
+    payload: { name: "Legacy", cards: [card] },
+  }),
+);
+assert.deepEqual(legacy.data.cards[0].review, scheduled);
+await assert.rejects(() =>
+  as("authenticated", a, () =>
+    rpc("save_private_record", {
+      ...args,
+      record_id: reviewId,
+      base_revision: 2,
+      operation_id: crypto.randomUUID(),
+      payload: {
+        name: "Bad",
+        cards: [{ ...card, review: { ...scheduled, stage: 6 } }],
+      },
+    }),
+  ),
+);
+const reset = await as("authenticated", a, () =>
+  rpc("save_private_record", {
+    ...args,
+    record_id: reviewId,
+    base_revision: 2,
+    operation_id: crypto.randomUUID(),
+    payload: {
+      name: "Reset",
+      cards: [
+        { ...card, review: { stage: 0, dueAt: null, lastReviewedAt: null } },
+      ],
+    },
+  }),
+);
+assert.equal(reset.data.cards[0].review.stage, 0);
+console.log(
+  "PASS omitted SRS retention, explicit reset and invalid review rejection",
+);
 const second = await as("authenticated", a, () =>
   rpc("save_private_record", {
     ...args,

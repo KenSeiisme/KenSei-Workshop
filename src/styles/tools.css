@@ -1444,3 +1444,51 @@ progress {
 .advanced-panel label {
   min-width: 0;
 }
+.advanced-panel .action-row {
+  flex-wrap: wrap;
+}
+.advanced-panel textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.meeting-timeline {
+  display: flex;
+  overflow: auto;
+  gap: 2px;
+  margin: 8px 0 18px;
+}
+.meeting-timeline span {
+  min-width: 23px;
+  padding: 8px 2px;
+  text-align: center;
+  border: 1px solid var(--line, #3f3548);
+  font-size: 11px;
+}
+.meeting-timeline .available {
+  background: #41314f;
+}
+.meeting-timeline .selected {
+  outline: 2px solid #d6b6ec;
+}
+@media print {
+  body:has([data-tool="markdown-studio"]) {
+    background: white !important;
+    color: black !important;
+  }
+  body:has([data-tool="markdown-studio"]) * {
+    visibility: hidden;
+  }
+  body:has([data-tool="markdown-studio"]) #markdown-preview,
+  body:has([data-tool="markdown-studio"]) #markdown-preview * {
+    visibility: visible;
+    color: black !important;
+  }
+  body:has([data-tool="markdown-studio"]) #markdown-preview {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    overflow: visible;
+    background: white !important;
+  }
+}

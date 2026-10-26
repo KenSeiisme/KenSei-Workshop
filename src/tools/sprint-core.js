@@ -17,7 +17,7 @@ export function shuffle(input) {
   }
   return out;
 }
-export function scoreText(source, typed, language) {
+export function scoreText(source, typed, language, duration = 60) {
   const target = Array.from(source),
     input = Array.from(typed);
   let correct = 0,
@@ -30,7 +30,9 @@ export function scoreText(source, typed, language) {
   });
   return {
     correct,
-    speed: +(counted / (language === "en" ? 5 : 1)).toFixed(2),
+    speed: +(((counted / (language === "en" ? 5 : 1)) * 60) / duration).toFixed(
+      2,
+    ),
     accuracy: input.length ? +((correct * 100) / input.length).toFixed(2) : 0,
   };
 }

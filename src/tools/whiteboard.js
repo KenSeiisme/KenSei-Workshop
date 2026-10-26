@@ -776,3 +776,31 @@ shared = mountSharedBoard({
 });
 window.addEventListener("workspace-ready", start);
 start();
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts.whiteboard = {
+  get drawing() {
+    return drawing;
+  },
+  get engine() {
+    return engine;
+  },
+  currentData,
+  ready: () => engineReady,
+  async insert(elements) {
+    await engineReady;
+    if (!drawing) throw Error("Open a whiteboard first.");
+    if (drawing.getAppState().viewModeEnabled)
+      throw Error("Reconnect before editing this shared whiteboard.");
+    const restored = engine.restoreElements(elements, null);
+    const combined = [
+      ...drawing.getSceneElementsIncludingDeleted(),
+      ...restored,
+    ];
+    whiteboardData(currentData().name, combined, drawing.getAppState());
+    drawing.updateScene({
+      elements: combined,
+      captureUpdate: engine.CaptureUpdateAction.IMMEDIATELY,
+    });
+  },
+};

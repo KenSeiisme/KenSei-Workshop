@@ -1169,3 +1169,12 @@ setInterval(() => {
 initialize();
 
 export { store };
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["study-planner"] = {
+  get plan() {
+    return plan;
+  },
+  saveEdits,
+  store,
+};

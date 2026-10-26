@@ -1,0 +1,366 @@
+{
+  "m_7e6d279a71ad": {
+    "en": "Preview text changes",
+    "zh-Hant": "預覽文字變更"
+  },
+  "m_284f12cc9577": {
+    "en": "Remove duplicate lines",
+    "zh-Hant": "移除重複行"
+  },
+  "m_2c6d77385a72": {
+    "en": "Sort lines A–Z",
+    "zh-Hant": "將文字行按 A–Z 排序"
+  },
+  "m_ab178b316cb4": {
+    "en": "Sort lines Z–A",
+    "zh-Hant": "將文字行按 Z–A 排序"
+  },
+  "m_55210a3b1600": {
+    "en": "Batch find and replace",
+    "zh-Hant": "批次尋找與取代"
+  },
+  "m_9ba7250cd9d6": {
+    "en": "Find: one literal string per line",
+    "zh-Hant": "尋找：每行輸入一段純文字"
+  },
+  "m_359271ef5e09": {
+    "en": "Replacement: matching line; empty means remove",
+    "zh-Hant": "取代：逐行對應；空白表示移除"
+  },
+  "m_85045ccc0567": {
+    "en": "Apply changes",
+    "zh-Hant": "套用變更"
+  },
+  "m_1ddb9bf30d5b": {
+    "en": "Undo last edit",
+    "zh-Hant": "復原上次編輯"
+  },
+  "m_330c32c49a13": {
+    "en": "Preview changes",
+    "zh-Hant": "預覽變更"
+  },
+  "m_cd87e44512ff": {
+    "en": "Writing tools",
+    "zh-Hant": "寫作工具"
+  },
+  "m_3b676bd0f069": {
+    "en": "Document outline",
+    "zh-Hant": "文件大綱"
+  },
+  "m_94fee62e68e2": {
+    "en": "Bold",
+    "zh-Hant": "粗體"
+  },
+  "m_9bf37cb58a69": {
+    "en": "Italic",
+    "zh-Hant": "斜體"
+  },
+  "m_b34f17f02ecf": {
+    "en": "Heading",
+    "zh-Hant": "標題"
+  },
+  "m_6f202f54a7b2": {
+    "en": "List",
+    "zh-Hant": "清單"
+  },
+  "m_340f463033e0": {
+    "en": "Code",
+    "zh-Hant": "程式碼"
+  },
+  "m_09fd06fdc117": {
+    "en": "Insert contents",
+    "zh-Hant": "插入目錄"
+  },
+  "m_8a62efb9d6f8": {
+    "en": "Print / Save as PDF",
+    "zh-Hant": "列印／儲存為 PDF"
+  },
+  "m_439be00c1833": {
+    "en": "Import column mapping",
+    "zh-Hant": "匯入欄位對應"
+  },
+  "m_ef520fcebb68": {
+    "en": "Choose CSV columns for the front and back. Nothing is saved until import.",
+    "zh-Hant": "請選擇用於卡片正面與背面的 CSV 欄位。按下匯入後才會儲存。"
+  },
+  "m_ac50f86cd619": {
+    "en": "Use valid CSV rows.",
+    "zh-Hant": "請使用有效的 CSV 資料列。"
+  },
+  "m_546d856808c9": {
+    "en": "Use a header and up to 200 cards.",
+    "zh-Hant": "請包含標題列，卡片數量最多為 200 張。"
+  },
+  "m_f2f45315a2c7": {
+    "en": "Front column",
+    "zh-Hant": "正面欄位"
+  },
+  "m_d954ee4c01ca": {
+    "en": "Back column",
+    "zh-Hant": "背面欄位"
+  },
+  "m_f6bbfeed9df6": {
+    "en": "Import as new deck",
+    "zh-Hant": "匯入為新牌組"
+  },
+  "m_a23203cd5747": {
+    "en": "Choose a CSV file first.",
+    "zh-Hant": "請先選擇 CSV 檔案。"
+  },
+  "m_5e297a1057e4": {
+    "en": "Choose different front and back columns.",
+    "zh-Hant": "請為正面與背面選擇不同的欄位。"
+  },
+  "m_dcbad0274f6e": {
+    "en": "Plan overview",
+    "zh-Hant": "計畫總覽"
+  },
+  "m_dc28d0d30d15": {
+    "en": "All courses",
+    "zh-Hant": "所有課程"
+  },
+  "m_dc51cf915f33": {
+    "en": "All deadlines",
+    "zh-Hant": "所有期限"
+  },
+  "m_e36cbd0877de": {
+    "en": "Next seven days",
+    "zh-Hant": "未來七天"
+  },
+  "m_6fcb38ddc858": {
+    "en": "Deadline",
+    "zh-Hant": "截止期限"
+  },
+  "m_86b003eef617": {
+    "en": "Export calendar (.ics)",
+    "zh-Hant": "匯出行事曆（.ics）"
+  },
+  "m_f8c369ab8bee": {
+    "en": "Create or open a plan first.",
+    "zh-Hant": "請先建立或開啟計畫。"
+  },
+  "m_2100995da502": {
+    "en": "Focus task and weekly progress",
+    "zh-Hant": "專注任務與本週進度"
+  },
+  "m_cbfc35674500": {
+    "en": "No task label",
+    "zh-Hant": "不標註任務"
+  },
+  "m_aa6eae3d56ae": {
+    "en": "Mark selected task complete",
+    "zh-Hant": "將所選任務標記為完成"
+  },
+  "m_2c50302e8a92": {
+    "en": "This plan is unavailable.",
+    "zh-Hant": "無法使用此計畫。"
+  },
+  "m_f4d7bfac4a13": {
+    "en": "Task for this focus session",
+    "zh-Hant": "本次專注的任務"
+  },
+  "m_cbc510c49c24": {
+    "en": "Refresh plans",
+    "zh-Hant": "重新整理計畫"
+  },
+  "m_da651ce6f705": {
+    "en": "{0} minutes completed this week",
+    "zh-Hant": "本週已完成 {0} 分鐘"
+  },
+  "m_9f42fc68a773": {
+    "en": "Plans could not load. Retry when connected.",
+    "zh-Hant": "無法載入計畫。請在連線後重試。"
+  },
+  "m_3d2efc654764": {
+    "en": "Meeting planner",
+    "zh-Hant": "會議規劃"
+  },
+  "m_8b8b8871bbfb": {
+    "en": "Meeting",
+    "zh-Hant": "會議"
+  },
+  "m_3c900468d837": {
+    "en": "Meeting time",
+    "zh-Hant": "會議時間"
+  },
+  "m_0b0d47dc73d9": {
+    "en": "Source time zone",
+    "zh-Hant": "來源時區"
+  },
+  "m_279a3e5e0fcb": {
+    "en": "Duration (minutes)",
+    "zh-Hant": "持續時間（分鐘）"
+  },
+  "m_25bc9efedfb7": {
+    "en": "Event name",
+    "zh-Hant": "活動名稱"
+  },
+  "m_b72cd6b3f5f8": {
+    "en": "Update timeline",
+    "zh-Hant": "更新時間軸"
+  },
+  "m_4561032457cd": {
+    "en": "Export event (.ics)",
+    "zh-Hant": "匯出活動（.ics）"
+  },
+  "m_5834419678f0": {
+    "en": "Choose 5–1,440 minutes.",
+    "zh-Hant": "請輸入 5 至 1,440 分鐘。"
+  },
+  "m_ea0c0a74782f": {
+    "en": "Work starts",
+    "zh-Hant": "工作開始時間"
+  },
+  "m_1e39ab1ad529": {
+    "en": "Work ends",
+    "zh-Hant": "工作結束時間"
+  },
+  "m_863ded274289": {
+    "en": "Within work hours",
+    "zh-Hant": "在工作時段內"
+  },
+  "m_012bc2e4e908": {
+    "en": "Outside work hours",
+    "zh-Hant": "超出工作時段"
+  },
+  "m_fe1fb9471d4e": {
+    "en": "All time zones overlap within work hours.",
+    "zh-Hant": "所選時間在所有時區均屬工作時段。"
+  },
+  "m_8f0f8e82c178": {
+    "en": "No full overlap for the selected time.",
+    "zh-Hant": "所選時間無法完全符合各時區的工作時段。"
+  },
+  "m_6b86000519fc": {
+    "en": "Templates and selection export",
+    "zh-Hant": "範本與選取內容匯出"
+  },
+  "m_83ed55693dfc": {
+    "en": "Flowchart",
+    "zh-Hant": "流程圖"
+  },
+  "m_10939a998790": {
+    "en": "Mind map",
+    "zh-Hant": "心智圖"
+  },
+  "m_6e4b1425d1f0": {
+    "en": "Study notes",
+    "zh-Hant": "學習筆記"
+  },
+  "m_149109c5003a": {
+    "en": "Export selected elements only",
+    "zh-Hant": "只匯出所選元素"
+  },
+  "m_8bedeb864cfa": {
+    "en": "Insert template",
+    "zh-Hant": "插入範本"
+  },
+  "m_dcacffb5836e": {
+    "en": "Insert this template into the current whiteboard?",
+    "zh-Hant": "要將此範本插入目前白板嗎？"
+  },
+  "m_e083bd83e9d3": {
+    "en": "Process",
+    "zh-Hant": "處理步驟"
+  },
+  "m_a6c7a84baa67": {
+    "en": "Finish",
+    "zh-Hant": "結束"
+  },
+  "m_caa12811adaa": {
+    "en": "Main idea",
+    "zh-Hant": "核心概念"
+  },
+  "m_7d90233eff54": {
+    "en": "Topic A",
+    "zh-Hant": "主題 A"
+  },
+  "m_75942c655b72": {
+    "en": "Topic B",
+    "zh-Hant": "主題 B"
+  },
+  "m_7e61847d61d6": {
+    "en": "Topic",
+    "zh-Hant": "主題"
+  },
+  "m_c925a0fbcc77": {
+    "en": "Key points",
+    "zh-Hant": "重點"
+  },
+  "m_9a72221a2747": {
+    "en": "Questions",
+    "zh-Hant": "問題"
+  },
+  "m_8e4e25a32dfc": {
+    "en": "Prepare PNG",
+    "zh-Hant": "準備 PNG"
+  },
+  "m_8cc809f21d96": {
+    "en": "Open a whiteboard first.",
+    "zh-Hant": "請先開啟白板。"
+  },
+  "m_b1cd76662a40": {
+    "en": "Select at least one drawing element.",
+    "zh-Hant": "請至少選取一個繪圖元素。"
+  },
+  "m_441497331a99": {
+    "en": "This selection is too large. Export an editable file.",
+    "zh-Hant": "選區過大。請匯出可編輯檔案。"
+  },
+  "m_4f31616dc2ce": {
+    "en": "Canvas export is unavailable.",
+    "zh-Hant": "無法匯出畫布。"
+  },
+  "m_a6e3eb68fb1a": {
+    "en": "Optional custom practice text",
+    "zh-Hant": "自訂練習文字（選填）"
+  },
+  "m_5269dfe53b4f": {
+    "en": "Practice settings",
+    "zh-Hant": "練習設定"
+  },
+  "m_18bbf5eb125a": {
+    "en": "Practice mistakes from this run",
+    "zh-Hant": "練習本次輸入錯誤的字元"
+  },
+  "m_2e38e3cf7c4e": {
+    "en": "Practice duration",
+    "zh-Hant": "練習時間"
+  },
+  "m_8125dc046f74": {
+    "en": "Practice result: {0} · {1}%",
+    "zh-Hant": "練習結果：{0} · {1}%"
+  },
+  "m_e454d5467113": {
+    "en": "Calendar export is too large. Shorten the course date range.",
+    "zh-Hant": "行事曆匯出內容過大。請縮短課程日期範圍。"
+  },
+  "m_950cd23da13b": {
+    "en": "Invalid review schedule.",
+    "zh-Hant": "複習排程無效。"
+  },
+  "m_af78beb0f18b": {
+    "en": "{0} days",
+    "zh-Hant": "{0} 天"
+  },
+  "m_09b538d1d0fa": {
+    "en": "Begin",
+    "zh-Hant": "開始"
+  },
+  "m_daa4b2079175": {
+    "en": "Due cards only",
+    "zh-Hant": "僅複習到期卡片"
+  },
+  "m_13d6fd5aef67": {
+    "en": "Review complete. {0} cards reviewed; {1} known.",
+    "zh-Hant": "複習完成。已複習 {0} 張，其中 {1} 張已掌握。"
+  },
+  "m_e134cff56ebc": {
+    "en": "Local practice speed trend",
+    "zh-Hant": "本機練習速度趨勢"
+  },
+  "m_a4b96a042bed": {
+    "en": "Start another test →",
+    "zh-Hant": "開始下一次測試 →"
+  }
+}

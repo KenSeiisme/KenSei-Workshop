@@ -9,6 +9,7 @@ export function el(tag, text = "", attrs = {}) {
     if (k === "class") n.className = v;
     else if (["placeholder", "title", "aria-label"].includes(k))
       uiAttr(n, k, uiMsg(v));
+    else if (k === "list" || k === "form") n.setAttribute(k, v);
     else if (k in n) n[k] = v;
     else n.setAttribute(k, v);
   }

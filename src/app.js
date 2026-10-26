@@ -81,6 +81,7 @@
     return write(data);
   }
   async function saveItem(type, data, id = uid(), expected = null) {
+    const ownerAtStart = user?.id || "guest";
     const item = { id, type, data, updated_at: new Date().toISOString() };
     if (user && client) {
       if (type === "draft" && expected) {
@@ -100,12 +101,16 @@
           );
         }
       }
+      if (ownerAtStart !== (user?.id || "guest"))
+        throw Error("Account changed.");
       const { data: saved, error } = await client
         .from("workspace_items")
         .upsert({ ...item, user_id: user.id })
         .select("id,type,data,updated_at")
         .single();
       if (error) throw error;
+      if (ownerAtStart !== (user?.id || "guest"))
+        throw Error("Account changed.");
       localSave(saved);
       return saved;
     }
@@ -697,6 +702,7 @@
       completedId = null,
       pausedMs = null,
       ringFrame = 0,
+      activeTask = null,
       timerOwner = user?.id || "guest";
     const timerKey = () => "kensei-workshop:v1:" + timerOwner + ":active-timer";
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -733,6 +739,7 @@
             end,
             round,
             completedId,
+            activeTask,
             remainingMs: running
               ? Math.max(0, end - Date.now())
               : (pausedMs ?? remaining * 1000),
@@ -757,6 +764,7 @@
       if (saved) {
         ({ settings, mode, running, remaining, end, round, completedId } =
           saved);
+        activeTask = saved.activeTask || null;
         pausedMs = saved.remainingMs ?? remaining * 1000;
         if (running)
           remaining = Math.max(0, Math.ceil((end - Date.now()) / 1000));
@@ -803,6 +811,7 @@
         : "Focus Timer — KenSei";
     }
     async function finish() {
+      const finishOwner = user?.id || "guest";
       running = false;
       if (mode === "focus") {
         const duration = settings.focus,
@@ -812,7 +821,11 @@
         try {
           await saveItem(
             "session",
-            { minutes: duration, completedAt: new Date().toISOString() },
+            {
+              minutes: duration,
+              completedAt: new Date().toISOString(),
+              ...(activeTask ? { task: structuredClone(activeTask) } : {}),
+            },
             id,
           );
           uiText(
@@ -820,6 +833,7 @@
             uiMsg("{0} minutes of focus, saved. Nicely done.", [duration]),
           );
         } catch {
+          if (finishOwner !== (user?.id || "guest")) return;
           toast(
             uiMsg(
               "Session could not sync. Export or retry from your workspace.",
@@ -836,6 +850,12 @@
             updated_at: new Date().toISOString(),
           });
         }
+        if (finishOwner !== (user?.id || "guest")) return;
+        window.dispatchEvent(
+          new CustomEvent("focus-completed", {
+            detail: { duration, task: activeTask },
+          }),
+        );
         mode = round % 4 === 0 ? "long" : "short";
         toast(uiMsg("Focus complete. Time for a break."));
       } else {
@@ -861,6 +881,10 @@
       } else {
         if (!remaining) remaining = settings[mode] * 60;
         end = Date.now() + (pausedMs ?? remaining * 1000);
+        if (!completedId)
+          activeTask = window.KenseiFocusTag
+            ? structuredClone(window.KenseiFocusTag)
+            : null;
         completedId ||= uid();
         running = true;
       }
@@ -930,6 +954,7 @@
           if (saved) {
             ({ settings, mode, running, remaining, end, round, completedId } =
               saved);
+            activeTask = saved.activeTask || null;
             pausedMs = saved.remainingMs ?? remaining * 1000;
           }
         } catch {}

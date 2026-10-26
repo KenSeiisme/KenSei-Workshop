@@ -25,7 +25,30 @@ export function validateDeck(data) {
       throw Error(
         "Each card needs front and back text, up to 1,000 characters per side.",
       );
-    return { id: c.id, front: c.front, back: c.back, known: c.known };
+    const out = { id: c.id, front: c.front, back: c.back, known: c.known };
+    if (Object.hasOwn(c, "review")) {
+      const s = c.review;
+      if (
+        !s ||
+        !Number.isInteger(s.stage) ||
+        s.stage < 0 ||
+        s.stage > 5 ||
+        ![s.dueAt, s.lastReviewedAt].every(
+          (v) =>
+            v === null ||
+            (typeof v === "string" &&
+              /^\d{4}-\d{2}-\d{2}T/.test(v) &&
+              Number.isFinite(Date.parse(v))),
+        )
+      )
+        throw Error("Invalid review schedule.");
+      out.review = {
+        stage: s.stage,
+        dueAt: s.dueAt,
+        lastReviewedAt: s.lastReviewedAt,
+      };
+    }
+    return out;
   });
   if (new Set(cards.map((c) => c.id)).size !== cards.length)
     throw Error("Card IDs must be unique.");
@@ -52,4 +75,20 @@ export function shuffled(list) {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+export function gradeCard(card, known, now = Date.now()) {
+  const stage = known ? Math.min(5, (card.review?.stage || 0) + 1) : 0;
+  const delay = known ? [1, 3, 7, 14, 30][stage - 1] * 86400000 : 600000;
+  return {
+    ...card,
+    known,
+    review: {
+      stage,
+      dueAt: new Date(now + delay).toISOString(),
+      lastReviewedAt: new Date(now).toISOString(),
+    },
+  };
+}
+export function cardDue(card, now = Date.now()) {
+  return !card.review?.dueAt || Date.parse(card.review.dueAt) <= now;
 }

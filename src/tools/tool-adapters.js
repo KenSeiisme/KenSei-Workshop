@@ -301,8 +301,8 @@ function adapt(tool, root) {
       break;
     case "flashcards": {
       const panels = [
-        $(".flash-layout > section:first-child"),
-        $(".flash-layout > section:nth-child(2)"),
+        $("#deck-new")?.closest("section"),
+        $("#card-front")?.closest("section"),
         $("#study-start")?.closest("section"),
       ];
       if (panels.every(Boolean)) {

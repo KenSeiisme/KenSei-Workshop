@@ -376,3 +376,10 @@ clock();
 count();
 convert();
 dates();
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["time-studio"] = {
+  get zones() {
+    return data.zones;
+  },
+};
