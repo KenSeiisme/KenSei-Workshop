@@ -1,0 +1,198 @@
+{
+  "m_1518d7404f6c": {
+    "en": "Join and shape audio",
+    "zh-Hant": "合併與調整音訊"
+  },
+  "m_8607491064d3": {
+    "en": "Keep ranges from the joined timeline, for example 0-10 and 20-30. Empty keeps all.",
+    "zh-Hant": "保留合併時間軸上的片段，例如 0-10 與 20-30。留空則保留全部。"
+  },
+  "m_2fe57d98f581": {
+    "en": "Choose up to ten audio files, 50 MB combined.",
+    "zh-Hant": "最多可選擇十個音訊檔案，總大小不可超過 50 MB。"
+  },
+  "m_8bdcb952a2fd": {
+    "en": "Peak normalization",
+    "zh-Hant": "峰值正規化"
+  },
+  "m_80c4a0701067": {
+    "en": "Prepare audio preview",
+    "zh-Hant": "準備音訊預覽"
+  },
+  "m_a627d683146f": {
+    "en": "Choose audio files first.",
+    "zh-Hant": "請先選擇音訊檔案。"
+  },
+  "m_24b383e64998": {
+    "en": "Combined audio exceeds five minutes or 128 MB decoded PCM.",
+    "zh-Hant": "合併音訊超過五分鐘，或解碼後的 PCM 超過 128 MB。"
+  },
+  "m_1cf35cc97d71": {
+    "en": "Audio preparation exceeds 128 MB PCM. Use shorter ranges.",
+    "zh-Hant": "音訊處理所需的 PCM 超過 128 MB。請縮短保留片段。"
+  },
+  "m_99e88b72b035": {
+    "en": "Fade lengths must fit inside the output and be at most 30 seconds.",
+    "zh-Hant": "淡入與淡出時間須在輸出長度內，且各自不可超過 30 秒。"
+  },
+  "m_721300dae81a": {
+    "en": "Preview ready: {0} seconds · peak {1}",
+    "zh-Hant": "預覽已就緒：{0} 秒 · 峰值 {1}"
+  },
+  "m_1768502d94b8": {
+    "en": "Audio files in order",
+    "zh-Hant": "依序排列的音訊檔案"
+  },
+  "m_a30a440ec100": {
+    "en": "Kept ranges (seconds)",
+    "zh-Hant": "保留片段（秒）"
+  },
+  "m_1c781f13f8cf": {
+    "en": "Fade in (seconds)",
+    "zh-Hant": "淡入（秒）"
+  },
+  "m_e71d97d5e795": {
+    "en": "Fade out (seconds)",
+    "zh-Hant": "淡出（秒）"
+  },
+  "m_e5013ddb039e": {
+    "en": "Cancel preparation",
+    "zh-Hant": "取消準備"
+  },
+  "m_e752d9b4737d": {
+    "en": "Use two increasing source and target anchors.",
+    "zh-Hant": "請為來源與目標各設定兩個依時間遞增的對齊點。"
+  },
+  "m_25cbed434e56": {
+    "en": "Batch subtitle editing",
+    "zh-Hant": "批次字幕編輯"
+  },
+  "m_cea6fc2b609e": {
+    "en": "Selected cues",
+    "zh-Hant": "所選字幕段"
+  },
+  "m_96c34a0719eb": {
+    "en": "Invalid",
+    "zh-Hant": "無效"
+  },
+  "m_38b163f9be7c": {
+    "en": "Overlap",
+    "zh-Hant": "時間重疊"
+  },
+  "m_56680dd537e2": {
+    "en": "Fast reading",
+    "zh-Hant": "閱讀速度過快"
+  },
+  "m_565339bc4d33": {
+    "en": "OK",
+    "zh-Hant": "正常"
+  },
+  "m_49776ed97313": {
+    "en": "Cue",
+    "zh-Hant": "字幕段"
+  },
+  "m_f4a635c101ab": {
+    "en": "Characters / second",
+    "zh-Hant": "字元／秒"
+  },
+  "m_9d60841e0a78": {
+    "en": "Check",
+    "zh-Hant": "檢查結果"
+  },
+  "m_9e6ba404af2c": {
+    "en": "Merge selected",
+    "zh-Hant": "合併所選項目"
+  },
+  "m_6ca523d28af8": {
+    "en": "Select at least two cues.",
+    "zh-Hant": "請至少選取兩個字幕段。"
+  },
+  "m_8c983dc7a7f4": {
+    "en": "Split at milliseconds",
+    "zh-Hant": "分割時間（毫秒）"
+  },
+  "m_bb6c2183fa13": {
+    "en": "Split selected cue",
+    "zh-Hant": "分割所選字幕段"
+  },
+  "m_23125bcb144b": {
+    "en": "Select one cue to split.",
+    "zh-Hant": "請選取一個要分割的字幕段。"
+  },
+  "m_3c3f8de66dd7": {
+    "en": "Split time must be inside the cue.",
+    "zh-Hant": "分割時間必須介於字幕段的開始與結束時間之間。"
+  },
+  "m_ca2ff6fca5b8": {
+    "en": "Use at least two text characters to split.",
+    "zh-Hant": "字幕文字須至少包含兩個字元才能分割。"
+  },
+  "m_09556b6791ba": {
+    "en": "Two-anchor timing correction",
+    "zh-Hant": "雙對齊點時間校正"
+  },
+  "m_2d7af61a7905": {
+    "en": "Source anchor 1 (ms)",
+    "zh-Hant": "來源對齊點 1（毫秒）"
+  },
+  "m_3d7bf4cc14cf": {
+    "en": "Target anchor 1 (ms)",
+    "zh-Hant": "目標對齊點 1（毫秒）"
+  },
+  "m_1a888abf3050": {
+    "en": "Source anchor 2 (ms)",
+    "zh-Hant": "來源對齊點 2（毫秒）"
+  },
+  "m_248a53de45d2": {
+    "en": "Target anchor 2 (ms)",
+    "zh-Hant": "目標對齊點 2（毫秒）"
+  },
+  "m_0c2e557f98fe": {
+    "en": "Preview corrected times",
+    "zh-Hant": "預覽校正後的時間"
+  },
+  "m_1fe4ba216cba": {
+    "en": "Apply corrected times",
+    "zh-Hant": "套用校正後的時間"
+  },
+  "m_7d9e7070f660": {
+    "en": "Preview the current correction first.",
+    "zh-Hant": "請先預覽目前的時間校正。"
+  },
+  "m_e80f79c585b6": {
+    "en": "1080p · 30fps",
+    "zh-Hant": "1080p · 每秒 30 影格"
+  },
+  "m_b43d8e69bba9": {
+    "en": "720p · 30fps",
+    "zh-Hant": "720p · 每秒 30 影格"
+  },
+  "m_7725f311f456": {
+    "en": "Recording preset",
+    "zh-Hant": "錄製預設"
+  },
+  "m_0f2d44327bb1": {
+    "en": "Cancel countdown",
+    "zh-Hant": "取消倒數"
+  },
+  "m_effe10b94464": {
+    "en": "Use start-end seconds, one range per line.",
+    "zh-Hant": "請使用起始秒數-結束秒數的格式，每行輸入一個範圍。"
+  },
+  "m_d3226f287196": {
+    "en": "Keep valid ranges within the audio and five-minute output limit.",
+    "zh-Hant": "請使用音訊長度內的有效範圍，輸出總長度不可超過五分鐘。"
+  },
+  "m_a88e79eb11af": {
+    "en": "Recording starts in {0}…",
+    "zh-Hant": "{0} 秒後開始錄製…"
+  },
+  "m_c590557f8856": {
+    "en": "Countdown cancelled. Ready to capture again.",
+    "zh-Hant": "倒數已取消，可再次開始擷取。"
+  },
+  "m_db5e5b4c0365": {
+    "en": "Single clip or up to ten joined files · 50 MB combined · 5 minutes · mono or stereo · decoded PCM up to 128 MB.",
+    "zh-Hant": "單一音檔或最多十個拼接音檔 · 合計 50 MB · 5 分鐘 · 單／雙聲道 · 解碼 PCM 上限 128 MB。"
+  }
+}

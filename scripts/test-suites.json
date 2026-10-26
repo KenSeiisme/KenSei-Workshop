@@ -301,5 +301,13 @@
     [
       "tests/browser/advanced-p2-outputs.cjs"
     ]
+  ],
+  "advanced-p3": [
+    [
+      "tests/unit/advanced-p3.mjs"
+    ],
+    [
+      "tests/browser/advanced-p3.cjs"
+    ]
   ]
 }

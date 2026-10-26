@@ -640,3 +640,11 @@ if ($("#audio-record-start")) {
     );
   recordingControls();
 }
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["audio-studio"] = {
+  loadAudio,
+  get buffer() {
+    return buffer;
+  },
+};

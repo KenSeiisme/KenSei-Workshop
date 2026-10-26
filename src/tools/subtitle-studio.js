@@ -225,3 +225,19 @@ export function restoreRecovery(text) {
   dirty = true;
   draw();
 }
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["subtitle-studio"] = {
+  get cues() {
+    return cues;
+  },
+  replace(next) {
+    if (next.length > 5000) throw Error("Use at most 5,000 cues.");
+    serialize(next, "vtt");
+    cues = next;
+    selected = null;
+    page = 0;
+    dirty = true;
+    draw();
+  },
+};

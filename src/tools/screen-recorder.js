@@ -84,8 +84,14 @@ $("#screen-start").onclick = async () => {
       includeMic = $("#screen-microphone").checked;
     nextCapture = await navigator.mediaDevices.getDisplayMedia({
       video: {
-        width: { ideal: 1920, max: 1920 },
-        height: { ideal: 1080, max: 1080 },
+        width: {
+          ideal: window.KenseiRecorderPreset === 720 ? 1280 : 1920,
+          max: window.KenseiRecorderPreset === 720 ? 1280 : 1920,
+        },
+        height: {
+          ideal: window.KenseiRecorderPreset === 720 ? 720 : 1080,
+          max: window.KenseiRecorderPreset === 720 ? 720 : 1080,
+        },
         frameRate: { ideal: 30, max: 30 },
       },
       audio: includeShared,
@@ -162,6 +168,19 @@ $("#screen-start").onclick = async () => {
         ]),
       ),
     );
+    // 先取得浏览器捕获授权，再倒数；不能让异步等待消耗用户激活。
+    for (let n = 3; n > 0; n--) {
+      message(uiMsg("Recording starts in {0}…", [n]));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (token !== generation) {
+        stopTracks(nextCapture, nextMic);
+        return;
+      }
+      if (screenTrack.readyState === "ended") {
+        release();
+        return;
+      }
+    }
     recording = makeRecording(mixed, {
       types: VIDEO_TYPES,
       maxSeconds: 600,
@@ -306,3 +325,19 @@ if (!supported)
     true,
   );
 controls();
+
+window.KenseiAdvancedContexts ||= {};
+window.KenseiAdvancedContexts["screen-recorder"] = {
+  get result() {
+    return result;
+  },
+  cancelCountdown() {
+    if (!pending || recording) return;
+    generation++;
+    release();
+    pending = false;
+    state = "idle";
+    message(uiMsg("Countdown cancelled. Ready to capture again."));
+    controls();
+  },
+};
