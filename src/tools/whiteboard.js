@@ -1,5 +1,6 @@
 import { $, api, status, download, downloadText, filename } from "./common.js";
 import { createRecordStore, recordSignature } from "./record-store.js";
+import { mountSharedBoard } from "./shared-whiteboard.js";
 import {
   validateWhiteboard,
   whiteboardData,
@@ -38,7 +39,8 @@ let engine,
   lastScene = null,
   error = "",
   ignore = false,
-  renderVersion = 0;
+  renderVersion = 0,
+  shared = null;
 const requested = new URLSearchParams(location.search).get("id");
 const css = document.createElement("link");
 css.rel = "stylesheet";
@@ -114,6 +116,7 @@ function list() {
   controls();
 }
 function currentData() {
+  if (shared?.active) return shared.data();
   if (!board) throw Error("Create or choose a whiteboard first.");
   const scene = drawing
     ? {
@@ -130,6 +133,10 @@ function currentData() {
   );
 }
 function changed(elements, state, files) {
+  if (shared?.active) {
+    shared.change(elements, state, files);
+    return;
+  }
   if (ignore || !board || scope !== owner()) return;
   let data;
   try {
@@ -205,7 +212,8 @@ async function mount(data) {
     theme: "dark",
     langCode: globalThis.KenseiI18n?.getLocale() === "zh-Hant" ? "zh-TW" : "en",
     aiEnabled: false,
-    isCollaborating: false,
+    isCollaborating: !!shared?.active,
+    onPointerUpdate: (payload) => shared?.pointer(payload),
     validateEmbeddable: () => false,
     viewModeEnabled: !board,
     autoFocus: false,
@@ -601,7 +609,9 @@ host.addEventListener(
     ) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      if (e.key.toLowerCase() === "o") $("#board-import").click();
+      if (e.key.toLowerCase() === "o" && shared?.active)
+        message(uiMsg("Import into Personal, then choose Share a copy."));
+      else if (e.key.toLowerCase() === "o") $("#board-import").click();
       else if (e.key.toLowerCase() === "s") exportBoard("json");
       else message(uiMsg("Linked elements are not included in this version."));
     }
@@ -609,6 +619,7 @@ host.addEventListener(
   true,
 );
 store.subscribe(() => {
+  if (shared?.active) return;
   list();
   if (!board || scope !== owner() || saving) return;
   const row = store.rows().find((r) => r.id === board.id);
@@ -627,6 +638,7 @@ store.subscribe(() => {
     .catch((e) => message(uiError(e), true));
 });
 window.addEventListener("record-conflict", async ({ detail }) => {
+  if (shared?.active) return;
   if (detail.kind !== "whiteboard" || board?.id !== detail.from) return;
   board.id = detail.to;
   history.replaceState(null, "", "?id=" + encodeURIComponent(detail.to));
@@ -644,6 +656,7 @@ window.addEventListener("beforeunload", (e) => {
   }
 });
 async function start() {
+  if (shared?.active) return;
   const token = ++switching,
     expected = owner();
   clearTimeout(timer);
@@ -667,10 +680,10 @@ async function start() {
   controls();
   try {
     await store.ready();
-    if (expected !== owner() || token !== switching) return;
+    if (expected !== owner() || token !== switching || shared?.active) return;
     await store.flush();
     await store.load(true);
-    if (expected !== owner() || token !== switching) return;
+    if (expected !== owner() || token !== switching || shared?.active) return;
     list();
     const id = requested || store.rows()[0]?.id;
     if (id) await open(id);
@@ -683,5 +696,83 @@ async function start() {
     message(uiError(e), true);
   }
 }
+shared = mountSharedBoard({
+  resetPrivate: () => {
+    board = null;
+    dirty = false;
+    error = "";
+    scope = owner();
+    $("#board-name").value = "";
+  },
+  api: () => drawing,
+  async mount(data) {
+    await mount(data);
+    for (let i = 0; i < 100 && !drawing; i++)
+      await new Promise((resolve) => setTimeout(resolve, 30));
+    if (!drawing)
+      throw Error("The whiteboard editor could not start. Reload to retry.");
+  },
+  editing(value) {
+    if (!mountedProps) return;
+    mountedProps = {
+      ...mountedProps,
+      isCollaborating: true,
+      viewModeEnabled: !value,
+    };
+    root.render(engine.createElement(engine.Excalidraw, mountedProps));
+  },
+  remote(elements, appState) {
+    drawing?.updateScene({
+      elements,
+      appState,
+      captureUpdate: engine.CaptureUpdateAction.NEVER,
+    });
+  },
+  reconcile: (...args) => engine.reconcileElements(...args),
+  collaborators: (collaborators) =>
+    drawing?.updateScene({
+      collaborators,
+      captureUpdate: engine.CaptureUpdateAction.NEVER,
+    }),
+  beforeEnter: async () => {
+    if (!(await save()))
+      throw Error("Save or export your private edits before opening Shared.");
+  },
+  privateData: () =>
+    board
+      ? whiteboardData(
+          $("#board-name").value,
+          drawing?.getSceneElementsIncludingDeleted() ||
+            lastScene?.elements ||
+            [],
+          drawing?.getAppState() || lastScene?.appState || {},
+        )
+      : null,
+  normalize: (data) => ({
+    ...data,
+    elements: engine.restoreElements(
+      data.elements.filter((e) => !e.isDeleted),
+      null,
+    ),
+  }),
+  personal: async () => {
+    if (board) await open(board.id);
+    else await start();
+  },
+  privateCopy: async (data) => {
+    const copy = await store.put(
+      validateWhiteboard({
+        ...data,
+        elements: data.elements.filter((e) => !e.isDeleted),
+        name: [...data.name].slice(0, 88).join("") + " (copy)",
+      }),
+      crypto.randomUUID(),
+      owner(),
+    );
+    message(uiMsg("A private copy was saved to your workspace."));
+    return copy;
+  },
+  export: exportBoard,
+});
 window.addEventListener("workspace-ready", start);
 start();

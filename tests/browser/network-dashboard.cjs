@@ -107,12 +107,12 @@ const legacy = {
     );
     assert.equal(requests.filter((x) => x === "/meta").length, 1);
     assert.ok(requests.every((x) => ["/meta", "/__down", "/__up"].includes(x)));
-    assert.match(await p.textContent("#network-connection"), /Example Network/);
-    assert.ok(!(await p.textContent("#network-connection")).includes(IP));
+    assert.match(await p.textContent(".network-top"), /Example Network/);
+    assert.ok(!(await p.textContent(".network-top")).includes(IP));
     await p.click("#network-ip");
-    assert.ok((await p.textContent("#network-connection")).includes(IP));
+    assert.ok((await p.textContent(".network-top")).includes(IP));
     await p.click("#network-ip");
-    assert.ok(!(await p.textContent("#network-connection")).includes(IP));
+    assert.ok(!(await p.textContent(".network-top")).includes(IP));
     const stored = await p.evaluate(() =>
         JSON.parse(localStorage.getItem("kensei-network-history-v1")),
       ),
@@ -146,6 +146,51 @@ const legacy = {
     assert.ok(Math.abs(mbytes - mbps / 8) < 0.02);
     pass(
       "real pinned engine produces valid sample curves, latency distributions, P90/peak separation and Mbps/MB/s conversion",
+    );
+    assert.equal(await p.locator("#gauge-ticks line").count(), 26);
+    assert.equal(await p.locator("#gauge-ticks text").count(), 6);
+    const maximum = Number(
+      await p.locator(".speed-gauge").getAttribute("data-maximum"),
+    );
+    const progress = Number(
+      (await p.locator("#gauge-arc").getAttribute("stroke-dasharray")).split(
+        " ",
+      )[0],
+    );
+    assert(Math.abs(progress - (mbps / maximum) * 100) < 0.02);
+    assert((await p.locator("#gauge-range").textContent()).includes("MB/s"));
+    await p
+      .locator("#network-ip-value")
+      .evaluate(
+        (n) => (n.textContent = "2001:0db8:85a3:0000:0000:8a2e:0370:7334"),
+      );
+    for (const width of [320, 360, 768, 1440]) {
+      await p.setViewportSize({ width, height: 900 });
+      await p.waitForTimeout(250);
+      const rects = await p.locator(".network-ip-row").evaluate((n) =>
+        [...n.children].map((x) => {
+          const r = x.getBoundingClientRect();
+          return { x: r.x, y: r.y, w: r.width };
+        }),
+      );
+      assert(rects[1].x < rects[2].x && rects[2].x < rects[3].x);
+      assert(
+        await p.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth + 1,
+        ),
+        JSON.stringify(
+          await p.evaluate(() => ({
+            width: innerWidth,
+            wide: [...document.querySelectorAll("body *")]
+              .filter((n) => n.getBoundingClientRect().right > innerWidth + 1)
+              .map((n) => n.tagName + "." + n.className)
+              .slice(0, 12),
+          })),
+        ),
+      );
+    }
+    pass(
+      "numeric gauge intervals, exact arc ratio, unit conversion and inline long IPv6 fit 320–1440px",
     );
     const json = JSON.parse((await download("#network-json")).toString());
     assert.equal(json.version, 2);

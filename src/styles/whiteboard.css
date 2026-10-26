@@ -78,3 +78,94 @@
     margin: 6px;
   }
 }
+.board-mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+.board-mode-tabs button {
+  min-height: 44px;
+  border: 1px solid #d6b6ec33;
+  border-radius: 9px;
+  padding: 8px 18px;
+  background: #211927;
+  color: #e6daed;
+}
+.board-mode-tabs [aria-selected="true"] {
+  background: #d6b6ec;
+  color: #21152b;
+}
+.shared-board-manager {
+  margin-bottom: 18px;
+}
+.shared-join {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  margin: 12px 0;
+}
+.shared-join label {
+  flex: 1;
+  margin: 0;
+}
+.shared-join .button {
+  margin: 0;
+}
+.shared-status-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+  color: #d6b6ec;
+  font-size: 12px;
+}
+.shared-members {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.shared-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ffffff15;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.shared-member small {
+  color: var(--muted);
+}
+.shared-member button {
+  min-height: 44px;
+}
+#shared-invite-output {
+  overflow-wrap: anywhere;
+  padding: 10px;
+  border: 1px solid #d6b6ec33;
+  user-select: all;
+}
+#shared-select {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 500px) {
+  .shared-join {
+    gap: 8px;
+  }
+  .shared-board-manager .action-row > select {
+    width: 100%;
+  }
+}
+.shared-board-manager > details > summary,
+#shared-member-panel > summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+  color: #d6b6ec;
+  font-size: 13px;
+}
+.shared-board-manager .shared-join {
+  margin-top: 12px;
+}

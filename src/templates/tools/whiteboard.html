@@ -1,4 +1,27 @@
-<div class="whiteboard-manager">
+<div class="board-mode-tabs" role="tablist" aria-label="Whiteboard workspace">
+  <button
+    id="board-personal-tab"
+    role="tab"
+    aria-selected="true"
+    aria-controls="board-personal-panel"
+  >
+    Personal</button
+  ><button
+    id="board-shared-tab"
+    role="tab"
+    aria-selected="false"
+    aria-controls="board-shared-panel"
+    tabindex="-1"
+  >
+    Shared
+  </button>
+</div>
+<div
+  class="whiteboard-manager"
+  id="board-personal-panel"
+  role="tabpanel"
+  aria-labelledby="board-personal-tab"
+>
   <section class="panel tool-form whiteboard-controls">
     <h2>Your whiteboards</h2>
     <div class="action-row">
@@ -28,7 +51,8 @@
     <p class="muted small">
       Guests save on this device. Signed-in boards sync privately. Guest boards
       are copied only when you choose. Vector drawings and text only; images,
-      linked elements, embedded pages and collaboration are not included.
+      linked elements and embedded pages are not included. Use Shared for
+      invitation-only collaboration.
     </p>
     <div class="action-row">
       <label class="button secondary board-import-label"
@@ -50,6 +74,88 @@
     <div id="board-guest-list" class="saved-list" hidden></div>
   </section>
 </div>
+<section
+  class="panel tool-form shared-board-manager"
+  id="board-shared-panel"
+  role="tabpanel"
+  aria-labelledby="board-shared-tab"
+  hidden
+>
+  <div class="section-heading">
+    <h2>Shared whiteboards</h2>
+    <button id="shared-refresh" class="text-link">Refresh</button>
+  </div>
+  <p class="muted small">
+    Up to four signed-in members. Shared boards stay saved when everyone leaves.
+    Only the owner manages invitations and members.
+  </p>
+  <details id="shared-browser" open>
+    <summary>Create or choose a room</summary>
+    <div id="shared-signin" hidden>
+      <button class="button primary" id="shared-login">
+        Sign in with Google
+      </button>
+    </div>
+    <div class="action-row">
+      <button class="button primary" id="shared-new">
+        New shared whiteboard</button
+      ><button class="button secondary" id="shared-copy-personal">
+        Share a copy</button
+      ><select id="shared-select" aria-label="Choose shared whiteboard">
+        <option value="">Choose a shared whiteboard</option>
+      </select>
+    </div>
+    <div class="shared-join">
+      <label
+        >Invitation code<input
+          id="shared-code"
+          maxlength="64"
+          autocomplete="off"
+          placeholder="Enter a room code" /></label
+      ><button class="button secondary" id="shared-join">Join</button>
+    </div>
+  </details>
+  <div id="shared-room-controls" hidden>
+    <label
+      >Shared whiteboard name<input id="shared-name" maxlength="100"
+    /></label>
+    <div class="shared-status-row">
+      <span id="shared-live-status" role="status"></span
+      ><span id="shared-save-status" role="status"></span>
+    </div>
+    <div class="action-row">
+      <button class="button secondary" id="shared-reconnect">Reconnect</button
+      ><button class="button secondary" id="shared-private-copy">
+        Save a private copy</button
+      ><button class="text-link" id="shared-json">Editable file ↓</button
+      ><button class="text-link" id="shared-png">PNG ↓</button
+      ><button class="text-link" id="shared-svg">SVG ↓</button
+      ><button class="text-link" id="shared-expand">Expand canvas</button>
+    </div>
+    <details id="shared-member-panel">
+      <summary>Members &amp; invitation</summary>
+      <div id="shared-owner-actions" class="action-row" hidden>
+        <button class="text-link" id="shared-invite">
+          Copy invitation link</button
+        ><button class="text-link" id="shared-invite-code">
+          Copy room code</button
+        ><button class="text-link" id="shared-reset-invite">
+          Reset invitation</button
+        ><button class="text-link" id="shared-delete">
+          Delete shared whiteboard
+        </button>
+      </div>
+      <div id="shared-invite-output" class="muted small" hidden></div>
+      <div id="shared-members" class="shared-members"></div>
+      <button class="text-link" id="shared-leave" hidden>
+        Leave shared whiteboard
+      </button>
+    </details>
+  </div>
+  <p id="shared-status" role="status" class="muted small">
+    Create or join a shared whiteboard.
+  </p>
+</section>
 <section
   id="board-canvas-shell"
   class="whiteboard-shell"

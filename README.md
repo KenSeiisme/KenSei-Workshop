@@ -6,6 +6,8 @@
 - GitHub 分支：`KenSei-Workshop`
 - 发布方式：push GitHub，由现有 Vercel 集成自动构建；无需另外手动部署。
 
+白板另提供邀请制共享房间：最多四个已登录账号共同绘画，与私人白板分开保存，并与 Pong 共用两间同时活跃房间的容量。
+
 ## 文件夹怎么找
 
 ```text
@@ -51,6 +53,7 @@ pnpm test:structure
 pnpm test:unit
 pnpm test:database
 pnpm test:experience
+pnpm test:tool-motion-shared
 
 # 浏览器测试需要先运行上面的预览服务器。
 $env:TEST_BASE_URL = 'http://127.0.0.1:8769'

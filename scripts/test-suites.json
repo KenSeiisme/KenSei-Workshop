@@ -102,5 +102,14 @@
     ["tests/unit/typing-experience.mjs"],
     ["tests/database/random-typing.mjs"],
     ["tests/browser/typing-experience.cjs"]
+  ],
+  "tool-motion-shared": [
+    ["tests/unit/network-gauge.mjs"],
+    ["tests/database/shared-whiteboards.mjs"],
+    ["tests/database/pong-rooms.mjs"],
+    ["tests/browser/tool-motion.cjs"],
+    ["tests/browser/shared-whiteboards.cjs"],
+    ["tests/browser/network-dashboard.cjs"],
+    ["tests/browser/sixth-whiteboard.cjs"]
   ]
 }

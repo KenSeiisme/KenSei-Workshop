@@ -1,7 +1,9 @@
 import { $, copy, downloadText, download, canvasBlob } from "./common.js";
 import { publicReport, summarize } from "./network-stats.js";
+import { gaugeRange, gaugeTicks } from "./network-gauge.js";
 import {
   uiOption,
+  uiRender,
   uiDate,
   uiMsg,
   uiJoin,
@@ -34,7 +36,8 @@ let frame = null,
   speedPlot = null,
   latencyPlot = null,
   plotLoad = null,
-  renderRevision = 0;
+  renderRevision = 0,
+  gaugeMaximum = 100;
 let history = [];
 try {
   history = JSON.parse(localStorage.getItem(key)) || [];
@@ -108,14 +111,6 @@ function paintConnection() {
       [connection.node, connection.nodeCity].filter(Boolean).join(" · "),
     ],
     ["Protocol", connection.protocol],
-    [
-      "IP",
-      connection.ip
-        ? showIP
-          ? connection.ip
-          : "•••• · click Show IP"
-        : uiMsg("Unavailable"),
-    ],
   ]) {
     list.append(
       textElement("dt", uiFrom(label)),
@@ -123,6 +118,10 @@ function paintConnection() {
     );
   }
   $("#network-ip").disabled = $("#network-copy-ip").disabled = !connection.ip;
+  uiText(
+    $("#network-ip-value"),
+    connection.ip ? (showIP ? connection.ip : "••••") : uiMsg("Unavailable"),
+  );
   uiText($("#network-ip"), showIP ? uiMsg("Hide IP") : uiMsg("Show IP"));
 }
 function paintMetrics(row = {}) {
@@ -151,7 +150,34 @@ function paintMetrics(row = {}) {
     typeof sample === "number" ? fmt(sample * factor()) : "—",
   );
   uiText($("#gauge-unit"), unit());
-  const max = sample > 0 ? 10 ** Math.ceil(Math.log10(sample * 1.1)) : 100;
+  const max = (gaugeMaximum = gaugeRange(gaugeMaximum, sample));
+  const svgNS = "http://www.w3.org/2000/svg";
+  const ticks = $("#gauge-ticks");
+  ticks.replaceChildren();
+  for (const tick of gaugeTicks(max, factor())) {
+    const line = document.createElementNS(svgNS, "line");
+    for (const name of ["x1", "x2", "y1", "y2"])
+      line.setAttribute(name, tick[name]);
+    line.setAttribute("class", tick.major ? "gauge-tick major" : "gauge-tick");
+    ticks.append(line);
+    if (tick.major) {
+      const label = document.createElementNS(svgNS, "text");
+      label.setAttribute("x", tick.x);
+      label.setAttribute("y", tick.y + 4);
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("class", "gauge-tick-label");
+      label.textContent =
+        tick.value >= 10000
+          ? (tick.value / 1000).toFixed(1) + "k"
+          : Number(tick.value.toFixed(2)).toString();
+      ticks.append(label);
+    }
+  }
+  uiText(
+    $("#gauge-range"),
+    uiMsg("Scale: 0–{0} {1}", [Number((max * factor()).toFixed(2)), unit()]),
+  );
+  $(".speed-gauge").dataset.maximum = max;
   $("#gauge-arc").setAttribute(
     "stroke-dasharray",
     (sample > 0 ? Math.min(100, (sample / max) * 100) : 0) + " 100",
@@ -317,25 +343,34 @@ async function plots(row) {
     down = new Map((data.download || []).map((p) => [p.t, p.mbps * factor()])),
     up = new Map((data.upload || []).map((p) => [p.t, p.mbps * factor()])),
     times = [...new Set([...down.keys(), ...up.keys()])].sort((x, y) => x - y);
+  const axisValues = (u, values) =>
+    values.map((v) => Number(v.toFixed(2)).toString());
   const base = {
-    width: Math.max(240, Math.floor(a.clientWidth)),
+    width: Math.max(180, Math.floor(a.clientWidth)),
     height: 260,
     scales: { x: { time: false } },
     axes: [
-      { stroke: "#a99db5", grid: { stroke: "#302936" } },
-      { stroke: "#a99db5", grid: { stroke: "#302936" } },
+      { stroke: "#a99db5", grid: { stroke: "#302936" }, values: axisValues },
+      { stroke: "#a99db5", grid: { stroke: "#302936" }, values: axisValues },
     ],
     cursor: { drag: { x: false, y: false } },
     legend: { show: true },
     series: [
       {},
-      { label: "Download", stroke: "#ef9bb7", width: 2, spanGaps: false },
       {
-        label: "Upload",
+        label: uiRender(uiMsg("Download")),
+        stroke: "#ef9bb7",
+        width: 2,
+        spanGaps: false,
+        value: (u, v) => (v == null ? "—" : fmt(v, " " + unit())),
+      },
+      {
+        label: uiRender(uiMsg("Upload")),
         stroke: "#afa0ef",
         width: 2,
         dash: [6, 3],
         spanGaps: false,
+        value: (u, v) => (v == null ? "—" : fmt(v, " " + unit())),
       },
     ],
   };
@@ -362,7 +397,7 @@ async function plots(row) {
           {
             ...base,
             axes: [
-              { ...base.axes[0], label: "Test time (s)" },
+              { ...base.axes[0], label: uiRender(uiMsg("Test time (s)")) },
               { ...base.axes[1], label: unit() },
             ],
           },
@@ -386,7 +421,7 @@ async function plots(row) {
       ul = data.upLatency || [],
       n = Math.max(idle.length, dl.length, ul.length);
     if (n) {
-      const width = Math.max(240, Math.floor(b.clientWidth)),
+      const width = Math.max(180, Math.floor(b.clientWidth)),
         points = [
           Array.from({ length: n }, (_, i) => i + 1),
           ...[idle, dl, ul].map((series) =>
@@ -403,14 +438,23 @@ async function plots(row) {
             ...base,
             width,
             axes: [
-              { ...base.axes[0], label: "Sample number" },
+              { ...base.axes[0], label: uiRender(uiMsg("Sample number")) },
               { ...base.axes[1], label: "ms" },
             ],
             series: [
               {},
-              { label: "Idle", stroke: "#b8d8ca", width: 2 },
-              { label: "Download", stroke: "#ef9bb7", width: 2 },
-              { label: "Upload", stroke: "#afa0ef", width: 2, dash: [6, 3] },
+              { label: uiRender(uiMsg("Idle")), stroke: "#b8d8ca", width: 2 },
+              {
+                label: uiRender(uiMsg("Download")),
+                stroke: "#ef9bb7",
+                width: 2,
+              },
+              {
+                label: uiRender(uiMsg("Upload")),
+                stroke: "#afa0ef",
+                width: 2,
+                dash: [6, 3],
+              },
             ],
           },
           points,
@@ -462,7 +506,12 @@ function resultText(row) {
       ([k, [label, type]]) =>
         label +
         ": " +
-        fmt(safe.metrics[k], " " + (type === "speed" ? "Mbps" : "ms")),
+        fmt(
+          type === "speed" && safe.metrics[k] != null
+            ? safe.metrics[k] * factor()
+            : safe.metrics[k],
+          " " + (type === "speed" ? unit() : "ms"),
+        ),
     ),
     "Elapsed: " + fmt(safe.elapsed, " s"),
     "Attempted test payload: " + fmt(safe.used / 1e6, " MB"),
@@ -473,6 +522,7 @@ function resultText(row) {
 function selectResult(row) {
   if (running) return;
   last = row;
+  gaugeMaximum = 100;
   phase = "complete";
   connection = row.connection || {};
   showIP = false;
@@ -507,10 +557,17 @@ function showHistory() {
           timeStyle: "short",
         }) +
           " · ↓ " +
-          fmt(row.metrics.download) +
+          fmt(
+            row.metrics.download == null
+              ? null
+              : row.metrics.download * factor(),
+          ) +
           " / ↑ " +
-          fmt(row.metrics.upload) +
-          " Mbps",
+          fmt(
+            row.metrics.upload == null ? null : row.metrics.upload * factor(),
+          ) +
+          " " +
+          unit(),
       ),
     );
     const view = textElement("button", uiMsg("View"), "text-link");
@@ -574,6 +631,7 @@ function stop(message) {
 $("#network-start").onclick = () => {
   if (running) return;
   running = true;
+  gaugeMaximum = 100;
   last = null;
   phase = "loading";
   current = {};
@@ -693,7 +751,12 @@ $("#network-clear").onclick = () => {
   showHistory();
   $("#network-comparison").replaceChildren();
 };
-$("#network-unit").onchange = () => paint(current);
+$("#network-unit").onchange = () => {
+  paint(current);
+  showHistory();
+  if (last) $("#network-result").value = resultText(last);
+  if ($("#network-comparison").children.length) $("#network-compare").click();
+};
 $("#network-ip").onclick = () => {
   showIP = !showIP;
   if (!showIP) {
@@ -702,11 +765,18 @@ $("#network-ip").onclick = () => {
   }
   paintConnection();
 };
-$("#network-copy-ip").onclick = () => {
-  const input = $("#network-result");
-  input.hidden = false;
-  input.value = connection.ip || "";
-  copy(input);
+$("#network-copy-ip").onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(connection.ip || "");
+    uiText($("#network-status"), uiMsg("IP copied to clipboard."));
+  } catch {
+    uiText(
+      $("#network-status"),
+      uiMsg(
+        "Clipboard unavailable. Choose Show IP and copy the address manually.",
+      ),
+    );
+  }
 };
 $("#network-copy").onclick = () => {
   if (last) {
@@ -777,7 +847,12 @@ $("#network-png").onclick = async () => {
       c.fillText(
         label +
           ": " +
-          fmt(last.metrics[k], " " + (type === "speed" ? "Mbps" : "ms")),
+          fmt(
+            type === "speed" && last.metrics[k] != null
+              ? last.metrics[k] * factor()
+              : last.metrics[k],
+            " " + (type === "speed" ? unit() : "ms"),
+          ),
         50,
         y,
       );
@@ -849,13 +924,23 @@ $("#network-compare").onclick = () => {
       ["Metric", "First", "Second", "Second − first"],
       Object.entries(fields).map(([k, [label, type]]) => [
         label,
-        fmt(a.metrics[k], type === "speed" ? " Mbps" : " ms"),
-        fmt(b.metrics[k], type === "speed" ? " Mbps" : " ms"),
+        fmt(
+          type === "speed" && a.metrics[k] != null
+            ? a.metrics[k] * factor()
+            : a.metrics[k],
+          type === "speed" ? " " + unit() : " ms",
+        ),
+        fmt(
+          type === "speed" && b.metrics[k] != null
+            ? b.metrics[k] * factor()
+            : b.metrics[k],
+          type === "speed" ? " " + unit() : " ms",
+        ),
         fmt(
           typeof a.metrics[k] === "number" && typeof b.metrics[k] === "number"
-            ? b.metrics[k] - a.metrics[k]
+            ? (b.metrics[k] - a.metrics[k]) * (type === "speed" ? factor() : 1)
             : null,
-          type === "speed" ? " Mbps" : " ms",
+          type === "speed" ? " " + unit() : " ms",
         ),
       ]),
     ),
@@ -885,6 +970,13 @@ let resizeTimer;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => plots(current), 150);
+});
+window.addEventListener("locale-change", () => {
+  speedPlot?.destroy();
+  latencyPlot?.destroy();
+  speedPlot = latencyPlot = null;
+  paint(current);
+  paintConnection();
 });
 paintConnection();
 paint({});

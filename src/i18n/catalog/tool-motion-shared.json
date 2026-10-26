@@ -1,0 +1,410 @@
+{
+  "m_9df325f039d9": {
+    "en": "A private copy was saved to your workspace.",
+    "zh-Hant": "私人副本已儲存到你的工作區。"
+  },
+  "m_8fcb1b4e214e": {
+    "en": "A remote update could not be applied. Reconnect to reload the saved board.",
+    "zh-Hant": "無法套用遠端更新，請重新連線以載入已儲存的白板。"
+  },
+  "m_941a795ea515": {
+    "en": "Answer revealed, but saving failed. Copy your answer before leaving.",
+    "zh-Hant": "答案已揭示，但儲存失敗。離開前請先複製答案。"
+  },
+  "m_10d95357bab0": {
+    "en": "Apply this change to the shared whiteboard?",
+    "zh-Hant": "要將這項變更套用到共享白板嗎？"
+  },
+  "m_1c43ec53e820": {
+    "en": "Choose a shared whiteboard",
+    "zh-Hant": "選擇共享白板"
+  },
+  "m_66150b576aef": {
+    "en": "Choose a shared whiteboard.",
+    "zh-Hant": "請選擇共享白板。"
+  },
+  "m_b8231237c477": {
+    "en": "Choose another member to remove.",
+    "zh-Hant": "請選擇要移除的其他成員。"
+  },
+  "m_74a91092e976": {
+    "en": "Choose shared whiteboard",
+    "zh-Hant": "選擇共享白板"
+  },
+  "m_0b5de96320e9": {
+    "en": "Clipboard unavailable. Choose Show IP and copy the address manually.",
+    "zh-Hant": "無法使用剪貼簿，請選擇「顯示 IP」後手動複製位址。"
+  },
+  "m_d403c686f6a1": {
+    "en": "Connecting",
+    "zh-Hant": "連線中"
+  },
+  "m_641dce44f65b": {
+    "en": "Copy invitation link",
+    "zh-Hant": "複製邀請連結"
+  },
+  "m_a1e45a657b09": {
+    "en": "Copy room code",
+    "zh-Hant": "複製房間代碼"
+  },
+  "m_7a1da59ddaf3": {
+    "en": "Copy the invitation shown below.",
+    "zh-Hant": "請複製下方顯示的邀請內容。"
+  },
+  "m_1d87690b777f": {
+    "en": "Create or join a shared whiteboard.",
+    "zh-Hant": "建立或加入共享白板。"
+  },
+  "m_f4fe40a09e93": {
+    "en": "Delete shared whiteboard",
+    "zh-Hant": "刪除共享白板"
+  },
+  "m_9707a4113cb6": {
+    "en": "Editable file ↓",
+    "zh-Hant": "可編輯檔案 ↓"
+  },
+  "m_2d8f67e50d68": {
+    "en": "Enter a room code",
+    "zh-Hant": "輸入房間代碼"
+  },
+  "m_83674bf2d2c1": {
+    "en": "Enter the eight-character room code.",
+    "zh-Hant": "請輸入八位房間代碼。"
+  },
+  "m_c3511e131261": {
+    "en": "Everyone in this room can draw. Changes save automatically.",
+    "zh-Hant": "房間內所有成員都可以繪畫，變更會自動儲存。"
+  },
+  "m_0c68b89b0de4": {
+    "en": "Guests save on this device. Signed-in boards sync privately. Guest boards are copied only when you choose. Vector drawings and text only; images, linked elements and embedded pages are not included. Use Shared for invitation-only collaboration.",
+    "zh-Hant": "訪客白板儲存在本機，登入後的個人白板會私人同步。只有你選擇時才會複製訪客白板。支援矢量繪圖及文字，不包含圖片、連結元素或嵌入頁面。請使用「共享」進行僅限受邀成員的共同編輯。"
+  },
+  "m_c1685e5e2764": {
+    "en": "IP copied to clipboard.",
+    "zh-Hant": "IP 位址已複製到剪貼簿。"
+  },
+  "m_6b74247f3a75": {
+    "en": "Invalid browser identity",
+    "zh-Hant": "瀏覽器識別資料無效"
+  },
+  "m_6c60c3df0b27": {
+    "en": "Invalid deletion marker.",
+    "zh-Hant": "刪除標記無效。"
+  },
+  "m_945ecd2a6bd2": {
+    "en": "Invalid editor identity.",
+    "zh-Hant": "編輯連線識別資料無效。"
+  },
+  "m_ef989bf3fd11": {
+    "en": "Invalid element geometry.",
+    "zh-Hant": "繪圖元素的幾何資料無效。"
+  },
+  "m_d59789ed19d2": {
+    "en": "Invalid element version or layer index.",
+    "zh-Hant": "元素版本或圖層順序資料無效。"
+  },
+  "m_ace1e1ef0275": {
+    "en": "Invalid room identifier",
+    "zh-Hant": "房間識別資料無效"
+  },
+  "m_1f12953dbf74": {
+    "en": "Invalid room identity.",
+    "zh-Hant": "房間識別資料無效。"
+  },
+  "m_63b49ecd549f": {
+    "en": "Invalid room request",
+    "zh-Hant": "房間請求無效"
+  },
+  "m_6f91a932fcc0": {
+    "en": "Invalid save identity.",
+    "zh-Hant": "儲存操作識別資料無效。"
+  },
+  "m_affb638ed906": {
+    "en": "Invalid shared canvas settings.",
+    "zh-Hant": "共享畫布設定無效。"
+  },
+  "m_1df7162410df": {
+    "en": "Invalid shared whiteboard request.",
+    "zh-Hant": "共享白板請求無效。"
+  },
+  "m_e2260d166f3c": {
+    "en": "Invitation code",
+    "zh-Hant": "邀請代碼"
+  },
+  "m_75e6b9184dc7": {
+    "en": "Invitation copied.",
+    "zh-Hant": "邀請內容已複製。"
+  },
+  "m_984b13da4402": {
+    "en": "Invitation is invalid or was reset.",
+    "zh-Hant": "邀請無效或已被重設。"
+  },
+  "m_43b42940ec87": {
+    "en": "Invitation reset. Previously joined members keep access.",
+    "zh-Hant": "邀請已重設，已加入的成員仍可存取白板。"
+  },
+  "m_fd30fe681b4b": {
+    "en": "Join",
+    "zh-Hant": "加入"
+  },
+  "m_e4b667776c9f": {
+    "en": "Keep up to 100 owned shared whiteboards.",
+    "zh-Hant": "最多可擁有 100 份共享白板。"
+  },
+  "m_c63daf6d11ed": {
+    "en": "Leave shared whiteboard",
+    "zh-Hant": "退出共享白板"
+  },
+  "m_f862dc0e873d": {
+    "en": "Leave your current room before joining another.",
+    "zh-Hant": "請先離開目前房間，再加入其他房間。"
+  },
+  "m_0124622a3a19": {
+    "en": "Local recovery failed. Export a backup before leaving.",
+    "zh-Hant": "本機恢復副本儲存失敗，離開前請匯出備份。"
+  },
+  "m_7c968fb71f50": {
+    "en": "Member",
+    "zh-Hant": "成員"
+  },
+  "m_3f90dfb74d4b": {
+    "en": "New shared whiteboard",
+    "zh-Hant": "新增共享白板"
+  },
+  "m_a1794783aab7": {
+    "en": "Offline",
+    "zh-Hant": "離線"
+  },
+  "m_0d21bd52022c": {
+    "en": "Online",
+    "zh-Hant": "在線"
+  },
+  "m_8736d3520f2f": {
+    "en": "Online capacity is busy. Close a live room or retry later.",
+    "zh-Hant": "聯機容量已滿，請關閉一個使用中的房間，或稍後重試。"
+  },
+  "m_c42aa584135e": {
+    "en": "Only the owner can manage this shared whiteboard.",
+    "zh-Hant": "只有房主可以管理這份共享白板。"
+  },
+  "m_b52522880e54": {
+    "en": "Only the room host can complete this casual match",
+    "zh-Hant": "只有房主可以結束這場休閒對戰"
+  },
+  "m_4b1b8aa3608a": {
+    "en": "Owner",
+    "zh-Hant": "房主"
+  },
+  "m_3bdd6c5f5f7f": {
+    "en": "Pending save",
+    "zh-Hant": "待儲存"
+  },
+  "m_845f9286400f": {
+    "en": "Personal",
+    "zh-Hant": "個人"
+  },
+  "m_03a9b50571bb": {
+    "en": "Read only · another editor or online capacity is busy",
+    "zh-Hant": "唯讀 · 其他連線正在編輯，或聯機容量已滿"
+  },
+  "m_de25d1a0f3c6": {
+    "en": "Read only. Another tab is editing, or online capacity is busy. Reconnect to retry.",
+    "zh-Hant": "目前為唯讀，其他分頁正在編輯，或聯機容量已滿。請重新連線以重試。"
+  },
+  "m_bf8a9eab9e7e": {
+    "en": "Reconnect",
+    "zh-Hant": "重新連線"
+  },
+  "m_afb118fcb16c": {
+    "en": "Reconnecting",
+    "zh-Hant": "重新連線中"
+  },
+  "m_fc8675f3464d": {
+    "en": "Remote update is too large.",
+    "zh-Hant": "遠端更新的資料量過大。"
+  },
+  "m_b86b7ac3793a": {
+    "en": "Reset invitation",
+    "zh-Hant": "重設邀請"
+  },
+  "m_7175fa667407": {
+    "en": "Results to copy",
+    "zh-Hant": "可複製的結果"
+  },
+  "m_0da692eeef19": {
+    "en": "Room not found or expired. Ask your friend for a new invitation.",
+    "zh-Hant": "找不到房間，或房間已過期。請向朋友索取新的邀請。"
+  },
+  "m_4297bc6b9a88": {
+    "en": "Room permissions changed. Reconnect before saving.",
+    "zh-Hant": "房間權限已變更，請先重新連線再儲存。"
+  },
+  "m_d88d17460a54": {
+    "en": "Save a private copy",
+    "zh-Hant": "儲存私人副本"
+  },
+  "m_9f359ae9197c": {
+    "en": "Save identity was reused with different content.",
+    "zh-Hant": "相同的儲存操作識別資料被用於不同內容。"
+  },
+  "m_fcb8afd6381f": {
+    "en": "Save or export your private edits before opening Shared.",
+    "zh-Hant": "開啟「共享」前，請先儲存或匯出個人白板的變更。"
+  },
+  "m_b5c120b316c2": {
+    "en": "Saved",
+    "zh-Hant": "已儲存"
+  },
+  "m_096b73624b09": {
+    "en": "Saving",
+    "zh-Hant": "儲存中"
+  },
+  "m_d214471af724": {
+    "en": "Scale: 0–{0} {1}",
+    "zh-Hant": "量程：0–{0} {1}"
+  },
+  "m_7a9e4b2ad710": {
+    "en": "Share a copy",
+    "zh-Hant": "共享副本"
+  },
+  "m_e3c4b39d6d50": {
+    "en": "Shared",
+    "zh-Hant": "共享"
+  },
+  "m_d69b0b1a0841": {
+    "en": "Shared connection timed out. Reconnect to retry.",
+    "zh-Hant": "共享連線逾時，請重新連線以重試。"
+  },
+  "m_e80929344374": {
+    "en": "Shared connection was interrupted. Reconnect to retry.",
+    "zh-Hant": "共享連線已中斷，請重新連線以重試。"
+  },
+  "m_49878a4487a3": {
+    "en": "Shared whiteboard name",
+    "zh-Hant": "共享白板名稱"
+  },
+  "m_dc1f7040b224": {
+    "en": "Shared whiteboards",
+    "zh-Hant": "共享白板"
+  },
+  "m_f90f3bb18756": {
+    "en": "Sign in to use shared whiteboards.",
+    "zh-Hant": "請登入以使用共享白板。"
+  },
+  "m_1dbcee682443": {
+    "en": "Sign in with Google",
+    "zh-Hant": "使用 Google 登入"
+  },
+  "m_af51b241bef3": {
+    "en": "Sign in with Google to play online",
+    "zh-Hant": "請使用 Google 登入以進行聯機遊戲"
+  },
+  "m_6520d0cf38cf": {
+    "en": "That room already has two players.",
+    "zh-Hant": "該房間已有兩名玩家。"
+  },
+  "m_af4112570ef6": {
+    "en": "The match changed. Refresh the room and retry.",
+    "zh-Hant": "對局已變更，請重新整理房間後重試。"
+  },
+  "m_b18346da6297": {
+    "en": "The owner can delete the shared whiteboard, or close the canvas to leave it saved.",
+    "zh-Hant": "房主可以刪除共享白板，或關閉畫布並保留存檔。"
+  },
+  "m_2db3766ebeb8": {
+    "en": "The whiteboard editor could not start. Reload to retry.",
+    "zh-Hant": "無法啟動白板編輯器，請重新載入以重試。"
+  },
+  "m_23f11297383e": {
+    "en": "This account is already playing in another tab or device.",
+    "zh-Hant": "此帳號已在其他分頁或裝置中遊玩。"
+  },
+  "m_042377d62f90": {
+    "en": "This room is private or belongs to another browser",
+    "zh-Hant": "此房間為私人房間，或屬於另一個瀏覽器"
+  },
+  "m_3d612812cbc9": {
+    "en": "This shared whiteboard exceeds 2 MB or 10,000 elements. Export or save a private copy.",
+    "zh-Hant": "這份共享白板已超過 2MB 或 10,000 個元素，請匯出或儲存私人副本。"
+  },
+  "m_67ac49e78c13": {
+    "en": "This shared whiteboard is unavailable or access was removed.",
+    "zh-Hant": "這份共享白板無法存取，或你的存取權限已被移除。"
+  },
+  "m_ddc1f6b7325b": {
+    "en": "This whiteboard already has four members.",
+    "zh-Hant": "這份白板已有四名成員。"
+  },
+  "m_793e6d58daac": {
+    "en": "Too many room attempts. Wait a minute and try again.",
+    "zh-Hant": "房間操作嘗試過於頻繁，請稍候一分鐘再試。"
+  },
+  "m_1d4c37f208df": {
+    "en": "Too many room requests. Wait a moment and retry.",
+    "zh-Hant": "房間請求過於頻繁，請稍候再試。"
+  },
+  "m_f3bd1817257c": {
+    "en": "Up to four signed-in members. Shared boards stay saved when everyone leaves. Only the owner manages invitations and members.",
+    "zh-Hant": "最多支援四名已登入成員。所有人離開後，共享白板仍會保留。只有房主可以管理邀請與成員。"
+  },
+  "m_cb7948dbc01a": {
+    "en": "Use a whiteboard name of 1–100 characters.",
+    "zh-Hant": "白板名稱須為 1–100 個字元。"
+  },
+  "m_3611d6bc8c94": {
+    "en": "Use up to 10,000 elements.",
+    "zh-Hant": "最多可使用 10,000 個元素。"
+  },
+  "m_940f81dbd8f1": {
+    "en": "Use vector drawings and plain text only.",
+    "zh-Hant": "僅支援矢量繪圖與純文字。"
+  },
+  "m_95fea10d5079": {
+    "en": "Whiteboard workspace",
+    "zh-Hant": "白板工作區"
+  },
+  "m_6edfb691ef0c": {
+    "en": "You already have an open room. Leave it before creating another.",
+    "zh-Hant": "你已有一個開啟的房間，請先離開再建立另一個。"
+  },
+  "m_b79bbc177bf2": {
+    "en": "You have an invitation. Sign in, then choose Join.",
+    "zh-Hant": "你收到一份邀請，請登入後選擇「加入」。"
+  },
+  "m_303d8a703e82": {
+    "en": "Your editing connection expired. Reconnect before saving.",
+    "zh-Hant": "你的編輯連線已過期，請先重新連線再儲存。"
+  },
+  "m_b86e6d073214": {
+    "en": "Your profile is not ready. Retry sign-in.",
+    "zh-Hant": "你的個人資料尚未就緒，請重試登入。"
+  },
+  "m_31b14c573583": {
+    "en": "Export PNG, SVG or editable .excalidraw. Shared rooms support four signed-in members. Images and external embeds are unsupported.",
+    "zh-Hant": "可匯出 PNG、SVG 或可繼續編輯的 .excalidraw 檔案。共享房間支援四名已登入成員，不支援圖片與外部嵌入內容。"
+  },
+  "m_7c8ba8cf0a4e": {
+    "en": "Personal boards sync privately. Shared copies are visible to room members. Guest boards require Copy to account.",
+    "zh-Hant": "個人白板會私人同步，共享副本則對房間成員可見。訪客白板需選擇「複製到帳號」才會加入帳號。"
+  },
+  "m_c49a19739f8e": {
+    "en": "Import into Personal, then choose Share a copy.",
+    "zh-Hant": "請先匯入私人白板，再選擇建立共享副本。"
+  },
+  "m_0e7454fad3e2": {
+    "en": "Create or choose a room",
+    "zh-Hant": "建立或選擇房間"
+  },
+  "m_522f75c6fe5e": {
+    "en": "Members & invitation",
+    "zh-Hant": "成員與邀請"
+  },
+  "m_f3f73e07d68a": {
+    "en": "Shared whiteboards are separate invitation-only copies, saved with Supabase for up to four signed-in members. Members see the drawing, public profile names, avatars, online presence and live cursors. Shared content is sent to Supabase, unlike local file tools. Only the owner manages invitations and membership. Removing a member changes channel access and invalidates the old invitation. Shared boards remain saved after everyone disconnects; the owner can delete them. Unsaved recovery copies stay on this device, isolated by account. Whiteboard and Pong share a two-active-room limit.",
+    "zh-Hant": "共享白板是獨立的邀請制副本，透過 Supabase 長期儲存，最多四位已登入成員。成員可看到繪圖、公開名稱、頭像、上線狀態與即時游標。共享內容會傳送到 Supabase，與本機檔案工具不同。只有房主能管理邀請及成員；移除成員會更新頻道存取權限，並使舊邀請失效。所有人離線後白板仍會保留，房主可刪除。未儲存的恢復副本僅保留在本機，依帳號隔離。白板與 Pong 共用兩間活躍房間的上限。"
+  },
+  "m_9dc70fce498d": {
+    "en": " / 500 MB · not a billing-byte count.",
+    "zh-Hant": " / 500 MB · 並非電訊商的計費流量。"
+  }
+}

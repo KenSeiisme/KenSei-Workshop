@@ -694,8 +694,33 @@
       remaining = 25 * 60,
       end = 0,
       round = 0,
-      completedId = null;
-    const timerKey = () => key() + ":active-timer";
+      completedId = null,
+      pausedMs = null,
+      ringFrame = 0,
+      timerOwner = user?.id || "guest";
+    const timerKey = () => "kensei-workshop:v1:" + timerOwner + ":active-timer";
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    function paintRing() {
+      cancelAnimationFrame(ringFrame);
+      ringFrame = 0;
+      const ms = running
+        ? Math.max(0, end - Date.now())
+        : (pausedMs ?? remaining * 1000);
+      const fraction = Math.max(0, Math.min(1, ms / (settings[mode] * 60000)));
+      const arc = $("#timer-progress-arc");
+      if (arc) {
+        arc.style.strokeDasharray = `${fraction * 100} 100`;
+        arc.style.strokeDashoffset = String(-(1 - fraction) * 100);
+        arc.style.stroke = {
+          focus: "#d6b6ec",
+          short: "#efbdd9",
+          long: "#a7ceef",
+        }[mode];
+        arc.closest(".timer-ring").dataset.progress = fraction.toFixed(6);
+      }
+      if (running && !document.hidden && !motion.matches)
+        ringFrame = requestAnimationFrame(paintRing);
+    }
     const persist = () => {
       try {
         sessionStorage.setItem(
@@ -708,6 +733,9 @@
             end,
             round,
             completedId,
+            remainingMs: running
+              ? Math.max(0, end - Date.now())
+              : (pausedMs ?? remaining * 1000),
           }),
         );
       } catch {}
@@ -716,7 +744,7 @@
       const saved = items("settings").find((x) => x.id === "timer-settings");
       if (saved) {
         settings = { ...settings, ...saved.data };
-        if (!running) remaining = settings[mode] * 60;
+        if (!running && pausedMs === null) remaining = settings[mode] * 60;
       }
       ["focus", "short", "long"].forEach((m) => {
         $("#duration-" + m).value = settings[m];
@@ -729,6 +757,7 @@
       if (saved) {
         ({ settings, mode, running, remaining, end, round, completedId } =
           saved);
+        pausedMs = saved.remainingMs ?? remaining * 1000;
         if (running)
           remaining = Math.max(0, Math.ceil((end - Date.now()) / 1000));
         ["focus", "short", "long"].forEach((m) => {
@@ -737,6 +766,7 @@
       }
     } catch {}
     function render() {
+      paintRing();
       const display = `${String(Math.floor(remaining / 60)).padStart(2, "0")}:${String(remaining % 60).padStart(2, "0")}`;
       uiText($("#timer-display"), display);
       uiAttr(
@@ -813,6 +843,7 @@
         toast(uiMsg("Break complete. Ready when you are."));
       }
       remaining = settings[mode] * 60;
+      pausedMs = null;
       persist();
       render();
     }
@@ -824,11 +855,12 @@
     }
     $("#timer-start").addEventListener("click", () => {
       if (running) {
-        remaining = Math.max(0, Math.ceil((end - Date.now()) / 1000));
+        pausedMs = Math.max(0, end - Date.now());
+        remaining = Math.ceil(pausedMs / 1000);
         running = false;
       } else {
         if (!remaining) remaining = settings[mode] * 60;
-        end = Date.now() + remaining * 1000;
+        end = Date.now() + (pausedMs ?? remaining * 1000);
         completedId ||= uid();
         running = true;
       }
@@ -838,6 +870,7 @@
     $("#timer-reset").addEventListener("click", () => {
       running = false;
       remaining = settings[mode] * 60;
+      pausedMs = null;
       completedId = null;
       persist();
       render();
@@ -847,6 +880,7 @@
         running = false;
         mode = b.dataset.mode;
         remaining = settings[mode] * 60;
+        pausedMs = null;
         completedId = null;
         persist();
         render();
@@ -870,6 +904,7 @@
         settings = values;
         running = false;
         remaining = settings[mode] * 60;
+        pausedMs = null;
         completedId = null;
         persist();
         render();
@@ -879,10 +914,34 @@
       }
     });
     window.addEventListener("workspace-ready", () => {
-      if (!running) loadSettings();
+      const next = user?.id || "guest";
+      if (next !== timerOwner) {
+        persist();
+        timerOwner = next;
+        running = false;
+        pausedMs = null;
+        completedId = null;
+        round = 0;
+        settings = { focus: 25, short: 5, long: 15 };
+        mode = "focus";
+        remaining = 1500;
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(timerKey()));
+          if (saved) {
+            ({ settings, mode, running, remaining, end, round, completedId } =
+              saved);
+            pausedMs = saved.remainingMs ?? remaining * 1000;
+          }
+        } catch {}
+        render();
+        tick();
+      }
+      if (!running && pausedMs === null) loadSettings();
     });
     window.addEventListener("beforeunload", persist);
     document.addEventListener("visibilitychange", tick);
+    document.addEventListener("visibilitychange", paintRing);
+    window.addEventListener("pagehide", () => cancelAnimationFrame(ringFrame));
     setInterval(tick, 300);
     render();
     tick();

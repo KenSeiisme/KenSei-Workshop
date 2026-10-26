@@ -8,6 +8,7 @@
       aria-label="Latest valid speed sample"
     >
       <path class="gauge-track" d="M30 160 A120 120 0 0 1 270 160" />
+      <g id="gauge-ticks" aria-hidden="true"></g>
       <path
         id="gauge-arc"
         class="gauge-arc"
@@ -18,6 +19,7 @@
       <text id="gauge-value" x="150" y="135" text-anchor="middle">—</text>
       <text id="gauge-unit" x="150" y="163" text-anchor="middle">Mbps</text>
     </svg>
+    <p id="gauge-range" class="muted small"></p>
     <p id="gauge-caption" class="muted small">
       Latest valid sample while running · P90 after completion
     </p>
@@ -60,7 +62,9 @@
       </p>
     </div>
     <dl id="network-connection" class="connection-grid"></dl>
-    <div class="action-row">
+    <div class="network-ip-row">
+      <span>IP</span
+      ><span id="network-ip-value" class="network-ip-value"></span>
       <button id="network-ip" class="text-link" disabled>Show IP</button
       ><button id="network-copy-ip" class="text-link" disabled>Copy IP</button>
     </div>

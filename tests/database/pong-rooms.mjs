@@ -68,7 +68,7 @@ assert.equal(
 );
 const r2 = await call(c, "create");
 assert.ok(r2.id);
-assert.match((await call(d, "create")).error, /occupied/);
+assert.match((await call(d, "create")).error, /occupied|capacity/);
 const ready = (body) => ({ room_id: room.id, round: 0, ...body });
 assert.equal((await call(a, "ready", ready())).status, "waiting");
 let started = await call(b, "ready", ready());

@@ -151,8 +151,8 @@ HELP = {
     ),
     "whiteboard": (
         "Named vector boards up to 2 MB; text, shapes, arrows and free drawing.",
-        "Export PNG, SVG or editable .excalidraw. Images, external embeds and live collaboration are unsupported.",
-        "Boards autosave locally and sync privately. Guest boards require Copy to account.",
+        "Export PNG, SVG or editable .excalidraw. Shared rooms support four signed-in members. Images and external embeds are unsupported.",
+        "Personal boards sync privately. Shared copies are visible to room members. Guest boards require Copy to account.",
     ),
     "screen-recorder": (
         "Desktop capture where supported; target 1080p / 30fps; stops at 10 minutes or 250 MB.",

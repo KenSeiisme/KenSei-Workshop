@@ -5,6 +5,16 @@
     ><button data-mode="long" aria-pressed="false">Long break</button>
   </div>
   <div class="timer-ring">
+    <svg class="timer-progress" viewBox="0 0 300 300" aria-hidden="true">
+      <circle class="timer-progress-track" cx="150" cy="150" r="142" />
+      <circle
+        id="timer-progress-arc"
+        cx="150"
+        cy="150"
+        r="142"
+        pathLength="100"
+      />
+    </svg>
     <div>
       <span class="eyebrow" id="timer-label">TIME FOR YOUR NEXT IDEA</span
       ><span id="timer-display" role="timer" aria-label="25 minutes remaining"

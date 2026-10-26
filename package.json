@@ -54,7 +54,8 @@
     "test:game-experience": "node scripts/test.mjs game-experience",
     "test:game-shell": "node scripts/test.mjs game-shell",
     "test:bilingual": "node scripts/test.mjs bilingual",
-    "test:typing-experience": "node scripts/test.mjs typing-experience"
+    "test:typing-experience": "node scripts/test.mjs typing-experience",
+    "test:tool-motion-shared": "node scripts/test.mjs tool-motion-shared"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

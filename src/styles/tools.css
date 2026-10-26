@@ -1225,3 +1225,98 @@ progress {
     transition: none;
   }
 }
+.timer-ring {
+  position: relative;
+  border: 0;
+}
+.timer-progress {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+.timer-progress circle {
+  fill: none;
+  stroke-width: 4;
+}
+.timer-progress-track {
+  stroke: #c3a1da25;
+}
+#timer-progress-arc {
+  stroke: #d6b6ec;
+  stroke-linecap: round;
+  stroke-dasharray: 100 100;
+}
+.timer-ring > div {
+  position: relative;
+  z-index: 1;
+}
+.answer-book::before {
+  content: "";
+  position: absolute;
+  inset: 8px 8px 8px 3px;
+  border: 1px solid #d6b6ec14;
+  border-radius: 4px;
+  pointer-events: none;
+  box-shadow:
+    -4px 0 0 #d6b6ec09,
+    -8px 0 0 #d6b6ec06;
+}
+.answer-book {
+  perspective: 1000px;
+}
+#answer-page {
+  transform-origin: 10% 50%;
+  backface-visibility: hidden;
+  will-change: auto;
+}
+.answer-book[data-turning="true"] #answer-page {
+  will-change: transform, opacity;
+}
+.gauge-tick {
+  stroke: #bca7c7;
+  stroke-width: 0.7;
+}
+.gauge-tick.major {
+  stroke-width: 1.4;
+}
+.speed-gauge .gauge-tick-label {
+  font: 8px var(--font);
+  fill: #cec1d8;
+}
+#gauge-range {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+.network-ip-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.network-ip-value {
+  font:
+    12px/1.6 ui-monospace,
+    monospace;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.network-ip-row button {
+  min-height: 44px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+@media (max-width: 440px) {
+  .network-ip-row {
+    gap: 6px;
+    grid-template-columns: 20px minmax(0, 1fr) auto auto;
+  }
+  .network-ip-row button {
+    font-size: 10px;
+  }
+}
