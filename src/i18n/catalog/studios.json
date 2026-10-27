@@ -318,5 +318,413 @@
   "m_7a2abcdedfcd": {
     "en": "PDF recipe contains invalid settings.",
     "zh-Hant": "PDF 配方包含無效的設定。"
+  },
+  "m_0308af2bafd9": {
+    "en": "JSON / CSV",
+    "zh-Hant": "JSON／CSV"
+  },
+  "m_cad5bf29c702": {
+    "en": "Analyze",
+    "zh-Hant": "分析"
+  },
+  "m_2d1aa49ac155": {
+    "en": "Choose up to five CSV or flat JSON tables. The SQL engine loads only in Analyze.",
+    "zh-Hant": "最多可選擇五份 CSV 或扁平 JSON 資料表。SQL 引擎只會在「分析」模式中載入。"
+  },
+  "m_378e47e03018": {
+    "en": "No join",
+    "zh-Hant": "不連接"
+  },
+  "m_7ac1be95a46b": {
+    "en": "Inner join",
+    "zh-Hant": "內部連接"
+  },
+  "m_d097d975a8e5": {
+    "en": "Left join",
+    "zh-Hant": "左外部連接"
+  },
+  "m_b6dac386598a": {
+    "en": "Table join",
+    "zh-Hant": "資料表連接"
+  },
+  "m_afd9638150c5": {
+    "en": "Result columns",
+    "zh-Hant": "結果欄位"
+  },
+  "m_9e852e7de3c3": {
+    "en": "Group columns",
+    "zh-Hant": "分組欄位"
+  },
+  "m_64ec3d1b4467": {
+    "en": "No aggregation",
+    "zh-Hant": "不彙總"
+  },
+  "m_37bac4952bec": {
+    "en": "Count",
+    "zh-Hant": "計數"
+  },
+  "m_a21d7df04c33": {
+    "en": "Sum",
+    "zh-Hant": "加總"
+  },
+  "m_b38ae2c5b845": {
+    "en": "Average",
+    "zh-Hant": "平均值"
+  },
+  "m_f939ae3d30c6": {
+    "en": "Equals",
+    "zh-Hant": "等於"
+  },
+  "m_6ea7dca7c213": {
+    "en": "Not equal",
+    "zh-Hant": "不等於"
+  },
+  "m_2eaecb3d0cf1": {
+    "en": "Contains",
+    "zh-Hant": "包含"
+  },
+  "m_1fbcaddaa362": {
+    "en": "Greater than",
+    "zh-Hant": "大於"
+  },
+  "m_23105bdfc3d6": {
+    "en": "Less than",
+    "zh-Hant": "小於"
+  },
+  "m_3251982cbfa9": {
+    "en": "At least",
+    "zh-Hant": "至少"
+  },
+  "m_6797626fe473": {
+    "en": "At most",
+    "zh-Hant": "至多"
+  },
+  "m_490f3c3d8a9e": {
+    "en": "Is null",
+    "zh-Hant": "為空值"
+  },
+  "m_0323bf2f5875": {
+    "en": "Visual SQL",
+    "zh-Hant": "視覺化 SQL"
+  },
+  "m_003788f63363": {
+    "en": "Source slot mapping",
+    "zh-Hant": "來源資料表對應"
+  },
+  "m_502f7f71d240": {
+    "en": "Settings changed. Run the query again before exporting.",
+    "zh-Hant": "設定已變更。匯出前請重新執行查詢。"
+  },
+  "m_225a0024dbd9": {
+    "en": "Ready. Review the SQL, then run.",
+    "zh-Hant": "已就緒。請檢查 SQL，再執行查詢。"
+  },
+  "m_ae5571bff9f7": {
+    "en": "Source table",
+    "zh-Hant": "來源資料表"
+  },
+  "m_27643d064544": {
+    "en": "Second table",
+    "zh-Hant": "第二份資料表"
+  },
+  "m_3514a49286df": {
+    "en": "Left join key",
+    "zh-Hant": "左側連接鍵"
+  },
+  "m_67089e068384": {
+    "en": "Right join key",
+    "zh-Hant": "右側連接鍵"
+  },
+  "m_65185b7b87aa": {
+    "en": "Result columns · empty selects all",
+    "zh-Hant": "結果欄位 · 留空表示選取全部"
+  },
+  "m_3c9193d0b2a4": {
+    "en": "Aggregate",
+    "zh-Hant": "彙總運算"
+  },
+  "m_101c8be52255": {
+    "en": "Measure column",
+    "zh-Hant": "計算欄位"
+  },
+  "m_c2bf378cea1b": {
+    "en": "Convert measure to number",
+    "zh-Hant": "將計算欄位轉為數值"
+  },
+  "m_86d46933d5fa": {
+    "en": "Pivot",
+    "zh-Hant": "樞紐分析"
+  },
+  "m_82ac719d346d": {
+    "en": "Pivot column",
+    "zh-Hant": "樞紐分析欄位"
+  },
+  "m_e8c9d590a1f8": {
+    "en": "Pivot values · comma separated",
+    "zh-Hant": "樞紐分析值 · 以逗號分隔"
+  },
+  "m_1f0704281426": {
+    "en": "Filter column",
+    "zh-Hant": "篩選欄位"
+  },
+  "m_291101a07fe9": {
+    "en": "Operator",
+    "zh-Hant": "運算子"
+  },
+  "m_d9542a271957": {
+    "en": "Filter value",
+    "zh-Hant": "篩選值"
+  },
+  "m_98bfac825464": {
+    "en": "Numeric filter",
+    "zh-Hant": "數值篩選"
+  },
+  "m_e520df698000": {
+    "en": "Add filter",
+    "zh-Hant": "新增篩選條件"
+  },
+  "m_bec69036aa27": {
+    "en": "Sort",
+    "zh-Hant": "排序"
+  },
+  "m_394a616b76d5": {
+    "en": "Numeric sort",
+    "zh-Hant": "數值排序"
+  },
+  "m_79479a6c76d8": {
+    "en": "Descending",
+    "zh-Hant": "遞減"
+  },
+  "m_bfb1ba5e010f": {
+    "en": "Generate SQL from builder",
+    "zh-Hant": "從視覺化設定產生 SQL"
+  },
+  "m_10a0b6177b7a": {
+    "en": "Replace the custom SQL with the visual configuration?",
+    "zh-Hant": "要以視覺化設定產生的 SQL 取代自訂 SQL 嗎？"
+  },
+  "m_23c5cdc6269e": {
+    "en": "Remove filter",
+    "zh-Hant": "移除篩選條件"
+  },
+  "m_adc6d769de23": {
+    "en": "Custom SQL · visual settings will not overwrite it",
+    "zh-Hant": "自訂 SQL · 視覺化設定不會覆寫內容"
+  },
+  "m_1837e00c45e8": {
+    "en": "Run query",
+    "zh-Hant": "執行查詢"
+  },
+  "m_bb446d765ac5": {
+    "en": "Cancel query",
+    "zh-Hant": "取消查詢"
+  },
+  "m_90ac6accab35": {
+    "en": "Query cancelled. Sources and the previous result are retained.",
+    "zh-Hant": "查詢已取消。來源資料與先前結果會保留。"
+  },
+  "m_cbdb565cb0a4": {
+    "en": "Query result",
+    "zh-Hant": "查詢結果"
+  },
+  "m_18f2619c41f7": {
+    "en": "Analyze locally",
+    "zh-Hant": "在本機分析"
+  },
+  "m_86d6cd18e461": {
+    "en": "Tables · 25 MB combined",
+    "zh-Hant": "資料表 · 總大小上限 25 MB"
+  },
+  "m_b5d57d519660": {
+    "en": "SQL · SELECT or WITH SELECT only",
+    "zh-Hant": "SQL · 僅限 SELECT 或 WITH SELECT"
+  },
+  "m_bdc14ce2f241": {
+    "en": "Download result CSV",
+    "zh-Hant": "下載結果 CSV"
+  },
+  "m_e5b61bca736a": {
+    "en": "Download result JSON",
+    "zh-Hant": "下載結果 JSON"
+  },
+  "m_99d1813a179d": {
+    "en": "Run the current query before exporting.",
+    "zh-Hant": "匯出前請先執行目前查詢。"
+  },
+  "m_e0b023580645": {
+    "en": "No query result yet.",
+    "zh-Hant": "尚無查詢結果。"
+  },
+  "m_ff16f6b17faf": {
+    "en": "The analysis engine could not load. Retry.",
+    "zh-Hant": "無法載入分析引擎。請重試。"
+  },
+  "m_4b89e9b86d14": {
+    "en": "The query exceeded 30 seconds. Narrow the query and retry.",
+    "zh-Hant": "查詢超過 30 秒。請縮小查詢範圍後重試。"
+  },
+  "m_ae14560404e7": {
+    "en": "Choose source files first.",
+    "zh-Hant": "請先選擇來源檔案。"
+  },
+  "m_8c23f6738962": {
+    "en": "Choose up to five tables, totaling 25 MB.",
+    "zh-Hant": "最多可選擇五份資料表，總大小不可超過 25 MB。"
+  },
+  "m_4385f8c20979": {
+    "en": "Choose a source column",
+    "zh-Hant": "選擇來源欄位"
+  },
+  "m_7134a6f668a9": {
+    "en": "Confirm source mapping",
+    "zh-Hant": "確認來源資料對應"
+  },
+  "m_ddd7776ab5b8": {
+    "en": "Map every recipe column before running.",
+    "zh-Hant": "執行前請為配方中的每個欄位設定來源對應。"
+  },
+  "m_bf4552b039b1": {
+    "en": "Source mapping confirmed. Review the query, then run.",
+    "zh-Hant": "來源資料對應已確認。請檢查查詢內容，再執行。"
+  },
+  "m_829ff7c9e9eb": {
+    "en": "Confirm source mapping after reloading the engine.",
+    "zh-Hant": "引擎重新載入後，請確認來源資料對應。"
+  },
+  "m_3bd9ad3811d9": {
+    "en": "Confirm source mapping before running.",
+    "zh-Hant": "執行前請確認來源資料對應。"
+  },
+  "m_9b4fb629736f": {
+    "en": "Running in a read-only local database…",
+    "zh-Hant": "正在本機唯讀資料庫中執行…"
+  },
+  "m_9af96bf6ecfc": {
+    "en": "Query complete. No source data was changed.",
+    "zh-Hant": "查詢完成。來源資料未被變更。"
+  },
+  "m_eee97eed9ac6": {
+    "en": "Choose a column.",
+    "zh-Hant": "請選擇欄位。"
+  },
+  "m_40d3f2ad54c2": {
+    "en": "Choose a source table.",
+    "zh-Hant": "請選擇來源資料表。"
+  },
+  "m_4ae4502b7e7e": {
+    "en": "Choose two different tables for a join.",
+    "zh-Hant": "請選擇兩份不同的資料表進行連接。"
+  },
+  "m_26db7bdb4b62": {
+    "en": "Invalid filter operator.",
+    "zh-Hant": "篩選運算子無效。"
+  },
+  "m_42ce8f972edd": {
+    "en": "Choose an aggregate.",
+    "zh-Hant": "請選擇彙總運算。"
+  },
+  "m_ea40c2c44afe": {
+    "en": "Enter 1–50 pivot values.",
+    "zh-Hant": "請輸入 1 至 50 個樞紐分析值。"
+  },
+  "m_1870d8b7fab3": {
+    "en": "Enter a valid number.",
+    "zh-Hant": "請輸入有效的數值。"
+  },
+  "m_1fcfb8992264": {
+    "en": "Invalid analysis recipe.",
+    "zh-Hant": "分析配方無效。"
+  },
+  "m_7c9e0545d6fa": {
+    "en": "Invalid recipe column slots.",
+    "zh-Hant": "配方欄位對應無效。"
+  },
+  "m_27c0d0b2fb80": {
+    "en": "Invalid SQL recipe.",
+    "zh-Hant": "SQL 配方無效。"
+  },
+  "m_5932529d75db": {
+    "en": "Use a JSON array of flat objects.",
+    "zh-Hant": "請使用由扁平物件組成的 JSON 陣列。"
+  },
+  "m_10ddb8beaa0f": {
+    "en": "The CSV is malformed.",
+    "zh-Hant": "CSV 格式錯誤。"
+  },
+  "m_4bad78da415c": {
+    "en": "Use 1–200 unique non-empty columns.",
+    "zh-Hant": "請使用 1 至 200 個名稱不重複且非空白的欄位。"
+  },
+  "m_57628f8f5c8f": {
+    "en": "Use at most 50,000 rows with consistent columns.",
+    "zh-Hant": "最多可使用 50,000 個資料列，且各列的欄位數須一致。"
+  },
+  "m_b39d135a01a2": {
+    "en": "Invalid source mapping.",
+    "zh-Hant": "來源資料對應無效。"
+  },
+  "m_be9bea5b5377": {
+    "en": "SQL must be shorter than 100,000 characters.",
+    "zh-Hant": "SQL 必須少於 100,000 個字元。"
+  },
+  "m_8e286088cb76": {
+    "en": "Use one SELECT or WITH SELECT query.",
+    "zh-Hant": "請使用一個 SELECT 或 WITH SELECT 查詢。"
+  },
+  "m_d44d4786af39": {
+    "en": "Use one SQL statement.",
+    "zh-Hant": "只能使用一個 SQL 敘述。"
+  },
+  "m_f165e1139591": {
+    "en": "The result exceeds 200 columns. Select fewer columns.",
+    "zh-Hant": "結果超過 200 個欄位。請減少所選欄位。"
+  },
+  "m_f55fb53e2552": {
+    "en": "The result exceeds 50,000 rows. Narrow the query.",
+    "zh-Hant": "結果超過 50,000 個資料列。請縮小查詢範圍。"
+  },
+  "m_d0e4ba0b1074": {
+    "en": "The result exceeds 25 MB. Narrow the query.",
+    "zh-Hant": "結果超過 25 MB。請縮小查詢範圍。"
+  },
+  "m_c61aafa17a40": {
+    "en": "Formula exceeds 10,000 characters.",
+    "zh-Hant": "公式超過 10,000 個字元。"
+  },
+  "m_59b8140ca1f1": {
+    "en": "Diagram exceeds the size or complexity limit.",
+    "zh-Hant": "圖表超過大小或複雜度限制。"
+  },
+  "m_be3f82f500a9": {
+    "en": "Use flowchart, sequence, class or ER diagrams.",
+    "zh-Hant": "請使用流程圖、循序圖、類別圖或 ER 圖。"
+  },
+  "m_6fbf3b224093": {
+    "en": "Diagram links, HTML and configuration directives are disabled.",
+    "zh-Hant": "已停用圖表連結、HTML 與設定指令。"
+  },
+  "m_f8549687cd8e": {
+    "en": "Math export styles could not load. Retry.",
+    "zh-Hant": "無法載入公式匯出樣式。請重試。"
+  },
+  "m_0b062618d8c6": {
+    "en": "Math export fonts could not load. Retry.",
+    "zh-Hant": "無法載入公式匯出字型。請重試。"
+  },
+  "m_3aad457d39fd": {
+    "en": "Inline math",
+    "zh-Hant": "行內公式"
+  },
+  "m_5651806a6630": {
+    "en": "Display math",
+    "zh-Hant": "獨立公式"
+  },
+  "m_aa8885bcba3b": {
+    "en": "Footnote",
+    "zh-Hant": "註腳"
+  },
+  "m_913c5e96ccce": {
+    "en": "Diagram",
+    "zh-Hant": "圖表"
   }
 }

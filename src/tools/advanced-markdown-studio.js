@@ -1,3 +1,5 @@
+import { recipeControls } from "./studio-recipes.js";
+import { renderOptions, validateMarkdownRecipe } from "./markdown-rich.js";
 import { textReceiver } from "./handoff.js";
 import { el, button, panel, row } from "./advanced-ui.js";
 export function init() {
@@ -6,6 +8,8 @@ export function init() {
     preview = document.querySelector("#markdown-preview");
   const p = panel("Writing tools", input.closest(".panel")),
     outline = el("nav", "", { "aria-label": "Document outline" });
+  p.className = "markdown-writing-tools";
+  input.before(p);
   const ctx = window.KenseiAdvancedContexts["markdown-studio"];
   function headings() {
     return ctx.headings;
@@ -59,10 +63,30 @@ export function init() {
             "\n",
         ),
       ),
-      button("Print / Save as PDF", () => window.print()),
+      button("Inline math", () => insert("$", "$")),
+      button("Display math", () => insert("\n$$\n", "\n$$\n")),
+      button("Footnote", () => insert("[^note]\n\n[^note]: ")),
+      button("Diagram", () =>
+        insert("\n```mermaid\nflowchart LR\n  A[Start] --> B[Finish]\n```\n"),
+      ),
+      button("Print / Save as PDF", async () => {
+        await ctx.render();
+        await document.fonts.ready;
+        window.print();
+      }),
     ),
     outline,
   );
   window.addEventListener("markdown-rendered", update);
   update();
+  recipeControls(
+    p,
+    "markdown-studio",
+    () => ({ ...renderOptions }),
+    (s) => {
+      Object.assign(renderOptions, s);
+      ctx.render();
+    },
+    validateMarkdownRecipe,
+  );
 }

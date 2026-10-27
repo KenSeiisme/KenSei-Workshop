@@ -1,0 +1,32 @@
+DuckDB-Wasm and DuckDB engine - official upstream license texts
+
+Distributed npm package: @duckdb/duckdb-wasm@1.33.1-dev57.0
+Package license declaration: MIT
+Package metadata: https://registry.npmjs.org/@duckdb%2fduckdb-wasm/1.33.1-dev57.0
+npm gitHead: ef8a4f8912b6e7f62bc0cc490145ebd391b79e1f
+Source tree: https://api.github.com/repos/duckdb/duckdb-wasm/git/trees/ef8a4f8912b6e7f62bc0cc490145ebd391b79e1f?recursive=1
+The source tree pins submodules/duckdb to 08e34c447bae34eaee3723cac61f2878b6bdf787.
+The bundled WASM engine reports v1.5.4.
+Retrieved: 2026-10-27
+
+1. DuckDB-Wasm - upstream LICENSE
+Source: https://raw.githubusercontent.com/duckdb/duckdb-wasm/ef8a4f8912b6e7f62bc0cc490145ebd391b79e1f/LICENSE
+
+Copyright 2018-2025 Stichting DuckDB Foundation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+2. DuckDB engine - upstream LICENSE
+Source: https://raw.githubusercontent.com/duckdb/duckdb/08e34c447bae34eaee3723cac61f2878b6bdf787/LICENSE
+
+Copyright 2018-2025 Stichting DuckDB Foundation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

@@ -1702,3 +1702,69 @@ progress {
 .studio-tabs button[aria-selected="true"] {
   color: #17111d;
 }
+
+.analysis-builder {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid #ffffff20;
+  border-radius: 14px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.analysis-builder .action-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  align-items: end;
+}
+.analysis-builder select[multiple] {
+  min-height: 120px;
+}
+#data-analyze-workspace textarea {
+  font-family: ui-monospace, monospace;
+}
+#data-analyze-workspace details {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #ffffff20;
+  border-radius: 12px;
+}
+#data-analyze-workspace details > div {
+  margin: 0.75rem 0;
+}
+.analysis-result {
+  min-width: 0;
+}
+.analysis-result [data-stale="true"] {
+  opacity: 0.65;
+}
+.markdown-writing-tools {
+  margin: 0.5rem 0 1rem;
+}
+.markdown-writing-tools .studio-recipes {
+  margin: 0.6rem 0;
+}
+.markdown-writing-tools nav {
+  max-height: 180px;
+  overflow: auto;
+}
+.markdown-diagram {
+  margin: 1rem 0;
+  overflow: auto;
+  background: #f7f1fa;
+  border-radius: 12px;
+  padding: 12px;
+  color: #271534;
+}
+.markdown-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+.math-block,
+.katex-display {
+  overflow: auto;
+}
+@media (max-width: 360px) {
+  .analysis-builder .action-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

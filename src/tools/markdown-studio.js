@@ -1,4 +1,9 @@
 import {
+  configureMarkdown,
+  renderRich,
+  exportStyles,
+} from "./markdown-rich.js";
+import {
   $,
   toast,
   library,
@@ -15,12 +20,24 @@ let parser = null,
   rendered = "",
   documentHeadings = [],
   debounce;
-function render() {
+let renderGeneration = 0;
+async function render() {
   if (!parser) return;
+  const token = ++renderGeneration,
+    source = input.value;
   documentHeadings = [];
-  rendered = parser.render(input.value);
+  let next;
+  try {
+    next = await renderRich(parser, source);
+  } catch (e) {
+    status(uiError(e), true);
+    return;
+  }
+  if (token !== renderGeneration) return { html: next, source };
+  rendered = next;
   $("#markdown-preview").innerHTML = rendered;
   window.dispatchEvent(new Event("markdown-rendered"));
+  return { html: next, source };
 }
 const changed = draftEditor("markdown-studio", input, () => {
   clearTimeout(debounce);
@@ -65,7 +82,8 @@ async function initialize() {
         tokens[i].attrSet("target", "_blank");
       return linkOpen(tokens, i, options, env, self);
     };
-    render();
+    await configureMarkdown(parser);
+    await render();
     status(uiMsg("Ready. Remote images and raw HTML are disabled."));
   } catch (e) {
     status(uiJoin([uiError(e), uiMsg(" Reload to retry.")]), true);
@@ -94,14 +112,21 @@ $("#markdown-md").onclick = () =>
     filename($("#draft-name").value || "kensei-document") + ".md",
     "text/markdown;charset=utf-8",
   );
-$("#markdown-html").onclick = () => {
-  if (!parser) return toast(uiMsg("Preview is still loading."));
-  render();
-  downloadText(
-    `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc($("#draft-name").value || "Document")}</title><style>body{max-width:800px;margin:40px auto;padding:0 20px;font:16px/1.7 system-ui}pre{overflow:auto;padding:16px;background:#f4f4f4}table{border-collapse:collapse}td,th{padding:6px 12px;border:1px solid #ccc}img{max-width:100%}</style><body>${rendered}</body></html>`,
-    filename($("#draft-name").value || "kensei-document") + ".html",
-    "text/html;charset=utf-8",
-  );
+$("#markdown-html").onclick = async () => {
+  try {
+    if (!parser) return toast(uiMsg("Preview is still loading."));
+    const compiled = await render();
+    if (!compiled || compiled.source !== input.value)
+      throw Error("The input changed. Export the updated document again.");
+    const exportCSS = await exportStyles();
+    downloadText(
+      `<!doctype html><html lang="${document.documentElement.lang}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc($("#draft-name").value || "Document")}</title><style>${exportCSS}</style><body>${compiled.html}</body></html>`,
+      filename($("#draft-name").value || "kensei-document") + ".html",
+      "text/html;charset=utf-8",
+    );
+  } catch (e) {
+    status(uiError(e), true);
+  }
 };
 
 window.KenseiAdvancedContexts ||= {};

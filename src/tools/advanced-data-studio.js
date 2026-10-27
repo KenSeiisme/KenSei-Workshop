@@ -1,3 +1,4 @@
+import { init as professionalData } from "./studio-data-studio.js";
 import { $, downloadText, copy, status } from "./common.js";
 import {
   el,
@@ -17,7 +18,7 @@ const rawCSV = (t) =>
       r.map((v) => '"' + String(v).replaceAll('"', '""') + '"').join(","),
     )
     .join("\r\n");
-export function init() {
+export async function init() {
   const ctx = window.KenseiAdvancedContexts["data-studio"],
     p = panel("Table editing and export", $("#data-table").closest("section")),
     query = el("input", "", { type: "search", placeholder: "Filter rows" }),
@@ -287,4 +288,5 @@ export function init() {
   );
   window.KenseiDataView = () =>
     ctx.table ? { headers: selectedHeaders(), rows: selectedRows() } : null;
+  await professionalData();
 }

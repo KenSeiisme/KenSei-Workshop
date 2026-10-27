@@ -1,0 +1,5 @@
+@duckdb/duckdb-wasm 1.33.1-dev57.0 · MIT
+apache-arrow 17.0.0 · Apache-2.0
+katex 0.19.1 · MIT
+mermaid 12.2.0 · MIT
+markdown-it-footnote 4.0.0 · MIT
