@@ -2,7 +2,7 @@ import { $, busy, status, canvasBlob, downloadText } from "./common.js";
 import { el, panel, row, button } from "./advanced-ui.js";
 import { sendControl, receiveHandoff } from "./handoff.js";
 import { uiMsg } from "../site/ui.js";
-export function init() {
+export async function init() {
   const ctx = window.KenseiAdvancedContexts["pdf-toolkit"],
     p = panel("Page workspace", $("#pdf-pages").closest(".pdf-layout"));
   const picked = new Set();
@@ -211,5 +211,8 @@ export function init() {
     () => ctx.pages.length > 0,
   );
   install();
+  await professionalPDF();
   window.addEventListener("pagehide", () => obs.disconnect(), { once: true });
 }
+
+import { init as professionalPDF } from "./studio-pdf-toolkit.js";

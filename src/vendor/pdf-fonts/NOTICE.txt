@@ -1,0 +1,43 @@
+LXGW WenKai Regular — Version 1.530
+
+Copyright 2021-2026 LXGW (https://github.com/lxgw/LxgwWenKai), with Reserved Font Name '霞鹜', '霞鶩', '落霞孤鹜', '落霞孤鶩' and 'LXGW'.
+Copyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee)
+
+Project: https://github.com/lxgw/LxgwWenKai
+Pinned release: v1.530
+Pinned source commit: 4becfb4d5cf0c92cfdb60a6e9b504bda43315325
+Font source: https://raw.githubusercontent.com/lxgw/LxgwWenKai/4becfb4d5cf0c92cfdb60a6e9b504bda43315325/fonts/TTF/LXGWWenKai-Regular.ttf
+License source: https://raw.githubusercontent.com/lxgw/LxgwWenKai/4becfb4d5cf0c92cfdb60a6e9b504bda43315325/OFL.txt
+
+The complete, unmodified upstream SIL Open Font License 1.1, copyright
+notices, reserved font names and additional permission are retained in OFL.txt.
+The TTF is an unmodified upstream file. No conversion or subsetting was done.
+
+Required embedding option: pdfDoc.embedFont(bytes, { subset: false }).
+Use the full font with @pdf-lib/fontkit 1.1.1 and pdf-lib 1.17.1. Runtime
+subsets from fontkit 1.1.1 were rejected after actual rendering omitted
+characters despite retaining extractable Unicode. The Noto CJK CFF candidate
+was also rejected: subset rendering lost letters and full-font extraction
+mapped digits to private-use code points. Rejected candidates and QA files
+were moved to _qa/font-compatibility outside the runtime vendor directory.
+
+Verified with PDF.js 6.4.299: English, Malay in Latin/Rumi script, simplified
+Chinese and traditional Chinese text renders correctly and extracts as exact
+Unicode after removing layout whitespace. This includes ASCII digits and
+accented Latin text. Invisible OCR text extracts correctly and renders no ink.
+Unicode AcroForm values survive save/reload, and flattened forms render and
+extract correctly. No PDF.js warnings occurred in the verified full-TTF mode.
+All 95 printable ASCII characters and all 983 Han characters in the site's
+current Traditional Chinese catalogs have glyph coverage. All test PDFs were
+created and checked in memory; rendering evidence is outside this directory.
+
+Tradeoffs: this fallback uses a calligraphic Kai style rather than Noto Sans.
+The font download is 25,928,940 bytes and the test PDFs are about 13.14 MB
+because the complete font is embedded. It is not a complete Unicode font;
+check each requested code point, especially rare Han, emoji and Arabic/Jawi.
+Only Latin/Rumi Malay was verified. This asset task changed no dependencies.
+
+The separately bundled @pdf-lib/fontkit is declared MIT. Its legal provenance
+and canonical MIT terms are recorded in fontkit-LICENSE.txt. The upstream fork
+publishes no standalone LICENSE or exact 1.1.1 source tag/gitHead; that gap is
+recorded rather than attributing an unsupported source revision to the release.

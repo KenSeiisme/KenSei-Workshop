@@ -1,0 +1,322 @@
+{
+  "m_def34d13db9b": {
+    "en": "Settings recipes",
+    "zh-Hant": "設定配方"
+  },
+  "m_68f19a7e661c": {
+    "en": "My recipe",
+    "zh-Hant": "我的配方"
+  },
+  "m_c343c41f7bfc": {
+    "en": "Recipe name",
+    "zh-Hant": "配方名稱"
+  },
+  "m_ccfd627b198e": {
+    "en": "Choose a saved recipe",
+    "zh-Hant": "選擇已儲存的配方"
+  },
+  "m_cda16b706ce1": {
+    "en": "Settings only. Choose source files again when reusing a recipe.",
+    "zh-Hant": "只會儲存設定。再次使用配方時，請重新選擇來源檔案。"
+  },
+  "m_52c601fc4d24": {
+    "en": "This recipe is not compatible with this tool.",
+    "zh-Hant": "此配方不適用於此工具。"
+  },
+  "m_00dbb1d0be28": {
+    "en": "Recipe loaded. Select source files and confirm mappings before running.",
+    "zh-Hant": "配方已載入。執行前請選擇來源檔案，並確認欄位對應。"
+  },
+  "m_41341a237dee": {
+    "en": "Give the recipe a name.",
+    "zh-Hant": "請為配方命名。"
+  },
+  "m_fefb48d46fe8": {
+    "en": "Recipe settings are too large.",
+    "zh-Hant": "配方設定內容過大。"
+  },
+  "m_5c8985929d59": {
+    "en": "Recipe saved to your account.",
+    "zh-Hant": "配方已儲存至你的帳號。"
+  },
+  "m_5b8baabc5feb": {
+    "en": "Recipe saved on this device.",
+    "zh-Hant": "配方已儲存在此裝置。"
+  },
+  "m_0e0576368e6d": {
+    "en": "Replace the current settings with this recipe? Files and results stay on this page.",
+    "zh-Hant": "要以此配方取代目前設定嗎？檔案與結果會保留在此頁面。"
+  },
+  "m_a58793d50e30": {
+    "en": "Import recipe JSON",
+    "zh-Hant": "匯入配方 JSON"
+  },
+  "m_82d8296e82ef": {
+    "en": "Recipe JSON must be smaller than 100 KB.",
+    "zh-Hant": "配方 JSON 必須小於 100 KB。"
+  },
+  "m_84b113d12d0c": {
+    "en": "Save as new",
+    "zh-Hant": "另存為新配方"
+  },
+  "m_f741508dcc46": {
+    "en": "Export recipe JSON",
+    "zh-Hant": "匯出配方 JSON"
+  },
+  "m_ce715c5a7a3d": {
+    "en": "Batch recipe · orientation → crop → resize → watermark → encode",
+    "zh-Hant": "批次配方 · 方向 → 裁切 → 調整尺寸 → 浮水印 → 編碼"
+  },
+  "m_3601e5efc9be": {
+    "en": "Enable orientation",
+    "zh-Hant": "啟用方向調整"
+  },
+  "m_57b5e2fc1bba": {
+    "en": "Rotation",
+    "zh-Hant": "旋轉角度"
+  },
+  "m_c51ca894313e": {
+    "en": "Enable centered crop",
+    "zh-Hant": "啟用置中裁切"
+  },
+  "m_1613e6d2e2df": {
+    "en": "Enable resize",
+    "zh-Hant": "啟用尺寸調整"
+  },
+  "m_2abe3b173987": {
+    "en": "Enable watermark",
+    "zh-Hant": "啟用浮水印"
+  },
+  "m_9429e86ca189": {
+    "en": "Watermark text",
+    "zh-Hant": "浮水印文字"
+  },
+  "m_d101b50a14cc": {
+    "en": "Watermark opacity",
+    "zh-Hant": "浮水印不透明度"
+  },
+  "m_0bc19b1c6618": {
+    "en": "Watermark position",
+    "zh-Hant": "浮水印位置"
+  },
+  "m_ba38c9fb590f": {
+    "en": "Enable output encoding",
+    "zh-Hant": "啟用輸出編碼"
+  },
+  "m_0a28ea1e2312": {
+    "en": "Image settings scope",
+    "zh-Hant": "圖片設定套用範圍"
+  },
+  "m_cb1122d44f31": {
+    "en": "Global recipe applies unless this image has an override.",
+    "zh-Hant": "未設定個別覆寫時，圖片會套用全域配方。"
+  },
+  "m_756600dc04e6": {
+    "en": "Settings scope",
+    "zh-Hant": "設定套用範圍"
+  },
+  "m_9d5310b5fffe": {
+    "en": "Override this image",
+    "zh-Hant": "個別覆寫此圖片設定"
+  },
+  "m_0ca00fadf34b": {
+    "en": "Global recipe",
+    "zh-Hant": "全域配方"
+  },
+  "m_afd80bdbe622": {
+    "en": "Select an image, then preview the current recipe.",
+    "zh-Hant": "請選擇圖片，再預覽目前配方。"
+  },
+  "m_91122ef7364c": {
+    "en": "Preview selected image",
+    "zh-Hant": "預覽所選圖片"
+  },
+  "m_6de4468dd1ad": {
+    "en": "Original image",
+    "zh-Hant": "原始圖片"
+  },
+  "m_24373c8c31be": {
+    "en": "Recipe preview",
+    "zh-Hant": "配方預覽"
+  },
+  "m_f6d8a983edd2": {
+    "en": "Preview only. Process the batch to encode and download.",
+    "zh-Hant": "這只是預覽。請處理整批圖片，才能編碼及下載。"
+  },
+  "m_8aa858b1558a": {
+    "en": "Image recipe contains an invalid value.",
+    "zh-Hant": "圖片配方包含無效的值。"
+  },
+  "m_123424f8afdc": {
+    "en": "Use a 90 degree rotation.",
+    "zh-Hant": "旋轉角度須為 90 度的倍數。"
+  },
+  "m_6f9c7e85d09e": {
+    "en": "Unsupported image format.",
+    "zh-Hant": "不支援此圖片格式。"
+  },
+  "m_c776328e21f2": {
+    "en": "Canvas is unavailable.",
+    "zh-Hant": "無法使用畫布。"
+  },
+  "m_5d6a7a9f6786": {
+    "en": "Pages & files",
+    "zh-Hant": "頁面與檔案"
+  },
+  "m_3ac95adc4345": {
+    "en": "Fill & Annotate",
+    "zh-Hant": "填寫與註記"
+  },
+  "m_5c0b1995d9d6": {
+    "en": "PDF annotation canvas",
+    "zh-Hant": "PDF 註記畫布"
+  },
+  "m_1a58afa2cb26": {
+    "en": "Choose one PDF. Forms and annotation contents stay in this page.",
+    "zh-Hant": "請選擇一份 PDF。表單與註記內容只保留在此頁面。"
+  },
+  "m_0306996228eb": {
+    "en": "Rectangle",
+    "zh-Hant": "矩形"
+  },
+  "m_07ccd15df32a": {
+    "en": "Highlight",
+    "zh-Hant": "螢光標記"
+  },
+  "m_05800e70aa10": {
+    "en": "Arrow",
+    "zh-Hant": "箭頭"
+  },
+  "m_6fb96a2a0ab7": {
+    "en": "Handwritten signature",
+    "zh-Hant": "手寫簽名"
+  },
+  "m_20ea579a8f89": {
+    "en": "Annotation text",
+    "zh-Hant": "註記文字"
+  },
+  "m_3610e13f977e": {
+    "en": "Draw a signature",
+    "zh-Hant": "繪製簽名"
+  },
+  "m_312dc08e425c": {
+    "en": "Changes pending export. Your original PDF is unchanged.",
+    "zh-Hant": "變更尚待匯出，原始 PDF 不受影響。"
+  },
+  "m_e64ec5d27fb6": {
+    "en": "Annotation properties",
+    "zh-Hant": "註記屬性"
+  },
+  "m_6d784d95c638": {
+    "en": "Font size",
+    "zh-Hant": "字型大小"
+  },
+  "m_9df01aeb5263": {
+    "en": "Line width",
+    "zh-Hant": "線條寬度"
+  },
+  "m_c84d3a603ffa": {
+    "en": "Clear signature",
+    "zh-Hant": "清除簽名"
+  },
+  "m_dd81d2c39148": {
+    "en": "Add annotation",
+    "zh-Hant": "新增註記"
+  },
+  "m_2b82fc019965": {
+    "en": "Choose a PDF first.",
+    "zh-Hant": "請先選擇 PDF。"
+  },
+  "m_41af63901ebd": {
+    "en": "Enter annotation text.",
+    "zh-Hant": "請輸入註記文字。"
+  },
+  "m_c39709440e8c": {
+    "en": "Draw a signature first.",
+    "zh-Hant": "請先繪製簽名。"
+  },
+  "m_a8283ade3185": {
+    "en": "Undo",
+    "zh-Hant": "復原"
+  },
+  "m_74273989b096": {
+    "en": "Redo",
+    "zh-Hant": "重做"
+  },
+  "m_a69f3f9da759": {
+    "en": "Drag to move; drag the corner to resize. Use arrow keys for the selected annotation; Shift resizes.",
+    "zh-Hant": "拖曳可移動註記，拖曳角落可調整大小。選取註記後可用方向鍵移動；按住 Shift 可調整大小。"
+  },
+  "m_3824a9f4dafe": {
+    "en": "Canvas",
+    "zh-Hant": "畫布"
+  },
+  "m_ae43692b2a31": {
+    "en": "Properties",
+    "zh-Hant": "屬性"
+  },
+  "m_6877906455d9": {
+    "en": "Single PDF",
+    "zh-Hant": "單份 PDF"
+  },
+  "m_0a30a815d67d": {
+    "en": "Page",
+    "zh-Hant": "頁面"
+  },
+  "m_84afee7ec5e6": {
+    "en": "Form fields",
+    "zh-Hant": "表單欄位"
+  },
+  "m_2748238758e1": {
+    "en": "Flatten form fields on export",
+    "zh-Hant": "匯出時將表單欄位轉為固定內容"
+  },
+  "m_f8bdc7af7f66": {
+    "en": "Export annotated PDF",
+    "zh-Hant": "匯出已加註記的 PDF"
+  },
+  "m_a805b612c987": {
+    "en": "PDF files must total 50 MB or less.",
+    "zh-Hant": "PDF 檔案總大小不可超過 50 MB。"
+  },
+  "m_50f96749829d": {
+    "en": "PDFs may contain at most 200 pages.",
+    "zh-Hant": "PDF 最多可包含 200 頁。"
+  },
+  "m_58d484e8a431": {
+    "en": "XFA forms are not supported. Choose a standard AcroForm PDF.",
+    "zh-Hant": "不支援 XFA 表單。請選擇標準 AcroForm PDF。"
+  },
+  "m_fc7452160d1e": {
+    "en": "Ready. Fill fields or add annotations, then export.",
+    "zh-Hant": "已就緒。請填寫欄位或新增註記，再匯出。"
+  },
+  "m_862c99f4285a": {
+    "en": "No editable AcroForm fields in this PDF. Add annotations below.",
+    "zh-Hant": "此 PDF 沒有可編輯的 AcroForm 欄位。你可以在下方新增註記。"
+  },
+  "m_c7023e8a9ed1": {
+    "en": "Annotation",
+    "zh-Hant": "註記"
+  },
+  "m_aa96ef66917d": {
+    "en": "Select annotation",
+    "zh-Hant": "選取註記"
+  },
+  "m_7341cd72ecff": {
+    "en": "The input changed. Export the updated PDF again.",
+    "zh-Hant": "輸入已變更。請重新匯出更新後的 PDF。"
+  },
+  "m_f02eca3c06ce": {
+    "en": "PDF exported. Editable fields are retained unless flattening was selected.",
+    "zh-Hant": "PDF 已匯出。除非已選擇將表單欄位轉為固定內容，否則仍可編輯欄位。"
+  },
+  "m_44931a4fdc43": {
+    "en": "The PDF font could not load. Retry.",
+    "zh-Hant": "無法載入 PDF 字型。請重試。"
+  },
+  "m_7a2abcdedfcd": {
+    "en": "PDF recipe contains invalid settings.",
+    "zh-Hant": "PDF 配方包含無效的設定。"
+  }
+}

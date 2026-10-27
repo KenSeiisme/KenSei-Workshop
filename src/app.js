@@ -1052,7 +1052,7 @@
             x.data.tool === "qr-studio"
               ? `QR appearance · ${x.data.size} px`
               : `${x.data.format.replace("image/", "").toUpperCase()} · ${x.data.quality}% quality${x.data.width ? " · " + x.data.width + " px wide" : ""}`,
-            uiHtml`<a class="text-link" href="/tools/${x.data.tool === "qr-studio" ? "qr-studio" : "image-studio"}/?preset=${encodeURIComponent(x.id)}">Use →</a>`,
+            uiHtml`<a class="text-link" href="/tools/${tools[x.data.tool] ? x.data.tool : "image-studio"}/?preset=${encodeURIComponent(x.id)}">Use →</a>`,
           ),
         )
         .join("") ||

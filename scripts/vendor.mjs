@@ -27,6 +27,7 @@ await cp("fflate", "umd/index.js", "fflate.js");
 await cp("@cloudflare/speedtest", "dist/speedtest.js", "speedtest.js");
 await cp("qr-code-styling", "lib/qr-code-styling.js", "qr-code-styling.js");
 await cp("pdf-lib", "dist/pdf-lib.min.js", "pdf-lib.js");
+await cp("@pdf-lib/fontkit", "dist/fontkit.umd.min.js", "fontkit.js");
 await cp(
   "markdown-it",
   "dist/browser/markdown-it.umd.min.js",

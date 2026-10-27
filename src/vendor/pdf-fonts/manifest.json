@@ -1,0 +1,161 @@
+{
+  "name": "LXGW WenKai Regular",
+  "version": "1.530",
+  "activeFont": "LXGWWenKai-Regular.ttf",
+  "sourceRepository": "https://github.com/lxgw/LxgwWenKai",
+  "sourceTag": "v1.530",
+  "sourceCommit": "4becfb4d5cf0c92cfdb60a6e9b504bda43315325",
+  "sourceUrl": "https://raw.githubusercontent.com/lxgw/LxgwWenKai/4becfb4d5cf0c92cfdb60a6e9b504bda43315325/fonts/TTF/LXGWWenKai-Regular.ttf",
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "copyright": "Copyright 2021-2026 LXGW (https://github.com/lxgw/LxgwWenKai), with Reserved Font Name '霞鹜', '霞鶩', '落霞孤鹜', '落霞孤鶩' and 'LXGW'.\nCopyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee)",
+  "changes": "None. Font and upstream OFL bytes are unmodified.",
+  "format": {
+    "container": "TrueType",
+    "signature": "00010000",
+    "outlines": "glyf",
+    "variable": false,
+    "glyphCount": 47336,
+    "unicodeCodePoints": 46926,
+    "os2FsType": 0
+  },
+  "coverage": {
+    "printableBasicLatin": "95/95",
+    "siteHan": {
+      "tested": 983,
+      "missing": 0
+    },
+    "verifiedLanguages": [
+      "English",
+      "Malay (Latin/Rumi)",
+      "Simplified Chinese",
+      "Traditional Chinese"
+    ],
+    "caveats": [
+      "Not complete Unicode; validate every requested code point.",
+      "Arabic/Jawi Malay and emoji are outside verified coverage.",
+      "Calligraphic Kai style rather than Noto Sans."
+    ]
+  },
+  "compatibility": {
+    "runtimeVerified": true,
+    "recommendedEmbedOptions": {
+      "subset": false
+    },
+    "fontkitVersion": "1.1.1",
+    "pdfLibVersion": "1.17.1",
+    "pdfJsVersion": "6.4.299",
+    "runtimeSubsettingRejected": true,
+    "subsetFailure": "Actual rendering omitted glyphs despite correct text extraction.",
+    "evidence": {
+      "name": "LXGW WenKai",
+      "version": "Version 1.530; October 18, 2026",
+      "glyphs": 47336,
+      "characters": 46926,
+      "copyright": "Copyright 2021-2026 LXGW (https://github.com/lxgw/LxgwWenKai), with Reserved Font Name '霞鹜', '霞鶩', '落霞孤鹜', '落霞孤鶩' and 'LXGW'.\nCopyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee)",
+      "fontBytes": 25928940,
+      "embedOptions": {
+        "subset": false
+      },
+      "fullFontPdfBytes": 13144015,
+      "formPdfBytes": 13145740,
+      "flattenedFormPdfBytes": 13145937,
+      "siteHan": 983,
+      "siteHanMissing": [],
+      "checks": [
+        {
+          "language": "English",
+          "mode": "visible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 1018
+        },
+        {
+          "language": "MalayLatin",
+          "mode": "visible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 1175
+        },
+        {
+          "language": "SimplifiedChinese",
+          "mode": "visible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 1981
+        },
+        {
+          "language": "TraditionalChinese",
+          "mode": "visible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 2606
+        },
+        {
+          "language": "English",
+          "mode": "invisible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 0
+        },
+        {
+          "language": "MalayLatin",
+          "mode": "invisible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 0
+        },
+        {
+          "language": "SimplifiedChinese",
+          "mode": "invisible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 0
+        },
+        {
+          "language": "TraditionalChinese",
+          "mode": "invisible",
+          "exactExtractionIgnoringLayoutWhitespace": true,
+          "darkPixels": 0
+        }
+      ],
+      "samples": {
+        "English": "English PDF form: Name, address, invoice, 0123456789.",
+        "MalayLatin": "Bahasa Melayu: Selamat datang, terima kasih, Kuala Lumpur, café.",
+        "SimplifiedChinese": "简体中文：台湾、香港、马来西亚、学习、文件、网络、请选择、编辑、保存、护照、发票、姓名。",
+        "TraditionalChinese": "繁體中文：臺灣、香港、馬來西亞、學習、檔案、體驗、網路、資訊、請選擇、編輯、儲存、護照、發票、姓名。"
+      },
+      "fontkitVersion": "1.1.1",
+      "pdfLibVersion": "1.17.1",
+      "pdfJsVersion": "6.4.299",
+      "visualInspection": "Full-font English, Malay Latin, simplified Chinese and traditional Chinese preview was inspected and all sample glyphs are intact.",
+      "pdfJsWarnings": [],
+      "allRecommendedModeChecksPassed": true
+    },
+    "qaDirectory": "_qa/font-compatibility"
+  },
+  "fontkitLegal": {
+    "installedPackage": "@pdf-lib/fontkit",
+    "version": "1.1.1",
+    "declaredLicense": "MIT",
+    "legalFile": "fontkit-LICENSE.txt",
+    "upstreamLicenseDeclarationCommit": "72b8e42bd6a398d496a63a6d483eabeed43861fb",
+    "exactReleaseCommit": null,
+    "releaseGitHeadAvailable": false,
+    "upstreamStandaloneLicenseAvailable": false,
+    "note": "Source declaration commit is not asserted to be the 1.1.1 release source; published package metadata declares MIT. Canonical MIT terms and supplied author/contributor attribution are retained without inventing a copyright notice."
+  },
+  "files": {
+    "LXGWWenKai-Regular.ttf": {
+      "bytes": 25928940,
+      "sha256": "2d73eea94ad808999d90c0000c239a84a33b09d4bc6ab6c5b8bbf1eda8a7fc8b",
+      "sourceUrl": "https://raw.githubusercontent.com/lxgw/LxgwWenKai/4becfb4d5cf0c92cfdb60a6e9b504bda43315325/fonts/TTF/LXGWWenKai-Regular.ttf"
+    },
+    "OFL.txt": {
+      "bytes": 5171,
+      "sha256": "1a25e35da1031c6c3436fde545bb9cb5aca954e9873afe510c834b8b79bd21a0",
+      "sourceUrl": "https://raw.githubusercontent.com/lxgw/LxgwWenKai/4becfb4d5cf0c92cfdb60a6e9b504bda43315325/OFL.txt"
+    },
+    "fontkit-LICENSE.txt": {
+      "bytes": 2129,
+      "sha256": "5ab6df2a61e146fa6d6246d26726009f9ce037ec45795bdd9f37563d9d4b51eb"
+    },
+    "NOTICE.txt": {
+      "bytes": 2836,
+      "sha256": "4b676cfee4bb76d2915e87e27e8f3bf7401de1a43534305b76b58aecd518db9e"
+    }
+  }
+}

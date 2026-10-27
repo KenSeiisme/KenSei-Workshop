@@ -1,3 +1,4 @@
+import { imageRecipes } from "./image-recipes.js";
 import { targetCompression } from "./target-compression.js";
 import { el, field, row, button } from "./advanced-ui.js";
 import { sendControl, receiveHandoff } from "./handoff.js";
@@ -24,6 +25,9 @@ let files = [],
   presetWidth = null;
 const failedIndices = new Set();
 let retryOnly = false;
+let recipe;
+let resultsStale = false;
+const filesListeners = [];
 const targetSize = el("input", "", {
   type: "number",
   min: 1,
@@ -54,6 +58,8 @@ function fileState(index, state) {
   );
 }
 function clearResults() {
+  resultsStale = false;
+  document.querySelector("#batch-results").removeAttribute("data-stale");
   fileState(-1, "Waiting");
   generation++;
   results.forEach((x) => {
@@ -93,6 +99,7 @@ async function load(list) {
     const img = await image(list[0]);
     clearResults();
     files = [...list];
+    queueMicrotask(() => filesListeners.forEach((fn) => fn()));
     w.disabled = h.disabled = false;
     w.value = presetWidth || img.width;
     h.value = Math.max(1, Math.round((+w.value * img.height) / img.width));
@@ -219,11 +226,15 @@ $("#image-process").onclick = async () => {
       );
       fileState(i, "Processing");
       try {
-        const img = await image(files[i]),
-          targetWidth = width,
+        const settings = recipe.get(i),
+          original = await image(files[i]),
+          img = recipe.prepare(original, settings),
+          mime = settings.encode ? settings.format : files[i].type,
+          q = settings.encode ? settings.quality : 1,
+          targetWidth = settings.resize ? settings.width : img.width,
           targetHeight = Math.max(
             1,
-            Math.round((width * img.height) / img.width),
+            Math.round((targetWidth * img.height) / img.width),
           );
         if (targetHeight > 12000 || targetWidth * targetHeight > 40000000)
           throw new Error("Target image is too large. Reduce the width.");
@@ -272,11 +283,12 @@ $("#image-process").onclick = async () => {
               drawNative();
             }
           }
+          recipe.watermark(canvas, settings);
           const compressed = await targetCompression(
             (v) => canvasBlob(canvas, mime, v),
             q,
-            mime !== "image/png" && +targetSize.value > 0
-              ? +targetSize.value * 1024
+            mime !== "image/png" && settings.encode && settings.targetKiB > 0
+              ? settings.targetKiB * 1024
               : 0,
             () => job === generation,
           );
@@ -295,6 +307,7 @@ $("#image-process").onclick = async () => {
           throw e;
         } finally {
           if (source) source.width = source.height = 0;
+          img.width = img.height = 0;
           canvas.width = canvas.height = 0;
         }
         if (job !== generation) break;
@@ -392,9 +405,14 @@ $("#image-process").onclick = async () => {
         $("#batch-results"),
         () => ({
           kind: "files",
-          files: results.map(
-            (r) => new File([r.blob], r.name, { type: r.blob.type }),
-          ),
+          files: (resultsStale
+            ? (() => {
+                throw Error(
+                  "Settings changed. Process the images again before downloading.",
+                );
+              })()
+            : results
+          ).map((r) => new File([r.blob], r.name, { type: r.blob.type })),
         }),
         ["image-to-text", "pdf-toolkit", "file-renamer"],
       );
@@ -419,6 +437,10 @@ function formatChangedQuality() {
   quality.disabled = format.value === "image/png";
 }
 $("#image-zip").onclick = async (e) => {
+  if (resultsStale)
+    return toast(
+      uiMsg("Settings changed. Process the images again before downloading."),
+    );
   e.target.disabled = true;
   try {
     await zip(
@@ -481,3 +503,42 @@ receiveHandoff(
   (p) => load(p.files),
   () => files.length > 0,
 );
+
+recipe = imageRecipes({
+  get files() {
+    return files;
+  },
+  stale() {
+    if (results.length) {
+      resultsStale = true;
+      document.querySelector("#batch-results").dataset.stale = "true";
+      uiText(
+        document.querySelector("#image-result"),
+        uiMsg("Settings changed. Process the images again before downloading."),
+      );
+    }
+    window.dispatchEvent(new Event("tool-content-changed"));
+  },
+  onFiles(fn) {
+    filesListeners.push(fn);
+  },
+});
+
+for (const node of [
+  document.querySelector("#batch-results"),
+  document.querySelector("#image-download"),
+])
+  node.addEventListener(
+    "click",
+    (event) => {
+      if (resultsStale && event.target.closest("a[download]")) {
+        event.preventDefault();
+        toast(
+          uiMsg(
+            "Settings changed. Process the images again before downloading.",
+          ),
+        );
+      }
+    },
+    true,
+  );

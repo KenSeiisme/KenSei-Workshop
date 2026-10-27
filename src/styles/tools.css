@@ -1552,3 +1552,153 @@ progress {
   color: #21152d;
   pointer-events: none;
 }
+
+/* Professional studios: stable workspaces, local-only settings recipes. */
+.studio-tabs {
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.studio-tabs [aria-selected="true"] {
+  background: var(--accent, #d8b4ed);
+  color: #17111d;
+}
+.studio-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: 1.2rem;
+  align-items: start;
+}
+.studio-workspace > *,
+.studio-properties,
+.studio-recipes,
+.image-pipeline {
+  min-width: 0;
+}
+.studio-properties {
+  display: grid;
+  gap: 0.75rem;
+}
+.studio-recipes,
+.image-pipeline {
+  padding: 1rem;
+  border: 1px solid #ffffff20;
+  border-radius: 14px;
+  margin: 1rem 0;
+}
+.studio-recipes > *,
+.image-pipeline > * {
+  margin-top: 0.7rem;
+}
+.studio-recipes summary,
+.image-pipeline summary {
+  cursor: pointer;
+  line-height: 1.5;
+}
+.studio-pdf input[type="checkbox"],
+.image-pipeline input[type="checkbox"] {
+  width: 22px;
+  min-height: 22px;
+}
+.pdf-annotation-stage {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  align-self: start;
+  overflow: hidden;
+}
+.pdf-annotation-stage > canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.pdf-annotation-layer {
+  position: absolute;
+  inset: 0;
+}
+.pdf-annotation {
+  position: absolute;
+  min-width: 12px;
+  min-height: 12px;
+  cursor: move;
+  touch-action: none;
+  white-space: pre-wrap;
+  overflow: visible;
+  border: 1px dashed transparent;
+  line-height: 1.2;
+}
+.pdf-annotation.selected {
+  outline: 2px dashed #2563eb;
+}
+.pdf-annotation.rectangle {
+  border: 2px solid;
+}
+.pdf-annotation.highlight {
+  background: #e9c84d60;
+}
+.pdf-annotation.arrow {
+  font-size: 3rem !important;
+  line-height: 1;
+}
+.pdf-annotation svg {
+  width: 100%;
+  height: 100%;
+}
+.annotation-resize {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 14px;
+  line-height: 20px;
+  width: 22px;
+  height: 22px;
+  background: #1e1b4b;
+  color: #fff;
+  cursor: se-resize;
+}
+.signature-pad {
+  width: 100%;
+  max-height: 130px;
+  border: 1px solid #ffffff35;
+  border-radius: 8px;
+  touch-action: none;
+  background: #19131f;
+}
+.pdf-form-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.annotation-list {
+  display: grid;
+  gap: 0.4rem;
+}
+.annotation-list button {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 767px) {
+  .studio-workspace {
+    grid-template-columns: 1fr;
+  }
+  .studio-tabs button {
+    flex: 1;
+    min-height: 44px;
+  }
+  .studio-recipes,
+  .image-pipeline {
+    padding: 0.7rem;
+  }
+  .pdf-form-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .studio-properties .action-row {
+    flex-wrap: wrap;
+  }
+}
+
+.studio-tabs button {
+  color: var(--text, #eee7f4);
+}
+.studio-tabs button[aria-selected="true"] {
+  color: #17111d;
+}
