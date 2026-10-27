@@ -1,6 +1,6 @@
 import { api, downloadText } from "./common.js";
 import { el, row, field, button, select } from "./advanced-ui.js";
-import { uiMsg, uiText, uiConfirm } from "../site/ui.js";
+import { uiMsg, uiText, uiConfirm, uiRender } from "../site/ui.js";
 
 // 只接收各工具白名單驗證後的設定；媒體、表單值和結果從不進入配方。
 export function recipeControls(
@@ -17,7 +17,7 @@ export function recipeControls(
     title = el("summary", "Settings recipes");
   const name = el("input", "", {
     maxLength: 100,
-    value: "My recipe",
+    value: uiRender(uiMsg("My recipe")),
     "aria-label": "Recipe name",
   });
   const saved = select([["", "Choose a saved recipe"]]);
@@ -26,6 +26,18 @@ export function recipeControls(
     "Settings only. Choose source files again when reusing a recipe.",
     { class: "muted small", role: "status" },
   );
+  const action = (label, fn, primary = false) =>
+    button(
+      label,
+      async () => {
+        try {
+          await fn();
+        } catch (e) {
+          uiText(note, uiMsg(e.message));
+        }
+      },
+      primary,
+    );
   const clean = () => validate(structuredClone(get()));
   const use = (data, id = null) => {
     if (!data?.recipe || data.tool !== tool || data.recipe.version !== 1)
@@ -65,7 +77,7 @@ export function recipeControls(
         ...legacy(settings),
         recipe: { version: 1, settings },
       };
-    if (JSON.stringify(data).length > 100000)
+    if (new TextEncoder().encode(JSON.stringify(data)).length > 100000)
       throw Error("Recipe settings are too large.");
     const item = await api.saveItem(
       "preset",
@@ -126,9 +138,9 @@ export function recipeControls(
     field("Recipe name", name),
     saved,
     row(
-      button("Save changes", () => save(false)),
-      button("Save as new", () => save(true)),
-      button("Export recipe JSON", () =>
+      action("Save changes", () => save(false)),
+      action("Save as new", () => save(true)),
+      action("Export recipe JSON", () =>
         downloadText(
           JSON.stringify(
             {

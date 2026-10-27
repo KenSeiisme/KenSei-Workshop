@@ -92,6 +92,32 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
     assert.equal(recipe.recipe.settings.crop, true);
     assert(!JSON.stringify(recipe).includes("before.png"));
     console.log("PASS batch pipeline dimensions and settings-only recipe");
+    await p.evaluate(() => {
+      window.restoreImageEncoder = HTMLCanvasElement.prototype.toBlob;
+      HTMLCanvasElement.prototype.toBlob = function () {
+        throw Error("Simulated export failure");
+      };
+    });
+    await p.fill("#image-width", "121");
+    await p.click("#image-process");
+    await p.waitForFunction(() =>
+      document
+        .querySelector("#image-result")
+        .textContent.includes("Processing failed"),
+    );
+    assert.equal(await p.locator("#image-previous-results button").count(), 2);
+    await p.locator("#image-previous-results summary").click();
+    const previous = await dl(() =>
+      p.locator("#image-previous-results button").first().click(),
+    );
+    assert.deepEqual(previous, out);
+    await p.evaluate(
+      () => (HTMLCanvasElement.prototype.toBlob = window.restoreImageEncoder),
+    );
+    console.log(
+      "PASS failed reprocessing retains explicitly labeled previous downloads",
+    );
+
     const doc = await PDFDocument.create(),
       page = doc.addPage([500, 700]);
     page.setRotation(degrees(90));
@@ -156,6 +182,108 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
     console.log(
       "PASS Chinese forms, radio/dropdown, rotated annotation and flatten exports",
     );
+    const plain = await PDFDocument.create();
+    plain.addPage([500, 700]).setRotation(degrees(90));
+    await p.setInputFiles("#pdf-fill-file", {
+      name: "signature.pdf",
+      mimeType: "application/pdf",
+      buffer: Buffer.from(await plain.save()),
+    });
+    await p.waitForFunction(() =>
+      document
+        .querySelector(".pdf-form-fields")
+        .textContent.includes("No editable"),
+    );
+    await p
+      .locator("#pdf-fill-workspace .studio-properties > label select")
+      .selectOption("signature");
+    const pad = await p.locator(".signature-pad").boundingBox();
+    await p.mouse.move(pad.x + pad.width * 0.1, pad.y + pad.height * 0.2);
+    await p.mouse.down();
+    await p.mouse.move(pad.x + pad.width * 0.45, pad.y + pad.height * 0.75, {
+      steps: 12,
+    });
+    await p.mouse.move(pad.x + pad.width * 0.8, pad.y + pad.height * 0.3, {
+      steps: 12,
+    });
+    await p.mouse.up();
+    await p
+      .getByRole("button", { name: "Add annotation", exact: true })
+      .click();
+    await p.getByRole("button", { name: "Undo", exact: true }).click();
+    assert.equal(await p.locator(".pdf-annotation.signature").count(), 0);
+    await p.getByRole("button", { name: "Redo", exact: true }).click();
+    assert.equal(await p.locator(".pdf-annotation.signature").count(), 1);
+    const signed = await dl(() =>
+      p
+        .getByRole("button", { name: "Export annotated PDF", exact: true })
+        .click(),
+    );
+    await p.evaluate(() => {
+      const n = document.createElement("input");
+      n.type = "file";
+      n.id = "verify-export-file";
+      n.hidden = true;
+      document.body.append(n);
+    });
+    await p.setInputFiles("#verify-export-file", {
+      name: "signed.pdf",
+      mimeType: "application/pdf",
+      buffer: signed,
+    });
+    const bounds = await p.evaluate(async () => {
+      const mod = await import("/vendor/pdfjs/build/pdf.min.mjs"),
+        task = mod.getDocument({
+          data: new Uint8Array(
+            await document
+              .querySelector("#verify-export-file")
+              .files[0].arrayBuffer(),
+          ),
+        }),
+        doc = await task.promise,
+        page = await doc.getPage(1),
+        v = page.getViewport({ scale: 1 }),
+        c = document.createElement("canvas");
+      c.width = v.width;
+      c.height = v.height;
+      const x = c.getContext("2d");
+      await page.render({ canvasContext: x, viewport: v }).promise;
+      const data = x.getImageData(0, 0, c.width, c.height).data;
+      let minX = Infinity,
+        minY = Infinity,
+        maxX = 0,
+        maxY = 0,
+        count = 0;
+      for (let y = 0; y < c.height; y++)
+        for (let xx = 0; xx < c.width; xx++) {
+          const i = (y * c.width + xx) * 4;
+          if (
+            data[i] > 60 &&
+            data[i + 2] > data[i] * 1.1 &&
+            data[i + 1] < data[i] * 0.9
+          ) {
+            count++;
+            minX = Math.min(minX, xx);
+            maxX = Math.max(maxX, xx);
+            minY = Math.min(minY, y);
+            maxY = Math.max(maxY, y);
+          }
+        }
+      await task.destroy();
+      return { minX, minY, maxX, maxY, count };
+    });
+    assert(bounds.count > 100);
+    assert(
+      bounds.minX >= 103 &&
+        bounds.maxX <= 317 &&
+        bounds.minY >= 98 &&
+        bounds.maxY <= 182,
+      JSON.stringify(bounds),
+    );
+    console.log(
+      "PASS continuous document selection, signature undo/redo and rotated-page rendered ink coordinates",
+    );
+
     for (const slug of ["image-studio", "pdf-toolkit"])
       for (const width of [320, 360, 768, 1440]) {
         await p.setViewportSize({ width, height: 950 });

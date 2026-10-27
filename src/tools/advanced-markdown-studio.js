@@ -1,7 +1,7 @@
 import { recipeControls } from "./studio-recipes.js";
 import { renderOptions, validateMarkdownRecipe } from "./markdown-rich.js";
 import { textReceiver } from "./handoff.js";
-import { el, button, panel, row } from "./advanced-ui.js";
+import { el, button, panel, row, field, select } from "./advanced-ui.js";
 export function init() {
   textReceiver("markdown-studio", "#markdown-input");
   const input = document.querySelector("#markdown-input"),
@@ -11,6 +11,46 @@ export function init() {
   p.className = "markdown-writing-tools";
   input.before(p);
   const ctx = window.KenseiAdvancedContexts["markdown-studio"];
+  const rendering = el("details");
+  rendering.append(el("summary", "Render options"));
+  const renderInputs = {};
+  for (const [key, label] of [
+    ["math", "Render mathematics"],
+    ["diagrams", "Render diagrams"],
+    ["footnotes", "Render footnotes"],
+  ]) {
+    const n = el("input", "", {
+      type: "checkbox",
+      checked: renderOptions[key],
+    });
+    renderInputs[key] = n;
+    n.onchange = () => {
+      renderOptions[key] = n.checked;
+      ctx.render();
+    };
+    rendering.append(field(label, n));
+  }
+  const paper = select(
+      [
+        ["A4", "A4"],
+        ["Letter", "Letter"],
+      ],
+      renderOptions.page,
+    ),
+    printStyle = document.createElement("style");
+  document.head.append(printStyle);
+  function paperStyle() {
+    printStyle.textContent =
+      "@media print{@page{size:" + renderOptions.page + ";margin:18mm}}";
+  }
+  paper.onchange = () => {
+    renderOptions.page = paper.value;
+    paperStyle();
+  };
+  rendering.append(field("Print paper", paper));
+  p.append(rendering);
+  paperStyle();
+
   function headings() {
     return ctx.headings;
   }
@@ -85,6 +125,9 @@ export function init() {
     () => ({ ...renderOptions }),
     (s) => {
       Object.assign(renderOptions, s);
+      for (const [key, n] of Object.entries(renderInputs)) n.checked = s[key];
+      paper.value = s.page;
+      paperStyle();
       ctx.render();
     },
     validateMarkdownRecipe,

@@ -1768,3 +1768,206 @@ progress {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* OCR review uses the same source coordinate frame as searchable-PDF output. */
+.ocr-review-stage {
+  position: relative;
+  align-self: start;
+  min-width: 0;
+}
+.ocr-review-stage > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ocr-review-stage > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.ocr-review-stage polygon {
+  fill: #b86fe822;
+  stroke: #9d45bf;
+  stroke-width: 0.002;
+  cursor: pointer;
+}
+.ocr-review-stage polygon.selected,
+.ocr-review-stage polygon:focus {
+  fill: #d1a3ea55;
+  stroke: #ffca80;
+  stroke-width: 0.004;
+  outline: none;
+}
+.ocr-review-blocks {
+  max-height: 650px;
+  overflow: auto;
+}
+.ocr-review-line {
+  border: 1px solid #ffffff20;
+  border-radius: 8px;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+}
+.ocr-review-line textarea {
+  min-height: 70px;
+}
+.ocr-review-line.selected {
+  border-color: #cfa4e7;
+}
+.mix-layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) minmax(0, 1fr) minmax(
+      200px,
+      260px
+    );
+  gap: 1rem;
+  align-items: start;
+}
+.mix-layout > * {
+  min-width: 0;
+}
+.mix-layout > .studio-tabs {
+  grid-column: 1/-1;
+}
+.mix-timeline {
+  overflow: auto;
+  background: #110d17;
+  border: 1px solid #ffffff25;
+  border-radius: 12px;
+  min-height: 160px;
+}
+.mix-ruler {
+  display: flex;
+  justify-content: space-between;
+  min-width: 600px;
+  font:
+    11px ui-monospace,
+    monospace;
+  padding: 0.5rem;
+}
+.mix-lane {
+  height: 70px;
+  border-top: 1px solid #ffffff20;
+  position: relative;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(20% - 1px),
+    #ffffff0a 20%
+  );
+}
+.mix-clip {
+  position: absolute;
+  top: 8px;
+  height: 54px;
+  min-width: 44px;
+  border: 1px solid #d9a4ef;
+  border-radius: 8px;
+  background: linear-gradient(120deg, #7b4989, #473d70);
+  color: #fff;
+  touch-action: none;
+  overflow: hidden;
+  font:
+    12px ui-monospace,
+    monospace;
+  padding: 0 22px;
+}
+.mix-clip.selected {
+  outline: 2px solid #f5c788;
+}
+.mix-trim-start,
+.mix-trim-end {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  display: grid;
+  place-items: center;
+  cursor: ew-resize;
+  background: #ffffff18;
+}
+.mix-trim-start {
+  left: 0;
+}
+.mix-trim-end {
+  right: 0;
+}
+.mix-track-settings {
+  border: 1px solid #ffffff20;
+  border-radius: 10px;
+  padding: 0.7rem;
+  margin: 0.7rem 0;
+}
+.mix-track-settings summary {
+  cursor: pointer;
+}
+.mix-properties {
+  display: grid;
+  gap: 0.65rem;
+}
+.mix-wave {
+  width: 100%;
+  height: 130px;
+  background: #15101b;
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+#ocr-review-workspace > label,
+#ocr-review-workspace > div {
+  min-width: 0;
+}
+@media (max-width: 1000px) {
+  .mix-layout {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+  .mix-properties {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 767px) {
+  .mix-layout {
+    display: block;
+  }
+  .mix-main,
+  .mix-properties,
+  .mix-sources {
+    margin-top: 1rem;
+  }
+  .mix-track-settings {
+    padding: 0.5rem;
+  }
+  .mix-trim-start,
+  .mix-trim-end {
+    min-width: 22px;
+  }
+  .ocr-review-blocks {
+    max-height: 550px;
+  }
+}
+
+@font-face {
+  font-family: WorkshopPDFFont;
+  src: url("/vendor/pdf-fonts/LXGWWenKai-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+.pdf-annotation.text {
+  font-family: WorkshopPDFFont, sans-serif;
+}
+.markdown-writing-tools > details {
+  padding: 0.7rem;
+  border: 1px solid #ffffff20;
+  border-radius: 10px;
+  margin: 0.6rem 0;
+}
+.markdown-writing-tools input[type="checkbox"] {
+  width: 22px;
+  min-height: 22px;
+}
+
+.mix-sources p,
+#data-analyze-workspace > div > p,
+.pdf-form-fields label > span {
+  overflow-wrap: anywhere;
+}

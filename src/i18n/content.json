@@ -5,8 +5,8 @@
       "zh-Hant": "圖片工作室"
     },
     "description": {
-      "en": "Batch compress, resize and convert images. Download individually or as a ZIP.",
-      "zh-Hant": "批次壓縮、調整尺寸與轉換圖片，可逐張下載或打包為 ZIP。"
+      "en": "Batch recipes for crop, resize, watermark and target-size compression, with per-image control.",
+      "zh-Hant": "以批次配方裁切、縮放、加浮水印及壓縮至目標大小，並可逐張調整。"
     },
     "aliases": [
       "image",
@@ -53,8 +53,8 @@
       "zh-Hant": "PDF 工具箱"
     },
     "description": {
-      "en": "Merge, split, arrange and rotate PDFs. Convert images to PDF and PDF pages to images.",
-      "zh-Hant": "合併、拆分、排序與旋轉 PDF，並在圖片與 PDF 頁面之間轉換。"
+      "en": "Organize pages, fill forms, annotate and sign PDFs locally, with editable or flattened export.",
+      "zh-Hant": "在本機整理頁面、填寫表單、加批註與手寫簽名，並匯出可編輯或扁平化 PDF。"
     },
     "aliases": [
       "pdf",
@@ -99,8 +99,8 @@
       "zh-Hant": "Markdown 工作室"
     },
     "description": {
-      "en": "Write Markdown with a live preview, save drafts and export MD or HTML.",
-      "zh-Hant": "撰寫 Markdown 並即時預覽、儲存草稿及匯出 MD 或 HTML。"
+      "en": "Write Markdown with math, footnotes and diagrams, then export MD, self-contained HTML or print.",
+      "zh-Hant": "以 Markdown 撰寫公式、註腳及圖表，再匯出 MD、獨立 HTML 或列印。"
     },
     "aliases": [
       "markdown",
@@ -142,8 +142,8 @@
       "zh-Hant": "圖片轉文字"
     },
     "description": {
-      "en": "Extract English, Chinese and Malay text from images, right on your device.",
-      "zh-Hant": "直接在裝置上，從圖片擷取英文、中文與馬來文。"
+      "en": "Recognize four languages, correct linked text boxes and export searchable PDFs on your device.",
+      "zh-Hant": "在本機辨識四種語言、修正連動文字框，並匯出可搜尋的 PDF。"
     },
     "aliases": [
       "ocr",
@@ -433,8 +433,8 @@
       "zh-Hant": "音訊工作室"
     },
     "description": {
-      "en": "Record your microphone, trim audio and export MP3 or WAV on your device.",
-      "zh-Hant": "在裝置上使用麥克風錄音、裁剪音訊，並匯出 MP3 或 WAV。"
+      "en": "Record, trim and mix audio with multitrack effects, crossfades and MP3 or WAV export.",
+      "zh-Hant": "錄音、裁剪及多軌混音，套用效果與交叉淡化，再匯出 MP3 或 WAV。"
     },
     "aliases": [
       "audio",
@@ -456,8 +456,8 @@
       "zh-Hant": "資料工作室"
     },
     "description": {
-      "en": "Validate and format JSON, preview CSV tables and convert between flat JSON and CSV.",
-      "zh-Hant": "驗證與格式化 JSON、預覽 CSV 表格，並在平面 JSON 與 CSV 之間轉換。"
+      "en": "Edit JSON and CSV, or analyze local tables with visual joins, pivots and read-only SQL.",
+      "zh-Hant": "編輯 JSON、CSV，或以視覺化連接、樞紐分析與唯讀 SQL 分析本機資料表。"
     },
     "aliases": [
       "json",

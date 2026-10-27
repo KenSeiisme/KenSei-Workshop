@@ -134,5 +134,12 @@
     ["tests/browser/advanced-p4.cjs"],
     ["tests/browser/advanced-locales.cjs"],
     ["tests/browser/network-dashboard.cjs"]
+  ],
+  "studios": [
+    ["tests/unit/studios-core.mjs"],
+    ["tests/database/studios-presets.mjs"],
+    ["tests/browser/studios-stage1.cjs"],
+    ["tests/browser/studios-stage2.cjs"],
+    ["tests/browser/studios-stage3.cjs"]
   ]
 }

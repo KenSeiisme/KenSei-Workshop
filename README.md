@@ -16,6 +16,16 @@
 
 分批验收命令：`pnpm test:advanced-p1`、`pnpm test:advanced-p2`、`pnpm test:advanced-p3`、`pnpm test:advanced-p4`。数据库测试使用隔离的 PostgreSQL 环境；详细边界与验收记录见 `docs/validation/`。
 
+## 六个专业工作区
+
+Image Studio 批处理配方、PDF Fill & Annotate、Data Analyze、OCR Review & PDF、Markdown 数学/图表及 Audio Mix 已接入。入口、工具数量与文件容量边界保持兼容。
+
+配方复用现有私有 `preset`，带独立版本和参数白名单；不含文件、查询结果、PDF 表单/批注/签名或音频。Data 与 Audio 恢复配方后必须确认来源槽位映射。旧图片预设仍可读取；文字草稿继续手动保存。
+
+- `pnpm test:studios`：纯逻辑、现有 RLS schema 与三个阶段的真实下载验收。
+- `pnpm vendor:studios`：开发时重建固定版本 SQL/公式/图表资源；字体来源及兼容约束见 `src/vendor/pdf-fonts/manifest.json`。
+- 部署仍只执行 Python 标准库静态构建，不安装浏览器运行依赖，不需要 Supabase 迁移。
+
 ## 文件夹怎么找
 
 ```text

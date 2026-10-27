@@ -77,9 +77,13 @@ export function imageRecipes(context) {
       "aria-label": "Image settings scope",
     }),
     enable = el("input", "", { type: "checkbox" }),
-    info = el("p", "Global recipe applies unless this image has an override.", {
-      class: "muted small",
-    });
+    info = el(
+      "p",
+      "Recipes store global steps; per-image overrides stay on this page.",
+      {
+        class: "muted small",
+      },
+    );
   const scope = row(
     field("Settings scope", overrideList),
     field("Override this image", enable),

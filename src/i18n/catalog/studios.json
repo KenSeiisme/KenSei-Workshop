@@ -726,5 +726,497 @@
   "m_913c5e96ccce": {
     "en": "Diagram",
     "zh-Hant": "圖表"
+  },
+  "m_d18350d103da": {
+    "en": "Trim & record",
+    "zh-Hant": "修剪與錄音"
+  },
+  "m_dce6eb4447ef": {
+    "en": "Mix",
+    "zh-Hant": "混音"
+  },
+  "m_21822ed82c86": {
+    "en": "Choose up to ten audio files. No automatic playback or rendering.",
+    "zh-Hant": "最多可選擇十個音訊檔案，不會自動播放或產生混音。"
+  },
+  "m_feaca89d4618": {
+    "en": "Multitrack timeline",
+    "zh-Hant": "多音軌時間軸"
+  },
+  "m_539d7de41fbb": {
+    "en": "Rendered mix waveform",
+    "zh-Hant": "混音結果波形"
+  },
+  "m_f1ca59e6eaa8": {
+    "en": "Audio source slot mapping",
+    "zh-Hant": "音訊來源位置對應"
+  },
+  "m_2ef03abe6310": {
+    "en": "Mix changed. Preview it again before playing or exporting.",
+    "zh-Hant": "混音已變更。播放或匯出前請重新預覽。"
+  },
+  "m_906c9ea268c5": {
+    "en": "Preview the updated mix before playing or exporting.",
+    "zh-Hant": "播放或匯出前請先預覽更新後的混音。"
+  },
+  "m_ce7db68628ec": {
+    "en": "Sources & tracks",
+    "zh-Hant": "來源與音軌"
+  },
+  "m_b613f4c01b53": {
+    "en": "Add track",
+    "zh-Hant": "新增音軌"
+  },
+  "m_f96193243fa6": {
+    "en": "Use at most ten tracks.",
+    "zh-Hant": "最多可使用十條音軌。"
+  },
+  "m_9dcff98e275f": {
+    "en": "Timeline",
+    "zh-Hant": "時間軸"
+  },
+  "m_c2cdc6280daa": {
+    "en": "Drag clips to move them. Drag the edges to trim; precise seconds are available in Clip properties.",
+    "zh-Hant": "拖曳可移動片段，拖曳邊緣可修剪。你也可以在「片段屬性」中設定精確秒數。"
+  },
+  "m_b93eef30eb58": {
+    "en": "Source slot",
+    "zh-Hant": "來源位置"
+  },
+  "m_e235f1037ef1": {
+    "en": "Add clip",
+    "zh-Hant": "新增片段"
+  },
+  "m_47c758afa7b0": {
+    "en": "Arrange clips with crossfade",
+    "zh-Hant": "以交叉淡化排列片段"
+  },
+  "m_a97ecb256529": {
+    "en": "Clip properties",
+    "zh-Hant": "片段屬性"
+  },
+  "m_df7e7cd44e32": {
+    "en": "Preview mix",
+    "zh-Hant": "預覽混音"
+  },
+  "m_560cdcb44421": {
+    "en": "Stop microphone recording before preparing a mix.",
+    "zh-Hant": "處理混音前請先停止麥克風錄音。"
+  },
+  "m_73c13a5360bc": {
+    "en": "Rendering the same mix used for preview and export…",
+    "zh-Hant": "正在產生用於預覽與匯出的同一份混音…"
+  },
+  "m_86f44937da05": {
+    "en": "Mix ready. Peaks may clip; lower track volume or enable normalization.",
+    "zh-Hant": "混音已就緒。峰值可能產生削波；請降低音軌音量或啟用正規化。"
+  },
+  "m_7721c29bbed5": {
+    "en": "Mix ready. Play or export the rendered result.",
+    "zh-Hant": "混音已就緒。你可以播放或匯出結果。"
+  },
+  "m_ea3a7b01f08a": {
+    "en": "Mix on this device",
+    "zh-Hant": "在此裝置混音"
+  },
+  "m_87d09c9edb59": {
+    "en": "Audio files · ten files / 50 MB / five minutes",
+    "zh-Hant": "音訊檔案 · 最多十個／50 MB／五分鐘"
+  },
+  "m_ebbc53de0521": {
+    "en": "Crossfade · seconds",
+    "zh-Hant": "交叉淡化 · 秒"
+  },
+  "m_52c1e92e9ef6": {
+    "en": "Play mix",
+    "zh-Hant": "播放混音"
+  },
+  "m_2578b6a83554": {
+    "en": "Cancel rendering",
+    "zh-Hant": "取消混音處理"
+  },
+  "m_932b4035165b": {
+    "en": "Cancelled. Sources and the previous mix are retained.",
+    "zh-Hant": "已取消。來源音訊與先前混音會保留。"
+  },
+  "m_bc105520c735": {
+    "en": "Export mix",
+    "zh-Hant": "匯出混音"
+  },
+  "m_dc50057a71ff": {
+    "en": "Choose up to ten files totaling 50 MB.",
+    "zh-Hant": "最多可選擇十個檔案，總大小不可超過 50 MB。"
+  },
+  "m_e3f52c806842": {
+    "en": "Combined audio exceeds five minutes, stereo or the 128 MB PCM limit.",
+    "zh-Hant": "合併音訊超過五分鐘、雙聲道或 128 MB PCM 的限制。"
+  },
+  "m_129a0b094a4e": {
+    "en": "Audio sources ready. Arrange and preview when ready.",
+    "zh-Hant": "音訊來源已就緒。請排列片段，再預覽混音。"
+  },
+  "m_704f53770c0a": {
+    "en": "Audio metadata could not load. Try MP3 or WAV.",
+    "zh-Hant": "無法載入音訊中繼資料。請嘗試 MP3 或 WAV。"
+  },
+  "m_45dd46f93df4": {
+    "en": "This audio file is damaged or unsupported.",
+    "zh-Hant": "此音訊檔案已損壞或不受支援。"
+  },
+  "m_5c4d9bfa5526": {
+    "en": "Combined audio may be at most five minutes.",
+    "zh-Hant": "合併音訊的總長度不可超過五分鐘。"
+  },
+  "m_7cd9419bfc25": {
+    "en": "Track {0}",
+    "zh-Hant": "音軌 {0}"
+  },
+  "m_f93b0fb1b7ac": {
+    "en": "Slot {0}",
+    "zh-Hant": "來源位置 {0}"
+  },
+  "m_440abaa6cc8a": {
+    "en": "Track volume",
+    "zh-Hant": "音軌音量"
+  },
+  "m_fd92d952db92": {
+    "en": "Pan",
+    "zh-Hant": "左右聲像"
+  },
+  "m_8dd6857baf02": {
+    "en": "Mute",
+    "zh-Hant": "靜音"
+  },
+  "m_c2e8cc175e0b": {
+    "en": "Solo track",
+    "zh-Hant": "單獨播放此音軌"
+  },
+  "m_832753df4f42": {
+    "en": "Low EQ · 200 Hz",
+    "zh-Hant": "低頻等化 · 200 Hz"
+  },
+  "m_08b9daa78bd4": {
+    "en": "Mid EQ · 1 kHz",
+    "zh-Hant": "中頻等化 · 1 kHz"
+  },
+  "m_fdb38d31e7a0": {
+    "en": "High EQ · 4 kHz",
+    "zh-Hant": "高頻等化 · 4 kHz"
+  },
+  "m_18051f14c6dc": {
+    "en": "Select a clip on the timeline.",
+    "zh-Hant": "請在時間軸上選取片段。"
+  },
+  "m_051f01f095a2": {
+    "en": "Track",
+    "zh-Hant": "音軌"
+  },
+  "m_8e02f321d465": {
+    "en": "Timeline position · seconds",
+    "zh-Hant": "時間軸位置 · 秒"
+  },
+  "m_3709314e1e1f": {
+    "en": "Trim start · seconds",
+    "zh-Hant": "修剪起點 · 秒"
+  },
+  "m_2d73deb742af": {
+    "en": "Trim end · seconds",
+    "zh-Hant": "修剪終點 · 秒"
+  },
+  "m_8880febdb1f8": {
+    "en": "Fade in · seconds",
+    "zh-Hant": "淡入 · 秒"
+  },
+  "m_d5aee78b1a20": {
+    "en": "Fade out · seconds",
+    "zh-Hant": "淡出 · 秒"
+  },
+  "m_15da036ad4cc": {
+    "en": "Duplicate clip",
+    "zh-Hant": "建立片段副本"
+  },
+  "m_c70bd75817ec": {
+    "en": "Use at most 60 clips.",
+    "zh-Hant": "最多可使用 60 個片段。"
+  },
+  "m_47f8b7d82668": {
+    "en": "Remove clip",
+    "zh-Hant": "移除片段"
+  },
+  "m_ecddd11e321f": {
+    "en": "Confirm audio source mapping before rendering.",
+    "zh-Hant": "處理混音前請確認音訊來源對應。"
+  },
+  "m_07b287b37664": {
+    "en": "Mix exported. Some peaks clipped.",
+    "zh-Hant": "混音已匯出。部分峰值產生削波。"
+  },
+  "m_0fabd87bc263": {
+    "en": "Mix exported.",
+    "zh-Hant": "混音已匯出。"
+  },
+  "m_2b71d320c447": {
+    "en": "Encoder could not load. Retry or choose WAV.",
+    "zh-Hant": "無法載入編碼器。請重試或選擇 WAV。"
+  },
+  "m_fb8612b69603": {
+    "en": "Confirm audio source mapping",
+    "zh-Hant": "確認音訊來源對應"
+  },
+  "m_5f74ccdd11fb": {
+    "en": "Choose a file for every source slot.",
+    "zh-Hant": "請為每個來源位置選擇檔案。"
+  },
+  "m_c077a665f0da": {
+    "en": "WAV",
+    "zh-Hant": "WAV"
+  },
+  "m_b84e48724bb6": {
+    "en": "MP3",
+    "zh-Hant": "MP3"
+  },
+  "m_df170444aac6": {
+    "en": "Use 1–10 tracks and at most 60 clips.",
+    "zh-Hant": "請使用 1 至 10 條音軌，片段數量最多為 60 個。"
+  },
+  "m_87cc20a3181f": {
+    "en": "The mix contains an invalid range or setting.",
+    "zh-Hant": "混音包含無效的範圍或設定。"
+  },
+  "m_5244ab76b007": {
+    "en": "Use three EQ bands.",
+    "zh-Hant": "請使用三段等化器。"
+  },
+  "m_42c6abdab387": {
+    "en": "Clips must fit inside five minutes with valid trim and fade ranges.",
+    "zh-Hant": "片段須位於五分鐘內，且修剪與淡入淡出範圍必須有效。"
+  },
+  "m_18acd5092d27": {
+    "en": "Add a clip to the timeline.",
+    "zh-Hant": "請將片段加入時間軸。"
+  },
+  "m_cb3e6e4df13a": {
+    "en": "Confirm a source mapping that covers every clip range.",
+    "zh-Hant": "請確認來源對應，確保來源音訊涵蓋每個片段範圍。"
+  },
+  "m_8e23baf0da9b": {
+    "en": "The source and rendered mix exceed the five-minute or 128 MB PCM budget. Shorten the clips.",
+    "zh-Hant": "來源音訊與混音結果超過五分鐘或 128 MB PCM 的處理上限。請縮短片段。"
+  },
+  "m_2f0211568b32": {
+    "en": "Recognize",
+    "zh-Hant": "辨識"
+  },
+  "m_0dc521032087": {
+    "en": "Review & PDF",
+    "zh-Hant": "檢查與 PDF"
+  },
+  "m_3fd80e0c5ffa": {
+    "en": "Re-OCR pages that already contain text · rasterizes those pages",
+    "zh-Hant": "重新 OCR 辨識已有文字的頁面 · 會將這些頁面轉為點陣影像"
+  },
+  "m_e212e89176d5": {
+    "en": "Review image or page",
+    "zh-Hant": "檢查圖片或頁面"
+  },
+  "m_042354ce016b": {
+    "en": "Recognize a source, then review linked text blocks. Original files are not modified.",
+    "zh-Hant": "請先辨識來源，再檢查對應的文字區塊。原始檔案不會被修改。"
+  },
+  "m_a9e196abaaf6": {
+    "en": "Original source for OCR review",
+    "zh-Hant": "供 OCR 檢查的原始來源"
+  },
+  "m_cdba20b64491": {
+    "en": "Linked text blocks",
+    "zh-Hant": "對應文字區塊"
+  },
+  "m_e43199702b2e": {
+    "en": "Previous blocks",
+    "zh-Hant": "上一組區塊"
+  },
+  "m_3adde4373a65": {
+    "en": "Next blocks",
+    "zh-Hant": "下一組區塊"
+  },
+  "m_a1b53c281d8a": {
+    "en": "Text blocks",
+    "zh-Hant": "文字區塊"
+  },
+  "m_8ccedaeb8586": {
+    "en": "Image / page",
+    "zh-Hant": "圖片／頁面"
+  },
+  "m_106f5c6085e5": {
+    "en": "Open this recognition result",
+    "zh-Hant": "開啟此辨識結果"
+  },
+  "m_e62a4533fefd": {
+    "en": "Export searchable PDF",
+    "zh-Hant": "匯出可搜尋 PDF"
+  },
+  "m_0be068650d42": {
+    "en": "Existing PDF text is retained. Re-OCR only if you want to replace it.",
+    "zh-Hant": "現有 PDF 文字會保留。只有要取代文字時，才需要重新 OCR 辨識。"
+  },
+  "m_9b89d7592731": {
+    "en": "No linked boxes yet. Run recognition first.",
+    "zh-Hant": "尚無對應文字框。請先執行辨識。"
+  },
+  "m_4a3b368b1e38": {
+    "en": "Recognition settings changed. Recognize this page again.",
+    "zh-Hant": "辨識設定已變更。請重新辨識此頁面。"
+  },
+  "m_02fd9913ed1a": {
+    "en": "Full text was edited. PDF export uses the edited reading layer; box coordinates remain from recognition.",
+    "zh-Hant": "全文已編輯。PDF 匯出會使用修改後的文字層；文字框座標仍依辨識結果。"
+  },
+  "m_39079b6486a4": {
+    "en": "Select a box or text block to correct it without recognizing again.",
+    "zh-Hant": "選取文字框或文字區塊即可修正內容，無須重新辨識。"
+  },
+  "m_c0946b797878": {
+    "en": "Correct recognized text",
+    "zh-Hant": "修正辨識文字"
+  },
+  "m_d5f8aa85c639": {
+    "en": "Recognition settings changed. Recognize the changed pages before exporting.",
+    "zh-Hant": "辨識設定已變更。匯出前請重新辨識設定已變更的頁面。"
+  },
+  "m_581368680114": {
+    "en": "To replace existing PDF text, explicitly re-OCR that page first.",
+    "zh-Hant": "要取代現有 PDF 文字，請先明確選擇重新 OCR 辨識該頁面。"
+  },
+  "m_0dc82d64ab44": {
+    "en": "Recognize at least one page before exporting.",
+    "zh-Hant": "匯出前請至少辨識一個頁面。"
+  },
+  "m_9ca4f38107c4": {
+    "en": "Finish or cancel recognition before exporting.",
+    "zh-Hant": "匯出前請先完成或取消辨識。"
+  },
+  "m_0040c4a4d09a": {
+    "en": "Building the searchable PDF on this device…",
+    "zh-Hant": "正在此裝置產生可搜尋 PDF…"
+  },
+  "m_6713a82776b0": {
+    "en": "The recognition result changed. Export again.",
+    "zh-Hant": "辨識結果已變更。請重新匯出。"
+  },
+  "m_b17aad5efa74": {
+    "en": "PDF exported. Pages without recognized text remain image-only.",
+    "zh-Hant": "PDF 已匯出。沒有辨識文字的頁面仍只包含圖片。"
+  },
+  "m_eafea073611c": {
+    "en": "Searchable PDF exported. Original page order is preserved.",
+    "zh-Hant": "可搜尋 PDF 已匯出，並保留原始頁面順序。"
+  },
+  "m_067f43e40e66": {
+    "en": "Choose one or more supported OCR languages.",
+    "zh-Hant": "請選擇一種或多種支援的 OCR 語言。"
+  },
+  "m_e188b2514b4d": {
+    "en": "Invalid OCR preprocessing recipe.",
+    "zh-Hant": "OCR 前處理配方無效。"
+  },
+  "m_870a060c2c27": {
+    "en": "Text extracted. Review it before use.",
+    "zh-Hant": "文字已擷取。使用前請先檢查。"
+  },
+  "m_00432a92c7a8": {
+    "en": "Fill AcroForms or add movable text, shapes, highlights, arrows and signatures. Fields remain editable unless flattened. XFA and certificate signing are unsupported.",
+    "zh-Hant": "填寫 AcroForm 表單，或新增可移動的文字、圖形、螢光標記、箭頭與簽名。除非轉為固定內容，否則欄位仍可編輯。不支援 XFA 表單與憑證簽署。"
+  },
+  "m_a5bb4d7fe41f": {
+    "en": "JSON: 5 MB. CSV: 10 MB. Analyze: five tables / 25 MB combined / 50,000 rows and 200 columns per table or result.",
+    "zh-Hant": "JSON：5 MB。CSV：10 MB。「分析」：最多五份資料表／總大小 25 MB／每份資料表或查詢結果最多 50,000 列及 200 欄。"
+  },
+  "m_9ba7d76807b4": {
+    "en": "Analyze supports visual joins, groups, pivots and read-only local SQL. CSV values remain strings until explicitly cast. Recipes require source and column mapping.",
+    "zh-Hant": "「分析」支援視覺化連接、分組、樞紐分析與本機唯讀 SQL。CSV 值會保留為字串，直到你明確轉型。使用配方時，須設定來源資料與欄位對應。"
+  },
+  "m_0de10fec633a": {
+    "en": "Math, footnotes and flow, sequence, class and ER diagrams share the preview, standalone HTML and print output. Raw HTML, remote images and interactive diagram links are disabled.",
+    "zh-Hant": "公式、註腳、流程圖、循序圖、類別圖與 ER 圖會一致呈現在預覽、獨立 HTML 及列印輸出中。已停用原始 HTML、遠端圖片及互動圖表連結。"
+  },
+  "m_427b93277681": {
+    "en": "Trim, join or mix up to ten inputs / 50 MB / five minutes / 128 MB source-and-render PCM budget.",
+    "zh-Hant": "修剪、合併或混音：最多十個輸入檔案／50 MB／五分鐘／來源與輸出的 PCM 總量上限 128 MB。"
+  },
+  "m_a76b0a454364": {
+    "en": "Review linked text boxes and export a searchable PDF. Existing PDF text is kept unless re-OCR is explicitly selected; other pages keep their order. Only selected language packs download.",
+    "zh-Hant": "檢查對應文字框，並匯出可搜尋 PDF。除非明確選擇重新 OCR 辨識，否則會保留 PDF 原有文字；其餘頁面會維持順序。只會下載所選語言套件。"
+  },
+  "m_c562afc14a20": {
+    "en": "Settings recipes contain operation parameters, SQL and slot mappings only. Original files, query results, PDF form values, annotation text, signatures and audio never enter recipes. Recipes save only when requested, locally for guests or privately for the signed-in account. Analyze runs in a read-only browser database with external access and extension downloads disabled.",
+    "zh-Hant": "設定配方只包含操作參數、SQL 與來源位置對應，不會包含原始檔案、查詢結果、PDF 表單值、註記文字、簽名或音訊。只有在你要求時才會儲存配方：訪客儲存在本機，登入後則以私密方式儲存至帳號。「分析」使用瀏覽器內的唯讀資料庫，並停用外部存取與擴充套件下載。"
+  },
+  "m_33926b4a78e6": {
+    "en": "Render options",
+    "zh-Hant": "顯示選項"
+  },
+  "m_aaf959cea485": {
+    "en": "Render mathematics",
+    "zh-Hant": "顯示公式"
+  },
+  "m_47276f2a64ed": {
+    "en": "Render diagrams",
+    "zh-Hant": "顯示圖表"
+  },
+  "m_d063ab1aeafb": {
+    "en": "Render footnotes",
+    "zh-Hant": "顯示註腳"
+  },
+  "m_d7e71001138a": {
+    "en": "Print paper",
+    "zh-Hant": "列印紙張"
+  },
+  "m_19f0474babd1": {
+    "en": "Apply to selected",
+    "zh-Hant": "套用至所選項目"
+  },
+  "m_1298137a9986": {
+    "en": "Recipe column configuration is too large.",
+    "zh-Hant": "配方欄位設定內容過大。"
+  },
+  "m_a83fe3f19bd4": {
+    "en": "Recipe filters are too large.",
+    "zh-Hant": "配方篩選條件內容過大。"
+  },
+  "m_4caa7123398d": {
+    "en": "The input changed. Export the updated document again.",
+    "zh-Hant": "輸入已變更。請重新匯出更新後的文件。"
+  },
+  "m_aef9bc81c356": {
+    "en": "The PDF font does not contain one or more characters. Replace unsupported symbols and retry.",
+    "zh-Hant": "PDF 字型缺少部分字元。請替換不支援的符號後重試。"
+  },
+  "m_ea4bdd2abe24": {
+    "en": "Wait for the current operation or cancel it first.",
+    "zh-Hant": "請等待目前操作完成，或先取消。"
+  },
+  "m_19791230c8a9": {
+    "en": "Loading the local SQL engine and source tables…",
+    "zh-Hant": "正在載入本機 SQL 引擎與來源資料表…"
+  },
+  "m_0cf10e1f0798": {
+    "en": "Select an annotation first.",
+    "zh-Hant": "請先選取一個批註。"
+  },
+  "m_20c73eaebccb": {
+    "en": "Recipes store global steps; per-image overrides stay on this page.",
+    "zh-Hant": "配方儲存全域步驟；逐張覆寫設定只保留在此頁面。"
+  },
+  "m_e3f22f81a86f": {
+    "en": "Preview updated.",
+    "zh-Hant": "預覽已更新。"
+  },
+  "m_a6c316aa8958": {
+    "en": "Previous valid results · not current settings",
+    "zh-Hant": "先前有效結果・並非目前設定"
+  },
+  "m_c2f0131d6073": {
+    "en": "Download previous result",
+    "zh-Hant": "下載先前結果"
   }
 }

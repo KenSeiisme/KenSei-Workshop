@@ -28,13 +28,15 @@ export async function pdfDocument(bytes) {
 export const pdfPoint = (viewport, x, y) =>
   viewport.convertToPdfPoint(x * viewport.width, y * viewport.height);
 export function pdfBox(viewport, box) {
-  const [x, y] = pdfPoint(viewport, box.x, box.y + box.h);
+  const [x, y] = pdfPoint(viewport, box.x, box.y + box.h),
+    right = pdfPoint(viewport, box.x + box.w, box.y + box.h),
+    top = pdfPoint(viewport, box.x, box.y);
   return {
     x,
     y,
-    width: (box.w * viewport.width) / viewport.scale,
-    height: (box.h * viewport.height) / viewport.scale,
-    angle: viewport.rotation,
+    width: Math.hypot(right[0] - x, right[1] - y),
+    height: Math.hypot(top[0] - x, top[1] - y),
+    angle: (Math.atan2(right[1] - y, right[0] - x) * 180) / Math.PI,
   };
 }
 export function recipePdf(s = {}) {
@@ -53,4 +55,21 @@ export function recipePdf(s = {}) {
       ? s.kind
       : "text",
   };
+}
+
+const supportedCharacters = new WeakMap();
+export function checkFontText(font, text) {
+  let supported = supportedCharacters.get(font);
+  if (!supported) {
+    supported = new Set(font.getCharacterSet());
+    supportedCharacters.set(font, supported);
+  }
+  if (
+    [...String(text)].some(
+      (char) => char.codePointAt(0) > 31 && !supported.has(char.codePointAt(0)),
+    )
+  )
+    throw Error(
+      "The PDF font does not contain one or more characters. Replace unsupported symbols and retry.",
+    );
 }

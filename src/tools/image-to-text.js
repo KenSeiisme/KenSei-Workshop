@@ -1,3 +1,4 @@
+import { init as professionalOCR } from "./studio-image-to-text.js";
 import {
   $,
   $$,
@@ -83,22 +84,31 @@ settings.append(
   ),
   list,
 );
-const defaults = () => ({
-  rotation: 0,
-  gray: false,
-  threshold: false,
-  level: 160,
-  crop: [0, 0, 100, 100],
-});
+let recipeDefaults = null;
+const defaults = () =>
+  recipeDefaults
+    ? structuredClone(recipeDefaults)
+    : {
+        rotation: 0,
+        gray: false,
+        threshold: false,
+        level: 160,
+        crop: [0, 0, 100, 100],
+      };
 function saveSettings() {
   if (current < 0 || !entries[current]) return;
-  entries[current].settings = {
+  const nextSettings = {
     rotation: +rotate.value,
     gray: gray.checked,
     threshold: threshold.checked,
     level: +level.value,
     crop: crop.map((n) => +n.value),
   };
+  if (
+    JSON.stringify(nextSettings) !== JSON.stringify(entries[current].settings)
+  )
+    entries[current].processingStale = true;
+  entries[current].settings = nextSettings;
 }
 function choose(i) {
   saveSettings();
@@ -112,6 +122,7 @@ function choose(i) {
   level.value = s.level;
   crop.forEach((n, j) => (n.value = s.crop[j]));
   chooser.value = String(i);
+  output.value = e.text ?? "";
   if (e.text !== undefined) output.value = e.text;
   else if (e.file) {
     const u = URL.createObjectURL(e.file);
@@ -120,6 +131,7 @@ function choose(i) {
     $("#ocr-preview").onload = () => URL.revokeObjectURL(u);
   }
   updateSave();
+  window.dispatchEvent(new Event("ocr-entry-change"));
 }
 function updateSave() {
   const b = $("#save-draft");
@@ -343,7 +355,18 @@ async function prepared(e) {
       }
       ctx.putImageData(pixels, 0, 0);
     }
-    return await canvasBlob(c);
+    const blob = await canvasBlob(c);
+    e.nextPreparedMeta = {
+      sourceWidth: source.width,
+      sourceHeight: source.height,
+      width: c.width,
+      height: c.height,
+      cropWidth: width,
+      cropHeight: height,
+      crop: [...s.crop],
+      rotation: s.rotation,
+    };
+    return blob;
   } finally {
     c.width = c.height = 0;
     if (temporary) temporary.width = temporary.height = 0;
@@ -406,6 +429,34 @@ async function run(retry = false) {
       if (token !== generation) break;
       const e = entries[i];
       try {
+        if (e.page) {
+          const content = await (await pdf.getPage(e.page)).getTextContent();
+          const native = content.items
+            .filter((x) => x.str?.trim())
+            .map((x) => x.str)
+            .join(" ");
+          if (
+            native &&
+            !window.KenseiAdvancedContexts["image-to-text"].shouldReOCR()
+          ) {
+            e.native = true;
+            e.rasterize = false;
+            e.manualText = false;
+            e.processingStale = false;
+            e.text = native;
+            e.blocks = [];
+            e.reviewLines = [];
+            e.error = null;
+            e.confidence = 100;
+            current = -1;
+            choose(i);
+            render();
+            changed();
+            continue;
+          }
+          e.rasterize = !!native;
+          e.native = false;
+        }
         const data = await recognize(
           await prepared(e),
           languages,
@@ -414,6 +465,11 @@ async function run(retry = false) {
         );
         if (token !== generation) break;
         e.text = data.text;
+        e.blocks = data.blocks || [];
+        e.reviewLines = null;
+        e.processingStale = false;
+        e.manualText = false;
+        e.preparedMeta = e.nextPreparedMeta;
         e.confidence = data.confidence;
         e.error = null;
         current = -1;
@@ -446,6 +502,7 @@ async function run(retry = false) {
       running = false;
       busy(false);
       updateSave();
+      window.dispatchEvent(new Event("ocr-result-change"));
     }
   }
 }
@@ -455,7 +512,11 @@ $("#cancel-job").onclick = () => {
   status(uiMsg("Recognition cancelled. Your previous text is kept."));
 };
 output.addEventListener("input", () => {
-  if (entries[current]) entries[current].text = output.value;
+  if (entries[current]) {
+    entries[current].text = output.value;
+    entries[current].manualText = true;
+  }
+  window.dispatchEvent(new Event("ocr-result-change"));
   updateSave();
 });
 $("#ocr-copy").onclick = () => copy(output);
@@ -501,3 +562,58 @@ window.addEventListener("pagehide", () => {
 });
 
 window.addEventListener("locale-change", render);
+
+window.KenseiAdvancedContexts ||= {};
+const professionalContext = {
+  get entries() {
+    return entries;
+  },
+  get current() {
+    return current;
+  },
+  get pdf() {
+    return pdf;
+  },
+  get files() {
+    return selected;
+  },
+  get running() {
+    return running;
+  },
+  choose,
+  getSettings() {
+    saveSettings();
+    return structuredClone(entries[current]?.settings || defaults());
+  },
+  updateText(text) {
+    output.value = text;
+    if (entries[current]) entries[current].text = text;
+    changed();
+    updateSave();
+  },
+  applyRecipe(s) {
+    recipeDefaults = structuredClone(s.preprocessing);
+    document
+      .querySelectorAll('[name="ocr-language"]')
+      .forEach((n) => (n.checked = s.languages.includes(n.value)));
+    for (const e of entries) {
+      if (JSON.stringify(e.settings) !== JSON.stringify(s.preprocessing))
+        e.processingStale = true;
+      e.settings = structuredClone(s.preprocessing);
+    }
+    if (current >= 0) {
+      const i = current;
+      current = -1;
+      choose(i);
+    }
+  },
+  shouldReOCR: () => false,
+};
+window.KenseiAdvancedContexts["image-to-text"] = professionalContext;
+professionalOCR(professionalContext);
+
+for (const n of [rotate, gray, threshold, level, ...crop])
+  n.addEventListener("input", () => {
+    saveSettings();
+    window.dispatchEvent(new Event("ocr-result-change"));
+  });

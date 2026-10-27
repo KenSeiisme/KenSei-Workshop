@@ -51,7 +51,10 @@ function wav(seconds, value) {
     ]);
     await p.getByLabel("Fade in (seconds)").fill(".2");
     await p.getByLabel("Fade out (seconds)").fill(".2");
-    await p.getByLabel("Peak normalization").check();
+    await p
+      .locator("#audio-trim-workspace")
+      .getByLabel("Peak normalization")
+      .check();
     await p
       .getByRole("button", { name: "Prepare audio preview", exact: true })
       .click();

@@ -16,6 +16,7 @@ import {
   zip,
   busy,
   filename,
+  download,
 } from "./common.js";
 import { uiMsg, uiError, uiText, uiHtml, uiPrompt } from "../site/ui.js";
 
@@ -27,6 +28,8 @@ const failedIndices = new Set();
 let retryOnly = false;
 let recipe;
 let resultsStale = false;
+let lastValidResults = [],
+  previousUrls = [];
 const filesListeners = [];
 const targetSize = el("input", "", {
   type: "number",
@@ -45,11 +48,51 @@ const retryFailed = button("Retry failed images", () => {
 retryFailed.id = "image-retry-failed";
 retryFailed.hidden = true;
 document.querySelector("#image-zip").after(retryFailed);
-targetSize.oninput = () => clearResults();
+targetSize.oninput = () => markResultsStale();
 const w = $("#image-width"),
   h = $("#image-height"),
   format = $("#image-format"),
   quality = $("#image-quality");
+function markResultsStale() {
+  generation++;
+  if (results.length) {
+    resultsStale = true;
+    document.querySelector("#batch-results").dataset.stale = "true";
+    uiText(
+      document.querySelector("#image-result"),
+      uiMsg("Settings changed. Process the images again before downloading."),
+    );
+  }
+}
+function showPrevious() {
+  previousUrls.forEach((url) => URL.revokeObjectURL(url));
+  previousUrls = [];
+  document.querySelector("#image-previous-results")?.remove();
+  const old = lastValidResults.filter(
+    (r) => !results.some((x) => x.sourceIndex === r.sourceIndex),
+  );
+  if (!old.length) return;
+  const box = el("details", "", {
+    id: "image-previous-results",
+    class: "panel studio-recipes",
+  });
+  box.append(el("summary", "Previous valid results · not current settings"));
+  for (const r of old) {
+    const url = URL.createObjectURL(r.blob);
+    previousUrls.push(url);
+    const name = el("p");
+    name.textContent =
+      r.name + " · " + r.width + " × " + r.height + " · " + size(r.blob.size);
+    box.append(
+      name,
+      el("img", "", { src: url, alt: r.name, class: "edited-preview" }),
+      button("Download previous result", () =>
+        download(r.blob, "previous-" + r.name),
+      ),
+    );
+  }
+  document.querySelector("#batch-results").after(box);
+}
 function fileState(index, state) {
   window.dispatchEvent(
     new CustomEvent("tool-file-state", {
@@ -57,7 +100,11 @@ function fileState(index, state) {
     }),
   );
 }
-function clearResults() {
+function clearResults(clearHistory = false) {
+  previousUrls.forEach((url) => URL.revokeObjectURL(url));
+  previousUrls = [];
+  document.querySelector("#image-previous-results")?.remove();
+  if (clearHistory) lastValidResults = [];
   resultsStale = false;
   document.querySelector("#batch-results").removeAttribute("data-stale");
   fileState(-1, "Waiting");
@@ -97,7 +144,7 @@ async function load(list) {
         throw new Error("Use JPG, PNG or WebP, up to 20 MB per image.");
     }
     const img = await image(list[0]);
-    clearResults();
+    clearResults(true);
     files = [...list];
     queueMicrotask(() => filesListeners.forEach((fn) => fn()));
     w.disabled = h.disabled = false;
@@ -144,7 +191,7 @@ w.addEventListener("input", () => {
           $("#image-preview").naturalWidth,
       ),
     );
-  clearResults();
+  markResultsStale();
 });
 h.addEventListener("input", () => {
   if (files.length && +h.value > 0)
@@ -155,7 +202,7 @@ h.addEventListener("input", () => {
           $("#image-preview").naturalHeight,
       ),
     );
-  clearResults();
+  markResultsStale();
 });
 function formatChanged() {
   quality.disabled = format.value === "image/png";
@@ -168,12 +215,12 @@ function formatChanged() {
         ? uiMsg("Transparent areas will use a white background.")
         : uiMsg("WebP balances size and image quality."),
   );
-  clearResults();
+  markResultsStale();
 }
 format.onchange = formatChanged;
 quality.oninput = () => {
   $("#quality-value").value = quality.value + "%";
-  clearResults();
+  markResultsStale();
 };
 $("#cancel-job").onclick = () => {
   generation++;
@@ -200,7 +247,7 @@ $("#image-process").onclick = async () => {
     return toast(
       uiMsg("Use whole dimensions from 1–12,000 px, up to 40 megapixels."),
     );
-  const onlyFailed = retryOnly;
+  const onlyFailed = retryOnly && !resultsStale;
   retryOnly = false;
   const indices = onlyFailed ? [...failedIndices] : files.map((_, i) => i);
   if (!onlyFailed) clearResults();
@@ -332,7 +379,11 @@ $("#image-process").onclick = async () => {
           originalUrl,
           sourceIndex: i,
           sourceSize: files[i].size,
+          width: targetWidth,
+          height: targetHeight,
         });
+        lastValidResults = lastValidResults.filter((r) => r.sourceIndex !== i);
+        lastValidResults.push(results.at(-1));
         const summary = document.querySelector("#image-batch-summary");
         if (summary) {
           const inputBytes = results.reduce((n, r) => n + r.sourceSize, 0),
@@ -398,6 +449,7 @@ $("#image-process").onclick = async () => {
           : "",
       ]),
     );
+    showPrevious();
     retryFailed.hidden = !failedIndices.size;
     document.querySelector("#image-send")?.remove();
     if (results.length) {

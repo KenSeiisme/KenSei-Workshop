@@ -1,8 +1,9 @@
+import { init as professionalAudio } from "./studio-audio-studio.js";
 import { $, status } from "./common.js";
 import { el, panel, row, button, field } from "./advanced-ui.js";
 import { keptRanges, shapeSamples, pcmWav } from "./audio-edit-core.js";
 import { uiMsg, uiText, uiError } from "../site/ui.js";
-export function init() {
+export async function init() {
   const ctx = window.KenseiAdvancedContexts["audio-studio"],
     p = panel("Join and shape audio", $("#audio-file").closest(".panel")),
     input = el("input", "", {
@@ -183,4 +184,5 @@ export function init() {
     note,
   );
   window.addEventListener("pagehide", () => generation++);
+  await professionalAudio();
 }

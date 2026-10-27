@@ -40,7 +40,7 @@ export function stateFor(message, error = false) {
   )
     return "success";
   if (
-    /processing|loading|downloading|recognizing|starting|hashing|comparing|encoding|decoding|recording|measuring|running|packing|extracting|calculating|scanning|please wait/i.test(
+    /rendering|building|preparing|processing|loading|downloading|recognizing|starting|hashing|comparing|encoding|decoding|recording|measuring|running|packing|extracting|calculating|scanning|please wait/i.test(
       message,
     )
   )

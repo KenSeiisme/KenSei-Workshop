@@ -34,7 +34,7 @@ function formula(value, display) {
     );
   if (value.length > 10000)
     return (
-      "<code>" +
+      '<code data-math-limit="true">' +
       esc(uiRender(uiMsg("Formula exceeds 10,000 characters."))) +
       "</code>"
     );
@@ -135,6 +135,10 @@ function cleanDiagram(source) {
     throw Error(
       "Diagram links, HTML and configuration directives are disabled.",
     );
+  if (/^\s*(?:style|classDef)\s/im.test(source))
+    throw Error(
+      "Diagram links, HTML and configuration directives are disabled.",
+    );
   return source;
 }
 async function diagramEngine() {
@@ -161,6 +165,11 @@ async function diagramEngine() {
   return mermaid;
 }
 export async function renderRich(parser, text) {
+  const method = renderOptions.footnotes ? "enable" : "disable";
+  parser.block.ruler[method](["footnote_def"], true);
+  parser.inline.ruler[method](["footnote_inline", "footnote_ref"], true);
+  parser.core.ruler[method](["footnote_tail"], true);
+
   if (renderOptions.math && text.includes("$")) await mathEngine();
   const host = document.createElement("div");
   host.innerHTML = parser.render(text);
@@ -193,6 +202,8 @@ export async function renderRich(parser, text) {
       node.replaceWith(figure);
     } catch (e) {
       node.classList.add("error-text");
+      node.dataset.diagramError = e.message;
+      node.dataset.diagramSource = node.textContent;
       node.textContent = uiRender(uiMsg(e.message)) + "\n\n" + node.textContent;
     }
   }

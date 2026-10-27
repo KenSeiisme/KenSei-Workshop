@@ -13,7 +13,7 @@ import {
   filename,
   status,
 } from "./common.js";
-import { uiMsg, uiJoin, uiError, uiHtml } from "../site/ui.js";
+import { uiMsg, uiJoin, uiError, uiHtml, uiText } from "../site/ui.js";
 
 const input = $("#markdown-input");
 let parser = null,
@@ -36,7 +36,17 @@ async function render() {
   if (token !== renderGeneration) return { html: next, source };
   rendered = next;
   $("#markdown-preview").innerHTML = rendered;
+  for (const n of $("#markdown-preview").querySelectorAll(
+    "[data-diagram-error]",
+  ))
+    uiText(
+      n,
+      uiJoin([uiMsg(n.dataset.diagramError), "\n\n", n.dataset.diagramSource]),
+    );
+  for (const n of $("#markdown-preview").querySelectorAll("[data-math-limit]"))
+    uiText(n, uiMsg("Formula exceeds 10,000 characters."));
   window.dispatchEvent(new Event("markdown-rendered"));
+  status(uiMsg("Preview updated."));
   return { html: next, source };
 }
 const changed = draftEditor("markdown-studio", input, () => {

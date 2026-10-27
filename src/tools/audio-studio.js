@@ -644,6 +644,10 @@ if ($("#audio-record-start")) {
 window.KenseiAdvancedContexts ||= {};
 window.KenseiAdvancedContexts["audio-studio"] = {
   loadAudio,
+  stopPlayback,
+  get isRecording() {
+    return recordingState !== "idle" || recordPending;
+  },
   get buffer() {
     return buffer;
   },

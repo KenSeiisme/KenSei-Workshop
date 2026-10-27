@@ -12,6 +12,10 @@ import {
 } from "../site/ui.js";
 
 const statusIds = {
+  "audio-studio": ["tool-status", "mix-status"],
+  "pdf-toolkit": ["tool-status", "pdf-fill-status"],
+  "data-studio": ["tool-status", "analyze-status"],
+  "image-to-text": ["tool-status", "ocr-review-status"],
   "image-studio": ["image-result", "edit-status"],
   "qr-studio": ["tool-status", "qr-scan-status"],
   "focus-timer": ["timer-summary"],

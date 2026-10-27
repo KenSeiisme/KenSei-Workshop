@@ -2,7 +2,7 @@ import {
   el,
   field,
   row,
-  button,
+  button as baseButton,
   select,
   renderTable,
   csvText,
@@ -13,6 +13,18 @@ import { sendControl } from "./handoff.js";
 import { visualSQL, validateAnalysisRecipe } from "./data-analysis-core.js";
 import { uiMsg, uiText, uiConfirm } from "../site/ui.js";
 export async function init() {
+  const action = (label, fn, primary = false) =>
+    baseButton(
+      label,
+      async () => {
+        try {
+          await fn();
+        } catch (e) {
+          uiText(status, uiMsg(e.message));
+        }
+      },
+      primary,
+    );
   const root = document.querySelector("[data-tool]"),
     normal = el("div", "", { id: "data-convert-workspace" }),
     pane = el("section", "", {
@@ -53,7 +65,7 @@ export async function init() {
     status = el(
       "p",
       "Choose up to five CSV or flat JSON tables. The SQL engine loads only in Analyze.",
-      { role: "status" },
+      { role: "status", id: "analyze-status" },
     ),
     tableList = el("div"),
     source = select([]),
@@ -239,7 +251,7 @@ export async function init() {
       field("Filter value", filterValue),
       field("Numeric filter", filterNumeric),
     ),
-    button("Add filter", () => {
+    action("Add filter", () => {
       filters.push({
         column: filterColumn.value,
         op: filterOp.value,
@@ -256,7 +268,7 @@ export async function init() {
       field("Numeric sort", sortNumeric),
       field("Descending", desc),
     ),
-    button("Generate SQL from builder", () => {
+    action("Generate SQL from builder", () => {
       if (
         custom &&
         !uiConfirm(
@@ -280,7 +292,7 @@ export async function init() {
         const line = el("div");
         line.textContent = f.column + " " + f.op + " " + f.value;
         line.append(
-          button("Remove filter", () => {
+          action("Remove filter", () => {
             filters.splice(i, 1);
             drawFilters();
             build();
@@ -299,8 +311,8 @@ export async function init() {
     );
     stale();
   };
-  const run = button("Run query", () => execute(), true),
-    cancel = button("Cancel query", () =>
+  const run = action("Run query", () => execute(), true),
+    cancel = action("Cancel query", () =>
       cancelQuery(
         "Query cancelled. Sources and the previous result are retained.",
       ),
@@ -310,12 +322,12 @@ export async function init() {
   preview.append(
     el("h3", "Query result"),
     row(
-      button("Previous", () => {
+      action("Previous", () => {
         resultPage = Math.max(0, resultPage - 1);
         drawResult();
       }),
       pager,
-      button("Next", () => {
+      action("Next", () => {
         if (result)
           resultPage = Math.max(
             0,
@@ -353,14 +365,14 @@ export async function init() {
   );
   exports.append(
     row(
-      button("Download result CSV", () =>
+      action("Download result CSV", () =>
         downloadText(
           csvText([fresh().headers, ...fresh().rows]),
           "analysis.csv",
           "text/csv;charset=utf-8",
         ),
       ),
-      button("Download result JSON", () =>
+      action("Download result JSON", () =>
         downloadText(
           JSON.stringify(
             fresh().rows.map((r) =>
@@ -408,7 +420,11 @@ export async function init() {
     );
     pager.textContent = `${result.rows.length} × ${result.headers.length} · ${resultPage + 1}/${Math.max(1, Math.ceil(result.rows.length / 50))}`;
   }
-  function stopWorker() {
+  function stopWorker(reason) {
+    const message =
+      typeof reason === "string"
+        ? reason
+        : "Query cancelled. Sources and the previous result are retained.";
     const old = worker;
     worker = null;
     generation++;
@@ -418,19 +434,21 @@ export async function init() {
     }
     for (const promise of pending.values()) {
       clearTimeout(promise.timer);
-      promise.reject(
-        Error("Query cancelled. Sources and the previous result are retained."),
-      );
+      promise.reject(Error(message));
     }
     pending.clear();
   }
   function cancelQuery(message) {
-    stopWorker();
+    stopWorker(message);
     run.disabled = false;
     cancel.hidden = true;
     uiText(status, uiMsg(message));
   }
   function request(kind, data = {}, timeout = 30000) {
+    if (pending.size)
+      return Promise.reject(
+        Error("Wait for the current operation or cancel it first."),
+      );
     if (!worker) {
       worker = new Worker("/tool-scripts/data-analysis-worker.js");
       const epoch = generation;
@@ -445,8 +463,9 @@ export async function init() {
           : job.reject(Error(e.data.error));
       };
       worker.onerror = (e) => {
+        e.preventDefault();
+        stopWorker("The analysis engine could not load. Retry.");
         uiText(status, uiMsg("The analysis engine could not load. Retry."));
-        stopWorker();
       };
     }
     return new Promise((resolve, reject) => {
@@ -462,30 +481,50 @@ export async function init() {
       worker.postMessage({ id, kind, ...data });
     });
   }
+  let acceptedFiles = [],
+    importSequence = 0;
   async function load() {
     if (!files.length) throw Error("Choose source files first.");
     stopWorker();
-    tables = await request("load", { files }, 90000);
-    tableList.replaceChildren(
-      ...tables.map((t, i) => {
-        const n = el("p");
-        n.textContent = `${t.name}: ${files[i].name} · ${t.count} × ${t.headers.length}`;
-        return n;
-      }),
-    );
-    populate();
-    if (recipeSlots) {
-      mapped = false;
-      drawMapping();
-    } else {
-      mapped = true;
-      build();
+    const epoch = generation;
+    run.disabled = true;
+    cancel.hidden = false;
+    uiText(status, uiMsg("Loading the local SQL engine and source tables…"));
+    try {
+      const loaded = await request("load", { files }, 90000);
+      if (epoch !== generation) return;
+      tables = loaded;
+      acceptedFiles = [...files];
+      tableList.replaceChildren(
+        ...tables.map((t, i) => {
+          const n = el("p");
+          n.textContent = `${t.name}: ${files[i].name} · ${t.count} × ${t.headers.length}`;
+          return n;
+        }),
+      );
+      populate();
+      if (recipeSlots) {
+        mapped = false;
+        drawMapping();
+      } else {
+        mapped = true;
+        build();
+      }
+      stale();
+    } catch (e) {
+      if (epoch === generation) stopWorker(e.message);
+      throw e;
+    } finally {
+      if (epoch === generation || (!worker && !pending.size)) {
+        run.disabled = false;
+        cancel.hidden = true;
+      }
     }
-    stale();
   }
   input.onchange = async () => {
     const next = [...input.files];
     if (!next.length) return;
+    const token = ++importSequence;
     try {
       if (
         next.length > 5 ||
@@ -496,7 +535,11 @@ export async function init() {
       stale();
       await load();
     } catch (e) {
-      uiText(status, uiMsg(e.message));
+      if (token === importSequence) {
+        files = acceptedFiles;
+        input.value = "";
+        uiText(status, uiMsg(e.message));
+      }
     }
   };
   function drawMapping() {
@@ -526,6 +569,10 @@ export async function init() {
             );
           const label = el("label");
           label.textContent = h;
+          s.onchange = () => {
+            mapped = false;
+            stale();
+          };
           label.append(s);
           columnsBox.append(label);
           return { to: h, input: s };
@@ -541,7 +588,7 @@ export async function init() {
       mappingBox.append(group);
     }
     mappingBox.append(
-      button("Confirm source mapping", async () => {
+      action("Confirm source mapping", async () => {
         mappings = selections.map((e) => ({
           name: e.slot.name,
           fileIndex: +e.fileSelect.value,
@@ -553,6 +600,7 @@ export async function init() {
         }));
         await request("map", { mappings });
         mapped = true;
+        stale();
         mappingBox.open = false;
         uiText(
           status,
@@ -576,11 +624,23 @@ export async function init() {
       }
       if (!mapped) throw Error("Confirm source mapping before running.");
       epoch = generation;
+      run.disabled = true;
+      cancel.hidden = false;
       uiText(status, uiMsg("Running in a read-only local database…"));
-      const value = await request("query", { sql: sql.value });
+      const statement = sql.value;
+      const value = await request("query", { sql: statement });
       if (generation !== epoch) return;
       result = value;
       resultPage = 0;
+      if (statement !== sql.value) {
+        dirty = true;
+        drawResult();
+        uiText(
+          status,
+          uiMsg("Settings changed. Run the query again before exporting."),
+        );
+        return;
+      }
       dirty = false;
       delete exports.dataset.stale;
       drawResult();
@@ -588,8 +648,10 @@ export async function init() {
     } catch (e) {
       uiText(status, uiMsg(e.message));
     } finally {
-      run.disabled = false;
-      cancel.hidden = true;
+      if (epoch === generation) {
+        run.disabled = false;
+        cancel.hidden = true;
+      }
     }
   }
   recipeControls(
@@ -609,6 +671,10 @@ export async function init() {
       recipeSlots = s.slots;
       sql.value = s.sql;
       custom = s.custom;
+      populate();
+      source.value = s.config.source;
+      second.value = s.config.second;
+      join.value = s.config.join;
       populate();
       for (const [k, n] of Object.entries({
         source,

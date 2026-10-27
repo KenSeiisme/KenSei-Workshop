@@ -122,10 +122,79 @@ export function validateAnalysisRecipe(s) {
     typeof s.config !== "object"
   )
     throw Error("Invalid SQL recipe.");
+  const config = s.config;
+  for (const key of ["columns", "groups"])
+    if (
+      Array.isArray(config[key]) &&
+      (config[key].length > 200 ||
+        config[key].some((x) => String(x).length > 5000))
+    )
+      throw Error("Recipe column configuration is too large.");
+  if (
+    Array.isArray(config.filters) &&
+    (config.filters.length > 100 ||
+      config.filters.some((f) =>
+        [f.column, f.value].some((x) => String(x || "").length > 5000),
+      ))
+  )
+    throw Error("Recipe filters are too large.");
+  for (const key of [
+    "leftKey",
+    "rightKey",
+    "measure",
+    "pivotColumn",
+    "pivotValues",
+    "sort",
+  ])
+    if (String(config[key] || "").length > 5000)
+      throw Error("Recipe settings are too large.");
   return {
     slots,
     sql: s.sql,
     custom: !!s.custom,
-    config: JSON.parse(JSON.stringify(s.config)),
+    config: {
+      source: /^table_[1-5]$/.test(s.config.source)
+        ? s.config.source
+        : "table_1",
+      second: /^table_[1-5]$/.test(s.config.second)
+        ? s.config.second
+        : "table_2",
+      join: ["none", "inner", "left"].includes(s.config.join)
+        ? s.config.join
+        : "none",
+      leftKey: String(s.config.leftKey || "").slice(0, 5000),
+      rightKey: String(s.config.rightKey || "").slice(0, 5000),
+      columns: (Array.isArray(s.config.columns) ? s.config.columns : [])
+        .slice(0, 200)
+        .map((x) => String(x).slice(0, 5000)),
+      groups: (Array.isArray(s.config.groups) ? s.config.groups : [])
+        .slice(0, 200)
+        .map((x) => String(x).slice(0, 5000)),
+      aggregate: ["none", "count", "sum", "avg", "min", "max"].includes(
+        s.config.aggregate,
+      )
+        ? s.config.aggregate
+        : "none",
+      measure: String(s.config.measure || "").slice(0, 5000),
+      numeric: !!s.config.numeric,
+      pivot: !!s.config.pivot,
+      pivotColumn: String(s.config.pivotColumn || "").slice(0, 5000),
+      pivotValues: String(s.config.pivotValues || "").slice(0, 5000),
+      sort: String(s.config.sort || "").slice(0, 5000),
+      sortNumeric: !!s.config.sortNumeric,
+      desc: !!s.config.desc,
+      filters: (Array.isArray(s.config.filters) ? s.config.filters : [])
+        .slice(0, 100)
+        .map((f) => ({
+          column: String(f.column || "").slice(0, 5000),
+          op: ["=", "!=", "contains", ">", "<", ">=", "<=", "is null"].includes(
+            f.op,
+          )
+            ? f.op
+            : "=",
+          value: String(f.value || "").slice(0, 5000),
+          numeric: !!f.numeric,
+        })),
+    },
   };
 }

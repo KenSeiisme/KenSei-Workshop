@@ -65,7 +65,9 @@
     "test:advanced-p1": "node scripts/test.mjs advanced-p1",
     "test:advanced-p2": "node scripts/test.mjs advanced-p2",
     "test:advanced-p3": "node scripts/test.mjs advanced-p3",
-    "test:advanced-p4": "node scripts/test.mjs advanced-p4"
+    "test:advanced-p4": "node scripts/test.mjs advanced-p4",
+    "test:studios": "node scripts/test.mjs studios",
+    "vendor:studios": "node scripts/vendor-studios.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

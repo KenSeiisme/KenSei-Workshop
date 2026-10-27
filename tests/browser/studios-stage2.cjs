@@ -143,6 +143,35 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
     );
     assert.deepEqual(pivotResult, [{ A: 5, B: 4 }]);
     console.log("PASS visual pivot SQL executes with exact aggregates");
+    await p.fill(
+      "#analyze-sql",
+      "SELECT SUM(sin(i * .123)) AS total FROM range(20000000) t(i)",
+    );
+    await p.getByRole("button", { name: "Run query", exact: true }).click();
+    await p.fill("#analyze-sql", "SELECT 999 AS changed");
+    await p.waitForFunction(
+      () =>
+        !document.querySelector("#data-analyze-workspace button.primary")
+          .disabled,
+      { timeout: 90000 },
+    );
+    assert.match(await state.textContent(), /Settings changed/);
+    await p.setInputFiles("#analyze-files", {
+      name: "invalid.json",
+      mimeType: "application/json",
+      buffer: Buffer.from("{bad"),
+    });
+    await p.waitForFunction(
+      () =>
+        !document.querySelector("#data-analyze-workspace button.primary")
+          .disabled,
+      { timeout: 90000 },
+    );
+    await query("SELECT COUNT(*) n FROM table_1");
+    console.log(
+      "PASS stale in-flight results and failed import retain usable original sources",
+    );
+
     await open("markdown-studio");
     const md =
       "# Formula and diagrams\n\nInline $E=mc^2$ and a note.[^n]\n\n[^n]: Footnote content\n\n$$\n\\frac{a}{b} + \\sqrt{x}\n$$\n\n```mermaid\nflowchart LR\n A[Start] --> B[End]\n```\n\n```mermaid\nsequenceDiagram\n Alice->>Bob: Hello\n```\n\n```mermaid\nclassDiagram\n Animal <|-- Duck\n```\n\n```mermaid\nerDiagram\n CUSTOMER ||--o{ ORDER : places\n```";

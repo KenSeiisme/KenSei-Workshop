@@ -4,7 +4,7 @@
     "image",
     "Image Studio",
     "A lighter image. A sharper workflow.",
-    "Batch compress, resize and convert images. Download individually or as a ZIP.",
+    "Batch recipes for crop, resize, watermark and target-size compression, with per-image control.",
     "Images"
   ],
   [
@@ -20,7 +20,7 @@
     "pdf",
     "PDF Toolkit",
     "Your pages, in a better order.",
-    "Merge, split, arrange and rotate PDFs. Convert images to PDF and PDF pages to images.",
+    "Organize pages, fill forms, annotate and sign PDFs locally, with editable or flattened export.",
     "Documents"
   ],
   [
@@ -36,7 +36,7 @@
     "markdown",
     "Markdown Studio",
     "From rough notes to readable pages.",
-    "Write Markdown with a live preview, save drafts and export MD or HTML.",
+    "Write Markdown with math, footnotes and diagrams, then export MD, self-contained HTML or print.",
     "Text"
   ],
   [
@@ -52,7 +52,7 @@
     "ocr",
     "Image to Text",
     "Give the words in your images a second life.",
-    "Extract English, Chinese and Malay text from images, right on your device.",
+    "Recognize four languages, correct linked text boxes and export searchable PDFs on your device.",
     "Images"
   ],
   [
@@ -156,7 +156,7 @@
     "audio",
     "Audio Studio",
     "Keep the part you need.",
-    "Record your microphone, trim audio and export MP3 or WAV on your device.",
+    "Record, trim and mix audio with multitrack effects, crossfades and MP3 or WAV export.",
     "Audio"
   ],
   [
@@ -164,7 +164,7 @@
     "data",
     "Data Studio",
     "Make your data easier to read.",
-    "Validate and format JSON, preview CSV tables and convert between flat JSON and CSV.",
+    "Edit JSON and CSV, or analyze local tables with visual joins, pivots and read-only SQL.",
     "Text"
   ],
   [

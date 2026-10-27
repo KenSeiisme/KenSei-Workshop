@@ -19,7 +19,7 @@ HELP = {
     ),
     "pdf-toolkit": (
         "Up to 50 MB and 200 pages in total. Encrypted or unsupported PDFs cannot be unlocked.",
-        "Choose an operation, select pages, then preview or export. Changed settings require a new output.",
+        "Fill AcroForms or add movable text, shapes, highlights, arrows and signatures. Fields remain editable unless flattened. XFA and certificate signing are unsupported.",
         "PDFs, preview pages and converted images stay on this device.",
     ),
     "text-toolkit": (
@@ -29,7 +29,7 @@ HELP = {
     ),
     "markdown-studio": (
         "Import Markdown up to 200 KB / 100,000 characters.",
-        "Raw HTML and remote images are disabled. Download Markdown or the safe HTML preview.",
+        "Math, footnotes and flow, sequence, class and ER diagrams share the preview, standalone HTML and print output. Raw HTML, remote images and interactive diagram links are disabled.",
         "Drafts save only when you choose Save draft; optional recovery remains local.",
     ),
     "text-compare": (
@@ -39,7 +39,7 @@ HELP = {
     ),
     "image-to-text": (
         "Up to 20 images / 100 MB, or one PDF / 50 MB / 200 pages with up to 20 selected pages per run.",
-        "Only selected language packs download and cache. Cancel or retry without losing your edited result.",
+        "Review linked text boxes and export a searchable PDF. Existing PDF text is kept unless re-OCR is explicitly selected; other pages keep their order. Only selected language packs download.",
         "Images stay local. Recognized text uploads only when you manually save a signed-in draft.",
     ),
     "focus-timer": (
@@ -112,7 +112,7 @@ HELP = {
         "File contents and names are not uploaded or added to recovery.",
     ),
     "audio-studio": (
-        "One clip or up to ten joined files / 50 MB combined / 5 minutes / 128 MB decoded PCM; mono or stereo.",
+        "Trim, join or mix up to ten inputs / 50 MB / five minutes / 128 MB source-and-render PCM budget.",
         (
             "Record or import, select a waveform range, preview and export MP3/WAV."
             " Other input formats depend on your browser."
@@ -120,8 +120,8 @@ HELP = {
         "Audio stays on this page. Download recordings before leaving; microphone access starts only on request.",
     ),
     "data-studio": (
-        "JSON: 5 MB. CSV: 10 MB / 50,000 rows / 200 columns; UTF-8/BOM.",
-        "JSON → CSV uses flat objects. CSV values remain strings; safe downloads escape spreadsheet formulas.",
+        "JSON: 5 MB. CSV: 10 MB. Analyze: five tables / 25 MB combined / 50,000 rows and 200 columns per table or result.",
+        "Analyze supports visual joins, groups, pivots and read-only local SQL. CSV values remain strings until explicitly cast. Recipes require source and column mapping.",
         "Inputs stay local. Optional recovery has a separate 2 MB snapshot limit.",
     ),
     "flashcards": (

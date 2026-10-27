@@ -4,6 +4,7 @@ import { library, download } from "./common.js";
 import {
   pdfDocument,
   unicodeFont,
+  checkFontText,
   pdfPoint,
   pdfBox,
   recipePdf,
@@ -58,7 +59,7 @@ export async function init() {
     status = el(
       "p",
       "Choose one PDF. Forms and annotation contents stay in this page.",
-      { role: "status" },
+      { role: "status", id: "pdf-fill-status" },
     );
   const action = (label, fn, primary = false) =>
     baseButton(
@@ -165,6 +166,7 @@ export async function init() {
           throw Error("Enter annotation text.");
         if (kind.value === "signature" && !strokes.some((s) => s.length > 1))
           throw Error("Draw a signature first.");
+        const settings = getSettings();
         checkpoint();
         const a = {
           id: crypto.randomUUID(),
@@ -175,9 +177,9 @@ export async function init() {
           w: kind.value === "text" ? 0.5 : 0.3,
           h: kind.value === "text" ? 0.12 : 0.16,
           text: text.value,
-          fontSize: +fontSize.value,
-          color: color.value,
-          lineWidth: +lineWidth.value,
+          fontSize: settings.fontSize,
+          color: settings.color,
+          lineWidth: settings.lineWidth,
           strokes: structuredClone(strokes),
         };
         annotations.push(a);
@@ -186,6 +188,31 @@ export async function init() {
         paint();
       }),
     ),
+    action("Apply to selected", () => {
+      const a = annotations.find((x) => x.id === selected);
+      if (!a) throw Error("Select an annotation first.");
+      const settings = recipePdf({
+        kind: kind.value,
+        fontSize: fontSize.value,
+        color: color.value,
+        lineWidth: lineWidth.value,
+      });
+      if (settings.kind === "text" && !text.value.trim())
+        throw Error("Enter annotation text.");
+      if (settings.kind === "signature" && !strokes.some((s) => s.length > 1))
+        throw Error("Draw a signature first.");
+      checkpoint();
+      Object.assign(a, {
+        kind: settings.kind,
+        fontSize: settings.fontSize,
+        color: settings.color,
+        lineWidth: settings.lineWidth,
+        text: text.value,
+        strokes: structuredClone(strokes),
+      });
+      changed();
+      paint();
+    }),
     row(
       action("Undo", () => {
         if (!undo.length) return;
@@ -281,7 +308,7 @@ export async function init() {
           "XFA forms are not supported. Choose a standard AcroForm PDF.",
         );
       const preview = await pdfDocument(originalBytes);
-      await pdf?.destroy();
+      await pdf?.loadingTask?.destroy();
       bytes = originalBytes;
       doc = loaded;
       pdf = preview;
@@ -401,8 +428,21 @@ export async function init() {
         fontSize: a.fontSize * (viewport?.scale || 1) + "px",
       });
       if (a.kind === "text") n.textContent = a.text;
-      else if (a.kind === "arrow") n.textContent = "↗";
-      else if (a.kind === "signature") {
+      else if (a.kind === "arrow") {
+        const svg = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "svg",
+          ),
+          path = document.createElementNS(svg.namespaceURI, "path");
+        svg.setAttribute("viewBox", "0 0 100 100");
+        svg.setAttribute("preserveAspectRatio", "none");
+        path.setAttribute("d", "M0 100 L100 0 M80 0 L100 0 L100 20");
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", a.color);
+        path.setAttribute("stroke-width", a.lineWidth);
+        svg.append(path);
+        n.append(svg);
+      } else if (a.kind === "signature") {
         const svg = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "svg",
@@ -421,6 +461,9 @@ export async function init() {
         }
         n.append(svg);
       }
+      if (a.kind === "highlight") n.style.background = a.color + "40";
+      if (a.kind === "rectangle")
+        n.style.borderWidth = a.lineWidth * (viewport?.scale || 1) + "px";
       const handle = el("span", "↘", { class: "annotation-resize" });
       n.append(handle);
       n.onpointerdown = (e) => {
@@ -502,6 +545,13 @@ export async function init() {
       const item = action("Select annotation", () => {
         selected = a.id;
         text.value = a.text;
+        kind.value = a.kind;
+        fontSize.value = a.fontSize;
+        color.value = a.color;
+        lineWidth.value = a.lineWidth;
+        strokes = structuredClone(a.strokes);
+        kind.onchange();
+        paintSignature();
         paint();
       });
       item.textContent = `${a.kind}: ${a.text.slice(0, 40)}`;
@@ -513,11 +563,17 @@ export async function init() {
     const rev = revision,
       lib = await library("pdf-lib.js", "PDFLib"),
       out = await lib.PDFDocument.load(bytes),
-      font = await unicodeFont(out);
+      font =
+        annotations.some((a) => a.kind === "text") ||
+        Object.values(values).some((d) => ["text", "select"].includes(d.kind))
+          ? await unicodeFont(out)
+          : undefined;
     for (const [name, data] of Object.entries(values)) {
       const f = out.getForm().getField(name);
-      if (data.kind === "text") f.setText(data.value);
-      else if (data.kind === "check") data.value ? f.check() : f.uncheck();
+      if (data.kind === "text") {
+        checkFontText(font, data.value);
+        f.setText(data.value);
+      } else if (data.kind === "check") data.value ? f.check() : f.uncheck();
       else if (data.value) f.select(data.value);
       else f.clear?.();
     }
@@ -541,22 +597,17 @@ export async function init() {
           rotate: lib.degrees(b.angle),
         };
       if (a.kind === "text") {
-        const lines = a.text.split("\n");
-        lines.forEach((line, i) => {
-          const at = pdfPoint(
-            v,
-            a.x,
-            a.y + ((i + 1) * a.fontSize * 1.2) / v.height,
-          );
-          p.drawText(line, {
-            x: at[0],
-            y: at[1],
-            size: a.fontSize,
-            font,
-            color: rgb,
-            maxWidth: b.width,
-            rotate: lib.degrees(v.rotation),
-          });
+        checkFontText(font, a.text);
+        const at = pdfPoint(v, a.x, a.y + (a.fontSize * 1.2) / v.height);
+        p.drawText(a.text, {
+          x: at[0],
+          y: at[1],
+          size: a.fontSize,
+          lineHeight: a.fontSize * 1.2,
+          font,
+          color: rgb,
+          maxWidth: b.width,
+          rotate: lib.degrees(v.rotation),
         });
       } else if (a.kind === "rectangle")
         p.drawRectangle({
@@ -620,6 +671,6 @@ export async function init() {
   }
   window.addEventListener("pagehide", () => {
     renderId++;
-    pdf?.destroy();
+    pdf?.loadingTask?.destroy().catch(() => {});
   });
 }

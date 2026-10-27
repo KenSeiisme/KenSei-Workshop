@@ -29,30 +29,62 @@ async function init() {
     await connection.query(command);
 }
 function parsed(text, json) {
-  let headers, rows;
+  let headers,
+    rows = [];
   if (json) {
     const data = JSON.parse(text);
-    if (
-      !Array.isArray(data) ||
-      data.some(
-        (x) =>
-          !x ||
-          Array.isArray(x) ||
-          typeof x !== "object" ||
-          Object.values(x).some((v) => v !== null && typeof v === "object"),
+    if (!Array.isArray(data) || data.length > 50000)
+      throw Error("Use at most 50,000 rows with consistent columns.");
+    const names = new Set();
+    for (const item of data) {
+      if (
+        !item ||
+        Array.isArray(item) ||
+        typeof item !== "object" ||
+        Object.values(item).some((v) => v !== null && typeof v === "object")
       )
-    )
-      throw Error("Use a JSON array of flat objects.");
-    headers = [...new Set(data.flatMap((x) => Object.keys(x)))];
-    rows = data.map((x) => headers.map((h) => x[h] ?? null));
+        throw Error("Use a JSON array of flat objects.");
+      for (const name of Object.keys(item)) {
+        names.add(name);
+        if (names.size > 200)
+          throw Error("Use 1–200 unique non-empty columns.");
+      }
+    }
+    headers = [...names];
+    rows = data.map((item) => headers.map((h) => item[h] ?? null));
   } else {
-    const p = Papa.parse(text, {
+    let failure = null;
+    Papa.parse(text, {
       skipEmptyLines: "greedy",
       dynamicTyping: false,
+      step(result, parser) {
+        if (result.errors.some((x) => x.code !== "UndetectableDelimiter")) {
+          failure = Error("The CSV is malformed.");
+          parser.abort();
+          return;
+        }
+        if (!headers) {
+          headers = result.data;
+          if (
+            !headers.length ||
+            headers.length > 200 ||
+            headers.some((h) => !String(h).trim()) ||
+            new Set(headers).size !== headers.length
+          ) {
+            failure = Error("Use 1–200 unique non-empty columns.");
+            parser.abort();
+          }
+          return;
+        }
+        if (rows.length >= 50000 || result.data.length !== headers.length) {
+          failure = Error("Use at most 50,000 rows with consistent columns.");
+          parser.abort();
+          return;
+        }
+        rows.push(result.data);
+      },
     });
-    if (p.errors.some((x) => x.code !== "UndetectableDelimiter"))
-      throw Error("The CSV is malformed.");
-    [headers, ...rows] = p.data;
+    if (failure) throw failure;
   }
   if (
     !headers?.length ||
@@ -61,8 +93,6 @@ function parsed(text, json) {
     new Set(headers).size !== headers.length
   )
     throw Error("Use 1–200 unique non-empty columns.");
-  if (rows.length > 50000 || rows.some((r) => r.length !== headers.length))
-    throw Error("Use at most 50,000 rows with consistent columns.");
   return { headers, rows };
 }
 async function importTables(files) {
