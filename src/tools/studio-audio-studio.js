@@ -1,4 +1,9 @@
 import { el, field, row, button, select } from "./advanced-ui.js";
+import {
+  audioContextType,
+  supportsAudioEditing,
+  AUDIO_UNAVAILABLE,
+} from "./audio-context.js";
 import { workspaceTabs, recipeControls } from "./studio-recipes.js";
 import { validateMixRecipe, mixBudget, renderMix } from "./audio-mix-core.js";
 import { download } from "./common.js";
@@ -143,7 +148,7 @@ export async function init() {
     solo: false,
   });
   async function audioContext() {
-    context ||= new AudioContext();
+    context ||= new (audioContextType())();
     return context;
   }
   left.append(
@@ -729,4 +734,9 @@ export async function init() {
     context?.close();
   });
   draw();
+  if (!supportsAudioEditing()) {
+    input.disabled = prepare.disabled = true;
+    state.classList.add("error-text");
+    uiText(state, uiMsg(AUDIO_UNAVAILABLE));
+  }
 }

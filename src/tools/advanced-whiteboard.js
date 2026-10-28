@@ -1,5 +1,5 @@
 import { $, download, filename } from "./common.js";
-import { el, panel, row, button, select } from "./advanced-ui.js";
+import { el, panel, row, button, select, field } from "./advanced-ui.js";
 import { sendControl } from "./handoff.js";
 import { uiMsg, uiConfirm, uiRender } from "../site/ui.js";
 export async function init() {
@@ -16,7 +16,7 @@ export async function init() {
   selection.prepend(only);
   p.append(
     row(
-      kind,
+      field("Template", kind),
       button("Insert template", async () => {
         if (
           !uiConfirm(uiMsg("Insert this template into the current whiteboard?"))

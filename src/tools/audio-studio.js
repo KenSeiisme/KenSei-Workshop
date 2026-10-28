@@ -1,5 +1,10 @@
 import { $, busy, status, download, size } from "./common.js";
 import {
+  audioContextType,
+  supportsAudioEditing,
+  AUDIO_UNAVAILABLE,
+} from "./audio-context.js";
+import {
   AUDIO_TYPES,
   makeRecording,
   stopTracks,
@@ -42,7 +47,7 @@ function stopPlayback() {
   raf = null;
 }
 async function audioContext() {
-  if (!context) context = new AudioContext();
+  if (!context) context = new (audioContextType())();
   if (context.state === "suspended") await context.resume();
   return context;
 }
@@ -315,7 +320,11 @@ $("#audio-export").onclick = async () => {
   try {
     const { a, b, volume } = selected,
       len = Math.max(1, Math.round((b - a) * 44100)),
-      render = new OfflineAudioContext(buffer.numberOfChannels, len, 44100),
+      render = new (audioContextType(true))(
+        buffer.numberOfChannels,
+        len,
+        44100,
+      ),
       node = render.createBufferSource();
     node.buffer = buffer;
     node.connect(render.destination);
@@ -414,6 +423,7 @@ if ($("#audio-record-start")) {
   };
   function recordingControls() {
     $("#audio-record-start").disabled =
+      !supportsAudioEditing() ||
       recordPending ||
       recordingState !== "idle" ||
       !navigator.mediaDevices?.getUserMedia ||
@@ -496,7 +506,7 @@ if ($("#audio-record-start")) {
       }
       microphoneStream = incoming;
       try {
-        microphoneContext = new AudioContext();
+        microphoneContext = new (audioContextType())();
         if (microphoneContext.state === "suspended")
           await microphoneContext.resume();
         if (token !== recordingGeneration) {
@@ -652,3 +662,7 @@ window.KenseiAdvancedContexts["audio-studio"] = {
     return buffer;
   },
 };
+if (!supportsAudioEditing()) {
+  $("#audio-file").disabled = true;
+  status(uiMsg(AUDIO_UNAVAILABLE), true);
+}

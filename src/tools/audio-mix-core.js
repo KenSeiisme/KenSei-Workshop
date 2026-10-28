@@ -1,3 +1,4 @@
+import { audioContextType } from "./audio-context.js";
 export function validateMixRecipe(value) {
   if (
     !value ||
@@ -97,7 +98,7 @@ const curve = (incoming) =>
 export async function renderMix(
   settings,
   sources,
-  create = (n, len, rate) => new OfflineAudioContext(n, len, rate),
+  create = (n, len, rate) => new (audioContextType(true))(n, len, rate),
 ) {
   const { frames } = mixBudget(settings, sources),
     ctx = create(2, frames, 44100),

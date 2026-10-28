@@ -30,11 +30,15 @@
     </button>
   </div>
 </header>
-<dialog class="tool-help-dialog" id="tool-help">
+<dialog
+  class="tool-help-dialog"
+  id="tool-help"
+  aria-labelledby="tool-help-title"
+>
   <button class="button secondary" data-close-help aria-label="Close help">
     Close ×
   </button>
-  <h2>${name}</h2>
+  <h2 id="tool-help-title">${name}</h2>
   <p>${description}</p>
   <h3>Limits &amp; requirements</h3>
   <p>${limits}</p>
@@ -47,9 +51,13 @@
     no pause.
   </p>
 </dialog>
-<dialog class="tool-help-dialog" id="typing-settings">
+<dialog
+  class="tool-help-dialog"
+  id="typing-settings"
+  aria-labelledby="typing-settings-title"
+>
   <button class="button secondary" id="typing-settings-close">Close ×</button>
-  <h2>Settings</h2>
+  <h2 id="typing-settings-title">Settings</h2>
   <label
     >Interface language<select
       data-language-select

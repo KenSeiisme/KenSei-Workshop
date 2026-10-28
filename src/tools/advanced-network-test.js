@@ -175,7 +175,7 @@ export function init() {
     field("Label for the next completed test", label),
     row(
       field("Tests to overlay", pick),
-      kind,
+      field("Sample series", kind),
       button("Update history view", draw),
     ),
     canvas,

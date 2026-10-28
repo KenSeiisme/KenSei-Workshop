@@ -8,8 +8,16 @@ import sys
 
 mimetypes.add_type("application/javascript", ".mjs")
 mimetypes.add_type("application/wasm", ".wasm")
+
+
+class PreviewHandler(SimpleHTTPRequestHandler):
+    def log_message(self, format, *args):
+        if "--quiet" not in sys.argv:
+            super().log_message(format, *args)
+
+
 handler = partial(
-    SimpleHTTPRequestHandler,
+    PreviewHandler,
     directory=str(Path(__file__).resolve().parents[1] / "dist"),
 )
 with ThreadingHTTPServer(

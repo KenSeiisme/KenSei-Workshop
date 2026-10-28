@@ -1,4 +1,5 @@
 import { init as professionalOCR } from "./studio-image-to-text.js";
+import { OCRClient } from "./ocr-client.js";
 import {
   $,
   $$,
@@ -373,7 +374,7 @@ async function prepared(e) {
   }
 }
 async function recognize(file, languages, token, name) {
-  worker ||= new Worker("/tool-scripts/ocr-worker.js");
+  worker ||= new OCRClient();
   const id = ++request,
     currentWorker = worker;
   return new Promise((resolve, reject) => {
@@ -420,7 +421,12 @@ async function run(retry = false) {
   if (!languages.length) throw Error("Select at least one language.");
   let indices = pageIndices();
   if (retry) indices = indices.filter((i) => entries[i].error);
-  if (!indices.length) throw Error("Choose files or failed items first.");
+  if (!indices.length)
+    throw Error(
+      retry
+        ? "No failed items to retry."
+        : "Choose an image or PDF, then select the pages to recognize.",
+    );
   const token = ++generation;
   running = true;
   busy(true);

@@ -1,0 +1,82 @@
+{
+  "m_6f1b2d0ae87b": {
+    "en": "Generate text, URL, Wi-Fi, contact and email codes, or a batch of up to 50 text/URL codes. Scan a local image or explicitly start the camera.",
+    "zh-Hant": "可產生文字、網址、Wi-Fi、聯絡人和電子郵件二維碼，或一次產生最多 50 筆文字／網址二維碼。掃描本機圖片，或由你啟動相機。"
+  },
+  "m_ad267efd771d": {
+    "en": "Compare lines, words or characters, optionally ignoring case and whitespace. Navigate differences and export a .diff file.",
+    "zh-Hant": "依行、單詞或字元比較，可忽略大小寫和空白；可跳至各處差異並匯出 .diff 檔案。"
+  },
+  "m_94f354ba25a8": {
+    "en": "Wheel and draw use optional integer weights from 1 to 100; equal weights give equal chances. No-repeat draws use a pool. Groups ignore weights and differ by at most one member.",
+    "zh-Hant": "轉盤與抽籤可設定 1–100 的整數權重，相同權重代表相同機率。不重複抽籤使用剩餘名單；分組不採用權重，各組人數最多相差一人。"
+  },
+  "m_3d061ceb0778": {
+    "en": "Public: 60 seconds and at least 95% accuracy. Practice: 15, 30, 60 or 120 seconds, with optional custom text. English uses WPM; Chinese uses CPM.",
+    "zh-Hant": "公開測試：60 秒，準確率至少 95% 才可上榜。私人練習可選 15、30、60 或 120 秒，亦可自訂文字。英文以 WPM、中文以 CPM 計算。"
+  },
+  "m_7327c479e108": {
+    "en": "Screen, keyboard, mouse and multi-touch tests are temporary and started by you.",
+    "zh-Hant": "螢幕、鍵盤、滑鼠與多點觸控測試均由你主動啟動，僅暫時執行。"
+  },
+  "m_4e34c372e25f": {
+    "en": "Passwords: 8–64 characters, default 20. Select at least one character category. Passphrases: 6–8 random words, default six.",
+    "zh-Hant": "密碼可選 8–64 個字元，預設 20 個；至少選擇一種字元類別。單詞口令可選 6–8 個隨機單詞，預設六個。"
+  },
+  "m_47b6064b4dd9": {
+    "en": "Import CSV columns, flip a card and choose Known or Need practice. Known advances the review interval; Need practice schedules another review in ten minutes. Editing resets that card.",
+    "zh-Hant": "匯入時對應 CSV 欄位；翻面後選擇「已掌握」或「需練習」。已掌握會延長複習間隔，需練習會安排十分鐘後再複習；編輯會重設該卡。"
+  },
+  "m_efe36e38be2f": {
+    "en": "% means divide by 100. Use the calculation sheet for multiple lines and page-only named variables. Results identify approximations and errors.",
+    "zh-Hant": "% 代表除以 100。計算表支援多行及僅供目前頁面使用的命名變數；結果會標示近似值與錯誤。"
+  },
+  "m_91b291c8153d": {
+    "en": "Plans retain their chosen time zone across devices. JSON keeps the editable plan; ICS exports classes and deadlines to a calendar without connecting your account.",
+    "zh-Hant": "計畫在不同裝置保持固定時區。JSON 保留可編輯計畫；ICS 可將課程和期限匯入日曆，不會連接你的日曆帳號。"
+  },
+  "m_6fd1f3c723fd": {
+    "en": "Extracted text",
+    "zh-Hant": "擷取的文字"
+  },
+  "m_0575f29df888": {
+    "en": "Template",
+    "zh-Hant": "範本"
+  },
+  "m_699b8fcf5170": {
+    "en": "Sample series",
+    "zh-Hant": "樣本系列"
+  },
+  "m_9982ac26053c": {
+    "en": "Import CSV",
+    "zh-Hant": "匯入 CSV"
+  },
+  "m_3a4308d0b4c1": {
+    "en": "No failed items to retry.",
+    "zh-Hant": "目前沒有需要重試的失敗項目。"
+  },
+  "m_93c4fb60170f": {
+    "en": "Choose an image or PDF, then select the pages to recognize.",
+    "zh-Hant": "請先選擇圖片或 PDF，再選擇要辨識的頁面。"
+  },
+  "m_6d690597c6ac": {
+    "en": "Audio editing is unavailable in this browser. Try Chrome, Edge or Firefox.",
+    "zh-Hant": "此瀏覽器無法編輯音訊，請改用 Chrome、Edge 或 Firefox。"
+  },
+  "m_d620e42b933d": {
+    "en": "Mark {0} done",
+    "zh-Hant": "將「{0}」標為完成"
+  },
+  "m_c547519e91a5": {
+    "en": "Tool files could not load. Save or download current work before reloading; source files must be selected again.",
+    "zh-Hant": "工具檔案載入失敗。重新載入前請先儲存或下載目前內容；來源檔案需要重新選擇。"
+  },
+  "m_437d0d63bfbd": {
+    "en": "Reload page",
+    "zh-Hant": "重新載入頁面"
+  },
+  "m_94d23ea99c4a": {
+    "en": "Settings changed. Generate again.",
+    "zh-Hant": "設定已變更，請重新產生。"
+  }
+}

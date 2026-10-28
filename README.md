@@ -134,6 +134,10 @@ pnpm format:check
 
 ## 统一的工具体验
 
+2026-10-28 的工具验收、修复和人工待测项目见 [28 工具验收报告](docs/validation/2026-10-28-tools-acceptance.md)。
+
+28 个工具的统一验收入口为 `pnpm test:tools:smoke`、`pnpm test:tools:acceptance` 和显式正式站检查 `pnpm test:tools:live`。覆盖表、合成样本、报告分类和 Android 人工短清单见 [工具验收与维护](docs/validation/tools-acceptance.md)。浏览器模拟、真实后端和真实设备分别记录，不把脚本通过称为零 Bug。
+
 全部 28 个工具共用页头、Help、状态反馈及响应式交互；通用布局和各工具适配分别维护。手机上的编辑标签切换保留输入，长历史和进阶设置可展开。
 
 七个文字编辑工具可自行开启 `Remember on this device`，默认关闭。恢复副本存放在独立 IndexedDB，与 Workspace 草稿和账号同步分离；每个工具、每个身份保留最近三次编辑会话，每份最多 2 MB。恢复需要主动选择，保存草稿时另存新副本；关闭开关会清除此身份在当前工具的恢复记录。

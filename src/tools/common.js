@@ -140,10 +140,15 @@ export async function copy(input) {
 export function draftEditor(tool, input, render = () => {}) {
   let id = null,
     savedAt = null,
-    dirty = false;
+    dirty = false,
+    revision = 0,
+    draftGeneration = 0,
+    saving = false,
+    owner = api.user?.id || "guest";
   const name = $("#draft-name"),
     state = $("#draft-state");
   const changed = () => {
+    revision++;
     window.dispatchEvent(new Event("tool-content-changed"));
     dirty = true;
     uiText(state, uiMsg("Unsaved changes · save when you are ready."));
@@ -152,6 +157,14 @@ export function draftEditor(tool, input, render = () => {}) {
   input.addEventListener("input", changed);
   name.addEventListener("input", changed);
   const load = () => {
+    const nextOwner = api.user?.id || "guest";
+    if (owner !== nextOwner) {
+      draftGeneration++;
+      owner = nextOwner;
+      id = null;
+      savedAt = null;
+      if (input.value || name.value) changed();
+    }
     if (dirty) return;
     const requested = new URLSearchParams(location.search).get("draft");
     const item = api
@@ -169,6 +182,7 @@ export function draftEditor(tool, input, render = () => {}) {
     }
   };
   $("#save-draft").addEventListener("click", async (e) => {
+    if (saving) return;
     if (!name.value.trim() || !input.value.trim())
       return toast(uiMsg("Add text and give your draft a name first."));
     if (
@@ -178,7 +192,12 @@ export function draftEditor(tool, input, render = () => {}) {
       return toast(
         uiMsg("This draft is too large to save. Download it instead."),
       );
-    e.target.disabled = true;
+    const button = e.currentTarget,
+      savedRevision = revision,
+      savedGeneration = draftGeneration,
+      savedOwner = api.user?.id || "guest";
+    saving = true;
+    button.disabled = true;
     try {
       const item = await api.saveItem(
         "draft",
@@ -186,26 +205,41 @@ export function draftEditor(tool, input, render = () => {}) {
         id || crypto.randomUUID(),
         savedAt,
       );
+      if (
+        savedOwner !== (api.user?.id || "guest") ||
+        savedGeneration !== draftGeneration
+      )
+        return;
       id = item.id;
       savedAt = item.updated_at;
-      dirty = false;
+      // 保存回执只确认点击时的版本，不能把保存期间的新编辑标成已保存。
+      dirty = revision !== savedRevision;
       uiText(
         state,
-        api.user
-          ? uiMsg("Saved and synced to your workspace.")
-          : uiMsg("Saved to your workspace on this device."),
+        dirty
+          ? uiMsg("Unsaved changes · save when you are ready.")
+          : api.user
+            ? uiMsg("Saved and synced to your workspace.")
+            : uiMsg("Saved to your workspace on this device."),
       );
       toast(uiMsg("Draft saved."));
     } catch {
+      if (
+        savedOwner !== (api.user?.id || "guest") ||
+        savedGeneration !== draftGeneration
+      )
+        return;
       uiText(
         state,
         uiMsg("Save failed. Your text is still here; retry or download it."),
       );
     } finally {
-      e.target.disabled = false;
+      saving = false;
+      button.disabled = false;
     }
   });
   window.addEventListener("tool-recovery-restored", () => {
+    draftGeneration++;
     id = null;
     savedAt = null;
     changed();

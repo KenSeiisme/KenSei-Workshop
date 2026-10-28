@@ -1,0 +1,5 @@
+code,name,amount,note
+00123,測試甲,12.50,"comma, inside"
+00007,Sample B,3.00,"two
+lines"
+00000,測試甲,12.50,=1+1

@@ -1,10 +1,8 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { Temporal } from "@js-temporal/polyfill";
-const load = (file) =>
-  import(
-    "data:text/javascript;base64," + fs.readFileSync(file).toString("base64")
-  );
+const load = (file) => import(pathToFileURL(path.resolve(file)).href);
 const { moments, dateDays } = await load("src/tools/time-core.js"),
   { renamed } = await load("src/tools/rename-core.js"),
   { summarize, quantile, publicReport } = await load(

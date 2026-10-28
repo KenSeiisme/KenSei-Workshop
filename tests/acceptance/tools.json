@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "tools": [
+    {
+      "slug": "image-studio",
+      "task": "Compress two images, compare them and download the ZIP.",
+      "groups": ["base", "advanced-p1", "studios"]
+    },
+    {
+      "slug": "qr-studio",
+      "task": "Generate and independently scan a Wi-Fi QR code; download a batch.",
+      "groups": ["base", "advanced-p4", "sixth"]
+    },
+    {
+      "slug": "pdf-toolkit",
+      "task": "Reorder pages, fill a form and export editable and flattened PDFs.",
+      "groups": ["base", "advanced-p1", "studios"]
+    },
+    {
+      "slug": "text-toolkit",
+      "task": "Preview a cleanup, apply it, undo it and save a named draft.",
+      "groups": ["base", "advanced-p2", "experience"]
+    },
+    {
+      "slug": "markdown-studio",
+      "task": "Preview math and diagrams and reopen the standalone HTML export.",
+      "groups": ["advanced-p2", "studios", "experience"]
+    },
+    {
+      "slug": "text-compare",
+      "task": "Compare changes by word, navigate them and export a diff.",
+      "groups": ["base", "advanced-p1", "experience"]
+    },
+    {
+      "slug": "image-to-text",
+      "task": "Recognize four languages, correct a box and search the exported PDF.",
+      "groups": ["base", "advanced-p1", "studios"]
+    },
+    {
+      "slug": "focus-timer",
+      "task": "Start, pause, resume and restore a timer; verify the ring and single completion.",
+      "groups": ["advanced-p2", "tool-motion-shared", "experience"]
+    },
+    {
+      "slug": "answer-book",
+      "task": "Reveal one answer, copy it and find it in history without saving the question.",
+      "groups": ["second-batch", "advanced-p4", "tool-motion-shared"]
+    },
+    {
+      "slug": "decision-studio",
+      "task": "Save weighted options, spin, draw without repeats and form complete groups.",
+      "groups": ["second-batch", "advanced-p4"]
+    },
+    {
+      "slug": "typing-sprint",
+      "task": "Finish a custom practice and check Ranked timing, scoring and retry isolation.",
+      "groups": ["second-batch", "typing-experience", "advanced-p2"]
+    },
+    {
+      "slug": "device-check",
+      "task": "Start and stop keyboard, mouse and touch checks; verify listener cleanup.",
+      "groups": ["second-batch", "advanced-p4"]
+    },
+    {
+      "slug": "network-test",
+      "task": "Check known speed samples, units, limits and cancellation without extra reporting.",
+      "groups": ["daily", "fourth", "advanced-p4", "tool-motion-shared"]
+    },
+    {
+      "slug": "zip-studio",
+      "task": "Pack a Chinese folder, inspect and extract it, then reject unsafe archives.",
+      "groups": ["daily", "advanced-p1"]
+    },
+    {
+      "slug": "color-studio",
+      "task": "Convert a known color, lock a swatch and export an image palette.",
+      "groups": ["daily", "advanced-p4"]
+    },
+    {
+      "slug": "unit-converter",
+      "task": "Convert temperature, binary storage and UK/US volume; save a combination.",
+      "groups": ["daily", "advanced-p4"]
+    },
+    {
+      "slug": "password-generator",
+      "task": "Generate a constrained password and six-word phrase; test copy failure without persistence.",
+      "groups": ["daily", "advanced-p4", "experience"]
+    },
+    {
+      "slug": "time-studio",
+      "task": "Resolve DST, compare dates and export a meeting calendar event.",
+      "groups": ["fourth", "advanced-p2"]
+    },
+    {
+      "slug": "file-renamer",
+      "task": "Apply ordered rules, resolve conflicts and compare the ZIP with its CSV mapping.",
+      "groups": ["fourth", "advanced-p1"]
+    },
+    {
+      "slug": "audio-studio",
+      "task": "Trim, mix, pan and fade audio; inspect and play the actual WAV/MP3 output.",
+      "groups": ["fourth", "advanced-p3", "studios"]
+    },
+    {
+      "slug": "data-studio",
+      "task": "Keep leading zeros, join and pivot tables, cancel SQL and inspect exported results.",
+      "groups": ["fourth", "advanced-p1", "studios"]
+    },
+    {
+      "slug": "flashcards",
+      "task": "Import mapped cards, review them and verify the next due date and old deck compatibility.",
+      "groups": ["fifth", "advanced-p2"]
+    },
+    {
+      "slug": "calculator-studio",
+      "task": "Check DEG/RAD, operator precedence, variables and recover from an invalid expression.",
+      "groups": ["fifth", "advanced-p4", "experience"]
+    },
+    {
+      "slug": "file-check",
+      "task": "Verify known hashes, missing manifest entries, duplicates and the CSV report.",
+      "groups": ["fifth", "advanced-p1", "experience"]
+    },
+    {
+      "slug": "subtitle-studio",
+      "task": "Import, merge and retime subtitles; verify SRT/VTT round trips and invalid intervals.",
+      "groups": ["fifth", "advanced-p3"]
+    },
+    {
+      "slug": "study-planner",
+      "task": "Create repeating classes and deadlines, restore the plan and inspect its ICS time zone.",
+      "groups": ["sixth", "advanced-p2"]
+    },
+    {
+      "slug": "whiteboard",
+      "task": "Draw, undo and export; verify private sync and four-member shared scene permissions.",
+      "groups": ["sixth", "advanced-p2", "tool-motion-shared"]
+    },
+    {
+      "slug": "screen-recorder",
+      "task": "Cancel the countdown, record a synthetic stream and play the downloaded recording.",
+      "groups": ["sixth", "advanced-p3"]
+    }
+  ],
+  "manual": [
+    {
+      "id": "google-oauth",
+      "status": "pending",
+      "task": "Real Google sign-in, consent cancel, bilingual return, expiration and sign-out."
+    },
+    {
+      "id": "android-chrome",
+      "status": "pending",
+      "task": "Real touch, soft keyboard, files, downloads, permissions and orientation."
+    },
+    {
+      "id": "ios-safari",
+      "status": "pending",
+      "task": "Real touch, soft keyboard, downloads and supported camera/microphone capture."
+    },
+    {
+      "id": "screen-reader",
+      "status": "pending",
+      "task": "Listen to labels, errors, tabs, dialogs and progress with an actual screen reader."
+    },
+    {
+      "id": "physical-capture",
+      "status": "pending",
+      "task": "Physical microphone/camera/display selection, denial, disconnection and shared audio."
+    },
+    {
+      "id": "first-time-user",
+      "status": "pending",
+      "task": "Observe an unfamiliar user completing tasks without operator guidance."
+    },
+    {
+      "id": "shared-whiteboard-live",
+      "status": "pending",
+      "task": "Four disposable authenticated users: membership, concurrent edits, reconnect and revocation."
+    },
+    {
+      "id": "network-full-live",
+      "status": "pending",
+      "task": "One explicitly started real Cloudflare test; record payload and cancellation."
+    }
+  ]
+}

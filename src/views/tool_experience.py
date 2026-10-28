@@ -13,7 +13,7 @@ HELP = {
         "Images stay on this device. Only settings are saved to Workspace.",
     ),
     "qr-studio": (
-        "Generate URL, text and Wi-Fi codes; scan a local image or an explicitly started camera.",
+        "Generate text, URL, Wi-Fi, contact and email codes, or a batch of up to 50 text/URL codes. Scan a local image or explicitly start the camera.",
         "Use strong contrast and a small logo. Scanned content is plain text; links open only when you choose.",
         "Only appearance presets can sync. QR content, Wi-Fi passwords, logos and camera frames are never saved.",
     ),
@@ -34,7 +34,7 @@ HELP = {
     ),
     "text-compare": (
         "TXT up to 200 KB / 100,000 characters per side.",
-        "Compare lines or characters, optionally normalizing case and whitespace. Export a .diff file.",
+        "Compare lines, words or characters, optionally ignoring case and whitespace. Navigate differences and export a .diff file.",
         "Both inputs and optional recovery remain on this device.",
     ),
     "image-to-text": (
@@ -54,11 +54,11 @@ HELP = {
     ),
     "decision-studio": (
         "1–200 unique options, up to 200 characters per option.",
-        "Every option has equal chance. No-repeat draws use a pool; groups differ by at most one member.",
+        "Wheel and draw use optional integer weights from 1 to 100; equal weights give equal chances. No-repeat draws use a pool. Groups ignore weights and differ by at most one member.",
         "Schemes autosave locally and sync privately. Guest schemes are not automatically uploaded.",
     ),
     "typing-sprint": (
-        "English WPM and Chinese CPM · 60 seconds · 95% accuracy to qualify.",
+        "Public: 60 seconds and at least 95% accuracy. Practice: 15, 30, 60 or 120 seconds, with optional custom text. English uses WPM; Chinese uses CPM.",
         (
             "Public is the default and requires sign-in. Choose Practice for a "
             "private test. Only committed IME text counts."
@@ -69,7 +69,7 @@ HELP = {
         ),
     ),
     "device-check": (
-        "Screen, keyboard and mouse tests are temporary and started by you.",
+        "Screen, keyboard, mouse and multi-touch tests are temporary and started by you.",
         "Reserved browser shortcuts may not reach this page. Leave the test area or use Stop to end detection.",
         "No key or mouse history is saved. Touchscreens may need an external keyboard or mouse.",
     ),
@@ -97,7 +97,7 @@ HELP = {
         "No live exchange rates or server requests are used.",
     ),
     "password-generator": (
-        "8–64 characters; default length 20. Select at least one character category.",
+        "Passwords: 8–64 characters, default 20. Select at least one character category. Passphrases: 6–8 random words, default six.",
         "Generated with cryptographic browser randomness. Copy places the password on your clipboard.",
         "Passwords are never saved, logged, recovered or uploaded.",
     ),
@@ -126,12 +126,12 @@ HELP = {
     ),
     "flashcards": (
         "Up to 200 cards / 1 MB per deck. Import front,back CSV or JSON backups.",
-        "Flip a card, then mark mastery. Editing resets that card to Need practice.",
+        "Import CSV columns, flip a card and choose Known or Need practice. Known advances the review interval; Need practice schedules another review in ten minutes. Editing resets that card.",
         "Decks autosave locally and sync privately. Guest decks require Copy to account.",
     ),
     "calculator-studio": (
         "Scalar real expressions, up to 1,000 characters; DEG or RAD.",
-        "% means divide by 100. Approximate fractions and decimal precision are identified in the result.",
+        "% means divide by 100. Use the calculation sheet for multiple lines and page-only named variables. Results identify approximations and errors.",
         "The last 50 calculations stay local. Expression recovery is optional.",
     ),
     "file-check": (
@@ -146,7 +146,7 @@ HELP = {
     ),
     "study-planner": (
         "Named plans up to 1 MB, weekly classes, assignments and exams.",
-        "Plans retain their chosen time zone across devices. JSON backups keep the editable plan.",
+        "Plans retain their chosen time zone across devices. JSON keeps the editable plan; ICS exports classes and deadlines to a calendar without connecting your account.",
         "Plans autosave locally and sync privately. Guest plans require Copy to account; conflicts retain copies.",
     ),
     "whiteboard": (

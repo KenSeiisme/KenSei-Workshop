@@ -1,4 +1,30 @@
 import assert from "node:assert/strict";
+import {
+  audioContextType,
+  supportsAudioEditing,
+} from "../../src/tools/audio-context.js";
+const FakeAudio = class {},
+  FakeOffline = class {};
+assert.equal(
+  audioContextType(false, { webkitAudioContext: FakeAudio }),
+  FakeAudio,
+);
+assert.equal(
+  audioContextType(true, { webkitOfflineAudioContext: FakeOffline }),
+  FakeOffline,
+);
+assert.equal(
+  supportsAudioEditing({
+    AudioContext: FakeAudio,
+    OfflineAudioContext: FakeOffline,
+  }),
+  true,
+);
+assert.equal(supportsAudioEditing({ AudioContext: FakeAudio }), false);
+assert.throws(
+  () => audioContextType(false, {}),
+  /Audio editing is unavailable/,
+);
 import { validateAnalysisRecipe } from "../../src/tools/data-analysis-core.js";
 import { validateImageRecipe } from "../../src/tools/image-recipe-core.js";
 import {

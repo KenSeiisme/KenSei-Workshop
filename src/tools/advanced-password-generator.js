@@ -14,16 +14,31 @@ export function init() {
       ["8", "8 words"],
     ]),
     base = $("#password-generate").onclick,
-    group = row(field("Generator mode", mode), field("Word count", count));
+    wordCount = field("Word count", count),
+    group = row(field("Generator mode", mode), wordCount),
+    characterSettings = [
+      $("#password-length").closest("label"),
+      $(".password-options"),
+    ];
   let words = null,
     version = 0;
-  $("#password-output").closest("section").prepend(group);
+  $("#password-output").closest(".panel").querySelector("h2").after(group);
+  wordCount.hidden = true;
   count.disabled = true;
-  mode.onchange = () => {
+  function invalidate() {
     version++;
-    count.disabled = mode.value !== "words";
     $("#password-output").value = "";
     $("#password-copy").disabled = true;
+    uiText($("#password-status"), uiMsg("Settings changed. Generate again."));
+  }
+  count.onchange = invalidate;
+  mode.onchange = () => {
+    invalidate();
+    count.disabled = mode.value !== "words";
+    wordCount.hidden = mode.value !== "words";
+    characterSettings.forEach((node) => {
+      node.hidden = mode.value === "words";
+    });
   };
   $("#password-generate").onclick = async () => {
     if (mode.value !== "words") return base();

@@ -34,10 +34,19 @@ export async function initToolUI() {
   const root = $("[data-tool]");
   if (!root || root.dataset.uiReady) return;
   const tool = root.dataset.tool;
-  $("[data-open-help]").onclick = () => $("#tool-help").showModal();
+  const helpTrigger = $("[data-open-help]"),
+    helpDialog = $("#tool-help");
+  helpTrigger.onclick = () => {
+    helpTrigger.focus();
+    helpDialog.showModal();
+  };
+  helpDialog.addEventListener("close", () =>
+    helpTrigger.focus({ preventScroll: true }),
+  );
   $("[data-close-help]").onclick = () => $("#tool-help").close();
   for (const id of statusIds[tool] || ["tool-status"]) {
-    observeText($("#" + id), (n) => {
+    const node = $("#" + id);
+    const update = (n) => {
       if (n.closest("[hidden]")) return;
       const message = uiSource(n).trim();
       if (message)
@@ -45,7 +54,9 @@ export async function initToolUI() {
           stateFor(message, n.classList.contains("error-text")),
           uiFrom(message),
         );
-    });
+    };
+    observeText(node, update);
+    if (node?.classList.contains("error-text")) update(node);
   }
   $$(
     "#draft-state,#deck-save-state,#planner-save-state,#board-state,#decision-save-state,[data-save-state]",

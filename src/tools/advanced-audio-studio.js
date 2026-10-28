@@ -1,4 +1,9 @@
 import { init as professionalAudio } from "./studio-audio-studio.js";
+import {
+  audioContextType,
+  supportsAudioEditing,
+  AUDIO_UNAVAILABLE,
+} from "./audio-context.js";
 import { $, status } from "./common.js";
 import { el, panel, row, button, field } from "./advanced-ui.js";
 import { keptRanges, shapeSamples, pcmWav } from "./audio-edit-core.js";
@@ -77,7 +82,7 @@ export async function init() {
       if (!files.length) throw Error("Choose audio files first.");
       busy = true;
       const token = ++generation,
-        ac = new AudioContext();
+        ac = new (audioContextType())();
       prepare.disabled = true;
       [input, ranges, fadeIn, fadeOut, normalize].forEach(
         (n) => (n.disabled = true),
@@ -119,7 +124,7 @@ export async function init() {
           throw Error(
             "Fade lengths must fit inside the output and be at most 30 seconds.",
           );
-        const offline = new OfflineAudioContext(channels, frames, 44100);
+        const offline = new (audioContextType(true))(channels, frames, 44100);
         let dest = 0;
         for (const [a, b] of keep) {
           let sourceAt = 0;
@@ -184,5 +189,9 @@ export async function init() {
     note,
   );
   window.addEventListener("pagehide", () => generation++);
+  if (!supportsAudioEditing()) {
+    input.disabled = prepare.disabled = true;
+    uiText(note, uiMsg(AUDIO_UNAVAILABLE));
+  }
   await professionalAudio();
 }

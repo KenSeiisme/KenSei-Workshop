@@ -61,7 +61,16 @@ async function textPDF(bytes) {
   });
   async function open(slug, lang = "") {
     await p.goto(base + lang + "/tools/" + slug + "/");
-    await p.waitForSelector("[data-ready=true]");
+    await p.waitForSelector("[data-ready=true]").catch(async (e) => {
+      console.error(
+        "Startup diagnostic",
+        slug,
+        lang,
+        errors,
+        await p.locator(".tool-feedback").innerText(),
+      );
+      throw e;
+    });
   }
   async function dl(fn) {
     const w = p.waitForEvent("download", { timeout: 120000 });
@@ -71,137 +80,165 @@ async function textPDF(bytes) {
   try {
     await open("audio-studio");
     await p.getByRole("tab", { name: "Mix", exact: true }).click();
-    await p.setInputFiles("#mix-files", [
-      {
-        name: "private-voice-one.wav",
-        mimeType: "audio/wav",
-        buffer: wav(2, 440),
-      },
-      {
-        name: "private-voice-two.wav",
-        mimeType: "audio/wav",
-        buffer: wav(2, 660),
-      },
-    ]);
-    await p.waitForFunction(
-      () => document.querySelectorAll(".mix-clip").length === 2,
+    const audioAvailable = await p.evaluate(async () =>
+      (await import("/tool-scripts/audio-context.js")).supportsAudioEditing(),
     );
-    await p.locator('.mix-track-settings[data-track="0"] summary').click();
-    await p.locator('.mix-track-settings[data-track="1"] summary').click();
-    await p.locator('[data-track="0"] input[data-param="pan"]').fill("-1");
-    await p.locator('[data-track="0"] input[data-param="pan"]').press("Tab");
-    await p
-      .locator('.mix-track-settings[data-track="1"] input[type=checkbox]')
-      .first()
-      .check();
-    await p.getByRole("button", { name: "Preview mix", exact: true }).click();
-    await p.waitForFunction(() =>
-      document.querySelector("#mix-status").textContent.includes("Mix ready"),
-    );
-    let audio = await dl(() =>
-      p.getByRole("button", { name: "Export mix", exact: true }).click(),
-    );
-    assert.equal(audio.readUInt16LE(22), 2);
-    assert.equal(audio.readUInt32LE(24), 44100);
-    let left = 0,
-      right = 0;
-    for (let i = 44; i < audio.length; i += 4) {
-      left += audio.readInt16LE(i) ** 2;
-      right += audio.readInt16LE(i + 2) ** 2;
-    }
-    assert(left > 1000000);
-    assert(right < left * 0.0001);
-    console.log("PASS actual stereo mix export, pan and mute");
-    await p.locator('[data-track="0"] input[data-param="pan"]').fill("0");
-    await p.locator('[data-track="0"] input[data-param="pan"]').press("Tab");
-    await p
-      .getByRole("button", {
-        name: "Arrange clips with crossfade",
-        exact: true,
-      })
-      .click();
-    await p.check("#mix-normalize");
-    await p.getByRole("button", { name: "Preview mix", exact: true }).click();
-    await p.waitForFunction(() =>
-      document.querySelector("#mix-status").textContent.includes("Mix ready"),
-    );
-    audio = await dl(() =>
-      p.getByRole("button", { name: "Export mix", exact: true }).click(),
-    );
-    assert(Math.abs((audio.length - 44) / 4 / 44100 - 3.5) < 0.001);
-    let peak = 0;
-    for (let i = 44; i < audio.length; i += 2)
-      peak = Math.max(peak, Math.abs(audio.readInt16LE(i)) / 32768);
-    assert(peak > 0.97 && peak < 0.99);
-    await p.selectOption("#mix-format", "mp3");
-    const mp3 = await dl(() =>
-      p.getByRole("button", { name: "Export mix", exact: true }).click(),
-    );
-    assert(mp3.length > 1000);
-    await p.locator("#audio-mix-workspace .studio-recipes summary").click();
-    const recipe = JSON.parse(
-      (
-        await dl(() =>
-          p
-            .locator("#audio-mix-workspace")
-            .getByRole("button", { name: "Export recipe JSON", exact: true })
-            .click(),
+    if (!audioAvailable) {
+      assert(await p.locator("#mix-files").isDisabled());
+      assert.match(
+        await p.locator("#mix-status").innerText(),
+        /Audio editing is unavailable/,
+      );
+      console.log(
+        "UNSUPPORTED audio output: this browser runtime exposes no Web Audio constructors; friendly fallback verified.",
+      );
+    } else {
+      await p.setInputFiles("#mix-files", [
+        {
+          name: "private-voice-one.wav",
+          mimeType: "audio/wav",
+          buffer: wav(2, 440),
+        },
+        {
+          name: "private-voice-two.wav",
+          mimeType: "audio/wav",
+          buffer: wav(2, 660),
+        },
+      ]);
+      await p
+        .waitForFunction(
+          () => document.querySelectorAll(".mix-clip").length === 2,
         )
-      ).toString(),
-    );
-    assert(!JSON.stringify(recipe).includes("private-voice"));
-    assert.equal(recipe.recipe.settings.clips.length, 2);
-    console.log(
-      "PASS equal-power crossfade duration, normalization, MP3 and media-free recipe",
-    );
-    const graph = await p.evaluate(async () => {
-      const { renderMix, validateMixRecipe } =
-          await import("/tool-scripts/audio-mix-core.js"),
-        ctx = new OfflineAudioContext(1, 88200, 44100),
-        tone = ctx.createBuffer(1, 88200, 44100);
-      for (let i = 0; i < 88200; i++)
-        tone.getChannelData(0)[i] =
-          Math.sin((2 * Math.PI * 80 * i) / 44100) * 0.2;
-      const track = { volume: 1, pan: 0, eq: [0, 0, 0] },
-        clip = { slot: 0, track: 0, at: 0, start: 0, end: 2 },
-        normal = await renderMix(
-          validateMixRecipe({ tracks: [track], clips: [clip] }),
-          [tone],
-        ),
-        low = await renderMix(
-          validateMixRecipe({
-            tracks: [{ ...track, eq: [-12, 0, 0] }],
-            clips: [clip],
-          }),
-          [tone],
-        );
-      const rms = (b) => {
-        const a = b.getChannelData(0);
-        let sum = 0;
-        for (let i = 22050; i < a.length; i++) sum += a[i] * a[i];
-        return Math.sqrt(sum / (a.length - 22050));
-      };
-      const dc = ctx.createBuffer(1, 88200, 44100);
-      dc.getChannelData(0).fill(0.2);
-      const equal = await renderMix(
-          validateMixRecipe({
-            tracks: [track],
-            clips: [clip, { ...clip, at: 1.5 }],
-            crossfade: 0.5,
-          }),
-          [dc],
-        ),
-        a = equal.buffer.getChannelData(0);
-      return {
-        eq: rms(low.buffer) / rms(normal.buffer),
-        cross: a[Math.round(1.75 * 44100)] / a[Math.round(0.5 * 44100)],
-      };
-    });
-    assert(graph.eq < 0.4);
-    assert(Math.abs(graph.cross - Math.SQRT2) < 0.02);
-    console.log(
-      "PASS rendered three-band EQ attenuation and equal-power midpoint amplitude",
-    );
+        .catch(async (e) => {
+          console.error(
+            "Mix import diagnostic",
+            await p.locator("#mix-status").innerText(),
+            await p.evaluate(() => ({
+              audio: typeof AudioContext,
+              offline: typeof OfflineAudioContext,
+              wav: new Audio().canPlayType("audio/wav"),
+            })),
+            errors,
+          );
+          throw e;
+        });
+      await p.locator('.mix-track-settings[data-track="0"] summary').click();
+      await p.locator('.mix-track-settings[data-track="1"] summary').click();
+      await p.locator('[data-track="0"] input[data-param="pan"]').fill("-1");
+      await p.locator('[data-track="0"] input[data-param="pan"]').press("Tab");
+      await p
+        .locator('.mix-track-settings[data-track="1"] input[type=checkbox]')
+        .first()
+        .check();
+      await p.getByRole("button", { name: "Preview mix", exact: true }).click();
+      await p.waitForFunction(() =>
+        document.querySelector("#mix-status").textContent.includes("Mix ready"),
+      );
+      let audio = await dl(() =>
+        p.getByRole("button", { name: "Export mix", exact: true }).click(),
+      );
+      assert.equal(audio.readUInt16LE(22), 2);
+      assert.equal(audio.readUInt32LE(24), 44100);
+      let left = 0,
+        right = 0;
+      for (let i = 44; i < audio.length; i += 4) {
+        left += audio.readInt16LE(i) ** 2;
+        right += audio.readInt16LE(i + 2) ** 2;
+      }
+      assert(left > 1000000);
+      assert(right < left * 0.0001);
+      console.log("PASS actual stereo mix export, pan and mute");
+      await p.locator('[data-track="0"] input[data-param="pan"]').fill("0");
+      await p.locator('[data-track="0"] input[data-param="pan"]').press("Tab");
+      await p
+        .getByRole("button", {
+          name: "Arrange clips with crossfade",
+          exact: true,
+        })
+        .click();
+      await p.check("#mix-normalize");
+      await p.getByRole("button", { name: "Preview mix", exact: true }).click();
+      await p.waitForFunction(() =>
+        document.querySelector("#mix-status").textContent.includes("Mix ready"),
+      );
+      audio = await dl(() =>
+        p.getByRole("button", { name: "Export mix", exact: true }).click(),
+      );
+      assert(Math.abs((audio.length - 44) / 4 / 44100 - 3.5) < 0.001);
+      let peak = 0;
+      for (let i = 44; i < audio.length; i += 2)
+        peak = Math.max(peak, Math.abs(audio.readInt16LE(i)) / 32768);
+      assert(peak > 0.97 && peak < 0.99);
+      await p.selectOption("#mix-format", "mp3");
+      const mp3 = await dl(() =>
+        p.getByRole("button", { name: "Export mix", exact: true }).click(),
+      );
+      assert(mp3.length > 1000);
+      await p.locator("#audio-mix-workspace .studio-recipes summary").click();
+      const recipe = JSON.parse(
+        (
+          await dl(() =>
+            p
+              .locator("#audio-mix-workspace")
+              .getByRole("button", { name: "Export recipe JSON", exact: true })
+              .click(),
+          )
+        ).toString(),
+      );
+      assert(!JSON.stringify(recipe).includes("private-voice"));
+      assert.equal(recipe.recipe.settings.clips.length, 2);
+      console.log(
+        "PASS equal-power crossfade duration, normalization, MP3 and media-free recipe",
+      );
+      const graph = await p.evaluate(async () => {
+        const { renderMix, validateMixRecipe } =
+            await import("/tool-scripts/audio-mix-core.js"),
+          ctx = new OfflineAudioContext(1, 88200, 44100),
+          tone = ctx.createBuffer(1, 88200, 44100);
+        for (let i = 0; i < 88200; i++)
+          tone.getChannelData(0)[i] =
+            Math.sin((2 * Math.PI * 80 * i) / 44100) * 0.2;
+        const track = { volume: 1, pan: 0, eq: [0, 0, 0] },
+          clip = { slot: 0, track: 0, at: 0, start: 0, end: 2 },
+          normal = await renderMix(
+            validateMixRecipe({ tracks: [track], clips: [clip] }),
+            [tone],
+          ),
+          low = await renderMix(
+            validateMixRecipe({
+              tracks: [{ ...track, eq: [-12, 0, 0] }],
+              clips: [clip],
+            }),
+            [tone],
+          );
+        const rms = (b) => {
+          const a = b.getChannelData(0);
+          let sum = 0;
+          for (let i = 22050; i < a.length; i++) sum += a[i] * a[i];
+          return Math.sqrt(sum / (a.length - 22050));
+        };
+        const dc = ctx.createBuffer(1, 88200, 44100);
+        dc.getChannelData(0).fill(0.2);
+        const equal = await renderMix(
+            validateMixRecipe({
+              tracks: [track],
+              clips: [clip, { ...clip, at: 1.5 }],
+              crossfade: 0.5,
+            }),
+            [dc],
+          ),
+          a = equal.buffer.getChannelData(0);
+        return {
+          eq: rms(low.buffer) / rms(normal.buffer),
+          cross: a[Math.round(1.75 * 44100)] / a[Math.round(0.5 * 44100)],
+        };
+      });
+      assert(graph.eq < 0.4);
+      assert(Math.abs(graph.cross - Math.SQRT2) < 0.02);
+      console.log(
+        "PASS rendered three-band EQ attenuation and equal-power midpoint amplitude",
+      );
+    }
 
     await open("image-to-text");
     const png = Buffer.from(

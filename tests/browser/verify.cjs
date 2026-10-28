@@ -220,10 +220,20 @@ function pass(name) {
       .fill("  Hello   world  \n\n\n Next line  ");
     await page.locator('[data-transform="clean"]').click();
     assert.equal(
+      await page.inputValue("#text-input"),
+      "  Hello   world  \n\n\n Next line  ",
+    );
+    await page
+      .getByRole("button", { name: "Apply changes", exact: true })
+      .click();
+    assert.equal(
       await page.locator("#text-input").inputValue(),
       "Hello world\n\nNext line",
     );
     await page.locator('[data-transform="upper"]').click();
+    await page
+      .getByRole("button", { name: "Apply changes", exact: true })
+      .click();
     assert.equal(
       await page.locator("#text-input").inputValue(),
       "HELLO WORLD\n\nNEXT LINE",
@@ -311,8 +321,15 @@ function pass(name) {
       page.locator("#image-download").click(),
     ]);
     assert(imgDownload.suggestedFilename().endsWith(".jpg"));
-    page.once("dialog", (d) => d.accept("Web preset"));
-    await page.locator("#save-preset").click();
+    await page.locator(".studio-recipes summary").first().click();
+    await page
+      .getByLabel("Recipe name", { exact: true })
+      .first()
+      .fill("Web preset");
+    await page
+      .getByRole("button", { name: "Save as new", exact: true })
+      .first()
+      .click();
     await page.goto(base + "/workspace/");
     await page.locator("#saved-presets a").click();
     await page.waitForLoadState("load");

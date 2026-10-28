@@ -23,6 +23,8 @@ export function init() {
       ["svg", "SVG"],
     ]),
     previews = el("div", "", { class: "qr-batch-previews" });
+  // 生成擴充屬於 Generate，切換 Scan 時一起隱藏，不重建預覽或輸入。
+  $("#qr-generate-panel").append(p);
   let outputs = [],
     epoch = 0;
   $("#qr-generate-panel").append(p);
@@ -86,8 +88,7 @@ export function init() {
       $("#qr-content").value = text;
       $("#qr-content").dispatchEvent(new Event("input"));
     }),
-    el("h3", "Batch text / URL QR codes"),
-    batch,
+    field("Batch text / URL QR codes", batch),
     row(
       field("Batch format", format),
       button(

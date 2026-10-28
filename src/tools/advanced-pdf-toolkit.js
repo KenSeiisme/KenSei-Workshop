@@ -24,6 +24,7 @@ export async function init() {
       rows: 7,
       readOnly: false,
       id: "pdf-extracted-text",
+      "aria-label": "Extracted text",
     }),
     filesBox = el("div");
   p.append(

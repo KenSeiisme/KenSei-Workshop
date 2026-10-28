@@ -34,7 +34,7 @@ export function init() {
   input.onchange = () =>
     load(input.files[0]).catch((e) => uiText(note, uiError(e)));
   p.append(
-    input,
+    field("Import CSV", input),
     row(field("Front column", front), field("Back column", back)),
     button("Import as new deck", async () => {
       if (!table) throw Error("Choose a CSV file first.");

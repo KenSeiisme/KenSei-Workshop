@@ -442,8 +442,27 @@ function pass(s) {
         .querySelector("#tool-status")
         .textContent.startsWith("Image ready"),
     );
+    // 初始化正常完成，只暫停識別訊息；快速引擎不會在捲動至取消按鈕前結束。
+    await page.evaluate(() => {
+      const NativeWorker = window.Worker;
+      window.__ocrRecognitionQueued = false;
+      window.__resumeOCRWorker = () => {
+        window.Worker = NativeWorker;
+      };
+      window.Worker = class extends NativeWorker {
+        postMessage(...args) {
+          if (args[0]?.action === "recognize") {
+            window.__ocrRecognitionQueued = true;
+            return;
+          }
+          return super.postMessage(...args);
+        }
+      };
+    });
     await page.locator("#ocr-run").click();
+    await page.waitForFunction(() => window.__ocrRecognitionQueued);
     await page.locator("#cancel-job").click();
+    await page.evaluate(() => __resumeOCRWorker());
     await page.waitForFunction(() =>
       document.querySelector("#tool-status").textContent.includes("cancelled"),
     );

@@ -194,8 +194,15 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
     );
     assert(html.includes("<svg"));
     assert(!html.includes("<script"));
-    const doc = await p.pdf({ format: "A4", printBackground: true });
-    assert(doc.length > 5000);
+    if (b.browserType().name() === "chromium") {
+      const doc = await p.pdf({ format: "A4", printBackground: true });
+      assert(doc.length > 5000);
+    } else {
+      // Playwright 的 PDF 打印 API 仅支持 Chromium；HTML 导出断言仍完整执行。
+      console.log(
+        "MANUAL browser Save as PDF: Playwright print API is Chromium-only",
+      );
+    }
     await p.fill(
       "#markdown-input",
       '```mermaid\nflowchart LR\n A-->B\n click A "https://example.com"\n```\n\n<img src="https://invalid.test/a.png">\n\n![bad](https://invalid.test/b.png)',
@@ -207,7 +214,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
     );
     assert.equal(await p.locator("#markdown-preview img").count(), 0);
     console.log(
-      "PASS formulas, footnotes, four diagrams, standalone HTML fonts, printed PDF and unsafe content restriction",
+      "PASS formulas, footnotes, four diagrams, standalone HTML fonts, " +
+        (b.browserType().name() === "chromium" ? "printed PDF, " : "") +
+        "and unsafe content restriction",
     );
     for (const slug of ["data-studio", "markdown-studio"])
       for (const width of [320, 360, 768, 1440]) {

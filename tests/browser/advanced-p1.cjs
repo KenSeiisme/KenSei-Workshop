@@ -64,6 +64,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
     await p.waitForFunction(() =>
       document.querySelector("#image-result").textContent.includes("1 of 1"),
     );
+    await p.waitForFunction(
+      () => document.querySelectorAll(".compare-images img").length === 2,
+    );
     assert.equal(await p.locator(".compare-images img").count(), 2);
     console.log("PASS target compression and original/output comparison");
     const incoming = c.waitForEvent("page");

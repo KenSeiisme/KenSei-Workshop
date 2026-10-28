@@ -67,7 +67,10 @@
     "test:advanced-p3": "node scripts/test.mjs advanced-p3",
     "test:advanced-p4": "node scripts/test.mjs advanced-p4",
     "test:studios": "node scripts/test.mjs studios",
-    "vendor:studios": "node scripts/vendor-studios.mjs"
+    "vendor:studios": "node scripts/vendor-studios.mjs",
+    "test:tools:smoke": "node scripts/accept-tools.mjs smoke",
+    "test:tools:acceptance": "node scripts/accept-tools.mjs acceptance",
+    "test:tools:live": "node scripts/accept-tools.mjs live"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

@@ -110,7 +110,7 @@ const pass = (x) => {
     assert.equal(await p.locator("#data-table tbody tr").count(), 50);
     await p.click("#data-next");
     assert.match(
-      await p.textContent("#data-table tbody tr:first-child"),
+      await p.inputValue("#data-table tbody tr:first-child input"),
       /0050/,
     );
     await p.click("#data-next");

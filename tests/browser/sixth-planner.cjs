@@ -110,12 +110,29 @@ fs.mkdirSync(output, { recursive: true });
       /1 due · 1 overdue · 0 done/,
     );
     assert.equal(await page.locator("#planner-week .planner-event").count(), 4);
+    // 默认只显示未完成任务；焦点验收要先显示全部，避免完成后按设计移出列表。
+    await page.selectOption("#planner-task-filter", "all");
     await page
       .locator("#planner-tasks .planner-item")
       .filter({ hasText: "Assignment 报告" })
       .locator('input[type="checkbox"]')
-      .check();
+      .click();
     await saved();
+    assert(
+      await page
+        .locator("#planner-tasks .planner-item")
+        .filter({ hasText: "Assignment 报告" })
+        .locator('input[type="checkbox"]')
+        .isChecked(),
+    );
+    assert(
+      await page
+        .locator("#planner-tasks .planner-item")
+        .filter({ hasText: "Assignment 报告" })
+        .locator('input[type="checkbox"]')
+        .evaluate((n) => n === document.activeElement),
+      "Autosave must retain the task checkbox keyboard focus",
+    );
     await page.selectOption("#planner-task-filter", "done");
     assert.equal(await page.locator("#planner-tasks .planner-item").count(), 1);
     assert.match(

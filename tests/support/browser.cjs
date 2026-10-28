@@ -25,3 +25,24 @@ try {
     );
   }
 }
+// 旧文件共用 chromium 名称；显式选择引擎时仍运行相同的文件输出断言。
+const engine = process.env.WORKSHOP_BROWSER_ENGINE;
+if (engine && engine !== "chromium") {
+  if (!["firefox", "webkit"].includes(engine))
+    throw Error("WORKSHOP_BROWSER_ENGINE must be chromium, firefox or webkit.");
+  const selected = module.exports[engine];
+  module.exports = new Proxy(module.exports, {
+    get(target, key) {
+      if (key !== "chromium") return Reflect.get(target, key);
+      return new Proxy(target.chromium, {
+        get(type, method) {
+          if (method !== "launch") return Reflect.get(type, method);
+          return (options = {}) => {
+            const { channel, ...supported } = options;
+            return selected.launch(supported);
+          };
+        },
+      });
+    },
+  });
+}

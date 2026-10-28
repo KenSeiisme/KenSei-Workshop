@@ -182,7 +182,13 @@ export async function init() {
       const tr = el("tr");
       visible.forEach((c) => {
         const td = el("td"),
-          n = el("input", "", { value: r.values[c], type: "text" });
+          multiline = /[\r\n]/.test(String(r.values[c])),
+          n = el(multiline ? "textarea" : "input", "", {
+            value: r.values[c],
+            ...(multiline
+              ? { rows: Math.min(5, String(r.values[c]).split(/\r?\n/).length) }
+              : { type: "text" }),
+          });
         n.setAttribute("aria-label", t.headers[c] + " " + (r.index + 1));
         n.onchange = () => {
           const old = r.values[c];

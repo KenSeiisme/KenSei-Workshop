@@ -1,6 +1,6 @@
 import { api, downloadText } from "./common.js";
 import { el, row, field, button, select } from "./advanced-ui.js";
-import { uiMsg, uiText, uiConfirm, uiRender } from "../site/ui.js";
+import { uiMsg, uiText, uiConfirm, uiRender, uiAttr } from "../site/ui.js";
 
 // 只接收各工具白名單驗證後的設定；媒體、表單值和結果從不進入配方。
 export function recipeControls(
@@ -12,7 +12,8 @@ export function recipeControls(
   legacy = () => ({}),
 ) {
   let current = null,
-    owner = api.user?.id || "guest";
+    owner = api.user?.id || "guest",
+    saving = false;
   const box = el("details", "", { class: "studio-recipes" }),
     title = el("summary", "Settings recipes");
   const name = el("input", "", {
@@ -21,6 +22,7 @@ export function recipeControls(
     "aria-label": "Recipe name",
   });
   const saved = select([["", "Choose a saved recipe"]]);
+  uiAttr(saved, "aria-label", uiMsg("Choose a saved recipe"));
   const note = el(
     "p",
     "Settings only. Choose source files again when reusing a recipe.",
@@ -69,6 +71,7 @@ export function recipeControls(
     saved.value = current || "";
   }
   async function save(asNew) {
+    if (saving) return;
     if (!name.value.trim()) throw Error("Give the recipe a name.");
     const settings = clean(),
       data = {
@@ -79,21 +82,36 @@ export function recipeControls(
       };
     if (new TextEncoder().encode(JSON.stringify(data)).length > 100000)
       throw Error("Recipe settings are too large.");
-    const item = await api.saveItem(
-      "preset",
-      data,
-      asNew || !current ? undefined : current,
-    );
-    current = item.id;
-    refresh();
-    uiText(
-      note,
-      uiMsg(
-        api.user
-          ? "Recipe saved to your account."
-          : "Recipe saved on this device.",
-      ),
-    );
+    const saveOwner = api.user?.id || "guest",
+      controls = [...box.querySelectorAll("button,select,input")],
+      prior = controls.map((n) => n.disabled);
+    saving = true;
+    controls.forEach((n) => {
+      n.disabled = true;
+    });
+    try {
+      const item = await api.saveItem(
+        "preset",
+        data,
+        asNew || !current ? undefined : current,
+      );
+      if (saveOwner !== (api.user?.id || "guest")) return;
+      current = item.id;
+      refresh();
+      uiText(
+        note,
+        uiMsg(
+          api.user
+            ? "Recipe saved to your account."
+            : "Recipe saved on this device.",
+        ),
+      );
+    } finally {
+      saving = false;
+      controls.forEach((n, i) => {
+        n.disabled = prior[i];
+      });
+    }
   }
   saved.onchange = () => {
     const item = api.items("preset").find((x) => x.id === saved.value);

@@ -25,6 +25,7 @@
 .tool-page button:not(.excalidraw button),
 .tool-page summary,
 .tool-page .button {
+  min-width: 44px;
   min-height: 44px;
 }
 .tool-page input:not([type="checkbox"]):not([type="range"]):not([type="color"]),

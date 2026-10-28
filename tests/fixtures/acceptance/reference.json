@@ -1,0 +1,33 @@
+{
+  "csv": {
+    "dataRows": 3,
+    "columns": 4,
+    "codes": ["00123", "00007", "00000"],
+    "numericAmountSum": 28,
+    "exportedFormulaMustBeEscaped": true
+  },
+  "subtitles": {
+    "cues": 2,
+    "startMs": [1000, 3000],
+    "endMs": [2500, 5000],
+    "shiftPlus500StartMs": [1500, 3500]
+  },
+  "units": {
+    "fahrenheit32InCelsius": 0,
+    "mebibyteInBytes": 1048576,
+    "megabyteInBytes": 1000000,
+    "usGallonInLitres": 3.785411784,
+    "imperialGallonInLitres": 4.54609
+  },
+  "calculator": {
+    "sin30Degrees": 0.5,
+    "sqrt144": 12,
+    "operatorPrecedence": { "input": "2 + 3 * 4", "output": 14 }
+  },
+  "color": {
+    "blackOnWhiteContrast": 21,
+    "greenHex": "#00ff00",
+    "greenRGB": [0, 255, 0]
+  },
+  "sha256Hello": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+}

@@ -476,12 +476,16 @@
   }
   let filter = "all";
   function filterTools() {
-    const query = ($("#tool-search")?.value || "").trim().toLowerCase();
+    const terms = ($("#tool-search")?.value || "")
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
     let count = 0;
     $$("[data-tool-card]").forEach((card) => {
       card.hidden =
         !(filter === "all" || card.dataset.category === filter) ||
-        !card.dataset.search.includes(query);
+        !terms.every((term) => card.dataset.search.includes(term));
       if (!card.hidden) count++;
     });
     if ($("#search-empty")) $("#search-empty").hidden = count > 0;
@@ -520,8 +524,13 @@
     let previous = null,
       draftId = null,
       savedAt = null,
-      dirty = false;
+      dirty = false,
+      editRevision = 0,
+      draftGeneration = 0,
+      savingDraft = false,
+      draftOwner = user?.id || "guest";
     const setDirty = () => {
+      editRevision++;
       window.dispatchEvent(new Event("tool-content-changed"));
       dirty = true;
       uiText(
@@ -615,6 +624,7 @@
       ),
     );
     $("#save-draft").addEventListener("click", async () => {
+      if (savingDraft) return;
       const name = $("#draft-name").value.trim();
       if (!name) {
         $("#draft-name").focus();
@@ -626,6 +636,10 @@
         return;
       }
       const button = $("#save-draft");
+      const savedRevision = editRevision,
+        savedGeneration = draftGeneration,
+        savedOwner = user?.id || "guest";
+      savingDraft = true;
       button.disabled = true;
       try {
         const item = await saveItem(
@@ -634,33 +648,55 @@
           draftId || uid(),
           savedAt,
         );
+        if (
+          savedOwner !== (user?.id || "guest") ||
+          savedGeneration !== draftGeneration
+        )
+          return;
         draftId = item.id;
         savedAt = item.updated_at;
-        dirty = false;
+        dirty = editRevision !== savedRevision;
         uiText(
           $("#draft-state"),
-          user
-            ? uiMsg("Saved and synced to your workspace.")
-            : uiMsg("Saved to your workspace on this device."),
+          dirty
+            ? uiMsg("Unsaved changes · your text is still on this page.")
+            : user
+              ? uiMsg("Saved and synced to your workspace.")
+              : uiMsg("Saved to your workspace on this device."),
         );
         toast(uiMsg("Draft saved."));
       } catch {
+        if (
+          savedOwner !== (user?.id || "guest") ||
+          savedGeneration !== draftGeneration
+        )
+          return;
         uiText(
           $("#draft-state"),
           uiMsg("Save failed. Your text is still here; please retry."),
         );
         toast(uiMsg("Could not save. Your text has been kept on this page."));
       } finally {
+        savingDraft = false;
         button.disabled = false;
       }
     });
     window.addEventListener("tool-recovery-restored", () => {
+      draftGeneration++;
       draftId = null;
       savedAt = null;
-      dirty = true;
+      setDirty();
     });
     const requestedDraft = new URLSearchParams(location.search).get("draft");
     const loadDraft = () => {
+      const nextOwner = user?.id || "guest";
+      if (draftOwner !== nextOwner) {
+        draftGeneration++;
+        draftOwner = nextOwner;
+        draftId = null;
+        savedAt = null;
+        if (input.value || $("#draft-name").value) setDirty();
+      }
       if (dirty) return;
       const item = items("draft").find(
         (x) =>
@@ -1179,8 +1215,29 @@
         await ui.initToolUI();
         document.querySelector("[data-tool]").dataset.ready = "true";
       })
-      .catch(() => {
-        toast(uiMsg("Tool files could not load. Reload this page to retry."));
+      .catch((error) => {
+        const root = document.querySelector("[data-tool]"),
+          box = root.querySelector(".tool-feedback"),
+          retry = document.createElement("button");
+        root.dataset.loadError = error?.name || "LoadError";
+        box.dataset.state = "error";
+        box.setAttribute("role", "alert");
+        uiText(
+          box.querySelector(".tool-state-label"),
+          uiMsg("Needs attention"),
+        );
+        const message = box.querySelector(".tool-state-message");
+        uiText(
+          message,
+          uiMsg(
+            "Tool files could not load. Save or download current work before reloading; source files must be selected again.",
+          ),
+        );
+        retry.type = "button";
+        retry.className = "button secondary";
+        uiText(retry, uiMsg("Reload page"));
+        retry.onclick = () => location.reload();
+        box.append(retry);
       });
   }
   if (document.querySelector("#private-workspace"))

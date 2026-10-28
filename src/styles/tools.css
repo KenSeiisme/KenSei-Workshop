@@ -1,4 +1,10 @@
 /* Shared tool surfaces inherit the existing Workshop palette. */
+.data-table td textarea {
+  min-width: 12rem;
+  max-width: 100%;
+  resize: vertical;
+  white-space: pre-wrap;
+}
 .tool-form h2,
 .editor-pane h2,
 .pdf-layout h2 {

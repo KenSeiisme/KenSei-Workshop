@@ -17,11 +17,15 @@
     </button>
   </div>
 </div>
-<dialog class="tool-help-dialog" id="tool-help">
+<dialog
+  class="tool-help-dialog"
+  id="tool-help"
+  aria-labelledby="tool-help-title"
+>
   <button class="button secondary" data-close-help aria-label="Close help">
     Close ×
   </button>
-  <h2>${name}</h2>
+  <h2 id="tool-help-title">${name}</h2>
   <h3>Limits &amp; requirements</h3>
   <p>${limits}</p>
   <h3>How it works</h3>

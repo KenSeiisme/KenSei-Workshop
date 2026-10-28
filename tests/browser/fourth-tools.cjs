@@ -183,7 +183,10 @@ const pass = (x) => {
     await p.fill("#data-csv", 'name,note\r\n"你好","line one\nline two"');
     await p.click("#data-csv-preview");
     await ready("Done");
-    assert.match(await p.textContent("#data-table"), /line one/);
+    assert.equal(
+      await p.locator("#data-table td textarea").inputValue(),
+      "line one\nline two",
+    );
     await p.fill("#data-csv", "name,value\nA,=1+1");
     const csv = await result(() => p.click("#data-csv-download"));
     assert.match(csv.data.toString(), /'=1\+1/);

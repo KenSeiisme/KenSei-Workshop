@@ -15,6 +15,7 @@ export function init() {
       rows: 3,
       maxLength: 15000,
       placeholder: "Optional custom practice text",
+      "aria-label": "Optional custom practice text",
     }),
     wrap = el("details"),
     summary = el("summary", "Practice settings"),

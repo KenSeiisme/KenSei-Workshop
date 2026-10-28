@@ -1,0 +1,3593 @@
+{
+  "date": "2026-10-28",
+  "scope": "28 tools; no new tools, games or database migrations",
+  "acceptance": {
+    "version": 1,
+    "mode": "acceptance",
+    "base": "http://127.0.0.1:8773",
+    "startedAt": "2026-10-28T09:05:33.832Z",
+    "suites": [
+      {
+        "id": "tests/browser/verify.cjs",
+        "status": "pass",
+        "elapsedMs": 16103,
+        "log": "01-verify.cjs.log"
+      },
+      {
+        "id": "tests/browser/image-studio.cjs",
+        "status": "pass",
+        "elapsedMs": 9498,
+        "log": "02-image-studio.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools.cjs",
+        "status": "pass",
+        "elapsedMs": 38496,
+        "log": "03-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/limits.cjs",
+        "status": "pass",
+        "elapsedMs": 6972,
+        "log": "04-limits.cjs.log"
+      },
+      {
+        "id": "tests/browser/ocr-lifecycle.cjs",
+        "status": "pass",
+        "elapsedMs": 5753,
+        "log": "05-ocr-lifecycle.cjs.log"
+      },
+      {
+        "id": "tests/browser/auth.cjs",
+        "status": "pass",
+        "elapsedMs": 6168,
+        "log": "06-auth.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p1.mjs",
+        "status": "pass",
+        "elapsedMs": 80,
+        "log": "07-advanced-p1.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p1.cjs",
+        "status": "pass",
+        "elapsedMs": 14348,
+        "log": "08-advanced-p1.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p1-files.cjs",
+        "status": "pass",
+        "elapsedMs": 5852,
+        "log": "09-advanced-p1-files.cjs.log"
+      },
+      {
+        "id": "tests/unit/studios-core.mjs",
+        "status": "pass",
+        "elapsedMs": 87,
+        "log": "10-studios-core.mjs.log"
+      },
+      {
+        "id": "tests/database/studios-presets.mjs",
+        "status": "pass",
+        "elapsedMs": 2565,
+        "log": "11-studios-presets.mjs.log"
+      },
+      {
+        "id": "tests/browser/studios-stage1.cjs",
+        "status": "pass",
+        "elapsedMs": 18949,
+        "log": "12-studios-stage1.cjs.log"
+      },
+      {
+        "id": "tests/browser/studios-stage2.cjs",
+        "status": "pass",
+        "elapsedMs": 20633,
+        "log": "13-studios-stage2.cjs.log"
+      },
+      {
+        "id": "tests/browser/studios-stage3.cjs",
+        "status": "pass",
+        "elapsedMs": 26215,
+        "log": "14-studios-stage3.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p4.mjs",
+        "status": "pass",
+        "elapsedMs": 7647,
+        "log": "15-advanced-p4.mjs.log"
+      },
+      {
+        "id": "tests/database/advanced-p4.mjs",
+        "status": "pass",
+        "elapsedMs": 2596,
+        "log": "16-advanced-p4.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p4.cjs",
+        "status": "pass",
+        "elapsedMs": 11818,
+        "log": "17-advanced-p4.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-locales.cjs",
+        "status": "pass",
+        "elapsedMs": 5963,
+        "log": "18-advanced-locales.cjs.log"
+      },
+      {
+        "id": "tests/browser/network-dashboard.cjs",
+        "status": "pass",
+        "elapsedMs": 16794,
+        "log": "19-network-dashboard.cjs.log"
+      },
+      {
+        "id": "tests/database/sixth-database.mjs",
+        "status": "pass",
+        "elapsedMs": 1435,
+        "log": "20-sixth-database.mjs.log"
+      },
+      {
+        "id": "tests/database/sixth-retry-revision.mjs",
+        "status": "pass",
+        "elapsedMs": 1445,
+        "log": "21-sixth-retry-revision.mjs.log"
+      },
+      {
+        "id": "tests/unit/sixth-planner.mjs",
+        "status": "pass",
+        "elapsedMs": 110,
+        "log": "22-sixth-planner.mjs.log"
+      },
+      {
+        "id": "tests/unit/sixth-whiteboard-core.mjs",
+        "status": "pass",
+        "elapsedMs": 61,
+        "log": "23-sixth-whiteboard-core.mjs.log"
+      },
+      {
+        "id": "tests/unit/sixth-media-core.mjs",
+        "status": "pass",
+        "elapsedMs": 48,
+        "log": "24-sixth-media-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-planner.cjs",
+        "status": "pass",
+        "elapsedMs": 6755,
+        "log": "25-sixth-planner.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-whiteboard.cjs",
+        "status": "pass",
+        "elapsedMs": 6236,
+        "log": "26-sixth-whiteboard.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-media.cjs",
+        "status": "pass",
+        "elapsedMs": 19989,
+        "log": "27-sixth-media.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-sync.cjs planner",
+        "status": "pass",
+        "elapsedMs": 7026,
+        "log": "28-sixth-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-sync.cjs whiteboard",
+        "status": "pass",
+        "elapsedMs": 5281,
+        "log": "29-sixth-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-pages-sync.cjs planner",
+        "status": "pass",
+        "elapsedMs": 9395,
+        "log": "30-sixth-pages-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-pages-sync.cjs whiteboard",
+        "status": "pass",
+        "elapsedMs": 14817,
+        "log": "31-sixth-pages-sync.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p2.mjs",
+        "status": "pass",
+        "elapsedMs": 238,
+        "log": "32-advanced-p2.mjs.log"
+      },
+      {
+        "id": "tests/database/fifth-database.mjs",
+        "status": "pass",
+        "elapsedMs": 2174,
+        "log": "33-fifth-database.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p2.cjs",
+        "status": "pass",
+        "elapsedMs": 24094,
+        "log": "34-advanced-p2.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p2-outputs.cjs",
+        "status": "pass",
+        "elapsedMs": 4173,
+        "log": "35-advanced-p2-outputs.cjs.log"
+      },
+      {
+        "id": "tests/browser/tool-experience.cjs",
+        "status": "pass",
+        "elapsedMs": 16468,
+        "log": "36-tool-experience.cjs.log"
+      },
+      {
+        "id": "tests/browser/local-recovery.cjs",
+        "status": "pass",
+        "elapsedMs": 25908,
+        "log": "37-local-recovery.cjs.log"
+      },
+      {
+        "id": "tests/browser/tool-feedback.cjs",
+        "status": "pass",
+        "elapsedMs": 3444,
+        "log": "38-tool-feedback.cjs.log"
+      },
+      {
+        "id": "tests/unit/network-gauge.mjs",
+        "status": "pass",
+        "elapsedMs": 93,
+        "log": "39-network-gauge.mjs.log"
+      },
+      {
+        "id": "tests/database/shared-whiteboards.mjs",
+        "status": "pass",
+        "elapsedMs": 2355,
+        "log": "40-shared-whiteboards.mjs.log"
+      },
+      {
+        "id": "tests/database/pong-rooms.mjs",
+        "status": "pass",
+        "elapsedMs": 2347,
+        "log": "41-pong-rooms.mjs.log"
+      },
+      {
+        "id": "tests/browser/tool-motion.cjs",
+        "status": "pass",
+        "elapsedMs": 3653,
+        "log": "42-tool-motion.cjs.log"
+      },
+      {
+        "id": "tests/browser/shared-whiteboards.cjs",
+        "status": "pass",
+        "elapsedMs": 17479,
+        "log": "43-shared-whiteboards.cjs.log"
+      },
+      {
+        "id": "tests/database/database.mjs",
+        "status": "pass",
+        "elapsedMs": 2376,
+        "log": "44-database.mjs.log"
+      },
+      {
+        "id": "tests/browser/second-batch.cjs",
+        "status": "pass",
+        "elapsedMs": 26029,
+        "log": "45-second-batch.cjs.log"
+      },
+      {
+        "id": "tests/unit/typing-experience.mjs",
+        "status": "pass",
+        "elapsedMs": 148,
+        "log": "46-typing-experience.mjs.log"
+      },
+      {
+        "id": "tests/database/random-typing.mjs",
+        "status": "pass",
+        "elapsedMs": 2576,
+        "log": "47-random-typing.mjs.log"
+      },
+      {
+        "id": "tests/browser/typing-experience.cjs",
+        "status": "pass",
+        "elapsedMs": 35962,
+        "log": "48-typing-experience.cjs.log"
+      },
+      {
+        "id": "tests/unit/daily-core.mjs",
+        "status": "pass",
+        "elapsedMs": 123,
+        "log": "49-daily-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/daily-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 25780,
+        "log": "50-daily-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/zip-guards.cjs",
+        "status": "pass",
+        "elapsedMs": 2095,
+        "log": "51-zip-guards.cjs.log"
+      },
+      {
+        "id": "tests/browser/network-guards.cjs",
+        "status": "pass",
+        "elapsedMs": 2899,
+        "log": "52-network-guards.cjs.log"
+      },
+      {
+        "id": "tests/unit/fourth-core.mjs",
+        "status": "pass",
+        "elapsedMs": 170,
+        "log": "53-fourth-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/fourth-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 9725,
+        "log": "54-fourth-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/fourth-boundaries.cjs",
+        "status": "pass",
+        "elapsedMs": 10242,
+        "log": "55-fourth-boundaries.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p3.mjs",
+        "status": "pass",
+        "elapsedMs": 86,
+        "log": "56-advanced-p3.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p3.cjs",
+        "status": "pass",
+        "elapsedMs": 12066,
+        "log": "57-advanced-p3.cjs.log"
+      },
+      {
+        "id": "tests/unit/fifth-core.mjs",
+        "status": "pass",
+        "elapsedMs": 11259,
+        "log": "58-fifth-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/fifth-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 14393,
+        "log": "59-fifth-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/fifth-sync.cjs",
+        "status": "pass",
+        "elapsedMs": 6020,
+        "log": "60-fifth-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/fifth-boundaries.cjs",
+        "status": "pass",
+        "elapsedMs": 5104,
+        "log": "61-fifth-boundaries.cjs.log"
+      },
+      {
+        "id": "tests/database/profiles-database.mjs",
+        "status": "pass",
+        "elapsedMs": 2140,
+        "log": "62-profiles-database.mjs.log"
+      },
+      {
+        "id": "tests/browser/profiles.cjs",
+        "status": "pass",
+        "elapsedMs": 13716,
+        "log": "63-profiles.cjs.log"
+      },
+      {
+        "id": "tests/browser/account-ui.cjs",
+        "status": "pass",
+        "elapsedMs": 19734,
+        "log": "64-account-ui.cjs.log"
+      },
+      {
+        "id": "tests/browser/localization.cjs",
+        "status": "pass",
+        "elapsedMs": 7430,
+        "log": "65-localization.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-visuals.cjs",
+        "status": "pass",
+        "elapsedMs": 2558,
+        "log": "66-advanced-visuals.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-workflows.cjs",
+        "status": "pass",
+        "elapsedMs": 6123,
+        "log": "67-tools-workflows.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-audit.cjs",
+        "status": "pass",
+        "elapsedMs": 223366,
+        "log": "68-tools-audit.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-cross-engine.cjs",
+        "status": "pass",
+        "elapsedMs": 229720,
+        "log": "69-tools-cross-engine.cjs.log",
+        "resolvedBy": "_qa\\tools-acceptance\\2026-10-28T12-14-57-708Z-acceptance\\report.json"
+      }
+    ],
+    "tools": [
+      {
+        "slug": "image-studio",
+        "task": "Compress two images, compare them and download the ZIP.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "qr-studio",
+        "task": "Generate and independently scan a Wi-Fi QR code; download a batch.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "pdf-toolkit",
+        "task": "Reorder pages, fill a form and export editable and flattened PDFs.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-toolkit",
+        "task": "Preview a cleanup, apply it, undo it and save a named draft.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "markdown-studio",
+        "task": "Preview math and diagrams and reopen the standalone HTML export.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-compare",
+        "task": "Compare changes by word, navigate them and export a diff.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "image-to-text",
+        "task": "Recognize four languages, correct a box and search the exported PDF.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "focus-timer",
+        "task": "Start, pause, resume and restore a timer; verify the ring and single completion.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "answer-book",
+        "task": "Reveal one answer, copy it and find it in history without saving the question.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/sixth-whiteboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "decision-studio",
+        "task": "Save weighted options, spin, draw without repeats and form complete groups.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "typing-sprint",
+        "task": "Finish a custom practice and check Ranked timing, scoring and retry isolation.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/typing-experience.mjs",
+          "tests/database/random-typing.mjs",
+          "tests/browser/typing-experience.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "device-check",
+        "task": "Start and stop keyboard, mouse and touch checks; verify listener cleanup.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "network-test",
+        "task": "Check known speed samples, units, limits and cancellation without extra reporting.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/sixth-whiteboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "zip-studio",
+        "task": "Pack a Chinese folder, inspect and extract it, then reject unsafe archives.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "color-studio",
+        "task": "Convert a known color, lock a swatch and export an image palette.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "unit-converter",
+        "task": "Convert temperature, binary storage and UK/US volume; save a combination.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "password-generator",
+        "task": "Generate a constrained password and six-word phrase; test copy failure without persistence.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "time-studio",
+        "task": "Resolve DST, compare dates and export a meeting calendar event.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-renamer",
+        "task": "Apply ordered rules, resolve conflicts and compare the ZIP with its CSV mapping.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "audio-studio",
+        "task": "Trim, mix, pan and fade audio; inspect and play the actual WAV/MP3 output.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p3.mjs",
+          "tests/browser/advanced-p3.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "data-studio",
+        "task": "Keep leading zeros, join and pivot tables, cancel SQL and inspect exported results.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "flashcards",
+        "task": "Import mapped cards, review them and verify the next due date and old deck compatibility.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "calculator-studio",
+        "task": "Check DEG/RAD, operator precedence, variables and recover from an invalid expression.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-check",
+        "task": "Verify known hashes, missing manifest entries, duplicates and the CSV report.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "subtitle-studio",
+        "task": "Import, merge and retime subtitles; verify SRT/VTT round trips and invalid intervals.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p3.mjs",
+          "tests/browser/advanced-p3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "study-planner",
+        "task": "Create repeating classes and deadlines, restore the plan and inspect its ICS time zone.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "whiteboard",
+        "task": "Draw, undo and export; verify private sync and four-member shared scene permissions.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "screen-recorder",
+        "task": "Cancel the countdown, record a synthetic stream and play the downloaded recording.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard",
+          "tests/unit/advanced-p3.mjs",
+          "tests/browser/advanced-p3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      }
+    ],
+    "manual": [
+      {
+        "id": "google-oauth",
+        "status": "pending",
+        "task": "Real Google sign-in, consent cancel, bilingual return, expiration and sign-out."
+      },
+      {
+        "id": "android-chrome",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, files, downloads, permissions and orientation."
+      },
+      {
+        "id": "ios-safari",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, downloads and supported camera/microphone capture."
+      },
+      {
+        "id": "screen-reader",
+        "status": "pending",
+        "task": "Listen to labels, errors, tabs, dialogs and progress with an actual screen reader."
+      },
+      {
+        "id": "physical-capture",
+        "status": "pending",
+        "task": "Physical microphone/camera/display selection, denial, disconnection and shared audio."
+      },
+      {
+        "id": "first-time-user",
+        "status": "pending",
+        "task": "Observe an unfamiliar user completing tasks without operator guidance."
+      },
+      {
+        "id": "shared-whiteboard-live",
+        "status": "pending",
+        "task": "Four disposable authenticated users: membership, concurrent edits, reconnect and revocation."
+      },
+      {
+        "id": "network-full-live",
+        "status": "pending",
+        "task": "One explicitly started real Cloudflare test; record payload and cancellation."
+      }
+    ],
+    "environment": {
+      "platform": "win32",
+      "arch": "x64",
+      "node": "v24.22.1",
+      "browsers": "chromium,firefox,webkit,msedge,brave"
+    },
+    "sourceHashBefore": "507d91db82ed1385ecee8adef40cb42454b74d222e77a05615ca42b2a250aa96",
+    "finishedAt": "2026-10-28T09:23:17.435Z",
+    "sourceHashAfter": "507d91db82ed1385ecee8adef40cb42454b74d222e77a05615ca42b2a250aa96",
+    "sourceChangedDuringRun": false,
+    "summary": {
+      "passed": 69,
+      "failed": 0,
+      "notRun": 0
+    }
+  },
+  "failedFollowupRuns": [
+    {
+      "version": 1,
+      "mode": "acceptance",
+      "base": "http://127.0.0.1:8773",
+      "startedAt": "2026-10-28T09:30:37.937Z",
+      "suites": [
+        {
+          "id": "tests/browser/tools-cross-engine.cjs",
+          "status": "fail",
+          "elapsedMs": 287622,
+          "log": "01-tools-cross-engine.cjs.log"
+        }
+      ],
+      "tools": [
+        {
+          "slug": "image-studio",
+          "task": "Compress two images, compare them and download the ZIP.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "qr-studio",
+          "task": "Generate and independently scan a Wi-Fi QR code; download a batch.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "pdf-toolkit",
+          "task": "Reorder pages, fill a form and export editable and flattened PDFs.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "text-toolkit",
+          "task": "Preview a cleanup, apply it, undo it and save a named draft.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "markdown-studio",
+          "task": "Preview math and diagrams and reopen the standalone HTML export.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "text-compare",
+          "task": "Compare changes by word, navigate them and export a diff.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "image-to-text",
+          "task": "Recognize four languages, correct a box and search the exported PDF.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "focus-timer",
+          "task": "Start, pause, resume and restore a timer; verify the ring and single completion.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "answer-book",
+          "task": "Reveal one answer, copy it and find it in history without saving the question.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "decision-studio",
+          "task": "Save weighted options, spin, draw without repeats and form complete groups.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "typing-sprint",
+          "task": "Finish a custom practice and check Ranked timing, scoring and retry isolation.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "device-check",
+          "task": "Start and stop keyboard, mouse and touch checks; verify listener cleanup.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "network-test",
+          "task": "Check known speed samples, units, limits and cancellation without extra reporting.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "zip-studio",
+          "task": "Pack a Chinese folder, inspect and extract it, then reject unsafe archives.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "color-studio",
+          "task": "Convert a known color, lock a swatch and export an image palette.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "unit-converter",
+          "task": "Convert temperature, binary storage and UK/US volume; save a combination.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "password-generator",
+          "task": "Generate a constrained password and six-word phrase; test copy failure without persistence.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "time-studio",
+          "task": "Resolve DST, compare dates and export a meeting calendar event.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "file-renamer",
+          "task": "Apply ordered rules, resolve conflicts and compare the ZIP with its CSV mapping.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "audio-studio",
+          "task": "Trim, mix, pan and fade audio; inspect and play the actual WAV/MP3 output.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "data-studio",
+          "task": "Keep leading zeros, join and pivot tables, cancel SQL and inspect exported results.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "flashcards",
+          "task": "Import mapped cards, review them and verify the next due date and old deck compatibility.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "calculator-studio",
+          "task": "Check DEG/RAD, operator precedence, variables and recover from an invalid expression.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "file-check",
+          "task": "Verify known hashes, missing manifest entries, duplicates and the CSV report.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "subtitle-studio",
+          "task": "Import, merge and retime subtitles; verify SRT/VTT round trips and invalid intervals.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "study-planner",
+          "task": "Create repeating classes and deadlines, restore the plan and inspect its ICS time zone.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "whiteboard",
+          "task": "Draw, undo and export; verify private sync and four-member shared scene permissions.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "screen-recorder",
+          "task": "Cancel the countdown, record a synthetic stream and play the downloaded recording.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        }
+      ],
+      "manual": [
+        {
+          "id": "google-oauth",
+          "status": "pending",
+          "task": "Real Google sign-in, consent cancel, bilingual return, expiration and sign-out."
+        },
+        {
+          "id": "android-chrome",
+          "status": "pending",
+          "task": "Real touch, soft keyboard, files, downloads, permissions and orientation."
+        },
+        {
+          "id": "ios-safari",
+          "status": "pending",
+          "task": "Real touch, soft keyboard, downloads and supported camera/microphone capture."
+        },
+        {
+          "id": "screen-reader",
+          "status": "pending",
+          "task": "Listen to labels, errors, tabs, dialogs and progress with an actual screen reader."
+        },
+        {
+          "id": "physical-capture",
+          "status": "pending",
+          "task": "Physical microphone/camera/display selection, denial, disconnection and shared audio."
+        },
+        {
+          "id": "first-time-user",
+          "status": "pending",
+          "task": "Observe an unfamiliar user completing tasks without operator guidance."
+        },
+        {
+          "id": "shared-whiteboard-live",
+          "status": "pending",
+          "task": "Four disposable authenticated users: membership, concurrent edits, reconnect and revocation."
+        },
+        {
+          "id": "network-full-live",
+          "status": "pending",
+          "task": "One explicitly started real Cloudflare test; record payload and cancellation."
+        }
+      ],
+      "environment": {
+        "platform": "win32",
+        "arch": "x64",
+        "node": "v24.22.1",
+        "browsers": "chromium"
+      },
+      "sourceHashBefore": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+      "finishedAt": "2026-10-28T09:35:25.607Z",
+      "sourceHashAfter": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+      "sourceChangedDuringRun": false,
+      "summary": {
+        "passed": 0,
+        "failed": 1,
+        "notRun": 68
+      }
+    },
+    {
+      "version": 1,
+      "mode": "acceptance",
+      "base": "http://127.0.0.1:8773",
+      "startedAt": "2026-10-28T12:09:42.201Z",
+      "suites": [
+        {
+          "id": "tests/browser/tools-cross-engine.cjs",
+          "status": "fail",
+          "elapsedMs": 276679,
+          "log": "01-tools-cross-engine.cjs.log"
+        }
+      ],
+      "tools": [
+        {
+          "slug": "image-studio",
+          "task": "Compress two images, compare them and download the ZIP.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "qr-studio",
+          "task": "Generate and independently scan a Wi-Fi QR code; download a batch.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "pdf-toolkit",
+          "task": "Reorder pages, fill a form and export editable and flattened PDFs.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "text-toolkit",
+          "task": "Preview a cleanup, apply it, undo it and save a named draft.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "markdown-studio",
+          "task": "Preview math and diagrams and reopen the standalone HTML export.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "text-compare",
+          "task": "Compare changes by word, navigate them and export a diff.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "image-to-text",
+          "task": "Recognize four languages, correct a box and search the exported PDF.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "focus-timer",
+          "task": "Start, pause, resume and restore a timer; verify the ring and single completion.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "answer-book",
+          "task": "Reveal one answer, copy it and find it in history without saving the question.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "decision-studio",
+          "task": "Save weighted options, spin, draw without repeats and form complete groups.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "typing-sprint",
+          "task": "Finish a custom practice and check Ranked timing, scoring and retry isolation.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "device-check",
+          "task": "Start and stop keyboard, mouse and touch checks; verify listener cleanup.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "network-test",
+          "task": "Check known speed samples, units, limits and cancellation without extra reporting.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "zip-studio",
+          "task": "Pack a Chinese folder, inspect and extract it, then reject unsafe archives.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "color-studio",
+          "task": "Convert a known color, lock a swatch and export an image palette.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "unit-converter",
+          "task": "Convert temperature, binary storage and UK/US volume; save a combination.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "password-generator",
+          "task": "Generate a constrained password and six-word phrase; test copy failure without persistence.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "time-studio",
+          "task": "Resolve DST, compare dates and export a meeting calendar event.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "file-renamer",
+          "task": "Apply ordered rules, resolve conflicts and compare the ZIP with its CSV mapping.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "audio-studio",
+          "task": "Trim, mix, pan and fade audio; inspect and play the actual WAV/MP3 output.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "data-studio",
+          "task": "Keep leading zeros, join and pivot tables, cancel SQL and inspect exported results.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "flashcards",
+          "task": "Import mapped cards, review them and verify the next due date and old deck compatibility.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "calculator-studio",
+          "task": "Check DEG/RAD, operator precedence, variables and recover from an invalid expression.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "file-check",
+          "task": "Verify known hashes, missing manifest entries, duplicates and the CSV report.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "subtitle-studio",
+          "task": "Import, merge and retime subtitles; verify SRT/VTT round trips and invalid intervals.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "study-planner",
+          "task": "Create repeating classes and deadlines, restore the plan and inspect its ICS time zone.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "whiteboard",
+          "task": "Draw, undo and export; verify private sync and four-member shared scene permissions.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        },
+        {
+          "slug": "screen-recorder",
+          "task": "Cancel the countdown, record a synthetic stream and play the downloaded recording.",
+          "functional": "pending",
+          "evidence": [],
+          "realDevice": "pending",
+          "usability": "developer-review-required"
+        }
+      ],
+      "manual": [
+        {
+          "id": "google-oauth",
+          "status": "pending",
+          "task": "Real Google sign-in, consent cancel, bilingual return, expiration and sign-out."
+        },
+        {
+          "id": "android-chrome",
+          "status": "pending",
+          "task": "Real touch, soft keyboard, files, downloads, permissions and orientation."
+        },
+        {
+          "id": "ios-safari",
+          "status": "pending",
+          "task": "Real touch, soft keyboard, downloads and supported camera/microphone capture."
+        },
+        {
+          "id": "screen-reader",
+          "status": "pending",
+          "task": "Listen to labels, errors, tabs, dialogs and progress with an actual screen reader."
+        },
+        {
+          "id": "physical-capture",
+          "status": "pending",
+          "task": "Physical microphone/camera/display selection, denial, disconnection and shared audio."
+        },
+        {
+          "id": "first-time-user",
+          "status": "pending",
+          "task": "Observe an unfamiliar user completing tasks without operator guidance."
+        },
+        {
+          "id": "shared-whiteboard-live",
+          "status": "pending",
+          "task": "Four disposable authenticated users: membership, concurrent edits, reconnect and revocation."
+        },
+        {
+          "id": "network-full-live",
+          "status": "pending",
+          "task": "One explicitly started real Cloudflare test; record payload and cancellation."
+        }
+      ],
+      "environment": {
+        "platform": "win32",
+        "arch": "x64",
+        "node": "v24.22.1",
+        "browsers": "chromium"
+      },
+      "sourceHashBefore": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+      "finishedAt": "2026-10-28T12:14:19.045Z",
+      "sourceHashAfter": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+      "sourceChangedDuringRun": false,
+      "summary": {
+        "passed": 0,
+        "failed": 1,
+        "notRun": 68
+      }
+    }
+  ],
+  "initialFullRun": {
+    "version": 1,
+    "mode": "acceptance",
+    "base": "http://127.0.0.1:8773",
+    "startedAt": "2026-10-28T09:05:33.832Z",
+    "suites": [
+      {
+        "id": "tests/browser/verify.cjs",
+        "status": "pass",
+        "elapsedMs": 16103,
+        "log": "01-verify.cjs.log"
+      },
+      {
+        "id": "tests/browser/image-studio.cjs",
+        "status": "pass",
+        "elapsedMs": 9498,
+        "log": "02-image-studio.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools.cjs",
+        "status": "pass",
+        "elapsedMs": 38496,
+        "log": "03-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/limits.cjs",
+        "status": "pass",
+        "elapsedMs": 6972,
+        "log": "04-limits.cjs.log"
+      },
+      {
+        "id": "tests/browser/ocr-lifecycle.cjs",
+        "status": "pass",
+        "elapsedMs": 5753,
+        "log": "05-ocr-lifecycle.cjs.log"
+      },
+      {
+        "id": "tests/browser/auth.cjs",
+        "status": "pass",
+        "elapsedMs": 6168,
+        "log": "06-auth.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p1.mjs",
+        "status": "pass",
+        "elapsedMs": 80,
+        "log": "07-advanced-p1.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p1.cjs",
+        "status": "pass",
+        "elapsedMs": 14348,
+        "log": "08-advanced-p1.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p1-files.cjs",
+        "status": "pass",
+        "elapsedMs": 5852,
+        "log": "09-advanced-p1-files.cjs.log"
+      },
+      {
+        "id": "tests/unit/studios-core.mjs",
+        "status": "pass",
+        "elapsedMs": 87,
+        "log": "10-studios-core.mjs.log"
+      },
+      {
+        "id": "tests/database/studios-presets.mjs",
+        "status": "pass",
+        "elapsedMs": 2565,
+        "log": "11-studios-presets.mjs.log"
+      },
+      {
+        "id": "tests/browser/studios-stage1.cjs",
+        "status": "pass",
+        "elapsedMs": 18949,
+        "log": "12-studios-stage1.cjs.log"
+      },
+      {
+        "id": "tests/browser/studios-stage2.cjs",
+        "status": "pass",
+        "elapsedMs": 20633,
+        "log": "13-studios-stage2.cjs.log"
+      },
+      {
+        "id": "tests/browser/studios-stage3.cjs",
+        "status": "pass",
+        "elapsedMs": 26215,
+        "log": "14-studios-stage3.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p4.mjs",
+        "status": "pass",
+        "elapsedMs": 7647,
+        "log": "15-advanced-p4.mjs.log"
+      },
+      {
+        "id": "tests/database/advanced-p4.mjs",
+        "status": "pass",
+        "elapsedMs": 2596,
+        "log": "16-advanced-p4.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p4.cjs",
+        "status": "pass",
+        "elapsedMs": 11818,
+        "log": "17-advanced-p4.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-locales.cjs",
+        "status": "pass",
+        "elapsedMs": 5963,
+        "log": "18-advanced-locales.cjs.log"
+      },
+      {
+        "id": "tests/browser/network-dashboard.cjs",
+        "status": "pass",
+        "elapsedMs": 16794,
+        "log": "19-network-dashboard.cjs.log"
+      },
+      {
+        "id": "tests/database/sixth-database.mjs",
+        "status": "pass",
+        "elapsedMs": 1435,
+        "log": "20-sixth-database.mjs.log"
+      },
+      {
+        "id": "tests/database/sixth-retry-revision.mjs",
+        "status": "pass",
+        "elapsedMs": 1445,
+        "log": "21-sixth-retry-revision.mjs.log"
+      },
+      {
+        "id": "tests/unit/sixth-planner.mjs",
+        "status": "pass",
+        "elapsedMs": 110,
+        "log": "22-sixth-planner.mjs.log"
+      },
+      {
+        "id": "tests/unit/sixth-whiteboard-core.mjs",
+        "status": "pass",
+        "elapsedMs": 61,
+        "log": "23-sixth-whiteboard-core.mjs.log"
+      },
+      {
+        "id": "tests/unit/sixth-media-core.mjs",
+        "status": "pass",
+        "elapsedMs": 48,
+        "log": "24-sixth-media-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-planner.cjs",
+        "status": "pass",
+        "elapsedMs": 6755,
+        "log": "25-sixth-planner.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-whiteboard.cjs",
+        "status": "pass",
+        "elapsedMs": 6236,
+        "log": "26-sixth-whiteboard.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-media.cjs",
+        "status": "pass",
+        "elapsedMs": 19989,
+        "log": "27-sixth-media.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-sync.cjs planner",
+        "status": "pass",
+        "elapsedMs": 7026,
+        "log": "28-sixth-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-sync.cjs whiteboard",
+        "status": "pass",
+        "elapsedMs": 5281,
+        "log": "29-sixth-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-pages-sync.cjs planner",
+        "status": "pass",
+        "elapsedMs": 9395,
+        "log": "30-sixth-pages-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-pages-sync.cjs whiteboard",
+        "status": "pass",
+        "elapsedMs": 14817,
+        "log": "31-sixth-pages-sync.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p2.mjs",
+        "status": "pass",
+        "elapsedMs": 238,
+        "log": "32-advanced-p2.mjs.log"
+      },
+      {
+        "id": "tests/database/fifth-database.mjs",
+        "status": "pass",
+        "elapsedMs": 2174,
+        "log": "33-fifth-database.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p2.cjs",
+        "status": "pass",
+        "elapsedMs": 24094,
+        "log": "34-advanced-p2.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p2-outputs.cjs",
+        "status": "pass",
+        "elapsedMs": 4173,
+        "log": "35-advanced-p2-outputs.cjs.log"
+      },
+      {
+        "id": "tests/browser/tool-experience.cjs",
+        "status": "pass",
+        "elapsedMs": 16468,
+        "log": "36-tool-experience.cjs.log"
+      },
+      {
+        "id": "tests/browser/local-recovery.cjs",
+        "status": "pass",
+        "elapsedMs": 25908,
+        "log": "37-local-recovery.cjs.log"
+      },
+      {
+        "id": "tests/browser/tool-feedback.cjs",
+        "status": "pass",
+        "elapsedMs": 3444,
+        "log": "38-tool-feedback.cjs.log"
+      },
+      {
+        "id": "tests/unit/network-gauge.mjs",
+        "status": "pass",
+        "elapsedMs": 93,
+        "log": "39-network-gauge.mjs.log"
+      },
+      {
+        "id": "tests/database/shared-whiteboards.mjs",
+        "status": "pass",
+        "elapsedMs": 2355,
+        "log": "40-shared-whiteboards.mjs.log"
+      },
+      {
+        "id": "tests/database/pong-rooms.mjs",
+        "status": "pass",
+        "elapsedMs": 2347,
+        "log": "41-pong-rooms.mjs.log"
+      },
+      {
+        "id": "tests/browser/tool-motion.cjs",
+        "status": "pass",
+        "elapsedMs": 3653,
+        "log": "42-tool-motion.cjs.log"
+      },
+      {
+        "id": "tests/browser/shared-whiteboards.cjs",
+        "status": "pass",
+        "elapsedMs": 17479,
+        "log": "43-shared-whiteboards.cjs.log"
+      },
+      {
+        "id": "tests/database/database.mjs",
+        "status": "pass",
+        "elapsedMs": 2376,
+        "log": "44-database.mjs.log"
+      },
+      {
+        "id": "tests/browser/second-batch.cjs",
+        "status": "pass",
+        "elapsedMs": 26029,
+        "log": "45-second-batch.cjs.log"
+      },
+      {
+        "id": "tests/unit/typing-experience.mjs",
+        "status": "pass",
+        "elapsedMs": 148,
+        "log": "46-typing-experience.mjs.log"
+      },
+      {
+        "id": "tests/database/random-typing.mjs",
+        "status": "pass",
+        "elapsedMs": 2576,
+        "log": "47-random-typing.mjs.log"
+      },
+      {
+        "id": "tests/browser/typing-experience.cjs",
+        "status": "pass",
+        "elapsedMs": 35962,
+        "log": "48-typing-experience.cjs.log"
+      },
+      {
+        "id": "tests/unit/daily-core.mjs",
+        "status": "pass",
+        "elapsedMs": 123,
+        "log": "49-daily-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/daily-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 25780,
+        "log": "50-daily-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/zip-guards.cjs",
+        "status": "pass",
+        "elapsedMs": 2095,
+        "log": "51-zip-guards.cjs.log"
+      },
+      {
+        "id": "tests/browser/network-guards.cjs",
+        "status": "pass",
+        "elapsedMs": 2899,
+        "log": "52-network-guards.cjs.log"
+      },
+      {
+        "id": "tests/unit/fourth-core.mjs",
+        "status": "pass",
+        "elapsedMs": 170,
+        "log": "53-fourth-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/fourth-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 9725,
+        "log": "54-fourth-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/fourth-boundaries.cjs",
+        "status": "pass",
+        "elapsedMs": 10242,
+        "log": "55-fourth-boundaries.cjs.log"
+      },
+      {
+        "id": "tests/unit/advanced-p3.mjs",
+        "status": "pass",
+        "elapsedMs": 86,
+        "log": "56-advanced-p3.mjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-p3.cjs",
+        "status": "pass",
+        "elapsedMs": 12066,
+        "log": "57-advanced-p3.cjs.log"
+      },
+      {
+        "id": "tests/unit/fifth-core.mjs",
+        "status": "pass",
+        "elapsedMs": 11259,
+        "log": "58-fifth-core.mjs.log"
+      },
+      {
+        "id": "tests/browser/fifth-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 14393,
+        "log": "59-fifth-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/fifth-sync.cjs",
+        "status": "pass",
+        "elapsedMs": 6020,
+        "log": "60-fifth-sync.cjs.log"
+      },
+      {
+        "id": "tests/browser/fifth-boundaries.cjs",
+        "status": "pass",
+        "elapsedMs": 5104,
+        "log": "61-fifth-boundaries.cjs.log"
+      },
+      {
+        "id": "tests/database/profiles-database.mjs",
+        "status": "pass",
+        "elapsedMs": 2140,
+        "log": "62-profiles-database.mjs.log"
+      },
+      {
+        "id": "tests/browser/profiles.cjs",
+        "status": "pass",
+        "elapsedMs": 13716,
+        "log": "63-profiles.cjs.log"
+      },
+      {
+        "id": "tests/browser/account-ui.cjs",
+        "status": "pass",
+        "elapsedMs": 19734,
+        "log": "64-account-ui.cjs.log"
+      },
+      {
+        "id": "tests/browser/localization.cjs",
+        "status": "pass",
+        "elapsedMs": 7430,
+        "log": "65-localization.cjs.log"
+      },
+      {
+        "id": "tests/browser/advanced-visuals.cjs",
+        "status": "pass",
+        "elapsedMs": 2558,
+        "log": "66-advanced-visuals.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-workflows.cjs",
+        "status": "pass",
+        "elapsedMs": 6123,
+        "log": "67-tools-workflows.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-audit.cjs",
+        "status": "pass",
+        "elapsedMs": 223366,
+        "log": "68-tools-audit.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-cross-engine.cjs",
+        "status": "fail",
+        "elapsedMs": 229720,
+        "log": "69-tools-cross-engine.cjs.log"
+      }
+    ],
+    "tools": [
+      {
+        "slug": "image-studio",
+        "task": "Compress two images, compare them and download the ZIP.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "qr-studio",
+        "task": "Generate and independently scan a Wi-Fi QR code; download a batch.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "pdf-toolkit",
+        "task": "Reorder pages, fill a form and export editable and flattened PDFs.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-toolkit",
+        "task": "Preview a cleanup, apply it, undo it and save a named draft.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "markdown-studio",
+        "task": "Preview math and diagrams and reopen the standalone HTML export.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-compare",
+        "task": "Compare changes by word, navigate them and export a diff.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "image-to-text",
+        "task": "Recognize four languages, correct a box and search the exported PDF.",
+        "functional": "pass",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/image-studio.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/limits.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/auth.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "focus-timer",
+        "task": "Start, pause, resume and restore a timer; verify the ring and single completion.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "answer-book",
+        "task": "Reveal one answer, copy it and find it in history without saving the question.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/sixth-whiteboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "decision-studio",
+        "task": "Save weighted options, spin, draw without repeats and form complete groups.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "typing-sprint",
+        "task": "Finish a custom practice and check Ranked timing, scoring and retry isolation.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/typing-experience.mjs",
+          "tests/database/random-typing.mjs",
+          "tests/browser/typing-experience.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "device-check",
+        "task": "Start and stop keyboard, mouse and touch checks; verify listener cleanup.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/database.mjs",
+          "tests/browser/second-batch.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "network-test",
+        "task": "Check known speed samples, units, limits and cancellation without extra reporting.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/sixth-whiteboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "zip-studio",
+        "task": "Pack a Chinese folder, inspect and extract it, then reject unsafe archives.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "color-studio",
+        "task": "Convert a known color, lock a swatch and export an image palette.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "unit-converter",
+        "task": "Convert temperature, binary storage and UK/US volume; save a combination.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "password-generator",
+        "task": "Generate a constrained password and six-word phrase; test copy failure without persistence.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/daily-core.mjs",
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/zip-guards.cjs",
+          "tests/browser/network-guards.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "time-studio",
+        "task": "Resolve DST, compare dates and export a meeting calendar event.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-renamer",
+        "task": "Apply ordered rules, resolve conflicts and compare the ZIP with its CSV mapping.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "audio-studio",
+        "task": "Trim, mix, pan and fade audio; inspect and play the actual WAV/MP3 output.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p3.mjs",
+          "tests/browser/advanced-p3.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "data-studio",
+        "task": "Keep leading zeros, join and pivot tables, cancel SQL and inspect exported results.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fourth-core.mjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/fourth-boundaries.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/unit/studios-core.mjs",
+          "tests/database/studios-presets.mjs",
+          "tests/browser/studios-stage1.cjs",
+          "tests/browser/studios-stage2.cjs",
+          "tests/browser/studios-stage3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "flashcards",
+        "task": "Import mapped cards, review them and verify the next due date and old deck compatibility.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p2.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "calculator-studio",
+        "task": "Check DEG/RAD, operator precedence, variables and recover from an invalid expression.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p4.mjs",
+          "tests/database/advanced-p4.mjs",
+          "tests/browser/advanced-p4.cjs",
+          "tests/browser/advanced-locales.cjs",
+          "tests/browser/network-dashboard.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-check",
+        "task": "Verify known hashes, missing manifest entries, duplicates and the CSV report.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p1.mjs",
+          "tests/browser/advanced-p1.cjs",
+          "tests/browser/advanced-p1-files.cjs",
+          "tests/browser/ocr-lifecycle.cjs",
+          "tests/browser/tool-experience.cjs",
+          "tests/browser/local-recovery.cjs",
+          "tests/browser/tool-feedback.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "subtitle-studio",
+        "task": "Import, merge and retime subtitles; verify SRT/VTT round trips and invalid intervals.",
+        "functional": "pass",
+        "evidence": [
+          "tests/unit/fifth-core.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/fifth-tools.cjs",
+          "tests/browser/fifth-sync.cjs",
+          "tests/browser/fifth-boundaries.cjs",
+          "tests/unit/advanced-p3.mjs",
+          "tests/browser/advanced-p3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "study-planner",
+        "task": "Create repeating classes and deadlines, restore the plan and inspect its ICS time zone.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "whiteboard",
+        "task": "Draw, undo and export; verify private sync and four-member shared scene permissions.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard",
+          "tests/unit/advanced-p2.mjs",
+          "tests/database/fifth-database.mjs",
+          "tests/browser/advanced-p2.cjs",
+          "tests/browser/advanced-p2-outputs.cjs",
+          "tests/unit/network-gauge.mjs",
+          "tests/database/shared-whiteboards.mjs",
+          "tests/database/pong-rooms.mjs",
+          "tests/browser/tool-motion.cjs",
+          "tests/browser/shared-whiteboards.cjs",
+          "tests/browser/network-dashboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "screen-recorder",
+        "task": "Cancel the countdown, record a synthetic stream and play the downloaded recording.",
+        "functional": "pass",
+        "evidence": [
+          "tests/database/sixth-database.mjs",
+          "tests/database/sixth-retry-revision.mjs",
+          "tests/unit/sixth-planner.mjs",
+          "tests/unit/sixth-whiteboard-core.mjs",
+          "tests/unit/sixth-media-core.mjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs",
+          "tests/browser/sixth-sync.cjs planner",
+          "tests/browser/sixth-sync.cjs whiteboard",
+          "tests/browser/sixth-pages-sync.cjs planner",
+          "tests/browser/sixth-pages-sync.cjs whiteboard",
+          "tests/unit/advanced-p3.mjs",
+          "tests/browser/advanced-p3.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      }
+    ],
+    "manual": [
+      {
+        "id": "google-oauth",
+        "status": "pending",
+        "task": "Real Google sign-in, consent cancel, bilingual return, expiration and sign-out."
+      },
+      {
+        "id": "android-chrome",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, files, downloads, permissions and orientation."
+      },
+      {
+        "id": "ios-safari",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, downloads and supported camera/microphone capture."
+      },
+      {
+        "id": "screen-reader",
+        "status": "pending",
+        "task": "Listen to labels, errors, tabs, dialogs and progress with an actual screen reader."
+      },
+      {
+        "id": "physical-capture",
+        "status": "pending",
+        "task": "Physical microphone/camera/display selection, denial, disconnection and shared audio."
+      },
+      {
+        "id": "first-time-user",
+        "status": "pending",
+        "task": "Observe an unfamiliar user completing tasks without operator guidance."
+      },
+      {
+        "id": "shared-whiteboard-live",
+        "status": "pending",
+        "task": "Four disposable authenticated users: membership, concurrent edits, reconnect and revocation."
+      },
+      {
+        "id": "network-full-live",
+        "status": "pending",
+        "task": "One explicitly started real Cloudflare test; record payload and cancellation."
+      }
+    ],
+    "environment": {
+      "platform": "win32",
+      "arch": "x64",
+      "node": "v24.22.1",
+      "browsers": "chromium,firefox,webkit,msedge,brave"
+    },
+    "sourceHashBefore": "507d91db82ed1385ecee8adef40cb42454b74d222e77a05615ca42b2a250aa96",
+    "finishedAt": "2026-10-28T09:23:17.435Z",
+    "sourceHashAfter": "507d91db82ed1385ecee8adef40cb42454b74d222e77a05615ca42b2a250aa96",
+    "sourceChangedDuringRun": false,
+    "summary": {
+      "passed": 68,
+      "failed": 1,
+      "notRun": 0
+    }
+  },
+  "finalCrossEngineRun": {
+    "version": 1,
+    "mode": "acceptance",
+    "base": "http://127.0.0.1:8773",
+    "startedAt": "2026-10-28T12:14:57.711Z",
+    "suites": [
+      {
+        "id": "tests/browser/tools-cross-engine.cjs",
+        "status": "pass",
+        "elapsedMs": 233209,
+        "log": "01-tools-cross-engine.cjs.log"
+      }
+    ],
+    "tools": [
+      {
+        "slug": "image-studio",
+        "task": "Compress two images, compare them and download the ZIP.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "qr-studio",
+        "task": "Generate and independently scan a Wi-Fi QR code; download a batch.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "pdf-toolkit",
+        "task": "Reorder pages, fill a form and export editable and flattened PDFs.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-toolkit",
+        "task": "Preview a cleanup, apply it, undo it and save a named draft.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "markdown-studio",
+        "task": "Preview math and diagrams and reopen the standalone HTML export.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-compare",
+        "task": "Compare changes by word, navigate them and export a diff.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "image-to-text",
+        "task": "Recognize four languages, correct a box and search the exported PDF.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "focus-timer",
+        "task": "Start, pause, resume and restore a timer; verify the ring and single completion.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "answer-book",
+        "task": "Reveal one answer, copy it and find it in history without saving the question.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "decision-studio",
+        "task": "Save weighted options, spin, draw without repeats and form complete groups.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "typing-sprint",
+        "task": "Finish a custom practice and check Ranked timing, scoring and retry isolation.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "device-check",
+        "task": "Start and stop keyboard, mouse and touch checks; verify listener cleanup.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "network-test",
+        "task": "Check known speed samples, units, limits and cancellation without extra reporting.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "zip-studio",
+        "task": "Pack a Chinese folder, inspect and extract it, then reject unsafe archives.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "color-studio",
+        "task": "Convert a known color, lock a swatch and export an image palette.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "unit-converter",
+        "task": "Convert temperature, binary storage and UK/US volume; save a combination.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "password-generator",
+        "task": "Generate a constrained password and six-word phrase; test copy failure without persistence.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "time-studio",
+        "task": "Resolve DST, compare dates and export a meeting calendar event.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-renamer",
+        "task": "Apply ordered rules, resolve conflicts and compare the ZIP with its CSV mapping.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "audio-studio",
+        "task": "Trim, mix, pan and fade audio; inspect and play the actual WAV/MP3 output.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "data-studio",
+        "task": "Keep leading zeros, join and pivot tables, cancel SQL and inspect exported results.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "flashcards",
+        "task": "Import mapped cards, review them and verify the next due date and old deck compatibility.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "calculator-studio",
+        "task": "Check DEG/RAD, operator precedence, variables and recover from an invalid expression.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-check",
+        "task": "Verify known hashes, missing manifest entries, duplicates and the CSV report.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "subtitle-studio",
+        "task": "Import, merge and retime subtitles; verify SRT/VTT round trips and invalid intervals.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "study-planner",
+        "task": "Create repeating classes and deadlines, restore the plan and inspect its ICS time zone.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "whiteboard",
+        "task": "Draw, undo and export; verify private sync and four-member shared scene permissions.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "screen-recorder",
+        "task": "Cancel the countdown, record a synthetic stream and play the downloaded recording.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      }
+    ],
+    "manual": [
+      {
+        "id": "google-oauth",
+        "status": "pending",
+        "task": "Real Google sign-in, consent cancel, bilingual return, expiration and sign-out."
+      },
+      {
+        "id": "android-chrome",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, files, downloads, permissions and orientation."
+      },
+      {
+        "id": "ios-safari",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, downloads and supported camera/microphone capture."
+      },
+      {
+        "id": "screen-reader",
+        "status": "pending",
+        "task": "Listen to labels, errors, tabs, dialogs and progress with an actual screen reader."
+      },
+      {
+        "id": "physical-capture",
+        "status": "pending",
+        "task": "Physical microphone/camera/display selection, denial, disconnection and shared audio."
+      },
+      {
+        "id": "first-time-user",
+        "status": "pending",
+        "task": "Observe an unfamiliar user completing tasks without operator guidance."
+      },
+      {
+        "id": "shared-whiteboard-live",
+        "status": "pending",
+        "task": "Four disposable authenticated users: membership, concurrent edits, reconnect and revocation."
+      },
+      {
+        "id": "network-full-live",
+        "status": "pending",
+        "task": "One explicitly started real Cloudflare test; record payload and cancellation."
+      }
+    ],
+    "environment": {
+      "platform": "win32",
+      "arch": "x64",
+      "node": "v24.22.1",
+      "browsers": "chromium"
+    },
+    "sourceHashBefore": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+    "finishedAt": "2026-10-28T12:18:50.969Z",
+    "sourceHashAfter": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+    "sourceChangedDuringRun": false,
+    "summary": {
+      "passed": 1,
+      "failed": 0,
+      "notRun": 68
+    }
+  },
+  "finalCoreRun": {
+    "version": 1,
+    "mode": "smoke",
+    "base": "http://127.0.0.1:8773",
+    "startedAt": "2026-10-28T12:18:51.349Z",
+    "suites": [
+      {
+        "id": "tests/browser/verify.cjs",
+        "status": "pass",
+        "elapsedMs": 15074,
+        "log": "01-verify.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools.cjs",
+        "status": "pass",
+        "elapsedMs": 32610,
+        "log": "02-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/second-batch.cjs",
+        "status": "pass",
+        "elapsedMs": 25935,
+        "log": "03-second-batch.cjs.log"
+      },
+      {
+        "id": "tests/browser/daily-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 25972,
+        "log": "04-daily-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/fourth-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 9418,
+        "log": "05-fourth-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/fifth-tools.cjs",
+        "status": "pass",
+        "elapsedMs": 15251,
+        "log": "06-fifth-tools.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-planner.cjs",
+        "status": "pass",
+        "elapsedMs": 8317,
+        "log": "07-sixth-planner.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-whiteboard.cjs",
+        "status": "pass",
+        "elapsedMs": 8221,
+        "log": "08-sixth-whiteboard.cjs.log"
+      },
+      {
+        "id": "tests/browser/sixth-media.cjs",
+        "status": "pass",
+        "elapsedMs": 19139,
+        "log": "09-sixth-media.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-audit.cjs",
+        "status": "pass",
+        "elapsedMs": 35211,
+        "log": "10-tools-audit.cjs.log"
+      },
+      {
+        "id": "tests/browser/tools-workflows.cjs",
+        "status": "pass",
+        "elapsedMs": 6010,
+        "log": "11-tools-workflows.cjs.log"
+      }
+    ],
+    "tools": [
+      {
+        "slug": "image-studio",
+        "task": "Compress two images, compare them and download the ZIP.",
+        "functional": "pending",
+        "evidence": ["tests/browser/verify.cjs", "tests/browser/tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "qr-studio",
+        "task": "Generate and independently scan a Wi-Fi QR code; download a batch.",
+        "functional": "pending",
+        "evidence": [
+          "tests/browser/verify.cjs",
+          "tests/browser/tools.cjs",
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "pdf-toolkit",
+        "task": "Reorder pages, fill a form and export editable and flattened PDFs.",
+        "functional": "pending",
+        "evidence": ["tests/browser/verify.cjs", "tests/browser/tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-toolkit",
+        "task": "Preview a cleanup, apply it, undo it and save a named draft.",
+        "functional": "pending",
+        "evidence": ["tests/browser/verify.cjs", "tests/browser/tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "markdown-studio",
+        "task": "Preview math and diagrams and reopen the standalone HTML export.",
+        "functional": "pending",
+        "evidence": [],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "text-compare",
+        "task": "Compare changes by word, navigate them and export a diff.",
+        "functional": "pending",
+        "evidence": ["tests/browser/verify.cjs", "tests/browser/tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "image-to-text",
+        "task": "Recognize four languages, correct a box and search the exported PDF.",
+        "functional": "pending",
+        "evidence": ["tests/browser/verify.cjs", "tests/browser/tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "focus-timer",
+        "task": "Start, pause, resume and restore a timer; verify the ring and single completion.",
+        "functional": "pending",
+        "evidence": ["tests/browser/sixth-whiteboard.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "answer-book",
+        "task": "Reveal one answer, copy it and find it in history without saving the question.",
+        "functional": "pending",
+        "evidence": [
+          "tests/browser/second-batch.cjs",
+          "tests/browser/sixth-whiteboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "decision-studio",
+        "task": "Save weighted options, spin, draw without repeats and form complete groups.",
+        "functional": "pending",
+        "evidence": ["tests/browser/second-batch.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "typing-sprint",
+        "task": "Finish a custom practice and check Ranked timing, scoring and retry isolation.",
+        "functional": "pending",
+        "evidence": ["tests/browser/second-batch.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "device-check",
+        "task": "Start and stop keyboard, mouse and touch checks; verify listener cleanup.",
+        "functional": "pending",
+        "evidence": ["tests/browser/second-batch.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "network-test",
+        "task": "Check known speed samples, units, limits and cancellation without extra reporting.",
+        "functional": "pending",
+        "evidence": [
+          "tests/browser/daily-tools.cjs",
+          "tests/browser/fourth-tools.cjs",
+          "tests/browser/sixth-whiteboard.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "zip-studio",
+        "task": "Pack a Chinese folder, inspect and extract it, then reject unsafe archives.",
+        "functional": "pending",
+        "evidence": ["tests/browser/daily-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "color-studio",
+        "task": "Convert a known color, lock a swatch and export an image palette.",
+        "functional": "pending",
+        "evidence": ["tests/browser/daily-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "unit-converter",
+        "task": "Convert temperature, binary storage and UK/US volume; save a combination.",
+        "functional": "pending",
+        "evidence": ["tests/browser/daily-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "password-generator",
+        "task": "Generate a constrained password and six-word phrase; test copy failure without persistence.",
+        "functional": "pending",
+        "evidence": ["tests/browser/daily-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "time-studio",
+        "task": "Resolve DST, compare dates and export a meeting calendar event.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fourth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-renamer",
+        "task": "Apply ordered rules, resolve conflicts and compare the ZIP with its CSV mapping.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fourth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "audio-studio",
+        "task": "Trim, mix, pan and fade audio; inspect and play the actual WAV/MP3 output.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fourth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "data-studio",
+        "task": "Keep leading zeros, join and pivot tables, cancel SQL and inspect exported results.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fourth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "flashcards",
+        "task": "Import mapped cards, review them and verify the next due date and old deck compatibility.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fifth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "calculator-studio",
+        "task": "Check DEG/RAD, operator precedence, variables and recover from an invalid expression.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fifth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "file-check",
+        "task": "Verify known hashes, missing manifest entries, duplicates and the CSV report.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fifth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "subtitle-studio",
+        "task": "Import, merge and retime subtitles; verify SRT/VTT round trips and invalid intervals.",
+        "functional": "pending",
+        "evidence": ["tests/browser/fifth-tools.cjs"],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "study-planner",
+        "task": "Create repeating classes and deadlines, restore the plan and inspect its ICS time zone.",
+        "functional": "pending",
+        "evidence": [
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "whiteboard",
+        "task": "Draw, undo and export; verify private sync and four-member shared scene permissions.",
+        "functional": "pending",
+        "evidence": [
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      },
+      {
+        "slug": "screen-recorder",
+        "task": "Cancel the countdown, record a synthetic stream and play the downloaded recording.",
+        "functional": "pending",
+        "evidence": [
+          "tests/browser/sixth-planner.cjs",
+          "tests/browser/sixth-whiteboard.cjs",
+          "tests/browser/sixth-media.cjs"
+        ],
+        "realDevice": "pending",
+        "usability": "developer-review-required"
+      }
+    ],
+    "manual": [
+      {
+        "id": "google-oauth",
+        "status": "pending",
+        "task": "Real Google sign-in, consent cancel, bilingual return, expiration and sign-out."
+      },
+      {
+        "id": "android-chrome",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, files, downloads, permissions and orientation."
+      },
+      {
+        "id": "ios-safari",
+        "status": "pending",
+        "task": "Real touch, soft keyboard, downloads and supported camera/microphone capture."
+      },
+      {
+        "id": "screen-reader",
+        "status": "pending",
+        "task": "Listen to labels, errors, tabs, dialogs and progress with an actual screen reader."
+      },
+      {
+        "id": "physical-capture",
+        "status": "pending",
+        "task": "Physical microphone/camera/display selection, denial, disconnection and shared audio."
+      },
+      {
+        "id": "first-time-user",
+        "status": "pending",
+        "task": "Observe an unfamiliar user completing tasks without operator guidance."
+      },
+      {
+        "id": "shared-whiteboard-live",
+        "status": "pending",
+        "task": "Four disposable authenticated users: membership, concurrent edits, reconnect and revocation."
+      },
+      {
+        "id": "network-full-live",
+        "status": "pending",
+        "task": "One explicitly started real Cloudflare test; record payload and cancellation."
+      }
+    ],
+    "environment": {
+      "platform": "win32",
+      "arch": "x64",
+      "node": "v24.22.1",
+      "browsers": "chromium"
+    },
+    "sourceHashBefore": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+    "finishedAt": "2026-10-28T12:22:12.552Z",
+    "sourceHashAfter": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+    "sourceChangedDuringRun": false,
+    "summary": {
+      "passed": 11,
+      "failed": 0,
+      "notRun": 0
+    }
+  },
+  "browserAudit": {
+    "cases": 280,
+    "failures": [],
+    "byBrowser": {
+      "chromium": 56,
+      "firefox": 56,
+      "webkit": 56,
+      "msedge": 56,
+      "brave": 56
+    },
+    "languages": ["en", "zh-Hant"],
+    "viewports": [
+      [320, 640],
+      [360, 800],
+      [768, 1024],
+      [1024, 768],
+      [1440, 900],
+      [800, 360]
+    ],
+    "deviceType": "headless Windows browsers; simulated viewports"
+  },
+  "crossEngineOutputs": {
+    "checks": [
+      {
+        "browser": "firefox",
+        "suite": "tools",
+        "status": "pass",
+        "limitations": [],
+        "evidence": "outputs-firefox-tools.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      },
+      {
+        "browser": "firefox",
+        "suite": "studios-stage1",
+        "status": "pass",
+        "limitations": [],
+        "evidence": "outputs-firefox-studios-stage1.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      },
+      {
+        "browser": "firefox",
+        "suite": "studios-stage2",
+        "status": "pass",
+        "limitations": [
+          "MANUAL browser Save as PDF: Playwright print API is Chromium-only"
+        ],
+        "evidence": "outputs-firefox-studios-stage2.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      },
+      {
+        "browser": "firefox",
+        "suite": "studios-stage3",
+        "status": "pass",
+        "limitations": [],
+        "evidence": "outputs-firefox-studios-stage3.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      },
+      {
+        "browser": "webkit",
+        "suite": "tools",
+        "status": "pass",
+        "limitations": [],
+        "evidence": "outputs-webkit-tools.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      },
+      {
+        "browser": "webkit",
+        "suite": "studios-stage1",
+        "status": "pass",
+        "limitations": [],
+        "evidence": "outputs-webkit-studios-stage1.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      },
+      {
+        "browser": "webkit",
+        "suite": "studios-stage2",
+        "status": "pass",
+        "limitations": [
+          "MANUAL browser Save as PDF: Playwright print API is Chromium-only"
+        ],
+        "evidence": "outputs-webkit-studios-stage2.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      },
+      {
+        "browser": "webkit",
+        "suite": "studios-stage3",
+        "status": "pass",
+        "limitations": [
+          "UNSUPPORTED audio output: this browser runtime exposes no Web Audio constructors; friendly fallback verified."
+        ],
+        "evidence": "outputs-webkit-studios-stage3.log",
+        "scope": "Same file/output assertions as Edge; guest fixture. Browser Save as PDF remains manual outside Chromium."
+      }
+    ]
+  },
+  "actualAnonymousBackend": {
+    "checkedAt": "2026-10-28T07:59:20.180Z",
+    "checks": [
+      {
+        "id": "start_typing_test",
+        "status": "pass",
+        "evidence": "actual anonymous backend denial",
+        "http": 401
+      },
+      {
+        "id": "get_private_records",
+        "status": "pass",
+        "evidence": "actual anonymous backend denial",
+        "http": 401
+      },
+      {
+        "id": "whiteboard_room",
+        "status": "pass",
+        "evidence": "actual anonymous backend denial",
+        "http": 401
+      },
+      {
+        "id": "workspace-private-rows",
+        "status": "pass",
+        "http": 401
+      },
+      {
+        "id": "public-typing-en",
+        "status": "pass",
+        "evidence": "actual anonymous response; public field audit, contents omitted"
+      },
+      {
+        "id": "public-typing-zh",
+        "status": "pass",
+        "evidence": "actual anonymous response; public field audit, contents omitted"
+      }
+    ],
+    "realGoogleOAuth": "pending",
+    "fourAuthenticatedMembers": "pending",
+    "physicalDevices": "pending",
+    "networkFullTest": "pending"
+  },
+  "actualNetwork": {
+    "checkedAt": "2026-10-28T08:06:39.741Z",
+    "status": "pass",
+    "actualNetwork": true,
+    "attempts": 1,
+    "message": "Full Test complete. Sample statistics and reports are ready.",
+    "payloadScheduled": 338900000,
+    "paths": ["/meta", "/__down", "/__up"],
+    "completedHistory": 1
+  },
+  "usability": "developer review; not first-time-user research",
+  "manualPending": [
+    "Android Chrome soft keyboard, touch, permissions and downloads",
+    "physical iOS Safari",
+    "real Google consent and account switching",
+    "physical camera/microphone/display capture and audio listening",
+    "four actual Auth members over Realtime",
+    "native calendar/PDF reader import and inspection",
+    "200 percent browser zoom and actual screen reader",
+    "first-time user understanding"
+  ],
+  "resourceLimit": "During discovery, available system memory fell to about 500 MB; process crashes/timeouts were retained. Later frozen checks ran serially with memory available. Browser out-of-memory survival is not certified.",
+  "knownNotApplicable": [
+    "Windows Playwright WebKit has no Web Audio constructors; unsupported message verified. Audio output checked in Edge and Firefox.",
+    "Browser Save as PDF: Playwright API only in Chromium; native Firefox/WebKit print remains manual."
+  ],
+  "followup": {
+    "sourceHash": "a0258d8b713eac89063877b7144d1b0ef322559492f1dc9f6c1e645db2c06bba",
+    "description": "完整回归最初为 68/69；Firefox OCR 连续取消问题修复后，跨引擎组重新 8/8 通过，随后 11 组（28 工具）核心回归通过。另复验 Firefox/WebKit 的保存竞态、密码模式、双语错误恢复，以及 Edge/Firefox 的连续 OCR 取消；原始失败保留，不以自动重试隐藏。"
+  }
+}

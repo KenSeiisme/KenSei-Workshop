@@ -9,6 +9,8 @@ const labels = {
   stale: "Needs updating",
 };
 export function feedback(state, message) {
+  // 初始化失敗必須一直可見，不能被已載入部分的輸入提示蓋掉。
+  if (document.querySelector("[data-tool][data-load-error]")) return;
   const box = document.querySelector(".tool-feedback");
   if (!box) return;
   if (box.dataset.state !== state) box.dataset.state = state;

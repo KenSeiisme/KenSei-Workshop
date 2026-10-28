@@ -8,7 +8,21 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     headless: true,
   });
   try {
-    const context = await browser.newContext();
+    const context = await browser.newContext({ reducedMotion: "reduce" });
+    await context.addInitScript(() => {
+      const NativeWorker = window.Worker;
+      window.__holdOCRRecognition = true;
+      window.Worker = class extends NativeWorker {
+        constructor(url, options) {
+          super(url, options);
+          this.ocrGate = String(url).includes("/tesseract/worker.min.js");
+        }
+        postMessage(...args) {
+          if (this.ocrGate && window.__holdOCRRecognition) return;
+          return super.postMessage(...args);
+        }
+      };
+    });
     await context.route("**/config.js", (r) =>
       r.fulfill({ body: "window.KENSEI_CONFIG={};" }),
     );
@@ -53,11 +67,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
         .textContent.startsWith("Image ready"),
     );
     await page.locator("#ocr-output").fill("Preserve this text");
-    // Hold the child worker response so each cancellation happens during initialization.
-    await context.route("**/vendor/tesseract/worker.min.js", async (r) => {
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      await r.continue().catch(() => {});
-    });
+    // 保留真实 Worker，但暂停识别消息；不能依靠嵌套 Worker 的网络拦截或固定延时。
     for (let i = 0; i < 4; i++) {
       const workerStarted = page.waitForEvent("worker");
       await page.locator("#ocr-run").click();
@@ -81,7 +91,26 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       );
       assert(await page.locator("#ocr-run").isEnabled());
     }
-    await context.unroute("**/vendor/tesseract/worker.min.js");
+    await page.evaluate(() => {
+      window.__holdOCRRecognition = false;
+    });
+    // 真實初始化連續取消；不攔截 Worker、WASM 或模型請求。
+    for (let i = 0; i < 6; i++) {
+      const started = page.waitForEvent("worker");
+      await page.locator("#ocr-run").click();
+      await started;
+      await page.locator("#cancel-job").click();
+      await page.waitForFunction(() =>
+        document
+          .querySelector("#tool-status")
+          .textContent.includes("cancelled"),
+      );
+      assert.equal(
+        await page.locator("#ocr-output").inputValue(),
+        "Preserve this text",
+      );
+      assert(await page.locator("#ocr-run").isEnabled());
+    }
     await context.route("**/vendor/tesseract/lang/**", (r) =>
       r.fulfill({ status: 503, body: "Temporary failure" }),
     );
@@ -111,7 +140,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     assert.match(await page.locator("#ocr-output").inputValue(), /Workshop/);
     assert.deepEqual(errors, []);
     console.log(
-      "PASS Four OCR initialization cancellations preserve status/text; model failure recovers on retry",
+      "PASS Four gated and six natural OCR cancellations preserve status/text; model failure recovers on retry",
     );
   } finally {
     await browser.close();

@@ -462,13 +462,20 @@ function renderItems() {
   if (!plan) return;
   const data = currentData(),
     courses = $("#planner-courses"),
-    tasks = $("#planner-tasks");
+    tasks = $("#planner-tasks"),
+    focused = document.activeElement,
+    focusedRow = focused?.closest("[data-planner-item]"),
+    focusKey = focusedRow?.dataset.plannerItem,
+    focusControl = focused?.matches('input[type="checkbox"]')
+      ? 'input[type="checkbox"]'
+      : "button";
   courses.replaceChildren();
   tasks.replaceChildren();
   for (const course of data.courses) {
     const row = node("div", undefined, "planner-item"),
       button = node("button", course.title, "text-link");
     row.dataset.selected = String(courseId === course.id);
+    row.dataset.plannerItem = "course:" + course.id;
     button.append(
       node(
         "small",
@@ -495,13 +502,10 @@ function renderItems() {
       checked = document.createElement("input"),
       button = node("button", task.title, "text-link");
     row.dataset.selected = String(taskId === task.id);
+    row.dataset.plannerItem = "task:" + task.id;
     checked.type = "checkbox";
     checked.checked = task.done;
-    uiAttr(
-      checked,
-      "aria-label",
-      uiJoin([uiMsg("Mark "), task.title, uiMsg("done")]),
-    );
+    uiAttr(checked, "aria-label", uiMsg("Mark {0} done", [task.title]));
     checked.onchange = () => toggleTask(task.id, checked.checked);
     const label = node(
       "small",
@@ -523,6 +527,16 @@ function renderItems() {
     );
   if (!tasks.children.length)
     tasks.append(node("p", uiMsg("No tasks in this view."), "muted small"));
+  if (
+    focusKey &&
+    !focused.isConnected &&
+    document.activeElement === document.body
+  )
+    document
+      .querySelector(
+        `[data-planner-item="${CSS.escape(focusKey)}"] ${focusControl}`,
+      )
+      ?.focus({ preventScroll: true });
   uiText(
     $("#planner-task-summary"),
     uiMsg("{0} due · {1} overdue · {2} done · {3}", [
