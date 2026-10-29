@@ -389,13 +389,12 @@ export function createWhiteboardPresentation({
       if (target)
         next = next.map((e) =>
           e.id === target
-            ? {
-                ...e,
+            ? engine().newElementWith(e, {
                 boundElements: [
                   ...(e.boundElements || []).filter((b) => b.id !== arrow.id),
                   { id: arrow.id, type: "arrow" },
                 ],
-              }
+              })
             : e,
         );
     next = projectPorts(next);

@@ -134,5 +134,5 @@ const wideRotation = {
   height: 1000,
   angle: Math.atan(0.5),
 };
-const distant = nodePorts(wideRotation)[3];
-assert.equal(nearestPort([wideRotation], distant).index, 3);
+const distant = nodePorts(wideRotation)[2];
+assert.equal(nearestPort([wideRotation], distant).index, 2);

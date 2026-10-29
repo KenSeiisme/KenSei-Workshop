@@ -143,6 +143,17 @@ fs.mkdirSync(out, { recursive: true });
       assert.equal(arrow.elbowed, type === "elbow");
       if (type === "round") assert(arrow.roundness);
     }
+    for (const node of nodes) {
+      const updated = s.scene.elements.find((e) => e.id === node.id);
+      assert(
+        updated.version > node.version,
+        "new port bindings must advance target versions for shared sync",
+      );
+      assert.equal(
+        updated.boundElements.filter((e) => e.type === "arrow").length,
+        3,
+      );
+    }
     // A node move/resize/rotation updates both ends through existing binding targets.
     await p.evaluate(() => {
       const c = window.KenseiAdvancedContexts.whiteboard,
