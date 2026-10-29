@@ -1,0 +1,142 @@
+{
+  "m_f530c27323cf": {
+    "en": "A local music and lightsaber show editor for ESP32-C3 stage props.",
+    "zh-Hant": "為 ESP32-C3 舞台道具設計的本機音樂與光劍編排工具。"
+  },
+  "m_73ad12c709d9": {
+    "en": "Turn sound into light.",
+    "zh-Hant": "將聲音，編排成光。"
+  },
+  "m_a7e742f0e43d": {
+    "en": "Download for Windows x64 ↧",
+    "zh-Hant": "下載 Windows x64 版本 ↧"
+  },
+  "m_27be53e68f57": {
+    "en": "KenSei Studio show editor and LED preview",
+    "zh-Hant": "KenSei Studio 燈光編排與燈珠預覽"
+  },
+  "m_0bd3cfffeae7": {
+    "en": "Music, light, and your next show.",
+    "zh-Hant": "音樂、燈光，以及你的下一場演出。"
+  },
+  "m_d36dd24a320e": {
+    "en": "Arrange lightsaber effects to music, preview every LED, and build offline ESP32-C3 lighting programs with ESPHome.",
+    "zh-Hant": "隨音樂編排光劍燈效、預覽每顆燈珠，並透過 ESPHome 建立 ESP32-C3 離線燈光節目。"
+  },
+  "m_c3325e038f82": {
+    "en": "Local audio, beat analysis and independent prop timelines.",
+    "zh-Hant": "本機音訊、節拍分析與各道具獨立時間軸。"
+  },
+  "m_a00a5c503018": {
+    "en": "Immediate preview with parameter effects and pixel keyframes.",
+    "zh-Hant": "即時預覽參數燈效與像素關鍵影格。"
+  },
+  "m_b421273116a6": {
+    "en": "English, Simplified Chinese and Traditional Chinese.",
+    "zh-Hant": "支援英語、簡體中文與繁體中文。"
+  },
+  "m_c8031889de5f": {
+    "en": "Compile, export and flash over USB.",
+    "zh-Hant": "編譯、匯出與 USB 燒錄。"
+  },
+  "m_ee7837b1f826": {
+    "en": "Install and keep creating",
+    "zh-Hant": "安裝後繼續創作"
+  },
+  "m_f6a70aac76ed": {
+    "en": "Install this version once to enable future updates inside the app.",
+    "zh-Hant": "安裝本版一次，即可在 App 內接收後續更新。"
+  },
+  "m_1368803d804d": {
+    "en": "Your .saberproj files, recovery data and build environment are preserved.",
+    "zh-Hant": "保留你的 .saberproj 專案、復原資料與編譯環境。"
+  },
+  "m_1254829bd999": {
+    "en": "Release notes",
+    "zh-Hant": "版本記錄"
+  },
+  "m_6b02e0d363a4": {
+    "en": "Added",
+    "zh-Hant": "新增"
+  },
+  "m_c3b959224fda": {
+    "en": "Improved",
+    "zh-Hant": "改進"
+  },
+  "m_1246fc93bca0": {
+    "en": "Fixed",
+    "zh-Hant": "修復"
+  },
+  "m_dd167905de0d": {
+    "en": "Version",
+    "zh-Hant": "版本"
+  },
+  "m_c283e6c7e0cb": {
+    "en": "Update Center with offline release history in English, Simplified Chinese and Traditional Chinese.",
+    "zh-Hant": "更新中心：離線查看英語、簡體中文與繁體中文版本記錄。"
+  },
+  "m_b3890f5ea364": {
+    "en": "Check for updates at startup, then choose when to download and install.",
+    "zh-Hant": "啟動檢查新版，由使用者選擇下載、安裝與重新啟動時間。"
+  },
+  "m_dd643a79ea28": {
+    "en": "Mouse wheel pans the timeline; Shift scrolls tracks and Ctrl zooms around the pointer.",
+    "zh-Hant": "滾輪左右瀏覽時間軸，Shift 上下瀏覽軌道，Ctrl 圍繞滑鼠位置縮放。"
+  },
+  "m_1b4e15af16ab": {
+    "en": "Playback starts immediately from the playhead, with no preview countdown.",
+    "zh-Hant": "預覽從播放頭立即開始，取消播放倒數。"
+  },
+  "m_eb017fee51ee": {
+    "en": "Updates save and restore the current workspace while preserving projects and build caches.",
+    "zh-Hant": "更新前儲存工作區，重新啟動後還原，保留專案與編譯快取。"
+  },
+  "m_4990d29a94a8": {
+    "en": "KenSei Workshop provides the Windows download and update feed.",
+    "zh-Hant": "KenSei Workshop 提供 Windows 下載與更新來源。"
+  },
+  "m_0955cb62b497": {
+    "en": "Protected rapid play/pause and song changes from stale audio callbacks.",
+    "zh-Hant": "保護快速播放／暫停及切歌，避免舊音訊回呼影響目前播放。"
+  },
+  "m_f1730852a888": {
+    "en": "English, Simplified Chinese and Traditional Chinese with a persistent language preference.",
+    "zh-Hant": "英語、簡體中文與繁體中文切換，重新啟動後保留語言選擇。"
+  },
+  "m_c7cdbe5f4807": {
+    "en": "Offline DM Sans and Space Grotesk fonts.",
+    "zh-Hant": "隨 App 打包 DM Sans 與 Space Grotesk 離線字型。"
+  },
+  "m_ce55889372b5": {
+    "en": "Renamed the app to KenSei Studio with the Workshop purple and pink theme.",
+    "zh-Hant": "更名為 KenSei Studio，採用 Workshop 紫粉主題。"
+  },
+  "m_cf0de43d4d68": {
+    "en": "Updated icons, installer and export names while preserving existing projects and tool caches.",
+    "zh-Hant": "更新圖示、安裝包與匯出名稱，保留現有專案與工具快取。"
+  },
+  "m_5ca082fbc396": {
+    "en": "Workbench controls fit the minimum window.",
+    "zh-Hant": "最小視窗下韌體工作台按鈕完整顯示。"
+  },
+  "m_0be1fb3dbc85": {
+    "en": "Opening a project no longer reports an audio error while releasing the old player.",
+    "zh-Hant": "開啟專案時清理舊播放器不再誤報音訊錯誤。"
+  },
+  "m_6a5381b42f47": {
+    "en": "Local MP3/WAV import, beat analysis and multi-prop timelines.",
+    "zh-Hant": "本機匯入 MP3／WAV、節拍分析與多光劍時間軸。"
+  },
+  "m_9eef0bec3c06": {
+    "en": "LED preview, parameter effects and pixel keyframe painting.",
+    "zh-Hant": "燈珠預覽、參數燈效與像素關鍵影格繪製。"
+  },
+  "m_4692e670ee0c": {
+    "en": "Versioned .saberproj files with audio and automatic recovery.",
+    "zh-Hant": "含音樂的 .saberproj 專案封裝與自動復原。"
+  },
+  "m_8c34f429e3e6": {
+    "en": "ESPHome source export, managed compilation and USB flashing for ESP32-C3.",
+    "zh-Hant": "ESP32-C3 的 ESPHome 工程匯出、環境管理、編譯與 USB 燒錄。"
+  }
+}

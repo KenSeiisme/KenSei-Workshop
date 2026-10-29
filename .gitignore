@@ -12,3 +12,5 @@ __pycache__/
 /dist/
 /supabase/.temp/
 /.openai/
+
+.env*

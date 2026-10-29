@@ -130,7 +130,22 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
     robots = (output / "robots.txt").read_text(encoding="utf-8")
     assert robots.count(f"Sitemap: {site_url}/sitemap.xml") == 1
     assert "Disallow:" not in robots
-    assert len(locations) == 98
+    assert len(locations) == 100
+    # Studio adds one public page per locale and a real immutable download feed.
+    studio = json.loads(
+        (ROOT / "data/kensei-studio/download.json").read_text(encoding="utf-8")
+    )
+    assert studio["bytes"] > 0 and len(studio["sha256"]) == 64
+    feed = (output / "updates/kensei-studio/windows/x64/latest.yml").read_text(
+        encoding="utf-8"
+    )
+    assert studio["downloadUrl"] in feed and studio["sha512"] in feed
+    assert (output / "updates/kensei-studio/windows/x64/releases.json").is_file()
+    for prefix in ("", "zh-hant/"):
+        page = (output / prefix / "projects/kensei-studio/index.html").read_text(
+            encoding="utf-8"
+        )
+        assert studio["downloadUrl"] in page and studio["sha256"] in page
     for prefix in ("", "zh-hant/"):
         for route in ("workspace", "profile", "auth/callback", "404"):
             assert 'name="robots" content="noindex, follow"' in (

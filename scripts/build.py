@@ -16,6 +16,7 @@ SITE = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(SOURCE / "views"))
 from template_renderer import render_template
+from studio_view import view as studio_view, copy_update_feed
 import localization as i18n
 from tool_experience import heading as tool_heading
 from profile_view import PROFILE_VIEW
@@ -131,6 +132,14 @@ for glyph, path in {
 
 PROJECTS = [
     (
+        "kensei-studio",
+        "KenSei Studio",
+        "Turn sound into light.",
+        "A local music and lightsaber show editor for ESP32-C3 stage props.",
+        "Software",
+        "Electron / React / ESPHome",
+    ),
+    (
         "3a3d",
         "3A3D",
         "Automotive, thoughtfully explored.",
@@ -158,6 +167,8 @@ PROJECTS = [
 
 
 def project_art(slug, large=False):
+    if slug == "kensei-studio":
+        return '<div class="studio-card-cover"><img src="/assets/kensei-studio/preview.png" alt="KenSei Studio show editor and LED preview" loading="lazy"></div>'
     if slug == "3a3d":
         return render_template("projects/art-3a3d.html")
     if slug == "salon-system":
@@ -352,6 +363,9 @@ details = {
 }
 for p in PROJECTS:
     slug, name, title, desc, cat, stack = p
+    if slug == "kensei-studio":
+        pages["projects/" + slug] = (name, studio_view(), "Projects")
+        continue
     subtitle, overview, highlights, tech, url, cta, note = details[slug]
     pages["projects/" + slug] = (
         name,
@@ -415,6 +429,7 @@ for game in GAMES:
     pages["games/" + game["slug"]] = (game["name"], game_page(game), "Games")
 
 
+copy_update_feed(OUT)
 site_url = SITE["site_url"].rstrip("/")
 routes = [i18n.page_path(route) for route in pages]
 social = []

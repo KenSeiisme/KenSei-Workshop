@@ -233,6 +233,8 @@ def metadata(route, locale, site_url):
 
 def styles(route):
     files = ["styles.css", "site.css"]
+    if route in ("", "projects", "projects/kensei-studio"):
+        files.append("studio.css")
     if route.startswith("tools/") or route == "workspace":
         files.append("tools.css")
     if route.startswith("tools/"):

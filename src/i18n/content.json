@@ -910,5 +910,15 @@
       "图像生成",
       "圖像生成"
     ]
+  },
+  "projects/kensei-studio": {
+    "name": {
+      "en": "KenSei Studio",
+      "zh-Hant": "KenSei Studio"
+    },
+    "description": {
+      "en": "A local music and lightsaber show editor for ESP32-C3 stage props.",
+      "zh-Hant": "為 ESP32-C3 舞台道具設計的本機音樂與光劍編排工具。"
+    }
   }
 }
