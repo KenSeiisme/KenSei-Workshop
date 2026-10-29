@@ -32,6 +32,8 @@ Two incidental issues were fixed during actual interaction checks: translating a
 | Shared helper regression    | All 56 English/Traditional tool page checks in Edge, including mobile Help focus and touch targets; localization/editor preservation, manual-save races, recipes/account switch, file checks, CSV editing and permission Help. No file-upload requests in local Whiteboard checks.                |
 | Build                       | Clean source build: 28 tools, 12 games, 107 HTML files including the error alias, 98 sitemap URLs, complete pinned vendor assets and ownership verification tag.                                                                                                                                  |
 
+Production verification passed on https://kensei-workshop.vercel.app/tools/whiteboard/: deployed source assets, real guest drawing, selection and full PNG/SVG/editable downloads, Send to Image Studio without auto-processing, bilingual state preservation, fullscreen and all six viewport sizes. Authentication was deliberately disabled in this guest browser test; the production database was checked separately as described below.
+
 Raw local artifacts are ignored under `_qa/whiteboard-canvas/`. Repeat with `pnpm test:whiteboard-canvas`. Existing live checks remain explicit opt-in and take approved disposable credentials over hidden stdin; credentials are never committed.
 
 ## Release gate and remaining manual checks

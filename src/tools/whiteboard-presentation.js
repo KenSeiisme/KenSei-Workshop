@@ -97,7 +97,8 @@ export function createWhiteboardPresentation({
       selected = elements.filter(
         (e) => app.selectedElementIds[e.id] && isNode(e),
       );
-    let nodes = selected;
+    // 多選時保留操作把手；只為單一節點或箭頭附近的節點顯示連接點。
+    let nodes = selected.length === 1 ? selected : [];
     if (app.activeTool.type === "arrow" || gesture) {
       const p = pointer || gesture?.origin;
       if (p)

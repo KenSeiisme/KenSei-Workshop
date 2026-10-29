@@ -171,6 +171,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8780";
     assert.notEqual(copy.startBinding.elementId, "left");
     assert.notEqual(copy.endBinding.elementId, "right");
     assert.equal(copy.customData.kenseiPorts.start, 3);
+    assert.equal(
+      await p.locator(".board-port").count(),
+      0,
+      "multi-selection must not generate an unbounded port overlay",
+    );
     // Pure paper pixels are compared between independent Canvas and SVG browser renderers.
     const samples = await p.evaluate(async () => {
       const c = window.KenseiAdvancedContexts.whiteboard,
