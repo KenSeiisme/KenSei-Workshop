@@ -1,5 +1,49 @@
 [
   {
+    "version": "0.4.0",
+    "date": "2026-10-30",
+    "changes": {
+      "en": {
+        "added": [
+          "Right-click prop and song management, including duplicate, reorder, clear and delete.",
+          "Per-song preview volume and mute, plus a persistent App master volume.",
+          "Eight offline lighting algorithms and 24 searchable Arctic, Neon and Ember presets."
+        ],
+        "improved": [
+          "Copy all song tracks when duplicating a prop, with fresh IDs and GPIO reconfirmation.",
+          "Volume changes keep preview playback and lighting in sync without invalidating firmware builds."
+        ],
+        "fixed": [
+          "Share audio assets when duplicating songs and preserve them for undo."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "道具与节目右键管理：复制、排序、清空与删除。",
+          "节目预览音量与静音，以及重启后保留的 App 总音量。",
+          "新增 8 种离线灯效算法与 24 个可搜索的冰蓝、霓虹、余烬预设。"
+        ],
+        "improved": [
+          "复制道具时包含全部歌曲轨道，生成新标识并要求重新确认 GPIO。",
+          "调整音量时预览与灯光持续运行，不影响固件构建结果。"
+        ],
+        "fixed": ["节目副本共用音频文件，保留撤销所需的音乐资源。"]
+      },
+      "zh-TW": {
+        "added": [
+          "道具與節目右鍵管理：複製、排序、清空與刪除。",
+          "節目預覽音量與靜音，以及重新啟動後保留的 App 總音量。",
+          "新增 8 種離線燈效演算法與 24 個可搜尋的冰藍、霓虹、餘燼預設。"
+        ],
+        "improved": [
+          "複製道具時包含全部歌曲軌道，產生新識別碼並要求重新確認 GPIO。",
+          "調整音量時預覽與燈光持續執行，不影響韌體建置結果。"
+        ],
+        "fixed": ["節目副本共用音訊檔案，保留復原所需的音樂資源。"]
+      }
+    }
+  },
+  {
     "version": "0.3.0",
     "date": "2026-10-30",
     "changes": {

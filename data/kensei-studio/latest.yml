@@ -1,34 +1,33 @@
-version: 0.3.0
+version: 0.4.0
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.3.0/KenSei-Studio-0.3.0-Setup.exe
-    sha512: S99/atQFWizooRW8IHJCeYXfxh9CqzJkdn84qhivuX0uu1SVSKoNwChyFHmqZ0o27W7h2ncInRpMU8goEwJr+Q==
-    size: 125633983
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.3.0/KenSei-Studio-0.3.0-Setup.exe
-sha512: S99/atQFWizooRW8IHJCeYXfxh9CqzJkdn84qhivuX0uu1SVSKoNwChyFHmqZ0o27W7h2ncInRpMU8goEwJr+Q==
-releaseDate: 2026-10-29T18:34:12.327Z
-releaseName: KenSei Studio 0.3.0
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.4.0/KenSei-Studio-0.4.0-Setup.exe
+    sha512: K744hWXzXhL9/TRhofMPO3ymXatIHa4ETWGdgfl01MzlnevqhZyDFrjrDB/e+nBmL9Y0H3RpEc1Ckiki0dGdLg==
+    size: 125646821
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.4.0/KenSei-Studio-0.4.0-Setup.exe
+sha512: K744hWXzXhL9/TRhofMPO3ymXatIHa4ETWGdgfl01MzlnevqhZyDFrjrDB/e+nBmL9Y0H3RpEc1Ckiki0dGdLg==
+releaseDate: 2026-10-29T20:17:02.613Z
+releaseName: KenSei Studio 0.4.0
 releaseNotes: >
   ADDED
 
-  - Update Center with offline release history in English, Simplified Chinese
-  and Traditional Chinese.
+  - Right-click prop and song management, including duplicate, reorder, clear
+  and delete.
 
-  - Check for updates at startup, then choose when to download and install.
+  - Per-song preview volume and mute, plus a persistent App master volume.
 
-  - Mouse wheel pans the timeline; Shift scrolls tracks and Ctrl zooms around
-  the pointer.
+  - Eight offline lighting algorithms and 24 searchable Arctic, Neon and Ember
+  presets.
 
 
   IMPROVED
 
-  - Playback starts immediately from the playhead, with no preview countdown.
+  - Copy all song tracks when duplicating a prop, with fresh IDs and GPIO
+  reconfirmation.
 
-  - Updates save and restore the current workspace while preserving projects and
-  build caches.
-
-  - KenSei Workshop provides the Windows download and update feed.
+  - Volume changes keep preview playback and lighting in sync without
+  invalidating firmware builds.
 
 
   FIXED
 
-  - Protected rapid play/pause and song changes from stale audio callbacks.
+  - Share audio assets when duplicating songs and preserve them for undo.

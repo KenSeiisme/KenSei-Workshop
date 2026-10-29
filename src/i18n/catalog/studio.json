@@ -138,5 +138,17 @@
   "m_8c34f429e3e6": {
     "en": "ESPHome source export, managed compilation and USB flashing for ESP32-C3.",
     "zh-Hant": "ESP32-C3 的 ESPHome 工程匯出、環境管理、編譯與 USB 燒錄。"
+  },
+  "m_4792c5791b17": {
+    "en": "Right-click management for props and songs.",
+    "zh-Hant": "以右鍵管理道具與節目。"
+  },
+  "m_d577e384d354": {
+    "en": "Per-song mute and volume, plus an App master volume.",
+    "zh-Hant": "各節目獨立靜音與音量，加上 App 總音量。"
+  },
+  "m_30b2ef55c971": {
+    "en": "17 lighting algorithms and 24 Arctic, Neon and Ember presets.",
+    "zh-Hant": "17 種燈效演算法與 24 個冰藍、霓虹、餘燼預設。"
   }
 }
