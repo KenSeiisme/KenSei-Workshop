@@ -9,7 +9,7 @@ Implemented against Excalidraw **0.18.1**. Tools remain 28 and games remain 12.
 - Boards holds Personal/Shared records and membership controls. More holds export, templates, help, language, Keep tool active and Snap to points. Both preferences are local and identity-scoped, with native tool locking. Selection, Hand and Escape retain their native behavior.
 - Rectangles (including rounded), diamonds and ellipses have 12 scene-space ports. Arrows retain native target bindings plus versioned port indices; ordinary, curved and elbow arrows remain distinct. Existing arrows are unchanged until their endpoints are edited. Free edge binding is retained, and disabling snapping preserves existing fixed bindings.
 - Paper is plain, ruled, grid, dots or graph paper, with 10/20/40 scene-unit spacing. Graph paper divides each main interval into five. Its independent layer follows scene pan/zoom and creates no selectable elements or history steps. Native grid rendering is disabled to avoid a second, mismatched grid.
-- Full/selection PNG and SVG, prepared PNG and Send to use the same bounds and paper renderer. Pattern exclusion preserves the base color; editable files retain paper and connector extensions. PNG applies the dark color transform in bounded strips because WebKit does not consistently support Canvas 2D filters. The transform follows [CSS Filter Effects](https://www.w3.org/TR/filter-effects-1/).
+- Full/selection PNG and SVG, prepared PNG and Send to use the same bounds and paper renderer. Pattern exclusion preserves the base color; editable files retain paper and connector extensions. PNG uses native Canvas filters where available, retaining compatibility with restricted pixel readback. Its WebKit fallback applies the dark transform in bounded strips. The transform follows [CSS Filter Effects](https://www.w3.org/TR/filter-effects-1/).
 
 ## Persistence and compatibility
 
@@ -36,7 +36,7 @@ Raw local artifacts are ignored under `_qa/whiteboard-canvas/`. Repeat with `pnp
 
 ## Release gate and remaining manual checks
 
-At report creation the Supabase plugin returned `Invalid or expired requestState` twice on migration application. Read-only schema/history checks confirmed no migration was applied. The local CLI is not authenticated. Source is ready; publishing must wait for the compatible migration, then push the existing branch to trigger Vercel. Do not publish a frontend that relies on uninstalled server validation.
+The initial plugin session expired on migration application. After the user reconnected Supabase, migration `20261029080926_workshop_whiteboard_canvas` applied successfully. Production checks confirm paper preservation, accepted port metadata, rejected arbitrary/non-arrow metadata, private helper permissions, anonymous room denial and the stale-writer trigger. The existing GitHub branch is the deployment source; Vercel publishes automatically after push. No direct Vercel configuration or Edge Function changes are required.
 
 Pending **physical Android** checks:
 

@@ -258,6 +258,32 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8780";
           );
       }
     }
+    if (
+      await p.evaluate(
+        () => "filter" in document.createElement("canvas").getContext("2d"),
+      )
+    )
+      assert(
+        await p.evaluate(async () => {
+          const original = CanvasRenderingContext2D.prototype.getImageData;
+          CanvasRenderingContext2D.prototype.getImageData = () => {
+            throw Error("canvas readback restricted");
+          };
+          try {
+            const canvas =
+              await window.KenseiAdvancedContexts.whiteboard.artwork({
+                format: "png",
+              });
+            const blob = await new Promise((r) =>
+              canvas.toBlob(r, "image/png"),
+            );
+            return blob?.size > 100;
+          } finally {
+            CanvasRenderingContext2D.prototype.getImageData = original;
+          }
+        }),
+        "native-filter PNG export must not require canvas pixel readback",
+      );
     // Paper preference does not enter element history, and lock-off restores native single-use drawing.
     await p.click("#board-menu-open");
     await p.uncheck("#board-keep-tool");

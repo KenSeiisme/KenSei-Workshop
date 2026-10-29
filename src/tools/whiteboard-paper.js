@@ -2,8 +2,17 @@ import { sceneSettings } from "./whiteboard-core.js";
 // CSS Filter Effects 的 invert(.93) + hue-rotate(180deg)，分條處理避免大型畫布額外佔用整幅記憶體。
 // 部分 WebKit 不支援 CanvasRenderingContext2D.filter；PNG 仍須與畫面和 SVG 一致。
 async function darken(canvas) {
-  const ctx = canvas.getContext("2d"),
-    rows = Math.max(1, Math.floor(262144 / canvas.width));
+  const ctx = canvas.getContext("2d");
+  if ("filter" in Object.getPrototypeOf(ctx)) {
+    // 使用原生濾鏡，避免支援此能力的瀏覽器讀取像素或額外建立整幅副本。
+    ctx.filter = "invert(93%) hue-rotate(180deg)";
+    ctx.globalCompositeOperation = "copy";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.filter = "none";
+    return;
+  }
+  const rows = Math.max(1, Math.floor(262144 / canvas.width));
   for (let y = 0; y < canvas.height; y += rows) {
     const image = ctx.getImageData(
         0,
