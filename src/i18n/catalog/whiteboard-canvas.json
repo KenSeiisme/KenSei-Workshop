@@ -1,0 +1,130 @@
+{
+  "m_7583c9453789": {
+    "en": "Open whiteboard details",
+    "zh-Hant": "開啟白板詳細資料"
+  },
+  "m_4fcd39dd9263": {
+    "en": "Boards",
+    "zh-Hant": "白板清單"
+  },
+  "m_c445b1b1b03b": {
+    "en": "Whiteboard menu",
+    "zh-Hant": "白板選單"
+  },
+  "m_1e87c31ece7d": {
+    "en": "Paper background",
+    "zh-Hant": "紙張背景"
+  },
+  "m_aa2febe50340": {
+    "en": "Paper style",
+    "zh-Hant": "紙張樣式"
+  },
+  "m_e94c2e24ae40": {
+    "en": "Paper spacing",
+    "zh-Hant": "線條間距"
+  },
+  "m_4144c7e4f139": {
+    "en": "Base color",
+    "zh-Hant": "底色"
+  },
+  "m_b23b65d98e37": {
+    "en": "Keep tool active",
+    "zh-Hant": "連續繪圖"
+  },
+  "m_55832ef859d3": {
+    "en": "Snap to points",
+    "zh-Hant": "吸附連接點"
+  },
+  "m_dac3a6a9455d": {
+    "en": "Include paper pattern",
+    "zh-Hant": "包含紙張線條"
+  },
+  "m_8b854ade2cd0": {
+    "en": "Plain",
+    "zh-Hant": "純色"
+  },
+  "m_fa48c7ba646f": {
+    "en": "Ruled",
+    "zh-Hant": "橫線"
+  },
+  "m_0d7d12ac624c": {
+    "en": "Grid",
+    "zh-Hant": "網格"
+  },
+  "m_6de335fa213a": {
+    "en": "Dots",
+    "zh-Hant": "點陣"
+  },
+  "m_53bc406f402b": {
+    "en": "Graph paper",
+    "zh-Hant": "方格紙"
+  },
+  "m_3e768e35726e": {
+    "en": "10 · close",
+    "zh-Hant": "10 · 密"
+  },
+  "m_c4630fdea3f8": {
+    "en": "20 · medium",
+    "zh-Hant": "20 · 標準"
+  },
+  "m_75623db255f0": {
+    "en": "40 · wide",
+    "zh-Hant": "40 · 疏"
+  },
+  "m_59e4ee81e2e7": {
+    "en": "Ready canvas",
+    "zh-Hant": "畫布已準備"
+  },
+  "m_969cbddc6c07": {
+    "en": "A little space for your ideas.",
+    "zh-Hant": "留一點空間給你的想法。"
+  },
+  "m_38d4abd1d8b4": {
+    "en": "Open boards",
+    "zh-Hant": "開啟白板清單"
+  },
+  "m_9f020888ec68": {
+    "en": "Drawing preferences",
+    "zh-Hant": "繪圖偏好"
+  },
+  "m_37fd4e355ba3": {
+    "en": "Exit fullscreen",
+    "zh-Hant": "離開全螢幕"
+  },
+  "m_c9fee936e9d5": {
+    "en": "Fullscreen is unavailable. Focus mode is still available.",
+    "zh-Hant": "無法使用全螢幕；仍可使用專注模式。"
+  },
+  "m_40083c5e7201": {
+    "en": "Invalid paper settings.",
+    "zh-Hant": "紙張設定無效。"
+  },
+  "m_0d7867baa0f6": {
+    "en": "Invalid connector metadata.",
+    "zh-Hant": "連接點資料無效。"
+  },
+  "m_3914e7c97dab": {
+    "en": "Choose new or continue",
+    "zh-Hant": "新建或繼續白板"
+  },
+  "m_fba9c74ca9b7": {
+    "en": "Refresh Whiteboard to keep editing this newer board. Your local changes are retained.",
+    "zh-Hant": "請重新整理白板，以繼續編輯新版文件。本機修改已保留。"
+  },
+  "m_48191194fcef": {
+    "en": "Named vector boards up to 2 MB and 10,000 elements; text, shapes, arrows and free drawing.",
+    "zh-Hant": "具名向量白板最多 2 MB、10,000 個元素；支援文字、形狀、箭頭和自由繪畫。"
+  },
+  "m_427539690bc0": {
+    "en": "Choose New or Continue to open the canvas. Boards holds Personal and Shared records. More contains exports, templates and drawing preferences. Keep tool active repeats your drawing tool; Snap to points connects arrows to 12 points on each shape. Background offers five paper styles that follow the scene. Fullscreen requires a supported browser; focus mode remains available.",
+    "zh-Hant": "選擇新建或繼續，即可開啟畫布。「白板清單」收納個人與共享記錄；「更多」提供匯出、範本與繪圖偏好。「連續繪圖」保留目前工具；「吸附連接點」可將箭頭連到形狀上的 12 個連接點。「背景」提供五種隨場景移動的紙張樣式。全螢幕需瀏覽器支援，亦可使用專注模式。"
+  },
+  "m_f63b4c4bcd33": {
+    "en": "Personal boards sync privately; Shared supports four signed-in members. Paper and arrow bindings belong to the document. Tool lock, selection and viewport are personal. Images and external embeds are unsupported. Guest boards require Copy to account.",
+    "zh-Hant": "個人白板以私人方式同步，共享白板支援四名已登入成員。紙張及箭頭綁定屬於文件；工具鎖定、選取及視角屬個人設定。不支援圖片和外部嵌入內容。訪客白板需透過「複製至帳號」匯入。"
+  },
+  "m_be255095d53f": {
+    "en": "Whiteboard changed. Prepare a new PNG.",
+    "zh-Hant": "白板已變更，請重新準備 PNG。"
+  }
+}

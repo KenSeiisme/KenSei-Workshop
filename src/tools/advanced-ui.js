@@ -30,8 +30,9 @@ export function button(text, fn, primary = false) {
   return b;
 }
 export function field(text, input) {
-  const label = el("label", text);
-  label.append(input);
+  const label = el("label");
+  // 翻譯只更新文字節點，保留同一個輸入控件與目前值。
+  label.append(el("span", text), input);
   return label;
 }
 export function select(items, value) {

@@ -1,0 +1,49 @@
+<header class="whiteboard-toolbar">
+  <a href="/tools/" class="back-link">← Tools</a>
+  <h1>${name}</h1>
+  <button
+    id="board-title"
+    class="text-link"
+    aria-label="Open whiteboard details"
+  >
+    <span data-ui-opaque id="board-title-label">—</span>
+  </button>
+  <span id="board-header-state" class="muted small" role="status"></span>
+  <button
+    class="favorite icon-button"
+    data-favorite="${slug}"
+    aria-label="Favorite ${name}"
+    aria-pressed="false"
+    hidden
+  >
+    ${star}
+  </button>
+  <div class="whiteboard-toolbar-actions">
+    <button class="button secondary" id="board-focus" hidden>Exit focus</button>
+    <button class="button secondary" id="board-boards">Boards</button>
+    <button class="button secondary" id="board-background">Background</button>
+    <button class="button secondary" id="board-fullscreen">Fullscreen</button>
+    <button class="button secondary" id="board-menu-open">More</button>
+  </div>
+</header>
+<dialog
+  class="tool-help-dialog"
+  id="tool-help"
+  aria-labelledby="tool-help-title"
+>
+  <button class="button secondary" data-close-help aria-label="Close help">
+    Close ×
+  </button>
+  <h2 id="tool-help-title">${name}</h2>
+  <p>${description}</p>
+  <h3>Limits &amp; requirements</h3>
+  <p>${limits}</p>
+  <h3>How it works</h3>
+  <p>${usage}</p>
+  <h3>Saving &amp; privacy</h3>
+  <p>${privacy}</p>
+</dialog>
+<div class="tool-feedback" data-state="ready" role="status" aria-live="polite">
+  <span class="tool-state-label">Ready</span>
+  <p class="tool-state-message">${privacy}</p>
+</div>

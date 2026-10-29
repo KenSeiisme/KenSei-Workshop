@@ -43,7 +43,7 @@ async function request(path, token, body) {
 const rpc = (i, action, body = {}) =>
   request("/rest/v1/rpc/whiteboard_room", sessions[i].access_token, {
     action,
-    body: { client_id: clients[i], ...body },
+    body: { client_id: clients[i], ...body, client_version: 2 },
   });
 async function scene(i, id) {
   return rpc(i, "get", { room_id: id });
@@ -191,6 +191,7 @@ async function main() {
   browser = await chromium.launch({ channel: "msedge", headless: true });
   try {
     const a = await boardPage(0);
+    await a.locator("#board-boards").click();
     await a.locator("#board-shared-tab").click();
     await a.locator("#shared-new").click();
     await connected(a);
@@ -206,6 +207,7 @@ async function main() {
     );
     assert(!["SUBSCRIBED", "timeout"].includes(refused));
     check("An authenticated nonmember cannot subscribe to a private room");
+    await b.locator("#board-boards").click();
     await b.locator("#board-shared-tab").click();
     await b.locator("#shared-code").fill(invite.code);
     await b.locator("#shared-join").click();
@@ -434,6 +436,7 @@ async function main() {
     await b.reload({ waitUntil: "domcontentloaded" });
     await connected(b);
     check("Refresh restores the saved room and editing connection");
+    await a.locator("#board-boards").click();
     await a.locator("#shared-member-panel").evaluate((n) => (n.open = true));
     await a.locator("#shared-members button").last().click();
     await pages[3].waitForFunction(() =>

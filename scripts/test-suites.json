@@ -141,5 +141,16 @@
     ["tests/browser/studios-stage1.cjs"],
     ["tests/browser/studios-stage2.cjs"],
     ["tests/browser/studios-stage3.cjs"]
+  ],
+  "whiteboard-canvas": [
+    ["tests/unit/whiteboard-canvas.mjs"],
+    ["tests/unit/sixth-whiteboard-core.mjs"],
+    ["tests/database/whiteboard-canvas.mjs"],
+    ["tests/database/shared-whiteboards.mjs"],
+    ["tests/browser/whiteboard-canvas.cjs"],
+    ["tests/browser/whiteboard-ports-exports.cjs"],
+    ["tests/browser/sixth-whiteboard.cjs"],
+    ["tests/browser/shared-whiteboards.cjs"],
+    ["tests/browser/sixth-pages-sync.cjs", "whiteboard"]
   ]
 }

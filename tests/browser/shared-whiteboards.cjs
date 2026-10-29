@@ -152,6 +152,7 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
       waitUntil: "domcontentloaded",
     });
     await p.waitForSelector('[data-ui-ready="true"]');
+    await p.locator("#board-boards").click();
     await p.locator("#board-shared-tab").click();
     return p;
   }
@@ -232,6 +233,89 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
     await count(3);
     for (const p of pages) assert.equal((await snapshot(p)).length, 3);
     console.log("PASS remote changes stay out of local Undo and do not echo");
+    await a.locator("#board-background").click();
+    await a.selectOption("#board-paper-type", "graph");
+    await a.selectOption("#board-paper-spacing", "40");
+    await a.locator("#board-background-panel").evaluate((n) => n.close());
+    await a.waitForTimeout(3200);
+    for (const p of pages)
+      assert.deepEqual(
+        await p.evaluate(
+          () =>
+            window.KenseiAdvancedContexts.whiteboard.currentData().appState
+              .paper,
+        ),
+        { version: 1, type: "graph", spacing: 40 },
+      );
+    await a.evaluate(async () => {
+      const c = window.KenseiAdvancedContexts.whiteboard,
+        n = c.drawing.getSceneElements().find((e) => e.type === "rectangle"),
+        E = c.engine;
+      const arrow = E.convertToExcalidrawElements([
+        {
+          type: "arrow",
+          x: 0,
+          y: 0,
+          points: [
+            [0, 0],
+            [200, 0],
+          ],
+        },
+      ])[0];
+      arrow.startBinding = { elementId: n.id, focus: 0, gap: 1 };
+      arrow.customData = { kenseiPorts: { version: 1, start: 3, end: null } };
+      c.drawing.updateScene({
+        elements: [...c.drawing.getSceneElementsIncludingDeleted(), arrow],
+        captureUpdate: E.CaptureUpdateAction.IMMEDIATELY,
+      });
+    });
+    await a.waitForTimeout(3200);
+    await count(4);
+    for (const p of pages)
+      assert(
+        (await snapshot(p)).some((e) => e.customData?.kenseiPorts?.start === 3),
+      );
+    const second = pages[1];
+    await second.evaluate(() => {
+      const c = window.KenseiAdvancedContexts.whiteboard,
+        a = c.drawing.getSceneElements().find((e) => e.customData?.kenseiPorts),
+        id = a.startBinding.elementId;
+      c.drawing.updateScene({
+        elements: c.drawing.getSceneElementsIncludingDeleted().map((e) =>
+          e.id === id
+            ? c.engine.newElementWith(e, {
+                x: e.x + 60,
+                y: e.y + 30,
+                angle: Math.PI / 4,
+              })
+            : e,
+        ),
+        captureUpdate: c.engine.CaptureUpdateAction.IMMEDIATELY,
+      });
+    });
+    await a.waitForTimeout(3200);
+    for (const p of pages)
+      assert(
+        await p.evaluate(async () => {
+          const { nodePorts, arrowPoints } =
+              await import("/tool-scripts/whiteboard-geometry.js"),
+            c = window.KenseiAdvancedContexts.whiteboard,
+            es = c.currentData().elements,
+            a = es.find((e) => e.customData?.kenseiPorts),
+            n = es.find((e) => e.id === a.startBinding.elementId),
+            v = nodePorts(n)[3],
+            q = arrowPoints(a)[0];
+          return Math.hypot(v.x - q.x, v.y - q.y) < 0.01;
+        }),
+      );
+    const quiet = messages;
+    await a.waitForTimeout(1500);
+    assert(messages - quiet < 8, "derived port positions must not echo");
+    console.log(
+      "PASS shared paper, arrow metadata, transformed port convergence and no derived broadcast loops (local RPC/WebSocket fixtures)",
+    );
+
+    await a.locator("#board-boards").click();
     await a.locator("#shared-member-panel").evaluate((n) => (n.open = true));
     await a.locator("#shared-members button").last().click();
     await pages[3].waitForFunction(

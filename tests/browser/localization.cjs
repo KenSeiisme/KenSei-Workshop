@@ -186,18 +186,21 @@ async function locale(page, value) {
       "溫度",
     );
     assert.equal(await page.inputValue("#unit-category"), "Temperature");
+    await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(base + "/tools/whiteboard/");
     await page.waitForSelector('[data-ready="true"]');
-    await page.click("#board-new");
+    await page.click("#board-entry-new");
     await page.waitForSelector("#board-canvas canvas");
+    await page.click("#board-boards");
     await page.fill("#board-name", "Start game");
+    await page.locator("#board-drawer").evaluate((n) => n.close());
     await page.locator('label:has([data-testid="toolbar-rectangle"])').click();
     const canvas = page.locator("#board-canvas canvas").last();
     await canvas.scrollIntoViewIfNeeded();
     let box = await canvas.boundingBox();
-    await page.mouse.move(box.x + 120, box.y + 120);
+    await page.mouse.move(box.x + 350, box.y + 180);
     await page.mouse.down();
-    await page.mouse.move(box.x + 260, box.y + 210, { steps: 6 });
+    await page.mouse.move(box.x + 490, box.y + 270, { steps: 6 });
     await page.mouse.up();
     await page.evaluate(
       () => (window.__canvas = document.querySelector("#board-canvas canvas")),
@@ -207,6 +210,7 @@ async function locale(page, value) {
       await page.click("#board-json");
       return JSON.parse(fs.readFileSync(await (await event).path(), "utf8"));
     }
+    await page.click("#board-menu-open");
     const before = await scene();
     assert(before.elements.some((x) => x.type === "rectangle" && !x.isDeleted));
     await locale(page, "zh-Hant");

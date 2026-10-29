@@ -77,7 +77,14 @@ export function mountSharedBoard(bridge) {
     }
     const { data, error } = await api.client.rpc("whiteboard_room", {
       action,
-      body: { client_id: clientId, ...body },
+      body: {
+        client_id: clientId,
+        ...body,
+        client_version: 2,
+        ...(action === "create"
+          ? { appState: sceneSettings(body.appState || {}) }
+          : {}),
+      },
     });
     if (actor() !== expected) throw Error("Account changed. Please reload.");
     if (error || data?.error) throw error || Error(data.error);
@@ -225,7 +232,10 @@ export function mountSharedBoard(bridge) {
         pending.set(e.id, structuredClone(e));
         outbound.set(e.id, structuredClone(e));
       }
-      if (signature !== settingsKnown) {
+      if (
+        signature !== settingsKnown ||
+        (!room.appState?.paper && changes.length)
+      ) {
         settingsKnown = signature;
         settingsPending = settings;
       }
@@ -655,11 +665,14 @@ export function mountSharedBoard(bridge) {
       privateSnapshot = bridge.privateData();
       active = true;
       owner = actor();
-      await bridge.mount({
-        name: "Shared whiteboard",
-        elements: [],
-        appState: { viewBackgroundColor: "#ffffff", gridSize: null },
-      });
+      await bridge.mount(
+        {
+          name: "Shared whiteboard",
+          elements: [],
+          appState: { viewBackgroundColor: "#ffffff", gridSize: null },
+        },
+        { preview: true },
+      );
       bridge.editing(false);
     } else {
       await flush();
@@ -854,7 +867,10 @@ export function mountSharedBoard(bridge) {
     return sharedData(
       room.name,
       drawing?.getSceneElementsIncludingDeleted() || latest?.elements || [],
-      drawing?.getAppState() || latest?.appState || room.appState,
+      bridge.state?.() ||
+        drawing?.getAppState() ||
+        latest?.appState ||
+        room.appState,
     );
   }
   window.addEventListener("offline", () => {
@@ -919,6 +935,7 @@ export function mountSharedBoard(bridge) {
         }
       }
     }
+    if (desired && (!api.user || invited || !room)) bridge.showBoards?.();
     controls();
   }
 
@@ -926,10 +943,12 @@ export function mountSharedBoard(bridge) {
     if (requested) {
       try {
         await tab(true);
-        if (invited)
+        if (invited) {
+          bridge.showBoards?.();
           notice(uiMsg("You have an invitation. Sign in, then choose Join."));
-        else if (api.user)
+        } else if (api.user)
           await loadRoom(await rpc("get", { room_id: requested }));
+        else bridge.showBoards?.();
       } catch (e) {
         notice(uiError(e), true);
       }
@@ -940,6 +959,7 @@ export function mountSharedBoard(bridge) {
       return active;
     },
     data,
+    personal: () => tab(false),
     change: queueLocal,
     pointer(payload) {
       if (editing)

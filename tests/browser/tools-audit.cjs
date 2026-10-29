@@ -141,6 +141,7 @@ async function launch(name) {
                 requestAnimationFrame(() => requestAnimationFrame(resolve)),
               ),
           );
+          if (slug === "whiteboard") await page.click("#board-menu-open");
           const help = page.locator("[data-open-help]");
           assert.equal(await help.count(), 1);
           await help.click();

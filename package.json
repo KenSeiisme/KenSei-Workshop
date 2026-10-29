@@ -70,7 +70,8 @@
     "vendor:studios": "node scripts/vendor-studios.mjs",
     "test:tools:smoke": "node scripts/accept-tools.mjs smoke",
     "test:tools:acceptance": "node scripts/accept-tools.mjs acceptance",
-    "test:tools:live": "node scripts/accept-tools.mjs live"
+    "test:tools:live": "node scripts/accept-tools.mjs live",
+    "test:whiteboard-canvas": "node scripts/test.mjs whiteboard-canvas"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

@@ -103,6 +103,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
           slug + " overflows " + width + ": " + JSON.stringify(result),
         );
       }
+      if (slug === "whiteboard") await p.click("#board-menu-open");
       await p.locator("[data-open-help]").click();
       assert(await p.locator("#tool-help").isVisible());
       await p.keyboard.press("Escape");

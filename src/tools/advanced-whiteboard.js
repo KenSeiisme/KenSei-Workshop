@@ -10,10 +10,25 @@ export async function init() {
       ["mind", "Mind map"],
       ["notes", "Study notes"],
     ]),
-    only = el("input", "", { type: "checkbox" });
-  let result = null;
-  const selection = el("label", "Export selected elements only");
-  selection.prepend(only);
+    only = $("#board-export-selection");
+  if ($("#board-more-content")) $("#board-more-content").append(p);
+  let result = null,
+    resultKey = "";
+  const currentKey = () =>
+    JSON.stringify({
+      data: ctx.currentData(),
+      selected: only.checked
+        ? ctx.drawing.getAppState().selectedElementIds
+        : null,
+      paper: $("#board-include-paper").checked,
+    });
+  const validResult = () => {
+    try {
+      return result && resultKey === currentKey() ? result : null;
+    } catch {
+      return null;
+    }
+  };
   p.append(
     row(
       field("Template", kind),
@@ -75,7 +90,6 @@ export async function init() {
         await ctx.insert(ctx.engine.convertToExcalidrawElements(elements));
       }),
     ),
-    selection,
     button("Prepare PNG", async () => {
       await ctx.ready();
       const d = ctx.drawing;
@@ -100,28 +114,27 @@ export async function init() {
         bounds[3] - bounds[1] > 16000
       )
         throw Error("This selection is too large. Export an editable file.");
-      const canvas = await ctx.engine.exportToCanvas({
-        elements,
-        appState: { ...app, exportBackground: true },
-        files: {},
-        exportPadding: 20,
-      });
+      const preparedKey = currentKey();
+      const canvas = await ctx.artwork({ elements, format: "png" });
       if (canvas.width * canvas.height > 32000000)
         throw Error("This selection is too large. Export an editable file.");
       const blob = await new Promise((r) => canvas.toBlob(r, "image/png"));
       if (!blob) throw Error("Canvas export is unavailable.");
       result = new File([blob], "whiteboard.png", { type: "image/png" });
+      resultKey = preparedKey;
       save.disabled = false;
       window.dispatchEvent(new Event("tool-content-changed"));
     }),
   );
   const save = button("Download PNG", () => {
-    if (result) download(result, result.name);
+    if (validResult()) download(result, result.name);
+    else throw Error("Whiteboard changed. Prepare a new PNG.");
   });
   save.disabled = true;
   p.append(save);
-  sendControl(p, () => (result ? { kind: "files", files: [result] } : null), [
-    "image-studio",
-    "pdf-toolkit",
-  ]);
+  sendControl(
+    p,
+    () => (validResult() ? { kind: "files", files: [result] } : null),
+    ["image-studio", "pdf-toolkit"],
+  );
 }

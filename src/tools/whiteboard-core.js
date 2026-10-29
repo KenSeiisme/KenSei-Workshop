@@ -9,6 +9,39 @@ const TYPES = new Set([
   "text",
   "frame",
 ]);
+export const PAPER_TYPES = ["plain", "ruled", "grid", "dots", "graph"];
+export function paperSettings(value) {
+  if (value === undefined) return { version: 1, type: "plain", spacing: 20 };
+  if (
+    !value ||
+    value.version !== 1 ||
+    !PAPER_TYPES.includes(value.type) ||
+    Object.keys(value).some(
+      (key) => !["version", "type", "spacing"].includes(key),
+    ) ||
+    ![10, 20, 40].includes(value.spacing)
+  )
+    throw Error("Invalid paper settings.");
+  return { version: 1, type: value.type, spacing: value.spacing };
+}
+export function portSettings(element) {
+  if (element.customData == null) return null;
+  const keys = Object.keys(element.customData),
+    p = element.customData.kenseiPorts;
+  if (
+    element.type !== "arrow" ||
+    keys.length !== 1 ||
+    keys[0] !== "kenseiPorts" ||
+    !p ||
+    p.version !== 1 ||
+    Object.keys(p).some((k) => !["version", "start", "end"].includes(k)) ||
+    ![p.start, p.end].every(
+      (n) => n === null || (Number.isInteger(n) && n >= 0 && n < 12),
+    )
+  )
+    throw Error("Invalid connector metadata.");
+  return { version: 1, start: p.start, end: p.end };
+}
 export function assertVectorScene(elements, files = {}) {
   if (!Array.isArray(elements) || elements.length > 10000)
     throw Error("Use a vector whiteboard with up to 10,000 elements.");
@@ -28,10 +61,11 @@ export function assertVectorScene(elements, files = {}) {
       throw Error(
         "This whiteboard contains unsupported elements. Images, embedded pages and attached files are not supported.",
       );
-    if (el.link || el.fileId || el.customData)
+    if (el.link || el.fileId)
       throw Error(
         "Linked elements, images and embedded content are not supported. Remove them before importing.",
       );
+    portSettings(el);
     for (const key of ["x", "y", "width", "height", "angle"])
       if (!Number.isFinite(el[key]))
         throw Error("The whiteboard contains invalid geometry.");
@@ -52,6 +86,7 @@ export function sceneSettings(state = {}) {
       state.gridSize <= 100
         ? state.gridSize
         : null,
+    paper: paperSettings(state.paper),
   };
 }
 export function whiteboardData(name, elements, appState, files = {}) {

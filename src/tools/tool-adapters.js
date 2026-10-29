@@ -356,6 +356,7 @@ function adapt(tool, root) {
       break;
     }
     case "whiteboard": {
+      if ($("#whiteboard-stage")) break;
       const controls = $(".whiteboard-controls");
       const first = $("#board-select")?.closest(".action-row");
       if (first) fold(first, "Choose a whiteboard", true);

@@ -30,6 +30,7 @@ const valid = validateWhiteboard(data);
 assert.deepEqual(Object.keys(valid.appState), [
   "viewBackgroundColor",
   "gridSize",
+  "paper",
 ]);
 assert.equal(importWhiteboard(editableScene(valid)).name, data.name);
 assert.equal(valid.elements[0].width, 180);

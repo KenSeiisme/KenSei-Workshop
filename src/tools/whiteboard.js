@@ -1,6 +1,9 @@
 import { $, api, status, download, downloadText, filename } from "./common.js";
 import { createRecordStore, recordSignature } from "./record-store.js";
 import { mountSharedBoard } from "./shared-whiteboard.js";
+import { createWhiteboardStage } from "./whiteboard-stage.js";
+import { createWhiteboardPresentation } from "./whiteboard-presentation.js";
+import { exportArtwork } from "./whiteboard-paper.js";
 import {
   validateWhiteboard,
   whiteboardData,
@@ -52,6 +55,21 @@ const engineReady = import("/vendor/whiteboard/engine.js").then((mod) => {
   root = engine.createRoot(host);
   return mod;
 });
+let presentation;
+const stage = createWhiteboardStage({
+  open: (id) => open(id).catch((e) => message(uiError(e), true)),
+  settingsChanged: (patch) => presentation?.settings(patch),
+  preferenceChanged: () => presentation?.preferences(),
+  refresh: () => presentation?.refresh(),
+});
+presentation = createWhiteboardPresentation({
+  host,
+  shell: $("#board-canvas-shell"),
+  getEngine: () => engine,
+  getAPI: () => drawing,
+  getStage: () => stage,
+  changed,
+});
 const key = (account, id) => account + ":" + id;
 let recoveryDatabase;
 async function recovery(account, id, value) {
@@ -87,7 +105,7 @@ function message(text, failed = false) {
   status(text, failed);
 }
 function controls() {
-  const enabled = !!board;
+  const enabled = stage.active && (!!board || !!shared?.active);
   for (const id of [
     "board-name",
     "board-delete",
@@ -96,6 +114,7 @@ function controls() {
     "board-svg",
   ])
     $("#" + id).disabled = !enabled;
+  $("#board-name").disabled = $("#board-delete").disabled = !board;
   $("#board-guests").hidden = !api.user;
   uiText(
     $("#board-state"),
@@ -104,6 +123,7 @@ function controls() {
         ? uiMsg("Unsaved changes · Saving locally…")
         : uiFrom(store.saveState())),
   );
+  if (!shared?.active) stage.edit(!!board);
 }
 function list() {
   const select = $("#board-select"),
@@ -114,6 +134,15 @@ function list() {
   select.value = selected || "";
   $("#board-more").hidden = !store.hasMore();
   controls();
+  if (!board && !shared?.active) {
+    let recent;
+    try {
+      recent = localStorage.getItem("kensei-whiteboard-recent:" + owner());
+    } catch {}
+    stage.recent(
+      store.rows().find((r) => r.id === recent) || store.rows()[0] || null,
+    );
+  }
 }
 function currentData() {
   if (shared?.active) return shared.data();
@@ -121,7 +150,7 @@ function currentData() {
   const scene = drawing
     ? {
         elements: drawing.getSceneElementsIncludingDeleted(),
-        appState: drawing.getAppState(),
+        appState: presentation.state(drawing.getAppState()),
         files: drawing.getFiles(),
       }
     : lastScene;
@@ -197,23 +226,42 @@ window.addEventListener("pagehide", () => documentLocaleObserver.disconnect(), {
   once: true,
 });
 let mountedProps = null;
-async function mount(data) {
+async function mount(data, { preview = false } = {}) {
+  const generation = ++renderVersion;
   await engineReady;
+  if (generation !== renderVersion) return;
+  // 舊檔缺少紙張欄位時只正規化記憶體，不因開啟而建立新修訂。
+  if (data.name)
+    data = whiteboardData(
+      data.name,
+      data.elements,
+      data.appState,
+      data.files || {},
+    );
   drawing = null;
   lastScene = data;
   signature = recordSignature(data);
   ignore = false;
+  presentation.load(data);
   mountedProps = {
-    key: key(scope, board?.id || "empty") + ":" + ++renderVersion,
+    key: key(scope, board?.id || "empty") + ":" + generation,
     initialData: {
       elements: data.elements,
-      appState: { ...data.appState, currentItemFontFamily: 2 },
+      appState: presentation.native({
+        ...data.appState,
+        currentItemFontFamily: 2,
+      }),
     },
     theme: "dark",
+    gridModeEnabled: false,
     langCode: globalThis.KenseiI18n?.getLocale() === "zh-Hant" ? "zh-TW" : "en",
     aiEnabled: false,
     isCollaborating: !!shared?.active,
-    onPointerUpdate: (payload) => shared?.pointer(payload),
+    onPointerUpdate: (payload) => {
+      if (generation !== renderVersion) return;
+      presentation.pointer(payload);
+      shared?.pointer(payload);
+    },
     validateEmbeddable: () => false,
     viewModeEnabled: !board,
     autoFocus: false,
@@ -230,9 +278,15 @@ async function mount(data) {
       },
     },
     excalidrawAPI: (instance) => {
+      if (generation !== renderVersion) return;
       drawing = instance;
+      presentation.attach(instance);
     },
-    onChange: changed,
+    onChange: (elements, state, files) => {
+      if (generation !== renderVersion) return;
+      const result = presentation.normalize(elements, state);
+      if (result) changed(result.elements, result.state, files);
+    },
     onPaste: blockPaste,
     onLibraryChange: () => {},
     onLinkOpen: (el, event) => event.preventDefault(),
@@ -240,10 +294,10 @@ async function mount(data) {
       engine.MainMenu,
       null,
       engine.createElement(engine.MainMenu.DefaultItems.ClearCanvas),
-      engine.createElement(engine.MainMenu.DefaultItems.ChangeCanvasBackground),
     ),
   };
   root.render(engine.createElement(engine.Excalidraw, mountedProps));
+  stage.activate(preview ? {} : data);
 }
 window.addEventListener("locale-change", () => {
   if (!mountedProps) return;
@@ -329,6 +383,9 @@ async function open(id) {
   $("#board-name").value = data.name;
   dirty = !!draft;
   await mount(data);
+  try {
+    localStorage.setItem("kensei-whiteboard-recent:" + owner(), id);
+  } catch {}
   list();
   history.replaceState(null, "", "?id=" + encodeURIComponent(id));
   message(
@@ -366,8 +423,14 @@ async function newBoard(
   if (expected !== owner()) return;
   await open(row.id);
 }
-$("#board-new").onclick = () =>
-  newBoard().catch((e) => message(uiError(e), true));
+$("#board-new").onclick = async () => {
+  try {
+    if (shared?.active) await shared.personal();
+    await newBoard();
+  } catch (e) {
+    message(uiError(e), true);
+  }
+};
 $("#board-select").onchange = (e) => {
   if (e.target.value)
     open(e.target.value).catch((e) => message(uiError(e), true));
@@ -377,7 +440,7 @@ $("#board-name").oninput = () => {
   const scene = drawing
     ? {
         elements: drawing.getSceneElementsIncludingDeleted(),
-        appState: drawing.getAppState(),
+        appState: presentation.state(drawing.getAppState()),
         files: drawing.getFiles(),
       }
     : lastScene;
@@ -435,56 +498,34 @@ async function exportBoard(format) {
         "application/json",
       );
     await engineReady;
-    const elements = data.elements.filter((el) => !el.isDeleted);
+    const selectedOnly = $("#board-export-selection").checked,
+      selected = drawing?.getAppState().selectedElementIds || {};
+    const elements = data.elements.filter(
+      (el) => !el.isDeleted && (!selectedOnly || selected[el.id]),
+    );
     if (!elements.length)
       throw Error("Add a drawing or text before exporting an image.");
-    const minX = Math.min(...elements.map((el) => el.x)),
-      maxX = Math.max(...elements.map((el) => el.x + Math.abs(el.width))),
-      minY = Math.min(...elements.map((el) => el.y)),
-      maxY = Math.max(...elements.map((el) => el.y + Math.abs(el.height)));
-    if (
-      maxX - minX > 16000 ||
-      maxY - minY > 16000 ||
-      (maxX - minX) * (maxY - minY) > 32000000
-    )
-      throw Error(
-        "This canvas is too large to export as an image. Export the editable file instead.",
-      );
-    const options = {
+    const artwork = await exportArtwork(engine, data, {
+      format,
+      includePaper: stage.includePaper,
       elements,
-      appState: {
-        ...data.appState,
-        exportBackground: true,
-        exportWithDarkMode: true,
-      },
-      files: {},
-      exportPadding: 20,
-    };
-    if (format === "svg") {
-      const svg = await engine.exportToSvg(options);
-      // Excalidraw 将字体嵌入导出 SVG，所有子集字体由本站加载。
+    });
+    if (format === "svg")
       downloadText(
-        svg.outerHTML,
+        artwork.outerHTML,
         filename(data.name) + ".svg",
         "image/svg+xml",
       );
-    } else {
-      const canvas = await engine.exportToCanvas(options);
-      const blob = await new Promise((resolve, reject) => {
-        try {
-          canvas.toBlob(
-            (b) =>
-              b
-                ? resolve(b)
-                : reject(
-                    Error("Canvas export is unavailable in this browser."),
-                  ),
-            "image/png",
-          );
-        } catch (e) {
-          reject(e);
-        }
-      });
+    else {
+      const blob = await new Promise((resolve, reject) =>
+        artwork.toBlob(
+          (value) =>
+            value
+              ? resolve(value)
+              : reject(Error("Canvas export is unavailable.")),
+          "image/png",
+        ),
+      );
       download(blob, filename(data.name) + ".png");
     }
     message(uiMsg("Whiteboard exported."));
@@ -495,24 +536,6 @@ async function exportBoard(format) {
 $("#board-json").onclick = () => exportBoard("json");
 $("#board-png").onclick = () => exportBoard("png");
 $("#board-svg").onclick = () => exportBoard("svg");
-$("#board-fullscreen").onclick = async () => {
-  try {
-    if (document.fullscreenElement) await document.exitFullscreen();
-    else if ($("#board-canvas-shell").requestFullscreen)
-      await $("#board-canvas-shell").requestFullscreen();
-    else
-      message(
-        uiMsg(
-          "Fullscreen is unavailable. You can zoom and pan inside the canvas.",
-        ),
-      );
-  } catch (e) {
-    message(
-      uiMsg("Fullscreen could not start. Use the canvas normally."),
-      true,
-    );
-  }
-};
 $("#board-guests").onclick = async () => {
   const out = $("#board-guest-list");
   out.replaceChildren();
@@ -633,9 +656,11 @@ store.subscribe(() => {
   board = structuredClone(row);
   persistedSignature = incoming;
   $("#board-name").value = row.data.name;
-  mount(row.data)
-    .then(() => message(uiMsg("Whiteboard refreshed from your workspace.")))
-    .catch((e) => message(uiError(e), true));
+  lastScene = row.data;
+  signature = recordSignature(row.data);
+  presentation.remote(row.data.elements, row.data.appState);
+  controls();
+  message(uiMsg("Whiteboard refreshed from your workspace."));
 });
 window.addEventListener("record-conflict", async ({ detail }) => {
   if (shared?.active) return;
@@ -656,7 +681,8 @@ window.addEventListener("beforeunload", (e) => {
   }
 });
 async function start() {
-  if (shared?.active) return;
+  if (shared?.active || (board && scope === owner())) return;
+  if (scope !== owner()) stage.identity();
   const token = ++switching,
     expected = owner();
   clearTimeout(timer);
@@ -685,7 +711,7 @@ async function start() {
     await store.load(true);
     if (expected !== owner() || token !== switching || shared?.active) return;
     list();
-    const id = requested || store.rows()[0]?.id;
+    const id = requested;
     if (id) await open(id);
     else
       await mount({
@@ -705,14 +731,20 @@ shared = mountSharedBoard({
     $("#board-name").value = "";
   },
   api: () => drawing,
-  async mount(data) {
-    await mount(data);
+  async mount(data, options) {
+    await mount(data, options);
+    controls();
     for (let i = 0; i < 100 && !drawing; i++)
       await new Promise((resolve) => setTimeout(resolve, 30));
     if (!drawing)
       throw Error("The whiteboard editor could not start. Reload to retry.");
   },
+  showBoards: () => {
+    const d = $("#board-drawer");
+    if (!d.open) d.showModal();
+  },
   editing(value) {
+    stage.edit(value);
     if (!mountedProps) return;
     mountedProps = {
       ...mountedProps,
@@ -722,12 +754,9 @@ shared = mountSharedBoard({
     root.render(engine.createElement(engine.Excalidraw, mountedProps));
   },
   remote(elements, appState) {
-    drawing?.updateScene({
-      elements,
-      appState,
-      captureUpdate: engine.CaptureUpdateAction.NEVER,
-    });
+    presentation.remote(elements, appState);
   },
+  state: () => presentation.state(drawing?.getAppState() || {}),
   reconcile: (...args) => engine.reconcileElements(...args),
   collaborators: (collaborators) =>
     drawing?.updateScene({
@@ -745,7 +774,9 @@ shared = mountSharedBoard({
           drawing?.getSceneElementsIncludingDeleted() ||
             lastScene?.elements ||
             [],
-          drawing?.getAppState() || lastScene?.appState || {},
+          drawing
+            ? presentation.state(drawing.getAppState())
+            : lastScene?.appState || {},
         )
       : null,
   normalize: (data) => ({
@@ -786,6 +817,13 @@ window.KenseiAdvancedContexts.whiteboard = {
     return engine;
   },
   currentData,
+  async artwork(options = {}) {
+    await engineReady;
+    return exportArtwork(engine, currentData(), {
+      ...options,
+      includePaper: stage.includePaper,
+    });
+  },
   ready: () => engineReady,
   async insert(elements) {
     await engineReady;
@@ -797,7 +835,11 @@ window.KenseiAdvancedContexts.whiteboard = {
       ...drawing.getSceneElementsIncludingDeleted(),
       ...restored,
     ];
-    whiteboardData(currentData().name, combined, drawing.getAppState());
+    whiteboardData(
+      currentData().name,
+      combined,
+      presentation.state(drawing.getAppState()),
+    );
     drawing.updateScene({
       elements: combined,
       captureUpdate: engine.CaptureUpdateAction.IMMEDIATELY,

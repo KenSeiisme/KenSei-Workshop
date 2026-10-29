@@ -10,7 +10,7 @@ await fs.mkdir(board, { recursive: true });
 const result = await build({
   stdin: {
     contents:
-      'export {createElement} from "react"; export {createRoot} from "react-dom/client"; export {Excalidraw,MainMenu,exportToCanvas,exportToSvg,convertToExcalidrawElements,reconcileElements,CaptureUpdateAction,restoreElements} from "@excalidraw/excalidraw";',
+      'export {createElement} from "react"; export {createRoot} from "react-dom/client"; export {Excalidraw,MainMenu,exportToCanvas,exportToSvg,convertToExcalidrawElements,reconcileElements,CaptureUpdateAction,restoreElements,getCommonBounds,newElementWith,sceneCoordsToViewportCoords,viewportCoordsToSceneCoords} from "@excalidraw/excalidraw";',
     resolveDir: root,
     sourcefile: "engine.js",
   },

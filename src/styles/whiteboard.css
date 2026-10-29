@@ -166,6 +166,269 @@
   color: #d6b6ec;
   font-size: 13px;
 }
+/* 白板專用舞台；管理區進入抽屜，畫布保留原有 React 節點。 */
+.tool-page.whiteboard-page {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.whiteboard-stage {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  min-height: 220px;
+  width: 100%;
+}
+.whiteboard-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+.whiteboard-toolbar h1 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.whiteboard-toolbar .back-link {
+  margin: 0;
+  min-height: 44px;
+  align-content: center;
+}
+.whiteboard-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.whiteboard-toolbar .button,
+.whiteboard-toolbar .text-link,
+.whiteboard-toolbar .back-link {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 10px;
+  margin: 0;
+  font-size: 12px;
+}
+#board-title {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#board-header-state {
+  max-width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+.tool-page.whiteboard-page .whiteboard-shell {
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  border-radius: 12px;
+}
+.whiteboard-paper,
+.whiteboard-canvas,
+.whiteboard-ports {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.whiteboard-paper {
+  pointer-events: none;
+  z-index: 0;
+}
+.whiteboard-canvas {
+  z-index: 1;
+}
+.whiteboard-canvas .excalidraw,
+.whiteboard-canvas .excalidraw__canvas-wrapper {
+  background: transparent;
+}
+.whiteboard-ports {
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.board-port {
+  pointer-events: all;
+  cursor: crosshair;
+  fill: #d6b6ec;
+  stroke: #47314f;
+  stroke-width: 1.5;
+}
+.board-port.is-nearest {
+  fill: #f9c1e3;
+  stroke: #fff;
+}
+.board-welcome {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  pointer-events: none;
+}
+.board-welcome-card {
+  pointer-events: auto;
+  width: min(430px, 100%);
+  padding: 20px;
+  border: 1px solid #d6b6ec55;
+  border-radius: 16px;
+  background: #1b1623f5;
+  box-shadow: 0 14px 60px #0005;
+}
+.board-welcome-card h2 {
+  font-size: clamp(18px, 3vw, 25px);
+  margin: 6px 0 16px;
+}
+.board-welcome-card .button,
+.board-welcome-card .text-link {
+  min-height: 44px;
+}
+.board-welcome-card p {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.whiteboard-stage > #tool-status {
+  margin: 0;
+  min-height: 16px;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.whiteboard-stage > .tool-feedback {
+  display: none;
+}
+.whiteboard-stage > .tool-feedback[data-state="error"] {
+  display: flex;
+  grid-row: 3;
+  margin: 0;
+}
+.board-dialog {
+  width: min(560px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  border: 1px solid #d6b6ec55;
+  border-radius: 14px;
+  color: var(--text);
+  background: #19151f;
+  padding: 16px;
+}
+.board-dialog::backdrop {
+  background: #08060c99;
+}
+.board-dialog > .action-row:first-child {
+  justify-content: space-between;
+  align-items: center;
+}
+.board-dialog h2 {
+  font-size: 20px;
+  margin: 0;
+}
+.board-dialog .panel {
+  border: none;
+  padding: 12px 0;
+  background: transparent;
+}
+.board-dialog .action-row {
+  flex-wrap: wrap;
+}
+.board-dialog input[type="checkbox"] {
+  min-width: 20px;
+  width: 20px;
+}
+.board-dialog .button,
+.board-dialog .text-link {
+  min-height: 44px;
+  min-width: 44px;
+}
+.board-dialog .studio-recipes,
+.board-dialog select {
+  max-width: 100%;
+}
+.board-dialog label:has(input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.whiteboard-stage:fullscreen {
+  background: #111015;
+  padding: 8px;
+  height: 100dvh !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+body.whiteboard-focus .site-header,
+body.whiteboard-focus > .header,
+body.whiteboard-focus > footer,
+body.whiteboard-focus > .footer,
+body.whiteboard-focus .site-footer {
+  display: none;
+}
+body.whiteboard-focus .container.whiteboard-page {
+  max-width: none;
+  width: 100%;
+  padding: 8px;
+}
+@media (max-width: 767px) {
+  body:has(.whiteboard-page) > .header {
+    height: 56px;
+  }
+  .tool-page.whiteboard-page {
+    padding-top: 4px;
+  }
+  .whiteboard-stage {
+    gap: 4px;
+  }
+  .whiteboard-toolbar h1 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  #board-title {
+    display: block;
+    max-width: 140px;
+  }
+  #board-header-state {
+    max-width: 100%;
+    min-width: 0;
+    flex: 1;
+  }
+  .whiteboard-toolbar-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .whiteboard-toolbar-actions .button {
+    flex: 1 1 auto;
+    padding: 7px;
+  }
+  .board-welcome-card {
+    padding: 15px;
+  }
+}
+@media (max-height: 480px) and (min-width: 600px) {
+  .whiteboard-toolbar {
+    gap: 4px;
+  }
+  #board-header-state,
+  #board-title {
+    display: none;
+  }
+  .whiteboard-toolbar-actions {
+    width: auto;
+    margin-left: auto;
+  }
+}
 .shared-board-manager .shared-join {
   margin-top: 12px;
 }

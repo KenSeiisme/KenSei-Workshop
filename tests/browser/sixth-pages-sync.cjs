@@ -152,6 +152,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
       ).store;
       await actualStore.ready();
     }, slug);
+    if (kind === "whiteboard" && id) await p.click("#board-boards");
     return p;
   }
   const settled = (p) =>
@@ -235,7 +236,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
     );
     const guest = await context(null),
       g = await openUI(guest);
-    await g.click(kind === "planner" ? "#planner-new" : "#board-new");
+    await g.click(kind === "planner" ? "#planner-new" : "#board-entry-new");
+    if (kind === "whiteboard") await g.click("#board-boards");
     await g.fill(nameField, "Explicit guest copy");
     await g.waitForTimeout(800);
     await Promise.all([
@@ -259,6 +261,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
       });
       await g.click("#planner-copy-account");
     } else {
+      await g.click("#board-boards");
       await g.click("#board-guests");
       await g
         .locator("#board-guest-list button")

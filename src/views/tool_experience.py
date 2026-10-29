@@ -150,9 +150,9 @@ HELP = {
         "Plans autosave locally and sync privately. Guest plans require Copy to account; conflicts retain copies.",
     ),
     "whiteboard": (
-        "Named vector boards up to 2 MB; text, shapes, arrows and free drawing.",
-        "Export PNG, SVG or editable .excalidraw. Shared rooms support four signed-in members. Images and external embeds are unsupported.",
-        "Personal boards sync privately. Shared copies are visible to room members. Guest boards require Copy to account.",
+        "Named vector boards up to 2 MB and 10,000 elements; text, shapes, arrows and free drawing.",
+        "Choose New or Continue to open the canvas. Boards holds Personal and Shared records. More contains exports, templates and drawing preferences. Keep tool active repeats your drawing tool; Snap to points connects arrows to 12 points on each shape. Background offers five paper styles that follow the scene. Fullscreen requires a supported browser; focus mode remains available.",
+        "Personal boards sync privately; Shared supports four signed-in members. Paper and arrow bindings belong to the document. Tool lock, selection and viewport are personal. Images and external embeds are unsupported. Guest boards require Copy to account.",
     ),
     "screen-recorder": (
         "Desktop capture where supported; target 1080p / 30fps; stops at 10 minutes or 250 MB.",
@@ -167,9 +167,13 @@ def heading(tool, star):
     limits, usage, privacy = HELP[slug]
     return render_template(
         (
-            "tools/typing-heading.html"
-            if slug == "typing-sprint"
-            else "tools/heading.html"
+            "tools/whiteboard-heading.html"
+            if slug == "whiteboard"
+            else (
+                "tools/typing-heading.html"
+                if slug == "typing-sprint"
+                else "tools/heading.html"
+            )
         ),
         category=escape(category.upper()),
         name=escape(name),

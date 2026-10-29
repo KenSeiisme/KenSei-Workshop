@@ -37,9 +37,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798";
   try {
     await page.goto(base + "/tools/whiteboard/");
     await page.waitForSelector('[data-ready="true"]');
-    await page.click("#board-new");
+    await page.click("#board-entry-new");
     await page.waitForSelector("#board-canvas canvas");
+    await page.click("#board-boards");
     await page.fill("#board-name", "课程 Whiteboard");
+    await page.locator("#board-drawer").evaluate((n) => n.close());
     await page.waitForTimeout(800);
     const canvas = page.locator("#board-canvas canvas").last();
     await canvas.scrollIntoViewIfNeeded();
@@ -54,6 +56,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798";
     await page.keyboard.insertText("你好 KenSei");
     await page.keyboard.press("Escape");
     await page.waitForTimeout(900);
+    await page.click("#board-menu-open");
     const editable = await download(() => page.click("#board-json")),
       scene = JSON.parse(editable.buffer);
     assert.equal(scene.name, "课程 Whiteboard");
@@ -86,10 +89,13 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798";
     await page.waitForFunction(
       () => document.querySelector("#board-name")?.value === "课程 Whiteboard",
     );
+    await page.click("#board-menu-open");
     const restored = JSON.parse(
       (await download(() => page.click("#board-json"))).buffer,
     );
     assert.equal(restored.elements.filter((el) => !el.isDeleted).length, 2);
+    await page.locator("#board-menu").evaluate((n) => n.close());
+    await page.click("#board-boards");
     const before = await page.locator("#board-select option").count();
     await page.setInputFiles("#board-import", {
       name: "image.excalidraw",
@@ -123,6 +129,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798";
         .querySelector("#tool-status")
         .textContent.includes("Linked elements"),
     );
+    await page.locator("#board-drawer").evaluate((n) => n.close());
     await page.locator("#board-canvas").evaluate((n) => {
       const transfer = new DataTransfer();
       transfer.items.add(new File(["fake"], "test.png", { type: "image/png" }));

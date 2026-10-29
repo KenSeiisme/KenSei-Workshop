@@ -17,7 +17,8 @@ const assert = require("node:assert/strict"),
   try {
     await p.goto(base + "/tools/whiteboard/");
     await p.waitForSelector("[data-ready=true]");
-    await p.click("#board-new");
+    await p.click("#board-entry-new");
+    await p.click("#board-menu-open");
     await p.waitForFunction(
       () =>
         window.KenseiAdvancedContexts?.whiteboard?.drawing &&
