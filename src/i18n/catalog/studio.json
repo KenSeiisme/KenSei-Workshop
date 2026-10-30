@@ -150,5 +150,17 @@
   "m_30b2ef55c971": {
     "en": "17 lighting algorithms and 24 Arctic, Neon and Ember presets.",
     "zh-Hant": "17 種燈效演算法與 24 個冰藍、霓虹、餘燼預設。"
+  },
+  "m_e85c390f07a5": {
+    "en": "Controller library, prop groups and eight-prop preview pages.",
+    "zh-Hant": "遙控器庫、道具群組與每頁八件的舞台預覽。"
+  },
+  "m_d2c5d818b520": {
+    "en": "Wireless performance preview with preflight checks and blackout acknowledgements.",
+    "zh-Hant": "無線演出預覽：演出前檢查與全場熄燈確認。"
+  },
+  "m_050db02b5629": {
+    "en": "64 props / indoor 30 m and timing targets await physical validation.",
+    "zh-Hant": "64 件道具／室內 30 公尺與同步精度目標仍待實物驗收。"
   }
 }

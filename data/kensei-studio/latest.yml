@@ -1,33 +1,41 @@
-version: 0.4.0
+version: 0.5.0
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.4.0/KenSei-Studio-0.4.0-Setup.exe
-    sha512: K744hWXzXhL9/TRhofMPO3ymXatIHa4ETWGdgfl01MzlnevqhZyDFrjrDB/e+nBmL9Y0H3RpEc1Ckiki0dGdLg==
-    size: 125646821
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.4.0/KenSei-Studio-0.4.0-Setup.exe
-sha512: K744hWXzXhL9/TRhofMPO3ymXatIHa4ETWGdgfl01MzlnevqhZyDFrjrDB/e+nBmL9Y0H3RpEc1Ckiki0dGdLg==
-releaseDate: 2026-10-29T20:17:02.613Z
-releaseName: KenSei Studio 0.4.0
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.5.0/final-1/KenSei-Studio-0.5.0-Setup.exe
+    sha512: Y1U+bLqidSzNxTJYw+djtvaSf9+/WGkUDLPID8oqS1jZoQyJmc1w4V7cg+OsUX0Tn4xkncJczz9rYnLLOWq/pg==
+    size: 125712087
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.5.0/final-1/KenSei-Studio-0.5.0-Setup.exe
+sha512: Y1U+bLqidSzNxTJYw+djtvaSf9+/WGkUDLPID8oqS1jZoQyJmc1w4V7cg+OsUX0Tn4xkncJczz9rYnLLOWq/pg==
+releaseDate: 2026-10-30T08:25:21.726Z
+releaseName: KenSei Studio 0.5.0
 releaseNotes: >
   ADDED
 
-  - Right-click prop and song management, including duplicate, reorder, clear
-  and delete.
+  - Controller profiles, collapsible libraries, prop groups and eight-prop
+  preview pages.
 
-  - Per-song preview volume and mute, plus a persistent App master volume.
+  - Preview wireless performance workspace with USB identity registration,
+  preflight checks and blackout status.
 
-  - Eight offline lighting algorithms and 24 searchable Arctic, Neon and Ember
-  presets.
+  - Authenticated ESP-NOW controller and prop firmware, plus 64-node loss and
+  clock-drift simulation.
+
+  - Sequential build/upload queue and scheduled Web Audio playback with offset
+  calibration.
 
 
   IMPROVED
 
-  - Copy all song tracks when duplicating a prop, with fresh IDs and GPIO
-  reconfirmation.
+  - Version 1 projects migrate in memory; the original file is backed up before
+  saving version 2.
 
-  - Volume changes keep preview playback and lighting in sync without
-  invalidating firmware builds.
+  - Live sessions lock editing, device jobs and update installation while cached
+  prop programs keep running after disconnection.
 
 
   FIXED
 
-  - Share audio assets when duplicating songs and preserve them for undo.
+  - Controller firmware and prop firmware are distinguished during build and
+  hardware identity checks.
+
+  - 64 props / indoor 30 m and physical timing accuracy remain unverified
+  targets; wireless sync is a preview.

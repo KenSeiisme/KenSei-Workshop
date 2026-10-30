@@ -1,5 +1,59 @@
 [
   {
+    "version": "0.5.0",
+    "date": "2026-10-30",
+    "changes": {
+      "en": {
+        "added": [
+          "Controller profiles, collapsible libraries, prop groups and eight-prop preview pages.",
+          "Preview wireless performance workspace with USB identity registration, preflight checks and blackout status.",
+          "Authenticated ESP-NOW controller and prop firmware, plus 64-node loss and clock-drift simulation.",
+          "Sequential build/upload queue and scheduled Web Audio playback with offset calibration."
+        ],
+        "improved": [
+          "Version 1 projects migrate in memory; the original file is backed up before saving version 2.",
+          "Live sessions lock editing, device jobs and update installation while cached prop programs keep running after disconnection."
+        ],
+        "fixed": [
+          "Controller firmware and prop firmware are distinguished during build and hardware identity checks.",
+          "64 props / indoor 30 m and physical timing accuracy remain unverified targets; wireless sync is a preview."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "遥控器配置、可折叠资料库、道具分组与每页八件的舞台预览。",
+          "无线演出预览工作区：USB 身份登记、演出前检查和全场熄灯确认状态。",
+          "带认证的 ESP-NOW 主控与道具固件，以及 64 节点丢包和时钟漂移模拟。",
+          "串行构建／烧录队列与支持偏移校准的 Web Audio 预约播放。"
+        ],
+        "improved": [
+          "版本 1 项目在内存迁移，保存版本 2 前保留原文件备份。",
+          "演出中锁定编辑、设备任务和更新安装；断联后道具继续本地节目。"
+        ],
+        "fixed": [
+          "构建和硬件身份检查区分主控固件与道具固件。",
+          "64 件／室内 30 米及实物同步精度仍是待验收目标，无线同步标为预览功能。"
+        ]
+      },
+      "zh-TW": {
+        "added": [
+          "遙控器設定、可收合資料庫、道具群組與每頁八件的舞台預覽。",
+          "無線演出預覽工作區：USB 身分登記、演出前檢查與全場熄燈確認狀態。",
+          "具認證的 ESP-NOW 主控與道具韌體，以及 64 節點丟包與時鐘漂移模擬。",
+          "序列建置／燒錄佇列與支援偏移校準的 Web Audio 預約播放。"
+        ],
+        "improved": [
+          "版本 1 專案於記憶體中遷移，儲存版本 2 前保留原始檔案備份。",
+          "演出中鎖定編輯、裝置工作及更新安裝；斷線後道具繼續本機節目。"
+        ],
+        "fixed": [
+          "建置與硬體身分檢查區分主控韌體與道具韌體。",
+          "64 件／室內 30 公尺及實物同步精度仍待驗收，無線同步標為預覽功能。"
+        ]
+      }
+    }
+  },
+  {
     "version": "0.4.0",
     "date": "2026-10-30",
     "changes": {
