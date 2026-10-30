@@ -1,41 +1,36 @@
-version: 0.5.0
+version: 0.6.0
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.5.0/final-1/KenSei-Studio-0.5.0-Setup.exe
-    sha512: Y1U+bLqidSzNxTJYw+djtvaSf9+/WGkUDLPID8oqS1jZoQyJmc1w4V7cg+OsUX0Tn4xkncJczz9rYnLLOWq/pg==
-    size: 125712087
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.5.0/final-1/KenSei-Studio-0.5.0-Setup.exe
-sha512: Y1U+bLqidSzNxTJYw+djtvaSf9+/WGkUDLPID8oqS1jZoQyJmc1w4V7cg+OsUX0Tn4xkncJczz9rYnLLOWq/pg==
-releaseDate: 2026-10-30T08:25:21.726Z
-releaseName: KenSei Studio 0.5.0
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.6.0/KenSei-Studio-0.6.0-Setup.exe
+    sha512: rvWwrk98mVKi6jAOPdgi0sFayvgD+qsx2bruz9PWg7DICWVyExpu2XgWjwo3qYuN7CIps0yM6MbOOu90H6lAZg==
+    size: 125721795
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.6.0/KenSei-Studio-0.6.0-Setup.exe
+sha512: rvWwrk98mVKi6jAOPdgi0sFayvgD+qsx2bruz9PWg7DICWVyExpu2XgWjwo3qYuN7CIps0yM6MbOOu90H6lAZg==
+releaseDate: 2026-10-30T13:52:23.215Z
+releaseName: KenSei Studio 0.6.0
 releaseNotes: >
   ADDED
 
-  - Controller profiles, collapsible libraries, prop groups and eight-prop
-  preview pages.
+  - Multi-select clips with Ctrl-click, marquee selection or timeline Select
+  All; copy and paste complete effects and pixel animations across tracks and
+  songs.
 
-  - Preview wireless performance workspace with USB identity registration,
-  preflight checks and blackout status.
-
-  - Authenticated ESP-NOW controller and prop firmware, plus 64-node loss and
-  clock-drift simulation.
-
-  - Sequential build/upload queue and scheduled Web Audio playback with offset
-  calibration.
+  - Hover over an effect for 250 ms or focus it with the keyboard to preview it
+  independently; clicking still adds it at the playhead.
 
 
   IMPROVED
 
-  - Version 1 projects migrate in memory; the original file is backed up before
-  saving version 2.
+  - New clips default to two beats, with beat and second duration presets saved
+  in workspace preferences. New inserts and pastes use the exact playhead
+  position regardless of snapping.
 
-  - Live sessions lock editing, device jobs and update installation while cached
-  prop programs keep running after disconnection.
+  - New effects shorten to the next clip or song end; pasted clips keep their
+  complete duration, timing, track spacing, names, parameters and keyframes.
+  Paste conflicts reject the whole batch.
 
 
   FIXED
 
-  - Controller firmware and prop firmware are distinguished during build and
-  hardware identity checks.
-
-  - 64 props / indoor 30 m and physical timing accuracy remain unverified
-  targets; wireless sync is a preview.
+  - Editor-only version updates retain the 0.5.0 firmware compatibility
+  identity, so unchanged projects keep their existing firmware and build cache.
+  Wireless synchronization remains a preview pending hardware validation.

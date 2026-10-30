@@ -162,5 +162,13 @@
   "m_050db02b5629": {
     "en": "64 props / indoor 30 m and timing targets await physical validation.",
     "zh-Hant": "64 件道具／室內 30 公尺與同步精度目標仍待實物驗收。"
+  },
+  "m_585b5267b243": {
+    "en": "Multi-select, copy and paste complete effects across tracks and songs.",
+    "zh-Hant": "多選並完整複製燈效，跨軌道和節目貼上。"
+  },
+  "m_731e1167cc2a": {
+    "en": "Short two-beat inserts at the exact playhead, with independent hover previews.",
+    "zh-Hant": "預設兩拍的短片段精確加入播放頭，並可懸停獨立預覽。"
   }
 }

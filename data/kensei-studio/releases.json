@@ -1,5 +1,50 @@
 [
   {
+    "version": "0.6.0",
+    "date": "2026-10-30",
+    "changes": {
+      "en": {
+        "added": [
+          "Multi-select clips with Ctrl-click, marquee selection or timeline Select All; copy and paste complete effects and pixel animations across tracks and songs.",
+          "Hover over an effect for 250 ms or focus it with the keyboard to preview it independently; clicking still adds it at the playhead."
+        ],
+        "improved": [
+          "New clips default to two beats, with beat and second duration presets saved in workspace preferences. New inserts and pastes use the exact playhead position regardless of snapping.",
+          "New effects shorten to the next clip or song end; pasted clips keep their complete duration, timing, track spacing, names, parameters and keyframes. Paste conflicts reject the whole batch."
+        ],
+        "fixed": [
+          "Editor-only version updates retain the 0.5.0 firmware compatibility identity, so unchanged projects keep their existing firmware and build cache. Wireless synchronization remains a preview pending hardware validation."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "支持 Ctrl 点选、框选及时间轴全选；完整复制参数灯效和像素动画，并跨轨道、跨节目粘贴。",
+          "悬停灯效 250 毫秒或使用键盘聚焦即可独立预览，点击仍将灯效加入播放头位置。"
+        ],
+        "improved": [
+          "新增片段默认两拍，可选择拍数或秒数并保存为工作区偏好。新增与粘贴始终精确跟随播放头，不受吸附影响。",
+          "新增灯效可缩短到下一片段或歌曲结尾；粘贴完整保留时长、相对时间、轨道间距、名称、参数和关键帧，发生冲突时整批取消。"
+        ],
+        "fixed": [
+          "仅编辑器版本升级时保留 0.5.0 固件兼容身份，未修改项目继续复用原固件与构建缓存。无线同步继续标为预览，等待实物验收。"
+        ]
+      },
+      "zh-TW": {
+        "added": [
+          "支援 Ctrl 點選、框選及時間軸全選；完整複製參數燈效和像素動畫，並跨軌道、跨節目貼上。",
+          "懸停燈效 250 毫秒或使用鍵盤聚焦即可獨立預覽，點擊仍將燈效加入播放頭位置。"
+        ],
+        "improved": [
+          "新增片段預設兩拍，可選擇拍數或秒數並儲存為工作區偏好。新增與貼上始終精確跟隨播放頭，不受吸附影響。",
+          "新增燈效可縮短至下一片段或歌曲結尾；貼上完整保留時長、相對時間、軌道間距、名稱、參數和關鍵幀，發生衝突時整批取消。"
+        ],
+        "fixed": [
+          "僅編輯器版本升級時保留 0.5.0 韌體相容身分，未修改專案繼續使用原韌體與建置快取。無線同步繼續標為預覽，等待實物驗收。"
+        ]
+      }
+    }
+  },
+  {
     "version": "0.5.0",
     "date": "2026-10-30",
     "changes": {
