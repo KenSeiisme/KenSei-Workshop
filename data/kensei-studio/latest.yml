@@ -1,36 +1,31 @@
-version: 0.6.0
+version: 0.7.0
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.6.0/KenSei-Studio-0.6.0-Setup.exe
-    sha512: rvWwrk98mVKi6jAOPdgi0sFayvgD+qsx2bruz9PWg7DICWVyExpu2XgWjwo3qYuN7CIps0yM6MbOOu90H6lAZg==
-    size: 125721795
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.6.0/KenSei-Studio-0.6.0-Setup.exe
-sha512: rvWwrk98mVKi6jAOPdgi0sFayvgD+qsx2bruz9PWg7DICWVyExpu2XgWjwo3qYuN7CIps0yM6MbOOu90H6lAZg==
-releaseDate: 2026-10-30T13:52:23.215Z
-releaseName: KenSei Studio 0.6.0
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.7.0/KenSei-Studio-0.7.0-Setup.exe
+    sha512: GMUcJjLLubER8+ghEHrjuRJvlGjhqz4WrzeLSHgh3vyXNtPObCxhgwkqE9XY8f3UbWraJ5D6q0b/Pt4/IbIQzA==
+    size: 125727950
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.7.0/KenSei-Studio-0.7.0-Setup.exe
+sha512: GMUcJjLLubER8+ghEHrjuRJvlGjhqz4WrzeLSHgh3vyXNtPObCxhgwkqE9XY8f3UbWraJ5D6q0b/Pt4/IbIQzA==
+releaseDate: 2026-10-30T15:19:28.970Z
+releaseName: KenSei Studio 0.7.0
 releaseNotes: >
   ADDED
 
-  - Multi-select clips with Ctrl-click, marquee selection or timeline Select
-  All; copy and paste complete effects and pixel animations across tracks and
-  songs.
-
-  - Hover over an effect for 250 ms or focus it with the keyboard to preview it
-  independently; clicking still adds it at the playhead.
+  - Drag the timeline playhead, ruler or waveform to seek, with edge scrolling
+  and continuous audio during playback.
 
 
   IMPROVED
 
-  - New clips default to two beats, with beat and second duration presets saved
-  in workspace preferences. New inserts and pastes use the exact playhead
-  position regardless of snapping.
+  - Simplified the library to 17 unique effects with uniform white/gray
+  defaults, shared hover previews and four accurate categories. Existing clips
+  and copied colors stay intact.
 
-  - New effects shorten to the next clip or song end; pasted clips keep their
-  complete duration, timing, track spacing, names, parameters and keyframes.
-  Paste conflicts reject the whole batch.
+  - Smart paste finds the earliest complete space after the playhead, moving
+  multi-track clips together without shortening or overwriting them. Repeated
+  paste works without moving the playhead.
 
 
   FIXED
 
-  - Editor-only version updates retain the 0.5.0 firmware compatibility
-  identity, so unchanged projects keep their existing firmware and build cache.
-  Wireless synchronization remains a preview pending hardware validation.
+  - Gave the playback slider a 24 px control area and a fully visible 12 px
+  thumb, including at both endpoints and different display scales.

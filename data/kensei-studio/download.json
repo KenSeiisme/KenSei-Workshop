@@ -1,9 +1,9 @@
 {
-  "version": "0.6.0",
+  "version": "0.7.0",
   "date": "2026-10-30",
-  "downloadUrl": "https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.6.0/KenSei-Studio-0.6.0-Setup.exe",
-  "bytes": 125721795,
-  "sha256": "57c5e4ae85f3952c32b3a62e97f96551a6ea1c122153de7e2c18286bc378223f",
-  "sha512": "rvWwrk98mVKi6jAOPdgi0sFayvgD+qsx2bruz9PWg7DICWVyExpu2XgWjwo3qYuN7CIps0yM6MbOOu90H6lAZg==",
-  "filename": "KenSei-Studio-0.6.0-Setup.exe"
+  "downloadUrl": "https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.7.0/KenSei-Studio-0.7.0-Setup.exe",
+  "bytes": 125727950,
+  "sha256": "523d1f5e792f90a4ae2747ec001d68031d48f4fdeb4d10434a10db92178fd3b9",
+  "sha512": "GMUcJjLLubER8+ghEHrjuRJvlGjhqz4WrzeLSHgh3vyXNtPObCxhgwkqE9XY8f3UbWraJ5D6q0b/Pt4/IbIQzA==",
+  "filename": "KenSei-Studio-0.7.0-Setup.exe"
 }

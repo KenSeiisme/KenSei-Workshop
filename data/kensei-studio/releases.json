@@ -1,5 +1,47 @@
 [
   {
+    "version": "0.7.0",
+    "date": "2026-10-30",
+    "changes": {
+      "en": {
+        "added": [
+          "Drag the timeline playhead, ruler or waveform to seek, with edge scrolling and continuous audio during playback."
+        ],
+        "improved": [
+          "Simplified the library to 17 unique effects with uniform white/gray defaults, shared hover previews and four accurate categories. Existing clips and copied colors stay intact.",
+          "Smart paste finds the earliest complete space after the playhead, moving multi-track clips together without shortening or overwriting them. Repeated paste works without moving the playhead."
+        ],
+        "fixed": [
+          "Gave the playback slider a 24 px control area and a fully visible 12 px thumb, including at both endpoints and different display scales."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "支持拖动时间轴播放头、标尺或波形定位，提供边缘自动滚动，播放中持续出声并跟随定位。"
+        ],
+        "improved": [
+          "灯效库精简为 17 种独立效果，统一白／灰默认颜色，共用悬停预览并准确归入四个分类；已有片段和复制颜色保持原样。",
+          "智能粘贴从播放头向后寻找完整空位，多轨片段共同顺延，不裁短、不覆盖；无需移动播放头即可连续粘贴。"
+        ],
+        "fixed": [
+          "播放进度条改为 24px 操作区域与完整可见的 12px 圆圈，修复起终点和不同显示缩放下的裁切。"
+        ]
+      },
+      "zh-TW": {
+        "added": [
+          "支援拖動時間軸播放頭、標尺或波形定位，提供邊緣自動捲動，播放中持續出聲並跟隨定位。"
+        ],
+        "improved": [
+          "燈效庫精簡為 17 種獨立效果，統一白／灰預設顏色，共用懸停預覽並準確歸入四個分類；已有片段和複製顏色保持原樣。",
+          "智慧貼上從播放頭向後尋找完整空位，多軌片段共同順延，不裁短、不覆蓋；無需移動播放頭即可連續貼上。"
+        ],
+        "fixed": [
+          "播放進度條改為 24px 操作區域與完整可見的 12px 圓圈，修復起終點和不同顯示縮放下的裁切。"
+        ]
+      }
+    }
+  },
+  {
     "version": "0.6.0",
     "date": "2026-10-30",
     "changes": {
