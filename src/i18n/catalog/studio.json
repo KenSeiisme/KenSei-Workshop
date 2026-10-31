@@ -182,5 +182,13 @@
   "m_76a72accc1f4": {
     "en": "17 distinct lighting effects with shared white/gray defaults.",
     "zh-Hant": "17 種獨立燈效，共用白／灰預設顏色。"
+  },
+  "m_c66e7ef34873": {
+    "en": "Import PNG/JPEG images and generate editable LED scans, with original images saved in the project.",
+    "zh-Hant": "匯入 PNG/JPEG 圖片並產生可編輯的燈帶掃描，原圖隨專案儲存。"
+  },
+  "m_499922b9674a": {
+    "en": "Simulate image sweeps and sword rotations; physical POV imaging remains experimental.",
+    "zh-Hant": "模擬圖片掃動及轉劍；實物 POV 成像仍為實驗功能。"
   }
 }

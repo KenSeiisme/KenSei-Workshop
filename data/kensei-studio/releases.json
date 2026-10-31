@@ -1,5 +1,47 @@
 [
   {
+    "version": "0.8.0",
+    "date": "2026-10-31",
+    "changes": {
+      "en": {
+        "added": [
+          "Import static PNG/JPEG images, crop, rotate and flip them, then generate editable hold-keyframe scans. Original images and settings travel with the project.",
+          "Preview linear sweeps and sword rotations from the actual generated pixels, with pivot, angle, direction and loop controls. POV imaging remains experimental and assumes constant motion."
+        ],
+        "improved": [
+          "Image scans respect the current ~30 FPS output, with 34 ms minimum column duration and bounded data size. Source metadata does not alter firmware identities."
+        ],
+        "fixed": [
+          "Combined effect descriptions and animation into one edge-aware hover panel, removing the native tooltip that obscured the preview."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "支持导入静态 PNG/JPEG，裁剪、旋转及翻转后生成可编辑的保持关键帧扫描灯效，原图和设置随项目保存。",
+          "支持按实际生成像素模拟直线扫动及转剑，可调旋转轴、角度、方向和循环；POV 成像仍为实验功能，模拟假定匀速运动。"
+        ],
+        "improved": [
+          "图片扫描遵循当前约 30 FPS 输出，每列至少 34 毫秒并限制数据量；原图编辑信息不改变固件身份。"
+        ],
+        "fixed": [
+          "灯效说明与动画合并为自动避开窗口边缘的单一悬停面板，移除遮挡预览的系统说明框。"
+        ]
+      },
+      "zh-TW": {
+        "added": [
+          "支援匯入靜態 PNG/JPEG，裁切、旋轉及翻轉後產生可編輯的保持關鍵影格掃描燈效，原圖和設定隨專案儲存。",
+          "支援依實際產生像素模擬直線掃動及轉劍，可調旋轉軸、角度、方向和循環；POV 成像仍為實驗功能，模擬假設等速運動。"
+        ],
+        "improved": [
+          "圖片掃描遵循目前約 30 FPS 輸出，每列至少 34 毫秒並限制資料量；原圖編輯資訊不改變韌體身分。"
+        ],
+        "fixed": [
+          "燈效說明與動畫合併為自動避開視窗邊緣的單一懸停面板，移除遮擋預覽的系統說明框。"
+        ]
+      }
+    }
+  },
+  {
     "version": "0.7.0",
     "date": "2026-10-30",
     "changes": {

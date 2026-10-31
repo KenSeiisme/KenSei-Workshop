@@ -1,31 +1,32 @@
-version: 0.7.0
+version: 0.8.0
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.7.0/KenSei-Studio-0.7.0-Setup.exe
-    sha512: GMUcJjLLubER8+ghEHrjuRJvlGjhqz4WrzeLSHgh3vyXNtPObCxhgwkqE9XY8f3UbWraJ5D6q0b/Pt4/IbIQzA==
-    size: 125727950
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.7.0/KenSei-Studio-0.7.0-Setup.exe
-sha512: GMUcJjLLubER8+ghEHrjuRJvlGjhqz4WrzeLSHgh3vyXNtPObCxhgwkqE9XY8f3UbWraJ5D6q0b/Pt4/IbIQzA==
-releaseDate: 2026-10-30T15:19:28.970Z
-releaseName: KenSei Studio 0.7.0
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.8.0/KenSei-Studio-0.8.0-Setup.exe
+    sha512: rHRcOx1W6U9ucfIQa+/jLxJeL3e5L+4frniiBvPJ79Z2GqPGtqisDtaeU6FMxbdWyENBtWfM5RlzjYpOU0SdnA==
+    size: 125746910
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.8.0/KenSei-Studio-0.8.0-Setup.exe
+sha512: rHRcOx1W6U9ucfIQa+/jLxJeL3e5L+4frniiBvPJ79Z2GqPGtqisDtaeU6FMxbdWyENBtWfM5RlzjYpOU0SdnA==
+releaseDate: 2026-10-31T15:45:26.896Z
+releaseName: KenSei Studio 0.8.0
 releaseNotes: >
   ADDED
 
-  - Drag the timeline playhead, ruler or waveform to seek, with edge scrolling
-  and continuous audio during playback.
+  - Import static PNG/JPEG images, crop, rotate and flip them, then generate
+  editable hold-keyframe scans. Original images and settings travel with the
+  project.
+
+  - Preview linear sweeps and sword rotations from the actual generated pixels,
+  with pivot, angle, direction and loop controls. POV imaging remains
+  experimental and assumes constant motion.
 
 
   IMPROVED
 
-  - Simplified the library to 17 unique effects with uniform white/gray
-  defaults, shared hover previews and four accurate categories. Existing clips
-  and copied colors stay intact.
-
-  - Smart paste finds the earliest complete space after the playhead, moving
-  multi-track clips together without shortening or overwriting them. Repeated
-  paste works without moving the playhead.
+  - Image scans respect the current ~30 FPS output, with 34 ms minimum column
+  duration and bounded data size. Source metadata does not alter firmware
+  identities.
 
 
   FIXED
 
-  - Gave the playback slider a 24 px control area and a fully visible 12 px
-  thumb, including at both endpoints and different display scales.
+  - Combined effect descriptions and animation into one edge-aware hover panel,
+  removing the native tooltip that obscured the preview.
