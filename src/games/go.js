@@ -24,6 +24,7 @@ import { mountEffects } from "./effects.js";
 import { mountAudio, unlockAudio, playCue } from "./audio.js";
 import {
   uiMsg,
+  uiJoin,
   uiFrom,
   uiText,
   uiError,
@@ -276,7 +277,17 @@ function draw() {
   );
 }
 function summary(config) {
-  return `${String(uiFrom(GO_RULES[config.rule].name))} · ${config.size} × ${config.size} · ${config.komi} ${String(uiMsg("points"))}${config.handicap ? ` · ${String(uiMsg("Handicap"))} ${config.handicap}` : ""}${config.training ? " · " + String(uiMsg("Single-color memory")) : ""}`;
+  return uiJoin([
+    uiFrom(GO_RULES[config.rule].name),
+    ` · ${config.size} × ${config.size} · `,
+    uiMsg(config.rule === "japanese" ? "{0} territory points" : "{0} points", [
+      config.komi,
+    ]),
+    ...(config.handicap
+      ? [" · ", uiMsg("Handicap"), ` ${config.handicap}`]
+      : []),
+    ...(config.training ? [" · ", uiMsg("Single-color memory")] : []),
+  ]);
 }
 function clockLabel(color) {
   if (!room?.clock) return "—";
@@ -453,7 +464,13 @@ function render() {
       avatar.className = "avatar-badge";
       paintAvatar(avatar, m);
       const label = document.createElement("span");
-      label.textContent = `${m.nickname} · ${String(uiFrom(m.ready ? "Ready" : "Not ready"))}`;
+      uiText(
+        label,
+        uiMsg("{0} · {1}", [
+          m.nickname,
+          uiFrom(m.ready ? "Ready" : "Not ready"),
+        ]),
+      );
       div.append(avatar, label);
       list.append(div);
     }
@@ -1276,9 +1293,19 @@ function rankRows(rows, target, mine = false) {
     link.append(avatar, name);
     const numbers = document.createElement("div");
     const top = document.createElement("b");
-    top.textContent = `${row.wins} ${String(uiMsg("wins"))} · ${(row.win_rate * 100).toFixed(1)}%`;
+    uiText(
+      top,
+      uiMsg("{0} wins · {1}%", [row.wins, (row.win_rate * 100).toFixed(1)]),
+    );
     const bottom = document.createElement("small");
-    bottom.textContent = `${row.played} ${String(uiMsg("games"))} · ${row.losses} L / ${row.draws} D`;
+    uiText(
+      bottom,
+      uiMsg("{0} games · {1} losses / {2} draws", [
+        row.played,
+        row.losses,
+        row.draws,
+      ]),
+    );
     numbers.append(top, document.createElement("br"), bottom);
     line.append(rank, link, numbers);
     node.append(line);

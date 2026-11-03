@@ -2,7 +2,7 @@ const assert = require("node:assert/strict"),
   fs = require("node:fs/promises");
 const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8780";
-const sdk = `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){},signInWithOAuth:async()=>({error:null})},from(){return {select(){return this},order:async()=>({data:[]})}},rpc:async(n)=>({data:n==='get_board_game_leaderboard'?{top:[],me:null}:[],error:null}),functions:{invoke:async()=>({data:{error:'Unexpected online request'},error:null})}}}`;
+const sdk = `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){},signInWithOAuth:async()=>({error:null})},from(){return {select(){return this},order:async()=>({data:[]})}},rpc:async(n)=>({data:n==='get_board_game_leaderboard'?{top:[{rank:1,nickname:'Fixture player',public_id:'00000000-0000-4000-8000-000000000001',wins:10,played:12,losses:1,draws:1,win_rate:10/12}],me:null}:[],error:null}),functions:{invoke:async()=>({data:{error:'Unexpected online request'},error:null})}}}`;
 (async () => {
   const browser = await chromium.launch({
     channel: process.env.BROWSER_CHANNEL || "msedge",
@@ -118,6 +118,23 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await page.goto(base + "/zh-hant/games/go/");
     await page.waitForSelector("[data-ready=true]");
     assert.match(await page.locator("h1").textContent(), /圍棋/);
+    assert.match(
+      await page.locator("#go-setup-summary").textContent(),
+      /中國規則.*7\.5 點/,
+    );
+    await page.waitForFunction(() =>
+      document.querySelector("#go-rankings")?.textContent.includes("12 局"),
+    );
+    assert.match(
+      await page.locator("#go-rankings").textContent(),
+      /10 勝.*1 負／1 和/,
+    );
+    await page.selectOption("#go-rule", "japanese");
+    assert.match(
+      await page.locator("#go-setup-summary").textContent(),
+      /日本 1989 規則.*6\.5 目/,
+    );
+    await page.selectOption("#go-rule", "chinese");
     await page.selectOption("#go-mode", "local");
     await page.check("#go-training");
     await page.click("#go-start");
@@ -128,6 +145,26 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       /Black|White|黑|白/,
     );
     assert.equal(await page.locator("#go-peek").isVisible(), true);
+    await page.evaluate(async () => {
+      window.goBoardBeforeLocale = document.querySelector("#game-board");
+      await window.KenseiI18n.setLocale("en");
+    });
+    assert.equal(
+      await page.evaluate(
+        () =>
+          document.querySelector("#game-board") === window.goBoardBeforeLocale,
+      ),
+      true,
+    );
+    assert.equal(
+      await page.locator("[data-go]").getAttribute("data-go-phase"),
+      "playing",
+    );
+    assert.match(await page.locator("#go-turn").textContent(), /White/);
+    assert.match(
+      await page.locator("#go-rankings").textContent(),
+      /10 wins.*12 games/,
+    );
     assert.deepEqual(errors, []);
     console.log(
       "PASS Go responsive first screen, local play/undo/scoring, SGF download, AI worker, restore, bilingual and memory privacy (mocked account API).",

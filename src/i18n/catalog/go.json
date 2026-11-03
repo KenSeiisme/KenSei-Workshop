@@ -323,6 +323,22 @@
     "en": "points",
     "zh-Hant": "點"
   },
+  "m_b717883aa388": {
+    "en": "{0} points",
+    "zh-Hant": "{0} 點"
+  },
+  "m_ac4502a1ee1f": {
+    "en": "{0} territory points",
+    "zh-Hant": "{0} 目"
+  },
+  "m_03e92caed5c1": {
+    "en": "{0} wins · {1}%",
+    "zh-Hant": "{0} 勝 · {1}%"
+  },
+  "m_22a2e68891d3": {
+    "en": "{0} games · {1} losses / {2} draws",
+    "zh-Hant": "{0} 局 · {1} 負／{2} 和"
+  },
   "m_7e69ba9210da": {
     "en": "{0} to move",
     "zh-Hant": "輪到{0}"
