@@ -673,6 +673,10 @@ export function mountAudio(root = document) {
     bindings.add(node);
     if (node.matches("[data-audio-toggle]"))
       node.addEventListener("click", () => {
+        if (loadError === "blocked" && preference.enabled) {
+          unlockAudio();
+          return;
+        }
         preference.enabled = !preference.enabled;
         if (preference.enabled) unlockAudio();
         else stopAudio();

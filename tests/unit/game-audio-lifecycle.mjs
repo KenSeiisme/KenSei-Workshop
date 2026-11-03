@@ -171,6 +171,30 @@ assert.equal(
   "old cross-tab claim cannot revoke the latest local gesture",
 );
 hooks.get("window:pagehide")({ persisted: false });
+hooks.get("window:pageshow")({ persisted: true });
+let blocked = true;
+window.AudioContext = class extends Context {
+  constructor() {
+    super();
+    this.state = "suspended";
+  }
+  resume() {
+    if (blocked) return Promise.reject(Error("gesture needed"));
+    return super.resume();
+  }
+};
+assert.equal(await audio.unlockAudio(), false);
+assert.equal(audio.getAudioDiagnostics().loadError, "blocked");
+blocked = false;
+hooks.get("button:click")();
+await new Promise((r) => setTimeout(r, 0));
+assert.equal(
+  audio.getAudioDiagnostics().enabled,
+  true,
+  "one sound-button gesture resumes blocked audio rather than muting it",
+);
+assert.equal(audio.getAudioDiagnostics().armed, true);
+hooks.get("window:pagehide")({ persisted: false });
 console.log(
   "PASS independent preference parsing, BFCache channel reopening, first-gesture loading, stale fetch isolation and ordered cross-tab ownership.",
 );
