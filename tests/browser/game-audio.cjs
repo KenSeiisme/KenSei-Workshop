@@ -45,6 +45,11 @@ async function startGo(page) {
   await page.click("#go-start");
   await page.waitForSelector("[data-go-phase=playing]");
 }
+async function startChess(page) {
+  await page.selectOption("#chess-mode", "local");
+  await page.click("#chess-start");
+  await page.waitForSelector("[data-chess-phase=playing]");
+}
 (async () => {
   const browser = await chromium.launch({
     channel: process.env.BROWSER_CHANNEL || "msedge",
@@ -144,6 +149,7 @@ async function startGo(page) {
         await ready(page, slug);
         if (slug === "pong") continue;
         if (slug === "go") await startGo(page);
+        else if (slug === "chess") await startChess(page);
         else await gameClick(page, "#game-start");
         assert.equal((await diagnostics(page)).loadError, "unsupported");
         assert.equal((await diagnostics(page)).musicPlaying, false);
@@ -152,8 +158,8 @@ async function startGo(page) {
       assert.equal(requests.length, 0);
       const report = {
         engine: process.env.WORKSHOP_BROWSER_ENGINE || "chromium",
-        games: 13,
-        startedGames: 12,
+        games: games.length,
+        startedGames: games.length - 1,
         nativeAudio: false,
         unsupportedFallback:
           "passed: silent playable games, explicit unavailable state, no asset traffic",
@@ -179,6 +185,7 @@ async function startGo(page) {
       assert.equal(requests.length, count, slug + " load must not fetch music");
       if (slug === "pong") continue;
       if (slug === "go") await startGo(page);
+      else if (slug === "chess") await startChess(page);
       else await gameClick(page, "#game-start");
       await runningAudio(page);
       const d = await diagnostics(page);
@@ -338,8 +345,8 @@ async function startGo(page) {
     assert.deepEqual(errors, []);
     const report = {
       engine: process.env.WORKSHOP_BROWSER_ENGINE || "chromium",
-      games: 13,
-      startedGames: 12,
+      games: games.length,
+      startedGames: games.length - 1,
       pong: "covered by arcade-next fixture",
       realWebAudio: true,
       rms,

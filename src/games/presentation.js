@@ -4,6 +4,7 @@ import { uiDate, uiHtml } from "../site/ui.js";
 // 名称与难度取自同一份规则；这里只格式化展示，不改变计分。
 export { GAMES };
 const paths = {
+  chess: '<path d="M10 2h4v4h4v4h-4v4h-4v-4H6V6h4zM7 15h10l-2 5H9zM5 22h14"/>',
   go: '<path d="M4 4h16v16H4zM4 9h16M4 15h16M9 4v16M15 4v16"/><circle cx="9" cy="9" r="3" fill="currentColor"/><circle cx="15" cy="15" r="3"/>',
   "block-drop": uiHtml(
     '<path d="M9 3h6v6H9zM3 9h6v6H3zM9 9h6v6H9zM15 9h6v6h-6zM3 20h18"/><path d="m11 17 1 2 1-2"/>',

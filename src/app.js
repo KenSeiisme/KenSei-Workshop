@@ -1256,6 +1256,10 @@
     import("/game-scripts/go.js").catch(() =>
       toast(uiMsg("Go files could not load. Reload this page to retry.")),
     );
+  if (document.querySelector("[data-chess]"))
+    import("/game-scripts/chess.js").catch(() =>
+      toast(uiMsg("Chess files could not load. Reload this page to retry.")),
+    );
   if (document.querySelector("[data-game], [data-games-directory]"))
     import("/game-scripts/games.js").catch(() =>
       toast(uiMsg("Game files could not load. Reload this page to retry.")),

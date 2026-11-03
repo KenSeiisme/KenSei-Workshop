@@ -65,8 +65,8 @@ const clock = (ms) =>
     .toString()
     .padStart(2, "0")}`;
 const title = (d) =>
-  d.game === "go"
-    ? `Go · ${d.difficulty}`
+  ["go", "chess"].includes(d.game)
+    ? `${d.game === "go" ? "Go" : "Chess"} · ${d.difficulty}`
     : `${GAMES[d.game].name} · ${rules(d.game, d.difficulty).label}`;
 let active = null,
   saveTimer,

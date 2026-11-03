@@ -5,6 +5,13 @@ import {
   applyGo,
   GO_VERSION,
 } from "../../../src/games/go-engine.js";
+import {
+  chessSettings,
+  createChess,
+  applyChess,
+  CHESS_VERSION,
+} from "../../../src/games/chess-engine.js";
+import { timeoutVerdicts } from "../../../src/games/chess-adjudication.js";
 
 const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -49,11 +56,14 @@ export function makeHandler(
     if (req.method !== "POST") return send({ error: "Use POST." }, 405);
     const authorization = req.headers.get("Authorization") || "";
     if (!/^Bearer [\w-]+\.[\w-]+\.[\w-]+$/.test(authorization))
-      return send({ error: "Sign in to play online Go." }, 401);
+      return send({ error: "Sign in to play online board games." }, 401);
     const base = env("SUPABASE_URL"),
       key = env("SUPABASE_SERVICE_ROLE_KEY");
     if (!base || !key)
-      return send({ error: "Online Go is temporarily unavailable." }, 503);
+      return send(
+        { error: "Online board games are temporarily unavailable." },
+        503,
+      );
     try {
       const auth = await request(`${base}/auth/v1/user`, {
         headers: { Authorization: authorization, apikey: key },
@@ -79,6 +89,9 @@ export function makeHandler(
         text += decoder.decode(value, { stream: true });
       }
       const body = JSON.parse(text + decoder.decode());
+      const game = body.game ?? "go";
+      if (game !== "go" && game !== "chess")
+        return send({ error: "Unknown board game." }, 400);
       const action = new URL(req.url).pathname
         .split("/")
         .filter(Boolean)
@@ -123,6 +136,7 @@ export function makeHandler(
         )
           return send({ error: "Invalid move request." }, 400);
         const payload = {
+          game,
           client_id: body.client_id,
           match_id: body.match_id,
           request_id: body.request_id,
@@ -132,33 +146,52 @@ export function makeHandler(
         const snapshot = await admin("prepare", payload);
         if (snapshot.error) return send(snapshot, 409);
         if (snapshot.duplicate) return send(snapshot.snapshot);
-        if (snapshot.rules_version !== GO_VERSION)
+        if (
+          (snapshot.game || "go") !== game ||
+          snapshot.rules_version !==
+            (game === "chess" ? CHESS_VERSION : GO_VERSION)
+        )
           return send(
             {
-              error: "Go rules changed. Refresh this page.",
+              error: "Board rules changed. Refresh this page.",
               code: "RULES_UPDATE_REQUIRED",
             },
             409,
           );
-        const next = applyGo(snapshot.state, body.action, snapshot.color);
+        const next =
+          game === "chess"
+            ? applyChess(snapshot.state, body.action, snapshot.color)
+            : applyGo(snapshot.state, body.action, snapshot.color);
+        if (game === "chess")
+          next.timeout =
+            body.action.type === "move"
+              ? timeoutVerdicts(next)
+              : snapshot.state.timeout;
         const result = await admin("commit", { ...payload, state: next });
         return send(result, result.error ? 409 : 200);
       }
       const payload: Record<string, unknown> = {
+        game,
         client_id: body.client_id,
         match_id: body.match_id,
       };
       if (action === "create" || action === "queue") {
-        if (body.rules_version !== GO_VERSION)
+        if (
+          body.rules_version !== (game === "chess" ? CHESS_VERSION : GO_VERSION)
+        )
           return send(
             {
-              error: "Go rules changed. Refresh this page.",
+              error: "Board rules changed. Refresh this page.",
               code: "RULES_UPDATE_REQUIRED",
             },
             409,
           );
-        const config = settings(body.config);
+        const config =
+          game === "chess" ? chessSettings(body.config) : settings(body.config);
+        if (game === "chess" && config.clock === "none")
+          return send({ error: "Choose a supported chess time control." }, 400);
         if (
+          game === "go" &&
           action === "queue" &&
           (!standard(config) || config.clock !== config.size)
         )
@@ -169,10 +202,16 @@ export function makeHandler(
             },
             400,
           );
+        const initial =
+          game === "chess" ? createChess(config) : createGo(config);
+        if (game === "chess") initial.timeout = timeoutVerdicts(initial);
         Object.assign(payload, {
           config,
-          state: createGo(config),
-          ranked: standard(config),
+          state: initial,
+          ranked: game === "chess" || standard(config),
+          preferred_color: [1, -1].includes(body.preferred_color)
+            ? body.preferred_color
+            : 0,
         });
       }
       if (action === "join") {

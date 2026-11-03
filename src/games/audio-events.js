@@ -1,6 +1,7 @@
 // 表现层只比较状态，不调用规则或消耗对局随机数。
 export const AUDIO_PROFILES = Object.freeze({
   go: "board",
+  chess: "board",
   "connect-four": "board",
   reversi: "board",
   2048: "puzzle",

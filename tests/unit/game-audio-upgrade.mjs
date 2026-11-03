@@ -34,7 +34,7 @@ assert.equal(
   }).musicEnabled,
   false,
 );
-assert.equal(Object.keys(AUDIO_PROFILES).length, 13);
+assert.equal(Object.keys(AUDIO_PROFILES).length, 14);
 const before = {
   game: "2048",
   status: "playing",

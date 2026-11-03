@@ -165,5 +165,11 @@
     ["tests/unit/go-edge.mjs"],
     ["tests/database/go-matches.mjs"],
     ["tests/browser/go.cjs"]
+  ],
+  "chess": [
+    ["tests/unit/chess.mjs"],
+    ["tests/unit/chess-edge.mjs"],
+    ["tests/database/chess-matches.mjs"],
+    ["tests/browser/chess.cjs"]
   ]
 }

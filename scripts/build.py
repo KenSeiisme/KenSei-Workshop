@@ -82,6 +82,10 @@ if not arguments.pages_only:
             dirs_exist_ok=True,
             ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.tar.gz"),
         )
+    # GPL 引擎的固定版本對應原始碼必須隨本站提供。
+    for archive in (SOURCE / "vendor/sources").glob("stockfish*.tar.gz"):
+        (OUT / "vendor/sources").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(archive, OUT / "vendor/sources" / archive.name)
 
 ICONS = {
     "cards": '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',

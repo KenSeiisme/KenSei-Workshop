@@ -941,5 +941,26 @@
       "记忆围棋",
       "記憶圍棋"
     ]
+  },
+  "games/chess": {
+    "name": {
+      "en": "Chess",
+      "zh-Hant": "西洋棋"
+    },
+    "description": {
+      "en": "Your next move starts here. Local two players, Stockfish and verified online matches.",
+      "zh-Hant": "從這裡走出下一步。支援本機雙人、Stockfish 人機及經驗證的線上對戰。"
+    },
+    "aliases": [
+      "chess",
+      "western chess",
+      "international chess",
+      "stockfish",
+      "西洋棋",
+      "国际象棋",
+      "國際象棋",
+      "西洋棋对战",
+      "西洋棋對戰"
+    ]
   }
 }

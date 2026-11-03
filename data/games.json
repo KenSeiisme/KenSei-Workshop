@@ -84,6 +84,13 @@
     "preview": "go"
   },
   {
+    "slug": "chess",
+    "name": "Chess",
+    "description": "Your next move starts here. Local two players, Stockfish and verified online matches.",
+    "category": "Board",
+    "preview": "chess"
+  },
+  {
     "slug": "pong",
     "name": "Pong",
     "description": "Invite a friend. Share a rally. A private online room for two.",

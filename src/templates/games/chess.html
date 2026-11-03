@@ -1,0 +1,340 @@
+<section
+  class="container page-section games-page neon-arcade chess-page"
+  data-chess
+  data-play-shell
+  data-game-theme="chess"
+  data-shell-state="ready"
+>
+  ${toolbar}
+  <div class="chess-layout">
+    <section class="game-play chess-play">
+      <div class="chess-hud" aria-label="Chess match status">
+        <div>
+          <span id="chess-white-name">White</span
+          ><strong id="chess-white-clock">—</strong>
+        </div>
+        <div>
+          <strong id="chess-turn">Ready preview</strong
+          ><small id="chess-qualification">Local practice</small>
+        </div>
+        <div>
+          <span id="chess-black-name">Black</span
+          ><strong id="chess-black-clock">—</strong>
+        </div>
+      </div>
+      <div class="game-board-shell chess-stage">
+        <div
+          id="game-board"
+          class="chess-board"
+          role="grid"
+          tabindex="0"
+          aria-label="Chess board. Arrow keys select a square; Enter selects a piece or destination."
+        ></div>
+        <section
+          id="chess-entry"
+          class="chess-overlay chess-entry"
+          aria-label="Chess setup"
+        >
+          <span class="eyebrow">Your next move starts here.</span>
+          <div class="chess-setup">
+            <label
+              >Mode<select id="chess-mode">
+                <option value="ai">Computer</option>
+                <option value="local">Local two players</option>
+                <option value="online">Online</option>
+              </select></label
+            >
+            <label
+              >Time control<select id="chess-clock">
+                <option value="none">Unlimited · local only</option>
+                <option value="5+3">5 + 3</option>
+                <option value="10+5">10 + 5</option>
+                <option value="15+10">15 + 10</option>
+              </select></label
+            >
+            <label id="chess-level-label"
+              >Computer level<select id="chess-level">
+                <option value="1">Level 1</option>
+                <option value="2" selected>Level 2</option>
+                <option value="3">Level 3</option>
+                <option value="4">Level 4</option>
+                <option value="5">Level 5</option>
+              </select></label
+            >
+            <label id="chess-side-label"
+              >Play as<select id="chess-side">
+                <option value="1">White</option>
+                <option value="-1">Black</option>
+                <option value="0">Random</option>
+              </select></label
+            >
+          </div>
+          <p class="small muted" id="chess-setup-summary">
+            Standard chess · 8 × 8
+          </p>
+          <div class="chess-actions" id="chess-local-entry">
+            <button class="button primary" id="chess-start">Start game</button
+            ><button class="button secondary" id="chess-continue" hidden>
+              Continue saved game
+            </button>
+          </div>
+          <div id="chess-online-entry" hidden>
+            <div class="chess-actions">
+              <button class="button primary" id="chess-create">
+                Create room</button
+              ><button class="button secondary" id="chess-find">
+                Find opponent
+              </button>
+            </div>
+            <div class="chess-code-row">
+              <label
+                >Room code<input
+                  id="chess-code"
+                  maxlength="8"
+                  autocomplete="off"
+                  autocapitalize="characters" /></label
+              ><button class="button secondary" id="chess-join">
+                Join room
+              </button>
+            </div>
+            <p class="small muted">
+              Online play requires Google sign-in. Standard human matches count
+              toward public statistics.
+            </p>
+          </div>
+          <p class="small" id="chess-save-info"></p>
+          <p id="chess-entry-status" role="status"></p>
+        </section>
+        <section id="chess-room" class="chess-overlay" hidden>
+          <h2 id="chess-room-title">Waiting for your opponent</h2>
+          <p id="chess-room-summary"></p>
+          <div id="chess-invite">
+            <code id="chess-invite-code"></code
+            ><button class="button secondary" id="chess-copy-invite">
+              Copy invite link
+            </button>
+          </div>
+          <div id="chess-members"></div>
+          <p id="chess-ready-time"></p>
+          <div class="chess-actions">
+            <button class="button primary" id="chess-ready">Ready</button
+            ><button class="button secondary" id="chess-cancel">Cancel</button>
+          </div>
+        </section>
+        <section id="chess-paused" class="chess-overlay" hidden>
+          <h2>Paused · local only</h2>
+          <button class="button primary" id="chess-resume">Continue</button>
+        </section>
+        <section id="chess-result" class="chess-overlay" hidden>
+          <h2 id="chess-result-title"></h2>
+          <p id="chess-result-detail"></p>
+          <div class="chess-actions">
+            <button class="button primary" id="chess-again">
+              New game setup</button
+            ><button class="button secondary" id="chess-review">
+              Review game</button
+            ><button class="button secondary" id="chess-result-pgn">
+              Download PGN
+            </button>
+          </div>
+        </section>
+      </div>
+      <p
+        class="chess-status"
+        id="chess-status"
+        role="status"
+        aria-live="polite"
+      >
+        Choose your settings and start when you are ready.
+      </p>
+      <div class="game-control-deck chess-actions">
+        <button class="button primary" id="chess-confirm" hidden>
+          Confirm move</button
+        ><button class="button secondary" id="chess-pause" disabled>
+          Pause</button
+        ><button class="button secondary" id="chess-undo" disabled>
+          Undo turn</button
+        ><button class="button secondary" id="chess-flip">Flip board</button
+        ><button class="button secondary" id="chess-draw" disabled>
+          Draw options</button
+        ><button class="button secondary" id="chess-resign" disabled>
+          Resign</button
+        ><button class="button secondary" id="chess-takeover" hidden>
+          Take control</button
+        ><button class="button secondary" id="chess-retry" hidden>
+          Retry connection</button
+        ><button class="button secondary" data-shell-menu>Menu</button>
+      </div>
+      <div id="chess-draw-offer" class="chess-notice" hidden>
+        <span id="chess-offer-text"></span
+        ><button class="button secondary" id="chess-accept">Accept draw</button
+        ><button class="button secondary" id="chess-decline">Decline</button>
+      </div>
+      <section id="chess-replay" class="panel" hidden>
+        <label
+          >Review move<input
+            id="chess-ply"
+            type="range"
+            min="0"
+            max="0"
+            value="0" /></label
+        ><output id="chess-ply-label"></output
+        ><button class="button secondary" id="chess-close-review">
+          Back to result
+        </button>
+      </section>
+      <details class="chess-history">
+        <summary>Moves &amp; save status</summary>
+        <div id="chess-moves" class="chess-moves"></div>
+        <p id="chess-sync" role="status"></p>
+      </details>
+    </section>
+    <aside class="panel chess-leaderboard" aria-label="Chess leaderboard">
+      <div class="chess-aside-heading">
+        <h2>Chess records</h2>
+        <button class="text-link" id="chess-rank-refresh">Refresh</button>
+      </div>
+      <p class="small muted">
+        Verified standard online human matches only. Local and computer games
+        remain private.
+      </p>
+      <div class="chess-setup">
+        <label
+          >Time control<select id="chess-rank-clock">
+            <option value="5+3">5 + 3</option>
+            <option value="10+5" selected>10 + 5</option>
+            <option value="15+10">15 + 10</option>
+          </select></label
+        ><label
+          >Sort<select id="chess-rank-sort">
+            <option value="wins">Most wins</option>
+            <option value="rate">Win rate · 10+ games</option>
+          </select></label
+        >
+      </div>
+      <p id="chess-rank-status" role="status"></p>
+      <div id="chess-rankings"></div>
+      <button class="text-link" id="chess-rank-more" hidden>Show Top 50</button>
+      <div id="chess-my-ranking"></div>
+    </aside>
+  </div>
+  <dialog class="game-shell-dialog" data-shell-settings-dialog>
+    <div class="game-shell-dialog-heading">
+      <h2>Settings</h2>
+      <button class="icon-button" data-shell-close aria-label="Close">×</button>
+    </div>
+    ${preferences}
+  </dialog>
+  <dialog class="game-shell-dialog" data-shell-menu-dialog>
+    <div class="game-shell-dialog-heading">
+      <h2>Chess</h2>
+      <button class="icon-button" data-shell-close aria-label="Close">×</button>
+    </div>
+    <div class="chess-actions">
+      <button class="button secondary" id="chess-new-setup">
+        New game setup</button
+      ><button class="button secondary" id="chess-export">Download PGN</button
+      ><button class="button secondary" id="chess-fen-copy">Copy FEN</button
+      ><button class="button secondary" id="chess-leave">
+        Leave online match
+      </button>
+    </div>
+    <details>
+      <summary>Import a private practice position</summary>
+      <p>
+        Import one PGN main line or a FEN position. Imported games never enter
+        public records. FEN does not include repetition history.
+      </p>
+      <label
+        >PGN or FEN<textarea
+          id="chess-import-text"
+          rows="4"
+          maxlength="256000"
+          spellcheck="false"
+        ></textarea></label
+      ><button class="button secondary" id="chess-import">
+        Import practice
+      </button>
+    </details>
+    <details open>
+      <summary>How to play &amp; rules</summary>
+      <p>
+        White moves first. Protect your king; checkmate wins. Use drag and drop
+        or select a piece and destination. On touch screens, confirm your
+        preview. Promotion offers queen, rook, bishop or knight.
+      </p>
+      <p>
+        Threefold repetition and fifty moves require a claim, including a
+        declared intended move. Fivefold repetition and seventy-five moves end
+        automatically; checkmate takes priority. A draw offer does not stop the
+        clock.
+      </p>
+      <p>
+        Timeout wins require a legal mating witness. The bounded verifier can
+        leave ordinary middlegames as well as rare dead positions Unresolved; no
+        public win is awarded without proof. Both players may agree to a draw.
+        This is a casual digital game, not a tournament referee.
+      </p>
+      <p>
+        Online clocks continue in the background. A continuous 120-second
+        disconnection forfeits unless time expires first. Both disconnected:
+        interrupted. Online play has no undo, hints or single-player pause.
+      </p>
+      <p>
+        Local and computer games save privately. Imported positions are checked
+        for basic legality, not complete historical reachability. Stockfish
+        levels do not represent official ratings.
+      </p>
+      <a
+        href="https://handbook.fide.com/chapter/e012023"
+        target="_blank"
+        rel="noopener"
+        >FIDE Laws of Chess</a
+      >
+    </details>
+  </dialog>
+  <dialog class="game-shell-dialog" id="chess-promotion">
+    <h2>Choose a promotion</h2>
+    <div class="chess-actions">
+      <button class="button secondary" data-promote="q">Queen</button
+      ><button class="button secondary" data-promote="r">Rook</button
+      ><button class="button secondary" data-promote="b">Bishop</button
+      ><button class="button secondary" data-promote="n">Knight</button>
+    </div>
+    <p class="small muted">The clock continues while you choose.</p>
+    <button class="button secondary" id="chess-promotion-cancel">Cancel</button>
+  </dialog>
+  <dialog class="game-shell-dialog" id="chess-draw-dialog">
+    <div class="game-shell-dialog-heading">
+      <h2>Draw options</h2>
+      <button class="icon-button" id="chess-draw-close" aria-label="Close">
+        ×
+      </button>
+    </div>
+    <p>The clock continues while this panel is open.</p>
+    <p id="chess-draw-status" role="status" aria-live="polite"></p>
+    <div class="chess-actions">
+      <button class="button secondary" id="chess-offer">Offer draw</button
+      ><button class="button secondary" id="chess-claim">
+        Claim current position
+      </button>
+    </div>
+    <label
+      >Intended move · UCI<input
+        id="chess-claim-move"
+        placeholder="e2e4"
+        maxlength="5"
+        autocomplete="off"
+        spellcheck="false" /></label
+    ><button class="button secondary" id="chess-claim-next">
+      Claim with intended move
+    </button>
+    <p class="small muted">
+      The intended move is verified but is not played if the claim succeeds.
+      Invalid claims leave the clock running.
+    </p>
+    <button class="text-link" id="chess-dispute">
+      Request unresolved-position review
+    </button>
+  </dialog>
+</section>

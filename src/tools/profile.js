@@ -103,12 +103,60 @@ function renderPublicScores(profile) {
   );
   revealGameCards($("#public-game-scores"));
   renderGoStats(profile.board_game_stats || []);
+  renderChessStats(profile.chess_stats || []);
   $("#public-best-scores").innerHTML = ["en", "zh"]
     .map((lang) => {
       const score = profile.best_scores?.find((x) => x.language === lang);
       return uiHtml`<section class="profile-typing-card"><div class="profile-typing-language"><span>${lang === "en" ? uiMsg("Aa") : "字"}</span><div><span class="eyebrow">60-SECOND PUBLIC SPRINT</span><h3>${lang === "en" ? uiMsg("English") : "中文"}</h3></div></div><div class="profile-score-value"><strong>${score ? Number(score.speed).toFixed(1) : "—"}</strong><span>${lang === "en" ? "WPM" : "CPM"}</span></div><p>${score ? uiHtml`<b>${Number(score.accuracy).toFixed(2)}% accuracy</b> · ${scoreDate(score.achieved_at)} · text v${Number(score.version)}` : uiMsg("No qualifying current-version score yet.")}</p></section>`;
     })
     .join("");
+}
+function renderChessStats(stats) {
+  let section = $("#public-chess-records");
+  if (!section) {
+    section = document.createElement("section");
+    section.id = "public-chess-records";
+    section.className = "panel profile-go-records";
+    $("#public-go-records").after(section);
+  }
+  section.replaceChildren();
+  const heading = document.createElement("h2");
+  uiText(heading, uiMsg("Chess · online records"));
+  section.append(heading);
+  if (!stats.length) {
+    const empty = document.createElement("p");
+    uiText(empty, uiMsg("No verified chess matches yet."));
+    section.append(empty);
+  }
+  for (const r of stats) {
+    const row = document.createElement("p"),
+      name = document.createElement("strong"),
+      detail = document.createElement("span");
+    row.className = "profile-go-stat";
+    uiText(
+      name,
+      uiMsg("Chess rules v{0} · {1}", [
+        Number(r.rules_version),
+        r.time_control,
+      ]),
+    );
+    uiText(
+      detail,
+      uiMsg("{0} games · {1} wins · {2} losses · {3} draws · {4}", [
+        Number(r.played),
+        Number(r.wins),
+        Number(r.losses),
+        Number(r.draws),
+        r.played ? `${(Number(r.win_rate) * 100).toFixed(1)}%` : "—",
+      ]),
+    );
+    row.append(name, document.createElement("br"), detail);
+    section.append(row);
+  }
+  const link = document.createElement("a");
+  link.href = `${location.pathname.startsWith("/zh-hant/") ? "/zh-hant" : ""}/games/chess/`;
+  uiText(link, uiMsg("Play Chess →"));
+  section.append(link);
 }
 function renderGoStats(stats) {
   let section = $("#public-go-records");

@@ -1,0 +1,39 @@
+{
+  "package": "stockfish",
+  "version": "19.0.1",
+  "engine": "Stockfish 19 Lite WASM, single-threaded",
+  "license": "GPL-3.0",
+  "sourceTag": "v19.0.1",
+  "sourceCommit": "0d5dd7944f88c817c07a26bc4fb1905d5f9c46d6",
+  "sourceUrl": "https://github.com/nmrugg/stockfish.js/tree/v19.0.1",
+  "sourceDownload": "/vendor/sources/stockfish-js-19.0.1-source.tar.gz",
+  "licenseUrl": "/vendor/licenses/stockfish-GPL-3.0.txt",
+  "authorsUrl": "/vendor/licenses/stockfish-AUTHORS.txt",
+  "buildInstructions": "/vendor/stockfish/README.md",
+  "modified": false,
+  "files": [
+    {
+      "path": "/vendor/stockfish/stockfish-19-lite-single.js",
+      "source": "https://unpkg.com/stockfish@19.0.1/bin/stockfish-19-lite-single.js",
+      "bytes": 28230,
+      "sha256": "ccb130d7ff29408531c47d859a49f91d59d4f482d05a53eb1a3231a4f624c91a"
+    },
+    {
+      "path": "/vendor/stockfish/stockfish-19-lite-single.wasm",
+      "source": "https://unpkg.com/stockfish@19.0.1/bin/stockfish-19-lite-single.wasm",
+      "bytes": 1845971,
+      "sha256": "ee4f115bdb2d32cadf96cada104a05b5ec257d7ad6f57582190b49bc71f096de"
+    },
+    {
+      "path": "/vendor/sources/stockfish-js-19.0.1-source.tar.gz",
+      "source": "https://codeload.github.com/nmrugg/stockfish.js/tar.gz/refs/tags/v19.0.1",
+      "bytes": 426054,
+      "sha256": "a18aa8a871f5265014b110b3e07804ff3637899d2e189be6ded2b99e2c17a10e"
+    },
+    {
+      "path": "/vendor/sources/nn-61e7af4bb97d.nnue",
+      "source": "https://tests.stockfishchess.org/api/nn/nn-61e7af4bb97d.nnue",
+      "sha256": "61e7af4bb97d51eeeb25d322916f86513b5cd3a827ce189c98c6e31946f99e5b"
+    }
+  ]
+}

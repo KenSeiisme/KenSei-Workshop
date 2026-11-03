@@ -1,0 +1,22 @@
+KenSei Workshop chess dependencies
+=================================
+
+chess.js 1.4.0
+License: BSD-2-Clause (full text in chess-js-BSD-2-Clause.txt)
+Unmodified ESM module: /vendor/chess.js
+Original package: https://www.npmjs.com/package/chess.js/v/1.4.0
+Exact source: https://github.com/jhlywa/chess.js/tree/ce1ff9e9fc342984ff75ca475ab39f37888cb28a
+SHA-256 (ESM): 76c7c34f0e2e9ab076521a5d6fe786a9cce537bb1b6f29d32a9c9970b5b232d2
+
+Stockfish.js 19.0.1 / Stockfish 19 Lite single-threaded
+License: GPL-3.0 (full text in stockfish-GPL-3.0.txt)
+Authors: stockfish-AUTHORS.txt
+Unmodified engine: /vendor/stockfish/stockfish-19-lite-single.js
+Companion WebAssembly: /vendor/stockfish/stockfish-19-lite-single.wasm
+Exact tagged source archive: /vendor/sources/stockfish-js-19.0.1-source.tar.gz
+Exact embedded evaluation network: /vendor/sources/nn-61e7af4bb97d.nnue
+Build instructions: /vendor/stockfish/README.md
+Source URLs and file checksums: /vendor/stockfish/manifest.json
+
+The engine is distributed locally. No game position, file, audio or user
+information is sent to npm, unpkg, GitHub or an engine API at runtime.

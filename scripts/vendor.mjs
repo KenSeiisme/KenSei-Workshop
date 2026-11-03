@@ -210,3 +210,4 @@ await import("./vendor-sixth.mjs");
 
 await import("./vendor-studios.mjs");
 await import("./vendor-go.mjs");
+await import("./vendor-chess.mjs");

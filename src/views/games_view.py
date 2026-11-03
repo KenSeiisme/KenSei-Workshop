@@ -5,6 +5,7 @@ from game_previews import idle_preview
 from html import escape
 from pong_view import VIEW as PONG_VIEW
 from go_view import VIEW as GO_VIEW
+from chess_view import VIEW as CHESS_VIEW
 
 HELP = {
     "go": "Play Go with Chinese, Japanese 1989 or AGA rules. Local, introductory computer and authenticated online play; optional single-color memory training.",
@@ -94,6 +95,12 @@ HELP = {
     ),
 }
 DETAILS = {
+    "chess": (
+        "14",
+        "Your next move starts here.",
+        "Standard chess · Stockfish",
+        "Local / Computer / Online",
+    ),
     "go": (
         "13",
         "A quiet board. A world of moves.",
@@ -136,6 +143,17 @@ DETAILS = {
 
 
 def preview(kind):
+    if kind == "chess":
+        return (
+            '<div class="preview-chess" aria-hidden="true">'
+            + "".join(
+                "<i>"
+                + ("♞" if i == 1 else "♙" if i == 10 else "♔" if i == 14 else "")
+                + "</i>"
+                for i in range(16)
+            )
+            + "</div>"
+        )
     if kind == "go":
         return '<div class="preview-go" aria-hidden="true">' + "<i></i>" * 15 + "</div>"
     if kind == "block-drop":
@@ -348,7 +366,7 @@ def directory(games):
             spec=DETAILS[g["slug"]][2],
             play_mode=(
                 "Local / Computer / Online"
-                if g["slug"] == "go"
+                if g["slug"] in ("go", "chess")
                 else (
                     "Online / Friends"
                     if g["slug"] == "pong"
@@ -368,6 +386,8 @@ def directory(games):
 
 
 def game_page(game):
+    if game["slug"] == "chess":
+        return CHESS_VIEW
     if game["slug"] == "go":
         return GO_VIEW
     if game["slug"] == "pong":

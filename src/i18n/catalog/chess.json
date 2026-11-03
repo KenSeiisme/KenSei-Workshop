@@ -1,0 +1,894 @@
+{
+  "m_e2beaba51133": {
+    "en": "Preparing game…",
+    "zh-Hant": "正在準備對局…"
+  },
+  "m_ea1ad949e515": {
+    "en": "Invalid FEN castling rights.",
+    "zh-Hant": "FEN 的王車易位權利無效。"
+  },
+  "m_bb7dd847a511": {
+    "en": "Invalid FEN en passant position.",
+    "zh-Hant": "FEN 的吃過路兵設定無效。"
+  },
+  "m_c1aade825397": {
+    "en": "Chess",
+    "zh-Hant": "西洋棋"
+  },
+  "m_4c673ac3ec6f": {
+    "en": "Your next move starts here.",
+    "zh-Hant": "從這裡走出下一步。"
+  },
+  "m_201e9f0fb20e": {
+    "en": "Your next move starts here. Local two players, Stockfish and verified online matches.",
+    "zh-Hant": "從這裡走出下一步。支援本機雙人、Stockfish 人機及經驗證的線上對戰。"
+  },
+  "m_550e81c46a5d": {
+    "en": "Standard chess · 8 × 8",
+    "zh-Hant": "標準西洋棋 · 8 × 8"
+  },
+  "m_e5fc7148bc43": {
+    "en": "Standard chess · {0}",
+    "zh-Hant": "標準西洋棋 · {0}"
+  },
+  "m_5e23ec6a300d": {
+    "en": "Mode",
+    "zh-Hant": "模式"
+  },
+  "m_76ed42d22129": {
+    "en": "Computer",
+    "zh-Hant": "人機對戰"
+  },
+  "m_0c7e70c5bf4e": {
+    "en": "Local two players",
+    "zh-Hant": "本機雙人"
+  },
+  "m_0d21bd52022c": {
+    "en": "Online",
+    "zh-Hant": "線上對戰"
+  },
+  "m_7346a5e76a21": {
+    "en": "Time control",
+    "zh-Hant": "用時設定"
+  },
+  "m_b73a2186fa37": {
+    "en": "Unlimited · local only",
+    "zh-Hant": "不限時 · 僅限本機"
+  },
+  "m_11dde17d6c3e": {
+    "en": "Unlimited",
+    "zh-Hant": "不限時"
+  },
+  "m_cadeb24c1b1c": {
+    "en": "Computer level",
+    "zh-Hant": "電腦難度"
+  },
+  "m_b75cf05d6d2a": {
+    "en": "Level 1",
+    "zh-Hant": "第 1 級"
+  },
+  "m_29cc4eb6673b": {
+    "en": "Level 2",
+    "zh-Hant": "第 2 級"
+  },
+  "m_42b03421cde7": {
+    "en": "Level 3",
+    "zh-Hant": "第 3 級"
+  },
+  "m_3d275ef75669": {
+    "en": "Level 4",
+    "zh-Hant": "第 4 級"
+  },
+  "m_0d0e64159b64": {
+    "en": "Level 5",
+    "zh-Hant": "第 5 級"
+  },
+  "m_84061ac6e98a": {
+    "en": "Play as",
+    "zh-Hant": "執棋方"
+  },
+  "m_3495e757855a": {
+    "en": "White",
+    "zh-Hant": "白方"
+  },
+  "m_c6cfe6e4f129": {
+    "en": "Black",
+    "zh-Hant": "黑方"
+  },
+  "m_67bc484430fe": {
+    "en": "Random",
+    "zh-Hant": "隨機"
+  },
+  "m_1128d0bd5145": {
+    "en": "Pawn",
+    "zh-Hant": "兵"
+  },
+  "m_f24b52468bfa": {
+    "en": "Knight",
+    "zh-Hant": "騎士"
+  },
+  "m_5b44abd9e902": {
+    "en": "Bishop",
+    "zh-Hant": "主教"
+  },
+  "m_58e40a29115f": {
+    "en": "Rook",
+    "zh-Hant": "城堡"
+  },
+  "m_153f6e435589": {
+    "en": "Queen",
+    "zh-Hant": "皇后"
+  },
+  "m_13166b63aaa7": {
+    "en": "King",
+    "zh-Hant": "國王"
+  },
+  "m_e99fdc4b5710": {
+    "en": "Ready preview",
+    "zh-Hant": "待機預覽"
+  },
+  "m_8ec9816f775c": {
+    "en": "Local practice",
+    "zh-Hant": "本機練習"
+  },
+  "m_effd438e610d": {
+    "en": "Chess match status",
+    "zh-Hant": "西洋棋對局狀態"
+  },
+  "m_a7609f6bd978": {
+    "en": "Chess board. Arrow keys select a square; Enter selects a piece or destination.",
+    "zh-Hant": "西洋棋棋盤。方向鍵選擇格子，Enter 選擇棋子或落點。"
+  },
+  "m_dba451835a1d": {
+    "en": "Chess setup",
+    "zh-Hant": "西洋棋開局設定"
+  },
+  "m_dc58131a08f4": {
+    "en": "Start game",
+    "zh-Hant": "開始對局"
+  },
+  "m_ab128526da3e": {
+    "en": "Continue saved game",
+    "zh-Hant": "繼續存檔對局"
+  },
+  "m_30abf96ab9bc": {
+    "en": "Create room",
+    "zh-Hant": "建立房間"
+  },
+  "m_b303e5047521": {
+    "en": "Find opponent",
+    "zh-Hant": "尋找對手"
+  },
+  "m_362c5966669d": {
+    "en": "Room code",
+    "zh-Hant": "房間代碼"
+  },
+  "m_cb2421c4877b": {
+    "en": "Join room",
+    "zh-Hant": "加入房間"
+  },
+  "m_7471415585c3": {
+    "en": "Online play requires Google sign-in. Standard human matches count toward public statistics.",
+    "zh-Hant": "線上對戰需登入 Google。標準真人對局會計入公開戰績。"
+  },
+  "m_ca7f58cd79c0": {
+    "en": "Waiting for your opponent",
+    "zh-Hant": "正在等待對手"
+  },
+  "m_5c58cd7963ca": {
+    "en": "Copy invite link",
+    "zh-Hant": "複製邀請連結"
+  },
+  "m_5fa7aac5375c": {
+    "en": "Ready",
+    "zh-Hant": "準備"
+  },
+  "m_330010f40240": {
+    "en": "Not ready",
+    "zh-Hant": "尚未準備"
+  },
+  "m_19766ed6ccb2": {
+    "en": "Cancel",
+    "zh-Hant": "取消"
+  },
+  "m_ea5a1f4ce7e2": {
+    "en": "Paused · local only",
+    "zh-Hant": "已暫停 · 僅限本機"
+  },
+  "m_31fbef162594": {
+    "en": "Continue",
+    "zh-Hant": "繼續"
+  },
+  "m_40985b6ad3c6": {
+    "en": "New game setup",
+    "zh-Hant": "設定新對局"
+  },
+  "m_472e71f04cdf": {
+    "en": "Review game",
+    "zh-Hant": "對局復盤"
+  },
+  "m_182e12c46491": {
+    "en": "Download PGN",
+    "zh-Hant": "下載 PGN 棋譜"
+  },
+  "m_730031883abe": {
+    "en": "Choose your settings and start when you are ready.",
+    "zh-Hant": "選擇設定，準備好後開始。"
+  },
+  "m_6824c63dafbb": {
+    "en": "Confirm move",
+    "zh-Hant": "確認走子"
+  },
+  "m_858e4ba7a29f": {
+    "en": "Pause",
+    "zh-Hant": "暫停"
+  },
+  "m_a7aabf37d2da": {
+    "en": "Undo turn",
+    "zh-Hant": "撤銷一輪"
+  },
+  "m_c56d6c2d8648": {
+    "en": "Flip board",
+    "zh-Hant": "翻轉棋盤"
+  },
+  "m_3d4a16205c55": {
+    "en": "Draw options",
+    "zh-Hant": "和棋選項"
+  },
+  "m_20a9ba67bf97": {
+    "en": "Resign",
+    "zh-Hant": "認輸"
+  },
+  "m_fbf728c3c3bb": {
+    "en": "Take control",
+    "zh-Hant": "接管操作"
+  },
+  "m_eccee4ef9458": {
+    "en": "Retry connection",
+    "zh-Hant": "重試連線"
+  },
+  "m_99af6606ff9d": {
+    "en": "Menu",
+    "zh-Hant": "選單"
+  },
+  "m_781339002d59": {
+    "en": "Accept draw",
+    "zh-Hant": "接受和棋"
+  },
+  "m_a2d285b35287": {
+    "en": "Decline",
+    "zh-Hant": "拒絕"
+  },
+  "m_4be83181dd82": {
+    "en": "Review move",
+    "zh-Hant": "逐手復盤"
+  },
+  "m_8b68de55778d": {
+    "en": "Back to result",
+    "zh-Hant": "返回結算"
+  },
+  "m_364a99922a40": {
+    "en": "Moves & save status",
+    "zh-Hant": "步譜與保存狀態"
+  },
+  "m_7bee9a5f378b": {
+    "en": "Chess leaderboard",
+    "zh-Hant": "西洋棋戰績榜"
+  },
+  "m_afbe03335b2e": {
+    "en": "Chess records",
+    "zh-Hant": "西洋棋戰績"
+  },
+  "m_0e9161011702": {
+    "en": "Refresh",
+    "zh-Hant": "重新整理"
+  },
+  "m_3dc4381b29f7": {
+    "en": "Verified standard online human matches only. Local and computer games remain private.",
+    "zh-Hant": "只計伺服器驗證的標準線上真人對局。本機與人機對局維持私人紀錄。"
+  },
+  "m_bec69036aa27": {
+    "en": "Sort",
+    "zh-Hant": "排序"
+  },
+  "m_dee63bf0e135": {
+    "en": "Most wins",
+    "zh-Hant": "勝場榜"
+  },
+  "m_3d403173f81f": {
+    "en": "Win rate · 10+ games",
+    "zh-Hant": "勝率榜 · 至少 10 局"
+  },
+  "m_29601eb80e79": {
+    "en": "Show Top 50",
+    "zh-Hant": "顯示前 50 名"
+  },
+  "m_eceb32ca4faa": {
+    "en": "Show Top 10",
+    "zh-Hant": "顯示前 10 名"
+  },
+  "m_74a883a037bc": {
+    "en": "Settings",
+    "zh-Hant": "設定"
+  },
+  "m_7d9eb7acb13e": {
+    "en": "Close",
+    "zh-Hant": "關閉"
+  },
+  "m_20386b091da0": {
+    "en": "Copy FEN",
+    "zh-Hant": "複製 FEN 局面"
+  },
+  "m_60f1879d80c3": {
+    "en": "Leave online match",
+    "zh-Hant": "離開線上對局"
+  },
+  "m_38b13ee94e92": {
+    "en": "Import a private practice position",
+    "zh-Hant": "匯入私人練習局面"
+  },
+  "m_34eda502d22b": {
+    "en": "Import one PGN main line or a FEN position. Imported games never enter public records. FEN does not include repetition history.",
+    "zh-Hant": "匯入單局 PGN 主線或 FEN 局面。匯入的對局不會計入公開戰績；FEN 不包含重複局面歷史。"
+  },
+  "m_0fab979c0c51": {
+    "en": "PGN or FEN",
+    "zh-Hant": "PGN 棋譜或 FEN 局面"
+  },
+  "m_7edaadf5b253": {
+    "en": "Import practice",
+    "zh-Hant": "匯入練習"
+  },
+  "m_797dbeeb31b0": {
+    "en": "How to play & rules",
+    "zh-Hant": "玩法與規則"
+  },
+  "m_c0a257d036e9": {
+    "en": "White moves first. Protect your king; checkmate wins. Use drag and drop or select a piece and destination. On touch screens, confirm your preview. Promotion offers queen, rook, bishop or knight.",
+    "zh-Hant": "白方先行。保護自己的國王，將死對方即可獲勝。可拖曳走子，或依次選擇棋子與落點；觸控裝置先預覽再確認。升變可選皇后、城堡、主教或騎士。"
+  },
+  "m_701ddbc9e33b": {
+    "en": "Threefold repetition and fifty moves require a claim, including a declared intended move. Fivefold repetition and seventy-five moves end automatically; checkmate takes priority. A draw offer does not stop the clock.",
+    "zh-Hant": "三次重複與五十步須提出申請，亦可先宣告下一步後申請。五次重複與七十五步會自動和棋；同一步將死時，將死優先。提議和棋不會停止計時。"
+  },
+  "m_cb53196c708f": {
+    "en": "Rare dead positions and timeout mating possibilities require reliable proof. Uncertain outcomes remain Unresolved without public wins; both players may agree to a draw. This is a casual digital game, not a tournament referee.",
+    "zh-Hant": "罕見死局及超時後能否將死須有可靠證明。無法確認的結果維持未決，不記公開勝場；雙方仍可協議和棋。本程式供休閒對弈，不能代替賽事裁判。"
+  },
+  "m_dec2bc761ef9": {
+    "en": "Online clocks continue in the background. A continuous 120-second disconnection forfeits unless time expires first. Both disconnected: interrupted. Online play has no undo, hints or single-player pause.",
+    "zh-Hant": "線上用時在背景持續計算。連續斷線 120 秒判負，若時鐘先耗盡則先處理超時。雙方都斷線則中斷；線上不提供悔棋、提示或單方暫停。"
+  },
+  "m_45c9a4992a7a": {
+    "en": "Local and computer games save privately. Imported positions are checked for basic legality, not complete historical reachability. Stockfish levels do not represent official ratings.",
+    "zh-Hant": "本機與人機對局使用私人存檔。匯入時僅檢查局面的基本合法性，不證明其完整歷史可達性。Stockfish 等級不代表正式棋力評分。"
+  },
+  "m_b0cbc9391372": {
+    "en": "FIDE Laws of Chess",
+    "zh-Hant": "FIDE 西洋棋規則"
+  },
+  "m_2f985e40dd19": {
+    "en": "Choose a promotion",
+    "zh-Hant": "選擇升變棋子"
+  },
+  "m_c95172142e3b": {
+    "en": "The clock continues while you choose.",
+    "zh-Hant": "選擇期間時鐘繼續計算。"
+  },
+  "m_cc2ed6e63276": {
+    "en": "The clock continues while this panel is open.",
+    "zh-Hant": "此面板開啟期間時鐘繼續計算。"
+  },
+  "m_affc8b64e116": {
+    "en": "Offer draw",
+    "zh-Hant": "提議和棋"
+  },
+  "m_ebb3a82958ad": {
+    "en": "Claim current position",
+    "zh-Hant": "按目前局面申請和棋"
+  },
+  "m_08f5d0ca2559": {
+    "en": "Intended move · UCI",
+    "zh-Hant": "宣告下一步 · UCI 格式"
+  },
+  "m_ae39d1e599be": {
+    "en": "Claim with intended move",
+    "zh-Hant": "宣告下一步並申請和棋"
+  },
+  "m_5fca6d7bab56": {
+    "en": "The intended move is verified but is not played if the claim succeeds. Invalid claims leave the clock running.",
+    "zh-Hant": "系統會驗證宣告的走法；申請成功時不會實際走出該步。無效申請不會停止計時。"
+  },
+  "m_0b97700d6c8b": {
+    "en": "Request unresolved-position review",
+    "zh-Hant": "申請未決局面確認"
+  },
+  "m_b9305c3a54cd": {
+    "en": "{0} · {1} {2}",
+    "zh-Hant": "{0} · {1}{2}"
+  },
+  "m_5e5207b5ea72": {
+    "en": "{0} · empty",
+    "zh-Hant": "{0} · 空格"
+  },
+  "m_7e664f912998": {
+    "en": "Checkmate",
+    "zh-Hant": "將死"
+  },
+  "m_c6d643787706": {
+    "en": "Stalemate",
+    "zh-Hant": "逼和"
+  },
+  "m_d843c4e9a6a5": {
+    "en": "Dead position · insufficient material",
+    "zh-Hant": "死局 · 子力不足"
+  },
+  "m_a7ac6b72310e": {
+    "en": "Fivefold repetition",
+    "zh-Hant": "五次重複局面"
+  },
+  "m_ac42d71ced35": {
+    "en": "Seventy-five moves",
+    "zh-Hant": "七十五步自動和棋"
+  },
+  "m_dd1e8186bf3d": {
+    "en": "Threefold repetition claimed",
+    "zh-Hant": "三次重複申請和棋"
+  },
+  "m_4bf31ae919e2": {
+    "en": "Fifty moves claimed",
+    "zh-Hant": "五十步申請和棋"
+  },
+  "m_05b0da006443": {
+    "en": "Draw agreed",
+    "zh-Hant": "雙方同意和棋"
+  },
+  "m_8cfb410aedca": {
+    "en": "Resignation",
+    "zh-Hant": "認輸"
+  },
+  "m_34a382bbb50d": {
+    "en": "Time expired",
+    "zh-Hant": "超時"
+  },
+  "m_f3d0fa1f0362": {
+    "en": "Time expired · no possible mate",
+    "zh-Hant": "超時 · 對方無法將死"
+  },
+  "m_1913a281a6a3": {
+    "en": "Disconnection",
+    "zh-Hant": "斷線判負"
+  },
+  "m_ab68763e8cbf": {
+    "en": "Interrupted · no public result",
+    "zh-Hant": "對局中斷 · 不計公開戰績"
+  },
+  "m_1dbb742cfa02": {
+    "en": "Unresolved · no public result",
+    "zh-Hant": "結果未決 · 不計公開戰績"
+  },
+  "m_d2e898189277": {
+    "en": "Game complete",
+    "zh-Hant": "對局結束"
+  },
+  "m_f4f211e7c50b": {
+    "en": "Ready within {0} seconds",
+    "zh-Hant": "請在 {0} 秒內準備"
+  },
+  "m_9cf25a17c2aa": {
+    "en": "{0} to move{1}",
+    "zh-Hant": "輪到{0}{1}"
+  },
+  "m_88baaa05d006": {
+    "en": " · Check",
+    "zh-Hant": " · 將軍"
+  },
+  "m_4f7838402f37": {
+    "en": "Verified",
+    "zh-Hant": "已驗證"
+  },
+  "m_d584502088a3": {
+    "en": "Ranked · online",
+    "zh-Hant": "線上 · 計入戰績"
+  },
+  "m_1f4c0985c358": {
+    "en": "Online practice",
+    "zh-Hant": "線上練習"
+  },
+  "m_5e07c979fbd0": {
+    "en": "{0} offers a draw",
+    "zh-Hant": "{0}提議和棋"
+  },
+  "m_56702c11dc02": {
+    "en": "Finding an opponent…",
+    "zh-Hant": "正在尋找對手…"
+  },
+  "m_21ca73aa7256": {
+    "en": "{0} · {1} · {2}",
+    "zh-Hant": "{0} · {1} · {2}"
+  },
+  "m_fdf6cad53041": {
+    "en": "Unresolved / interrupted",
+    "zh-Hant": "未決／中斷"
+  },
+  "m_61517c08b3bf": {
+    "en": "Draw",
+    "zh-Hant": "和棋"
+  },
+  "m_31ffe29256e6": {
+    "en": "{0} wins",
+    "zh-Hant": "{0}獲勝"
+  },
+  "m_cd55a9d95751": {
+    "en": "{0} · {1}",
+    "zh-Hant": "{0} · {1}"
+  },
+  "m_7e5266df4d26": {
+    "en": "Your move. Select a piece and destination.",
+    "zh-Hant": "輪到你，請選擇棋子與落點。"
+  },
+  "m_ec2b73def022": {
+    "en": "Your turn.",
+    "zh-Hant": "輪到你。"
+  },
+  "m_0e90adf08a72": {
+    "en": "Preview selected. Confirm your move.",
+    "zh-Hant": "已預覽落點，請確認走子。"
+  },
+  "m_f7f798da97bf": {
+    "en": "{0} wins · {1}",
+    "zh-Hant": "{0} 勝 · {1}"
+  },
+  "m_69aaa21b287d": {
+    "en": "{0} games · {1} losses · {2} draws",
+    "zh-Hant": "{0} 局 · {1} 負 · {2} 和"
+  },
+  "m_c3b4579a87c9": {
+    "en": "Loading records…",
+    "zh-Hant": "正在載入戰績…"
+  },
+  "m_09875b38744a": {
+    "en": "Win-rate ranking requires 10 completed games.",
+    "zh-Hant": "勝率排名需至少完成 10 局。"
+  },
+  "m_b10ecd67984c": {
+    "en": "No verified chess matches yet.",
+    "zh-Hant": "尚無已驗證的西洋棋對局。"
+  },
+  "m_3a31ff501978": {
+    "en": "Your rank: —",
+    "zh-Hant": "你的排名：—"
+  },
+  "m_f0111994283c": {
+    "en": "Records could not load. Use Refresh to retry.",
+    "zh-Hant": "無法載入戰績，請按重新整理重試。"
+  },
+  "m_d249818eccab": {
+    "en": "Copied.",
+    "zh-Hant": "已複製。"
+  },
+  "m_8b02a747c117": {
+    "en": "Copy this text:",
+    "zh-Hant": "請複製以下文字："
+  },
+  "m_ee5068d13200": {
+    "en": "Leave the current practice game and open online play?",
+    "zh-Hant": "離開目前練習對局並開啟線上對戰？"
+  },
+  "m_377e85297bc6": {
+    "en": "End this private computer game as a draw?",
+    "zh-Hant": "將此私人電腦對局以和棋結束？"
+  },
+  "m_cff10632401f": {
+    "en": "Start a new game? Your current progress remains saved.",
+    "zh-Hant": "開始新對局？目前進度仍會保留。"
+  },
+  "m_c27e8b44a793": {
+    "en": "Request an unresolved-position review? Both players must agree; no public result is awarded.",
+    "zh-Hant": "申請未決局面確認？須由雙方同意，且不會計入公開戰績。"
+  },
+  "m_9867f659850a": {
+    "en": "Resign this game?",
+    "zh-Hant": "確定認輸？"
+  },
+  "m_a022f8f6d58b": {
+    "en": "Leave this online match? A started game counts as resignation.",
+    "zh-Hant": "離開此線上對局？已開始的對局會視為認輸。"
+  },
+  "m_6204f95e0182": {
+    "en": "Replace the current practice position?",
+    "zh-Hant": "取代目前的練習局面？"
+  },
+  "m_cafccf9f5e91": {
+    "en": "Choose a supported chess time control.",
+    "zh-Hant": "請選擇支援的西洋棋用時設定。"
+  },
+  "m_df6f5369e385": {
+    "en": "Invalid FEN position.",
+    "zh-Hant": "FEN 局面無效。"
+  },
+  "m_214a6b0d719d": {
+    "en": "Invalid FEN piece count.",
+    "zh-Hant": "FEN 局面的棋子數量無效。"
+  },
+  "m_4d131672ce37": {
+    "en": "Invalid FEN king position.",
+    "zh-Hant": "FEN 局面的國王位置無效。"
+  },
+  "m_7099ede6f769": {
+    "en": "Choose a legal intended move.",
+    "zh-Hant": "請宣告合法的下一步。"
+  },
+  "m_3b26d11eeef4": {
+    "en": "Invalid chess move.",
+    "zh-Hant": "西洋棋走法無效。"
+  },
+  "m_0025fe4c712e": {
+    "en": "Invalid chess action.",
+    "zh-Hant": "西洋棋操作無效。"
+  },
+  "m_a10d7ceb8496": {
+    "en": "This chess game has ended.",
+    "zh-Hant": "此西洋棋對局已結束。"
+  },
+  "m_84fc20c75626": {
+    "en": "Unresolved positions only allow a mutual draw agreement.",
+    "zh-Hant": "未決局面只接受雙方協議和棋。"
+  },
+  "m_4e7af01340c5": {
+    "en": "Chess record limit reached. Export the PGN.",
+    "zh-Hant": "西洋棋步譜已達上限，請匯出 PGN 棋譜。"
+  },
+  "m_4c688adcde8c": {
+    "en": "Wait for your turn.",
+    "zh-Hant": "請等待輪到你。"
+  },
+  "m_2fe1719f3b47": {
+    "en": "That move is not legal.",
+    "zh-Hant": "此走法不合法。"
+  },
+  "m_ffcde39c65ae": {
+    "en": "Only the player to move may claim a draw.",
+    "zh-Hant": "只有目前行棋方可申請和棋。"
+  },
+  "m_22975cbcd4ba": {
+    "en": "The draw claim is not valid for this position.",
+    "zh-Hant": "此局面不符合該和棋申請條件。"
+  },
+  "m_7f10e5421c7a": {
+    "en": "A draw offer is already pending.",
+    "zh-Hant": "目前已有待回覆的和棋提議。"
+  },
+  "m_c5afc382d2a7": {
+    "en": "There is no opponent draw offer to accept.",
+    "zh-Hant": "目前沒有可接受的對方和棋提議。"
+  },
+  "m_28ea05884696": {
+    "en": "There is no opponent draw offer to decline.",
+    "zh-Hant": "目前沒有可拒絕的對方和棋提議。"
+  },
+  "m_d41a1aa41bca": {
+    "en": "Unknown chess action.",
+    "zh-Hant": "未知的西洋棋操作。"
+  },
+  "m_033ec3a1d01b": {
+    "en": "Invalid chess save or size over 256 KB.",
+    "zh-Hant": "西洋棋存檔無效或超過 256 KB。"
+  },
+  "m_2d9f949296a4": {
+    "en": "Import one PGN main line, up to 256 KB, without variations.",
+    "zh-Hant": "請匯入不含變化分支的單局 PGN 主線，檔案上限為 256 KB。"
+  },
+  "m_56c7d5ae6cde": {
+    "en": "The clock has expired.",
+    "zh-Hant": "時鐘已耗盡。"
+  },
+  "m_c879aabbb6ee": {
+    "en": "Chess engine timed out. Retry or choose local two players.",
+    "zh-Hant": "西洋棋引擎逾時，請重試或改用本機雙人。"
+  },
+  "m_3c786f31afdd": {
+    "en": "Loading Stockfish…",
+    "zh-Hant": "正在載入 Stockfish…"
+  },
+  "m_90f55c13f5b7": {
+    "en": "Stockfish could not load. Retry or choose local two players.",
+    "zh-Hant": "Stockfish 載入失敗，請重試或改用本機雙人。"
+  },
+  "m_2949f29dd9e1": {
+    "en": "Search cancelled.",
+    "zh-Hant": "已取消搜尋。"
+  },
+  "m_3482ab557647": {
+    "en": "Stockfish ready",
+    "zh-Hant": "Stockfish 已準備就緒"
+  },
+  "m_41553d353f5f": {
+    "en": "Stockfish returned no legal move. Retry the engine.",
+    "zh-Hant": "Stockfish 未回傳合法走法，請重試引擎。"
+  },
+  "m_d6b77b264ec6": {
+    "en": "Sign in to play online chess.",
+    "zh-Hant": "請登入以進行線上西洋棋對戰。"
+  },
+  "m_00c080715a4e": {
+    "en": "Account changed. Reopen this game.",
+    "zh-Hant": "帳號已變更，請重新開啟此對局。"
+  },
+  "m_77fe7b65c5e6": {
+    "en": "The online board could not be updated. Check your connection and retry.",
+    "zh-Hant": "線上棋盤無法更新，請檢查連線後重試。"
+  },
+  "m_c6b662cdc69a": {
+    "en": "This room belongs to another board game.",
+    "zh-Hant": "此房間屬於另一款棋類遊戲。"
+  },
+  "m_e53ad56bd41b": {
+    "en": "The room closed before play started. No result was recorded.",
+    "zh-Hant": "房間在開賽前關閉，未記錄戰績。"
+  },
+  "m_3213977da5af": {
+    "en": "Waiting for a free online room and an opponent. You can cancel at any time.",
+    "zh-Hant": "等待可用房間與對手，可隨時取消。"
+  },
+  "m_db1d2bf23fc7": {
+    "en": "Waiting for an opponent with the same time control.",
+    "zh-Hant": "等待用時設定相同的對手。"
+  },
+  "m_5e818e01fe23": {
+    "en": "Reconnect or take control before playing.",
+    "zh-Hant": "請先重新連線或接管操作。"
+  },
+  "m_9ba3c84d6c5a": {
+    "en": "Leave the online match before starting practice.",
+    "zh-Hant": "開始練習前，請先離開線上對局。"
+  },
+  "m_60a48955bd45": {
+    "en": "Start a game before exporting.",
+    "zh-Hant": "請先開始對局再匯出棋譜。"
+  },
+  "m_0474bff29fad": {
+    "en": "Origin not allowed.",
+    "zh-Hant": "不允許此來源。"
+  },
+  "m_8957e11c71b3": {
+    "en": "Use POST.",
+    "zh-Hant": "請使用 POST 請求。"
+  },
+  "m_4a889f6dbf2b": {
+    "en": "Sign in to play online board games.",
+    "zh-Hant": "請登入以進行線上棋類對戰。"
+  },
+  "m_64c9e7f8b8a6": {
+    "en": "Online board games are temporarily unavailable.",
+    "zh-Hant": "線上棋類對戰暫時無法使用。"
+  },
+  "m_1b144c8c7d14": {
+    "en": "Your session expired. Sign in again.",
+    "zh-Hant": "登入狀態已過期，請重新登入。"
+  },
+  "m_05ee22b084ee": {
+    "en": "A signed-in account is required.",
+    "zh-Hant": "此操作需要登入帳號。"
+  },
+  "m_848aa7d5f78b": {
+    "en": "Missing request body.",
+    "zh-Hant": "請求缺少必要內容。"
+  },
+  "m_08f02a912a90": {
+    "en": "Board request exceeds 16 KB.",
+    "zh-Hant": "棋類對局請求超過 16 KB。"
+  },
+  "m_34031006b5f8": {
+    "en": "Unknown board game.",
+    "zh-Hant": "未知的棋類遊戲。"
+  },
+  "m_8e3b2c1b29c8": {
+    "en": "Invalid board request.",
+    "zh-Hant": "棋類對局請求無效。"
+  },
+  "m_c6462c8f5bd4": {
+    "en": "Invalid match identity.",
+    "zh-Hant": "對局識別無效。"
+  },
+  "m_a4c54c54ac32": {
+    "en": "Invalid move request.",
+    "zh-Hant": "著手請求無效。"
+  },
+  "m_fd0fed297ec9": {
+    "en": "The online board could not be updated.",
+    "zh-Hant": "無法更新線上棋盤。"
+  },
+  "m_cddd6ccd22dc": {
+    "en": "Board rules changed. Refresh this page.",
+    "zh-Hant": "棋類規則已更新，請重新整理頁面。"
+  },
+  "m_18ea3034eb4a": {
+    "en": "Enter an eight-character room code.",
+    "zh-Hant": "請輸入 8 碼房間代碼。"
+  },
+  "m_d8d09ee6595a": {
+    "en": "A browser identity is required.",
+    "zh-Hant": "缺少瀏覽器識別資訊。"
+  },
+  "m_91a5917d054b": {
+    "en": "A request identity is required.",
+    "zh-Hant": "缺少請求識別資訊。"
+  },
+  "m_f85952c54586": {
+    "en": "Request identity was used for another action.",
+    "zh-Hant": "此請求識別碼已用於另一項操作。"
+  },
+  "m_535d9b9ee1e8": {
+    "en": "Invalid standard chess configuration.",
+    "zh-Hant": "標準西洋棋設定無效。"
+  },
+  "m_148d41d5aa47": {
+    "en": "Invalid canonical board transition.",
+    "zh-Hant": "權威棋盤狀態轉換無效。"
+  },
+  "m_49ea9c832f34": {
+    "en": "Unknown board operation.",
+    "zh-Hant": "未知的棋類對局操作。"
+  },
+  "m_943cd06489f2": {
+    "en": "This match is not available to your account.",
+    "zh-Hant": "目前帳號無法存取此對局。"
+  },
+  "m_74a3520204ce": {
+    "en": "Too many board requests. Wait a minute and retry.",
+    "zh-Hant": "對局請求過於頻繁，請稍候一分鐘再試。"
+  },
+  "m_b4c8d0b24fd2": {
+    "en": "That room is unavailable or already full.",
+    "zh-Hant": "此房間無法使用或已滿員。"
+  },
+  "m_8b9668e20bac": {
+    "en": "Another tab controls this match. Take control to play.",
+    "zh-Hant": "另一分頁正控制此對局，請接管後再操作。"
+  },
+  "m_6e94f25423e4": {
+    "en": "This match is not accepting moves.",
+    "zh-Hant": "此對局目前不接受著手。"
+  },
+  "m_c56c7916ae09": {
+    "en": "The board changed. Read the latest position and retry.",
+    "zh-Hant": "棋盤已更新，請讀取最新局面後重試。"
+  },
+  "m_54fad506aaef": {
+    "en": "Chess · online records",
+    "zh-Hant": "西洋棋 · 線上戰績"
+  },
+  "m_26e6e832010d": {
+    "en": "Play Chess →",
+    "zh-Hant": "開始下西洋棋 →"
+  },
+  "m_0de835ec3cb0": {
+    "en": "Chess rules v{0} · {1}",
+    "zh-Hant": "西洋棋規則 v{0} · {1}"
+  },
+  "m_033451a0e24d": {
+    "en": "Online Chess and public records",
+    "zh-Hant": "線上西洋棋與公開戰績"
+  },
+  "m_a76ca53fc973": {
+    "en": "Chess uses the same private server-verified match service as Go. Match members can read the position, moves, clocks and outcome. Standard online human games publish completed games, wins, losses, draws and win rate by time control. Local games, Stockfish practice and imported positions remain private. Stockfish runs on this device without sending positions to an external AI service. Unresolved and interrupted matches do not enter public statistics. Go, Chess, Pong and shared Whiteboard share a two-active-room limit.",
+    "zh-Hant": "西洋棋與圍棋共用私人且由伺服器驗證的對局服務。對局成員可讀取局面、步譜、時鐘與結果。標準線上真人局會按用時設定公開完局、勝、負、和及勝率；本機、Stockfish 練習與匯入局面維持私人。Stockfish 在此裝置執行，不會將局面傳送至外部 AI 服務。未決與中斷對局不計入公開統計。Go、Chess、Pong 與共享 Whiteboard 合計最多兩個活躍房間。"
+  },
+  "m_9d849b5de063": {
+    "en": "Corresponding source and build instructions",
+    "zh-Hant": "對應原始碼與建置說明"
+  },
+  "m_389d3b79ed35": {
+    "en": "Source archive",
+    "zh-Hant": "原始碼壓縮檔"
+  },
+  "m_5e82554444e3": {
+    "en": "Timeout wins require a legal mating witness. The bounded verifier can leave ordinary middlegames as well as rare dead positions Unresolved; no public win is awarded without proof. Both players may agree to a draw. This is a casual digital game, not a tournament referee.",
+    "zh-Hant": "超時勝局須有合法續著可達將死的證明。驗證器的搜尋範圍有限，因此一般中局與罕見死局都有可能維持未決；未取得證明時不記公開勝場。雙方仍可協議和棋。本程式供休閒對弈，不能代替賽事裁判。"
+  },
+  "m_c795d7da04cb": {
+    "en": "Repetition history starts with the imported position.",
+    "zh-Hant": "重複局面歷史從匯入的局面開始計算。"
+  }
+}

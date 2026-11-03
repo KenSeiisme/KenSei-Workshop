@@ -13,7 +13,7 @@
       "height": 630,
       "bytes": 281127,
       "sha256": "91a5e33c7bb1819d7d560796c3f50444981b0bb7f5df08810b7cfb9833115c76",
-      "sourceHash": "d6991354e436eeec5cf232a40e086259e882e2fe69e97a52fe7013c701b91645"
+      "sourceHash": "e3ffd87009e95b7dd36f510efacab5c5f18b85db90b76256bb21a8ef16a029bc"
     },
     {
       "route": "",
@@ -23,7 +23,7 @@
       "height": 630,
       "bytes": 260608,
       "sha256": "9b5c658e2786998748be9a823c2ffe04a63c066cf8c1fd100273fd7026c45b1c",
-      "sourceHash": "047c709eff2ff69913dfcf12181d0272bf6a593a4b726d46541b5b65de3211a3"
+      "sourceHash": "e36494c17ebe3a6b065125f6077b68cc62d9d923f83d42b772d1bb054fd39bb7"
     },
     {
       "route": "projects",
@@ -33,7 +33,7 @@
       "height": 630,
       "bytes": 258580,
       "sha256": "050804753b309af728b93f6aea4d073768fb4a64b1c68ef91ab0db2a7d42c07f",
-      "sourceHash": "57504840cbe7218cb590bba232bb9e03b614215ffaa7f34a3f17a77098490774"
+      "sourceHash": "94e8447cb7237fa27f11aab5e9272352ca2d21199bc1e768c839dd42eca83010"
     },
     {
       "route": "projects",
@@ -43,7 +43,7 @@
       "height": 630,
       "bytes": 247768,
       "sha256": "5786de98cddb81580315eea5c5f55aaefe63cacb293280612b3a546078ceec5a",
-      "sourceHash": "e615922cd62dc750902724d3305ef1e47b097fe33cbbed300329097a7568df6a"
+      "sourceHash": "9ad6fd30bab5face8681f26e33e5221acbbf89f1bf5cca034baadd7dcb92ba5b"
     },
     {
       "route": "tools",
@@ -53,7 +53,7 @@
       "height": 630,
       "bytes": 261242,
       "sha256": "b30fd795ad494189bc647d7f3cf548a9993936e6fa74da3bae033b60a62246bb",
-      "sourceHash": "7a5bcf3a1c6e0801f14545dea97cd3767e8e649ee98ab1ae5bd42bebae60e57b"
+      "sourceHash": "5988ee9d709da8606b9d918935955dd385742d7c9ce08e8bfbc11586ad87bb05"
     },
     {
       "route": "tools",
@@ -63,7 +63,7 @@
       "height": 630,
       "bytes": 251328,
       "sha256": "09c405f4d16dfb896d3337b9497f48ba32b624890c3e4b9e114986bd64dd4cbb",
-      "sourceHash": "e702ee3e7bb06624400c15add86962d66e54a9a7007668c7b51c53773d86b2a2"
+      "sourceHash": "05a8f4d68c0e7e6728559626f873d3d304df78f191fca36978df300d8e590958"
     },
     {
       "route": "tools/image-studio",
@@ -73,7 +73,7 @@
       "height": 630,
       "bytes": 270893,
       "sha256": "6fb40c683f66c88bbd9cd12cf7104f3a8767d0379b593db9a9853c8a91bb89b6",
-      "sourceHash": "f19a49027f6c757ccca312e933a91aeff2f800d498ac68e5775d725e757ad15d"
+      "sourceHash": "1bd97862bff682876f06d9ee3873b5f6c8dc57636cd5fe3547488197a535fb60"
     },
     {
       "route": "tools/image-studio",
@@ -83,7 +83,7 @@
       "height": 630,
       "bytes": 257184,
       "sha256": "3a5ba7eb0b1ba33afd765c6d3c356f6a7632d98880e4b52d613e22ee6c922450",
-      "sourceHash": "18c4ef063420b8d71d485c66bc477469d8e031498fcedc03eb40e23592459143"
+      "sourceHash": "60c3ad5e516f4698fb5107485207e09b53140062e64d2fb1b97719c5c84c36e6"
     },
     {
       "route": "tools/qr-studio",
@@ -93,7 +93,7 @@
       "height": 630,
       "bytes": 266139,
       "sha256": "03cd167b002b5af53c6792c2075c6f720cb3fa85ed4fc36ef2c1a93edcaafaeb",
-      "sourceHash": "8fef7831a95eadba03023b189d7091b443fdbc90495cbfbf4dded3c200f0867c"
+      "sourceHash": "c756bddfb557605238050cfad742d9f0d38b9fd4d6c3064d78408da15ea60408"
     },
     {
       "route": "tools/qr-studio",
@@ -103,7 +103,7 @@
       "height": 630,
       "bytes": 255816,
       "sha256": "d7d734598db0f8ed25f934567157bd98d45cda4c3112479cbf0c7f9206e974c4",
-      "sourceHash": "b7106dce86752ed27ef8ae8b4e0eaf25c909690c984d12a289a7070112dcb618"
+      "sourceHash": "c4c94605b13aea2aa9b59aa90022e82276d0cdc328ab1ec9b5edf26995805b23"
     },
     {
       "route": "tools/pdf-toolkit",
@@ -113,7 +113,7 @@
       "height": 630,
       "bytes": 264435,
       "sha256": "faa504242e3f5c1e2f07b88166c0a64e3bb5db89eff25958722c57f5bd9df466",
-      "sourceHash": "9f101c57359605f967b517f5eeab3b57fde9630b7c8208a9cb43ff506aca894b"
+      "sourceHash": "07727fb70580ed8ecef34e88ec35b85730d5ad85333ec57fa1694b57c53b8b2e"
     },
     {
       "route": "tools/pdf-toolkit",
@@ -123,7 +123,7 @@
       "height": 630,
       "bytes": 255499,
       "sha256": "c4f1fc5eafe362faad115e43e2de3a1e3a186738ecb92340eae45fb5ef89e428",
-      "sourceHash": "3627ee7c27e0795c6ac764fe5ca7652d1ddb39741f44fdb0719f1d46ab3665c3"
+      "sourceHash": "0448eb9fec484be3a8df9e37fafbd075a57eb71bbd2c1fa25ad6b08be01e5972"
     },
     {
       "route": "tools/text-toolkit",
@@ -133,7 +133,7 @@
       "height": 630,
       "bytes": 255524,
       "sha256": "06b1989c4515ecdfbf9d2cb8ec9ff1ed520fb50e0a8432a8ece7ebd742021a41",
-      "sourceHash": "28eb3cd486437fad73512fe01bbb3b87625b49d8f00dfe06636e56aa6570f645"
+      "sourceHash": "c148dda949e21fa0e3b8d3c2eb8e6fe67ee69d5426e127cda9697d9a14423973"
     },
     {
       "route": "tools/text-toolkit",
@@ -143,7 +143,7 @@
       "height": 630,
       "bytes": 250008,
       "sha256": "047f35e2f553ca94a49d59966bc333752fb7221d10db064e5a9b7f69f87cf712",
-      "sourceHash": "1e439b0c70f3b299478710e1d2d090dcf6cdedb06f0390123a666defbfa8766c"
+      "sourceHash": "ffd69460c3184cc800298d96f6c2676c0143159095ba8842fe5f02fbbfcd14ea"
     },
     {
       "route": "tools/markdown-studio",
@@ -153,7 +153,7 @@
       "height": 630,
       "bytes": 271066,
       "sha256": "b29e6b41a7383404ca08f75acd9c5de6c66e40fd36cca7506a380a5654c1dd89",
-      "sourceHash": "5655dad4bc40d370bcab31bad5fa3804bf6b97c1bac84a3b95a2cba89a5f7f47"
+      "sourceHash": "f9bbd568ff178ea459dece4a6d0f07f42a645dabafa51178179caf20281417f2"
     },
     {
       "route": "tools/markdown-studio",
@@ -163,7 +163,7 @@
       "height": 630,
       "bytes": 261370,
       "sha256": "6f52da3d73ab5a3991ee67d40c635493caea7c32964fb9dd0475a1576d90acf8",
-      "sourceHash": "331b9bc13a9b1648a3c795594ff2cb15de8131537dd400af9d06469fe54a0e69"
+      "sourceHash": "d41f8907b2024adb78e599d0296a0bfa667ff8ecde8c7a75f0a7feed0c73ba72"
     },
     {
       "route": "tools/text-compare",
@@ -173,7 +173,7 @@
       "height": 630,
       "bytes": 262963,
       "sha256": "85cf19c77a8617277589267204e24dd6c09185f80083a1a73c6b185a10f09e72",
-      "sourceHash": "1967e4d3d0dda0a03024374b8686bc1c4c1dcc1c69aa920053d7903398cf1b76"
+      "sourceHash": "fc27a8cbcdec7dd50ee8f4b3e4666f6c5cfbc5f5615fbd83abfde95c32772a37"
     },
     {
       "route": "tools/text-compare",
@@ -183,7 +183,7 @@
       "height": 630,
       "bytes": 251508,
       "sha256": "f2d949b0a637c05c0100eb149b72dce824508d83f8df1b92d5720bf382b4a01d",
-      "sourceHash": "2078b478c637c7c511dece6cf63476e411301db3889e6cac4863a80a93b5d6c9"
+      "sourceHash": "5aea1c1369a2017add6a7e69d651f80c124911f67c880bdab7d9d01e841fe8f1"
     },
     {
       "route": "tools/image-to-text",
@@ -193,7 +193,7 @@
       "height": 630,
       "bytes": 268647,
       "sha256": "bb3814f5c18b333f5cef07f0d0e0db7d0ad1d5d89de4873e6cfbe85b6a93d7a7",
-      "sourceHash": "980b04bc254dbea469aa44165843abafd85619c18800bc34062cee3ed1970561"
+      "sourceHash": "dccb0780baa123fe811bf9d3ea770533f4e204a4d563a3435e7b3c56482a9e6b"
     },
     {
       "route": "tools/image-to-text",
@@ -203,7 +203,7 @@
       "height": 630,
       "bytes": 254380,
       "sha256": "7ef6d9dc5d447d6ce5390adcbe851d953a2085114cfebfc67c4bd4ad36b82e63",
-      "sourceHash": "9719ebd69b8720d10b4d848fc2a55060bc9aaefadc539d32d35fee4c92856511"
+      "sourceHash": "25527a18d5a80af229637cc5f889199bff76227687f9b8b8acaae69b87412f86"
     },
     {
       "route": "tools/focus-timer",
@@ -213,7 +213,7 @@
       "height": 630,
       "bytes": 257510,
       "sha256": "39abddb742f71aa0026cd162f44422e5e6e5b66fa82d181b47a261492c377a24",
-      "sourceHash": "cd17a1f6011d3cd8109a13cd16c92279847b3261b64741a3d42fe5369fbb62b6"
+      "sourceHash": "e520cf9ed25edc61734b600c292af532f6dcd079140941b68a8b0e6c00b555b9"
     },
     {
       "route": "tools/focus-timer",
@@ -223,7 +223,7 @@
       "height": 630,
       "bytes": 252685,
       "sha256": "3bed0b402b63503907c5d33af22a45d878e8c30c26b81b04e780fbce0cfc5a4e",
-      "sourceHash": "6deee922c318847b8152d706ca0de736e3b17af1ebcd62b87e27d37ea0d69bdb"
+      "sourceHash": "c20ded4e39bf0e53af7a3bcf063a18b1153eb094e24819357bfd71fa6ddba27c"
     },
     {
       "route": "tools/answer-book",
@@ -233,7 +233,7 @@
       "height": 630,
       "bytes": 268392,
       "sha256": "e1cbcb7e4046322d27a8c56d91c2ae0ed962c86473a21171830a67c2385a2a1a",
-      "sourceHash": "26da9d4a47d1acd8f63a324130ee5ba84f7c62ca96aa0886497125438dba8121"
+      "sourceHash": "3cca147cf8414ad4de18b990bc7bcbbb05960edce3fe1aacdf75530c4ce4844c"
     },
     {
       "route": "tools/answer-book",
@@ -243,7 +243,7 @@
       "height": 630,
       "bytes": 254426,
       "sha256": "e6bd76168c211fdd663f4fb044a6da81dee6fe1bb7b3f15e0bfb7ea5b9a6b6af",
-      "sourceHash": "55e32fc59914d7c70c54f60794161ada3bc40cc5c0b791ee1e2a0420fb965a0f"
+      "sourceHash": "ae1ec97c422fc6f65f7a572fcc876cc5e7d76cb65641e1848d504b8a318e4dc2"
     },
     {
       "route": "tools/decision-studio",
@@ -253,7 +253,7 @@
       "height": 630,
       "bytes": 273509,
       "sha256": "331c03794e80c072cedbf5eeadde0663d7dd1e22d270e9b8267f315db8c9b76e",
-      "sourceHash": "2afbe0992354093126bb79d6b00efa8b42099772c00ad18ee48e72cd8762d6ce"
+      "sourceHash": "e62013059fa46ca8320d53328984e75dd0854806391289f07f2bff9eb0d9fdb5"
     },
     {
       "route": "tools/decision-studio",
@@ -263,7 +263,7 @@
       "height": 630,
       "bytes": 256855,
       "sha256": "ad1dd5d72afd07a657344f36588d3872c945d141a663c175505eb80cc8f8defc",
-      "sourceHash": "d7e58e51b7b4acc97321a36a180b22c482061987aef128a4be4a482e3f173d6f"
+      "sourceHash": "435a3f7e6a036b77feb72406cd1bb3152d6e25f03a2712edbd9826bf196d4e91"
     },
     {
       "route": "tools/typing-sprint",
@@ -273,7 +273,7 @@
       "height": 630,
       "bytes": 267536,
       "sha256": "4459ff6928e980ffe8af77570bfe7895c405076ec22f1b376e85352bd01e7b53",
-      "sourceHash": "d8a39328f3ecd918dfdb675e17c9bcb0947ec340ac71cc79e60b1a885e398841"
+      "sourceHash": "c8aa6098df68b20d31da050bdb059b24e66cd1a8801dc065c892f0a01ab2e452"
     },
     {
       "route": "tools/typing-sprint",
@@ -283,7 +283,7 @@
       "height": 630,
       "bytes": 253005,
       "sha256": "fb952044029e5e70abe74320c79e79cc7941ba4da972f7940fe9f9b7ad799834",
-      "sourceHash": "7b92fef0bcbd648db7ac33e042f60cdc07bfd7511fe973b5dd54568d087c4fad"
+      "sourceHash": "7cd637b6b4d1bf5c7d1a1022f82c489e2f2fc2c597b22a3e6a432f1eb70a764d"
     },
     {
       "route": "tools/device-check",
@@ -293,7 +293,7 @@
       "height": 630,
       "bytes": 265122,
       "sha256": "e9495f23213c07288d3f3376413667c042e99da557ecb342f93d9dc331dfe278",
-      "sourceHash": "663603de3a74983877eb52071f9c6c4cb19fee0dc8685fd6db911a16e3d1236a"
+      "sourceHash": "fe1cd4f7db9b3defefd10eee4c068613a918c98bec298ea0961ef08d87884d89"
     },
     {
       "route": "tools/device-check",
@@ -303,7 +303,7 @@
       "height": 630,
       "bytes": 255275,
       "sha256": "c38b2dfaf0259469635ad14df5ae74c75f130452b592e4ef0aad83e1ed7cc22a",
-      "sourceHash": "2c7b2384bed53f7c7560d3ec045e9f0a63b33d14267ff8d8de1e5dbe982dc327"
+      "sourceHash": "dd3d8f95638cb7cc7d1bc6c72672ec202db5ed9dbc8f063cc109b7a0888db003"
     },
     {
       "route": "tools/network-test",
@@ -313,7 +313,7 @@
       "height": 630,
       "bytes": 263192,
       "sha256": "210fd7fc42f500d984df3591d749aee7db005d800c1d730e4d84e0bed952d1b1",
-      "sourceHash": "e872e87604f1a101652f3f1b6da1421a9b05f75008a8679e0d9327ae1de7958d"
+      "sourceHash": "f295a1531e532a774625cc00976db3499bf191d67a3b4339015d5102ad1045e4"
     },
     {
       "route": "tools/network-test",
@@ -323,7 +323,7 @@
       "height": 630,
       "bytes": 259069,
       "sha256": "df8febc25fed3e1e6f956e7a1288efc22b292f684ee3283a119fc9f57fddfb70",
-      "sourceHash": "1b54b62af72d823de38b781c141392300a2378b2e5058040c7e9dbeb966e3a06"
+      "sourceHash": "ee61a205530388b7e215783ec3e3f77ef73b10c8e06c37e61a11274f1b4bf4db"
     },
     {
       "route": "tools/zip-studio",
@@ -333,7 +333,7 @@
       "height": 630,
       "bytes": 262610,
       "sha256": "57f010314bc6a1ea785b8c48f1ca64987760b60c5934f07f3cefcc5bcd1209da",
-      "sourceHash": "dac4e9acae25df786372f2f14be7da90eac3e15794d4dff13bc5311ef78a333f"
+      "sourceHash": "70d1928f89362ca1a2da2920fe889a946226df05b513e57e925c908ca1072700"
     },
     {
       "route": "tools/zip-studio",
@@ -343,7 +343,7 @@
       "height": 630,
       "bytes": 254020,
       "sha256": "76c36eaca74621dff8fc5ad856fae475b93e30546daf955fa9b1f0516b70f2f8",
-      "sourceHash": "34d719b9f481d25dd596b30e8912c6823ade0f308f802d21a402b78ecec9fb05"
+      "sourceHash": "106d06a5992b61cee808568732b30a6dd0f4bfaafe572fb71c68e95e8fcb8928"
     },
     {
       "route": "tools/color-studio",
@@ -353,7 +353,7 @@
       "height": 630,
       "bytes": 265507,
       "sha256": "31db0c91b6b6fbfda850cb795c3645022c7c733f6f8a7ebe353ce722864c77c2",
-      "sourceHash": "d8d71e8d0fee3edd16897b3b6da856ef708c9436ed1e97678e6326c41ee30374"
+      "sourceHash": "2c6c9c00cbe091117f6ea09637ec96c20399c97872b2b3c1abfa9bd9532c2d30"
     },
     {
       "route": "tools/color-studio",
@@ -363,7 +363,7 @@
       "height": 630,
       "bytes": 253352,
       "sha256": "0c1991233bb02486fac01def5f1fa6fb86b97432287dac6f449d4ef66fd3fce7",
-      "sourceHash": "e295b89a9b65878853d2a3a9f36a65fc9389355fc9d1ab998908ddb4263212da"
+      "sourceHash": "f00606b516ea6e0a8325a43c3938176201946964bb1503661c3ce8eeefdf02a7"
     },
     {
       "route": "tools/unit-converter",
@@ -373,7 +373,7 @@
       "height": 630,
       "bytes": 264042,
       "sha256": "5e11675f30d61b4f1ed52c568d103f2cab0f36ee97c53d0377548f3b1e7bdd56",
-      "sourceHash": "781a7bf33ddd5316428e5c7d1c3e46bbfc647d649995d4ec79d23bad4ea17b38"
+      "sourceHash": "07e0744015ce0557342822477898c22dd12a91117c68cf20d34415b0810f3aef"
     },
     {
       "route": "tools/unit-converter",
@@ -383,7 +383,7 @@
       "height": 630,
       "bytes": 251484,
       "sha256": "da01f78408331289885a7e5185f3aafe161448795c2cfb52daa493096a1a26d8",
-      "sourceHash": "48293738ab26acbfaefd216b7620cf29515ab2deee052f247a769c4b37ea1df5"
+      "sourceHash": "63d98524565139bbedc100a1d0bde5c3d233a7364c706180188e42da2a732792"
     },
     {
       "route": "tools/password-generator",
@@ -393,7 +393,7 @@
       "height": 630,
       "bytes": 270556,
       "sha256": "52ac5fc7496bc7be1a13d16a5526310e5ea561c2cca94d7d99c187f8c910d010",
-      "sourceHash": "98e32554b6d3c5a1f665756b9a6de245502aeba1a9cd893718f62572bfc08b72"
+      "sourceHash": "e4484c693fe4a3839d5f256f3e582117e70e94acc74343256e3aade3b037460a"
     },
     {
       "route": "tools/password-generator",
@@ -403,7 +403,7 @@
       "height": 630,
       "bytes": 253716,
       "sha256": "4ec1a95f5f8329571e9d1fa62f60d525fb61f449e59649a584254f515716d175",
-      "sourceHash": "89a1bb4a03f77c0b540091d8f85d28530e4cfde421e6def222722cee8f6966d6"
+      "sourceHash": "355aadb68d30313f8982481c0bb1653437f810b1daea58bc267ddfbbb100c03f"
     },
     {
       "route": "tools/time-studio",
@@ -413,7 +413,7 @@
       "height": 630,
       "bytes": 264647,
       "sha256": "a9585558de0b02095bd23ebe54ae6bd057a03ff54415410d7a7b9928db95e85f",
-      "sourceHash": "27f3effce6f92af0101e6522d1d3a9d32d6170d6eb14c15cabafa92757692d10"
+      "sourceHash": "e36ba44465305c4dbbf180d50f5fdb9e9213538742d1cec0900d3de4f8809490"
     },
     {
       "route": "tools/time-studio",
@@ -423,7 +423,7 @@
       "height": 630,
       "bytes": 250810,
       "sha256": "09d176ef95ebb0ca5ef263294ef95342cbb2bf9fefec49f8c93d498d06190137",
-      "sourceHash": "feb814b934106c2ac41ecb6ac3164c8cee67ed9a279a50f6aa9b1ce0e7d9216f"
+      "sourceHash": "64ae3a8b23e8d688a4655781e1e7a902d8b02c8e2fe0193002e4c6d1f84a15ae"
     },
     {
       "route": "tools/file-renamer",
@@ -433,7 +433,7 @@
       "height": 630,
       "bytes": 264318,
       "sha256": "d2328b44fa09bd559aedd4229f5ca7d575ad44d2a8b586c1a27c15ebf1ba5433",
-      "sourceHash": "62429a9b2e716a9a717aa3d78b28d84c3cd230e0103fc24c153fcf09fad4859b"
+      "sourceHash": "cf7e88ea24fa0b62642b5bb98bed6ccfb9564ca8115243e0992cd5353926425f"
     },
     {
       "route": "tools/file-renamer",
@@ -443,7 +443,7 @@
       "height": 630,
       "bytes": 259182,
       "sha256": "5c699c6c47cf8303105590ae3dbe9696f001863a23da9717f8f5db08ddc5e8bd",
-      "sourceHash": "af7d75236f5a386dd602aca70196ee42d021bbf41c2487373de6ef50b5e6517e"
+      "sourceHash": "ab6fb4c68734548f4533d71b99c2e79fb5076c9cda59a8c2ce73d50a8292b65c"
     },
     {
       "route": "tools/audio-studio",
@@ -453,7 +453,7 @@
       "height": 630,
       "bytes": 265927,
       "sha256": "0f6fa28bcc6e5514dd68bcfb5e2dfe7be77326cb935f83e9aed829ef024a82eb",
-      "sourceHash": "3c86118351bbde1c01ff3d59d37afc59472c9ec38c6ebfe69f4f171e8647f496"
+      "sourceHash": "a49d814cba83b6fec37099c800a248b761e7a1f3ad2e4f362e5c7fd5840dcb4a"
     },
     {
       "route": "tools/audio-studio",
@@ -463,7 +463,7 @@
       "height": 630,
       "bytes": 255643,
       "sha256": "159cced2dd53f4de7c9fafdfc16d984a8550e1c027a90233d47ed722565f4a42",
-      "sourceHash": "36ac1105bf18a458475b699c39edfe30f8bed1d6fb9f3ed9b70d100e3d72b061"
+      "sourceHash": "27b583dc6bebe4f370d170209b85bde84e729e3a1f97f06481dff194f35f2094"
     },
     {
       "route": "tools/data-studio",
@@ -473,7 +473,7 @@
       "height": 630,
       "bytes": 266578,
       "sha256": "3d2ee51e71ee6cdaa32fedfce9d548714a56e61e0d2c7f2265113d5458c4cb07",
-      "sourceHash": "cbb6906d62dcc7aad22d34dcb8f4c1aaf0082da78d66d458a68625bb8563fdba"
+      "sourceHash": "f9e533e09e82ea892949b74f22884b2ab57f23af5586e2ccb70f6195b42cc814"
     },
     {
       "route": "tools/data-studio",
@@ -483,7 +483,7 @@
       "height": 630,
       "bytes": 261881,
       "sha256": "e722131ddec936afe283aa8d304a174bd9f2b99fa95ca175ce6862bc76fb8fc3",
-      "sourceHash": "8c392ca989436e26c775553b92dd777dc3a08623bc2ea996a7a9cdbc4484e1dd"
+      "sourceHash": "d4c509f723bd8013fb88851896d1a06b7a8dd7754bea89a7daff4325fe3c0abc"
     },
     {
       "route": "tools/flashcards",
@@ -493,7 +493,7 @@
       "height": 630,
       "bytes": 268191,
       "sha256": "0a22ecadab864cafc298cc15fb281c0cc461e76a1ddc2705def6f5722697f81a",
-      "sourceHash": "85d3c0c65b0bc0ab8c9009a34f49fcb495d7ed746aa914cda6ca6944ce8d598b"
+      "sourceHash": "69e75b02c979495d0435972b8f882064f2401b139602bb771c539e44489406f5"
     },
     {
       "route": "tools/flashcards",
@@ -503,7 +503,7 @@
       "height": 630,
       "bytes": 253488,
       "sha256": "ae3672c42659cc52b078425cd5d94c2d104adb4201c728089cb612d97e0bd391",
-      "sourceHash": "abf78f6d5d7fd01389ce170df2a036670bc6567ef733a960b607f4ed93862184"
+      "sourceHash": "f60de2cef139c171601d6e082e01589607f06c2fe67dbda30c334a36b0147569"
     },
     {
       "route": "tools/calculator-studio",
@@ -513,7 +513,7 @@
       "height": 630,
       "bytes": 270681,
       "sha256": "8649d08e7b15085240702228d2eeef6a0bfa3cda1f28d992d2d72d9cbc8039c1",
-      "sourceHash": "1460dafbf7265ed9305d9322e3a17c1ad710094705a286215c8f899b3439e34b"
+      "sourceHash": "27b22918acbd5876ef2166dd94d0e7f31e3d06102c7ebae1051bb53c6a0b4fe2"
     },
     {
       "route": "tools/calculator-studio",
@@ -523,7 +523,7 @@
       "height": 630,
       "bytes": 259368,
       "sha256": "bc05c08cf6f4153822686d7b6a589e486ad9bdd1daace9f4d75c8239b42a1cf8",
-      "sourceHash": "fa75a21c6d9f434285627bc052463445c8fff5552afde4bb1174a0391f97de77"
+      "sourceHash": "faf3e682a8352fccea6b0f02c34093994f8995fc05317cae9c8af89c6ee51be6"
     },
     {
       "route": "tools/file-check",
@@ -533,7 +533,7 @@
       "height": 630,
       "bytes": 263573,
       "sha256": "71f600b91cc548cf27251670c158a5dffd7acfe66f6401236c922cda41d7307e",
-      "sourceHash": "dee77a2ad7a3c1cb206b62d4418a456c47e48f62c90236a155943ef3ceac7393"
+      "sourceHash": "a82d4dcd5d22624acb1beaa9b77275932987841bd414bc5e9d406e17f90b9d67"
     },
     {
       "route": "tools/file-check",
@@ -543,7 +543,7 @@
       "height": 630,
       "bytes": 260591,
       "sha256": "5053f1ed0e76ddf81826f648e6f1d1e7c8e30aeff110918d78660d04fbe08422",
-      "sourceHash": "dede2fb1422dc9c2860cc5384f6f54b435cc24625c9276738b231109eac200ba"
+      "sourceHash": "1ec7c9494cd0518fbb94a676b16a0527d1afe1824a26d5f3d77d4ec420d95e9d"
     },
     {
       "route": "tools/subtitle-studio",
@@ -553,7 +553,7 @@
       "height": 630,
       "bytes": 262686,
       "sha256": "bf7fbd317125d123d01f87810ebfa38ad058645b54f25db8a160ff9f55a32f5a",
-      "sourceHash": "7dd71ef14cde1592bb02ccd5d1bd4310511d1b965260b47b58129c96534b83cf"
+      "sourceHash": "db51ca38c566ac7f644472c9977e394b8099de8fe1000bb04bc473c7dd985862"
     },
     {
       "route": "tools/subtitle-studio",
@@ -563,7 +563,7 @@
       "height": 630,
       "bytes": 251461,
       "sha256": "8199e7763e33e4aa92aca5e8c568d560184bddf3e71d4256afb5566378219f30",
-      "sourceHash": "0c7a78d681e57bc4a304f11ef1c81863bdd9c6567921c741b3fe4d03279d84cc"
+      "sourceHash": "ac95999de66f449d0e58ac9620f316e62f5468c60782b4227afd7866e86085e4"
     },
     {
       "route": "tools/study-planner",
@@ -573,7 +573,7 @@
       "height": 630,
       "bytes": 264284,
       "sha256": "412e9a563d4f97f693244a9c7eaab617e2d0c0295775795d89c8945f836defc8",
-      "sourceHash": "47bf356a225a506db1b11e86575b3bfe26a13a0e90686780b97bec8a92d73cbc"
+      "sourceHash": "afb9efd048b92b196b333f7f8b4ca66b68336530bdfb322b73a7f2755388b3d9"
     },
     {
       "route": "tools/study-planner",
@@ -583,7 +583,7 @@
       "height": 630,
       "bytes": 253353,
       "sha256": "3853c4ff932ea11c370939675ea7f14f156f63030da2719175d9c65d64de41d2",
-      "sourceHash": "6c586ed79e4b9c4b59d343d985c6d7e9097c90f278ff5bbcbdd2faebfb51cdd5"
+      "sourceHash": "3a17a1df2c3bd6cbf55095a48da1274c44fa900d972e7a7daddcedd67be6037b"
     },
     {
       "route": "tools/whiteboard",
@@ -593,7 +593,7 @@
       "height": 630,
       "bytes": 265416,
       "sha256": "e85522d25847cc587836be81bb206d261981224e2886d511d01c40fb652f2c6f",
-      "sourceHash": "347c30389e8bd7d0aade7d14d748338f9436e8777924122857d8ad771947f949"
+      "sourceHash": "94698865acff5199cdc8a19295eab57aff1e541ec998a108956c158b437b00b1"
     },
     {
       "route": "tools/whiteboard",
@@ -603,7 +603,7 @@
       "height": 630,
       "bytes": 251878,
       "sha256": "986f67086d06178b54b8fdff9c8372cb64b25d44672e86de3777f820ad15021b",
-      "sourceHash": "70d919088aa513e3c7c20854c53526b38f43b5bc8f20136275a3dbba898dff92"
+      "sourceHash": "f64d15c2fa69190cf18309c768f112d9307eb7ae2f1086643ffcd069d2bd6bf5"
     },
     {
       "route": "tools/screen-recorder",
@@ -613,7 +613,7 @@
       "height": 630,
       "bytes": 266808,
       "sha256": "65ff4b141dfa1718a582bf2a53d8339d7ca56b1edb428d6441d1f6364935a0ee",
-      "sourceHash": "0f8284243a008f6a3df51c5c8866b296cea8bd20b025cd01461f4b4197154922"
+      "sourceHash": "c2606e3271aa7a2c90babbf8821cfdf4a0a7c36a134e5dae3f492ec569b1d656"
     },
     {
       "route": "tools/screen-recorder",
@@ -623,7 +623,7 @@
       "height": 630,
       "bytes": 256963,
       "sha256": "9805f45214bdce8ec4658421fb57b14eac8e5324cc8113bb19ef517856dc7a76",
-      "sourceHash": "63c545db3452740c55b0ceef5be9488564305d41b4eff7787ef3aec73c7726a6"
+      "sourceHash": "7b5b99dfb4f7448172f8aa919183a4725fe72ced4b8af16b4f12265544a9bfe0"
     },
     {
       "route": "projects/kensei-studio",
@@ -633,7 +633,7 @@
       "height": 630,
       "bytes": 264274,
       "sha256": "31ebffd3a1835199da1ff86ee398a02a52400e66a3fa742cb97367b84f4c5782",
-      "sourceHash": "fb61ea04d3a057aed6ca1290df326c66027d30de6aae452acc6cbfefe398c185"
+      "sourceHash": "fbd0fbb7d794a16ae281bad63bc8c264a0d82b0fd27214164478f79bb14601c8"
     },
     {
       "route": "projects/kensei-studio",
@@ -643,7 +643,7 @@
       "height": 630,
       "bytes": 256551,
       "sha256": "fa279dde15024cd9fdeeba8ce4bbe7e80067c26347eb3f2014c0f261976208e7",
-      "sourceHash": "bf9070be2cbd16caa585f675e145b9b07a6c881fc704024e38627dbc9185e01e"
+      "sourceHash": "2fd1a41b034d5a7f0ca3e78a7ca1631b8c5f01621b80dc8026722d4982a5b058"
     },
     {
       "route": "projects/3a3d",
@@ -653,7 +653,7 @@
       "height": 630,
       "bytes": 262358,
       "sha256": "bc30ce647d1a7682185ddcdb02b1bca343de90d4ec81c2299fd2cc88b38d32fb",
-      "sourceHash": "f8dc46050538f65db351af50bdce645cde9abd7acae397cb82fef5b4d0a9ee80"
+      "sourceHash": "78ed14fe7d3a9e0af8d3eee7b77c90659f5600b81d3847966470e61137d744e3"
     },
     {
       "route": "projects/3a3d",
@@ -663,7 +663,7 @@
       "height": 630,
       "bytes": 251211,
       "sha256": "26b7626c4e214ad299c21143b87876ca085bbf841cb9e24976a70bbba3d5b888",
-      "sourceHash": "0f925d391a2c28b82e7ae82af5fb6993d022ca4b6b0710f60e164073eea12b0b"
+      "sourceHash": "4c6aecde4db0acce844bebcb77d57da6f3111ef27a58df755318a3ec5de4b5f4"
     },
     {
       "route": "projects/salon-system",
@@ -673,7 +673,7 @@
       "height": 630,
       "bytes": 273906,
       "sha256": "d664e18394f2ad39c26d7751b54d965cb5a160c0e82553047e1548f3ee597612",
-      "sourceHash": "0fe5c8f18a6477ff2be6f8e94c5f7a6c77887399b71351cd84e63620c009dad4"
+      "sourceHash": "ae117d28e3076b9950b1fadf08ea84d63d3a690afb83a435d8b6f5b3a0bff8ae"
     },
     {
       "route": "projects/salon-system",
@@ -683,7 +683,7 @@
       "height": 630,
       "bytes": 260292,
       "sha256": "0c520fad8c5d2cd639ec989f74cf529d300346023ca530fd327bd0e1755600ff",
-      "sourceHash": "ce6e7d25ffddf3ca97262792aad84182d2aeec8850e5f64f08429b6fe4ea8310"
+      "sourceHash": "a7f847348a4e815bb3f34a5ac8564683e692289adbaf5984a6d3e515b8fcad23"
     },
     {
       "route": "projects/ai-art",
@@ -693,7 +693,7 @@
       "height": 630,
       "bytes": 260975,
       "sha256": "a3725837c1b93bab2db3afe24b2501580e081101ad2c96b4baa0530a2de5d620",
-      "sourceHash": "fc8d60f380ad2d8495f08a3783dda52f569717e71a1ae869d26a14b9da368cc4"
+      "sourceHash": "c4e31e34281d93d4ee2e2dc3b8232cfc4e711dfc370d29b7f8958e85700e5cb7"
     },
     {
       "route": "projects/ai-art",
@@ -703,7 +703,7 @@
       "height": 630,
       "bytes": 255684,
       "sha256": "79304ec93f3f429db638684f9eb9f298515e238087f94806eb1303a6adcc4484",
-      "sourceHash": "960dd9315066144cc3f11944ffd7fdba3e4e821d0be951d832710566c73e58d6"
+      "sourceHash": "e98c213c5280ab2c6065d37bdd2590954ca86401ed2cf2a7cd44c232e1d6308b"
     },
     {
       "route": "privacy",
@@ -713,7 +713,7 @@
       "height": 630,
       "bytes": 266732,
       "sha256": "935ae5e2c984ddcabdfd7c3e991e7a7528852e17dfd36ca462df693856d3b4b3",
-      "sourceHash": "9f0aeac741426c68e6fa22dba691399c6b096879577dc63bc2b38479b528fdd4"
+      "sourceHash": "6c3e775ead58821ab84b56558d2e173b08c9067284a36804b12197cfe3b68f76"
     },
     {
       "route": "privacy",
@@ -723,7 +723,7 @@
       "height": 630,
       "bytes": 263497,
       "sha256": "7e054975c918211dceb22533c9b81c23bad5171be417e00d0852d00bcf7fd106",
-      "sourceHash": "628626896d58cbae8c1edc5d5af45ca00f91b77648c3b0f57a758790f9f9ba0f"
+      "sourceHash": "19434b170ef80afa5d47403aee14959cdaef88c76a547cda30eb338431f23423"
     },
     {
       "route": "credits",
@@ -733,7 +733,7 @@
       "height": 630,
       "bytes": 268777,
       "sha256": "0e214438fd29da27a56bb265abedb60f9807cd0d3b48f09196e840bfc102ee57",
-      "sourceHash": "9d2e78fff8f535c6ba62fba4c6775110c2d750d3ba857d495e322999d4ee6555"
+      "sourceHash": "eab7bab863d6a6c5d360329e3bb4b21456f3f0d753efb0143603736c6d50ed8e"
     },
     {
       "route": "credits",
@@ -743,7 +743,7 @@
       "height": 630,
       "bytes": 258936,
       "sha256": "e6f878f6d0370126e8e25fc4a0bb57cd51f72eb0d98aff186ad48b587d13ff08",
-      "sourceHash": "33a03f7182a39568c5493e7848cc23b09e9a69657caaec6c7b4441133e93d940"
+      "sourceHash": "52493b8efee31efe0197953bff43798ac6653fbdfcf529d9748c0e8ab5cf7052"
     },
     {
       "route": "games",
@@ -751,9 +751,9 @@
       "file": "en/games.png",
       "width": 1200,
       "height": 630,
-      "bytes": 264173,
-      "sha256": "df86d00d5f1d7cac2ec0d8c5705a94323e06c19d09f749197db1b281b2f4ab09",
-      "sourceHash": "244b3552948867dc6bc205addf37240bb851f86f6d0490d40c38403f2148c28c"
+      "bytes": 265486,
+      "sha256": "4236711dd7cdaf7447432d70d921d63226b80f334c3b96ac4d518b0caf7ca0d5",
+      "sourceHash": "42d5b505b6ab44a31295a6e63ba7a78ea2e0e12817d5cb270ddad78ec537a119"
     },
     {
       "route": "games",
@@ -761,9 +761,9 @@
       "file": "zh-hant/games.png",
       "width": 1200,
       "height": 630,
-      "bytes": 259327,
-      "sha256": "3b620e2066e31a24fe7d18ae402609a6f37ada94646c27ecf8e45a5bd86c549d",
-      "sourceHash": "961888b8be29f1c443f9e59fe70bc2f77e8cfdc14fb4c0d5b454c54a6278627e"
+      "bytes": 260480,
+      "sha256": "4ff46ef4ae56d9564d281e5d5fd3e94e2d91828cc8fd1aabe269343976f1a6b2",
+      "sourceHash": "ffd31f1ac151128432261f414ee38a551cc95f43921e0c44b6c47bab7d57c62a"
     },
     {
       "route": "games/2048",
@@ -773,7 +773,7 @@
       "height": 630,
       "bytes": 255673,
       "sha256": "0422ce9c9a7517a602818a9607d3e89b2f052cae5048c70d00f14348d40f356c",
-      "sourceHash": "a10aa8de04c24a8bf2912441f0b2b31fe9b2b2222708565af8f1c3009b8b1aeb"
+      "sourceHash": "cbf947159530a62eb67cfcbf9ba706e118ad8a22693f68969b4d270e763f5ba3"
     },
     {
       "route": "games/2048",
@@ -783,7 +783,7 @@
       "height": 630,
       "bytes": 249170,
       "sha256": "1924afe5ef40d955fbb31d5b5c20b74fb9d0e6421644e93cd34fc997985342bf",
-      "sourceHash": "ff1bf39d986432117f1e9ff1ef0f38bcdc10344e105851a35006ac0f2e90388e"
+      "sourceHash": "af51fcb73f340152f72595552d54d932bd02c6031407add1188abfb821b0a350"
     },
     {
       "route": "games/minesweeper",
@@ -793,7 +793,7 @@
       "height": 630,
       "bytes": 257783,
       "sha256": "980dda715f849c3d11762bfe5c90c9dee520470dc90944eb29d58a564a7e7e99",
-      "sourceHash": "2b24be04e230a2ec4e17da0681b70406f78afdc542b25f6992994753c1c74f87"
+      "sourceHash": "eb0c4c8d794d1912289954bdb8ccc34cc48389b8b59c254377bd6d59dd909d93"
     },
     {
       "route": "games/minesweeper",
@@ -803,7 +803,7 @@
       "height": 630,
       "bytes": 245308,
       "sha256": "225f577dbc25315c8d07004ba5c4f4cf59eee958595a6883992d66e70ea76541",
-      "sourceHash": "293bcf632398c1b200963f4ab479a2b850868698296c34481a3948debe842426"
+      "sourceHash": "ec08e5e5b87c8546557ed1189feea661d96c6148207489bb8cd373d3351f4e0c"
     },
     {
       "route": "games/snake",
@@ -813,7 +813,7 @@
       "height": 630,
       "bytes": 248711,
       "sha256": "5f66265afae1dc7bd72ce1cc8ea1617f3a2371c6af53f363979660c7daa8c40d",
-      "sourceHash": "20f96e783082efe23b1c4797ea10a4d789cf60fed7cd3d49f2564f1d97faedb3"
+      "sourceHash": "ce4e9eb50d6e35cbc522d85ce5f172ef83e5533457ffd01e3a6c2ebd415754c6"
     },
     {
       "route": "games/snake",
@@ -823,7 +823,7 @@
       "height": 630,
       "bytes": 244787,
       "sha256": "6a7b305c3706bd4a6bfc33dd331e8b4a1a44eb62f4e8a21f72133e4328ea1c94",
-      "sourceHash": "48839311c5056ffd61ac27e8119f0cd5af081ecf31fb3c39b6d01d613998934b"
+      "sourceHash": "adaffb8c2b41fb73214e8e8e103e57ff6fc9ae88b3805e704fca591f144a5936"
     },
     {
       "route": "games/memory-match",
@@ -833,7 +833,7 @@
       "height": 630,
       "bytes": 258511,
       "sha256": "41f60155149655c1a71bb8fc2177bf36ee6551eed32d0c0cb66a2690b7c57bd8",
-      "sourceHash": "8d460c7fc0055b606787df4cc6f581f2c144a7456bfb5f471c0b029129350af3"
+      "sourceHash": "594f9d215ce2c88bdbcbca0757691c4f28b617f6e3c7a54b4ac28d008ca6cc62"
     },
     {
       "route": "games/memory-match",
@@ -843,7 +843,7 @@
       "height": 630,
       "bytes": 253948,
       "sha256": "9dd10b7276d101f7205b921bc994794c76460a79b75291279f3a1502f3c74376",
-      "sourceHash": "7e3b136a5ad52001b89df4f280521c85c8950cc8c0be3a720610cb5d6c3293c2"
+      "sourceHash": "87c998a030ce226eb80c07c2aa28303971ce175ba3ce07e9e97c85f5ee80705d"
     },
     {
       "route": "games/sudoku",
@@ -853,7 +853,7 @@
       "height": 630,
       "bytes": 260311,
       "sha256": "f3b228dbcca445f61948c0d9dec03697ad968aa25eb319ae48068d9be85fbf76",
-      "sourceHash": "2df9dfdc72b69aba7532c86fda0820afccae4a332e9efabe06191c8ad1ce1c64"
+      "sourceHash": "fe5573b21c3443138460d9b9807cfc425cf10f1b9838baaff0d90cef149b6165"
     },
     {
       "route": "games/sudoku",
@@ -863,7 +863,7 @@
       "height": 630,
       "bytes": 255799,
       "sha256": "0efd2aa71b249302212dd93e7fe514052850700efba68313f4f4052f1e68c042",
-      "sourceHash": "208c72894ba1131edd286e4f5b7d0cf2ff308fd65c7d22cc8baffb1dcd4e26d3"
+      "sourceHash": "ba0b751028b903afce8be81caa1ee9fce8b726d509d06424f87afd298133d765"
     },
     {
       "route": "games/nonogram",
@@ -873,7 +873,7 @@
       "height": 630,
       "bytes": 259034,
       "sha256": "b7b13716d77d6820063ac24e2e430cf611fd3774b5cdd7430c3a48549712063c",
-      "sourceHash": "3a2c92b91ea593f33f8636d227024efaf763df557a4e2b300f07d690b334ef5e"
+      "sourceHash": "3fd861965a90ed251c80af3efeef2261ceb6a3875359981cab222091074727a3"
     },
     {
       "route": "games/nonogram",
@@ -883,7 +883,7 @@
       "height": 630,
       "bytes": 255628,
       "sha256": "cb1939f843feb5f630750600bfdc02fe478f62123897001d2412b044a1b4b441",
-      "sourceHash": "079136eceeacdbadd6a0c55a819de1125b0c8b9a7add14406d273d208a66e0f9"
+      "sourceHash": "0f64d23d9952ce504384c20aca908e58ba3994c4049ecaedcc69baf6bdb6077b"
     },
     {
       "route": "games/block-puzzle",
@@ -893,7 +893,7 @@
       "height": 630,
       "bytes": 257142,
       "sha256": "bdca18075ac84916d83ac37d8454b9e71920e34cd82c204b74277571907af12e",
-      "sourceHash": "bec42b48226e3f2018039495641b8cfebbc7c500e6e59409adb8d6516ddf5f75"
+      "sourceHash": "38412497562155394f5e40db1443ce72daa7efd9ec9bbc4c1c809480c65be5e8"
     },
     {
       "route": "games/block-puzzle",
@@ -903,7 +903,7 @@
       "height": 630,
       "bytes": 251245,
       "sha256": "fa98d08170211c5084d584627b3f40d2f6df49bd59a17eca2eeca29a41ec0a3c",
-      "sourceHash": "2c08e245888890e976fce4303ed25fcfcef96d047a60e13c107038ec25f4fe96"
+      "sourceHash": "1b6aa053b5ca10692a2c04444b5ad9a463e18ed1aa38cf19269c3cf389ecdc7c"
     },
     {
       "route": "games/brick-breaker",
@@ -913,7 +913,7 @@
       "height": 630,
       "bytes": 258573,
       "sha256": "f20b00de2ffe734aca2dbd4bbb8373c9a3b28c725531fe9a8e8ccb077a07da20",
-      "sourceHash": "9f18386a3f0f2a5b5cdcafed2f8e9a11ca1e0c2ce821a5634b084b5ec3c19568"
+      "sourceHash": "3dcc701d501923a87249263df859644d2cbc778bafc276fe6d37ffd8b4f1c13a"
     },
     {
       "route": "games/brick-breaker",
@@ -923,7 +923,7 @@
       "height": 630,
       "bytes": 248343,
       "sha256": "079a373f7f48dc9550461acdacad346ee762c5f727cc628fdf67e8118213a894",
-      "sourceHash": "dfc4f3c6f25999212314c8b9c68049be33cc4654f4d96cc817b57251e981d240"
+      "sourceHash": "914e54cf2b170edb3299d190c18b7fb58ba08d8eb11c6cb99777ae1ac0773617"
     },
     {
       "route": "games/connect-four",
@@ -933,7 +933,7 @@
       "height": 630,
       "bytes": 258973,
       "sha256": "13384b37a295b2cb7bcbfc46ec1478113c65f141c2e4823db35a33d5e5bb8c53",
-      "sourceHash": "2c197feb152444f3c04ccd04f9ac68b0f412008cccf10aa0cfdc63ac16eac04f"
+      "sourceHash": "04de137419827ebd1139869c6cfc436e618d30bf5ea5157e7087870685642475"
     },
     {
       "route": "games/connect-four",
@@ -943,7 +943,7 @@
       "height": 630,
       "bytes": 249641,
       "sha256": "66754d1b6f51412279df249fa626bdbb9d8745859fb7368e86043ac10bb1cb42",
-      "sourceHash": "33567fd2b80176b3062ae644c7c2fbe5652065774916575e53265dd00e570d87"
+      "sourceHash": "641b6b0e51399c75ced0c3944c69b00d6aff95c2911a3d763b9953a7c54eab8f"
     },
     {
       "route": "games/reversi",
@@ -953,7 +953,7 @@
       "height": 630,
       "bytes": 257304,
       "sha256": "d7c1408c000496269d87ea9337ea07ae3ff47a9f56b3da5fdfde23008d448db1",
-      "sourceHash": "5f9ddfd6df1d29cc0332306b5965210f7d9d45c74cd92b8a5c4b53da92f4687f"
+      "sourceHash": "baa7e6a2b0180aafef2a8510de64602f3aceb69e39bfd2238fd095eb69ea2c53"
     },
     {
       "route": "games/reversi",
@@ -963,7 +963,7 @@
       "height": 630,
       "bytes": 248515,
       "sha256": "1b051296f85dd4b8c843eca5584846b20f62ef58a116db7faa740342005b42e3",
-      "sourceHash": "32b599919848f025cd3bf36d1e568aed7a2a2aec67ca60b5462601e5133064b0"
+      "sourceHash": "fa5b961db6b4c082b36bef6a059511d20ad3c28c572c5a58c23f47a75028ae39"
     },
     {
       "route": "games/block-drop",
@@ -973,7 +973,7 @@
       "height": 630,
       "bytes": 260088,
       "sha256": "9009dfb605cf9c12a05674b94de2653b832b8a7e71a3a36d1d8564c19ee44875",
-      "sourceHash": "2863f33e76610797b39760f33485e8615cc4453fdd52f3df020098ef7ca1faf9"
+      "sourceHash": "c37a45cc22b9fa2887e4bd44cf7d394f2e59d6f321f2e4f478aa8175f53c1bef"
     },
     {
       "route": "games/block-drop",
@@ -983,7 +983,7 @@
       "height": 630,
       "bytes": 253738,
       "sha256": "19add2f8f1ac895c1a2aeb571090caa378ee9db51f5b296d482dd651e8d22e47",
-      "sourceHash": "6cda5bb23e470b33ec234622f670163051f32281deb941feedde4b1bd5ebd7c2"
+      "sourceHash": "ea0f55a935b0b68282a690ed1f15ff3d86838da657637364013c710645e60eea"
     },
     {
       "route": "games/go",
@@ -993,7 +993,7 @@
       "height": 630,
       "bytes": 261664,
       "sha256": "e848ad2535aab262feeff3d266a3e7d0036e0a89f1d9a312bbaaddb6e653359f",
-      "sourceHash": "3c123761ca0dc7bc9693143b4eb1916f4d2c9e9f148f96da0bfda0205d1dd7ac"
+      "sourceHash": "c4cbd9192703a21442b62d4019f06a961df0d4948a217ae7794cd6096d582a83"
     },
     {
       "route": "games/go",
@@ -1003,7 +1003,27 @@
       "height": 630,
       "bytes": 256952,
       "sha256": "4758cd205af71f7b39cabc7f9732c367ed1c9651e52eeae9e0771ead8f355f0b",
-      "sourceHash": "b25c7cefe09eaaa03a3320a956559201593c8486f525684a2ea460dee957fc61"
+      "sourceHash": "e9493649875e39d28134eec46b8b41f13868fa28b385cb3e3dccbb40f0368f86"
+    },
+    {
+      "route": "games/chess",
+      "locale": "en",
+      "file": "en/games-chess.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 263027,
+      "sha256": "6f3936e194468279a44b837c1519122160ac3a029b1bf2067f5da9287aa74da0",
+      "sourceHash": "0fb5640951120aec277bf377dac44fb8d7caa51cedfd1623d1d9262edb1a643b"
+    },
+    {
+      "route": "games/chess",
+      "locale": "zh-Hant",
+      "file": "zh-hant/games-chess.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 258565,
+      "sha256": "8fce03a783bcbf045af72eff2f9bcbc4afa6fa0fa6849add02841374507dc24d",
+      "sourceHash": "73ec980cc066dcda35d1998e1571d2a911bc3b9314c893f6700142ce60ab67d5"
     },
     {
       "route": "games/pong",
@@ -1013,7 +1033,7 @@
       "height": 630,
       "bytes": 250681,
       "sha256": "9e08f618c574ebd7d9bff8baa0513b53bea8ce9d8b87edcc403e3dd993bb80e0",
-      "sourceHash": "6d3098ac1219fe74c84d53c8de5735cf12974a9d0d1ffc64766c517dcf7ec2b7"
+      "sourceHash": "68ec52333bf7777fd9fe6fc388a6b88a41e329c86c3d598c5feeace797d03e81"
     },
     {
       "route": "games/pong",
@@ -1023,7 +1043,7 @@
       "height": 630,
       "bytes": 254544,
       "sha256": "68c938564a0dfe9af521fb4c64a8fb99e0c2d56106a4e9ed8b0abe95976a626f",
-      "sourceHash": "6d65c305b19bea4a657489358544d8fb93815c90eb42b131cc96180af540c2da"
+      "sourceHash": "722294def9a4595f5404a01af1dfe9b7c64fd9aec9e3ce6c30903dbe5a344624"
     }
   ]
 }
