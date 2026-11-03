@@ -139,6 +139,13 @@ async function locale(page, value) {
       "Start game.png",
     );
     console.log("PASS opaque Markdown preview and original file identity");
+    // Older indexes may omit optional aliases on a Project; other results must survive.
+    await context.route("**/assets/search-index.json", async (route) => {
+      const response = await route.fetch();
+      const entries = await response.json();
+      delete entries.find((entry) => entry.type === "projects").aliases;
+      await route.fulfill({ response, json: entries });
+    });
     await page.goto(base + "/");
     await page.click(".site-search-button");
     await page.fill(".site-search-input", "扫雷");
@@ -154,6 +161,13 @@ async function locale(page, value) {
         await page.locator(".site-search-result").first().getAttribute("href")
       ).includes("/tools/qr-studio/"),
     );
+    await page.fill(".site-search-input", "西洋棋");
+    assert(
+      (
+        await page.locator(".site-search-result").first().getAttribute("href")
+      ).includes("/games/chess/"),
+    );
+    await context.unroute("**/assets/search-index.json");
     await page.keyboard.press("Escape");
     assert.equal(
       await page.locator(".site-search").evaluate((n) => n.open),

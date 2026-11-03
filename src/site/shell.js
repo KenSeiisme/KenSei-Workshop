@@ -161,12 +161,13 @@
   const folded = (s) => s.toLocaleLowerCase().normalize("NFKC").trim();
   function rank(entry, q) {
     if (!q) return 1;
+    const aliases = Array.isArray(entry.aliases) ? entry.aliases : [];
     const names = Object.values(entry.name).map(folded);
     if (names.includes(q)) return 100;
     if (names.some((s) => s.startsWith(q))) return 80;
-    if (entry.aliases.some((s) => folded(s) === q)) return 70;
+    if (aliases.some((s) => folded(s) === q)) return 70;
     if (names.some((s) => s.includes(q))) return 60;
-    if (entry.aliases.some((s) => folded(s).includes(q))) return 50;
+    if (aliases.some((s) => folded(s).includes(q))) return 50;
     if (Object.values(entry.description).some((s) => folded(s).includes(q)))
       return 20;
     return 0;

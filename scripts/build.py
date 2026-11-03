@@ -466,7 +466,12 @@ for route, (title, body, active) in pages.items():
     json.dumps(social, ensure_ascii=False, indent=2), encoding="utf-8"
 )
 search = [
-    {"route": "/" + route + "/", "type": route.split("/")[0], **entry}
+    {
+        "route": "/" + route + "/",
+        "type": route.split("/")[0],
+        "aliases": [],
+        **entry,
+    }
     for route, entry in i18n.CONTENT.items()
 ]
 (OUT / "assets/search-index.json").write_text(

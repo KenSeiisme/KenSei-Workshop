@@ -63,6 +63,7 @@ assert "@import" not in (ROOT / "src/styles/styles.css").read_text(encoding="utf
 index = json.loads((output / "assets/search-index.json").read_text(encoding="utf-8"))
 assert len(index) == 46
 assert {x["type"] for x in index} == {"tools", "games", "projects"}
+assert all(isinstance(x.get("aliases"), list) for x in index)
 print(
     "PASS 104 public URLs, 112 localized pages, per-route dictionary parity, canonical/hreflang, noindex, self-hosted fonts, 104 social PNGs and 46-entry public search"
 )
