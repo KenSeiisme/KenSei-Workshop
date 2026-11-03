@@ -6,4 +6,5 @@
 /supabase/
 /node_modules/
 *.tar.gz
+!**/vendor/sources/stockfish-js-19.0.1-source.tar.gz
 .env*
