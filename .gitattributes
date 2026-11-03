@@ -7,3 +7,4 @@ dist/** linguist-generated=true
 src/assets/fonts/*-OFL.txt -text whitespace=-trailing-space
 src/vendor/licenses/DM-Sans.txt -text whitespace=-trailing-space
 src/vendor/licenses/Space-Grotesk.txt -text whitespace=-trailing-space
+src/assets/game-audio/licenses/*.txt -text whitespace=-trailing-space

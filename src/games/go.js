@@ -17,11 +17,20 @@ import {
   createJapaneseConfirmation,
   applyJapaneseConfirmation,
 } from "./go-engine.js";
-import { formatGoClock } from "./go-clock.js";
+import { formatGoClock, clockView } from "./go-clock.js";
 import { mountPlayShell } from "./play-shell.js";
 import { boardClientId } from "./board-identity.js";
 import { mountEffects } from "./effects.js";
-import { mountAudio, unlockAudio, playCue } from "./audio.js";
+import {
+  mountAudio,
+  unlockAudio,
+  pauseAudio,
+  stopAudio,
+  playCue,
+  setAudioState,
+  observeCountdown,
+  resultCue,
+} from "./audio.js";
 import {
   uiMsg,
   uiJoin,
@@ -58,6 +67,72 @@ let identity = owner(),
 let confirmation = null;
 let selectedConfig = settings(),
   setupError = "";
+let goAudioSnapshot = null;
+function syncGoAudio() {
+  const id = room?.id || saveId || "",
+    playable =
+      state?.phase === "playing" &&
+      !paused &&
+      replayPly === null &&
+      (!room || (room.controller && connected));
+  setAudioState({
+    game: "go",
+    runId: id,
+    phase: playable
+      ? "playing"
+      : state?.phase === "finished"
+        ? "complete"
+        : state
+          ? "paused"
+          : "ready",
+  });
+  const previous = goAudioSnapshot;
+  if (
+    previous?.id === id &&
+    state &&
+    replayPly === null &&
+    (!room || room.controller)
+  ) {
+    if (previous.phase !== "finished" && state.phase === "finished")
+      playCue(
+        resultCue(
+          state.result.winner,
+          room ? room.color : mode === "ai" ? human : null,
+          state.result.reason,
+        ),
+        1,
+        { id: `${id}:result` },
+      );
+    else if (state.log.length > previous.moves && state.phase !== "finished") {
+      const move = state.log.at(-1);
+      if (move.type === "move")
+        playCue(
+          state.captures[1] + state.captures[-1] > previous.captures
+            ? "capture"
+            : "move",
+        );
+      if (move.type === "pass") playCue("pass");
+      if (
+        room &&
+        state.phase === "playing" &&
+        previous.turn !== state.turn &&
+        state.turn === room.color
+      )
+        playCue("turn", 1, { id: `${id}:turn:${state.log.length}` });
+    }
+    if (room && playable && !previous.connected) playCue("reconnect");
+  }
+  goAudioSnapshot = state
+    ? {
+        id,
+        phase: state.phase,
+        moves: state.log.length,
+        captures: state.captures[1] + state.captures[-1],
+        turn: state.turn,
+        connected,
+      }
+    : null;
+}
 let practiceClock = { 1: 0, "-1": 0 },
   practiceAnchor = performance.now();
 function chargePracticeClock() {
@@ -317,8 +392,29 @@ function renderClock() {
       room.status === "ready" ? uiMsg("Ready within {0} seconds", [left]) : "",
     );
   }
+  if (room?.clock && state) {
+    const view = clockView(
+      room.clock,
+      state.turn,
+      Date.now() + clockOffset,
+      room.status === "playing",
+    );
+    observeCountdown({
+      matchId: room.id,
+      turnId: `${room.clock.anchor}:${state.log.length}`,
+      periodId: view.periods,
+      remainingMs: view.period,
+      playing: room.status === "playing" && state.phase === "playing",
+      ownTurn: state.turn === room.color,
+      controller: room.controller,
+      visible: !document.hidden,
+      connected,
+      overtime: view.main === 0 && !view.expired,
+    });
+  } else observeCountdown(null);
 }
 function render() {
+  syncGoAudio();
   const phase = state?.phase,
     training = state?.config.training && phase !== "finished",
     online = !!room;
@@ -514,7 +610,6 @@ function render() {
     );
     if (!resultShown) {
       resultShown = true;
-      playCue(result.winner === null ? "end" : "win");
       refreshRank();
     }
   }
@@ -898,8 +993,6 @@ async function act(action, actor) {
     scheduleSave();
     maybeAI();
   }
-  if (action.type === "move") playCue("move");
-  else if (action.type === "pass") playCue("tap");
 }
 function pointAt(event) {
   const rect = canvas.getBoundingClientRect(),
@@ -998,6 +1091,8 @@ function togglePause() {
   if (!state || room || !active()) return;
   chargePracticeClock();
   paused = !paused;
+  if (paused) pauseAudio();
+  else unlockAudio();
   practiceAnchor = performance.now();
   cancelAI();
   render();
@@ -1358,6 +1453,7 @@ for (const node of $(".go-leaderboard-filters").querySelectorAll("select"))
 async function authChanged() {
   const next = owner();
   if (next !== identity) {
+    stopAudio();
     generation++;
     cancelAI();
     clearTimeout(saveTimer);

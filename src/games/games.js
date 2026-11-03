@@ -1,4 +1,11 @@
-import { mountAudio, unlockAudio, stopAudio, observeAudio } from "./audio.js";
+import {
+  mountAudio,
+  unlockAudio,
+  stopAudio,
+  pauseAudio,
+  observeAudio,
+  setAudioState,
+} from "./audio.js";
 import { api, esc } from "/tool-scripts/common.js";
 import { ensureProfile } from "/tool-scripts/profile-service.js";
 import {
@@ -308,6 +315,7 @@ function readyUI() {
   if ($("#game-human-side"))
     $("#game-human-side").closest("label").hidden = difficulty() === "local";
   if (!active) {
+    setAudioState({ game, phase: "ready", runId: "" });
     presenter.reset();
     shell?.restorePreview();
     root.dataset.runState = "ready";
@@ -359,8 +367,15 @@ const SHAPES = [
 ];
 function draw(reason = "view", event = null) {
   if (!active) return;
+  setAudioState({
+    game,
+    runId: `${game}:${active.seed}`,
+    phase:
+      active.status !== "playing" ? "complete" : running ? "playing" : "paused",
+  });
   root.dataset.runEligibility = currentRunIsRanked() ? "ranked" : "local";
-  observeAudio(audioSnapshot, active, event || {});
+  if (!["restore", "undo"].includes(reason))
+    observeAudio(audioSnapshot, active, event || {});
   audioSnapshot = structuredClone(active);
   presenter.prepare(active, { running, reason, event });
   const board = $("#game-board"),
@@ -513,7 +528,7 @@ function downgrade(reason) {
   );
 }
 function pause(reason = "Paused.") {
-  stopAudio();
+  pauseAudio();
   if (!running) return;
   accumulated = elapsed();
   running = false;

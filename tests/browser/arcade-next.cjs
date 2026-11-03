@@ -204,7 +204,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     await p.waitForFunction(
       () => document.querySelector("#progress-results").textContent === "1",
     );
-    assert.equal(await p.locator("[data-game-card]").count(), 12);
+    assert.equal(await p.locator("[data-game-card]").count(), 13);
     assert.equal(
       await p.locator("#progress-all [data-achievement]").count(),
       30,
@@ -243,6 +243,21 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
           .querySelector("#pong-room-state")
           .textContent.includes("Playing"),
       );
+    for (const page of [host, guest]) {
+      await page.evaluate(async () => {
+        window.__pongAudio = await import("/game-scripts/audio.js");
+      });
+      await page.waitForFunction(
+        () => window.__pongAudio.getAudioDiagnostics().musicPlaying,
+      );
+      const audio = await page.evaluate(() =>
+        window.__pongAudio.getAudioDiagnostics(),
+      );
+      assert.equal(audio.family, "arcade");
+      assert.ok(
+        audio.decodedBytes > 0 && audio.decodedBytes <= 32 * 1024 * 1024,
+      );
+    }
     await host.locator(".pong-canvas").focus();
     await host.keyboard.down("ArrowDown");
     await host.waitForTimeout(450);
@@ -443,7 +458,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       JSON.stringify({
         status: "PASS",
         coverage:
-          "Block Drop real Public finish/lost acknowledgment/achievement/12-game progress; two independent browser Pong rooms, private topic checks, readiness, controls, pause/resume, close and no ranked writes",
+          "Block Drop fixture Public finish/lost acknowledgment/achievement/13-game catalog; two independent browser Pong rooms, private topic checks, readiness, audio, controls, pause/resume, close and no production writes",
         twoRoomPublishPerSecond: emitted / 3.5,
         estimatedRealtimeEventsPerSecond: (emitted * 2) / 3.5,
       }),

@@ -338,6 +338,19 @@ body.game-is-focused > .footer {
 [data-play-shell] .game-shell-preferences .game-effects-control {
   display: grid;
 }
+[data-play-shell] .game-shell-preferences .game-audio-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+[data-play-shell] .game-audio-toggle-row input[type="checkbox"] {
+  width: 20px;
+  min-height: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  margin: 0;
+}
 [data-play-shell] .game-menu-actions {
   display: grid;
   gap: 10px;

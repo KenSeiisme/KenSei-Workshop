@@ -1,7 +1,14 @@
 import { api, esc } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import { mountEffects, effectsMode } from "./effects.js";
-import { mountAudio, unlockAudio, stopAudio, playCue } from "./audio.js";
+import {
+  mountAudio,
+  unlockAudio,
+  stopAudio,
+  pauseAudio,
+  playCue,
+  setAudioState,
+} from "./audio.js";
 import { mountPlayShell } from "./play-shell.js";
 import {
   createPong,
@@ -31,6 +38,7 @@ const clock = (t) =>
     .padStart(2, "0")}`;
 let clientId;
 let endCueRound = -1;
+let reconnectCuePending = false;
 try {
   clientId =
     sessionStorage.getItem("kensei-pong-tab-v1") || crypto.randomUUID();
@@ -86,6 +94,7 @@ function overlay(title, note = "") {
   uiText($("#pong-overlay-note"), uiFrom(note));
 }
 function renderRoom() {
+  syncPongAudio();
   root.dataset.pongState = room?.status || "ready";
   const live = room && !["closed", "interrupted"].includes(room.status);
   shell?.update({
@@ -215,6 +224,21 @@ function renderRoom() {
     );
   else overlay(null);
 }
+function syncPongAudio() {
+  const snapshot = host() ? state : remoteState;
+  setAudioState({
+    game: "pong",
+    runId: room ? `${room.id}:${room.round}` : "",
+    phase:
+      room?.status === "playing" && snapshot?.status !== "playing" && snapshot
+        ? "complete"
+        : room?.status === "playing" && connected && !stopped && !interruptedAt
+          ? "playing"
+          : room
+            ? "paused"
+            : "ready",
+  });
+}
 async function rpc(action, extra = {}) {
   if (!api.user || !api.client)
     throw Error("Sign in with Google to play online.");
@@ -239,10 +263,13 @@ async function rpc(action, extra = {}) {
 }
 function installRoom(next) {
   if (!next || (room && next.id !== room.id)) return;
+  if (!room) reconnectCuePending = false;
   const wasRunning = room?.status === "playing",
     oldRound = round;
   room = next;
-  if (wasRunning && next.status === "paused") stopAudio();
+  if (wasRunning && next.status === "paused") {
+    pauseAudio();
+  }
   roomOwner = api.user?.id;
   if (next.round !== oldRound) {
     endCueRound = -1;
@@ -257,7 +284,9 @@ function installRoom(next) {
     lastEcho = 0;
   }
   if (next.status === "playing" && !wasRunning) {
-    if (next.round !== oldRound) playCue("serve");
+    syncPongAudio();
+    if (next.round !== oldRound)
+      playCue("serve", 1, { id: `${next.id}:${next.round}:serve` });
     baseTicks = state?.ticks || 0;
     runAt = performance.now();
     interruptedAt = 0;
@@ -355,6 +384,7 @@ function receive(role, payload) {
     previousRemote = remoteState;
     previousAt = remoteAt;
     remoteState = payload.state;
+    syncPongAudio();
     remoteAt = now;
     if (Number.isFinite(payload.t0)) lastEcho = payload.t0;
     if (Number.isFinite(payload.echo) && payload.echo > 0) {
@@ -423,6 +453,10 @@ async function connect() {
     $("#pong-retry").hidden = true;
     tell("control");
     await poll();
+    if (reconnectCuePending) {
+      reconnectCuePending = false;
+      playCue("reconnect");
+    }
   } catch (e) {
     connected = false;
     message(uiError(e));
@@ -444,6 +478,7 @@ function disconnect(clear = true) {
 function connectionLost() {
   stopAudio();
   if (!room || ["closed", "interrupted"].includes(room.status)) return;
+  reconnectCuePending = true;
   if (!interruptedAt) interruptedAt = performance.now();
   connected = false;
   keys.clear();
@@ -458,7 +493,8 @@ function connectionLost() {
 }
 async function operation(action, extra = {}) {
   if (action === "ready") unlockAudio();
-  if (["pause", "leave", "interrupt"].includes(action)) stopAudio();
+  if (action === "pause") pauseAudio();
+  else if (["leave", "interrupt"].includes(action)) stopAudio();
   if (busy) return;
   if (!api.user) {
     api.openAuth(location.pathname + location.search);
@@ -611,6 +647,7 @@ function frame(now) {
       if (score !== state.score.join())
         tell("state", { state, status: room.status, t0: now, echo: lastEcho });
       if (state.status !== "playing") {
+        syncPongAudio();
         if (endCueRound !== room.round) {
           endCueRound = room.round;
           playCue(
@@ -736,6 +773,7 @@ $("#pong-leave").onclick = () => {
     operation("leave");
 };
 $("#pong-retry").onclick = async () => {
+  unlockAudio();
   await poll();
   if (room && !["closed", "interrupted"].includes(room.status)) connect();
 };

@@ -7,7 +7,7 @@
   >
   <legend>Sound &amp; display</legend>
   <label
-    >Volume<input
+    >Sound effects volume<input
       type="range"
       min="0"
       max="100"
@@ -15,6 +15,26 @@
       data-audio-volume
       aria-label="Game volume"
   /></label>
+  <label class="game-audio-toggle-row"
+    ><input type="checkbox" data-music-toggle checked /> Background music</label
+  >
+  <label
+    >Music volume<input
+      type="range"
+      min="0"
+      max="100"
+      value="12"
+      data-music-volume
+      aria-label="Music volume"
+  /></label>
+  <label class="game-audio-toggle-row" data-audio-countdown-wrap hidden
+    ><input type="checkbox" data-audio-countdown checked /> Go · last 5 seconds
+    reminder</label
+  >
+  <p class="muted small" data-audio-status role="status" hidden></p>
+  <button class="button secondary" type="button" data-audio-retry hidden>
+    Retry audio
+  </button>
   <label class="game-effects-control"
     >Effects<select data-effects-select aria-label="Game effects">
       <option value="auto">Auto</option>

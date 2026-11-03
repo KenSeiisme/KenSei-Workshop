@@ -153,6 +153,13 @@
     ["tests/browser/shared-whiteboards.cjs"],
     ["tests/browser/sixth-pages-sync.cjs", "whiteboard"]
   ],
+  "game-audio": [
+    ["tests/unit/game-audio.mjs"],
+    ["tests/unit/game-audio-upgrade.mjs"],
+    ["tests/unit/game-audio-lifecycle.mjs"],
+    ["tests/browser/game-audio.cjs"],
+    ["tests/browser/go-audio-clock.cjs"]
+  ],
   "go": [
     ["tests/unit/go-engine.mjs"],
     ["tests/unit/go-edge.mjs"],

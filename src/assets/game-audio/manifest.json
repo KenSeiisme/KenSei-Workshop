@@ -1,0 +1,1874 @@
+{
+  "version": 1,
+  "preparedWith": "FFmpeg 7.1.1; Python standard library",
+  "profiles": {
+    "board": {
+      "music": {
+        "file": "board-loop.mp3",
+        "bytes": 565498,
+        "sha256": "069c10f83802c856cdde633aabc9e8dfc026d09d0366eba3e7c13a975a821831",
+        "duration": 47.052653,
+        "gain": 1,
+        "loopStart": 0,
+        "loopEnd": 47.052653,
+        "source": "music-board",
+        "peakDbfs": -2.298,
+        "seamEndpointPeak": 0.002096,
+        "processing": "First 1/4 of complete original loop; -16 LUFS / -3 dBTP target; 3ms endpoint tapers; 96kbps MP3 with gapless metadata"
+      },
+      "cues": {
+        "move": [
+          {
+            "file": "stone-1.wav",
+            "bytes": 15002,
+            "sha256": "208c736555350f780437d805967bb9b71bce8c093ff597290100a461b8e1dcae",
+            "duration": 0.169592,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-1.ogg",
+            "sourceSha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-2.wav",
+            "bytes": 20072,
+            "sha256": "4be4a43670cf1a629c0ff0f59ce6dec0457377f1b5d9f047d88063d2b39ab67b",
+            "duration": 0.227075,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-2.ogg",
+            "sourceSha256": "8ca8b2d450741c04ed7b4ba51ed3f73c2400c8b3dbe83b974be4fe4774a76712",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-3.wav",
+            "bytes": 22094,
+            "sha256": "75b02f32403233bedcb1b232aae970f3df9b28cfcb248f42c9e0ffd38766ee83",
+            "duration": 0.25,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-3.ogg",
+            "sourceSha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa",
+            "peakDbfs": -12
+          }
+        ],
+        "merge": [
+          {
+            "file": "stone-1.wav",
+            "bytes": 15002,
+            "sha256": "208c736555350f780437d805967bb9b71bce8c093ff597290100a461b8e1dcae",
+            "duration": 0.169592,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-1.ogg",
+            "sourceSha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-2.wav",
+            "bytes": 20072,
+            "sha256": "4be4a43670cf1a629c0ff0f59ce6dec0457377f1b5d9f047d88063d2b39ab67b",
+            "duration": 0.227075,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-2.ogg",
+            "sourceSha256": "8ca8b2d450741c04ed7b4ba51ed3f73c2400c8b3dbe83b974be4fe4774a76712",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-3.wav",
+            "bytes": 22094,
+            "sha256": "75b02f32403233bedcb1b232aae970f3df9b28cfcb248f42c9e0ffd38766ee83",
+            "duration": 0.25,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-3.ogg",
+            "sourceSha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa",
+            "peakDbfs": -12
+          }
+        ],
+        "reveal": [
+          {
+            "file": "stone-1.wav",
+            "bytes": 15002,
+            "sha256": "208c736555350f780437d805967bb9b71bce8c093ff597290100a461b8e1dcae",
+            "duration": 0.169592,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-1.ogg",
+            "sourceSha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-2.wav",
+            "bytes": 20072,
+            "sha256": "4be4a43670cf1a629c0ff0f59ce6dec0457377f1b5d9f047d88063d2b39ab67b",
+            "duration": 0.227075,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-2.ogg",
+            "sourceSha256": "8ca8b2d450741c04ed7b4ba51ed3f73c2400c8b3dbe83b974be4fe4774a76712",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-3.wav",
+            "bytes": 22094,
+            "sha256": "75b02f32403233bedcb1b232aae970f3df9b28cfcb248f42c9e0ffd38766ee83",
+            "duration": 0.25,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-3.ogg",
+            "sourceSha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa",
+            "peakDbfs": -12
+          }
+        ],
+        "flag": [
+          {
+            "file": "flag.wav",
+            "bytes": 12986,
+            "sha256": "da216269bde0bd39aa68e421afd5e46f560b2653f6733d3ba13c568400a5253f",
+            "duration": 0.146735,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/switch_001.ogg",
+            "sourceSha256": "3b74efad87f1e69dbd1d05c5ad952ab90859b5a3d11da6ec5bd79b4f03b42afa",
+            "peakDbfs": -12
+          }
+        ],
+        "flip": [
+          {
+            "file": "stone-1.wav",
+            "bytes": 15002,
+            "sha256": "208c736555350f780437d805967bb9b71bce8c093ff597290100a461b8e1dcae",
+            "duration": 0.169592,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-1.ogg",
+            "sourceSha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-2.wav",
+            "bytes": 20072,
+            "sha256": "4be4a43670cf1a629c0ff0f59ce6dec0457377f1b5d9f047d88063d2b39ab67b",
+            "duration": 0.227075,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-2.ogg",
+            "sourceSha256": "8ca8b2d450741c04ed7b4ba51ed3f73c2400c8b3dbe83b974be4fe4774a76712",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-3.wav",
+            "bytes": 22094,
+            "sha256": "75b02f32403233bedcb1b232aae970f3df9b28cfcb248f42c9e0ffd38766ee83",
+            "duration": 0.25,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-3.ogg",
+            "sourceSha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa",
+            "peakDbfs": -12
+          }
+        ],
+        "pair": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "miss": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "input": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "erase": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "conflict": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "line": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "brick": [
+          {
+            "file": "stone-1.wav",
+            "bytes": 15002,
+            "sha256": "208c736555350f780437d805967bb9b71bce8c093ff597290100a461b8e1dcae",
+            "duration": 0.169592,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-1.ogg",
+            "sourceSha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-2.wav",
+            "bytes": 20072,
+            "sha256": "4be4a43670cf1a629c0ff0f59ce6dec0457377f1b5d9f047d88063d2b39ab67b",
+            "duration": 0.227075,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-2.ogg",
+            "sourceSha256": "8ca8b2d450741c04ed7b4ba51ed3f73c2400c8b3dbe83b974be4fe4774a76712",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-3.wav",
+            "bytes": 22094,
+            "sha256": "75b02f32403233bedcb1b232aae970f3df9b28cfcb248f42c9e0ffd38766ee83",
+            "duration": 0.25,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-3.ogg",
+            "sourceSha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa",
+            "peakDbfs": -12
+          }
+        ],
+        "paddle": [
+          {
+            "file": "stone-1.wav",
+            "bytes": 15002,
+            "sha256": "208c736555350f780437d805967bb9b71bce8c093ff597290100a461b8e1dcae",
+            "duration": 0.169592,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-1.ogg",
+            "sourceSha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-2.wav",
+            "bytes": 20072,
+            "sha256": "4be4a43670cf1a629c0ff0f59ce6dec0457377f1b5d9f047d88063d2b39ab67b",
+            "duration": 0.227075,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-2.ogg",
+            "sourceSha256": "8ca8b2d450741c04ed7b4ba51ed3f73c2400c8b3dbe83b974be4fe4774a76712",
+            "peakDbfs": -12
+          },
+          {
+            "file": "stone-3.wav",
+            "bytes": 22094,
+            "sha256": "75b02f32403233bedcb1b232aae970f3df9b28cfcb248f42c9e0ffd38766ee83",
+            "duration": 0.25,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chip-lay-3.ogg",
+            "sourceSha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa",
+            "peakDbfs": -12
+          }
+        ],
+        "serve": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "point": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "pickup": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "multiball": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "wide": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "slow": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "life": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "win": [
+          {
+            "file": "gentle-win.wav",
+            "bytes": 70358,
+            "sha256": "8e00b5ae2f447a8281487d23490c7f188304740ea1ae6b86c37a8a6ba1f56cd6",
+            "duration": 0.797211,
+            "gain": 0.85,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI10.ogg",
+            "sourceSha256": "baf50beffc4cc2dbb92c9d596a22732a8b5249c7648b681c0df6d0af6c561478",
+            "peakDbfs": -12
+          }
+        ],
+        "over": [
+          {
+            "file": "gentle-over.wav",
+            "bytes": 43382,
+            "sha256": "d2a0c5700e405d25bf2bf5a372015e94ff63897fa9229a15ac2bf3fb148da2e1",
+            "duration": 0.491361,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+            "sourceSha256": "b442ade3308a2bbda4b8c572c86f9f1071c7bdbcfb1e6f915d35c605b61bd475",
+            "peakDbfs": -12
+          }
+        ],
+        "loss": [
+          {
+            "file": "gentle-loss.wav",
+            "bytes": 69888,
+            "sha256": "b1b40f5b4ffefdb5f94f0d61c7243de39ca1994e7a20e3cf8b08d7724520bb49",
+            "duration": 0.791882,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI11.ogg",
+            "sourceSha256": "072fe661c6ce8c7672afaf0af51e27533d6effe99d35584b01d864bde800ecc1",
+            "peakDbfs": -12
+          }
+        ],
+        "draw": [
+          {
+            "file": "gentle-draw.wav",
+            "bytes": 40276,
+            "sha256": "084f7ad6859903f622017488131ffc6abce5b144bc3c58833c6a15ceeb7082e9",
+            "duration": 0.456145,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI16.ogg",
+            "sourceSha256": "1b1211b6360aae37ea685fee057bcabd034a749c1dfac6a9d643086d96e9b9aa",
+            "peakDbfs": -12
+          }
+        ],
+        "milestone": [
+          {
+            "file": "gentle-win.wav",
+            "bytes": 70358,
+            "sha256": "8e00b5ae2f447a8281487d23490c7f188304740ea1ae6b86c37a8a6ba1f56cd6",
+            "duration": 0.797211,
+            "gain": 0.85,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI10.ogg",
+            "sourceSha256": "baf50beffc4cc2dbb92c9d596a22732a8b5249c7648b681c0df6d0af6c561478",
+            "peakDbfs": -12
+          }
+        ],
+        "rotate": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "harddrop": [
+          {
+            "file": "capture.wav",
+            "bytes": 13626,
+            "sha256": "98e2b38ea0dd79326120196487e1af75ebe39b24973254eb15819457cf3b1516",
+            "duration": 0.153991,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chips-stack-1.ogg",
+            "sourceSha256": "12bf175b9afcea112175b241ad3336c6244ac5fdcdff8b5942ecc03f2225e0c4",
+            "peakDbfs": -12
+          }
+        ],
+        "capture": [
+          {
+            "file": "capture.wav",
+            "bytes": 13626,
+            "sha256": "98e2b38ea0dd79326120196487e1af75ebe39b24973254eb15819457cf3b1516",
+            "duration": 0.153991,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chips-stack-1.ogg",
+            "sourceSha256": "12bf175b9afcea112175b241ad3336c6244ac5fdcdff8b5942ecc03f2225e0c4",
+            "peakDbfs": -12
+          }
+        ],
+        "pass": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "turn": [
+          {
+            "file": "turn.wav",
+            "bytes": 10622,
+            "sha256": "233fd0005d61b37dbaf538436d734c041e8bb45f8be8901d735318badad42043",
+            "duration": 0.119932,
+            "gain": 0.7,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/bong_001.ogg",
+            "sourceSha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710",
+            "peakDbfs": -12
+          }
+        ],
+        "pause": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "reconnect": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "countdown": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "end": [
+          {
+            "file": "gentle-over.wav",
+            "bytes": 43382,
+            "sha256": "d2a0c5700e405d25bf2bf5a372015e94ff63897fa9229a15ac2bf3fb148da2e1",
+            "duration": 0.491361,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+            "sourceSha256": "b442ade3308a2bbda4b8c572c86f9f1071c7bdbcfb1e6f915d35c605b61bd475",
+            "peakDbfs": -12
+          }
+        ]
+      }
+    },
+    "puzzle": {
+      "music": {
+        "file": "puzzle-loop.mp3",
+        "bytes": 640731,
+        "sha256": "12f8e45406ea19180c9920fc7ac82f7833f00a446787fbd6646356654d20d341",
+        "duration": 53.333333,
+        "gain": 1,
+        "loopStart": 0,
+        "loopEnd": 53.333333,
+        "source": "music-puzzle",
+        "peakDbfs": -5.829,
+        "seamEndpointPeak": 0.001422,
+        "processing": "First 1/1 of complete original loop; -16 LUFS / -3 dBTP target; 3ms endpoint tapers; 96kbps MP3 with gapless metadata"
+      },
+      "cues": {
+        "move": [
+          {
+            "file": "soft-1.wav",
+            "bytes": 8822,
+            "sha256": "e1d5d9b866cba749a3473af5d78363ff5cd65c97bfade1e515f12a6c49ed0f6b",
+            "duration": 0.099524,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_001.ogg",
+            "sourceSha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-2.wav",
+            "bytes": 13618,
+            "sha256": "82333feb3130b8c9718c8bb1cb9655baef399ad93247c7fb58b63a009a4d5455",
+            "duration": 0.1539,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_002.ogg",
+            "sourceSha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-3.wav",
+            "bytes": 3606,
+            "sha256": "36be5a1c84d9501e730a2d66946af64c7312739016651497300c83168ac71337",
+            "duration": 0.040385,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/select_001.ogg",
+            "sourceSha256": "aec0c31ea934a35936ae0d2ab8fac8123c93aa5647f935853a58dbaf90278b7a",
+            "peakDbfs": -12
+          }
+        ],
+        "merge": [
+          {
+            "file": "soft-1.wav",
+            "bytes": 8822,
+            "sha256": "e1d5d9b866cba749a3473af5d78363ff5cd65c97bfade1e515f12a6c49ed0f6b",
+            "duration": 0.099524,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_001.ogg",
+            "sourceSha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-2.wav",
+            "bytes": 13618,
+            "sha256": "82333feb3130b8c9718c8bb1cb9655baef399ad93247c7fb58b63a009a4d5455",
+            "duration": 0.1539,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_002.ogg",
+            "sourceSha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-3.wav",
+            "bytes": 3606,
+            "sha256": "36be5a1c84d9501e730a2d66946af64c7312739016651497300c83168ac71337",
+            "duration": 0.040385,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/select_001.ogg",
+            "sourceSha256": "aec0c31ea934a35936ae0d2ab8fac8123c93aa5647f935853a58dbaf90278b7a",
+            "peakDbfs": -12
+          }
+        ],
+        "reveal": [
+          {
+            "file": "soft-1.wav",
+            "bytes": 8822,
+            "sha256": "e1d5d9b866cba749a3473af5d78363ff5cd65c97bfade1e515f12a6c49ed0f6b",
+            "duration": 0.099524,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_001.ogg",
+            "sourceSha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-2.wav",
+            "bytes": 13618,
+            "sha256": "82333feb3130b8c9718c8bb1cb9655baef399ad93247c7fb58b63a009a4d5455",
+            "duration": 0.1539,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_002.ogg",
+            "sourceSha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-3.wav",
+            "bytes": 3606,
+            "sha256": "36be5a1c84d9501e730a2d66946af64c7312739016651497300c83168ac71337",
+            "duration": 0.040385,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/select_001.ogg",
+            "sourceSha256": "aec0c31ea934a35936ae0d2ab8fac8123c93aa5647f935853a58dbaf90278b7a",
+            "peakDbfs": -12
+          }
+        ],
+        "flag": [
+          {
+            "file": "flag.wav",
+            "bytes": 12986,
+            "sha256": "da216269bde0bd39aa68e421afd5e46f560b2653f6733d3ba13c568400a5253f",
+            "duration": 0.146735,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/switch_001.ogg",
+            "sourceSha256": "3b74efad87f1e69dbd1d05c5ad952ab90859b5a3d11da6ec5bd79b4f03b42afa",
+            "peakDbfs": -12
+          }
+        ],
+        "flip": [
+          {
+            "file": "card-1.wav",
+            "bytes": 28268,
+            "sha256": "a49d77d7a401eaeb38ed1825660d093a36f74fd1c539c1985b2ad8b0876b812a",
+            "duration": 0.32,
+            "gain": 0.8,
+            "source": "casino-audio",
+            "sourceFile": "Audio/card-place-1.ogg",
+            "sourceSha256": "d8f26c33a665dcbdcc6f632f6050bc9dd548feb0d4942d4547615926d3926810",
+            "peakDbfs": -12
+          },
+          {
+            "file": "card-2.wav",
+            "bytes": 28268,
+            "sha256": "23840dd89876f14b827c591c348d18b03b01e832303d2d4266a7a8e57bde8206",
+            "duration": 0.32,
+            "gain": 0.8,
+            "source": "casino-audio",
+            "sourceFile": "Audio/card-place-2.ogg",
+            "sourceSha256": "903d5050718595e87864dd755643b476ab1a5533080dcc2dddc72570d33ba9f8",
+            "peakDbfs": -12
+          },
+          {
+            "file": "card-3.wav",
+            "bytes": 28268,
+            "sha256": "867acc9baa7159eba381e15351c2ab5b418b3866a47b150241f6d4c975a91e12",
+            "duration": 0.32,
+            "gain": 0.8,
+            "source": "casino-audio",
+            "sourceFile": "Audio/card-place-3.ogg",
+            "sourceSha256": "1d988631a6e5201ed1bb0d728f2e43a3ec79401258426858793598044ac95841",
+            "peakDbfs": -12
+          }
+        ],
+        "pair": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "miss": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "input": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "erase": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "conflict": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "line": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "brick": [
+          {
+            "file": "soft-1.wav",
+            "bytes": 8822,
+            "sha256": "e1d5d9b866cba749a3473af5d78363ff5cd65c97bfade1e515f12a6c49ed0f6b",
+            "duration": 0.099524,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_001.ogg",
+            "sourceSha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-2.wav",
+            "bytes": 13618,
+            "sha256": "82333feb3130b8c9718c8bb1cb9655baef399ad93247c7fb58b63a009a4d5455",
+            "duration": 0.1539,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_002.ogg",
+            "sourceSha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-3.wav",
+            "bytes": 3606,
+            "sha256": "36be5a1c84d9501e730a2d66946af64c7312739016651497300c83168ac71337",
+            "duration": 0.040385,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/select_001.ogg",
+            "sourceSha256": "aec0c31ea934a35936ae0d2ab8fac8123c93aa5647f935853a58dbaf90278b7a",
+            "peakDbfs": -12
+          }
+        ],
+        "paddle": [
+          {
+            "file": "soft-1.wav",
+            "bytes": 8822,
+            "sha256": "e1d5d9b866cba749a3473af5d78363ff5cd65c97bfade1e515f12a6c49ed0f6b",
+            "duration": 0.099524,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_001.ogg",
+            "sourceSha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-2.wav",
+            "bytes": 13618,
+            "sha256": "82333feb3130b8c9718c8bb1cb9655baef399ad93247c7fb58b63a009a4d5455",
+            "duration": 0.1539,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/pluck_002.ogg",
+            "sourceSha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9",
+            "peakDbfs": -12
+          },
+          {
+            "file": "soft-3.wav",
+            "bytes": 3606,
+            "sha256": "36be5a1c84d9501e730a2d66946af64c7312739016651497300c83168ac71337",
+            "duration": 0.040385,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/select_001.ogg",
+            "sourceSha256": "aec0c31ea934a35936ae0d2ab8fac8123c93aa5647f935853a58dbaf90278b7a",
+            "peakDbfs": -12
+          }
+        ],
+        "serve": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "point": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "pickup": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "multiball": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "wide": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "slow": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "life": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "win": [
+          {
+            "file": "gentle-win.wav",
+            "bytes": 70358,
+            "sha256": "8e00b5ae2f447a8281487d23490c7f188304740ea1ae6b86c37a8a6ba1f56cd6",
+            "duration": 0.797211,
+            "gain": 0.85,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI10.ogg",
+            "sourceSha256": "baf50beffc4cc2dbb92c9d596a22732a8b5249c7648b681c0df6d0af6c561478",
+            "peakDbfs": -12
+          }
+        ],
+        "over": [
+          {
+            "file": "gentle-over.wav",
+            "bytes": 43382,
+            "sha256": "d2a0c5700e405d25bf2bf5a372015e94ff63897fa9229a15ac2bf3fb148da2e1",
+            "duration": 0.491361,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+            "sourceSha256": "b442ade3308a2bbda4b8c572c86f9f1071c7bdbcfb1e6f915d35c605b61bd475",
+            "peakDbfs": -12
+          }
+        ],
+        "loss": [
+          {
+            "file": "gentle-loss.wav",
+            "bytes": 69888,
+            "sha256": "b1b40f5b4ffefdb5f94f0d61c7243de39ca1994e7a20e3cf8b08d7724520bb49",
+            "duration": 0.791882,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI11.ogg",
+            "sourceSha256": "072fe661c6ce8c7672afaf0af51e27533d6effe99d35584b01d864bde800ecc1",
+            "peakDbfs": -12
+          }
+        ],
+        "draw": [
+          {
+            "file": "gentle-draw.wav",
+            "bytes": 40276,
+            "sha256": "084f7ad6859903f622017488131ffc6abce5b144bc3c58833c6a15ceeb7082e9",
+            "duration": 0.456145,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI16.ogg",
+            "sourceSha256": "1b1211b6360aae37ea685fee057bcabd034a749c1dfac6a9d643086d96e9b9aa",
+            "peakDbfs": -12
+          }
+        ],
+        "milestone": [
+          {
+            "file": "gentle-win.wav",
+            "bytes": 70358,
+            "sha256": "8e00b5ae2f447a8281487d23490c7f188304740ea1ae6b86c37a8a6ba1f56cd6",
+            "duration": 0.797211,
+            "gain": 0.85,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI10.ogg",
+            "sourceSha256": "baf50beffc4cc2dbb92c9d596a22732a8b5249c7648b681c0df6d0af6c561478",
+            "peakDbfs": -12
+          }
+        ],
+        "rotate": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "harddrop": [
+          {
+            "file": "capture.wav",
+            "bytes": 13626,
+            "sha256": "98e2b38ea0dd79326120196487e1af75ebe39b24973254eb15819457cf3b1516",
+            "duration": 0.153991,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chips-stack-1.ogg",
+            "sourceSha256": "12bf175b9afcea112175b241ad3336c6244ac5fdcdff8b5942ecc03f2225e0c4",
+            "peakDbfs": -12
+          }
+        ],
+        "capture": [
+          {
+            "file": "capture.wav",
+            "bytes": 13626,
+            "sha256": "98e2b38ea0dd79326120196487e1af75ebe39b24973254eb15819457cf3b1516",
+            "duration": 0.153991,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chips-stack-1.ogg",
+            "sourceSha256": "12bf175b9afcea112175b241ad3336c6244ac5fdcdff8b5942ecc03f2225e0c4",
+            "peakDbfs": -12
+          }
+        ],
+        "pass": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "turn": [
+          {
+            "file": "turn.wav",
+            "bytes": 10622,
+            "sha256": "233fd0005d61b37dbaf538436d734c041e8bb45f8be8901d735318badad42043",
+            "duration": 0.119932,
+            "gain": 0.7,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/bong_001.ogg",
+            "sourceSha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710",
+            "peakDbfs": -12
+          }
+        ],
+        "pause": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "reconnect": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "countdown": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "end": [
+          {
+            "file": "gentle-over.wav",
+            "bytes": 43382,
+            "sha256": "d2a0c5700e405d25bf2bf5a372015e94ff63897fa9229a15ac2bf3fb148da2e1",
+            "duration": 0.491361,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/Pizzicato jingles/jingles_PIZZI00.ogg",
+            "sourceSha256": "b442ade3308a2bbda4b8c572c86f9f1071c7bdbcfb1e6f915d35c605b61bd475",
+            "peakDbfs": -12
+          }
+        ]
+      }
+    },
+    "arcade": {
+      "music": {
+        "file": "arcade-loop.mp3",
+        "bytes": 630700,
+        "sha256": "23b5c81996222838940791e7e2068035b28a9eacb21e673f9f4514d7e1b2a97d",
+        "duration": 52.5,
+        "gain": 1,
+        "loopStart": 0,
+        "loopEnd": 52.5,
+        "source": "music-arcade",
+        "peakDbfs": -2.531,
+        "seamEndpointPeak": 0.005815,
+        "processing": "First 1/2 of complete original loop; -16 LUFS / -3 dBTP target; 3ms endpoint tapers; 96kbps MP3 with gapless metadata"
+      },
+      "cues": {
+        "move": [
+          {
+            "file": "collision-1.wav",
+            "bytes": 15920,
+            "sha256": "b33cfa0a89fcfd92afa746689081a1bd6516877ef1822c23557c291c31dcf57f",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound1.ogg",
+            "sourceSha256": "f2f44effce087e47683f0fea05a71002bd8dca78fb10bf93d9f0b38d49f9590e",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-2.wav",
+            "bytes": 15920,
+            "sha256": "d35980336e1027a3bf8c0962aba843a01ae5e747bf58ba8c9808660c8fa04bfb",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound2.ogg",
+            "sourceSha256": "5a33494e622c15c4587e0a19447cf55c86283faac0e6c1238b550f43a30f16a3",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-3.wav",
+            "bytes": 15920,
+            "sha256": "8934dca370c8ad1d6578cbf8f7b97ae74c52fb8a52c01354d8d1e4b619f2fef1",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound3.ogg",
+            "sourceSha256": "5e9f2b4a0b14e65a157d0bbcb28cf816926583afa96e753489c722ec3d810a78",
+            "peakDbfs": -12
+          }
+        ],
+        "merge": [
+          {
+            "file": "collision-1.wav",
+            "bytes": 15920,
+            "sha256": "b33cfa0a89fcfd92afa746689081a1bd6516877ef1822c23557c291c31dcf57f",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound1.ogg",
+            "sourceSha256": "f2f44effce087e47683f0fea05a71002bd8dca78fb10bf93d9f0b38d49f9590e",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-2.wav",
+            "bytes": 15920,
+            "sha256": "d35980336e1027a3bf8c0962aba843a01ae5e747bf58ba8c9808660c8fa04bfb",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound2.ogg",
+            "sourceSha256": "5a33494e622c15c4587e0a19447cf55c86283faac0e6c1238b550f43a30f16a3",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-3.wav",
+            "bytes": 15920,
+            "sha256": "8934dca370c8ad1d6578cbf8f7b97ae74c52fb8a52c01354d8d1e4b619f2fef1",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound3.ogg",
+            "sourceSha256": "5e9f2b4a0b14e65a157d0bbcb28cf816926583afa96e753489c722ec3d810a78",
+            "peakDbfs": -12
+          }
+        ],
+        "reveal": [
+          {
+            "file": "collision-1.wav",
+            "bytes": 15920,
+            "sha256": "b33cfa0a89fcfd92afa746689081a1bd6516877ef1822c23557c291c31dcf57f",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound1.ogg",
+            "sourceSha256": "f2f44effce087e47683f0fea05a71002bd8dca78fb10bf93d9f0b38d49f9590e",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-2.wav",
+            "bytes": 15920,
+            "sha256": "d35980336e1027a3bf8c0962aba843a01ae5e747bf58ba8c9808660c8fa04bfb",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound2.ogg",
+            "sourceSha256": "5a33494e622c15c4587e0a19447cf55c86283faac0e6c1238b550f43a30f16a3",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-3.wav",
+            "bytes": 15920,
+            "sha256": "8934dca370c8ad1d6578cbf8f7b97ae74c52fb8a52c01354d8d1e4b619f2fef1",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound3.ogg",
+            "sourceSha256": "5e9f2b4a0b14e65a157d0bbcb28cf816926583afa96e753489c722ec3d810a78",
+            "peakDbfs": -12
+          }
+        ],
+        "flag": [
+          {
+            "file": "flag.wav",
+            "bytes": 12986,
+            "sha256": "da216269bde0bd39aa68e421afd5e46f560b2653f6733d3ba13c568400a5253f",
+            "duration": 0.146735,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/switch_001.ogg",
+            "sourceSha256": "3b74efad87f1e69dbd1d05c5ad952ab90859b5a3d11da6ec5bd79b4f03b42afa",
+            "peakDbfs": -12
+          }
+        ],
+        "flip": [
+          {
+            "file": "card-1.wav",
+            "bytes": 28268,
+            "sha256": "a49d77d7a401eaeb38ed1825660d093a36f74fd1c539c1985b2ad8b0876b812a",
+            "duration": 0.32,
+            "gain": 0.8,
+            "source": "casino-audio",
+            "sourceFile": "Audio/card-place-1.ogg",
+            "sourceSha256": "d8f26c33a665dcbdcc6f632f6050bc9dd548feb0d4942d4547615926d3926810",
+            "peakDbfs": -12
+          },
+          {
+            "file": "card-2.wav",
+            "bytes": 28268,
+            "sha256": "23840dd89876f14b827c591c348d18b03b01e832303d2d4266a7a8e57bde8206",
+            "duration": 0.32,
+            "gain": 0.8,
+            "source": "casino-audio",
+            "sourceFile": "Audio/card-place-2.ogg",
+            "sourceSha256": "903d5050718595e87864dd755643b476ab1a5533080dcc2dddc72570d33ba9f8",
+            "peakDbfs": -12
+          },
+          {
+            "file": "card-3.wav",
+            "bytes": 28268,
+            "sha256": "867acc9baa7159eba381e15351c2ab5b418b3866a47b150241f6d4c975a91e12",
+            "duration": 0.32,
+            "gain": 0.8,
+            "source": "casino-audio",
+            "sourceFile": "Audio/card-place-3.ogg",
+            "sourceSha256": "1d988631a6e5201ed1bb0d728f2e43a3ec79401258426858793598044ac95841",
+            "peakDbfs": -12
+          }
+        ],
+        "pair": [
+          {
+            "file": "arcade-point.wav",
+            "bytes": 35324,
+            "sha256": "cf9be253b469dc25d76dc9c0a755820b88c557973d0d766caad6d02d4efb693d",
+            "duration": 0.4,
+            "gain": 0.85,
+            "source": "digital-audio",
+            "sourceFile": "Audio/threeTone1.ogg",
+            "sourceSha256": "bdf21eb12e65507f091d074886fdac820e1ccae51d060caa168e5567acadb84b",
+            "peakDbfs": -12
+          }
+        ],
+        "miss": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "input": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "erase": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "conflict": [
+          {
+            "file": "error.wav",
+            "bytes": 9260,
+            "sha256": "d0317f563b910965f4240888240ad5a63ae2bc942c7e4629a3904f75062d73c7",
+            "duration": 0.10449,
+            "gain": 0.75,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/error_004.ogg",
+            "sourceSha256": "0b574cea597d96507e782ae9764f88482ce49f46e931e57054bf7150047f2d69",
+            "peakDbfs": -12
+          }
+        ],
+        "line": [
+          {
+            "file": "arcade-point.wav",
+            "bytes": 35324,
+            "sha256": "cf9be253b469dc25d76dc9c0a755820b88c557973d0d766caad6d02d4efb693d",
+            "duration": 0.4,
+            "gain": 0.85,
+            "source": "digital-audio",
+            "sourceFile": "Audio/threeTone1.ogg",
+            "sourceSha256": "bdf21eb12e65507f091d074886fdac820e1ccae51d060caa168e5567acadb84b",
+            "peakDbfs": -12
+          }
+        ],
+        "brick": [
+          {
+            "file": "collision-1.wav",
+            "bytes": 15920,
+            "sha256": "b33cfa0a89fcfd92afa746689081a1bd6516877ef1822c23557c291c31dcf57f",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound1.ogg",
+            "sourceSha256": "f2f44effce087e47683f0fea05a71002bd8dca78fb10bf93d9f0b38d49f9590e",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-2.wav",
+            "bytes": 15920,
+            "sha256": "d35980336e1027a3bf8c0962aba843a01ae5e747bf58ba8c9808660c8fa04bfb",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound2.ogg",
+            "sourceSha256": "5a33494e622c15c4587e0a19447cf55c86283faac0e6c1238b550f43a30f16a3",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-3.wav",
+            "bytes": 15920,
+            "sha256": "8934dca370c8ad1d6578cbf8f7b97ae74c52fb8a52c01354d8d1e4b619f2fef1",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound3.ogg",
+            "sourceSha256": "5e9f2b4a0b14e65a157d0bbcb28cf816926583afa96e753489c722ec3d810a78",
+            "peakDbfs": -12
+          }
+        ],
+        "paddle": [
+          {
+            "file": "collision-1.wav",
+            "bytes": 15920,
+            "sha256": "b33cfa0a89fcfd92afa746689081a1bd6516877ef1822c23557c291c31dcf57f",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound1.ogg",
+            "sourceSha256": "f2f44effce087e47683f0fea05a71002bd8dca78fb10bf93d9f0b38d49f9590e",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-2.wav",
+            "bytes": 15920,
+            "sha256": "d35980336e1027a3bf8c0962aba843a01ae5e747bf58ba8c9808660c8fa04bfb",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound2.ogg",
+            "sourceSha256": "5a33494e622c15c4587e0a19447cf55c86283faac0e6c1238b550f43a30f16a3",
+            "peakDbfs": -12
+          },
+          {
+            "file": "collision-3.wav",
+            "bytes": 15920,
+            "sha256": "8934dca370c8ad1d6578cbf8f7b97ae74c52fb8a52c01354d8d1e4b619f2fef1",
+            "duration": 0.18,
+            "gain": 0.75,
+            "source": "digital-audio",
+            "sourceFile": "Audio/pepSound3.ogg",
+            "sourceSha256": "5e9f2b4a0b14e65a157d0bbcb28cf816926583afa96e753489c722ec3d810a78",
+            "peakDbfs": -12
+          }
+        ],
+        "serve": [
+          {
+            "file": "serve.wav",
+            "bytes": 28268,
+            "sha256": "d8b332f0f9b7005d2d5d860d85a7d7e74125acb9d63ed2020f6ad4e73ce2c78d",
+            "duration": 0.32,
+            "gain": 0.8,
+            "source": "digital-audio",
+            "sourceFile": "Audio/highUp.ogg",
+            "sourceSha256": "cbc1c3c7ccf5d7903818144a4c3f5b2ed2385095792f29d8d7c76360ba4fa559",
+            "peakDbfs": -12
+          }
+        ],
+        "point": [
+          {
+            "file": "arcade-point.wav",
+            "bytes": 35324,
+            "sha256": "cf9be253b469dc25d76dc9c0a755820b88c557973d0d766caad6d02d4efb693d",
+            "duration": 0.4,
+            "gain": 0.85,
+            "source": "digital-audio",
+            "sourceFile": "Audio/threeTone1.ogg",
+            "sourceSha256": "bdf21eb12e65507f091d074886fdac820e1ccae51d060caa168e5567acadb84b",
+            "peakDbfs": -12
+          }
+        ],
+        "pickup": [
+          {
+            "file": "multiball.wav",
+            "bytes": 39734,
+            "sha256": "b5219debf35724419f4c20568a77741b8ca65ebaff573e5fe145068a8dbae998",
+            "duration": 0.45,
+            "gain": 0.9,
+            "source": "digital-audio",
+            "sourceFile": "Audio/powerUp3.ogg",
+            "sourceSha256": "59e7591f7a068882767bc1fd61edabf479b78787466d3a70bc49dfa0533777d2",
+            "peakDbfs": -12
+          }
+        ],
+        "multiball": [
+          {
+            "file": "multiball.wav",
+            "bytes": 39734,
+            "sha256": "b5219debf35724419f4c20568a77741b8ca65ebaff573e5fe145068a8dbae998",
+            "duration": 0.45,
+            "gain": 0.9,
+            "source": "digital-audio",
+            "sourceFile": "Audio/powerUp3.ogg",
+            "sourceSha256": "59e7591f7a068882767bc1fd61edabf479b78787466d3a70bc49dfa0533777d2",
+            "peakDbfs": -12
+          }
+        ],
+        "wide": [
+          {
+            "file": "wide.wav",
+            "bytes": 31256,
+            "sha256": "5c16c49aafc092349008908e2338fe09b8437f81b94428d0a490c198e30de350",
+            "duration": 0.353878,
+            "gain": 0.9,
+            "source": "digital-audio",
+            "sourceFile": "Audio/powerUp4.ogg",
+            "sourceSha256": "df6992456056af760815460b66d2ca1c3a07c200cca26325db5820b90104d177",
+            "peakDbfs": -12
+          }
+        ],
+        "slow": [
+          {
+            "file": "slow.wav",
+            "bytes": 17286,
+            "sha256": "f474ebd795c7df7d4e07903e1316eec4f7dbab4adfc09693cb84627360825cd2",
+            "duration": 0.195488,
+            "gain": 0.85,
+            "source": "digital-audio",
+            "sourceFile": "Audio/powerUp6.ogg",
+            "sourceSha256": "d1007bc67852cc767fad077a6b7ee016c0eb3d52a2032f1496726d7ab590e22d",
+            "peakDbfs": -12
+          }
+        ],
+        "life": [
+          {
+            "file": "life.wav",
+            "bytes": 36610,
+            "sha256": "e974893b7e4129b1dbb40a11735b4b8b25065327c7083c67e7229323da128def",
+            "duration": 0.41458,
+            "gain": 0.9,
+            "source": "digital-audio",
+            "sourceFile": "Audio/phaserDown1.ogg",
+            "sourceSha256": "d2d046cd0247045f8819905fc9719a7237ccbd590b3128ce58a61a81f50d208b",
+            "peakDbfs": -12
+          }
+        ],
+        "win": [
+          {
+            "file": "arcade-win.wav",
+            "bytes": 50976,
+            "sha256": "68a5e29312adb9a773d2eb6dd903fdd9d2a8fbd7478f3de320e06b10c1e6044f",
+            "duration": 0.57746,
+            "gain": 0.9,
+            "source": "music-jingles",
+            "sourceFile": "Audio/8-Bit jingles/jingles_NES03.ogg",
+            "sourceSha256": "64b146c4b737d4a74d60316554bdb667cfbe20681a71722948c5f70f83af7d92",
+            "peakDbfs": -12
+          }
+        ],
+        "over": [
+          {
+            "file": "arcade-over.wav",
+            "bytes": 70870,
+            "sha256": "310193d3fd034789a7d4cf1c97594f6e0c2518d170f2d63347b7ddd557d86a7a",
+            "duration": 0.803016,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/8-Bit jingles/jingles_NES11.ogg",
+            "sourceSha256": "ee06814cd4e703bdd501b8035d143061b7fa21cf3b5ab2d0cb4e014dabf1054a",
+            "peakDbfs": -12
+          }
+        ],
+        "loss": [
+          {
+            "file": "arcade-loss.wav",
+            "bytes": 50978,
+            "sha256": "bc32b9a00707ac90b17581a5ef54ce2f595d4cdf274944a2cb9a6d1b1f559fd7",
+            "duration": 0.577483,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/8-Bit jingles/jingles_NES04.ogg",
+            "sourceSha256": "f396b3bb91cf939b51b64c734db01187d70a59cf74dd83cb9d6746e00552d50e",
+            "peakDbfs": -12
+          }
+        ],
+        "draw": [
+          {
+            "file": "arcade-draw.wav",
+            "bytes": 30696,
+            "sha256": "785221b9583c88d3119631d827272ace1b4cd721644dee376fa7b46cefa55194",
+            "duration": 0.347528,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/8-Bit jingles/jingles_NES01.ogg",
+            "sourceSha256": "dac403c193e8b6277375c25182ba75bb6868e0e453f0ac2de368d079016e0476",
+            "peakDbfs": -12
+          }
+        ],
+        "milestone": [
+          {
+            "file": "milestone.wav",
+            "bytes": 71214,
+            "sha256": "15d027794888a59da363811574c4823e367c928994774f0a107f536adef3c566",
+            "duration": 0.806916,
+            "gain": 0.9,
+            "source": "music-jingles",
+            "sourceFile": "Audio/8-Bit jingles/jingles_NES12.ogg",
+            "sourceSha256": "ac678f8435036f800f4b2244e6d6b929bfdd012640698ab9815b35b86bfbcd29",
+            "peakDbfs": -12
+          }
+        ],
+        "rotate": [
+          {
+            "file": "rotate.wav",
+            "bytes": 10316,
+            "sha256": "f9c563264c210fe0bbf4a1c86836f995e09ffde72206942e025073e666932d0d",
+            "duration": 0.116463,
+            "gain": 0.55,
+            "source": "digital-audio",
+            "sourceFile": "Audio/tone1.ogg",
+            "sourceSha256": "12c6a1955aad54cb04206b5e9985df4379ebc598a01b65070609e0b0a3b9b026",
+            "peakDbfs": -12
+          }
+        ],
+        "harddrop": [
+          {
+            "file": "harddrop.wav",
+            "bytes": 22976,
+            "sha256": "643dd43c5a5beb6ccdd1649ae2445bad15209448ae1edb1f225c60e992260323",
+            "duration": 0.26,
+            "gain": 0.9,
+            "source": "digital-audio",
+            "sourceFile": "Audio/lowDown.ogg",
+            "sourceSha256": "e0215fcfd8b9d7877f74d5c46b239a13d7db0d25998da97b80404931ef9eef5d",
+            "peakDbfs": -12
+          }
+        ],
+        "capture": [
+          {
+            "file": "capture.wav",
+            "bytes": 13626,
+            "sha256": "98e2b38ea0dd79326120196487e1af75ebe39b24973254eb15819457cf3b1516",
+            "duration": 0.153991,
+            "gain": 0.9,
+            "source": "casino-audio",
+            "sourceFile": "Audio/chips-stack-1.ogg",
+            "sourceSha256": "12bf175b9afcea112175b241ad3336c6244ac5fdcdff8b5942ecc03f2225e0c4",
+            "peakDbfs": -12
+          }
+        ],
+        "pass": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "turn": [
+          {
+            "file": "turn.wav",
+            "bytes": 10622,
+            "sha256": "233fd0005d61b37dbaf538436d734c041e8bb45f8be8901d735318badad42043",
+            "duration": 0.119932,
+            "gain": 0.7,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/bong_001.ogg",
+            "sourceSha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710",
+            "peakDbfs": -12
+          }
+        ],
+        "pause": [
+          {
+            "file": "erase.wav",
+            "bytes": 7216,
+            "sha256": "5018490d308e9c565575da6c405d7fb0e6cdae93619467e1067d28c7f213ac8f",
+            "duration": 0.081315,
+            "gain": 0.65,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/back_002.ogg",
+            "sourceSha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195",
+            "peakDbfs": -12
+          }
+        ],
+        "reconnect": [
+          {
+            "file": "confirm.wav",
+            "bytes": 25608,
+            "sha256": "f0fefee9e140b59ff1ac91a3315fa222a91853597fcd168a81850fd122d8c4c4",
+            "duration": 0.289841,
+            "gain": 0.8,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/confirmation_001.ogg",
+            "sourceSha256": "063564703b6094d70718a3e787a55cc9141611e4ecd6b6637f8828f79b4a8c3a",
+            "peakDbfs": -12
+          }
+        ],
+        "countdown": [
+          {
+            "file": "tick.wav",
+            "bytes": 1992,
+            "sha256": "935bac9ed8ba169701c07f3dd6ff6f98306e78b42fa79f44708c3f910dc6646c",
+            "duration": 0.022086,
+            "gain": 0.55,
+            "source": "interface-sounds",
+            "sourceFile": "Audio/tick_001.ogg",
+            "sourceSha256": "9d057b918024c787bbe6c00beed13a7ef72a3fa0c259add3cef36582792f4230",
+            "peakDbfs": -12
+          }
+        ],
+        "end": [
+          {
+            "file": "arcade-over.wav",
+            "bytes": 70870,
+            "sha256": "310193d3fd034789a7d4cf1c97594f6e0c2518d170f2d63347b7ddd557d86a7a",
+            "duration": 0.803016,
+            "gain": 0.8,
+            "source": "music-jingles",
+            "sourceFile": "Audio/8-Bit jingles/jingles_NES11.ogg",
+            "sourceSha256": "ee06814cd4e703bdd501b8035d143061b7fa21cf3b5ab2d0cb4e014dabf1054a",
+            "peakDbfs": -12
+          }
+        ]
+      }
+    }
+  },
+  "sources": [
+    {
+      "id": "interface-sounds",
+      "title": "Interface Sounds",
+      "author": "Kenney",
+      "url": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceArchiveSha256": "f2193d072726d6758a5f7871b2dcc54dcce0d5c35c6f0a62f92549b327c81232",
+      "processing": "Individual one-shots: silence trimmed, mono 44.1kHz PCM16, 70Hz high-pass / 9.5kHz low-pass, -12dBFS peak normalization, 2ms attack / 10ms release tapers"
+    },
+    {
+      "id": "casino-audio",
+      "title": "Casino Audio",
+      "author": "Kenney",
+      "url": "https://kenney.nl/assets/casino-audio",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceArchiveSha256": "f36250766ac5bc378c13708ddf12a23a8e54a3251f8d482c7536e51b5dbafa18",
+      "processing": "Individual one-shots: silence trimmed, mono 44.1kHz PCM16, 70Hz high-pass / 9.5kHz low-pass, -12dBFS peak normalization, 2ms attack / 10ms release tapers"
+    },
+    {
+      "id": "digital-audio",
+      "title": "Digital Audio",
+      "author": "Kenney",
+      "url": "https://kenney.nl/assets/digital-audio",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceArchiveSha256": "24e6ce28b76a6d8c89cff4d331e0965ff5c3de8a73c612028e9d363cc64e4f06",
+      "processing": "Individual one-shots: silence trimmed, mono 44.1kHz PCM16, 70Hz high-pass / 9.5kHz low-pass, -12dBFS peak normalization, 2ms attack / 10ms release tapers"
+    },
+    {
+      "id": "music-jingles",
+      "title": "Music Jingles",
+      "author": "Kenney",
+      "url": "https://kenney.nl/assets/music-jingles",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceArchiveSha256": "b729ba57959bd58793d2c5cafa348aaf2655d354f3da35ec4729e03ec77197b8",
+      "processing": "Individual one-shots: silence trimmed, mono 44.1kHz PCM16, 70Hz high-pass / 9.5kHz low-pass, -12dBFS peak normalization, 2ms attack / 10ms release tapers"
+    },
+    {
+      "id": "music-board",
+      "title": "Easy Going Music Loop",
+      "author": "Seth_Makes_Sounds",
+      "url": "https://freesound.org/people/Seth_Makes_Sounds/sounds/691837/",
+      "downloadUrl": "https://cdn.freesound.org/previews/691/691837_13228046-hq.mp3",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSha256": "a05578bc5d571198d4babc4ef8585640ce3de7e040cfc26567ce3f59b1173d70",
+      "processing": "First 1/4 of complete original loop; -16 LUFS / -3 dBTP target; 3ms endpoint tapers; 96kbps MP3 with gapless metadata"
+    },
+    {
+      "id": "music-puzzle",
+      "title": "Retro Game Music 90BPM Loop - Bass, Lead, Pad and Keys",
+      "author": "Jadis0x",
+      "url": "https://freesound.org/people/Jadis0x/sounds/859283/",
+      "downloadUrl": "https://cdn.freesound.org/previews/859/859283_11915007-hq.mp3",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSha256": "00a58a9932c6cffa5bf4802ab8957b86c07133889df32248341d330ffb27fed3",
+      "processing": "First 1/1 of complete original loop; -16 LUFS / -3 dBTP target; 3ms endpoint tapers; 96kbps MP3 with gapless metadata"
+    },
+    {
+      "id": "music-arcade",
+      "title": "Simple Game Music Loop",
+      "author": "Seth_Makes_Sounds",
+      "url": "https://freesound.org/people/Seth_Makes_Sounds/sounds/684511/",
+      "downloadUrl": "https://cdn.freesound.org/previews/684/684511_13228046-hq.mp3",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceSha256": "f8ab7378d98567517cef4c05ca14f8c81f5892809e43fb2062300a6efc0a4698",
+      "processing": "First 1/2 of complete original loop; -16 LUFS / -3 dBTP target; 3ms endpoint tapers; 96kbps MP3 with gapless metadata"
+    }
+  ],
+  "verification": {
+    "subjectiveListening": "Pending headphones, speakers and physical Android; waveform checks are separate",
+    "budgets": {
+      "board": {
+        "uniqueFiles": 15,
+        "downloadBytes": 927880,
+        "decodedPcmBytesAt48000Hz": 18855772
+      },
+      "puzzle": {
+        "uniqueFiles": 18,
+        "downloadBytes": 1056795,
+        "decodedPcmBytesAt48000Hz": 21384124
+      },
+      "arcade": {
+        "uniqueFiles": 27,
+        "downloadBytes": 1341078,
+        "decodedPcmBytesAt48000Hz": 21703948
+      }
+    }
+  }
+}

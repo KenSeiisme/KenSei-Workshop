@@ -1,0 +1,58 @@
+{
+  "m_3fc13391b94d": {
+    "en": "Audio is not available in this browser. You can keep playing silently.",
+    "zh-Hant": "此瀏覽器無法播放遊戲聲音，仍可繼續靜音遊玩。"
+  },
+  "m_79443ae41b64": {
+    "en": "Sound effects volume",
+    "zh-Hant": "音效音量"
+  },
+  "m_6c12137afaf1": {
+    "en": "Background music",
+    "zh-Hant": "背景音樂"
+  },
+  "m_d8773f37c57e": {
+    "en": "Music volume",
+    "zh-Hant": "音樂音量"
+  },
+  "m_8c7441104d32": {
+    "en": "Go · last 5 seconds reminder",
+    "zh-Hant": "圍棋 · 最後 5 秒提示音"
+  },
+  "m_f86a12ffdfa1": {
+    "en": "Retry audio",
+    "zh-Hant": "重試載入聲音"
+  },
+  "m_b9c2abe43cd4": {
+    "en": "Tap the sound button or game area to resume audio.",
+    "zh-Hant": "點一下聲音按鈕或遊戲區域以恢復聲音。"
+  },
+  "m_85c10f67757d": {
+    "en": "Music could not load. Retry audio; you can keep playing.",
+    "zh-Hant": "音樂無法載入。可繼續遊玩，或重試載入聲音。"
+  },
+  "m_35a4beed3e9a": {
+    "en": "Some sounds could not load. Basic sounds remain available.",
+    "zh-Hant": "部分音效無法載入，仍可使用基本提示音。"
+  },
+  "m_c1cdfdb41bd1": {
+    "en": "Audio credits",
+    "zh-Hant": "聲音素材致謝"
+  },
+  "m_43515392483b": {
+    "en": "Game audio uses CC0 recordings and music, edited and hosted by KenSei Workshop. Music and sound preferences stay on this device.",
+    "zh-Hant": "遊戲採用 CC0 錄音與音樂，由 KenSei Workshop 編輯並於本站提供。音效和音樂偏好只保存在此裝置。"
+  },
+  "m_d80ce50c22e0": {
+    "en": "Audio sources and processing manifest",
+    "zh-Hant": "聲音來源與處理清單"
+  },
+  "m_7e4d94445e09": {
+    "en": "CC0 license",
+    "zh-Hant": "CC0 授權"
+  },
+  "m_3611a439b653": {
+    "en": "Game sound effects default to 35% and background music to 12%, after you start, continue or Ready. Previously muted settings stay muted. Audio files come from this site; games do not connect to external sound libraries. Go countdown reminders use the existing match clock. Sound settings stay on this device and do not enter game saves, rankings or account records.",
+    "zh-Hant": "開始、繼續或按下 Ready 後，遊戲音效預設為 35%，背景音樂為 12%。原有靜音設定會保留。聲音檔案由本站提供，遊戲不會連線至外部音效庫。圍棋讀秒提示沿用既有對局時鐘。聲音設定只保存在此裝置，不會進入存檔、排行榜或帳號紀錄。"
+  }
+}

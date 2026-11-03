@@ -47,7 +47,7 @@ globalThis.window = {
   AudioContext: Audio,
   addEventListener: (name, fn) => hooks.set(name, fn),
 };
-const { audioEvent, playCue, unlockAudio, stopAudio } =
+const { audioEvent, playCue, unlockAudio, stopAudio, getAudioDiagnostics } =
   await import("../../src/games/audio.js");
 assert.equal(created, 0);
 playCue("win");
@@ -65,6 +65,8 @@ for (const kind of [
   "pickup",
 ])
   for (let i = 0; i < 20; i++) playCue(kind);
+assert.ok(getAudioDiagnostics().voices <= 8);
+assert.equal(playCue("not-a-defined-cue"), false);
 stopAudio();
 document.hidden = true;
 assert.equal(await unlockAudio(), false);
@@ -142,9 +144,20 @@ assert.equal(
 for (const game of ["sudoku", "nonogram"])
   assert.equal(
     audioEvent(
-      { game, status: "playing" },
-      { game, status: "playing" },
-      { type: "set" },
+      {
+        game,
+        status: "playing",
+        board: Array(game === "sudoku" ? 81 : 25).fill(0),
+      },
+      {
+        game,
+        status: "playing",
+        size: 5,
+        rows: [],
+        cols: [],
+        board: [1, ...Array(game === "sudoku" ? 80 : 24).fill(0)],
+      },
+      { type: "set", index: 0, value: 1 },
     ),
     "input",
   );
