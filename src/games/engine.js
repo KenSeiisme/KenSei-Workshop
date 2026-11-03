@@ -3,6 +3,7 @@ import * as arcade from "./arcade-engine.js";
 import * as boards from "./board-engine.js";
 import * as drop from "./block-drop-engine.js";
 import * as brickV2 from "./brick-v2-engine.js";
+import { validateGoSave } from "./go-engine.js";
 // 浏览器与服务端共用规则；此文件不访问 DOM、网络或时钟。
 export const VERSION = 1;
 export const GAMES = {
@@ -446,6 +447,7 @@ export function replay(
   return { ...metrics(s), elapsed_ms: Math.max(1, Math.round(durationMs)) };
 }
 export function validateSave(data) {
+  if (data?.game === "go") return validateGoSave(data);
   if (!data || JSON.stringify(data).length > 240000)
     throw Error("Game save is too large.");
   const { game, difficulty } = data;

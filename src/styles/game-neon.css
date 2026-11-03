@@ -1319,3 +1319,20 @@ html[data-game-effects="full"] .game-card {
     border-color 150ms,
     box-shadow 150ms;
 }
+.preview-go {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 65%;
+  margin: auto;
+}
+.preview-go i {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #e7dceb;
+  box-shadow: 0 4px 7px #0008;
+}
+.preview-go i:nth-child(odd) {
+  background: #17111f;
+  outline: 1px solid #8f739d;
+}

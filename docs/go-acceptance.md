@@ -1,0 +1,37 @@
+# Go acceptance record
+
+Environment: Windows desktop, local static preview, production Supabase project. Dates: 2–3 November 2026 (Asia/Kuala_Lumpur).
+
+| Check                                                                       | Status            | Evidence / boundary                                                                                                                         |
+| --------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Go core legality, capture, suicide, ko / superko                            | Passed            | `tests/unit/go-engine.mjs`; exact history keys, not a short collision-prone hash                                                            |
+| AGA pass stones, White last, resumption                                     | Passed            | Pure-engine fixtures                                                                                                                        |
+| Japanese post-stop ko-specific passes, seki scoring, both-lose confirmation | Passed            | Pure-engine fixtures; not an automatic life/death certification                                                                             |
+| Compact replay, handicap placement, SGF setup and result                    | Passed            | Pure-engine fixtures and actual browser download                                                                                            |
+| Server authentication, canonical moves, forged state rejection              | Passed            | `tests/unit/go-edge.mjs`                                                                                                                    |
+| Invites, matching, Ready expiry, CAS, duplicate requests                    | Passed locally    | `tests/database/go-matches.mjs` using PGlite, all migrations                                                                                |
+| Single / both disconnect, server clock, statistics, rate threshold          | Passed locally    | Controlled database deadlines; no real elapsed-time claim                                                                                   |
+| Old unit tests and database behavior                                        | Passed            | 29 unit groups and 17 database groups                                                                                                       |
+| 320 / 360 / 768 / 1366 / 1440 layouts                                       | Passed            | Chromium, Firefox and WebKit simulated viewports                                                                                            |
+| Local play, undo, AI Worker, resume, review, SGF                            | Passed            | `tests/browser/go.cjs`; mocked account API                                                                                                  |
+| English / Traditional Chinese and static SEO                                | Passed            | 102 public URLs, 110 localized pages, 102 social cards, 45 search entries                                                                   |
+| Supabase migration, private grants, Cron                                    | Passed remotely   | `pg_cron` 1.6.4, active 15-second job, seven private RLS tables; `board_admin` service-only                                                 |
+| Real two-account game and Realtime                                          | Passed remotely   | Real Auth sessions: turns, illegal-move recovery, retry, refresh, read-only tab and control takeover; not Google OAuth UI                   |
+| Real combined Go / Pong / Whiteboard capacity                               | Passed remotely   | Real room leases; third active room refused / whiteboard read-only, then slot reuse after release                                           |
+| Natural 120-second disconnect                                               | Passed remotely   | Waited for the actual one-sided deadline; Cron settled the forfeit                                                                          |
+| Test data and temporary endpoint removal                                    | Passed remotely   | Four fixture users removed; all six remaining closed fixture matches deleted; zero Go rows / stats / active rooms; normal Edge v14 restored |
+| Existing 28 tools                                                           | Smoke passed      | 11/11 core smoke groups; this does not certify every manual output or permission flow                                                       |
+| Existing twelve games                                                       | Passed            | Five viewport sizes, landscape, focus / start / eligibility layout regression                                                               |
+| Real Google OAuth UI                                                        | Pending           | Disposable Auth fixtures exercise the backend, not the Google consent screen                                                                |
+| Physical Android touch, soft keyboard and download                          | Pending           | Requires the user's actual Android device                                                                                                   |
+| Japanese official special life/death diagrams                               | Pending / limited | No claim that all official examples are automatically adjudicated; unresolved agreement stays unranked                                      |
+
+The walkthrough fixed rejected-move recovery, stable control identity across refresh, invalid setup feedback and private clock restoration. The local preview now accepts a larger connection backlog so simultaneous browser clients do not produce false connection failures.
+
+The live run received 35 WebSocket frames and made 53 HTTP requests (p95 413ms, maximum 3,629ms including fixture provisioning). Separately, production Edge logs for 251 non-test POST requests recorded p95 execution of 212ms, maximum 575ms and zero HTTP 5xx responses. These are execution durations, not CPU measurements or a load-test guarantee. No public fixture score was created; public statistics were verified with isolated database fixtures.
+
+Evidence: `tests/unit/go-engine.mjs` (16 core checks), `tests/unit/go-edge.mjs`, `tests/database/go-matches.mjs`, `tests/browser/go.cjs`, and the opt-in live harness `scripts/verify-go-online.cjs`. Local reports remain under ignored `_qa/go/`; no credentials, sessions or temporary control secret belong in committed reports.
+
+Android follow-up: open both language routes, start a local / AI game, confirm a touch move, zoom and pan a 19×19 board, edit the name with the soft keyboard, exit focus, refresh / continue, and open the downloaded SGF. An authenticated user should also check Google return navigation and invitation join without an automatic start.
+
+Deployment uses the existing GitHub branch and its connected Vercel project. Production URL: https://kensei-workshop.vercel.app/games/go/ (Traditional Chinese: https://kensei-workshop.vercel.app/zh-hant/games/go/). Publication is complete only after the pushed deployment is checked at those URLs.

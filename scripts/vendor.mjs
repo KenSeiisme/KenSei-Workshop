@@ -209,3 +209,4 @@ await import("./vendor-fifth.mjs");
 await import("./vendor-sixth.mjs");
 
 await import("./vendor-studios.mjs");
+await import("./vendor-go.mjs");

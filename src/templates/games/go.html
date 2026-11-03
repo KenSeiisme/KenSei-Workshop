@@ -1,0 +1,388 @@
+<section
+  class="container page-section games-page neon-arcade go-page"
+  data-go
+  data-play-shell
+  data-game-theme="go"
+  data-shell-state="ready"
+>
+  ${toolbar}
+  <div class="go-layout">
+    <section class="game-play go-play">
+      <div class="go-hud" aria-label="Go match status">
+        <div>
+          <span id="go-black-name">Black</span
+          ><strong id="go-black-clock">—</strong
+          ><small id="go-black-captures">0 captured</small>
+        </div>
+        <div>
+          <strong id="go-turn">Ready preview</strong
+          ><small id="go-qualification">Local practice</small>
+        </div>
+        <div>
+          <span id="go-white-name">White</span
+          ><strong id="go-white-clock">—</strong
+          ><small id="go-white-captures">0 captured</small>
+        </div>
+      </div>
+      <div class="game-board-shell go-stage">
+        <div class="go-pan" id="go-pan">
+          <canvas
+            id="game-board"
+            class="go-canvas"
+            width="760"
+            height="760"
+            tabindex="0"
+            role="grid"
+            aria-label="Go board. Arrow keys select an intersection; Enter places a stone."
+          ></canvas>
+        </div>
+        <section class="go-entry" id="go-entry" aria-label="Go setup">
+          <span class="eyebrow">A quiet board. A world of moves.</span>
+          <div class="go-setup">
+            <label
+              >Mode<select id="go-mode">
+                <option value="ai">Computer</option>
+                <option value="local">Local two players</option>
+                <option value="online">Online</option>
+              </select></label
+            >
+            <label
+              >Rules<select id="go-rule">
+                <option value="chinese">Chinese</option>
+                <option value="japanese">Japanese 1989</option>
+                <option value="aga">AGA</option>
+              </select></label
+            >
+            <label
+              >Board size<select id="go-size">
+                <option value="9">9 × 9</option>
+                <option value="13">13 × 13</option>
+                <option value="19">19 × 19</option>
+              </select></label
+            >
+            <label id="go-ai-label"
+              >Computer level<select id="go-level">
+                <option value="1">Beginner 1</option>
+                <option value="2">Beginner 2</option>
+                <option value="3">Beginner 3</option>
+              </select></label
+            >
+            <label
+              ><input type="checkbox" id="go-training" /> Single-color
+              memory</label
+            >
+            <label id="go-color-label"
+              >Play as<select id="go-human">
+                <option value="1">Black</option>
+                <option value="-1">White</option>
+              </select></label
+            >
+          </div>
+          <p id="go-setup-summary" class="small muted"></p>
+          <details id="go-advanced">
+            <summary>Advanced settings · local / invitation</summary>
+            <div class="go-setup">
+              <label
+                >Handicap<select id="go-handicap">
+                  <option value="0">Even game</option>
+                  <option value="1">No komi · Black first</option>
+                  <option value="2">2 stones</option>
+                  <option value="3">3 stones</option>
+                  <option value="4">4 stones</option>
+                  <option value="5">5 stones</option>
+                  <option value="6">6 stones</option>
+                  <option value="7">7 stones</option>
+                  <option value="8">8 stones</option>
+                  <option value="9">9 stones</option>
+                </select></label
+              ><label
+                >Komi · points<input
+                  id="go-komi"
+                  type="number"
+                  step="0.5"
+                  min="-100"
+                  max="100"
+                  value="7.5" /></label
+              ><label
+                >Online clock<select id="go-clock">
+                  <option value="9">5 min + 3 × 20 sec</option>
+                  <option value="13">10 min + 3 × 30 sec</option>
+                  <option value="19">20 min + 5 × 30 sec</option>
+                </select></label
+              >
+            </div>
+          </details>
+          <div class="go-start-actions">
+            <button class="button primary" id="go-start">Start game</button
+            ><button class="button secondary" id="go-continue" hidden>
+              Continue saved game
+            </button>
+          </div>
+          <div id="go-online-entry" hidden>
+            <div class="go-start-actions">
+              <button class="button primary" id="go-create">Create room</button
+              ><button class="button secondary" id="go-find">
+                Find opponent
+              </button>
+            </div>
+            <div class="go-code-row">
+              <label
+                >Room code<input
+                  id="go-code"
+                  maxlength="8"
+                  autocomplete="off"
+                  autocapitalize="characters" /></label
+              ><button class="button secondary" id="go-join">Join room</button>
+            </div>
+            <p class="small muted">
+              Online play requires Google sign-in. Standard human matches count
+              toward public statistics.
+            </p>
+          </div>
+          <p id="go-save-info" class="small muted"></p>
+        </section>
+        <section id="go-room-panel" class="go-room-panel" hidden>
+          <h2 id="go-room-title">Waiting for your opponent</h2>
+          <p id="go-room-summary"></p>
+          <div id="go-invite">
+            <code id="go-invite-code"></code
+            ><button class="button secondary" id="go-copy-invite">
+              Copy invite link
+            </button>
+          </div>
+          <div id="go-members"></div>
+          <p id="go-ready-time" class="muted"></p>
+          <label id="go-training-consent" hidden
+            ><input type="checkbox" id="go-accept-training" /> I agree to
+            single-color training · not ranked</label
+          ><button class="button primary" id="go-ready">Ready</button
+          ><button class="button secondary" id="go-cancel-wait">Cancel</button>
+        </section>
+        <section id="go-result" class="go-result" hidden>
+          <h2 id="go-result-title"></h2>
+          <p id="go-result-detail"></p>
+          <div class="go-start-actions">
+            <button class="button primary" id="go-again">New game setup</button
+            ><button class="button secondary" id="go-review">Review game</button
+            ><button class="button secondary" id="go-export-result">
+              Download SGF
+            </button>
+          </div>
+        </section>
+      </div>
+      <p id="go-status" class="go-status" role="status" aria-live="polite">
+        Choose your settings and start when you are ready.
+      </p>
+      <div class="game-control-deck go-controls">
+        <button class="button primary" id="go-pass" disabled>Pass</button
+        ><button class="button secondary" id="go-confirm-place" hidden>
+          Place stone</button
+        ><button class="button secondary" id="go-pause" disabled>Pause</button
+        ><button class="button secondary" id="go-undo" disabled>Undo</button
+        ><button class="button secondary" id="go-resign" disabled>Resign</button
+        ><button class="button secondary" id="go-peek" hidden>
+          Hold to reveal colors</button
+        ><button class="button secondary" id="go-takeover" hidden>
+          Take control</button
+        ><button class="button secondary" id="go-retry" hidden>
+          Retry connection</button
+        ><button class="button secondary" data-shell-menu>Menu</button>
+      </div>
+      <div class="go-zoom">
+        <label
+          >Board zoom<input
+            id="go-zoom"
+            type="range"
+            min="1"
+            max="4"
+            step="0.25"
+            value="1" /></label
+        ><span
+          id="go-cursor-note"
+          class="small muted"
+          role="status"
+          aria-live="polite"
+        ></span>
+      </div>
+      <section class="go-scoring panel" id="go-scoring" hidden>
+        <h2>Confirm the final position</h2>
+        <p>
+          Automatic totals are suggestions. Both players must agree on dead
+          stones and seki. Unresolved disputes do not count as a win.
+        </p>
+        <label
+          >Mark groups<select id="go-mark-mode">
+            <option value="dead">Dead stones</option>
+            <option value="seki">Seki</option>
+            <option value="clear">Clear marks</option>
+          </select></label
+        >
+        <div id="go-score-detail"></div>
+        <div class="go-start-actions">
+          <button class="button primary" id="go-score-confirm">
+            Confirm score</button
+          ><button class="button secondary" id="go-score-dispute">
+            Dispute</button
+          ><button class="button secondary" id="go-resume">Resume play</button
+          ><button class="button secondary" id="go-no-result" hidden>
+            Agree no result · cycle
+          </button>
+        </div>
+        <label id="go-local-actor-label"
+          >Confirm / request as<select id="go-local-actor">
+            <option value="1">Black</option>
+            <option value="-1">White</option>
+          </select></label
+        >
+      </section>
+      <section id="go-confirmation" class="panel go-scoring" hidden>
+        <h3>Japanese life-and-death confirmation</h3>
+        <p>
+          This local hypothetical board does not change the match, prisoners or
+          score. A ko recapture requires a pass for that specific ko. Confirm
+          the real dead groups only when both players agree.
+        </p>
+        <div class="go-start-actions">
+          <button class="button secondary" id="go-confirmation-open">
+            Open confirmation board</button
+          ><label id="go-confirmation-ko-label" hidden
+            >Pass for ko<select id="go-confirmation-ko"></select></label
+          ><button class="button secondary" id="go-confirmation-pass" hidden>
+            Pass for this ko</button
+          ><button class="button secondary" id="go-confirmation-close" hidden>
+            Return to real position</button
+          ><button class="button secondary" id="go-both-lose" hidden>
+            Agree both lose · unresolved effective move
+          </button>
+        </div>
+      </section>
+      <section class="go-review panel" id="go-replay" hidden>
+        <label
+          >Review move<input
+            id="go-review-ply"
+            type="range"
+            min="0"
+            max="0"
+            value="0" /></label
+        ><output id="go-review-number"></output
+        ><button class="button secondary" id="go-review-close">
+          Back to result
+        </button>
+      </section>
+      <details class="go-private-records">
+        <summary>Practice records · this identity</summary>
+        <p id="go-practice-records">No completed practice games yet.</p>
+      </details>
+    </section>
+    <aside class="panel go-leaderboard" aria-label="Go leaderboard">
+      <div class="go-board-heading">
+        <h2>Go records</h2>
+        <button class="text-link" id="go-board-refresh">Refresh</button>
+      </div>
+      <p class="small muted">
+        Verified standard online human matches only. Practice and training
+        remain separate.
+      </p>
+      <div class="go-leaderboard-filters">
+        <label
+          >Rules<select id="go-rank-rule">
+            <option value="chinese">Chinese</option>
+            <option value="japanese">Japanese 1989</option>
+            <option value="aga">AGA</option>
+          </select></label
+        ><label
+          >Size<select id="go-rank-size">
+            <option value="9">9 × 9</option>
+            <option value="13">13 × 13</option>
+            <option value="19">19 × 19</option>
+          </select></label
+        ><label
+          >Sort<select id="go-rank-sort">
+            <option value="wins">Most wins</option>
+            <option value="rate">Win rate · 10+ games</option>
+          </select></label
+        >
+      </div>
+      <p id="go-board-status" role="status"></p>
+      <div id="go-rankings"></div>
+      <button class="text-link" id="go-board-more" hidden>Show Top 50</button>
+      <div id="go-my-ranking"></div>
+    </aside>
+  </div>
+  <dialog class="game-shell-dialog" data-shell-settings-dialog>
+    <div class="game-shell-dialog-heading">
+      <h2>Settings</h2>
+      <button class="icon-button" data-shell-close aria-label="Close">×</button>
+    </div>
+    ${preferences}
+  </dialog>
+  <dialog class="game-shell-dialog" data-shell-menu-dialog>
+    <div class="game-shell-dialog-heading">
+      <h2>Go</h2>
+      <button class="icon-button" data-shell-close aria-label="Close">×</button>
+    </div>
+    <div class="go-start-actions">
+      <button class="button secondary" id="go-new-setup">New game setup</button
+      ><button class="button secondary" id="go-export">Download SGF</button
+      ><button class="button secondary" id="go-leave">Leave online match</button
+      ><button class="button secondary" id="go-cycle-review">
+        Request cycle review at selected point
+      </button>
+    </div>
+    <details open>
+      <summary>How to play &amp; rules</summary>
+      <p>
+        Place stones on intersections. Surround an opponent group to capture it.
+        Suicide and prohibited repetition are blocked. Pass when there are no
+        useful moves; both players then review dead stones, seki and the score.
+      </p>
+      <p>
+        Chinese uses area scoring and positional superko with a published
+        no-result procedure for exceptional cycles. Japanese 1989 uses
+        territory, prisoners, simple ko and mutual final agreement. Special
+        life-and-death confirmation can require adjudication: an unresolved
+        position is never automatically awarded. AGA uses situational superko,
+        pass stones, White last, area scoring and handicap compensation.
+      </p>
+      <p>
+        Japanese rule examples are still being validated; do not use this app as
+        a tournament referee. Resume play to settle a dispute where the chosen
+        rules permit it.
+      </p>
+      <p>
+        Chinese standard komi: 7.5 points = 3¾ stones. Japanese: 6.5 points.
+        AGA: 7.5-point tournament preset. Handicap / custom komi games are not
+        ranked.
+      </p>
+      <p>
+        Online clocks keep running in the background. A continuous 120-second
+        disconnection forfeits unless the clock expires first. Both
+        disconnected: interrupted, with no winner. Closing an online match
+        deliberately counts as resignation.
+      </p>
+      <p>
+        Local and computer games save privately. Online matches are restored
+        from the server. Keyboard controls apply only while the board is
+        focused. On touch devices, preview a point then confirm; zoom and pan
+        for larger boards.
+      </p>
+      <a href="https://wqwh.weiqi.org.cn/rules/" target="_blank" rel="noopener"
+        >Chinese rules</a
+      >
+      ·
+      <a
+        href="https://www.nihonkiin.or.jp/match/kiyaku/zenbun.htm"
+        target="_blank"
+        rel="noopener"
+        >Japanese 1989</a
+      >
+      ·
+      <a
+        href="https://www.britgo.org/rules/agarules.html"
+        target="_blank"
+        rel="noopener"
+        >AGA rules</a
+      >
+    </details>
+  </dialog>
+</section>

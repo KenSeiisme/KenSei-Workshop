@@ -16,11 +16,17 @@ class PreviewHandler(SimpleHTTPRequestHandler):
             super().log_message(format, *args)
 
 
+class PreviewServer(ThreadingHTTPServer):
+    # 同時載入多個 ES module／多瀏覽器驗收時，避免預設 5 個連線的佇列拒絕請求。
+    request_queue_size = 128
+    daemon_threads = True
+
+
 handler = partial(
     PreviewHandler,
     directory=str(Path(__file__).resolve().parents[1] / "dist"),
 )
-with ThreadingHTTPServer(
+with PreviewServer(
     ("127.0.0.1", int(sys.argv[1]) if len(sys.argv) > 1 else 8769), handler
 ) as server:
     print(f"Local preview: http://127.0.0.1:{server.server_port}", flush=True)

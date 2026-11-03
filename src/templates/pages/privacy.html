@@ -93,7 +93,7 @@
     membership. Removing a member changes channel access and invalidates the old
     invitation. Shared boards remain saved after everyone disconnects; the owner
     can delete them. Unsaved recovery copies stay on this device, isolated by
-    account. Whiteboard and Pong share a two-active-room limit.
+    account. Whiteboard, Pong and Go share a two-active-room limit.
   </p>
   <h2>Recording and QR scanning</h2>
   <p>
@@ -181,6 +181,18 @@
     resumable saves. Leaving, account changes and expired rooms release the
     connection. Supabase handles connection metadata under its own privacy
     policy.
+  </p>
+  <h3>Online Go and public records</h3>
+  <p>
+    Go online matches store the rules, moves, clocks, membership and verified
+    outcome on Supabase. Only match members can read the live position and
+    private move record. Realtime carries version notifications; the server
+    checks each move and settles the result. Standard online human matches
+    publish completed games, wins, losses, draws and win rate under your public
+    Profile. Practice, computer games and single-color training do not enter
+    these statistics. Matchmaking stores a short-lived queue entry. A second tab
+    is read-only until you explicitly take control. Online clocks continue in
+    the background; both-player interruptions never create a winner.
   </p>
   <h2>Your controls</h2>
   <p>

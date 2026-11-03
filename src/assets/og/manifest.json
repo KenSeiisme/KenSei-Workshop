@@ -13,7 +13,7 @@
       "height": 630,
       "bytes": 281127,
       "sha256": "91a5e33c7bb1819d7d560796c3f50444981b0bb7f5df08810b7cfb9833115c76",
-      "sourceHash": "06bf38e5c05781ec60f38364b80571e2fea56847e252bef49aee15f6dd9149b7"
+      "sourceHash": "d6991354e436eeec5cf232a40e086259e882e2fe69e97a52fe7013c701b91645"
     },
     {
       "route": "",
@@ -23,7 +23,7 @@
       "height": 630,
       "bytes": 260608,
       "sha256": "9b5c658e2786998748be9a823c2ffe04a63c066cf8c1fd100273fd7026c45b1c",
-      "sourceHash": "dabce059faca878302703353bc63ba29f8b7552ded7263ba9223467ebf8899a6"
+      "sourceHash": "047c709eff2ff69913dfcf12181d0272bf6a593a4b726d46541b5b65de3211a3"
     },
     {
       "route": "projects",
@@ -33,7 +33,7 @@
       "height": 630,
       "bytes": 258580,
       "sha256": "050804753b309af728b93f6aea4d073768fb4a64b1c68ef91ab0db2a7d42c07f",
-      "sourceHash": "416db2a1c37f66cb3cbb69b4567f889059130bf73a679f248bf5f0a85caecce7"
+      "sourceHash": "57504840cbe7218cb590bba232bb9e03b614215ffaa7f34a3f17a77098490774"
     },
     {
       "route": "projects",
@@ -43,7 +43,7 @@
       "height": 630,
       "bytes": 247768,
       "sha256": "5786de98cddb81580315eea5c5f55aaefe63cacb293280612b3a546078ceec5a",
-      "sourceHash": "3e0a5e2311c15edf30860ea49fdf40c5eaa6bab21a54a1c8f57d4649390d6e12"
+      "sourceHash": "e615922cd62dc750902724d3305ef1e47b097fe33cbbed300329097a7568df6a"
     },
     {
       "route": "tools",
@@ -53,7 +53,7 @@
       "height": 630,
       "bytes": 261242,
       "sha256": "b30fd795ad494189bc647d7f3cf548a9993936e6fa74da3bae033b60a62246bb",
-      "sourceHash": "fead3a7e1f753735de19a13fa8625b379c796e759e9a8130f61533f9b92cab33"
+      "sourceHash": "7a5bcf3a1c6e0801f14545dea97cd3767e8e649ee98ab1ae5bd42bebae60e57b"
     },
     {
       "route": "tools",
@@ -63,7 +63,7 @@
       "height": 630,
       "bytes": 251328,
       "sha256": "09c405f4d16dfb896d3337b9497f48ba32b624890c3e4b9e114986bd64dd4cbb",
-      "sourceHash": "3d2de12fb3ea5f72228cc0a3c72433d1a4fa7826a1171fd60d76a446a6653abe"
+      "sourceHash": "e702ee3e7bb06624400c15add86962d66e54a9a7007668c7b51c53773d86b2a2"
     },
     {
       "route": "tools/image-studio",
@@ -71,9 +71,9 @@
       "file": "en/tools-image-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 267727,
-      "sha256": "c8e0c682336f555cbc2ac76ee4336ed24ef75916c5213bcba54d98338b51f382",
-      "sourceHash": "ef74cfd01b32f9f237e7187dd46b1d02bb5d3d7daf12d83cf0ab33c71e64c1bc"
+      "bytes": 270893,
+      "sha256": "6fb40c683f66c88bbd9cd12cf7104f3a8767d0379b593db9a9853c8a91bb89b6",
+      "sourceHash": "f19a49027f6c757ccca312e933a91aeff2f800d498ac68e5775d725e757ad15d"
     },
     {
       "route": "tools/image-studio",
@@ -81,9 +81,9 @@
       "file": "zh-hant/tools-image-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 254139,
-      "sha256": "c7d551fcfc549b7fd29385a4c05bc4c5b231e99fe13989f00cd4e51239590254",
-      "sourceHash": "b46ccc6a73a23063099166e3e50b73c7d11ae92a6354ec22b48706fbbc3562be"
+      "bytes": 257184,
+      "sha256": "3a5ba7eb0b1ba33afd765c6d3c356f6a7632d98880e4b52d613e22ee6c922450",
+      "sourceHash": "18c4ef063420b8d71d485c66bc477469d8e031498fcedc03eb40e23592459143"
     },
     {
       "route": "tools/qr-studio",
@@ -93,7 +93,7 @@
       "height": 630,
       "bytes": 266139,
       "sha256": "03cd167b002b5af53c6792c2075c6f720cb3fa85ed4fc36ef2c1a93edcaafaeb",
-      "sourceHash": "906667977cc1d8688031eb4cb9c391765faa3c8e54118efaf2888a4574ff3694"
+      "sourceHash": "8fef7831a95eadba03023b189d7091b443fdbc90495cbfbf4dded3c200f0867c"
     },
     {
       "route": "tools/qr-studio",
@@ -103,7 +103,7 @@
       "height": 630,
       "bytes": 255816,
       "sha256": "d7d734598db0f8ed25f934567157bd98d45cda4c3112479cbf0c7f9206e974c4",
-      "sourceHash": "453334f4ee6aa847530105863ff1d245239966100512d9a425816c47ba1b0550"
+      "sourceHash": "b7106dce86752ed27ef8ae8b4e0eaf25c909690c984d12a289a7070112dcb618"
     },
     {
       "route": "tools/pdf-toolkit",
@@ -111,9 +111,9 @@
       "file": "en/tools-pdf-toolkit.png",
       "width": 1200,
       "height": 630,
-      "bytes": 263936,
-      "sha256": "eee316e81a04b91639f5a303bd2b0e35111750d887cbe895922c7aff03b1f1d5",
-      "sourceHash": "42a26e71ffe96b76af69b90e1fae58c1d9c28f66a309d58d4d597715d03a17da"
+      "bytes": 264435,
+      "sha256": "faa504242e3f5c1e2f07b88166c0a64e3bb5db89eff25958722c57f5bd9df466",
+      "sourceHash": "9f101c57359605f967b517f5eeab3b57fde9630b7c8208a9cb43ff506aca894b"
     },
     {
       "route": "tools/pdf-toolkit",
@@ -121,9 +121,9 @@
       "file": "zh-hant/tools-pdf-toolkit.png",
       "width": 1200,
       "height": 630,
-      "bytes": 252504,
-      "sha256": "381dbf3137834188a255bf596d4fefb94ed8fbbddf810d3effecee1123722ff3",
-      "sourceHash": "436d74d7e4d3d898ccd34066ae9eac03b087d723f6e807cb9392bc7f3a9afe5b"
+      "bytes": 255499,
+      "sha256": "c4f1fc5eafe362faad115e43e2de3a1e3a186738ecb92340eae45fb5ef89e428",
+      "sourceHash": "3627ee7c27e0795c6ac764fe5ca7652d1ddb39741f44fdb0719f1d46ab3665c3"
     },
     {
       "route": "tools/text-toolkit",
@@ -133,7 +133,7 @@
       "height": 630,
       "bytes": 255524,
       "sha256": "06b1989c4515ecdfbf9d2cb8ec9ff1ed520fb50e0a8432a8ece7ebd742021a41",
-      "sourceHash": "10c5e35295696bca14bc1024ba8fef15424c4e25b7000541099f1ff1b61209e4"
+      "sourceHash": "28eb3cd486437fad73512fe01bbb3b87625b49d8f00dfe06636e56aa6570f645"
     },
     {
       "route": "tools/text-toolkit",
@@ -143,7 +143,7 @@
       "height": 630,
       "bytes": 250008,
       "sha256": "047f35e2f553ca94a49d59966bc333752fb7221d10db064e5a9b7f69f87cf712",
-      "sourceHash": "4ef40a8a76bd96764bbb8e5c7df35e5d558e9f5313abf49e373da31d22cec93c"
+      "sourceHash": "1e439b0c70f3b299478710e1d2d090dcf6cdedb06f0390123a666defbfa8766c"
     },
     {
       "route": "tools/markdown-studio",
@@ -151,9 +151,9 @@
       "file": "en/tools-markdown-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 267384,
-      "sha256": "3857adc4f8979fcabbc597299691b31f111ea9e6d4a9e91e187412119291eda2",
-      "sourceHash": "873690ea4b7851c24e17c9ef49efd477fcfefc93bc69bae008b1cb89e02a30d2"
+      "bytes": 271066,
+      "sha256": "b29e6b41a7383404ca08f75acd9c5de6c66e40fd36cca7506a380a5654c1dd89",
+      "sourceHash": "5655dad4bc40d370bcab31bad5fa3804bf6b97c1bac84a3b95a2cba89a5f7f47"
     },
     {
       "route": "tools/markdown-studio",
@@ -161,9 +161,9 @@
       "file": "zh-hant/tools-markdown-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 258888,
-      "sha256": "de5046348b00427024792e4551c6de460fe9bdf769ba8855a797c887366ffc56",
-      "sourceHash": "b4c204415f2c5a6b6a1364b5e0eab4e8ef1280337964f1f9a64140b34820fa21"
+      "bytes": 261370,
+      "sha256": "6f52da3d73ab5a3991ee67d40c635493caea7c32964fb9dd0475a1576d90acf8",
+      "sourceHash": "331b9bc13a9b1648a3c795594ff2cb15de8131537dd400af9d06469fe54a0e69"
     },
     {
       "route": "tools/text-compare",
@@ -173,7 +173,7 @@
       "height": 630,
       "bytes": 262963,
       "sha256": "85cf19c77a8617277589267204e24dd6c09185f80083a1a73c6b185a10f09e72",
-      "sourceHash": "c0a85fc9e186d78c94e7b9176fd1aa6e4fd7b77f1a6ebc997f019750bdae1b60"
+      "sourceHash": "1967e4d3d0dda0a03024374b8686bc1c4c1dcc1c69aa920053d7903398cf1b76"
     },
     {
       "route": "tools/text-compare",
@@ -183,7 +183,7 @@
       "height": 630,
       "bytes": 251508,
       "sha256": "f2d949b0a637c05c0100eb149b72dce824508d83f8df1b92d5720bf382b4a01d",
-      "sourceHash": "76f5c2a5563bb3c5b725a72b6e0d983556cdbaf7d32737c95c5fcefa0e82e2a7"
+      "sourceHash": "2078b478c637c7c511dece6cf63476e411301db3889e6cac4863a80a93b5d6c9"
     },
     {
       "route": "tools/image-to-text",
@@ -191,9 +191,9 @@
       "file": "en/tools-image-to-text.png",
       "width": 1200,
       "height": 630,
-      "bytes": 264514,
-      "sha256": "85012d84331cb31f591e5c4ad7f1cc9739f8d92eddcae7800a09816df3a0185f",
-      "sourceHash": "fc95f2a25a6ceadad72674bac08e5d9d15bce1d708f2d6954bda8589c42f3ea8"
+      "bytes": 268647,
+      "sha256": "bb3814f5c18b333f5cef07f0d0e0db7d0ad1d5d89de4873e6cfbe85b6a93d7a7",
+      "sourceHash": "980b04bc254dbea469aa44165843abafd85619c18800bc34062cee3ed1970561"
     },
     {
       "route": "tools/image-to-text",
@@ -201,9 +201,9 @@
       "file": "zh-hant/tools-image-to-text.png",
       "width": 1200,
       "height": 630,
-      "bytes": 252473,
-      "sha256": "abac86b6c6120e3993c7ff83a3adfffc41e8e28484b17e91138880d9be224c60",
-      "sourceHash": "ee05cafd3cb35f3c94bf82d3518207be1a1ec7d2e70834fb1e58094e31d974d2"
+      "bytes": 254380,
+      "sha256": "7ef6d9dc5d447d6ce5390adcbe851d953a2085114cfebfc67c4bd4ad36b82e63",
+      "sourceHash": "9719ebd69b8720d10b4d848fc2a55060bc9aaefadc539d32d35fee4c92856511"
     },
     {
       "route": "tools/focus-timer",
@@ -213,7 +213,7 @@
       "height": 630,
       "bytes": 257510,
       "sha256": "39abddb742f71aa0026cd162f44422e5e6e5b66fa82d181b47a261492c377a24",
-      "sourceHash": "b1b4a7aab9e9ad423fa0a9dec373d3aa908c2d11c7c47182e4f404019b2b53b1"
+      "sourceHash": "cd17a1f6011d3cd8109a13cd16c92279847b3261b64741a3d42fe5369fbb62b6"
     },
     {
       "route": "tools/focus-timer",
@@ -223,7 +223,7 @@
       "height": 630,
       "bytes": 252685,
       "sha256": "3bed0b402b63503907c5d33af22a45d878e8c30c26b81b04e780fbce0cfc5a4e",
-      "sourceHash": "8f844e45641269a6854f7f476e0a0895e639f66471fd596d66b99952968e632b"
+      "sourceHash": "6deee922c318847b8152d706ca0de736e3b17af1ebcd62b87e27d37ea0d69bdb"
     },
     {
       "route": "tools/answer-book",
@@ -233,7 +233,7 @@
       "height": 630,
       "bytes": 268392,
       "sha256": "e1cbcb7e4046322d27a8c56d91c2ae0ed962c86473a21171830a67c2385a2a1a",
-      "sourceHash": "677c012e90aff92a4d471c35870f827d055b0fb7659874aea5d9392fa07c0dd5"
+      "sourceHash": "26da9d4a47d1acd8f63a324130ee5ba84f7c62ca96aa0886497125438dba8121"
     },
     {
       "route": "tools/answer-book",
@@ -243,7 +243,7 @@
       "height": 630,
       "bytes": 254426,
       "sha256": "e6bd76168c211fdd663f4fb044a6da81dee6fe1bb7b3f15e0bfb7ea5b9a6b6af",
-      "sourceHash": "c4651940ea846541e054adf70c0435f70dc134fa1285aaf81f03a0416f6b3b4a"
+      "sourceHash": "55e32fc59914d7c70c54f60794161ada3bc40cc5c0b791ee1e2a0420fb965a0f"
     },
     {
       "route": "tools/decision-studio",
@@ -253,7 +253,7 @@
       "height": 630,
       "bytes": 273509,
       "sha256": "331c03794e80c072cedbf5eeadde0663d7dd1e22d270e9b8267f315db8c9b76e",
-      "sourceHash": "c802692d8c9576ebd7397808d43ef486555effd4dde51d6b730906945ba9b922"
+      "sourceHash": "2afbe0992354093126bb79d6b00efa8b42099772c00ad18ee48e72cd8762d6ce"
     },
     {
       "route": "tools/decision-studio",
@@ -263,7 +263,7 @@
       "height": 630,
       "bytes": 256855,
       "sha256": "ad1dd5d72afd07a657344f36588d3872c945d141a663c175505eb80cc8f8defc",
-      "sourceHash": "185edfaacc0915c4efa97336c933426918d43a8fedd9262524b334cc3581f61d"
+      "sourceHash": "d7e58e51b7b4acc97321a36a180b22c482061987aef128a4be4a482e3f173d6f"
     },
     {
       "route": "tools/typing-sprint",
@@ -273,7 +273,7 @@
       "height": 630,
       "bytes": 267536,
       "sha256": "4459ff6928e980ffe8af77570bfe7895c405076ec22f1b376e85352bd01e7b53",
-      "sourceHash": "16e109eb0543e940877dedd2f7d9fde9a79bfa1191148951a96ea3f898749cee"
+      "sourceHash": "d8a39328f3ecd918dfdb675e17c9bcb0947ec340ac71cc79e60b1a885e398841"
     },
     {
       "route": "tools/typing-sprint",
@@ -283,7 +283,7 @@
       "height": 630,
       "bytes": 253005,
       "sha256": "fb952044029e5e70abe74320c79e79cc7941ba4da972f7940fe9f9b7ad799834",
-      "sourceHash": "719a335148b884ab1b018b859c41d79dbd4cde1548fe5608b83e902ff89d972f"
+      "sourceHash": "7b92fef0bcbd648db7ac33e042f60cdc07bfd7511fe973b5dd54568d087c4fad"
     },
     {
       "route": "tools/device-check",
@@ -293,7 +293,7 @@
       "height": 630,
       "bytes": 265122,
       "sha256": "e9495f23213c07288d3f3376413667c042e99da557ecb342f93d9dc331dfe278",
-      "sourceHash": "2cea058b1fa12d59605501b4bc40101dc721757d31f713adb08974913ef02749"
+      "sourceHash": "663603de3a74983877eb52071f9c6c4cb19fee0dc8685fd6db911a16e3d1236a"
     },
     {
       "route": "tools/device-check",
@@ -303,7 +303,7 @@
       "height": 630,
       "bytes": 255275,
       "sha256": "c38b2dfaf0259469635ad14df5ae74c75f130452b592e4ef0aad83e1ed7cc22a",
-      "sourceHash": "43eb56f07286a43dc7d1ae047b236f63220010478f3d745dcaef7866f7d15671"
+      "sourceHash": "2c7b2384bed53f7c7560d3ec045e9f0a63b33d14267ff8d8de1e5dbe982dc327"
     },
     {
       "route": "tools/network-test",
@@ -313,7 +313,7 @@
       "height": 630,
       "bytes": 263192,
       "sha256": "210fd7fc42f500d984df3591d749aee7db005d800c1d730e4d84e0bed952d1b1",
-      "sourceHash": "d9ca684fb151c615daa88f59141cab223f9525f12da5d54b1deb34537b3cebae"
+      "sourceHash": "e872e87604f1a101652f3f1b6da1421a9b05f75008a8679e0d9327ae1de7958d"
     },
     {
       "route": "tools/network-test",
@@ -323,7 +323,7 @@
       "height": 630,
       "bytes": 259069,
       "sha256": "df8febc25fed3e1e6f956e7a1288efc22b292f684ee3283a119fc9f57fddfb70",
-      "sourceHash": "140dd4b7a50fcc98492cfe7ba6c17d51bf2b514879ca86a3f78f259eaa096d40"
+      "sourceHash": "1b54b62af72d823de38b781c141392300a2378b2e5058040c7e9dbeb966e3a06"
     },
     {
       "route": "tools/zip-studio",
@@ -333,7 +333,7 @@
       "height": 630,
       "bytes": 262610,
       "sha256": "57f010314bc6a1ea785b8c48f1ca64987760b60c5934f07f3cefcc5bcd1209da",
-      "sourceHash": "2db6d8ba48655255d244f4538e12fff4e12fdf6de8f159c1cbb46e82cb9137fe"
+      "sourceHash": "dac4e9acae25df786372f2f14be7da90eac3e15794d4dff13bc5311ef78a333f"
     },
     {
       "route": "tools/zip-studio",
@@ -343,7 +343,7 @@
       "height": 630,
       "bytes": 254020,
       "sha256": "76c36eaca74621dff8fc5ad856fae475b93e30546daf955fa9b1f0516b70f2f8",
-      "sourceHash": "0edae7db77b5765290f2e324e8d44198699dfbf4ad3053bb585fd9c08d5360d2"
+      "sourceHash": "34d719b9f481d25dd596b30e8912c6823ade0f308f802d21a402b78ecec9fb05"
     },
     {
       "route": "tools/color-studio",
@@ -353,7 +353,7 @@
       "height": 630,
       "bytes": 265507,
       "sha256": "31db0c91b6b6fbfda850cb795c3645022c7c733f6f8a7ebe353ce722864c77c2",
-      "sourceHash": "8292e579df8c7b3efd20c6dd1af65fa4fba42f1de6d9fdb7f60f5a5f1e337352"
+      "sourceHash": "d8d71e8d0fee3edd16897b3b6da856ef708c9436ed1e97678e6326c41ee30374"
     },
     {
       "route": "tools/color-studio",
@@ -363,7 +363,7 @@
       "height": 630,
       "bytes": 253352,
       "sha256": "0c1991233bb02486fac01def5f1fa6fb86b97432287dac6f449d4ef66fd3fce7",
-      "sourceHash": "5e9897884a0b690a150e03d5943ba00923fdb96ffb7433871b572bbb8a3e636c"
+      "sourceHash": "e295b89a9b65878853d2a3a9f36a65fc9389355fc9d1ab998908ddb4263212da"
     },
     {
       "route": "tools/unit-converter",
@@ -373,7 +373,7 @@
       "height": 630,
       "bytes": 264042,
       "sha256": "5e11675f30d61b4f1ed52c568d103f2cab0f36ee97c53d0377548f3b1e7bdd56",
-      "sourceHash": "a93fa679b69e22a8417c5120381b958afbc6e473c767d9c838332c5697956c7b"
+      "sourceHash": "781a7bf33ddd5316428e5c7d1c3e46bbfc647d649995d4ec79d23bad4ea17b38"
     },
     {
       "route": "tools/unit-converter",
@@ -383,7 +383,7 @@
       "height": 630,
       "bytes": 251484,
       "sha256": "da01f78408331289885a7e5185f3aafe161448795c2cfb52daa493096a1a26d8",
-      "sourceHash": "6e53ec9313d485c452dcd34a5a7a6363bfdabcaefad2dd51dd316b11140a741e"
+      "sourceHash": "48293738ab26acbfaefd216b7620cf29515ab2deee052f247a769c4b37ea1df5"
     },
     {
       "route": "tools/password-generator",
@@ -393,7 +393,7 @@
       "height": 630,
       "bytes": 270556,
       "sha256": "52ac5fc7496bc7be1a13d16a5526310e5ea561c2cca94d7d99c187f8c910d010",
-      "sourceHash": "69dfd192364e6d2ff95358b2f387178f790d65cc9b41b3fd0fb724481df00846"
+      "sourceHash": "98e32554b6d3c5a1f665756b9a6de245502aeba1a9cd893718f62572bfc08b72"
     },
     {
       "route": "tools/password-generator",
@@ -403,7 +403,7 @@
       "height": 630,
       "bytes": 253716,
       "sha256": "4ec1a95f5f8329571e9d1fa62f60d525fb61f449e59649a584254f515716d175",
-      "sourceHash": "2d618d9d50f16c5e0de3bc15673de102d23d75e4ccb630034238554e82438c03"
+      "sourceHash": "89a1bb4a03f77c0b540091d8f85d28530e4cfde421e6def222722cee8f6966d6"
     },
     {
       "route": "tools/time-studio",
@@ -413,7 +413,7 @@
       "height": 630,
       "bytes": 264647,
       "sha256": "a9585558de0b02095bd23ebe54ae6bd057a03ff54415410d7a7b9928db95e85f",
-      "sourceHash": "78cb2902a266eb017daee60caadc5953d3ac1573207c54be65b9f8a68d47d65e"
+      "sourceHash": "27f3effce6f92af0101e6522d1d3a9d32d6170d6eb14c15cabafa92757692d10"
     },
     {
       "route": "tools/time-studio",
@@ -423,7 +423,7 @@
       "height": 630,
       "bytes": 250810,
       "sha256": "09d176ef95ebb0ca5ef263294ef95342cbb2bf9fefec49f8c93d498d06190137",
-      "sourceHash": "e23fced39e09580dde8a092d7f92126506c0175ede0247b2563c2da87ab25b99"
+      "sourceHash": "feb814b934106c2ac41ecb6ac3164c8cee67ed9a279a50f6aa9b1ce0e7d9216f"
     },
     {
       "route": "tools/file-renamer",
@@ -433,7 +433,7 @@
       "height": 630,
       "bytes": 264318,
       "sha256": "d2328b44fa09bd559aedd4229f5ca7d575ad44d2a8b586c1a27c15ebf1ba5433",
-      "sourceHash": "7b690f5fba49b6eba654871a4b72abec9560bb710bfad22bc342b34128fa0674"
+      "sourceHash": "62429a9b2e716a9a717aa3d78b28d84c3cd230e0103fc24c153fcf09fad4859b"
     },
     {
       "route": "tools/file-renamer",
@@ -443,7 +443,7 @@
       "height": 630,
       "bytes": 259182,
       "sha256": "5c699c6c47cf8303105590ae3dbe9696f001863a23da9717f8f5db08ddc5e8bd",
-      "sourceHash": "d4dedc6eab5352a363f87a550f3c870ddde0fd05a3fa8a2f9fdb810a492877a5"
+      "sourceHash": "af7d75236f5a386dd602aca70196ee42d021bbf41c2487373de6ef50b5e6517e"
     },
     {
       "route": "tools/audio-studio",
@@ -451,9 +451,9 @@
       "file": "en/tools-audio-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 263834,
-      "sha256": "aa396d0bfbd05604a0103023fa72d46a77e0c0dbe040bf1637081d9aeab7bf14",
-      "sourceHash": "1c204c71e8641a9ed2db3d18157d65a6b52e375dde4cfe9e6867ef69bbaca62d"
+      "bytes": 265927,
+      "sha256": "0f6fa28bcc6e5514dd68bcfb5e2dfe7be77326cb935f83e9aed829ef024a82eb",
+      "sourceHash": "3c86118351bbde1c01ff3d59d37afc59472c9ec38c6ebfe69f4f171e8647f496"
     },
     {
       "route": "tools/audio-studio",
@@ -461,9 +461,9 @@
       "file": "zh-hant/tools-audio-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 252698,
-      "sha256": "baba6a6daa2a38c0e7ee82a42bee4acd2c88a866868b4483aea03685d96872ea",
-      "sourceHash": "05aab6f8d03a8c025264a3461939c1bdf21bcc291a15390d6faebeed6dd3f596"
+      "bytes": 255643,
+      "sha256": "159cced2dd53f4de7c9fafdfc16d984a8550e1c027a90233d47ed722565f4a42",
+      "sourceHash": "36ac1105bf18a458475b699c39edfe30f8bed1d6fb9f3ed9b70d100e3d72b061"
     },
     {
       "route": "tools/data-studio",
@@ -471,9 +471,9 @@
       "file": "en/tools-data-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 267749,
-      "sha256": "c6910689723a7bca876e91fba4a4c80bfff00b53dec844afc95c300b5f424f91",
-      "sourceHash": "751ca243504ba853aa15fe2280e1974ae63d7c2272b94565aaccbbb08a10d26c"
+      "bytes": 266578,
+      "sha256": "3d2ee51e71ee6cdaa32fedfce9d548714a56e61e0d2c7f2265113d5458c4cb07",
+      "sourceHash": "cbb6906d62dcc7aad22d34dcb8f4c1aaf0082da78d66d458a68625bb8563fdba"
     },
     {
       "route": "tools/data-studio",
@@ -481,9 +481,9 @@
       "file": "zh-hant/tools-data-studio.png",
       "width": 1200,
       "height": 630,
-      "bytes": 261073,
-      "sha256": "cd6877afdcc3d226d4e2753769176b2b3a36619c8841e129d7fbfc0f86a5f69f",
-      "sourceHash": "576cbbe2b6eb182458ec584bc274d8ee1a206a6e0f37262a54b98ce567292032"
+      "bytes": 261881,
+      "sha256": "e722131ddec936afe283aa8d304a174bd9f2b99fa95ca175ce6862bc76fb8fc3",
+      "sourceHash": "8c392ca989436e26c775553b92dd777dc3a08623bc2ea996a7a9cdbc4484e1dd"
     },
     {
       "route": "tools/flashcards",
@@ -493,7 +493,7 @@
       "height": 630,
       "bytes": 268191,
       "sha256": "0a22ecadab864cafc298cc15fb281c0cc461e76a1ddc2705def6f5722697f81a",
-      "sourceHash": "da37647e521e7cef7942c0a5368dc7578fdb3ba6d0c4865e1a9ff4971d9e3909"
+      "sourceHash": "85d3c0c65b0bc0ab8c9009a34f49fcb495d7ed746aa914cda6ca6944ce8d598b"
     },
     {
       "route": "tools/flashcards",
@@ -503,7 +503,7 @@
       "height": 630,
       "bytes": 253488,
       "sha256": "ae3672c42659cc52b078425cd5d94c2d104adb4201c728089cb612d97e0bd391",
-      "sourceHash": "e5a9dfef8930094e1c7e6da1a1c834875ee087bc8ce980a59a8123d7d9f160e2"
+      "sourceHash": "abf78f6d5d7fd01389ce170df2a036670bc6567ef733a960b607f4ed93862184"
     },
     {
       "route": "tools/calculator-studio",
@@ -513,7 +513,7 @@
       "height": 630,
       "bytes": 270681,
       "sha256": "8649d08e7b15085240702228d2eeef6a0bfa3cda1f28d992d2d72d9cbc8039c1",
-      "sourceHash": "7149c4cc8eb3f929cd97eb2e23595fc1cbb5148b120c3cb43157a0ac380f3420"
+      "sourceHash": "1460dafbf7265ed9305d9322e3a17c1ad710094705a286215c8f899b3439e34b"
     },
     {
       "route": "tools/calculator-studio",
@@ -523,7 +523,7 @@
       "height": 630,
       "bytes": 259368,
       "sha256": "bc05c08cf6f4153822686d7b6a589e486ad9bdd1daace9f4d75c8239b42a1cf8",
-      "sourceHash": "e29c33495a4cf1550e07d7a765999975a270b12b8585bfee294c12afdc847c33"
+      "sourceHash": "fa75a21c6d9f434285627bc052463445c8fff5552afde4bb1174a0391f97de77"
     },
     {
       "route": "tools/file-check",
@@ -533,7 +533,7 @@
       "height": 630,
       "bytes": 263573,
       "sha256": "71f600b91cc548cf27251670c158a5dffd7acfe66f6401236c922cda41d7307e",
-      "sourceHash": "7cada4b52cffbfd25c9d48985ae1999ea0f1f748dcce3d2f9f1891e07b346bb1"
+      "sourceHash": "dee77a2ad7a3c1cb206b62d4418a456c47e48f62c90236a155943ef3ceac7393"
     },
     {
       "route": "tools/file-check",
@@ -543,7 +543,7 @@
       "height": 630,
       "bytes": 260591,
       "sha256": "5053f1ed0e76ddf81826f648e6f1d1e7c8e30aeff110918d78660d04fbe08422",
-      "sourceHash": "36b3291cd351bf9158fd686b8308497c7f77910fa08d6b4671bce0e334f79851"
+      "sourceHash": "dede2fb1422dc9c2860cc5384f6f54b435cc24625c9276738b231109eac200ba"
     },
     {
       "route": "tools/subtitle-studio",
@@ -553,7 +553,7 @@
       "height": 630,
       "bytes": 262686,
       "sha256": "bf7fbd317125d123d01f87810ebfa38ad058645b54f25db8a160ff9f55a32f5a",
-      "sourceHash": "026ac6bbd8ec57a85da28384c08acdf6b6f58259000f74ab0d7e8fe4ddd015ae"
+      "sourceHash": "7dd71ef14cde1592bb02ccd5d1bd4310511d1b965260b47b58129c96534b83cf"
     },
     {
       "route": "tools/subtitle-studio",
@@ -563,7 +563,7 @@
       "height": 630,
       "bytes": 251461,
       "sha256": "8199e7763e33e4aa92aca5e8c568d560184bddf3e71d4256afb5566378219f30",
-      "sourceHash": "cf6185c7d7670657a74f8a04416325f4297a06908666943401d33054cc8d0703"
+      "sourceHash": "0c7a78d681e57bc4a304f11ef1c81863bdd9c6567921c741b3fe4d03279d84cc"
     },
     {
       "route": "tools/study-planner",
@@ -573,7 +573,7 @@
       "height": 630,
       "bytes": 264284,
       "sha256": "412e9a563d4f97f693244a9c7eaab617e2d0c0295775795d89c8945f836defc8",
-      "sourceHash": "9e124f6b8325b6561a60d619c3e7e5aa1f4deefe948effbc5ce32e517f5ee22b"
+      "sourceHash": "47bf356a225a506db1b11e86575b3bfe26a13a0e90686780b97bec8a92d73cbc"
     },
     {
       "route": "tools/study-planner",
@@ -583,7 +583,7 @@
       "height": 630,
       "bytes": 253353,
       "sha256": "3853c4ff932ea11c370939675ea7f14f156f63030da2719175d9c65d64de41d2",
-      "sourceHash": "cf5454e0abb31c0b9fe01e47b2c6fb00cdf7239eb189dc05bb54b161e7bd9d1e"
+      "sourceHash": "6c586ed79e4b9c4b59d343d985c6d7e9097c90f278ff5bbcbdd2faebfb51cdd5"
     },
     {
       "route": "tools/whiteboard",
@@ -593,7 +593,7 @@
       "height": 630,
       "bytes": 265416,
       "sha256": "e85522d25847cc587836be81bb206d261981224e2886d511d01c40fb652f2c6f",
-      "sourceHash": "14a21318ac2b3be44264cb5c82e058120727b1c10f5de6dff79e02aef985f5bb"
+      "sourceHash": "347c30389e8bd7d0aade7d14d748338f9436e8777924122857d8ad771947f949"
     },
     {
       "route": "tools/whiteboard",
@@ -603,7 +603,7 @@
       "height": 630,
       "bytes": 251878,
       "sha256": "986f67086d06178b54b8fdff9c8372cb64b25d44672e86de3777f820ad15021b",
-      "sourceHash": "d2a929607d84ea4e8a4826cf417cc3536ec2e785560b0bc3e6f5daf1cdf0756d"
+      "sourceHash": "70d919088aa513e3c7c20854c53526b38f43b5bc8f20136275a3dbba898dff92"
     },
     {
       "route": "tools/screen-recorder",
@@ -613,7 +613,7 @@
       "height": 630,
       "bytes": 266808,
       "sha256": "65ff4b141dfa1718a582bf2a53d8339d7ca56b1edb428d6441d1f6364935a0ee",
-      "sourceHash": "b1a4786307c65d33d4d6766468b95f3f0a4151f109b0d1d77ee371392f929497"
+      "sourceHash": "0f8284243a008f6a3df51c5c8866b296cea8bd20b025cd01461f4b4197154922"
     },
     {
       "route": "tools/screen-recorder",
@@ -623,7 +623,27 @@
       "height": 630,
       "bytes": 256963,
       "sha256": "9805f45214bdce8ec4658421fb57b14eac8e5324cc8113bb19ef517856dc7a76",
-      "sourceHash": "c6f63d91afdcf350d6cc50fc5dc485486eae51c0456d1cf3fad07778c4ebc514"
+      "sourceHash": "63c545db3452740c55b0ceef5be9488564305d41b4eff7787ef3aec73c7726a6"
+    },
+    {
+      "route": "projects/kensei-studio",
+      "locale": "en",
+      "file": "en/projects-kensei-studio.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 264274,
+      "sha256": "31ebffd3a1835199da1ff86ee398a02a52400e66a3fa742cb97367b84f4c5782",
+      "sourceHash": "fb61ea04d3a057aed6ca1290df326c66027d30de6aae452acc6cbfefe398c185"
+    },
+    {
+      "route": "projects/kensei-studio",
+      "locale": "zh-Hant",
+      "file": "zh-hant/projects-kensei-studio.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 256551,
+      "sha256": "fa279dde15024cd9fdeeba8ce4bbe7e80067c26347eb3f2014c0f261976208e7",
+      "sourceHash": "bf9070be2cbd16caa585f675e145b9b07a6c881fc704024e38627dbc9185e01e"
     },
     {
       "route": "projects/3a3d",
@@ -633,7 +653,7 @@
       "height": 630,
       "bytes": 262358,
       "sha256": "bc30ce647d1a7682185ddcdb02b1bca343de90d4ec81c2299fd2cc88b38d32fb",
-      "sourceHash": "8bd0a5d0d22f53c2498df33e3d8c8af14633ea005813a13c63dcd4f9e2d813e4"
+      "sourceHash": "f8dc46050538f65db351af50bdce645cde9abd7acae397cb82fef5b4d0a9ee80"
     },
     {
       "route": "projects/3a3d",
@@ -643,7 +663,7 @@
       "height": 630,
       "bytes": 251211,
       "sha256": "26b7626c4e214ad299c21143b87876ca085bbf841cb9e24976a70bbba3d5b888",
-      "sourceHash": "b43f25e72a2325c6f05a99a3c71f8d02b968a6e35fbe4258bf4c1d6131de6447"
+      "sourceHash": "0f925d391a2c28b82e7ae82af5fb6993d022ca4b6b0710f60e164073eea12b0b"
     },
     {
       "route": "projects/salon-system",
@@ -653,7 +673,7 @@
       "height": 630,
       "bytes": 273906,
       "sha256": "d664e18394f2ad39c26d7751b54d965cb5a160c0e82553047e1548f3ee597612",
-      "sourceHash": "ad51f3865e173dfa0cfc3dc8415a3f138ab2cd2c512563a429f8e4315026b6fd"
+      "sourceHash": "0fe5c8f18a6477ff2be6f8e94c5f7a6c77887399b71351cd84e63620c009dad4"
     },
     {
       "route": "projects/salon-system",
@@ -663,7 +683,7 @@
       "height": 630,
       "bytes": 260292,
       "sha256": "0c520fad8c5d2cd639ec989f74cf529d300346023ca530fd327bd0e1755600ff",
-      "sourceHash": "c00a9b51420c8322e570dcfb85ddc44aeb15affa9f15182ff9f4686f6426d375"
+      "sourceHash": "ce6e7d25ffddf3ca97262792aad84182d2aeec8850e5f64f08429b6fe4ea8310"
     },
     {
       "route": "projects/ai-art",
@@ -673,7 +693,7 @@
       "height": 630,
       "bytes": 260975,
       "sha256": "a3725837c1b93bab2db3afe24b2501580e081101ad2c96b4baa0530a2de5d620",
-      "sourceHash": "e0a5d4cd930cb8acec55b9a0555842e1f1adf51196ca412a83f2cde2d825545e"
+      "sourceHash": "fc8d60f380ad2d8495f08a3783dda52f569717e71a1ae869d26a14b9da368cc4"
     },
     {
       "route": "projects/ai-art",
@@ -683,7 +703,7 @@
       "height": 630,
       "bytes": 255684,
       "sha256": "79304ec93f3f429db638684f9eb9f298515e238087f94806eb1303a6adcc4484",
-      "sourceHash": "c63d0d160356478035b0a67e1c8ef7911c7488e5aa3633fc33356f57bf4ef108"
+      "sourceHash": "960dd9315066144cc3f11944ffd7fdba3e4e821d0be951d832710566c73e58d6"
     },
     {
       "route": "privacy",
@@ -693,7 +713,7 @@
       "height": 630,
       "bytes": 266732,
       "sha256": "935ae5e2c984ddcabdfd7c3e991e7a7528852e17dfd36ca462df693856d3b4b3",
-      "sourceHash": "9ab12f307a19c7f9d062e8e3b6701606bf5a3e0fa93befe47c20d1c02384830c"
+      "sourceHash": "9f0aeac741426c68e6fa22dba691399c6b096879577dc63bc2b38479b528fdd4"
     },
     {
       "route": "privacy",
@@ -703,7 +723,7 @@
       "height": 630,
       "bytes": 263497,
       "sha256": "7e054975c918211dceb22533c9b81c23bad5171be417e00d0852d00bcf7fd106",
-      "sourceHash": "17dd998cd9097cddbfd710f2bfb987f55ef4384397dda92e39253260a0d18ccd"
+      "sourceHash": "628626896d58cbae8c1edc5d5af45ca00f91b77648c3b0f57a758790f9f9ba0f"
     },
     {
       "route": "credits",
@@ -713,7 +733,7 @@
       "height": 630,
       "bytes": 268777,
       "sha256": "0e214438fd29da27a56bb265abedb60f9807cd0d3b48f09196e840bfc102ee57",
-      "sourceHash": "f72168f37968dfd141584cb2c9984315dee7b6f69914f284d46ddbfc722b566a"
+      "sourceHash": "9d2e78fff8f535c6ba62fba4c6775110c2d750d3ba857d495e322999d4ee6555"
     },
     {
       "route": "credits",
@@ -723,7 +743,7 @@
       "height": 630,
       "bytes": 258936,
       "sha256": "e6f878f6d0370126e8e25fc4a0bb57cd51f72eb0d98aff186ad48b587d13ff08",
-      "sourceHash": "172b355ebca5ed7e7d948c6c17186ce61406bcff62b6d0ae186a8bd961a7e4fa"
+      "sourceHash": "33a03f7182a39568c5493e7848cc23b09e9a69657caaec6c7b4441133e93d940"
     },
     {
       "route": "games",
@@ -731,9 +751,9 @@
       "file": "en/games.png",
       "width": 1200,
       "height": 630,
-      "bytes": 265026,
-      "sha256": "75ade656d2cc988191c0684a4f117a117dbf2715e27c28106c2a3af015da59cd",
-      "sourceHash": "6fa1e290b3ac80eec5c91ed8d9a7b509c5d8c31f5a5a53cd99fbc245edb2b09d"
+      "bytes": 264173,
+      "sha256": "df86d00d5f1d7cac2ec0d8c5705a94323e06c19d09f749197db1b281b2f4ab09",
+      "sourceHash": "244b3552948867dc6bc205addf37240bb851f86f6d0490d40c38403f2148c28c"
     },
     {
       "route": "games",
@@ -741,9 +761,9 @@
       "file": "zh-hant/games.png",
       "width": 1200,
       "height": 630,
-      "bytes": 260164,
-      "sha256": "f6d4b2609a2eda064812272fe004ab578433be0b37a71ee0fecbf9c1496580f4",
-      "sourceHash": "695149aa5c75db4aa7b68ffdaaac8c4ea623d992ab038788bccb1f4ed8cb5996"
+      "bytes": 259327,
+      "sha256": "3b620e2066e31a24fe7d18ae402609a6f37ada94646c27ecf8e45a5bd86c549d",
+      "sourceHash": "961888b8be29f1c443f9e59fe70bc2f77e8cfdc14fb4c0d5b454c54a6278627e"
     },
     {
       "route": "games/2048",
@@ -753,7 +773,7 @@
       "height": 630,
       "bytes": 255673,
       "sha256": "0422ce9c9a7517a602818a9607d3e89b2f052cae5048c70d00f14348d40f356c",
-      "sourceHash": "97447868a09046d6772d68fa61f7086777da087c967d2e7fb3d72bd4e02a923c"
+      "sourceHash": "a10aa8de04c24a8bf2912441f0b2b31fe9b2b2222708565af8f1c3009b8b1aeb"
     },
     {
       "route": "games/2048",
@@ -763,7 +783,7 @@
       "height": 630,
       "bytes": 249170,
       "sha256": "1924afe5ef40d955fbb31d5b5c20b74fb9d0e6421644e93cd34fc997985342bf",
-      "sourceHash": "70cb184a65a0f55bcaa1e81d8abdd7b48215162966ceab82bf43e9bfc7ab2d94"
+      "sourceHash": "ff1bf39d986432117f1e9ff1ef0f38bcdc10344e105851a35006ac0f2e90388e"
     },
     {
       "route": "games/minesweeper",
@@ -773,7 +793,7 @@
       "height": 630,
       "bytes": 257783,
       "sha256": "980dda715f849c3d11762bfe5c90c9dee520470dc90944eb29d58a564a7e7e99",
-      "sourceHash": "64e7bef42ca373d1d2b06121a1158baa4a2c4851ccec5decef3088857313dbdf"
+      "sourceHash": "2b24be04e230a2ec4e17da0681b70406f78afdc542b25f6992994753c1c74f87"
     },
     {
       "route": "games/minesweeper",
@@ -783,7 +803,7 @@
       "height": 630,
       "bytes": 245308,
       "sha256": "225f577dbc25315c8d07004ba5c4f4cf59eee958595a6883992d66e70ea76541",
-      "sourceHash": "96b558a4b564224bc950a482fcfe1db585c3607849d94ce30be2e3ab94961e7e"
+      "sourceHash": "293bcf632398c1b200963f4ab479a2b850868698296c34481a3948debe842426"
     },
     {
       "route": "games/snake",
@@ -793,7 +813,7 @@
       "height": 630,
       "bytes": 248711,
       "sha256": "5f66265afae1dc7bd72ce1cc8ea1617f3a2371c6af53f363979660c7daa8c40d",
-      "sourceHash": "a05deb4c74c11137897bfcc5a3903b8303dc6d9f71ffa987cb59dd60c4d2ffe2"
+      "sourceHash": "20f96e783082efe23b1c4797ea10a4d789cf60fed7cd3d49f2564f1d97faedb3"
     },
     {
       "route": "games/snake",
@@ -803,7 +823,7 @@
       "height": 630,
       "bytes": 244787,
       "sha256": "6a7b305c3706bd4a6bfc33dd331e8b4a1a44eb62f4e8a21f72133e4328ea1c94",
-      "sourceHash": "d2940504097ea99368989b642e10af9e346005f60de8ac310a4f23acdd2e35ec"
+      "sourceHash": "48839311c5056ffd61ac27e8119f0cd5af081ecf31fb3c39b6d01d613998934b"
     },
     {
       "route": "games/memory-match",
@@ -813,7 +833,7 @@
       "height": 630,
       "bytes": 258511,
       "sha256": "41f60155149655c1a71bb8fc2177bf36ee6551eed32d0c0cb66a2690b7c57bd8",
-      "sourceHash": "9ffd2c2198c34cbc4ea346f7fa1999a8c9af7906f64d155e7c34bc80f1eca072"
+      "sourceHash": "8d460c7fc0055b606787df4cc6f581f2c144a7456bfb5f471c0b029129350af3"
     },
     {
       "route": "games/memory-match",
@@ -823,7 +843,7 @@
       "height": 630,
       "bytes": 253948,
       "sha256": "9dd10b7276d101f7205b921bc994794c76460a79b75291279f3a1502f3c74376",
-      "sourceHash": "ab5851fa398592e5fe4e0320fc292b4ad07fd121270868af5a2defe2c0eed127"
+      "sourceHash": "7e3b136a5ad52001b89df4f280521c85c8950cc8c0be3a720610cb5d6c3293c2"
     },
     {
       "route": "games/sudoku",
@@ -833,7 +853,7 @@
       "height": 630,
       "bytes": 260311,
       "sha256": "f3b228dbcca445f61948c0d9dec03697ad968aa25eb319ae48068d9be85fbf76",
-      "sourceHash": "6a2aa6e8d5f90920857cafaf9121534e880336f4ce019e70dd7c193fbbf3644c"
+      "sourceHash": "2df9dfdc72b69aba7532c86fda0820afccae4a332e9efabe06191c8ad1ce1c64"
     },
     {
       "route": "games/sudoku",
@@ -843,7 +863,7 @@
       "height": 630,
       "bytes": 255799,
       "sha256": "0efd2aa71b249302212dd93e7fe514052850700efba68313f4f4052f1e68c042",
-      "sourceHash": "6e1a0502046d776b037b0916320a7ceaef0c9843acfbe61aa9727f2343227110"
+      "sourceHash": "208c72894ba1131edd286e4f5b7d0cf2ff308fd65c7d22cc8baffb1dcd4e26d3"
     },
     {
       "route": "games/nonogram",
@@ -853,7 +873,7 @@
       "height": 630,
       "bytes": 259034,
       "sha256": "b7b13716d77d6820063ac24e2e430cf611fd3774b5cdd7430c3a48549712063c",
-      "sourceHash": "c82fb33dc44937ee360adfa563b6c7e444a87294b796ebe8af8982e374bb061f"
+      "sourceHash": "3a2c92b91ea593f33f8636d227024efaf763df557a4e2b300f07d690b334ef5e"
     },
     {
       "route": "games/nonogram",
@@ -863,7 +883,7 @@
       "height": 630,
       "bytes": 255628,
       "sha256": "cb1939f843feb5f630750600bfdc02fe478f62123897001d2412b044a1b4b441",
-      "sourceHash": "bfb1a175c39674ea11db3f045d9694237ddf34a21167fad2b3b9ccc40267c6ab"
+      "sourceHash": "079136eceeacdbadd6a0c55a819de1125b0c8b9a7add14406d273d208a66e0f9"
     },
     {
       "route": "games/block-puzzle",
@@ -873,7 +893,7 @@
       "height": 630,
       "bytes": 257142,
       "sha256": "bdca18075ac84916d83ac37d8454b9e71920e34cd82c204b74277571907af12e",
-      "sourceHash": "ff0d9e3a482aaaaab81b523ee6188ec0840c883e28e591e7173945a6d1098126"
+      "sourceHash": "bec42b48226e3f2018039495641b8cfebbc7c500e6e59409adb8d6516ddf5f75"
     },
     {
       "route": "games/block-puzzle",
@@ -883,7 +903,7 @@
       "height": 630,
       "bytes": 251245,
       "sha256": "fa98d08170211c5084d584627b3f40d2f6df49bd59a17eca2eeca29a41ec0a3c",
-      "sourceHash": "236a5510a72a8d36558dd98539c5c0876ff81a5770be7999041ad32d70aae529"
+      "sourceHash": "2c08e245888890e976fce4303ed25fcfcef96d047a60e13c107038ec25f4fe96"
     },
     {
       "route": "games/brick-breaker",
@@ -893,7 +913,7 @@
       "height": 630,
       "bytes": 258573,
       "sha256": "f20b00de2ffe734aca2dbd4bbb8373c9a3b28c725531fe9a8e8ccb077a07da20",
-      "sourceHash": "bd518b3fb93ee093c23f8260e6ddff06250c7bf6deb19a9513fd0323e9a2bbda"
+      "sourceHash": "9f18386a3f0f2a5b5cdcafed2f8e9a11ca1e0c2ce821a5634b084b5ec3c19568"
     },
     {
       "route": "games/brick-breaker",
@@ -903,7 +923,7 @@
       "height": 630,
       "bytes": 248343,
       "sha256": "079a373f7f48dc9550461acdacad346ee762c5f727cc628fdf67e8118213a894",
-      "sourceHash": "aa7d17e796c50a11deb1a7a0fcf66de00f44bb279867e7948e52541e94296ac1"
+      "sourceHash": "dfc4f3c6f25999212314c8b9c68049be33cc4654f4d96cc817b57251e981d240"
     },
     {
       "route": "games/connect-four",
@@ -913,7 +933,7 @@
       "height": 630,
       "bytes": 258973,
       "sha256": "13384b37a295b2cb7bcbfc46ec1478113c65f141c2e4823db35a33d5e5bb8c53",
-      "sourceHash": "b5c37909d04e13d600017a3b6571e2ec7cfd65eb148333d8c2c45dd53a339073"
+      "sourceHash": "2c197feb152444f3c04ccd04f9ac68b0f412008cccf10aa0cfdc63ac16eac04f"
     },
     {
       "route": "games/connect-four",
@@ -923,7 +943,7 @@
       "height": 630,
       "bytes": 249641,
       "sha256": "66754d1b6f51412279df249fa626bdbb9d8745859fb7368e86043ac10bb1cb42",
-      "sourceHash": "3f11771b6759f5ff144167f1e1d971d5a4a27258b83c87f0f06716435876f8c2"
+      "sourceHash": "33567fd2b80176b3062ae644c7c2fbe5652065774916575e53265dd00e570d87"
     },
     {
       "route": "games/reversi",
@@ -933,7 +953,7 @@
       "height": 630,
       "bytes": 257304,
       "sha256": "d7c1408c000496269d87ea9337ea07ae3ff47a9f56b3da5fdfde23008d448db1",
-      "sourceHash": "ca5baa3dc446f7691c0e036a7633a66d77d59ddfd32bd4bfbbba1d4a02d49043"
+      "sourceHash": "5f9ddfd6df1d29cc0332306b5965210f7d9d45c74cd92b8a5c4b53da92f4687f"
     },
     {
       "route": "games/reversi",
@@ -943,7 +963,7 @@
       "height": 630,
       "bytes": 248515,
       "sha256": "1b051296f85dd4b8c843eca5584846b20f62ef58a116db7faa740342005b42e3",
-      "sourceHash": "14512086d8ef9ed287b8b35e536e5cac98c9cc734a93e1a1210c1c26a78efe14"
+      "sourceHash": "32b599919848f025cd3bf36d1e568aed7a2a2aec67ca60b5462601e5133064b0"
     },
     {
       "route": "games/block-drop",
@@ -953,7 +973,7 @@
       "height": 630,
       "bytes": 260088,
       "sha256": "9009dfb605cf9c12a05674b94de2653b832b8a7e71a3a36d1d8564c19ee44875",
-      "sourceHash": "26626a39b2179f7c13abdb93c721bb19d867f73ad6405da1194f5af9b0aa1afc"
+      "sourceHash": "2863f33e76610797b39760f33485e8615cc4453fdd52f3df020098ef7ca1faf9"
     },
     {
       "route": "games/block-drop",
@@ -963,7 +983,27 @@
       "height": 630,
       "bytes": 253738,
       "sha256": "19add2f8f1ac895c1a2aeb571090caa378ee9db51f5b296d482dd651e8d22e47",
-      "sourceHash": "6a5c3f84f2def0dfb2fd3e081078d2758d2ee24dd385e20c8de3990a8eae2332"
+      "sourceHash": "6cda5bb23e470b33ec234622f670163051f32281deb941feedde4b1bd5ebd7c2"
+    },
+    {
+      "route": "games/go",
+      "locale": "en",
+      "file": "en/games-go.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 261664,
+      "sha256": "e848ad2535aab262feeff3d266a3e7d0036e0a89f1d9a312bbaaddb6e653359f",
+      "sourceHash": "3c123761ca0dc7bc9693143b4eb1916f4d2c9e9f148f96da0bfda0205d1dd7ac"
+    },
+    {
+      "route": "games/go",
+      "locale": "zh-Hant",
+      "file": "zh-hant/games-go.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 256952,
+      "sha256": "4758cd205af71f7b39cabc7f9732c367ed1c9651e52eeae9e0771ead8f355f0b",
+      "sourceHash": "b25c7cefe09eaaa03a3320a956559201593c8486f525684a2ea460dee957fc61"
     },
     {
       "route": "games/pong",
@@ -973,7 +1013,7 @@
       "height": 630,
       "bytes": 250681,
       "sha256": "9e08f618c574ebd7d9bff8baa0513b53bea8ce9d8b87edcc403e3dd993bb80e0",
-      "sourceHash": "17cfc4c31162864a29fa1a67cf5b2c38c5c43cc7c6ce71ace934efc3f818de92"
+      "sourceHash": "6d3098ac1219fe74c84d53c8de5735cf12974a9d0d1ffc64766c517dcf7ec2b7"
     },
     {
       "route": "games/pong",
@@ -983,7 +1023,7 @@
       "height": 630,
       "bytes": 254544,
       "sha256": "68c938564a0dfe9af521fb4c64a8fb99e0c2d56106a4e9ed8b0abe95976a626f",
-      "sourceHash": "b9964e905e58ffe3fc31d2c9d76ef3b570ca45ea3566ffff33a096e337bee97f"
+      "sourceHash": "6d65c305b19bea4a657489358544d8fb93815c90eb42b131cc96180af540c2da"
     }
   ]
 }

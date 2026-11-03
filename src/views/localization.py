@@ -55,8 +55,8 @@ COMMON = {
     "games": (
         {"en": "Games", "zh-Hant": "遊戲"},
         {
-            "en": "Play 12 browser games with local saves and verified leaderboards for eligible signed-in runs.",
-            "zh-Hant": "暢玩 12 款瀏覽器遊戲，支援本機存檔，合資格的登入對局可加入已驗證排行榜。",
+            "en": "Play 13 browser games with local saves, verified leaderboards and online Go matches.",
+            "zh-Hant": "暢玩 13 款瀏覽器遊戲，支援本機存檔、已驗證排行榜與線上圍棋對局。",
         },
     ),
     "projects": (
@@ -268,6 +268,8 @@ def styles(route):
             files.append("board-games.css")
         if route.startswith("games/"):
             files.append("game-play-shell.css")
+        if slug == "go":
+            files.append("go.css")
     return files
 
 
@@ -300,7 +302,9 @@ def source_files(route):
         files.add("src/tools/profile.js")
     if route == "games" or route.startswith("games/"):
         files.add(
-            "src/games/pong.js" if route == "games/pong" else "src/games/games.js"
+            "src/games/go.js"
+            if route == "games/go"
+            else "src/games/pong.js" if route == "games/pong" else "src/games/games.js"
         )
     if route.startswith("tools/"):
         advanced = "src/tools/advanced-" + route.split("/")[-1] + ".js"

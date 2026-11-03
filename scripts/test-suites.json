@@ -152,5 +152,11 @@
     ["tests/browser/sixth-whiteboard.cjs"],
     ["tests/browser/shared-whiteboards.cjs"],
     ["tests/browser/sixth-pages-sync.cjs", "whiteboard"]
+  ],
+  "go": [
+    ["tests/unit/go-engine.mjs"],
+    ["tests/unit/go-edge.mjs"],
+    ["tests/database/go-matches.mjs"],
+    ["tests/browser/go.cjs"]
   ]
 }

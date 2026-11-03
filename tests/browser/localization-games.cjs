@@ -18,7 +18,9 @@ const sdk = `export function createClient(){const id='11111111-1111-4111-8111-11
   );
   const errors = [];
   try {
-    for (const { slug } of JSON.parse(fs.readFileSync("data/games.json"))) {
+    for (const { slug } of JSON.parse(
+      fs.readFileSync("data/games.json"),
+    ).filter((g) => g.slug !== "go")) {
       const p = await context.newPage();
       p.on("pageerror", (e) => errors.push(slug + ": " + e.message));
       await p.goto(base + "/games/" + slug + "/");

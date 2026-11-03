@@ -17,7 +17,7 @@ urls = [
     .getroot()
     .iter("{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
 ]
-assert len(urls) == len(set(urls)) == 98
+assert len(urls) == len(set(urls)) == 102
 for url in urls:
     path = url.removeprefix(base)
     locale = "zh-Hant" if path.startswith("/zh-hant/") else "en"
@@ -61,8 +61,8 @@ for prefix in ["", "zh-hant/"]:
 assert "Disallow:" not in (output / "robots.txt").read_text()
 assert "@import" not in (ROOT / "src/styles/styles.css").read_text(encoding="utf-8")
 index = json.loads((output / "assets/search-index.json").read_text(encoding="utf-8"))
-assert len(index) == 43
+assert len(index) == 45
 assert {x["type"] for x in index} == {"tools", "games", "projects"}
 print(
-    "PASS 98 public URLs, 106 localized pages, per-route dictionary parity, canonical/hreflang, noindex, self-hosted fonts, 98 social PNGs and 43-entry public search"
+    "PASS 102 public URLs, 110 localized pages, per-route dictionary parity, canonical/hreflang, noindex, self-hosted fonts, 102 social PNGs and 45-entry public search"
 )

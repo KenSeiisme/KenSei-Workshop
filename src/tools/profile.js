@@ -102,12 +102,75 @@ function renderPublicScores(profile) {
       .join(""),
   );
   revealGameCards($("#public-game-scores"));
+  renderGoStats(profile.board_game_stats || []);
   $("#public-best-scores").innerHTML = ["en", "zh"]
     .map((lang) => {
       const score = profile.best_scores?.find((x) => x.language === lang);
       return uiHtml`<section class="profile-typing-card"><div class="profile-typing-language"><span>${lang === "en" ? uiMsg("Aa") : "字"}</span><div><span class="eyebrow">60-SECOND PUBLIC SPRINT</span><h3>${lang === "en" ? uiMsg("English") : "中文"}</h3></div></div><div class="profile-score-value"><strong>${score ? Number(score.speed).toFixed(1) : "—"}</strong><span>${lang === "en" ? "WPM" : "CPM"}</span></div><p>${score ? uiHtml`<b>${Number(score.accuracy).toFixed(2)}% accuracy</b> · ${scoreDate(score.achieved_at)} · text v${Number(score.version)}` : uiMsg("No qualifying current-version score yet.")}</p></section>`;
     })
     .join("");
+}
+function renderGoStats(stats) {
+  let section = $("#public-go-records");
+  if (!section) {
+    section = document.createElement("section");
+    section.id = "public-go-records";
+    section.className = "panel profile-go-records";
+    $("#public-game-scores").after(section);
+  }
+  section.replaceChildren();
+  const heading = document.createElement("h2");
+  uiText(heading, uiMsg("Go · online records"));
+  section.append(heading);
+  const note = document.createElement("p");
+  note.className = "muted small";
+  uiText(
+    note,
+    uiMsg(
+      "Verified standard human matches. Local, computer and memory training are excluded.",
+    ),
+  );
+  section.append(note);
+  if (!stats.length) {
+    const empty = document.createElement("p");
+    uiText(empty, uiMsg("No verified Go matches yet."));
+    section.append(empty);
+  }
+  for (const r of stats) {
+    const row = document.createElement("p");
+    row.className = "profile-go-stat";
+    const name = document.createElement("strong");
+    uiText(
+      name,
+      uiMsg("{0} · {1} × {1}", [
+        uiFrom(
+          { chinese: "Chinese", japanese: "Japanese 1989", aga: "AGA" }[
+            r.rule
+          ] || r.rule,
+        ),
+        Number(r.size),
+      ]),
+    );
+    const detail = document.createElement("span");
+    uiText(
+      detail,
+      uiMsg("{0} games · {1} wins · {2} losses · {3} draws · {4}", [
+        Number(r.played),
+        Number(r.wins),
+        Number(r.losses),
+        Number(r.draws),
+        r.played ? `${(Number(r.win_rate) * 100).toFixed(1)}%` : "—",
+      ]),
+    );
+    row.append(name, document.createElement("br"), detail);
+    section.append(row);
+  }
+  const link = document.createElement("a");
+  link.href = location.pathname.startsWith("/zh-hant/")
+    ? "/zh-hant/games/go/"
+    : "/games/go/";
+  uiText(link, uiMsg("Play Go →"));
+  section.append(link);
 }
 async function load() {
   $("#profile-retry").hidden = true;

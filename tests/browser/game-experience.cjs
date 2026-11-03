@@ -3,7 +3,9 @@ const assert = require("node:assert/strict"),
   fs = require("node:fs");
 const { chromium } = require("../support/browser.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
-const games = JSON.parse(fs.readFileSync("data/games.json", "utf8"));
+const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
+  (g) => g.slug !== "go",
+); // Go has its own authoritative-match acceptance suite.
 (async () => {
   const engine = await import("../../src/games/engine.js");
   const browser = await chromium.launch({

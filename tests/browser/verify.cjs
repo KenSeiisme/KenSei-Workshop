@@ -212,7 +212,11 @@ function pass(name) {
     pass("Mobile navigation, combined tool filtering and favorites");
     await page.goto(base + "/projects/");
     await page.locator('[data-filter="software"]').click();
-    assert.equal(await page.locator(".project-card:visible").count(), 1);
+    assert.equal(await page.locator(".project-card:visible").count(), 2);
+    assert.match(
+      (await page.locator(".project-card:visible").allTextContents()).join(" "),
+      /KenSei Studio/,
+    );
     pass("Project category filtering");
     await page.goto(base + "/tools/text-toolkit/");
     await page

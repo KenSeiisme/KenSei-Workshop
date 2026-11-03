@@ -4,8 +4,10 @@ from template_renderer import render_template
 from game_previews import idle_preview
 from html import escape
 from pong_view import VIEW as PONG_VIEW
+from go_view import VIEW as GO_VIEW
 
 HELP = {
+    "go": "Play Go with Chinese, Japanese 1989 or AGA rules. Local, introductory computer and authenticated online play; optional single-color memory training.",
     "block-drop": (
         "Stack seven kinds of falling pieces on a 10 × 20 board. Left/right or "
         "A/D move; Up/X rotates clockwise, Z counterclockwise, Down/S "
@@ -92,6 +94,12 @@ HELP = {
     ),
 }
 DETAILS = {
+    "go": (
+        "13",
+        "A quiet board. A world of moves.",
+        "9 / 13 / 19 · Three rules",
+        "Local / Computer / Online",
+    ),
     "block-drop": (
         "11",
         "Find your stack rhythm.",
@@ -128,6 +136,8 @@ DETAILS = {
 
 
 def preview(kind):
+    if kind == "go":
+        return '<div class="preview-go" aria-hidden="true">' + "<i></i>" * 15 + "</div>"
     if kind == "block-drop":
         return (
             '<div class="mini-drop" aria-hidden="true">'
@@ -337,9 +347,13 @@ def directory(games):
             description=g["description"],
             spec=DETAILS[g["slug"]][2],
             play_mode=(
-                "Online / Friends"
-                if g["slug"] == "pong"
-                else "Computer / Local" if g["category"] == "Board" else "Solo"
+                "Local / Computer / Online"
+                if g["slug"] == "go"
+                else (
+                    "Online / Friends"
+                    if g["slug"] == "pong"
+                    else "Computer / Local" if g["category"] == "Board" else "Solo"
+                )
             ),
         )
         for g in games
@@ -354,6 +368,8 @@ def directory(games):
 
 
 def game_page(game):
+    if game["slug"] == "go":
+        return GO_VIEW
     if game["slug"] == "pong":
         return PONG_VIEW
     slug, name = game["slug"], game["name"]

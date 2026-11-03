@@ -1,0 +1,862 @@
+{
+  "m_6cc8519b9158": {
+    "en": "Go",
+    "zh-Hant": "圍棋"
+  },
+  "m_9d0a632c6083": {
+    "en": "A quiet board. A world of moves.",
+    "zh-Hant": "一方棋盤，萬千變化。"
+  },
+  "m_46895fefc53c": {
+    "en": "9 / 13 / 19 · Three rules",
+    "zh-Hant": "9／13／19 路 · 三套規則"
+  },
+  "m_a9f4a0d367de": {
+    "en": "Local / Computer / Online",
+    "zh-Hant": "本機／人機／線上"
+  },
+  "m_8a9779f42128": {
+    "en": "Chinese",
+    "zh-Hant": "中國規則"
+  },
+  "m_6ca7204b612f": {
+    "en": "Japanese 1989",
+    "zh-Hant": "日本 1989 規則"
+  },
+  "m_fa787e6871fb": {
+    "en": "AGA",
+    "zh-Hant": "AGA 規則"
+  },
+  "m_76ed42d22129": {
+    "en": "Computer",
+    "zh-Hant": "人機對戰"
+  },
+  "m_0c7e70c5bf4e": {
+    "en": "Local two players",
+    "zh-Hant": "本機雙人"
+  },
+  "m_0d21bd52022c": {
+    "en": "Online",
+    "zh-Hant": "線上對戰"
+  },
+  "m_af626542572a": {
+    "en": "Board size",
+    "zh-Hant": "棋盤大小"
+  },
+  "m_cadeb24c1b1c": {
+    "en": "Computer level",
+    "zh-Hant": "電腦難度"
+  },
+  "m_8d2f2df6eb92": {
+    "en": "Beginner 1",
+    "zh-Hant": "入門一級"
+  },
+  "m_2b2ffbe31746": {
+    "en": "Beginner 2",
+    "zh-Hant": "入門二級"
+  },
+  "m_041567b075a8": {
+    "en": "Beginner 3",
+    "zh-Hant": "入門三級"
+  },
+  "m_f50d2cfec3ce": {
+    "en": "Single-color memory",
+    "zh-Hant": "單色記憶訓練"
+  },
+  "m_c868543cc8f6": {
+    "en": "Advanced settings · local / invitation",
+    "zh-Hant": "進階設定 · 本機／邀請房"
+  },
+  "m_8874e3cc90c0": {
+    "en": "Handicap",
+    "zh-Hant": "讓子"
+  },
+  "m_27ce8811b333": {
+    "en": "Even game",
+    "zh-Hant": "分先"
+  },
+  "m_dc72c8181635": {
+    "en": "No komi · Black first",
+    "zh-Hant": "讓先 · 黑先無貼目"
+  },
+  "m_4923ab2d202a": {
+    "en": "2 stones",
+    "zh-Hant": "讓 2 子"
+  },
+  "m_7e4c5bf0209c": {
+    "en": "3 stones",
+    "zh-Hant": "讓 3 子"
+  },
+  "m_287a490e044a": {
+    "en": "4 stones",
+    "zh-Hant": "讓 4 子"
+  },
+  "m_b96afd1d6f65": {
+    "en": "5 stones",
+    "zh-Hant": "讓 5 子"
+  },
+  "m_2a64571d2611": {
+    "en": "6 stones",
+    "zh-Hant": "讓 6 子"
+  },
+  "m_f25d1b516558": {
+    "en": "7 stones",
+    "zh-Hant": "讓 7 子"
+  },
+  "m_7d8c2b1add30": {
+    "en": "8 stones",
+    "zh-Hant": "讓 8 子"
+  },
+  "m_32d2be253c6d": {
+    "en": "9 stones",
+    "zh-Hant": "讓 9 子"
+  },
+  "m_a18cedda8038": {
+    "en": "Komi · points",
+    "zh-Hant": "貼目 · 點"
+  },
+  "m_07782aa65d87": {
+    "en": "Online clock",
+    "zh-Hant": "線上用時"
+  },
+  "m_7bfeb35d7326": {
+    "en": "5 min + 3 × 20 sec",
+    "zh-Hant": "5 分鐘＋3 次 20 秒讀秒"
+  },
+  "m_0e4c3c925ee7": {
+    "en": "10 min + 3 × 30 sec",
+    "zh-Hant": "10 分鐘＋3 次 30 秒讀秒"
+  },
+  "m_8bd7b9829977": {
+    "en": "20 min + 5 × 30 sec",
+    "zh-Hant": "20 分鐘＋5 次 30 秒讀秒"
+  },
+  "m_b303e5047521": {
+    "en": "Find opponent",
+    "zh-Hant": "尋找對手"
+  },
+  "m_7471415585c3": {
+    "en": "Online play requires Google sign-in. Standard human matches count toward public statistics.",
+    "zh-Hant": "線上對戰需登入 Google。標準真人對局會計入公開戰績。"
+  },
+  "m_23a40bb2a585": {
+    "en": "Go match status",
+    "zh-Hant": "圍棋對局狀態"
+  },
+  "m_e2cc9636e486": {
+    "en": "Go setup",
+    "zh-Hant": "圍棋開局設定"
+  },
+  "m_a5fb0deb86f0": {
+    "en": "Go board. Arrow keys select an intersection; Enter places a stone.",
+    "zh-Hant": "圍棋棋盤。方向鍵選擇交點，Enter 落子。"
+  },
+  "m_ca7f58cd79c0": {
+    "en": "Waiting for your opponent",
+    "zh-Hant": "正在等待對手"
+  },
+  "m_e3db0476672e": {
+    "en": "I agree to single-color training · not ranked",
+    "zh-Hant": "我同意單色訓練 · 不計公開戰績"
+  },
+  "m_730031883abe": {
+    "en": "Choose your settings and start when you are ready.",
+    "zh-Hant": "選擇設定，準備好後開始。"
+  },
+  "m_fb1f49801d6c": {
+    "en": "Place stone",
+    "zh-Hant": "確認落子"
+  },
+  "m_20a9ba67bf97": {
+    "en": "Resign",
+    "zh-Hant": "認輸"
+  },
+  "m_93dbfad4fe5d": {
+    "en": "Hold to reveal colors",
+    "zh-Hant": "按住查看棋色"
+  },
+  "m_fbf728c3c3bb": {
+    "en": "Take control",
+    "zh-Hant": "接管操作"
+  },
+  "m_8f4c1db992b4": {
+    "en": "Board zoom",
+    "zh-Hant": "棋盤縮放"
+  },
+  "m_9f706937eb98": {
+    "en": "Confirm the final position",
+    "zh-Hant": "確認終局局面"
+  },
+  "m_f01f776bf762": {
+    "en": "Automatic totals are suggestions. Both players must agree on dead stones and seki. Unresolved disputes do not count as a win.",
+    "zh-Hant": "自動計分只供參考。雙方須確認死棋與雙活；未解決的爭議不會記為勝場。"
+  },
+  "m_00e39bd33b7d": {
+    "en": "Mark groups",
+    "zh-Hant": "標記棋塊"
+  },
+  "m_bd54e42f5ddb": {
+    "en": "Dead stones",
+    "zh-Hant": "死棋"
+  },
+  "m_667ecbf55ab7": {
+    "en": "Seki",
+    "zh-Hant": "雙活"
+  },
+  "m_801545905b87": {
+    "en": "Clear marks",
+    "zh-Hant": "清除標記"
+  },
+  "m_83ae588eaf53": {
+    "en": "Confirm score",
+    "zh-Hant": "確認計分"
+  },
+  "m_3a8931a9b2f6": {
+    "en": "Dispute",
+    "zh-Hant": "提出爭議"
+  },
+  "m_f0b1fc6d8d5e": {
+    "en": "Resume play",
+    "zh-Hant": "續弈"
+  },
+  "m_ec0beb0d920f": {
+    "en": "Agree no result · cycle",
+    "zh-Hant": "同意無勝負 · 循環局面"
+  },
+  "m_57699d52d8fe": {
+    "en": "Confirm / request as",
+    "zh-Hant": "確認／申請方"
+  },
+  "m_4be83181dd82": {
+    "en": "Review move",
+    "zh-Hant": "逐手復盤"
+  },
+  "m_8b68de55778d": {
+    "en": "Back to result",
+    "zh-Hant": "返回結算"
+  },
+  "m_6d869a02a771": {
+    "en": "Practice records · this identity",
+    "zh-Hant": "練習紀錄 · 目前身分"
+  },
+  "m_0256681f5ba6": {
+    "en": "No completed practice games yet.",
+    "zh-Hant": "尚無已完成的練習對局。"
+  },
+  "m_6ec89c481692": {
+    "en": "Go leaderboard",
+    "zh-Hant": "圍棋戰績榜"
+  },
+  "m_8da72fa96823": {
+    "en": "Go records",
+    "zh-Hant": "圍棋戰績"
+  },
+  "m_457c29bda559": {
+    "en": "Verified standard online human matches only. Practice and training remain separate.",
+    "zh-Hant": "只計伺服器驗證的標準線上真人對局。練習與訓練分開記錄。"
+  },
+  "m_4228aeb07c41": {
+    "en": "Rules",
+    "zh-Hant": "規則"
+  },
+  "m_dee63bf0e135": {
+    "en": "Most wins",
+    "zh-Hant": "勝場榜"
+  },
+  "m_3d403173f81f": {
+    "en": "Win rate · 10+ games",
+    "zh-Hant": "勝率榜 · 至少 10 局"
+  },
+  "m_60f1879d80c3": {
+    "en": "Leave online match",
+    "zh-Hant": "離開線上對局"
+  },
+  "m_797dbeeb31b0": {
+    "en": "How to play & rules",
+    "zh-Hant": "玩法與規則"
+  },
+  "m_216352ab01f7": {
+    "en": "Place stones on intersections. Surround an opponent group to capture it. Suicide and prohibited repetition are blocked. Pass when there are no useful moves; both players then review dead stones, seki and the score.",
+    "zh-Hant": "在交點落子，包圍對方棋塊即可提子。系統會阻止自殺與規則禁止的重複局面。無需繼續落子時可停著，雙方再確認死棋、雙活與計分。"
+  },
+  "m_6eb2da6904c3": {
+    "en": "Chinese uses area scoring and positional superko with a published no-result procedure for exceptional cycles. Japanese 1989 uses territory, prisoners, simple ko and mutual final agreement. Special life-and-death confirmation can require adjudication: an unresolved position is never automatically awarded. AGA uses situational superko, pass stones, White last, area scoring and handicap compensation.",
+    "zh-Hant": "中國規則採數子、全局同形限制，罕見循環依已公布的無勝負補充程序處理。日本 1989 規則採數目、提子、單劫與雙方終局確認；特殊死活可能需要裁定，未決局面不會自動判勝。AGA 採情境超級劫、停著交子、白方末手、數子及讓子補償。"
+  },
+  "m_a4e5bbed2ef3": {
+    "en": "Japanese rule examples are still being validated; do not use this app as a tournament referee. Resume play to settle a dispute where the chosen rules permit it.",
+    "zh-Hant": "日本規則的特殊例題仍在驗證中，本程式不能代替賽事裁判。規則允許時可透過續弈解決爭議。"
+  },
+  "m_c69e961be3d0": {
+    "en": "Chinese standard komi: 7.5 points = 3¾ stones. Japanese: 6.5 points. AGA: 7.5-point tournament preset. Handicap / custom komi games are not ranked.",
+    "zh-Hant": "標準貼目：中國規則 7.5 點＝3¾ 子，日本規則 6.5 目，AGA 採 7.5 點比賽預設。讓子與自訂貼目不計公開戰績。"
+  },
+  "m_f69461930831": {
+    "en": "Online clocks keep running in the background. A continuous 120-second disconnection forfeits unless the clock expires first. Both disconnected: interrupted, with no winner. Closing an online match deliberately counts as resignation.",
+    "zh-Hant": "線上用時在背景持續計算。連續斷線 120 秒判負，若時鐘先耗盡則先判超時。雙方都斷線則中斷，不產生勝者；主動退出進行中的線上對局視為認輸。"
+  },
+  "m_8254f9b7a2de": {
+    "en": "Local and computer games save privately. Online matches are restored from the server. Keyboard controls apply only while the board is focused. On touch devices, preview a point then confirm; zoom and pan for larger boards.",
+    "zh-Hant": "本機與人機對局使用私人存檔，線上對局從伺服器恢復。鍵盤操作僅在棋盤聚焦時生效；觸控先預覽再確認落子，大棋盤可縮放及平移。"
+  },
+  "m_40dd527321ca": {
+    "en": "Chinese rules",
+    "zh-Hant": "中國圍棋規則"
+  },
+  "m_e2947dee42c3": {
+    "en": "AGA rules",
+    "zh-Hant": "AGA 正式規則"
+  },
+  "m_f147f12c15d2": {
+    "en": "Go files could not load. Reload this page to retry.",
+    "zh-Hant": "圍棋檔案載入失敗，請重新整理後重試。"
+  },
+  "m_732312dc5625": {
+    "en": "Selected point: {0}",
+    "zh-Hant": "已選交點：{0}"
+  },
+  "m_ec7add5240cf": {
+    "en": "Go board · {0} × {0} · selected {1}",
+    "zh-Hant": "圍棋棋盤 · {0} × {0} · 已選 {1}"
+  },
+  "m_c54a061dfcc1": {
+    "en": "points",
+    "zh-Hant": "點"
+  },
+  "m_7e69ba9210da": {
+    "en": "{0} to move",
+    "zh-Hant": "輪到{0}"
+  },
+  "m_c6cfe6e4f129": {
+    "en": "Black",
+    "zh-Hant": "黑方"
+  },
+  "m_3495e757855a": {
+    "en": "White",
+    "zh-Hant": "白方"
+  },
+  "m_b36c6f086ae0": {
+    "en": "Scoring review",
+    "zh-Hant": "終局計分確認"
+  },
+  "m_dbf930f547a1": {
+    "en": "Unresolved dispute",
+    "zh-Hant": "爭議未決"
+  },
+  "m_d2e898189277": {
+    "en": "Game complete",
+    "zh-Hant": "對局結束"
+  },
+  "m_6db018e12db4": {
+    "en": "Verified online result",
+    "zh-Hant": "已驗證線上結果"
+  },
+  "m_0c4f6c906a73": {
+    "en": "Completed · not in public records",
+    "zh-Hant": "已結束 · 不計公開戰績"
+  },
+  "m_fa28be03c0d2": {
+    "en": "Online · standard",
+    "zh-Hant": "線上 · 標準對局"
+  },
+  "m_529a3574e0f6": {
+    "en": "Online · not ranked",
+    "zh-Hant": "線上 · 不計公開戰績"
+  },
+  "m_5c393387f1cf": {
+    "en": "Invitation · waiting",
+    "zh-Hant": "邀請房 · 等待中"
+  },
+  "m_6a6d1271d375": {
+    "en": "Memory training · private",
+    "zh-Hant": "記憶訓練 · 私人"
+  },
+  "m_8ec9816f775c": {
+    "en": "Local practice",
+    "zh-Hant": "本機練習"
+  },
+  "m_3e76275fdb3c": {
+    "en": "{0} captured",
+    "zh-Hant": "提子 {0}"
+  },
+  "m_ed7503f78e5b": {
+    "en": "Waiting for an opponent",
+    "zh-Hant": "等待配對對手"
+  },
+  "m_dfa827d8f07a": {
+    "en": "Room {0}",
+    "zh-Hant": "房間 {0}"
+  },
+  "m_330010f40240": {
+    "en": "Not ready",
+    "zh-Hant": "尚未準備"
+  },
+  "m_c6008b5b55ec": {
+    "en": "No result",
+    "zh-Hant": "無勝負"
+  },
+  "m_31ffe29256e6": {
+    "en": "{0} wins",
+    "zh-Hant": "{0}獲勝"
+  },
+  "m_b12e85ab38f8": {
+    "en": "Agreed score",
+    "zh-Hant": "雙方同意的計分"
+  },
+  "m_8cfb410aedca": {
+    "en": "Resignation",
+    "zh-Hant": "認輸"
+  },
+  "m_34a382bbb50d": {
+    "en": "Time expired",
+    "zh-Hant": "超時"
+  },
+  "m_1913a281a6a3": {
+    "en": "Disconnection",
+    "zh-Hant": "斷線判負"
+  },
+  "m_ab68763e8cbf": {
+    "en": "Interrupted · no public result",
+    "zh-Hant": "對局中斷 · 不計公開戰績"
+  },
+  "m_763f21fbc349": {
+    "en": "Cycle · no result",
+    "zh-Hant": "循環局面 · 無勝負"
+  },
+  "m_f4f211e7c50b": {
+    "en": "Ready within {0} seconds",
+    "zh-Hant": "請在 {0} 秒內準備"
+  },
+  "m_8c4f679ca140": {
+    "en": "Local: {0} · Computer: {1} · Memory training: {2}. These are private completed records, not verified online wins.",
+    "zh-Hant": "本機 {0} 局 · 人機 {1} 局 · 記憶訓練 {2} 局。這些是私人完局紀錄，不是已驗證的線上勝場。"
+  },
+  "m_c75d4ed0f857": {
+    "en": "Place a stone, or pass when you are ready to score.",
+    "zh-Hant": "請落子，準備計分時可停著。"
+  },
+  "m_7511d7f3fd51": {
+    "en": "Computer is thinking…",
+    "zh-Hant": "電腦思考中…"
+  },
+  "m_ec2b73def022": {
+    "en": "Your turn.",
+    "zh-Hant": "輪到你。"
+  },
+  "m_02373e8554da": {
+    "en": "Computer could not finish this move. Pause and continue to retry.",
+    "zh-Hant": "電腦未能完成這手棋，請暫停後繼續以重試。"
+  },
+  "m_a8afd97917f2": {
+    "en": "Sign in to play online Go.",
+    "zh-Hant": "請登入以進行線上圍棋對戰。"
+  },
+  "m_00c080715a4e": {
+    "en": "Account changed. Reopen this game.",
+    "zh-Hant": "帳號已變更，請重新開啟此對局。"
+  },
+  "m_77fe7b65c5e6": {
+    "en": "The online board could not be updated. Check your connection and retry.",
+    "zh-Hant": "線上棋盤無法更新，請檢查連線後重試。"
+  },
+  "m_e53ad56bd41b": {
+    "en": "The room closed before play started. No result was recorded.",
+    "zh-Hant": "房間在開賽前關閉，未記錄戰績。"
+  },
+  "m_ee5068d13200": {
+    "en": "Leave the current practice game and open online play?",
+    "zh-Hant": "離開目前練習對局並開啟線上對戰？"
+  },
+  "m_82ae42321e4c": {
+    "en": "Matchmaking requires standard settings and normal colors.",
+    "zh-Hant": "隨機配對僅接受標準設定與正常黑白棋色。"
+  },
+  "m_3213977da5af": {
+    "en": "Waiting for a free online room and an opponent. You can cancel at any time.",
+    "zh-Hant": "等待可用房間與對手，可隨時取消。"
+  },
+  "m_d4dc0b4c92e3": {
+    "en": "Waiting for an opponent with the same rules and board size.",
+    "zh-Hant": "等待規則與棋盤大小相同的對手。"
+  },
+  "m_5e818e01fe23": {
+    "en": "Reconnect or take control before playing.",
+    "zh-Hant": "請先重新連線或接管操作。"
+  },
+  "m_00c9bbbe1d97": {
+    "en": "Paused · practice saved locally",
+    "zh-Hant": "已暫停 · 練習已存於本機"
+  },
+  "m_b78653ebc116": {
+    "en": "Play continued.",
+    "zh-Hant": "已繼續對局。"
+  },
+  "m_cd0a25c4e5b1": {
+    "en": "An online match in progress will be resigned. Continue?",
+    "zh-Hant": "進行中的線上對局將視為認輸，繼續？"
+  },
+  "m_75109a8aeb4d": {
+    "en": "Start a new game? The current practice save will remain available.",
+    "zh-Hant": "開始新對局？目前練習存檔仍會保留。"
+  },
+  "m_9867f659850a": {
+    "en": "Resign this game?",
+    "zh-Hant": "確定認輸？"
+  },
+  "m_859c95c840b3": {
+    "en": "Take control in this tab? The other tab becomes read-only.",
+    "zh-Hant": "在此分頁接管操作？另一分頁將改為唯讀。"
+  },
+  "m_d65176d65e1f": {
+    "en": "Invite link copied.",
+    "zh-Hant": "邀請連結已複製。"
+  },
+  "m_b2aa247fad4b": {
+    "en": "Standard settings",
+    "zh-Hant": "標準設定"
+  },
+  "m_fcba891e8a4a": {
+    "en": "Custom / training · not ranked",
+    "zh-Hant": "自訂／訓練 · 不計公開戰績"
+  },
+  "m_a962826d4641": {
+    "en": "wins",
+    "zh-Hant": "勝"
+  },
+  "m_cd7ac4c61fd8": {
+    "en": "games",
+    "zh-Hant": "局"
+  },
+  "m_c3b4579a87c9": {
+    "en": "Loading records…",
+    "zh-Hant": "正在載入戰績…"
+  },
+  "m_0568b68f0c49": {
+    "en": "Wins / completed games. Win-rate ranking requires 10 completed games.",
+    "zh-Hant": "勝場／有效完局。勝率榜需至少完成 10 局。"
+  },
+  "m_74cb7db99ed2": {
+    "en": "No verified matches in this board yet.",
+    "zh-Hant": "此分榜尚無已驗證的對局。"
+  },
+  "m_f0111994283c": {
+    "en": "Records could not load. Use Refresh to retry.",
+    "zh-Hant": "無法載入戰績，請按重新整理重試。"
+  },
+  "m_16a5e2d57942": {
+    "en": "Go · online records",
+    "zh-Hant": "圍棋 · 線上戰績"
+  },
+  "m_a6fc1ef380c0": {
+    "en": "Verified standard human matches. Local, computer and memory training are excluded.",
+    "zh-Hant": "已驗證的標準真人對局，不包含本機、人機與記憶訓練。"
+  },
+  "m_de2a70291a74": {
+    "en": "No verified Go matches yet.",
+    "zh-Hant": "尚無已驗證的圍棋對局。"
+  },
+  "m_cc076a7290c3": {
+    "en": "{0} games · {1} wins · {2} losses · {3} draws · {4}",
+    "zh-Hant": "{0} 局 · {1} 勝 · {2} 負 · {3} 和 · {4}"
+  },
+  "m_fb14bbf7701c": {
+    "en": "Play Go →",
+    "zh-Hant": "開始下圍棋 →"
+  },
+  "m_97bf1898ff14": {
+    "en": "Invalid Go settings.",
+    "zh-Hant": "圍棋設定無效。"
+  },
+  "m_98d8a1f5e623": {
+    "en": "The board is not accepting moves.",
+    "zh-Hant": "目前棋盤不能落子。"
+  },
+  "m_f701660006e9": {
+    "en": "Choose an intersection on the board.",
+    "zh-Hant": "請選擇棋盤上的交點。"
+  },
+  "m_19fb8be7546f": {
+    "en": "That intersection is occupied.",
+    "zh-Hant": "該交點已有棋子。"
+  },
+  "m_794fd3f5672a": {
+    "en": "Immediate ko recapture is not legal.",
+    "zh-Hant": "不能立即回提劫。"
+  },
+  "m_8ba84b180e69": {
+    "en": "Suicide is not legal. Capture the surrounding stones or choose another point.",
+    "zh-Hant": "此處為禁入點，請先提掉周圍棋子或改選其他交點。"
+  },
+  "m_b0a60be4bca4": {
+    "en": "Positional superko: this board position has already occurred.",
+    "zh-Hant": "全局同形限制：此棋盤局面已出現過。"
+  },
+  "m_bec1a4e398c9": {
+    "en": "Situational superko: this board and player-to-move have already occurred.",
+    "zh-Hant": "情境超級劫：相同棋盤與輪次已出現過。"
+  },
+  "m_ab733a479f4b": {
+    "en": "Select existing stone groups.",
+    "zh-Hant": "請選擇現有棋塊。"
+  },
+  "m_950ee3a7b495": {
+    "en": "A group cannot be both dead and in seki.",
+    "zh-Hant": "同一棋塊不能同時標記為死棋與雙活。"
+  },
+  "m_73914bcd94ad": {
+    "en": "Invalid Go action.",
+    "zh-Hant": "圍棋操作無效。"
+  },
+  "m_2c44a26ae358": {
+    "en": "This game has already ended.",
+    "zh-Hant": "此對局已結束。"
+  },
+  "m_4c688adcde8c": {
+    "en": "Wait for your turn.",
+    "zh-Hant": "請等待輪到你。"
+  },
+  "m_0cd97e6890de": {
+    "en": "The move record is full. Export the record; this game requires adjudication.",
+    "zh-Hant": "著手紀錄已滿，請匯出棋譜；此局需要另行裁定。"
+  },
+  "m_0b413bb8bfca": {
+    "en": "Mark stones after both players pass.",
+    "zh-Hant": "雙方停著後才可標記棋子。"
+  },
+  "m_b45834d485ac": {
+    "en": "Resolve the scoring dispute before confirming.",
+    "zh-Hant": "請先解決計分爭議再確認。"
+  },
+  "m_80f4ec2b9d80": {
+    "en": "There is no scoring proposal to dispute.",
+    "zh-Hant": "目前沒有可提出爭議的計分提案。"
+  },
+  "m_a9181fe3686d": {
+    "en": "The game has not stopped for scoring.",
+    "zh-Hant": "對局尚未進入終局計分。"
+  },
+  "m_808217b1d79d": {
+    "en": "No recorded repeating cycle is available for this agreement.",
+    "zh-Hant": "尚未記錄可用於此確認的循環局面。"
+  },
+  "m_32759a701e73": {
+    "en": "Unknown Go action.",
+    "zh-Hant": "未知的圍棋操作。"
+  },
+  "m_a48973023eb7": {
+    "en": "Invalid Go move record.",
+    "zh-Hant": "圍棋著手紀錄無效。"
+  },
+  "m_ee14252f34fc": {
+    "en": "Invalid Go save.",
+    "zh-Hant": "圍棋存檔無效。"
+  },
+  "m_6ffa6b8b1c9f": {
+    "en": "Stone",
+    "zh-Hant": "棋子"
+  },
+  "m_47cb2a4b2299": {
+    "en": "{0} stone",
+    "zh-Hant": "{0}棋子"
+  },
+  "m_4c4aeb0a8ef8": {
+    "en": "Empty intersection",
+    "zh-Hant": "空交點"
+  },
+  "m_fa63bae87c71": {
+    "en": "Selected point: {0} · {1}",
+    "zh-Hant": "已選交點：{0} · {1}"
+  },
+  "m_abbe4b08d5ed": {
+    "en": "Go board · {0} × {0} · selected {1} · {2}",
+    "zh-Hant": "圍棋棋盤 · {0} × {0} · 已選 {1} · {2}"
+  },
+  "m_a88c892cb9f8": {
+    "en": "Enter a komi value in half-point steps.",
+    "zh-Hant": "請輸入以半點為單位的貼目。"
+  },
+  "m_b24677a89657": {
+    "en": "Move {0} / {1}",
+    "zh-Hant": "第 {0}／{1} 手"
+  },
+  "m_18a5b93f201a": {
+    "en": "Go save is too large. Download SGF before leaving.",
+    "zh-Hant": "圍棋存檔超過大小限制，離開前請下載 SGF 棋譜。"
+  },
+  "m_dc58131a08f4": {
+    "en": "Start game",
+    "zh-Hant": "開始對局"
+  },
+  "m_30abf96ab9bc": {
+    "en": "Create room",
+    "zh-Hant": "建立房間"
+  },
+  "m_d863662c5e56": {
+    "en": "0 captured",
+    "zh-Hant": "提子 0"
+  },
+  "m_472e71f04cdf": {
+    "en": "Review game",
+    "zh-Hant": "對局復盤"
+  },
+  "m_2897dbf278d3": {
+    "en": "Download SGF",
+    "zh-Hant": "下載 SGF 棋譜"
+  },
+  "m_1af851907331": {
+    "en": "Size",
+    "zh-Hant": "大小"
+  },
+  "m_0088810f746e": {
+    "en": "Japanese life-and-death confirmation",
+    "zh-Hant": "日本規則死活確認"
+  },
+  "m_8568d5c66764": {
+    "en": "This local hypothetical board does not change the match, prisoners or score. A ko recapture requires a pass for that specific ko. Confirm the real dead groups only when both players agree.",
+    "zh-Hant": "此本機假想棋盤不改變實戰、提子或計分。回提同一劫前，須先針對該劫停著；雙方同意後才確認實戰死棋。"
+  },
+  "m_d77f131bb496": {
+    "en": "Open confirmation board",
+    "zh-Hant": "開啟死活確認棋盤"
+  },
+  "m_950f85477fc6": {
+    "en": "Pass for ko",
+    "zh-Hant": "針對劫停著"
+  },
+  "m_efcaf12cf725": {
+    "en": "Pass for this ko",
+    "zh-Hant": "針對此劫停著"
+  },
+  "m_543b927c76ee": {
+    "en": "Return to real position",
+    "zh-Hant": "返回實戰局面"
+  },
+  "m_0aaa5a3a4816": {
+    "en": "Agree both lose · unresolved effective move",
+    "zh-Hant": "同意雙方負 · 有效著手爭議未決"
+  },
+  "m_3a77bce61a2f": {
+    "en": "Both players lose",
+    "zh-Hant": "雙方負"
+  },
+  "m_30b4fd8183a0": {
+    "en": "Hypothetical confirmation · the real match is unchanged.",
+    "zh-Hant": "死活確認假想棋盤 · 實戰局面不變。"
+  },
+  "m_d48bfa981104": {
+    "en": "Both players lose under Japanese Article 13. Confirm only for an unresolved effective move affecting the result.",
+    "zh-Hant": "依日本規則第 13 條判雙方負；僅在影響勝負的有效著手爭議未決時確認。"
+  },
+  "m_8518df47fcd0": {
+    "en": "Request cycle review at selected point",
+    "zh-Hant": "申請審視所選交點的循環局面"
+  },
+  "m_b0a3db866f3e": {
+    "en": "Territory: {0} · Stones: {1} · Prisoners: {2}",
+    "zh-Hant": "地 {0} · 盤上棋子 {1} · 提子 {2}"
+  },
+  "m_e19660d4b42a": {
+    "en": "Komi: {0} · Handicap compensation: {1}",
+    "zh-Hant": "貼目 {0} · 讓子補償 {1}"
+  },
+  "m_e7107602d169": {
+    "en": "{0} / 2 confirmations",
+    "zh-Hant": "已確認 {0}／2 人"
+  },
+  "m_000c40205851": {
+    "en": "Hold to reveal colors · {0} peeks",
+    "zh-Hant": "按住查看棋色 · 已查看 {0} 次"
+  },
+  "m_3a31ff501978": {
+    "en": "Your rank: —",
+    "zh-Hant": "你的排名：—"
+  },
+  "m_09875b38744a": {
+    "en": "Win-rate ranking requires 10 completed games.",
+    "zh-Hant": "勝率排名需至少完成 10 局。"
+  },
+  "m_c011d6097bfb": {
+    "en": "License",
+    "zh-Hant": "授權"
+  },
+  "m_1974999d9e74": {
+    "en": ". Go rule adaptation, AI and match flow are Workshop code.",
+    "zh-Hant": "。圍棋規則適配、AI 與對局流程由本站編寫。"
+  },
+  "m_469b18e33bf6": {
+    "en": "Online Go and public records",
+    "zh-Hant": "線上圍棋與公開戰績"
+  },
+  "m_eaa96a63eeda": {
+    "en": "Shared whiteboards are separate invitation-only copies, saved with Supabase for up to four signed-in members. Members see the drawing, public profile names, avatars, online presence and live cursors. Shared content is sent to Supabase, unlike local file tools. Only the owner manages invitations and membership. Removing a member changes channel access and invalidates the old invitation. Shared boards remain saved after everyone disconnects; the owner can delete them. Unsaved recovery copies stay on this device, isolated by account. Whiteboard, Pong and Go share a two-active-room limit.",
+    "zh-Hant": "共享白板是獨立的邀請制副本，由 Supabase 保存，最多四名登入成員可使用。成員可查看畫面、公開名稱、頭像、上線狀態與游標。共享內容會傳送至 Supabase；本機檔案工具則留在裝置。僅房主可管理邀請與成員；移除成員會更新頻道權限並使舊邀請失效。所有人離線後白板仍會保存，房主可刪除。未同步的恢復副本依帳號隔離，留在此裝置。Whiteboard、Pong 與 Go 合計最多兩個活躍房間。"
+  },
+  "m_defeb0e6e6cc": {
+    "en": "Go online matches store the rules, moves, clocks, membership and verified outcome on Supabase. Only match members can read the live position and private move record. Realtime carries version notifications; the server checks each move and settles the result. Standard online human matches publish completed games, wins, losses, draws and win rate under your public Profile. Practice, computer games and single-color training do not enter these statistics. Matchmaking stores a short-lived queue entry. A second tab is read-only until you explicitly take control. Online clocks continue in the background; both-player interruptions never create a winner.",
+    "zh-Hant": "線上圍棋會在 Supabase 保存規則、著手、時鐘、成員與已驗證結果。只有對局成員可讀取即時局面及私人棋譜。Realtime 只通知版本變更，每手棋及結算皆由伺服器驗證。標準線上真人局會在公開 Profile 顯示完局、勝、負、和與勝率；練習、人機與單色訓練不計入。配對佇列僅短期保存。額外分頁在明確接管前為唯讀。背景持續計時，雙方中斷不會產生勝者。"
+  },
+  "m_a0719b954959": {
+    "en": "Online Go is temporarily unavailable.",
+    "zh-Hant": "線上圍棋暫時無法使用。"
+  },
+  "m_8e3b2c1b29c8": {
+    "en": "Invalid board request.",
+    "zh-Hant": "棋類對局請求無效。"
+  },
+  "m_c6462c8f5bd4": {
+    "en": "Invalid match identity.",
+    "zh-Hant": "對局識別無效。"
+  },
+  "m_a4c54c54ac32": {
+    "en": "Invalid move request.",
+    "zh-Hant": "著手請求無效。"
+  },
+  "m_fd0fed297ec9": {
+    "en": "The online board could not be updated.",
+    "zh-Hant": "無法更新線上棋盤。"
+  },
+  "m_8ce84a2121dd": {
+    "en": "Go rules changed. Refresh this page.",
+    "zh-Hant": "圍棋規則已更新，請重新整理頁面。"
+  },
+  "m_18ea3034eb4a": {
+    "en": "Enter an eight-character room code.",
+    "zh-Hant": "請輸入 8 碼房間代碼。"
+  },
+  "m_46b84f051cdf": {
+    "en": "Online Go could not complete this request.",
+    "zh-Hant": "線上圍棋未能完成此請求。"
+  },
+  "m_74a3520204ce": {
+    "en": "Too many board requests. Wait a minute and retry.",
+    "zh-Hant": "對局請求過於頻繁，請稍候一分鐘再試。"
+  },
+  "m_91806b6a6a7d": {
+    "en": "Only standard Go settings can enter matchmaking.",
+    "zh-Hant": "隨機配對僅接受標準圍棋設定。"
+  },
+  "m_b4c8d0b24fd2": {
+    "en": "That room is unavailable or already full.",
+    "zh-Hant": "此房間無法使用或已滿員。"
+  },
+  "m_943cd06489f2": {
+    "en": "This match is not available to your account.",
+    "zh-Hant": "目前帳號無法存取此對局。"
+  },
+  "m_8b9668e20bac": {
+    "en": "Another tab controls this match. Take control to play.",
+    "zh-Hant": "另一分頁正控制此對局，請接管後再操作。"
+  },
+  "m_1912b1fc4e46": {
+    "en": "Both players must accept single-color training.",
+    "zh-Hant": "雙方均須同意單色訓練。"
+  },
+  "m_6e94f25423e4": {
+    "en": "This match is not accepting moves.",
+    "zh-Hant": "此對局目前不接受著手。"
+  },
+  "m_c56c7916ae09": {
+    "en": "The board changed. Read the latest position and retry.",
+    "zh-Hant": "棋盤已更新，請讀取最新局面後重試。"
+  }
+}

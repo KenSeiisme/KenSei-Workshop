@@ -77,6 +77,13 @@
     "preview": "block-drop"
   },
   {
+    "slug": "go",
+    "name": "Go",
+    "description": "Three rule sets. Local, computer or online opponents. Train your memory on a single-color board.",
+    "category": "Board",
+    "preview": "go"
+  },
+  {
     "slug": "pong",
     "name": "Pong",
     "description": "Invite a friend. Share a rally. A private online room for two.",

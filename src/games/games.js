@@ -58,7 +58,9 @@ const clock = (ms) =>
     .toString()
     .padStart(2, "0")}`;
 const title = (d) =>
-  `${GAMES[d.game].name} · ${rules(d.game, d.difficulty).label}`;
+  d.game === "go"
+    ? `Go · ${d.difficulty}`
+    : `${GAMES[d.game].name} · ${rules(d.game, d.difficulty).label}`;
 let active = null,
   saveTimer,
   lastWritten = "",

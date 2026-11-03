@@ -1,0 +1,352 @@
+.go-page {
+  --go-accent: #ccaff2;
+}
+.go-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+.go-play {
+  min-width: 0;
+  padding: 0;
+}
+.go-hud {
+  display: grid;
+  grid-template-columns: 1fr minmax(100px, 1fr) 1fr;
+  gap: 8px;
+  align-items: center;
+  text-align: center;
+  margin: 0 0 8px;
+  font-size: 12px;
+}
+.go-hud > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.go-hud > div > span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.go-hud strong {
+  font:
+    600 clamp(15px, 2vw, 22px) "Space Grotesk",
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.go-hud small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.go-stage {
+  position: relative;
+  width: min(100%, var(--shell-stage-space, 600px));
+  aspect-ratio: 1;
+  margin: auto;
+  overflow: hidden;
+  border: 1px solid #766184;
+  border-radius: 14px;
+  box-shadow: 0 0 32px #b58ae21c;
+  background: #241d2e;
+}
+.go-pan {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.go-canvas#game-board {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  cursor: crosshair;
+  touch-action: pan-x pan-y;
+}
+.go-canvas:focus-visible {
+  outline: 3px solid #ecc6ff;
+  outline-offset: -4px;
+}
+.go-entry,
+.go-room-panel,
+.go-result {
+  position: absolute;
+  z-index: 3;
+  inset: auto 4% 4%;
+  padding: 16px;
+  border: 1px solid #baa0cd66;
+  background: #17121ff5;
+  border-radius: 14px;
+  max-height: 94%;
+  overflow-y: auto;
+  box-shadow: 0 16px 40px #0008;
+}
+.go-entry .eyebrow {
+  font-size: 10px;
+}
+.go-setup {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+}
+.go-page label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11px;
+  min-width: 0;
+}
+.go-page label:has(input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+}
+.go-page input:not([type="checkbox"]):not([type="range"]),
+.go-page select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px;
+  font-size: 12px;
+}
+.go-start-actions,
+.go-code-row {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.go-page .button {
+  min-height: 44px;
+  padding: 9px 12px;
+  font-size: 12px;
+}
+.go-page details summary {
+  cursor: pointer;
+  min-height: 36px;
+  padding: 6px 0;
+}
+.go-status {
+  min-height: 22px;
+  margin: 8px 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.go-controls.game-control-deck {
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.go-zoom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 8px;
+}
+.go-zoom label {
+  flex-direction: row;
+  align-items: center;
+}
+.go-zoom input {
+  max-width: 110px;
+}
+.go-scoring,
+.go-review {
+  margin: 12px 0;
+  padding: 16px;
+}
+.go-scoring p {
+  font-size: 12px;
+}
+.go-score-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.go-leaderboard {
+  padding: 16px;
+  min-width: 0;
+}
+.go-board-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.go-board-heading h2 {
+  font-size: 18px;
+  margin: 0;
+}
+.go-leaderboard-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.go-leaderboard-filters label:last-child {
+  grid-column: 1/-1;
+}
+.go-rank-row {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid #a989bd25;
+  align-items: center;
+  font-size: 12px;
+}
+.go-rank-row a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.go-rank-row .avatar-badge {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+}
+.go-rank-row small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.go-rank-row b {
+  font-variant-numeric: tabular-nums;
+}
+.go-rank-row.mine {
+  border: 1px solid #a580c9;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+}
+.go-member {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.go-private-records {
+  font-size: 12px;
+  margin-top: 12px;
+}
+.go-page [hidden] {
+  display: none !important;
+}
+.go-page[data-play-shell] .go-play {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.go-page[data-play-shell] .go-stage {
+  padding: 0;
+}
+.go-page .go-hud {
+  min-height: 38px;
+  margin-bottom: 4px;
+}
+.go-page .go-hud > div {
+  gap: 0;
+  line-height: 12px;
+}
+.go-page .go-hud strong {
+  line-height: 18px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.go-page .go-hud small {
+  line-height: 10px;
+}
+.go-page #game-board.go-canvas {
+  max-width: none;
+  max-height: none;
+  margin: 0;
+}
+.go-page[data-focus="true"] .go-play {
+  display: block;
+}
+.go-page .go-stage .go-entry {
+  min-height: 0;
+}
+.preview-go {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  width: 65%;
+  margin: auto;
+}
+.preview-go i {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #e7dceb;
+  box-shadow: 0 4px 7px #0008;
+}
+.preview-go i:nth-child(odd) {
+  background: #17111f;
+  outline: 1px solid #8f739d;
+}
+@media (min-width: 1100px) {
+  .go-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+  .go-leaderboard {
+    position: sticky;
+    top: 12px;
+    max-height: calc(100dvh - 100px);
+    overflow: auto;
+  }
+}
+@media (max-width: 600px) {
+  .go-setup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .go-entry,
+  .go-room-panel,
+  .go-result {
+    inset: auto 2% 2%;
+    padding: 10px;
+  }
+  .go-entry .eyebrow {
+    display: none;
+  }
+  .go-entry p {
+    margin: 6px 0;
+    font-size: 10px;
+  }
+  .go-page .go-stage {
+    min-height: 290px;
+  }
+  .go-page .go-start-actions .button {
+    flex: 1;
+  }
+  .go-hud {
+    font-size: 10px;
+    gap: 4px;
+  }
+  #go-advanced {
+    font-size: 10px;
+  }
+  .go-status {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .go-page * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
