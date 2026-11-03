@@ -13,7 +13,7 @@ Results are recorded separately for pure tests, simulated browser layouts, real 
 | WebKit              | Same layout, interaction, promotion, real Worker and recovery task                                                                                                                      | Passed  |
 | Production schema   | Two compatible migrations, Edge v15, anonymous leaderboard reads; admin RPC denied to anon/authenticated                                                                                | Passed  |
 | Production backend  | Three disposable Auth accounts, real two-browser Ready/moves/draw, 7 private revision broadcasts, ownership/stale-request rejection, refresh/read-only tab, Go/Pong/Whiteboard capacity | Passed  |
-| Production site     | Both languages, navigation/search, resources, real engine and download                                                                                                                  | Pending |
+| Production site     | Both languages, navigation/search, resources, real engine and download                                                                                                                  | Passed  |
 | Android hardware    | Touch confirmation, soft keyboard, downloads, sound and sustained AI use                                                                                                                | Pending |
 | Real Google consent | Interactive sign-in/return on the user's real account                                                                                                                                   | Pending |
 
@@ -24,3 +24,7 @@ Android short checklist: open Chess, start local play, tap a piece and target th
 Full local regression: 33/33 unit suites and 18/18 database suites passed. Targeted Chess/Go database suites passed again after leaderboard isolation. Browser checks use actual local engines with a mocked account API; physical Android and real Google consent are separate pending checks.
 
 Live run: 20 instrumented requests, p95 round-trip 1,243ms (network latency, not Edge CPU time), zero public scores. Cleanup verified zero fixture users, sessions, matches, public profiles and statistics. No privileged test endpoint was installed.
+
+Production walk-through found two release defects and supplied targeted fixes: Vercel's archive exclusion hid the required Stockfish source download, and an older Project entry without optional search aliases broke non-empty site searches. The source archive is explicitly included, builds require it, and search accepts older indexes with missing aliases. The bilingual browser regression now deliberately tests such an index, including Minesweeper, QR Studio and Chess searches.
+
+Production verification passed against the actual Vercel domain with no mocked account API: 90 public entry-page requests, 11 resource/hash checks, Traditional Chinese search, Games navigation, anonymous leaderboard, local play, state-preserving language switch, actual PGN download, production Stockfish Worker reply and IndexedDB Continue recovery. No browser page errors occurred. Formal schema tests cover 104 sitemap URLs and 112 localized pages. Simulated touch/viewports remain distinct from physical Android acceptance.
