@@ -4,8 +4,8 @@ const { chromium } = require("../support/browser.cjs");
 const { gameClick, gameSelect } = require("../support/game-shell.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
 const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
-  (g) => g.slug !== "go",
-); // Go has its own authoritative-match acceptance suite.
+  (g) => !["go", "chess", "xiangqi"].includes(g.slug),
+); // Go, Chess and Xiangqi use their dedicated authoritative-match browser suites.
 const ranked = games.filter(
   (g) => !["connect-four", "reversi", "pong"].includes(g.slug),
 );

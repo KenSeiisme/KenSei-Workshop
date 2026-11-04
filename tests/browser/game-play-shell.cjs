@@ -9,8 +9,8 @@ const {
 } = require("../support/game-shell.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
 const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
-  (g) => g.slug !== "go",
-); // Go has its own authoritative-match acceptance suite.
+  (g) => !["go", "chess", "xiangqi"].includes(g.slug),
+); // Go, Chess and Xiangqi use their dedicated authoritative-match browser suites.
 const sdk = `export function createClient(){const id=window.__shellSigned?'11111111-1111-4111-8111-111111111111':null;window.__shellCalls=[];return {auth:{getSession:async()=>({data:{session:id?{user:{id}}:null}}),onAuthStateChange(){},signInWithOAuth:async()=>({error:null})},from(){return{select(){return this},order:async()=>({data:[]})}},rpc:async(name,args)=>({data:name==='ensure_my_profile'?{public_id:id,nickname:'Shell Player',avatar_kind:'none'}:name==='get_game_leaderboard'?{version:1,top:[],me:null}:name==='get_my_game_progress'?{unlocks:[],progress:{},verified_results:0,games_ranked:0}:[],error:null}),functions:{invoke:async(name,{body})=>{window.__shellCalls.push({name,body});if(window.__shellFailStart&&name.endsWith('/start'))return{data:{error:'Temporary session failure'},error:{message:'Temporary session failure'}};return{data:{id:'22222222-2222-4222-8222-222222222222',seed:12345,version:body.game==='brick-breaker'?2:1},error:null}}}}}`;
 (async () => {
   const browser = await chromium.launch({

@@ -1,0 +1,418 @@
+{
+  "m_19f7d87fb92a": {
+    "en": "Xiangqi",
+    "zh-Hant": "中國象棋"
+  },
+  "m_34be31a52449": {
+    "en": "Your next move starts here. Local two players, Fairy-Stockfish and verified online matches.",
+    "zh-Hant": "從這裡走出下一步。支援本機雙人、Fairy-Stockfish 人機及經驗證的線上對戰。"
+  },
+  "m_44cb36b766ec": {
+    "en": "Standard xiangqi · 8 × 8",
+    "zh-Hant": "標準中國象棋 · 8 × 8"
+  },
+  "m_8801cbf080b1": {
+    "en": "Standard xiangqi · {0}",
+    "zh-Hant": "標準中國象棋 · {0}"
+  },
+  "m_ba19e9c3d5f4": {
+    "en": "Red",
+    "zh-Hant": "紅方"
+  },
+  "m_477ea3dc835e": {
+    "en": "Xiangqi match status",
+    "zh-Hant": "中國象棋對局狀態"
+  },
+  "m_114facf682b4": {
+    "en": "Xiangqi board. Arrow keys select a square; Enter selects a piece or destination.",
+    "zh-Hant": "中國象棋棋盤。方向鍵選擇格子，Enter 選擇棋子或落點。"
+  },
+  "m_3a2ceee6b86f": {
+    "en": "Xiangqi setup",
+    "zh-Hant": "中國象棋開局設定"
+  },
+  "m_72c2e218d333": {
+    "en": "Xiangqi leaderboard",
+    "zh-Hant": "中國象棋戰績榜"
+  },
+  "m_ca4338050e2e": {
+    "en": "Xiangqi records",
+    "zh-Hant": "中國象棋戰績"
+  },
+  "m_851318d0110d": {
+    "en": "Red moves first. Protect your king; checkmate wins. Use drag and drop or select a piece and destination. On touch screens, confirm your preview. Promotion offers queen, rook, bishop or knight.",
+    "zh-Hant": "紅方先行。保護自己的國王，將死對方即可獲勝。可拖曳走子，或依次選擇棋子與落點；觸控裝置先預覽再確認。升變可選皇后、城堡、主教或騎士。"
+  },
+  "m_3108a57cf466": {
+    "en": "Local and computer games save privately. Imported positions are checked for basic legality, not complete historical reachability. Fairy-Stockfish levels do not represent official ratings.",
+    "zh-Hant": "本機與人機對局使用私人存檔。匯入時僅檢查局面的基本合法性，不證明其完整歷史可達性。Fairy-Stockfish 等級不代表正式棋力評分。"
+  },
+  "m_0548a8793529": {
+    "en": "FIDE Laws of Xiangqi",
+    "zh-Hant": "FIDE 中國象棋規則"
+  },
+  "m_3bf452f01f94": {
+    "en": "No verified xiangqi matches yet.",
+    "zh-Hant": "尚無已驗證的中國象棋對局。"
+  },
+  "m_95540294cd8e": {
+    "en": "Choose a supported xiangqi time control.",
+    "zh-Hant": "請選擇支援的中國象棋用時設定。"
+  },
+  "m_85bc678384e5": {
+    "en": "Invalid xiangqi move.",
+    "zh-Hant": "中國象棋走法無效。"
+  },
+  "m_7f10fc6f3f44": {
+    "en": "Invalid xiangqi action.",
+    "zh-Hant": "中國象棋操作無效。"
+  },
+  "m_1a34d0a34fbc": {
+    "en": "This xiangqi game has ended.",
+    "zh-Hant": "此中國象棋對局已結束。"
+  },
+  "m_acdcb1672ebc": {
+    "en": "Xiangqi record limit reached. Export the PGN.",
+    "zh-Hant": "中國象棋步譜已達上限，請匯出 PGN 棋譜。"
+  },
+  "m_8c5d4b2fe8a3": {
+    "en": "Unknown xiangqi action.",
+    "zh-Hant": "未知的中國象棋操作。"
+  },
+  "m_81d38a4eff0d": {
+    "en": "Invalid xiangqi save or size over 256 KB.",
+    "zh-Hant": "中國象棋存檔無效或超過 256 KB。"
+  },
+  "m_f14114f7cfd2": {
+    "en": "Xiangqi engine timed out. Retry or choose local two players.",
+    "zh-Hant": "中國象棋引擎逾時，請重試或改用本機雙人。"
+  },
+  "m_cae0951c1b94": {
+    "en": "Loading Fairy-Stockfish…",
+    "zh-Hant": "正在載入 Fairy-Stockfish…"
+  },
+  "m_dc369f6da3ef": {
+    "en": "Fairy-Stockfish could not load. Retry or choose local two players.",
+    "zh-Hant": "Fairy-Stockfish 載入失敗，請重試或改用本機雙人。"
+  },
+  "m_851b49ecc804": {
+    "en": "Fairy-Stockfish ready",
+    "zh-Hant": "Fairy-Stockfish 已就緒"
+  },
+  "m_32a4982035fc": {
+    "en": "Fairy-Stockfish returned no legal move. Retry the engine.",
+    "zh-Hant": "Fairy-Stockfish 未回傳合法走法，請重試引擎。"
+  },
+  "m_d970d4779106": {
+    "en": "Sign in to play online xiangqi.",
+    "zh-Hant": "請登入以進行線上中國象棋對戰。"
+  },
+  "m_ba2ce3c1c826": {
+    "en": "Invalid standard xiangqi configuration.",
+    "zh-Hant": "標準中國象棋設定無效。"
+  },
+  "m_7318f6a89302": {
+    "en": "Xiangqi · online records",
+    "zh-Hant": "中國象棋 · 線上戰績"
+  },
+  "m_35388f110ce1": {
+    "en": "Play Xiangqi →",
+    "zh-Hant": "開始下中國象棋 →"
+  },
+  "m_d3803978bbb9": {
+    "en": "Xiangqi rules v{0} · {1}",
+    "zh-Hant": "中國象棋規則 v{0} · {1}"
+  },
+  "m_6595565f5f9c": {
+    "en": "Online Xiangqi and public records",
+    "zh-Hant": "線上象棋與公開戰績"
+  },
+  "m_c2a9fbd85d76": {
+    "en": "Xiangqi uses the same private server-verified match service as Go. Match members can read the position, moves, clocks and outcome. Standard online human games publish completed games, wins, losses, draws and win rate by time control. Local games, Fairy-Stockfish practice and imported positions remain private. Fairy-Stockfish runs on this device without sending positions to an external AI service. Unresolved and interrupted matches do not enter public statistics. Go, Xiangqi, Pong and shared Redboard share a two-active-room limit.",
+    "zh-Hant": "中國象棋與圍棋共用私人且由伺服器驗證的對局服務。對局成員可讀取局面、步譜、時鐘與結果。標準線上真人局會按用時設定公開完局、勝、負、和及勝率；本機、Fairy-Stockfish 練習與匯入局面維持私人。Fairy-Stockfish 在此裝置執行，不會將局面傳送至外部 AI 服務。未決與中斷對局不計入公開統計。Go、Chess、Pong 與共享 Whiteboard 合計最多兩個活躍房間。"
+  },
+  "m_2c00c9aaa72c": {
+    "en": "Authors",
+    "zh-Hant": "作者"
+  },
+  "m_9fb08083729f": {
+    "en": "Choose a supported Xiangqi time control.",
+    "zh-Hant": "請選擇支援的象棋用時。"
+  },
+  "m_7a6187b6c134": {
+    "en": "Invalid Xiangqi action.",
+    "zh-Hant": "象棋操作無效。"
+  },
+  "m_da082559a361": {
+    "en": "Invalid Xiangqi move.",
+    "zh-Hant": "象棋著手無效。"
+  },
+  "m_87ece765bf72": {
+    "en": "Invalid Xiangqi save action.",
+    "zh-Hant": "象棋存檔的操作紀錄無效。"
+  },
+  "m_ae37bc42ce61": {
+    "en": "Invalid standard Xiangqi configuration.",
+    "zh-Hant": "標準象棋對局設定無效。"
+  },
+  "m_0cfc02cfe736": {
+    "en": "This Xiangqi game has ended.",
+    "zh-Hant": "這局象棋已結束。"
+  },
+  "m_9ba525e5b00e": {
+    "en": "Unknown Xiangqi action.",
+    "zh-Hant": "無法識別的象棋操作。"
+  },
+  "m_6554b6b6a58f": {
+    "en": "Online clocks continue in the background. A continuous 120-second disconnection forfeits unless time expires first. Both disconnected: interrupted. Draw offers keep the clock running.",
+    "zh-Hant": "線上時鐘在背景繼續運行。連續斷線一百二十秒判負，若時間先用完則先判超時；雙方均斷線則記為中斷。提議和棋不會暫停時鐘。"
+  },
+  "m_555543445536": {
+    "en": "Xiangqi rules and adjudication are independently implemented Workshop code.",
+    "zh-Hant": "象棋規則與裁定由 Workshop 獨立實作。"
+  },
+  "m_965bd7d001e3": {
+    "en": "Xiangqi uses the same private match service. The server checks WXF moves, repetition, clocks and outcomes. Standard online human games publish wins, losses, draws and completed games by time control. Private games, imported records and computer practice do not enter public statistics. Fairy-Stockfish runs locally without sending positions to an AI service. Only Xiangqi pages and engine resources enable cross-origin isolation for the local engine.",
+    "zh-Hant": "象棋沿用私有對局服務，由伺服器核對 WXF 著手、循環、時鐘與結果。標準線上真人局按用時公開勝、負、和及完局數；私人對局、匯入棋譜與人機練習不計入。Fairy-Stockfish 在本機運行，不會把局面傳給 AI 服務。只有象棋頁及引擎資源啟用本機引擎所需的跨來源隔離。"
+  },
+  "m_d6e97739d927": {
+    "en": "Chess uses the same private server-verified match service as Go. Match members can read the position, moves, clocks and outcome. Standard online human games publish completed games, wins, losses, draws and win rate by time control. Local games, Stockfish practice and imported positions remain private. Stockfish runs on this device without sending positions to an external AI service. Unresolved and interrupted matches do not enter public statistics. Go, Chess, Xiangqi, Pong and shared Whiteboard share a two-active-room limit.",
+    "zh-Hant": "西洋棋沿用圍棋的私有伺服器驗證服務，成員可讀取局面、著手、時鐘與結果。標準線上真人局按用時公開完局、勝負和與勝率。本機、Stockfish 練習和匯入局面維持私有，引擎不傳送局面至外部 AI。未決及中斷對局不計戰績。圍棋、西洋棋、象棋、Pong 與共享白板共用兩個活躍房間上限。"
+  },
+  "m_78d9ad458ebc": {
+    "en": "Chariot",
+    "zh-Hant": "車"
+  },
+  "m_edc513403366": {
+    "en": "Horse",
+    "zh-Hant": "馬"
+  },
+  "m_d48f07feb6fc": {
+    "en": "Elephant",
+    "zh-Hant": "象／相"
+  },
+  "m_28da8c1f9ede": {
+    "en": "Advisor",
+    "zh-Hant": "士／仕"
+  },
+  "m_23c237c85e6a": {
+    "en": "Cannon",
+    "zh-Hant": "炮／砲"
+  },
+  "m_c910d474dcd7": {
+    "en": "General",
+    "zh-Hant": "將／帥"
+  },
+  "m_f826baa05bef": {
+    "en": "Soldier",
+    "zh-Hant": "兵／卒"
+  },
+  "m_2e70a937c403": {
+    "en": "A familiar board. A new challenge.",
+    "zh-Hant": "熟悉的棋盤，全新的較量。"
+  },
+  "m_3da5097c648e": {
+    "en": "A familiar board. A new challenge. WXF rules, five computer levels and verified online matches.",
+    "zh-Hant": "熟悉的棋盤，全新的較量。支援 WXF 規則、五級人機與伺服器驗證的線上對戰。"
+  },
+  "m_90310a1c7269": {
+    "en": "WXF 2018 · 9 × 10",
+    "zh-Hant": "WXF 2018 · 九路十行"
+  },
+  "m_e3064455810f": {
+    "en": "WXF 2018 · 9 × 10 · {0}",
+    "zh-Hant": "WXF 2018 · 九路十行 · {0}"
+  },
+  "m_204fe7878cb4": {
+    "en": "Piece labels",
+    "zh-Hant": "棋子標示"
+  },
+  "m_42f5ad7bcd87": {
+    "en": "Chinese characters",
+    "zh-Hant": "漢字"
+  },
+  "m_0b438c8abb4d": {
+    "en": "Letters",
+    "zh-Hant": "字母"
+  },
+  "m_541abcb6d58f": {
+    "en": "Download ICCS",
+    "zh-Hant": "下載 ICCS 棋譜"
+  },
+  "m_49e0e6d56e34": {
+    "en": "Download JSON",
+    "zh-Hant": "下載 JSON"
+  },
+  "m_0e3a38158550": {
+    "en": "ICCS, JSON or FEN",
+    "zh-Hant": "ICCS、JSON 或 FEN"
+  },
+  "m_726ed70ef37f": {
+    "en": "No legal move · loss",
+    "zh-Hant": "無子可動 · 判負"
+  },
+  "m_f099dab06220": {
+    "en": "Neither side has attacking pieces",
+    "zh-Hant": "雙方均無進攻棋子"
+  },
+  "m_9819a334d184": {
+    "en": "Natural move limit · 100 qualifying plies",
+    "zh-Hant": "自然限著 · 一百個有效著手"
+  },
+  "m_1e4056b0860b": {
+    "en": "Lawful repetition",
+    "zh-Hant": "合法循環和棋"
+  },
+  "m_7c787ff27b79": {
+    "en": "Refused to vary perpetual check",
+    "zh-Hant": "長將警告後拒絕變著"
+  },
+  "m_5042a55e057c": {
+    "en": "Refused to vary perpetual chase",
+    "zh-Hant": "長捉警告後拒絕變著"
+  },
+  "m_afe88222b7e9": {
+    "en": "Result declared in imported record",
+    "zh-Hant": "匯入棋譜所記載的結果"
+  },
+  "m_d598d97acbff": {
+    "en": "{0} must vary this repetition. Repeating the prohibited move loses the game.",
+    "zh-Hant": "{0}必須改變此循環；再重複犯例著手將判負。"
+  },
+  "m_50cc5afdca91": {
+    "en": "The Xiangqi engine timed out. Retry or choose another mode.",
+    "zh-Hant": "象棋引擎逾時，請重試或改用其他模式。"
+  },
+  "m_5f5fada63ac1": {
+    "en": "This browser cannot run the Xiangqi engine here. Use local two players or online play.",
+    "zh-Hant": "此瀏覽器目前無法執行象棋引擎，仍可使用本機雙人或線上對戰。"
+  },
+  "m_963e11efb6af": {
+    "en": "Fairy-Stockfish could not load. Retry or choose another mode.",
+    "zh-Hant": "無法載入 Fairy-Stockfish，請重試或改用其他模式。"
+  },
+  "m_5f3e74cdb064": {
+    "en": "The Xiangqi engine returned an invalid move.",
+    "zh-Hant": "象棋引擎傳回無效著手。"
+  },
+  "m_2d587bd2354f": {
+    "en": "Invalid Xiangqi engine move.",
+    "zh-Hant": "象棋引擎著手格式無效。"
+  },
+  "m_c3969d5342ac": {
+    "en": "Invalid Xiangqi FEN.",
+    "zh-Hant": "象棋 FEN 局面格式無效。"
+  },
+  "m_996998e4bf37": {
+    "en": "Invalid Xiangqi FEN piece.",
+    "zh-Hant": "象棋 FEN 含無效棋子。"
+  },
+  "m_fdd5b9ed772c": {
+    "en": "Xiangqi FEN requires nine files per rank.",
+    "zh-Hant": "象棋 FEN 每行必須有九路。"
+  },
+  "m_bf5384d9b459": {
+    "en": "Xiangqi has no castling or en passant rights.",
+    "zh-Hant": "象棋不使用王車易位或吃過路兵欄位。"
+  },
+  "m_4029ca3ba998": {
+    "en": "Invalid Xiangqi FEN counters.",
+    "zh-Hant": "象棋 FEN 的著手計數無效。"
+  },
+  "m_e0cec73d9d0f": {
+    "en": "Invalid Xiangqi piece identity.",
+    "zh-Hant": "象棋棋子識別資料無效。"
+  },
+  "m_19a3619ba570": {
+    "en": "Select a Xiangqi piece.",
+    "zh-Hant": "請先選擇象棋棋子。"
+  },
+  "m_c36c34610257": {
+    "en": "Invalid Xiangqi FEN piece count.",
+    "zh-Hant": "象棋 FEN 的棋子數量無效。"
+  },
+  "m_308317f13179": {
+    "en": "The general must remain inside its palace.",
+    "zh-Hant": "將帥必須位於己方九宮內。"
+  },
+  "m_ed89568c8f66": {
+    "en": "Invalid advisor position.",
+    "zh-Hant": "士／仕的位置無效。"
+  },
+  "m_c7d2a71beb50": {
+    "en": "Invalid elephant position.",
+    "zh-Hant": "象／相的位置無效。"
+  },
+  "m_effdd0a5251a": {
+    "en": "Invalid soldier position.",
+    "zh-Hant": "兵／卒的位置無效。"
+  },
+  "m_4a3fc0a48a60": {
+    "en": "The side that just moved cannot remain in check.",
+    "zh-Hant": "剛走完的一方不能仍處於被將軍狀態。"
+  },
+  "m_19a4dc8c5251": {
+    "en": "Use WXF 2018 on the standard 9 × 10 board.",
+    "zh-Hant": "請使用標準九路十行棋盤與 WXF 2018 規則。"
+  },
+  "m_417b0a076906": {
+    "en": "Xiangqi record limit reached. Export the record.",
+    "zh-Hant": "象棋紀錄已達上限，請匯出棋譜。"
+  },
+  "m_43723ad38ef4": {
+    "en": "Invalid Xiangqi record.",
+    "zh-Hant": "象棋棋譜無效。"
+  },
+  "m_632c879be5a9": {
+    "en": "Invalid Xiangqi result.",
+    "zh-Hant": "象棋結果無效。"
+  },
+  "m_dfbd95c211ee": {
+    "en": "Invalid Xiangqi save or size over 256 KB.",
+    "zh-Hant": "象棋存檔無效或超過 256KB。"
+  },
+  "m_25b1e50a05df": {
+    "en": "Invalid saved Xiangqi clock.",
+    "zh-Hant": "存檔中的象棋時鐘無效。"
+  },
+  "m_2ee0c8cbbd72": {
+    "en": "Import one Xiangqi record up to 256 KB.",
+    "zh-Hant": "請匯入一份不超過 256KB 的象棋棋譜。"
+  },
+  "m_e815aa5f96fb": {
+    "en": "Use an ICCS a0-i9 Xiangqi text record.",
+    "zh-Hant": "請使用 a0–i9 座標的 ICCS 象棋文字棋譜。"
+  },
+  "m_849ba18f3566": {
+    "en": "Invalid ICCS move in record.",
+    "zh-Hant": "棋譜中含無效 ICCS 著手。"
+  },
+  "m_115e09fd6a99": {
+    "en": "World Xiangqi Rules 2018",
+    "zh-Hant": "世界象棋規則 2018"
+  },
+  "m_f58333c587da": {
+    "en": "Import an ICCS text record, KenSei JSON record or FEN position. Imported games remain private. FEN has no previous repetition or checking history; those counters start here.",
+    "zh-Hant": "可匯入 ICCS 文字棋譜、KenSei JSON 或 FEN 局面。匯入對局維持私人；FEN 不含先前循環與將軍歷史，相關計數從匯入後開始。"
+  },
+  "m_01c803c40da9": {
+    "en": "Red moves first on the standard 9 × 10 board. Protect your general; checkmate and having no legal move both lose. Select a piece and destination, drag, or use the board arrow keys and Enter. On touch screens, confirm your preview.",
+    "zh-Hant": "標準棋盤為九路十行，紅方先行。請保護將帥：被將死或無子可動均判負。可點選棋子與落點、拖動，或在棋盤使用方向鍵及 Enter；觸控裝置須確認預覽落點。"
+  },
+  "m_fd8814cca3d9": {
+    "en": "WXF 2018 rules apply. Horse legs, elephant eyes, cannon screens, river and palace restrictions are enforced. Online play has no undo, hints or single-player pause.",
+    "zh-Hant": "採用 WXF 2018 規則，檢查蹩馬腿、塞象眼、炮架、過河及九宮限制。線上對局不提供悔棋、提示或單方暫停。"
+  },
+  "m_75423af9bfb4": {
+    "en": "This site follows the Chinese original: after the same position returns three times, the responsible player is warned to vary. Repeating that prohibited transition loses. Lawful repetition draws after four returns. This digital referee policy is fixed for rules v1.",
+    "zh-Hant": "本站以中文原文為準：同一局面返回三次後，警告責任方變著；再重複該犯例著手判負。合法循環返回四次判和。此數位裁判口徑固定於規則 v1。"
+  },
+  "m_0a17c8cdf536": {
+    "en": "The natural move limit is 100 qualifying plies without a capture; pawn moves do not reset it. Only a player's first ten checks count toward that player's verification total. The automatic referee verifies either player's eligible count. Checkmate and repetition forfeits take priority.",
+    "zh-Hant": "無吃子的自然限著為一百個有效著手，兵卒移動不重置。每方只有前十次將軍計入其審核計數，由自動裁判驗證任一方是否符合；將死及循環犯例判負優先。"
+  },
+  "m_3d6835146dbf": {
+    "en": "Private progress saves on this device first; signed-in saves sync to your account. Imported records never become ranked. Fairy-Stockfish runs on this device; its five levels are not official ratings.",
+    "zh-Hant": "私人進度先儲存在此裝置，登入後同步至帳號。匯入棋譜不參加公開戰績。Fairy-Stockfish 在此裝置執行，五級難度不代表官方段位。"
+  }
+}

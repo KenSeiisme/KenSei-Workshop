@@ -34,7 +34,7 @@ assert.equal(
   }).musicEnabled,
   false,
 );
-assert.equal(Object.keys(AUDIO_PROFILES).length, 14);
+assert.equal(Object.keys(AUDIO_PROFILES).length, 15);
 const before = {
   game: "2048",
   status: "playing",
@@ -179,5 +179,5 @@ for (const [name, profile] of Object.entries(manifest.profiles)) {
     assert.ok(profile.cues[cue]?.length, name + cue);
 }
 console.log(
-  "PASS audio v2 migration, 13 profiles, effective actions, player perspective, powerups, no mutation, countdown dedupe, pinned assets and download / PCM budgets.",
+  "PASS audio v2 migration, 15 game profiles, effective actions, player perspective, powerups, no mutation, countdown dedupe, pinned assets and download / PCM budgets.",
 );

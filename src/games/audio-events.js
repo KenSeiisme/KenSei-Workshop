@@ -2,6 +2,7 @@
 export const AUDIO_PROFILES = Object.freeze({
   go: "board",
   chess: "board",
+  xiangqi: "board",
   "connect-four": "board",
   reversi: "board",
   2048: "puzzle",

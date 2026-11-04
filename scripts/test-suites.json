@@ -171,5 +171,14 @@
     ["tests/unit/chess-edge.mjs"],
     ["tests/database/chess-matches.mjs"],
     ["tests/browser/chess.cjs"]
+  ],
+  "xiangqi": [
+    ["tests/unit/xiangqi-static.mjs"],
+    ["tests/unit/xiangqi.mjs"],
+    ["tests/unit/xiangqi-edge.mjs"],
+    ["tests/database/xiangqi-matches.mjs"],
+    ["tests/browser/xiangqi.cjs"],
+    ["tests/browser/xiangqi-ai.cjs"],
+    ["tests/browser/xiangqi-profile.cjs"]
   ]
 }

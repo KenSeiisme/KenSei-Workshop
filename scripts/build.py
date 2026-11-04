@@ -83,11 +83,17 @@ if not arguments.pages_only:
             ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.tar.gz"),
         )
     # GPL 引擎的固定版本對應原始碼必須隨本站提供。
-    archive = SOURCE / "vendor/sources/stockfish-js-19.0.1-source.tar.gz"
-    if not archive.is_file():
-        raise FileNotFoundError("Stockfish corresponding source archive is required.")
-    (OUT / "vendor/sources").mkdir(parents=True, exist_ok=True)
-    shutil.copy2(archive, OUT / "vendor/sources" / archive.name)
+    for name in [
+        "stockfish-js-19.0.1-source.tar.gz",
+        "fairy-stockfish-1.1.12-source.tar.gz",
+    ]:
+        archive = SOURCE / "vendor/sources" / name
+        if not archive.is_file():
+            raise FileNotFoundError(
+                "Corresponding engine source archive is required: " + name
+            )
+        (OUT / "vendor/sources").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(archive, OUT / "vendor/sources" / archive.name)
 
 ICONS = {
     "cards": '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',

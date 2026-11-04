@@ -1,0 +1,3113 @@
+{
+  "schemaVersion": 1,
+  "ruleset": "WXF2018",
+  "coordinateConvention": "ICCS: a0 is Red's left corner; files a-i, ranks 0-9; uppercase pieces are Red; N=horse, B=elephant.",
+  "execution": "Load startFen; replay prefix, then cycle exactly cyclesToPlay times. Keep physical piece identities across all plies. Expected result is from the official family ruling, after sufficient repetition.",
+  "verificationScope": "All coordinate lines pass an independent piece-movement, obstruction, palace, river, horse-leg, elephant-eye, self-check, and facing-kings replay check. This is reference-fixture preparation, not evidence that any target adjudicator passes.",
+  "officialSource": "2018 World Xiangqi Rules, numbered diagrams 1-110, printed pages 40-99 (PDF pages 48-107).",
+  "authorReference": {
+    "url": "https://github.com/danieltan1517/orange-xiangqi/blob/e30960b4924710dc0fb332bb4cb5955cc04cc1f3/tests.jai",
+    "commit": "e30960b4924710dc0fb332bb4cb5955cc04cc1f3",
+    "blobSha": "4d2d7b94fdee2fb5f35ee2f1dc5a881eb425c55b",
+    "sourceLicense": null,
+    "originalCases": 173
+  },
+  "diagramCount": 110,
+  "fixtures": [
+    {
+      "id": "wxf2018-001",
+      "diagram": 1,
+      "official": {
+        "pdfPage": 48,
+        "printedPage": 40,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=48"
+      },
+      "startFen": "c2a1k3/2c1a2R1/b6P1/8p/9/9/9/9/4K4/9 w - - 0 1",
+      "prefix": ["h8h9", "f9f8"],
+      "cycle": ["h9h8", "f8f9", "h8h9", "f9f8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 2,
+          "line": 333
+        },
+        {
+          "index": 3,
+          "line": 334
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-002",
+      "diagram": 2,
+      "official": {
+        "pdfPage": 48,
+        "printedPage": 40,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=48"
+      },
+      "startFen": "9/4k4/9/9/9/9/9/9/2p6/3K1RBc1 w - - 0 1",
+      "prefix": ["f0e0", "e8f8", "e0f0"],
+      "cycle": ["f8e8", "f0e0", "e8f8", "e0f0"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 4,
+          "line": 335
+        },
+        {
+          "index": 5,
+          "line": 336
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-003",
+      "diagram": 3,
+      "official": {
+        "pdfPage": 49,
+        "printedPage": 41,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=49"
+      },
+      "startFen": "4R4/3k5/5R3/9/9/2B6/n8/3pB4/4p4/3K5 w - - 0 1",
+      "prefix": ["e9d9", "d8e8"],
+      "cycle": ["d9e9", "e8d8", "e9d9", "d8e8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 6,
+          "line": 337
+        },
+        {
+          "index": 7,
+          "line": 338
+        },
+        {
+          "index": 8,
+          "line": 339
+        },
+        {
+          "index": 9,
+          "line": 340
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-004",
+      "diagram": 4,
+      "official": {
+        "pdfPage": 49,
+        "printedPage": 41,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=49"
+      },
+      "startFen": "3akr3/5c3/1P2b4/4R4/9/9/9/9/9/4CK3 w - - 0 1",
+      "prefix": ["e6e7", "f8e8", "e7f7"],
+      "cycle": ["e8f8", "f7e7", "f8e8", "e7f7"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 10,
+          "line": 341
+        },
+        {
+          "index": 11,
+          "line": 342
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-005",
+      "diagram": 5,
+      "official": {
+        "pdfPage": 50,
+        "printedPage": 42,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=50"
+      },
+      "startFen": "5c3/8R/4k2P1/3P5/5P3/6P2/5pN2/5A3/4CK3/6rn1 w - - 0 1",
+      "prefix": ["f5e5", "f3e3", "e5f5", "e3f3", "f5e5"],
+      "cycle": ["f3e3", "e5f5", "e3f3", "f5e5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 12,
+          "line": 345
+        },
+        {
+          "index": 13,
+          "line": 346
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-006",
+      "diagram": 6,
+      "official": {
+        "pdfPage": 50,
+        "printedPage": 42,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=50"
+      },
+      "startFen": "3ak1b2/4a4/4b4/r3C2R1/p8/9/P8/4p4/4p4/5K3 w - - 0 1",
+      "prefix": ["h6g6", "g9i7"],
+      "cycle": ["g6h6", "i7g9", "h6g6", "g9i7"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 14,
+          "line": 349
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-007",
+      "diagram": 7,
+      "official": {
+        "pdfPage": 51,
+        "printedPage": 43,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=51"
+      },
+      "startFen": "2b2k3/9/4b2P1/3N5/1R6p/6P2/5p2r/8n/4p4/5K3 w - - 0 1",
+      "prefix": ["d6c8", "f9f8", "c8d6"],
+      "cycle": ["f8f9", "d6c8", "f9f8", "c8d6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 15,
+          "line": 350
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-008",
+      "diagram": 8,
+      "official": {
+        "pdfPage": 51,
+        "printedPage": 43,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=51"
+      },
+      "startFen": "3aka3/4n4/4b4/4C4/p3p3p/9/2c6/2C6/4K4/9 w - - 0 1",
+      "prefix": ["c2g2", "c3g3"],
+      "cycle": ["g2c2", "g3c3", "c2g2", "c3g3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 16,
+          "line": 351
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-009",
+      "diagram": 9,
+      "official": {
+        "pdfPage": 52,
+        "printedPage": 44,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=52"
+      },
+      "startFen": "2bNka3/1N2aPP2/n3b4/p8/5c3/2C6/9/4B4/4A4/r1BK1A1n1 w - - 0 1",
+      "prefix": ["c4h4", "f5h5", "h4e4", "h5e5"],
+      "cycle": ["e4h4", "e5h5", "h4e4", "h5e5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 17,
+          "line": 352
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-010",
+      "diagram": 10,
+      "official": {
+        "pdfPage": 52,
+        "printedPage": 44,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=52"
+      },
+      "startFen": "5k3/2CPP4/9/9/9/9/9/B3p4/r8/4K4 w - - 0 1",
+      "prefix": ["e8f8", "f9e9"],
+      "cycle": ["e0f0", "e2f2", "f8e8", "e9f9", "f0e0", "f2e2", "e8f8", "f9e9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 18,
+          "line": 353
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-011",
+      "diagram": 11,
+      "official": {
+        "pdfPage": 53,
+        "printedPage": 45,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=53"
+      },
+      "startFen": "2bak4/4a4/4b4/8p/5R3/8P/n8/1r2C4/9/1cBAKAB2 w - - 0 1",
+      "prefix": ["f5h5", "e9f9", "h5f5", "f9e9", "f5h5"],
+      "cycle": ["e9f9", "h5f5", "f9e9", "f5h5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 19,
+          "line": 354
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-012",
+      "diagram": 12,
+      "official": {
+        "pdfPage": 53,
+        "printedPage": 45,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=53"
+      },
+      "startFen": "2bak3r/2R1a2C1/2Rcb4/2N2P3/5C2p/9/9/4p4/4p2p1/5K3 w - - 0 1",
+      "prefix": ["f5e5", "e9f9"],
+      "cycle": ["e5f5", "f9e9", "f5e5", "e9f9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 21,
+          "line": 356
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Author call order differs from official diagram numbering."
+    },
+    {
+      "id": "wxf2018-013",
+      "diagram": 13,
+      "official": {
+        "pdfPage": 54,
+        "printedPage": 46,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=54"
+      },
+      "startFen": "2ba1k3/4a4/b8/7R1/9/9/1r2p4/9/4A4/2B1KAB1c w - - 0 1",
+      "prefix": ["h6h9", "f9f8", "h9h0"],
+      "cycle": ["i0i1", "h0h8", "f8f9", "h8h1", "i1i0", "h1h9", "f9f8", "h9h0"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 20,
+          "line": 355
+        },
+        {
+          "index": 28,
+          "line": 369
+        },
+        {
+          "index": 29,
+          "line": 370
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Reference calls 28 and 29 use the same placement with a different losing chase cycle; the selected official family cycle is a draw."
+    },
+    {
+      "id": "wxf2018-014",
+      "diagram": 14,
+      "official": {
+        "pdfPage": 54,
+        "printedPage": 46,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=54"
+      },
+      "startFen": "4ka3/2R1a4/C8/p7p/1P5n1/9/4n4/4B4/9/4K1B2 w - - 0 1",
+      "prefix": ["c8c9", "e8d9"],
+      "cycle": ["c9c8", "d9e8", "c8c9", "e8d9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 22,
+          "line": 359
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-015",
+      "diagram": 15,
+      "official": {
+        "pdfPage": 55,
+        "printedPage": 47,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=55"
+      },
+      "startFen": "1R1C1abr1/4k4/4b4/p7p/2p6/9/r1P3P2/B8/9/2B1KA3 w - - 0 1",
+      "prefix": ["b9b8", "e8e9"],
+      "cycle": ["b8b9", "e9e8", "b9b8", "e8e9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 23,
+          "line": 360
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-016",
+      "diagram": 16,
+      "official": {
+        "pdfPage": 55,
+        "printedPage": 47,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=55"
+      },
+      "startFen": "3k1a3/4a1P2/8r/9/2R6/9/2P6/1p7/4An2n/3CKA3 w - - 0 1",
+      "prefix": ["c5c9", "d9d8"],
+      "cycle": ["c9c5", "d8d9", "c5c9", "d9d8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 25,
+          "line": 362
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Author call order differs from official diagram numbering."
+    },
+    {
+      "id": "wxf2018-017",
+      "diagram": 17,
+      "official": {
+        "pdfPage": 56,
+        "printedPage": 48,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=56"
+      },
+      "startFen": "N1ra1a3/3nk4/4b4/p1p6/6b1p/2P6/P2R4P/4B4/4A4/2B1KA3 w - - 0 1",
+      "prefix": ["d3h3", "e8e9"],
+      "cycle": ["h3d3", "e9e8", "d3h3", "e8e9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 24,
+          "line": 361
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Author call order differs from official diagram numbering."
+    },
+    {
+      "id": "wxf2018-018",
+      "diagram": 18,
+      "official": {
+        "pdfPage": 56,
+        "printedPage": 48,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=56"
+      },
+      "startFen": "2bakab2/3r5/2n1c2c1/p1R1p1p2/7np/2P2CP2/P2rP3P/2N1C1N2/4A4/2B1KAB1R w - - 0 1",
+      "prefix": ["f4f3", "d3d7", "f3f7"],
+      "cycle": ["d7d3", "f7f3", "d3d7", "f3f7"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 30,
+          "line": 371
+        },
+        {
+          "index": 31,
+          "line": 372
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-019",
+      "diagram": 19,
+      "official": {
+        "pdfPage": 57,
+        "printedPage": 49,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=57"
+      },
+      "startFen": "2bak4/4a4/4b4/2p5p/6p2/2Pp5/4P4/2N4C1/2CrA4/3AK4 w - - 0 1",
+      "prefix": ["h2h1", "d1d3", "h1h3"],
+      "cycle": ["d3d1", "h3h1", "d1d3", "h1h3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 32,
+          "line": 373
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-020",
+      "diagram": 20,
+      "official": {
+        "pdfPage": 57,
+        "printedPage": 49,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=57"
+      },
+      "startFen": "2bak4/4a4/4b4/8p/2p3p2/9/N2rP4/6NC1/C3A4/4K1B2 w - - 0 1",
+      "prefix": ["h2h3", "d3d1", "h3h1"],
+      "cycle": ["d1d3", "h1h3", "d3d1", "h3h1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 33,
+          "line": 374
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-021",
+      "diagram": 21,
+      "official": {
+        "pdfPage": 58,
+        "printedPage": 50,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=58"
+      },
+      "startFen": "2c1kab2/4a4/4b4/9/9/9/P1p5P/2r1N1cC1/4A4/3ACK3 w - - 0 1",
+      "prefix": ["e2d4", "c2c1", "h2h1", "g2g1", "e1d2", "g1g0", "d2e1"],
+      "cycle": ["g0g1", "e1d2", "g1g0", "d2e1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 26,
+          "line": 365
+        },
+        {
+          "index": 27,
+          "line": 366
+        },
+        {
+          "index": 34,
+          "line": 376
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-022",
+      "diagram": 22,
+      "official": {
+        "pdfPage": 58,
+        "printedPage": 50,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=58"
+      },
+      "startFen": "1r2kab2/4a4/4b4/p1p1p3p/5R3/2P2N3/PC2P3P/4Cr3/1R3c3/2B1KA3 w - - 0 1",
+      "prefix": ["b3b2", "f2f3", "b2b3"],
+      "cycle": ["f3f2", "b3b2", "f2f3", "b2b3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 35,
+          "line": 378
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-023",
+      "diagram": 23,
+      "official": {
+        "pdfPage": 59,
+        "printedPage": 51,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=59"
+      },
+      "startFen": "4kab2/4a4/4b4/c3C1p1R/8P/2B6/9/3AB1p2/1pr1A4/4K4 w - - 0 1",
+      "prefix": ["e6c6", "c1d1", "c6d6"],
+      "cycle": ["d1c1", "d6c6", "c1d1", "c6d6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 36,
+          "line": 379
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-024",
+      "diagram": 24,
+      "official": {
+        "pdfPage": 59,
+        "printedPage": 51,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=59"
+      },
+      "startFen": "2bak3r/4a4/4b1n2/P2rp3p/2p1c1p2/4R4/N3P3R/4BC1C1/N3A4/4KAB2 w - - 0 1",
+      "prefix": ["f2f6", "d6d4", "f6f4"],
+      "cycle": ["d4d6", "f4f6", "d6d4", "f6f4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 37,
+          "line": 380
+        },
+        {
+          "index": 38,
+          "line": 384
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-025",
+      "diagram": 25,
+      "official": {
+        "pdfPage": 60,
+        "printedPage": 52,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=60"
+      },
+      "startFen": "2bck3r/4a4/3ab4/P2rp3p/2p1c4/4R4/N3P3P/4BC1C1/N3A4/4KAB2 w - - 0 1",
+      "prefix": ["h2h6", "d6d3", "f2f3", "d3d1", "h6h1"],
+      "cycle": [
+        "d1d6",
+        "f3f6",
+        "d6d3",
+        "h1h3",
+        "d3d1",
+        "f6f1",
+        "d1d6",
+        "h3h6",
+        "d6d3",
+        "f1f3",
+        "d3d1",
+        "h6h1"
+      ],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 39,
+          "line": 387
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-026",
+      "diagram": 26,
+      "official": {
+        "pdfPage": 60,
+        "printedPage": 52,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=60"
+      },
+      "startFen": "4k4/9/9/9/C8/9/pp5pp/4B4/9/r1BAKA2r w - - 0 1",
+      "prefix": ["a5i5", "i0h0", "i5a5"],
+      "cycle": ["a0b0", "a5h5", "h0i0", "h5b5", "b0a0", "b5i5", "i0h0", "i5a5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 40,
+          "line": 390
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-027",
+      "diagram": 27,
+      "official": {
+        "pdfPage": 61,
+        "printedPage": 53,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=61"
+      },
+      "startFen": "2b1ka3/4a4/4b4/p2rp4/4n4/4R4/Pr2P2p1/4BC3/4A4/R3KAB2 w - - 0 1",
+      "prefix": ["f2f3", "b3b1", "f3f6"],
+      "cycle": [
+        "d6d3",
+        "f6f1",
+        "b1b6",
+        "f1f3",
+        "d3d1",
+        "f3f6",
+        "b6b3",
+        "f6f1",
+        "d1d6",
+        "f1f3",
+        "b3b1",
+        "f3f6"
+      ],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 41,
+          "line": 393
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-028",
+      "diagram": 28,
+      "official": {
+        "pdfPage": 61,
+        "printedPage": 53,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=61"
+      },
+      "startFen": "2bak4/4a4/4b3n/p3p4/4n3p/4R4/Pr2P4/4BC1C1/3rA4/R3KAB2 w - - 0 1",
+      "prefix": [
+        "f2f3",
+        "b3b6",
+        "h2h1",
+        "d1d5",
+        "f3f6",
+        "b6b2",
+        "h1h5",
+        "d5d3",
+        "f6f2",
+        "b2b1",
+        "h5h3",
+        "d3d5",
+        "f2f1",
+        "b1b6",
+        "f1f6",
+        "b6b1"
+      ],
+      "cycle": ["h3h5", "d5d3", "f6f1", "b1b6", "h5h3", "d3d5", "f1f6", "b6b1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 42,
+          "line": 396
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-029",
+      "diagram": 29,
+      "official": {
+        "pdfPage": 62,
+        "printedPage": 54,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=62"
+      },
+      "startFen": "2b1ka3/4a4/4b4/9/9/9/9/4B3R/4A1rc1/4KA3 w - - 0 1",
+      "prefix": ["i2h2", "h1i1"],
+      "cycle": ["h2i2", "i1h1", "i2h2", "h1i1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 43,
+          "line": 400
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-030",
+      "diagram": 30,
+      "official": {
+        "pdfPage": 62,
+        "printedPage": 54,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=62"
+      },
+      "startFen": "2bak4/4a4/4b4/9/6c2/5R3/4c4/4C4/4N4/3AKA3 w - - 0 1",
+      "prefix": ["f4g4", "g5c5", "g4c4"],
+      "cycle": ["c5g5", "c4g4", "g5c5", "g4c4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 44,
+          "line": 403
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-031",
+      "diagram": 31,
+      "official": {
+        "pdfPage": 63,
+        "printedPage": 55,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=63"
+      },
+      "startFen": "3k1a3/4a4/9/p1N3n2/4p1b1c/4c2R1/P8/4C4/4A4/2B1K1p2 w - - 0 1",
+      "prefix": ["h4i4", "i5h5"],
+      "cycle": ["i4h4", "h5i5", "h4i4", "i5h5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 45,
+          "line": 406
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-032",
+      "diagram": 32,
+      "official": {
+        "pdfPage": 63,
+        "printedPage": 55,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=63"
+      },
+      "startFen": "2bk1a3/4a4/4b4/9/c8/1R7/3r5/4B4/4A4/4KAB2 w - - 0 1",
+      "prefix": ["b4a4", "a5e5", "a4e4"],
+      "cycle": ["e5a5", "e4a4", "a5e5", "a4e4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 46,
+          "line": 409
+        },
+        {
+          "index": 47,
+          "line": 410
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-033",
+      "diagram": 33,
+      "official": {
+        "pdfPage": 64,
+        "printedPage": 56,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=64"
+      },
+      "startFen": "4kab2/4a4/4b4/3rC2R1/9/9/4n4/4B4/4A4/4KAB1c w - - 0 1",
+      "prefix": ["h6i6", "i0h0", "i6h6"],
+      "cycle": ["h0i0", "h6i6", "i0h0", "i6h6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 48,
+          "line": 413
+        },
+        {
+          "index": 49,
+          "line": 414
+        },
+        {
+          "index": 165,
+          "line": 663
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-034",
+      "diagram": 34,
+      "official": {
+        "pdfPage": 64,
+        "printedPage": 56,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=64"
+      },
+      "startFen": "3aka3/7R1/7c1/9/9/9/9/9/4A4/3AK1p2 b - - 0 1",
+      "prefix": ["h7c7", "h8c8"],
+      "cycle": ["c7h7", "c8h8", "h7c7", "h8c8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 50,
+          "line": 417
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Reference starts with Black to move at a rotation of the illustrated cycle."
+    },
+    {
+      "id": "wxf2018-035",
+      "diagram": 35,
+      "official": {
+        "pdfPage": 65,
+        "printedPage": 57,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=65"
+      },
+      "startFen": "4k4/4a4/4b4/6c2/9/3R5/4c4/4C4/4N4/3AKA3 w - - 0 1",
+      "prefix": ["d4g4", "g6c6", "g4c4"],
+      "cycle": ["c6g6", "c4g4", "g6c6", "g4c4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 51,
+          "line": 420
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-036",
+      "diagram": 36,
+      "official": {
+        "pdfPage": 65,
+        "printedPage": 57,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=65"
+      },
+      "startFen": "1rbakab2/9/2c5n/4p3p/p8/7R1/P1P1P1P1P/2N3N2/4A4/2BAK1B2 w - - 0 1",
+      "prefix": ["h4c4", "c7g7", "c4g4"],
+      "cycle": ["g7c7", "g4c4", "c7g7", "c4g4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 52,
+          "line": 423
+        },
+        {
+          "index": 53,
+          "line": 424
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-037",
+      "diagram": 37,
+      "official": {
+        "pdfPage": 66,
+        "printedPage": 58,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=66"
+      },
+      "startFen": "3ak4/4a4/4b4/p8/2p3n2/9/P1P3r2/3AB4/c3N3N/1RB1KA3 w - - 0 1",
+      "prefix": ["b0b1", "a1a0", "b1b0"],
+      "cycle": ["a0a1", "b0b1", "a1a0", "b1b0"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 54,
+          "line": 427
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-038",
+      "diagram": 38,
+      "official": {
+        "pdfPage": 66,
+        "printedPage": 58,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=66"
+      },
+      "startFen": "2bakar2/9/2c6/8R/p3p1p2/9/P1P1P1P1P/B1N6/1r2A4/2B1KA3 w - - 0 1",
+      "prefix": ["i6c6", "c7h7", "c6h6"],
+      "cycle": ["h7c7", "h6c6", "c7h7", "c6h6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 55,
+          "line": 430
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-039",
+      "diagram": 39,
+      "official": {
+        "pdfPage": 67,
+        "printedPage": 59,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=67"
+      },
+      "startFen": "2baka3/C4rN2/4b1n2/1Rp5p/6p2/2P6/4c1P1c/4B3C/4A4/4KAB2 w - - 0 1",
+      "prefix": ["b6b8", "f9e8", "b8b6"],
+      "cycle": ["e8f9", "b6b8", "f9e8", "b8b6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 57,
+          "line": 435
+        },
+        {
+          "index": 58,
+          "line": 436
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Use reference calls 57 and 58; grouped author annotation does not identify each number individually."
+    },
+    {
+      "id": "wxf2018-040",
+      "diagram": 40,
+      "official": {
+        "pdfPage": 67,
+        "printedPage": 59,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=67"
+      },
+      "startFen": "2bak4/RC2arN2/4b1n2/2p5p/6p2/2P6/4p1P1c/4B4/4A4/4KAB2 b - - 0 1",
+      "prefix": ["e8f9", "b8b9"],
+      "cycle": ["f9e8", "b9b8", "e8f9", "b8b9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 56,
+          "line": 434
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Reference starts after the first illustrated Red cannon move, with Black to move."
+    },
+    {
+      "id": "wxf2018-041",
+      "diagram": 41,
+      "official": {
+        "pdfPage": 68,
+        "printedPage": 60,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=68"
+      },
+      "startFen": "3aka3/C4rN2/4b1n2/N7p/2p3p2/8P/2P3P2/9/4A4/4KA3 w - - 0 1",
+      "prefix": ["a6b8", "f9e8", "b8a6"],
+      "cycle": ["e8f9", "a6b8", "f9e8", "b8a6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 59,
+          "line": 437
+        },
+        {
+          "index": 60,
+          "line": 438
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-042",
+      "diagram": 42,
+      "official": {
+        "pdfPage": 69,
+        "printedPage": 61,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=69"
+      },
+      "startFen": "1rb1kabr1/4a1c2/1cn3n2/p1C1p1R1p/9/9/P1P1P1P1P/2N1C1N2/9/R1BAKAB2 w - - 0 1",
+      "prefix": ["g6f6", "g7h5"],
+      "cycle": ["f6g6", "h5g7", "g6f6", "g7h5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "red",
+        "loser": "black"
+      },
+      "referenceCases": [
+        {
+          "index": 61,
+          "line": 441
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-043",
+      "diagram": 43,
+      "official": {
+        "pdfPage": 69,
+        "printedPage": 61,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=69"
+      },
+      "startFen": "1rb1kabr1/4a1c2/1cn6/pRp1pR2p/7n1/2P2p3/P3P1P1P/C1N1C1N2/4A4/3AK1B2 w - - 0 1",
+      "prefix": ["f6g6", "h5g7"],
+      "cycle": ["g6f6", "g7h5", "f6g6", "h5g7"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "red",
+        "loser": "black"
+      },
+      "referenceCases": [
+        {
+          "index": 62,
+          "line": 444
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-044",
+      "diagram": 44,
+      "official": {
+        "pdfPage": 70,
+        "printedPage": 62,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=70"
+      },
+      "startFen": "r1b1kabr1/4a1c2/1cn6/p1p1pR2p/3NP2n1/9/P1P3p1P/1C2C4/4A4/RNBAK1B2 w - - 0 1",
+      "prefix": ["f6g6", "h5g7"],
+      "cycle": ["g6f6", "g7h5", "f6g6", "h5g7"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "red",
+        "loser": "black"
+      },
+      "referenceCases": [
+        {
+          "index": 63,
+          "line": 447
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-045",
+      "diagram": 45,
+      "official": {
+        "pdfPage": 70,
+        "printedPage": 62,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=70"
+      },
+      "startFen": "4ka3/1CP1a4/4b4/2p6/1cb1r4/4CN3/4Pp2P/4B4/4A4/2BAK4 w - - 0 1",
+      "prefix": ["f4g6", "e5e6", "g6f4"],
+      "cycle": ["e6e5", "f4g6", "e5e6", "g6f4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 64,
+          "line": 451
+        },
+        {
+          "index": 65,
+          "line": 452
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-046",
+      "diagram": 46,
+      "official": {
+        "pdfPage": 71,
+        "printedPage": 63,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=71"
+      },
+      "startFen": "3ak1br1/4a4/4b4/p8/6p2/9/P7P/n7B/4A4/2R1KA3 w - - 0 1",
+      "prefix": ["c0c2", "a2b0", "c2c1", "b0a2"],
+      "cycle": ["c1c2", "a2b0", "c2c1", "b0a2"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "red",
+        "loser": "black"
+      },
+      "referenceCases": [
+        {
+          "index": 66,
+          "line": 456
+        },
+        {
+          "index": 67,
+          "line": 457
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-047",
+      "diagram": 47,
+      "official": {
+        "pdfPage": 71,
+        "printedPage": 63,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=71"
+      },
+      "startFen": "4kab2/4a4/8b/p1p5p/4c1n2/6R2/P1P1P1P1P/4BC3/8N/2B1KA1r1 w - - 0 1",
+      "prefix": ["i1g2", "h0g0", "g2i1"],
+      "cycle": ["g0h0", "i1g2", "h0g0", "g2i1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 68,
+          "line": 461
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-048",
+      "diagram": 48,
+      "official": {
+        "pdfPage": 72,
+        "printedPage": 64,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=72"
+      },
+      "startFen": "3akc3/4a4/9/9/3n5/1R7/9/9/4A4/4KAB2 w - - 0 1",
+      "prefix": [
+        "b4b5",
+        "d5c3",
+        "b5c5",
+        "c3e4",
+        "c5c4",
+        "e4d6",
+        "c4d4",
+        "d6f5",
+        "d4d5"
+      ],
+      "cycle": ["f5e3", "d5e5", "e3c4", "e5e4", "c4d6", "e4d4", "d6f5", "d4d5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 69,
+          "line": 465
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-049",
+      "diagram": 49,
+      "official": {
+        "pdfPage": 73,
+        "printedPage": 65,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=73"
+      },
+      "startFen": "4ka3/4a4/3Pb4/2p1r3p/2b6/2R6/1n7/4B4/4A4/4KAB2 w - - 0 1",
+      "prefix": ["c4c3", "b3a1", "c3c1"],
+      "cycle": ["a1b3", "c1c3", "b3a1", "c3c1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 70,
+          "line": 469
+        },
+        {
+          "index": 71,
+          "line": 470
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-050",
+      "diagram": 50,
+      "official": {
+        "pdfPage": 73,
+        "printedPage": 65,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=73"
+      },
+      "startFen": "3akr3/n3a4/4b4/9/P1b6/9/1n7/4B4/3RA4/2BAK4 w - - 0 1",
+      "prefix": ["d1d3", "b3c1", "d3d1"],
+      "cycle": ["c1b3", "d1d3", "b3c1", "d3d1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 72,
+          "line": 474
+        },
+        {
+          "index": 73,
+          "line": 475
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-051",
+      "diagram": 51,
+      "official": {
+        "pdfPage": 74,
+        "printedPage": 66,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=74"
+      },
+      "startFen": "2bak3r/4a4/4b4/p3C1R2/9/P8/5R3/9/4r4/5K3 w - - 0 1",
+      "prefix": ["g6i6", "i9g9"],
+      "cycle": ["i6g6", "g9i9", "g6i6", "i9g9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 74,
+          "line": 479
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-052",
+      "diagram": 52,
+      "official": {
+        "pdfPage": 75,
+        "printedPage": 67,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=75"
+      },
+      "startFen": "2b1ka3/4a4/4b4/p3r3p/9/1R7/P7P/2p1CpC2/4A1n2/2BK1AB1c w - - 0 1",
+      "prefix": ["b4b6", "e6e3", "b6b3"],
+      "cycle": ["e3e6", "b3b6", "e6e3", "b6b3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 75,
+          "line": 482
+        },
+        {
+          "index": 76,
+          "line": 483
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-053",
+      "diagram": 53,
+      "official": {
+        "pdfPage": 75,
+        "printedPage": 67,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=75"
+      },
+      "startFen": "Cc1ak4/4a1P2/9/2p6/1P7/6C2/9/B2p5/2p2p3/4K4 w - - 0 1",
+      "prefix": ["g4b4", "b9c9", "b4c4"],
+      "cycle": ["c9b9", "c4b4", "b9c9", "b4c4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 77,
+          "line": 486
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-054",
+      "diagram": 54,
+      "official": {
+        "pdfPage": 76,
+        "printedPage": 68,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=76"
+      },
+      "startFen": "3k1a1cC/4a4/4b4/9/6PP1/2C6/2p1p4/4B4/4A4/4KAB2 w - - 0 1",
+      "prefix": ["c4h4", "h9g9", "h4g4"],
+      "cycle": ["g9h9", "g4h4", "h9g9", "h4g4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 78,
+          "line": 490
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-055",
+      "diagram": 55,
+      "official": {
+        "pdfPage": 76,
+        "printedPage": 68,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=76"
+      },
+      "startFen": "5ab2/4k2P1/5an1b/p1p3p2/8p/2P4N1/6P1P/B8/5p2c/3KC4 w - - 0 1",
+      "prefix": ["h4f5", "g7i6", "f5h4"],
+      "cycle": ["i6g7", "h4f5", "g7i6", "f5h4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 79,
+          "line": 493
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-056",
+      "diagram": 56,
+      "official": {
+        "pdfPage": 77,
+        "printedPage": 69,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=77"
+      },
+      "startFen": "4ka1nC/3Pa4/9/8p/8P/4c4/9/7C1/3p1p3/4K4 w - - 0 1",
+      "prefix": ["i5h5", "e4h4", "h5g5", "h4g4", "g5h5"],
+      "cycle": ["g4h4", "h5g5", "h4g4", "g5h5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 80,
+          "line": 496
+        },
+        {
+          "index": 81,
+          "line": 497
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-057",
+      "diagram": 57,
+      "official": {
+        "pdfPage": 78,
+        "printedPage": 70,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=78"
+      },
+      "startFen": "4k1b2/4n4/3aba3/4p4/9/8P/P2nP4/2N1BA3/8c/2BK2C2 w - - 0 1",
+      "prefix": ["g0f0", "i1f1", "f2e1", "f1h1", "e1f2"],
+      "cycle": ["h1f1", "f2e1", "f1h1", "e1f2"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 82,
+          "line": 500
+        },
+        {
+          "index": 83,
+          "line": 501
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-058",
+      "diagram": 58,
+      "official": {
+        "pdfPage": 78,
+        "printedPage": 70,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=78"
+      },
+      "startFen": "2bakab2/9/4c3n/p1prp3R/9/2P6/P3P1c1P/2N1BC2B/4A4/3AK4 w - - 0 1",
+      "prefix": ["f2g2", "g3f3", "i2g4"],
+      "cycle": ["f3g3", "g4i2", "g3f3", "i2g4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 84,
+          "line": 504
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-059",
+      "diagram": 59,
+      "official": {
+        "pdfPage": 79,
+        "printedPage": 71,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=79"
+      },
+      "startFen": "3akabC1/9/4b4/7P1/2n6/8p/3p5/9/4A1c2/2BAK1B1C w - - 0 1",
+      "prefix": ["g0i2", "g1i1", "i2g0"],
+      "cycle": ["i1g1", "g0i2", "g1i1", "i2g0"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 85,
+          "line": 507
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-060",
+      "diagram": 60,
+      "official": {
+        "pdfPage": 79,
+        "printedPage": 71,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=79"
+      },
+      "startFen": "3akabC1/9/4b4/7P1/2n5p/9/3p5/9/4A1c2/2BAK1B1C w - - 0 1",
+      "prefix": ["g0i2", "g1i1", "i2g0"],
+      "cycle": ["i1g1", "g0i2", "g1i1", "i2g0"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 86,
+          "line": 510
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-061",
+      "diagram": 61,
+      "official": {
+        "pdfPage": 80,
+        "printedPage": 72,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=80"
+      },
+      "startFen": "3akabC1/9/4b4/r3p4/p1p6/4P4/P1P5n/NCr1B4/4A4/R2AK1B2 w - - 0 1",
+      "prefix": ["h9h2", "i3g2", "e2g4", "g2h4", "g4e2"],
+      "cycle": ["h4g2", "e2g4", "g2h4", "g4e2"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 87,
+          "line": 513
+        },
+        {
+          "index": 88,
+          "line": 514
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-062",
+      "diagram": 62,
+      "official": {
+        "pdfPage": 80,
+        "printedPage": 72,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=80"
+      },
+      "startFen": "4kab2/4a4/4b3n/2r3p1p/2p2N3/9/1RP3P1P/4B3C/2r1A4/2N1KABc1 w - - 0 1",
+      "prefix": ["i2i1", "c1c2", "i1i2"],
+      "cycle": ["c2c1", "i2i1", "c1c2", "i1i2"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 89,
+          "line": 517
+        },
+        {
+          "index": 90,
+          "line": 518
+        },
+        {
+          "index": 91,
+          "line": 519
+        },
+        {
+          "index": 92,
+          "line": 520
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-063",
+      "diagram": 63,
+      "official": {
+        "pdfPage": 81,
+        "printedPage": 73,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=81"
+      },
+      "startFen": "4ka3/4a4/9/4r4/9/9/9/1C2C4/p3A4/3K1AB1n w - - 0 1",
+      "prefix": ["b2b6", "e6e5", "b6b5"],
+      "cycle": ["e5e6", "b5b6", "e6e5", "b6b5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 93,
+          "line": 523
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-064",
+      "diagram": 64,
+      "official": {
+        "pdfPage": 82,
+        "printedPage": 74,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=82"
+      },
+      "startFen": "3aka3/4c4/4r4/9/9/9/PR7/2p1CA3/7p1/2B2K3 w - - 0 1",
+      "prefix": ["b3b7", "e7e3", "b7b3", "e3e4", "b3b4"],
+      "cycle": ["e4e3", "b4b3", "e3e4", "b3b4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 94,
+          "line": 526
+        },
+        {
+          "index": 95,
+          "line": 527
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-065",
+      "diagram": 65,
+      "official": {
+        "pdfPage": 82,
+        "printedPage": 74,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=82"
+      },
+      "startFen": "5kb2/4a4/4ba3/5r3/9/P6R1/3cpCpc1/4BA3/4A4/2BK5 w - - 0 1",
+      "prefix": ["h4h6", "f6f5", "h6h5"],
+      "cycle": ["f5f6", "h5h6", "f6f5", "h6h5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 96,
+          "line": 530
+        },
+        {
+          "index": 97,
+          "line": 531
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-066",
+      "diagram": 66,
+      "official": {
+        "pdfPage": 83,
+        "printedPage": 75,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=83"
+      },
+      "startFen": "2bk1a1rC/4a1R2/4b4/9/9/4cp3/9/4B4/N3Ap3/2BAK4 w - - 0 1",
+      "prefix": ["g8h8", "h9g9", "h8g8", "g9h9", "g8h8"],
+      "cycle": ["h9g9", "h8g8", "g9h9", "g8h8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 98,
+          "line": 534
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-067",
+      "diagram": 67,
+      "official": {
+        "pdfPage": 83,
+        "printedPage": 75,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=83"
+      },
+      "startFen": "4ka3/4a4/4b4/p7p/9/4C4/4P4/4B4/3K5/3Ac1B2 w - - 0 1",
+      "prefix": ["d1e1", "e0f0", "e1f1"],
+      "cycle": ["f0e0", "f1e1", "e0f0", "e1f1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 1,
+          "line": 330
+        },
+        {
+          "index": 99,
+          "line": 538
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-068",
+      "diagram": 68,
+      "official": {
+        "pdfPage": 84,
+        "printedPage": 76,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=84"
+      },
+      "startFen": "3k2b1r/4a4/5a2b/3PP4/7P1/9/9/B4N2B/5K3/4p4 w - - 0 1",
+      "prefix": ["f1e1", "e0d0", "e1d1"],
+      "cycle": ["d0e0", "d1e1", "e0d0", "e1d1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 100,
+          "line": 539
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-069",
+      "diagram": 69,
+      "official": {
+        "pdfPage": 84,
+        "printedPage": 76,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=84"
+      },
+      "startFen": "4k1b1c/7P1/3a5/9/9/9/9/9/3K5/9 w - - 0 1",
+      "prefix": ["h8i8", "i9h9", "i8h8"],
+      "cycle": ["h9i9", "h8i8", "i9h9", "i8h8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 101,
+          "line": 540
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-070",
+      "diagram": 70,
+      "official": {
+        "pdfPage": 85,
+        "printedPage": 77,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=85"
+      },
+      "startFen": "4kab2/4a4/4b1n2/4p2P1/2p5P/9/9/7C1/4A4/4K4 w - - 0 1",
+      "prefix": ["h6g6", "g7h9"],
+      "cycle": ["g6h6", "h9g7", "h6g6", "g7h9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 102,
+          "line": 541
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-071",
+      "diagram": 71,
+      "official": {
+        "pdfPage": 85,
+        "printedPage": 77,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=85"
+      },
+      "startFen": "3a2b1r/4ak3/8p/7P1/9/9/9/B2NN3B/3K5/4p4 w - - 0 1",
+      "prefix": ["d1e1", "e0d0", "e1d1"],
+      "cycle": ["d0e0", "d1e1", "e0d0", "e1d1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 103,
+          "line": 545
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-072",
+      "diagram": 72,
+      "official": {
+        "pdfPage": 86,
+        "printedPage": 78,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=86"
+      },
+      "startFen": "1c1ak4/N1PNa4/9/9/5P3/9/9/4Bp3/9/3p1K1p1 w - - 0 1",
+      "prefix": ["c8b8", "b9c9", "b8c8"],
+      "cycle": ["c9b9", "c8b8", "b9c9", "b8c8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 104,
+          "line": 546
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-073",
+      "diagram": 73,
+      "official": {
+        "pdfPage": 86,
+        "printedPage": 78,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=86"
+      },
+      "startFen": "2bak4/4a4/4b4/1rp6/P2R5/4pp3/9/CC7/4p4/5K3 w - - 0 1",
+      "prefix": ["a5b5", "b6a6", "b5a5"],
+      "cycle": ["a6b6", "a5b5", "b6a6", "b5a5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 108,
+          "line": 551
+        },
+        {
+          "index": 109,
+          "line": 552
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-074",
+      "diagram": 74,
+      "official": {
+        "pdfPage": 87,
+        "printedPage": 79,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=87"
+      },
+      "startFen": "3rk1b2/4a4/3ab2r1/5R1N1/9/4p4/9/4B4/4A4/3AK1B2 w - - 0 1",
+      "prefix": ["f6e6", "e4f4", "e6f6"],
+      "cycle": ["f4e4", "f6e6", "e4f4", "e6f6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 110,
+          "line": 553
+        },
+        {
+          "index": 111,
+          "line": 554
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-075",
+      "diagram": 75,
+      "official": {
+        "pdfPage": 88,
+        "printedPage": 80,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=88"
+      },
+      "startFen": "1Pbak2r1/4a4/4b4/2p6/9/3R5/2P6/4p2p1/3CC2N1/5K3 w - - 0 1",
+      "prefix": ["d4e4", "e2d2", "e4d4", "d2e2", "d4e4"],
+      "cycle": ["e2d2", "e4d4", "d2e2", "d4e4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 105,
+          "line": 547
+        },
+        {
+          "index": 106,
+          "line": 548
+        },
+        {
+          "index": 112,
+          "line": 556
+        },
+        {
+          "index": 113,
+          "line": 557
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-076",
+      "diagram": 76,
+      "official": {
+        "pdfPage": 88,
+        "printedPage": 80,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=88"
+      },
+      "startFen": "2b1k1r2/9/4b4/9/9/2P3P2/1R7/2n1B4/4A4/4KABc1 w - - 0 1",
+      "prefix": ["b3c3", "c2b0"],
+      "cycle": [
+        "c3b3",
+        "b0c2",
+        "b3h3",
+        "h0i0",
+        "h3c3",
+        "c2b0",
+        "c3b3",
+        "b0c2",
+        "b3i3",
+        "i0h0",
+        "i3c3",
+        "c2b0"
+      ],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 170,
+          "line": 673
+        }
+      ],
+      "provenance": "official-manual-factual-transcription",
+      "reason": "One rook alternates chasing the black horse and black cannon.",
+      "note": "Independently transcribed official board and multi-victim draw cycle. Reference call 170 instead has a RED cannon at h0 and a single-victim losing chase cycle."
+    },
+    {
+      "id": "wxf2018-077",
+      "diagram": 77,
+      "official": {
+        "pdfPage": 89,
+        "printedPage": 81,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=89"
+      },
+      "startFen": "4kab2/4a4/3rb4/9/9/9/8R/1p5p1/4A4/3AK1B2 w - - 0 1",
+      "prefix": ["i3h3", "h2g2"],
+      "cycle": ["h3b3", "b2c2", "b3g3", "g2h2", "g3c3", "c2b2", "c3h3", "h2g2"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 114,
+          "line": 560
+        }
+      ],
+      "provenance": "official-manual-factual-transcription",
+      "reason": "One rook alternates chasing two crossed-river pawns.",
+      "note": "Independently transcribed official multi-pawn draw cycle. Reference call 114 chooses a single-pawn losing cycle from the same placement."
+    },
+    {
+      "id": "wxf2018-078",
+      "diagram": 78,
+      "official": {
+        "pdfPage": 89,
+        "printedPage": 81,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=89"
+      },
+      "startFen": "2rakab2/9/8b/2NPP1p2/9/2P1c1P2/7R1/2n1B1p2/4A4/3AK1B2 w - - 0 1",
+      "prefix": ["h3c3", "c2a1", "c3e3", "e4f4"],
+      "cycle": [
+        "e3f3",
+        "f4e4",
+        "f3g3",
+        "g2h2",
+        "g3a3",
+        "a1c0",
+        "a3c3",
+        "c0a1",
+        "c3e3",
+        "e4f4",
+        "e3f3",
+        "f4e4",
+        "f3h3",
+        "h2g2",
+        "h3a3",
+        "a1c0",
+        "a3c3",
+        "c0a1",
+        "c3e3",
+        "e4f4"
+      ],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 115,
+          "line": 563
+        },
+        {
+          "index": 116,
+          "line": 564
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-079",
+      "diagram": 79,
+      "official": {
+        "pdfPage": 90,
+        "printedPage": 82,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=90"
+      },
+      "startFen": "3aka3/9/4b4/p8/2b6/2N3B2/4P3p/2C1B4/3rA1p2/3AK4 w - - 0 1",
+      "prefix": ["c2c3", "d1d3", "c3c1", "d3d1"],
+      "cycle": ["c1c3", "d1d3", "c3c1", "d3d1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "red",
+        "loser": "black"
+      },
+      "referenceCases": [
+        {
+          "index": 117,
+          "line": 567
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-080",
+      "diagram": 80,
+      "official": {
+        "pdfPage": 90,
+        "printedPage": 82,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=90"
+      },
+      "startFen": "3rkabc1/4a3R/4b4/9/9/9/9/B8/1R2A4/c1BAK4 w - - 0 1",
+      "prefix": [],
+      "cycle": ["i8h8", "h9i9", "b1a1", "a0b0", "h8i8", "i9h9", "a1b1", "b0a0"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 118,
+          "line": 570
+        },
+        {
+          "index": 119,
+          "line": 571
+        }
+      ],
+      "provenance": "official-manual-factual-transcription",
+      "note": "Official eight-ply cycle alternates both red rooks and both black cannons. Selecting only the latest repeated suffix from the author line incorrectly reduces this to a losing single-victim chase."
+    },
+    {
+      "id": "wxf2018-081",
+      "diagram": 81,
+      "official": {
+        "pdfPage": 91,
+        "printedPage": 83,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=91"
+      },
+      "startFen": "2b1ka1P1/4a4/b8/p5R2/8c/7R1/P1p3p2/3rBn3/N2C2n1C/3K1NB2 w - - 0 1",
+      "prefix": ["h4h5", "i5i7"],
+      "cycle": [
+        "g6g7",
+        "i7i6",
+        "h5h6",
+        "i6i5",
+        "g7g5",
+        "i5i7",
+        "h6h7",
+        "i7i6",
+        "g5g6",
+        "i6i5",
+        "h7h5",
+        "i5i7"
+      ],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 120,
+          "line": 574
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping",
+      "note": "Reference call 120 ends with an extra move that does not repeat a full board position. The repeated 12-ply cycle visible before its final move is used here."
+    },
+    {
+      "id": "wxf2018-082",
+      "diagram": 82,
+      "official": {
+        "pdfPage": 91,
+        "printedPage": 83,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=91"
+      },
+      "startFen": "4k4/9/9/9/3P5/4C4/2N6/6ppc/4p4/5K3 w - - 0 1",
+      "prefix": ["c3e2", "e1d1", "e2c3"],
+      "cycle": ["d1e1", "c3e2", "e1d1", "e2c3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 121,
+          "line": 577
+        },
+        {
+          "index": 122,
+          "line": 578
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-083",
+      "diagram": 83,
+      "official": {
+        "pdfPage": 92,
+        "printedPage": 84,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=92"
+      },
+      "startFen": "2baka3/9/4b4/9/6c2/3R5/4c4/4C4/4N4/3AKA3 w - - 0 1",
+      "prefix": ["d4g4", "g5d5", "g4d4"],
+      "cycle": ["d5g5", "d4g4", "g5d5", "g4d4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 123,
+          "line": 582
+        },
+        {
+          "index": 124,
+          "line": 583
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-084",
+      "diagram": 84,
+      "official": {
+        "pdfPage": 92,
+        "printedPage": 84,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=92"
+      },
+      "startFen": "1r2knb1C/4a4/5ac1b/7R1/p8/9/9/9/4A4/3AK4 w - - 0 1",
+      "prefix": ["h6g6", "g7h7", "g6h6"],
+      "cycle": ["h7g7", "h6g6", "g7h7", "g6h6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 125,
+          "line": 586
+        },
+        {
+          "index": 126,
+          "line": 587
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-085",
+      "diagram": 85,
+      "official": {
+        "pdfPage": 93,
+        "printedPage": 85,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=93"
+      },
+      "startFen": "2bakab2/r4rN2/6P2/p3P3p/9/P5R2/5c2P/4B4/4A4/3AK1B2 w - - 0 1",
+      "prefix": ["g4g3", "f3f6", "g3g6"],
+      "cycle": ["f6f3", "g6g3", "f3f6", "g3g6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 127,
+          "line": 590
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-086",
+      "diagram": 86,
+      "official": {
+        "pdfPage": 93,
+        "printedPage": 85,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=93"
+      },
+      "startFen": "3akab2/9/4b3r/8c/p8/7R1/P8/9/4A4/r1BAK3R w - - 0 1",
+      "prefix": ["h4h6", "i6i3", "h6h3"],
+      "cycle": ["i3i6", "h3h6", "i6i3", "h6h3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 128,
+          "line": 594
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-087",
+      "diagram": 87,
+      "official": {
+        "pdfPage": 94,
+        "printedPage": 86,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=94"
+      },
+      "startFen": "1r2kab2/4a4/4b4/4R3p/5P3/2R6/4c4/4r4/4A4/2B1KA3 w - - 0 1",
+      "prefix": ["c4c3", "e3e4"],
+      "cycle": ["c3c4", "e4e3", "c4c3", "e3e4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 129,
+          "line": 597
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-088",
+      "diagram": 88,
+      "official": {
+        "pdfPage": 94,
+        "printedPage": 86,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=94"
+      },
+      "startFen": "2b1ka2c/4a4/4b3r/8c/p8/9/P4R3/8R/4A4/r1BAK3C w - - 0 1",
+      "prefix": ["f3f6", "i6i5", "f6f5"],
+      "cycle": ["i5i4", "f5f4", "i4i6", "f4f6", "i6i5", "f6f5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 130,
+          "line": 600
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-089",
+      "diagram": 89,
+      "official": {
+        "pdfPage": 95,
+        "printedPage": 87,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=95"
+      },
+      "startFen": "4kab2/4a3c/2n1bc3/2R6/8p/C8/8P/3CB4/4A4/4KAB2 w - - 0 1",
+      "prefix": ["d2c2", "c7a8", "c6a6"],
+      "cycle": ["a8c7", "a6c6", "c7a8", "c6a6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 131,
+          "line": 603
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-090",
+      "diagram": 90,
+      "official": {
+        "pdfPage": 95,
+        "printedPage": 87,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=95"
+      },
+      "startFen": "2bak1r2/4a4/1C2b4/9/6p2/9/9/9/7R1/c1BAK4 w - - 0 1",
+      "prefix": ["h1a1", "a0b0", "a1b1"],
+      "cycle": ["b0a0", "b1a1", "a0b0", "a1b1"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 132,
+          "line": 606
+        },
+        {
+          "index": 133,
+          "line": 607
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-091",
+      "diagram": 91,
+      "official": {
+        "pdfPage": 96,
+        "printedPage": 88,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=96"
+      },
+      "startFen": "2bak4/4a4/4b4/CC7/3r5/1R7/5r3/4B4/4A4/c3KAB2 w - - 0 1",
+      "prefix": ["b4a4", "a0b0", "a4b4"],
+      "cycle": ["b0a0", "b4a4", "a0b0", "a4b4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 134,
+          "line": 608
+        },
+        {
+          "index": 135,
+          "line": 609
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-092",
+      "diagram": 92,
+      "official": {
+        "pdfPage": 96,
+        "printedPage": 88,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=96"
+      },
+      "startFen": "2bak4/4a4/4b1n2/4p3p/9/1p1r5/c3RR3/B2CC3B/4p4/2p2K3 w - - 0 1",
+      "prefix": ["e3d3", "d4e4", "d3e3"],
+      "cycle": ["e4d4", "e3d3", "d4e4", "d3e3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 136,
+          "line": 612
+        },
+        {
+          "index": 137,
+          "line": 613
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-093",
+      "diagram": 93,
+      "official": {
+        "pdfPage": 97,
+        "printedPage": 89,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=97"
+      },
+      "startFen": "1r1ak1b2/N1RNC4/4b4/9/9/9/4P4/9/4p4/5K3 w - - 0 1",
+      "prefix": ["c8b8", "b9c9", "b8c8"],
+      "cycle": ["c9b9", "c8b8", "b9c9", "b8c8"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 138,
+          "line": 616
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-094",
+      "diagram": 94,
+      "official": {
+        "pdfPage": 98,
+        "printedPage": 90,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=98"
+      },
+      "startFen": "5k3/4P4/9/9/9/9/9/5N3/9/3KRr1c1 w - - 0 1",
+      "prefix": ["f2h1", "f0g0", "h1f2"],
+      "cycle": ["g0f0", "f2h1", "f0g0", "h1f2"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 139,
+          "line": 617
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-095",
+      "diagram": 95,
+      "official": {
+        "pdfPage": 98,
+        "printedPage": 90,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=98"
+      },
+      "startFen": "4k4/9/4c4/6PC1/9/9/9/4BN3/4A4/3AKR1rc w - - 0 1",
+      "prefix": ["f2h1", "h0g0", "h1f2"],
+      "cycle": ["g0h0", "f2h1", "h0g0", "h1f2"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 140,
+          "line": 618
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-096",
+      "diagram": 96,
+      "official": {
+        "pdfPage": 99,
+        "printedPage": 91,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=99"
+      },
+      "startFen": "C4k3/3P5/9/5c3/1P7/2B6/2P2r3/3p1R3/5K3/9 w - - 0 1",
+      "prefix": ["a9a3", "f3f5", "a3a5"],
+      "cycle": ["f5f3", "a5a3", "f3f5", "a3a5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 141,
+          "line": 621
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-097",
+      "diagram": 97,
+      "official": {
+        "pdfPage": 99,
+        "printedPage": 91,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=99"
+      },
+      "startFen": "C1Na5/3Rak3/4bc3/2p6/n5b2/9/1p6r/4B4/4A4/2B1KA3 w - - 0 1",
+      "prefix": ["a9a8", "f8f9"],
+      "cycle": ["a8a9", "f9f8", "a9a8", "f8f9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 142,
+          "line": 624
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-098",
+      "diagram": 98,
+      "official": {
+        "pdfPage": 100,
+        "printedPage": 92,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=100"
+      },
+      "startFen": "5k3/1n7/9/3P5/P1r5c/2B5R/6P2/4B4/4A4/3AK4 w - - 0 1",
+      "prefix": ["i4h4", "i5h5"],
+      "cycle": ["h4g4", "h5g5", "g4i4", "g5i5", "i4h4", "i5h5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 143,
+          "line": 625
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-099",
+      "diagram": 99,
+      "official": {
+        "pdfPage": 100,
+        "printedPage": 92,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=100"
+      },
+      "startFen": "4k4/3P2P1P/9/9/6b1c/5p1C1/9/9/4A4/3AK1p2 w - - 0 1",
+      "prefix": ["h4i4", "i5h5"],
+      "cycle": ["i4h4", "h5i5", "h4i4", "i5h5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 144,
+          "line": 628
+        },
+        {
+          "index": 146,
+          "line": 632
+        },
+        {
+          "index": 147,
+          "line": 633
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-100",
+      "diagram": 100,
+      "official": {
+        "pdfPage": 101,
+        "printedPage": 93,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=101"
+      },
+      "startFen": "4k1b2/3P5/c3b2c1/7R1/9/9/9/9/4K4/9 w - - 0 1",
+      "prefix": [
+        "h6f6",
+        "h7f7",
+        "f6i6",
+        "f7i7",
+        "i6b6",
+        "a7b7",
+        "b6g6",
+        "i7g7",
+        "g6f6",
+        "g7f7",
+        "f6h6",
+        "f7h7",
+        "h6b6",
+        "b7a7",
+        "b6h6",
+        "h7f7",
+        "h6f6"
+      ],
+      "cycle": ["f7h7", "f6h6", "h7f7", "h6f6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 145,
+          "line": 629
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-101",
+      "diagram": 101,
+      "official": {
+        "pdfPage": 101,
+        "printedPage": 93,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=101"
+      },
+      "startFen": "2bak4/4a4/4b4/9/2p2r3/r8/1R7/4B4/9/1R2K1B2 w - - 0 1",
+      "prefix": ["b3b4", "a4a1", "b4b1", "a1a3", "b1b3"],
+      "cycle": ["a3a6", "b3b6", "a6a8", "b6b8", "a8a1", "b8b1", "a1a3", "b1b3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 148,
+          "line": 634
+        },
+        {
+          "index": 171,
+          "line": 674
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-102",
+      "diagram": 102,
+      "official": {
+        "pdfPage": 102,
+        "printedPage": 94,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=102"
+      },
+      "startFen": "3r1k3/4P4/9/c1p2r3/9/2R6/9/4B4/4A4/4K1B2 w - - 0 1",
+      "prefix": [
+        "c4g4",
+        "f6g6",
+        "g4h4",
+        "g6h6",
+        "h4f4",
+        "h6f6",
+        "f4i4",
+        "f6i6",
+        "i4h4",
+        "i6h6"
+      ],
+      "cycle": ["h4g4", "h6g6", "g4h4", "g6h6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 149,
+          "line": 635
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-103",
+      "diagram": 103,
+      "official": {
+        "pdfPage": 102,
+        "printedPage": 94,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=102"
+      },
+      "startFen": "2bk5/3c5/4bN3/1R2p4/9/9/3r5/3R1p3/3K5/9 w - - 0 1",
+      "prefix": ["b6b3", "d3d4"],
+      "cycle": ["b3b4", "d4d6", "b4b6", "d6d3", "b6b3", "d3d4"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 150,
+          "line": 636
+        },
+        {
+          "index": 151,
+          "line": 637
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-104",
+      "diagram": 104,
+      "official": {
+        "pdfPage": 103,
+        "printedPage": 95,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=103"
+      },
+      "startFen": "1r1ak4/4aP3/b1P1b4/4C4/9/3R5/9/9/4p4/3K5 w - - 0 1",
+      "prefix": ["c7b7", "b9c9"],
+      "cycle": ["b7c7", "c9b9", "c7b7", "b9c9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 152,
+          "line": 638
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-105",
+      "diagram": 105,
+      "official": {
+        "pdfPage": 103,
+        "printedPage": 95,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=103"
+      },
+      "startFen": "2ca1k3/4a4/b3b4/2P5P/6p2/1c7/9/B7N/2nR5/2BAK4 w - - 0 1",
+      "prefix": [],
+      "cycle": ["c6d6", "a7c5", "d6c6", "c5a7", "c6b6", "e7c5", "b6c6", "c5e7"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [
+        {
+          "index": 153,
+          "line": 643
+        }
+      ],
+      "provenance": "official-manual-factual-transcription",
+      "reason": "Pawn moves repeatedly remove cannon protection from the same black horse.",
+      "note": "Official eight-ply cycle includes both pawn directions and both black elephants; reference call 153 covers only one four-ply branch."
+    },
+    {
+      "id": "wxf2018-106",
+      "diagram": 106,
+      "official": {
+        "pdfPage": 104,
+        "printedPage": 96,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=104"
+      },
+      "startFen": "3k2b2/4P4/4b4/9/8p/6Bc1/6P1P/3AB4/4pp3/1p1K3R1 w - - 0 1",
+      "prefix": ["h0h1", "h4h3"],
+      "cycle": ["h1h0", "h3h4", "h0h1", "h4h3"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 154,
+          "line": 646
+        },
+        {
+          "index": 155,
+          "line": 647
+        }
+      ],
+      "provenance": "referenced-coordinate-facts-with-explicit-diagram-mapping"
+    },
+    {
+      "id": "wxf2018-107",
+      "diagram": 107,
+      "official": {
+        "pdfPage": 104,
+        "printedPage": 96,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=104"
+      },
+      "startFen": "2cak4/4a4/9/2r6/9/9/9/2N1BC3/4A4/2BAK4 w - - 0 1",
+      "prefix": [],
+      "cycle": ["c2d4", "c6c4", "d4c2", "c4c6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [],
+      "provenance": "official-manual-factual-transcription",
+      "reason": "Both sides alternate a chase and an idle move.",
+      "note": "Not present in the author's 173 reference calls; independently transcribed from official diagram and text."
+    },
+    {
+      "id": "wxf2018-108",
+      "diagram": 108,
+      "official": {
+        "pdfPage": 105,
+        "printedPage": 97,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=105"
+      },
+      "startFen": "3akab2/c2R1R2c/4b4/9/9/9/9/4B4/4K4/2B6 w - - 0 1",
+      "prefix": [],
+      "cycle": ["f8f6", "d9e8", "f6f8", "e8d9"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "draw",
+        "winner": null,
+        "loser": null
+      },
+      "referenceCases": [
+        {
+          "index": 107,
+          "line": 550
+        },
+        {
+          "index": 156,
+          "line": 650
+        }
+      ],
+      "provenance": "official-manual-factual-transcription",
+      "reason": "Each side perpetually chases one common victim with two attackers.",
+      "note": "Official same-rook and same-advisor four-ply cycle; reference calls 107 and 156 alternate both rooks and both advisors instead."
+    },
+    {
+      "id": "wxf2018-109",
+      "diagram": 109,
+      "official": {
+        "pdfPage": 106,
+        "printedPage": 98,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=106"
+      },
+      "startFen": "1r2kab2/4aR3/1cn5c/p5N1p/6b2/9/P7P/6C2/9/2BAKAB2 w - - 0 1",
+      "prefix": [],
+      "cycle": ["g6h8", "g5e7", "h8g6", "e7g5"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "black",
+        "loser": "red"
+      },
+      "referenceCases": [],
+      "provenance": "official-manual-factual-transcription",
+      "reason": "The mating threat also perpetually chases the same black elephant; chase controls the ruling.",
+      "note": "Not present in the author's 173 reference calls; independently transcribed from official diagram and text."
+    },
+    {
+      "id": "wxf2018-110",
+      "diagram": 110,
+      "official": {
+        "pdfPage": 106,
+        "printedPage": 98,
+        "url": "https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_XiangQi_Rules_English2018.pdf#page=106"
+      },
+      "startFen": "4kab2/4arNC1/4b1R2/4n4/2p3p2/2c6/4P3P/9/4A4/2BAK1B2 w - - 0 1",
+      "prefix": [],
+      "cycle": ["g7g6", "e6f4", "g6g7", "f4e6"],
+      "cyclesToPlay": 3,
+      "expected": {
+        "result": "win",
+        "winner": "red",
+        "loser": "black"
+      },
+      "referenceCases": [],
+      "provenance": "official-manual-factual-transcription",
+      "reason": "The black horse perpetually chases the red rook. Red alternates chase and idle.",
+      "note": "Not present in the author's 173 reference calls; independently transcribed from official diagram and text."
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+<section
+  class="container page-section games-page neon-arcade xiangqi-page"
+  data-xiangqi
+  data-play-shell
+  data-game-theme="xiangqi"
+  data-shell-state="ready"
+>
+  ${toolbar}
+  <div class="xiangqi-layout">
+    <section class="game-play xiangqi-play">
+      <div class="xiangqi-hud" aria-label="Xiangqi match status">
+        <div>
+          <span id="xiangqi-red-name">Red</span
+          ><strong id="xiangqi-red-clock">—</strong>
+        </div>
+        <div>
+          <strong id="xiangqi-turn">Ready preview</strong
+          ><small id="xiangqi-qualification">Local practice</small>
+        </div>
+        <div>
+          <span id="xiangqi-black-name">Black</span
+          ><strong id="xiangqi-black-clock">—</strong>
+        </div>
+      </div>
+      <div class="game-board-shell xiangqi-stage">
+        <div
+          id="game-board"
+          class="xiangqi-board"
+          role="grid"
+          tabindex="0"
+          aria-label="Xiangqi board. Arrow keys select a square; Enter selects a piece or destination."
+        ></div>
+        <section
+          id="xiangqi-entry"
+          class="xiangqi-overlay xiangqi-entry"
+          aria-label="Xiangqi setup"
+        >
+          <span class="eyebrow">A familiar board. A new challenge.</span>
+          <div class="xiangqi-setup">
+            <label
+              >Mode<select id="xiangqi-mode">
+                <option value="ai">Computer</option>
+                <option value="local">Local two players</option>
+                <option value="online">Online</option>
+              </select></label
+            >
+            <label
+              >Time control<select id="xiangqi-clock">
+                <option value="none">Unlimited · local only</option>
+                <option value="5+3">5 + 3</option>
+                <option value="10+5">10 + 5</option>
+                <option value="15+10">15 + 10</option>
+              </select></label
+            >
+            <label id="xiangqi-level-label"
+              >Computer level<select id="xiangqi-level">
+                <option value="1">Level 1</option>
+                <option value="2" selected>Level 2</option>
+                <option value="3">Level 3</option>
+                <option value="4">Level 4</option>
+                <option value="5">Level 5</option>
+              </select></label
+            >
+            <label id="xiangqi-side-label"
+              >Play as<select id="xiangqi-side">
+                <option value="1">Red</option>
+                <option value="-1">Black</option>
+                <option value="0">Random</option>
+              </select></label
+            >
+          </div>
+          <p class="small muted" id="xiangqi-setup-summary">
+            WXF 2018 · 9 × 10
+          </p>
+          <div class="xiangqi-actions" id="xiangqi-local-entry">
+            <button class="button primary" id="xiangqi-start">Start game</button
+            ><button class="button secondary" id="xiangqi-continue" hidden>
+              Continue saved game
+            </button>
+          </div>
+          <div id="xiangqi-online-entry" hidden>
+            <div class="xiangqi-actions">
+              <button class="button primary" id="xiangqi-create">
+                Create room</button
+              ><button class="button secondary" id="xiangqi-find">
+                Find opponent
+              </button>
+            </div>
+            <div class="xiangqi-code-row">
+              <label
+                >Room code<input
+                  id="xiangqi-code"
+                  maxlength="8"
+                  autocomplete="off"
+                  autocapitalize="characters" /></label
+              ><button class="button secondary" id="xiangqi-join">
+                Join room
+              </button>
+            </div>
+            <p class="small muted">
+              Online play requires Google sign-in. Standard human matches count
+              toward public statistics.
+            </p>
+          </div>
+          <p class="small" id="xiangqi-save-info"></p>
+          <p id="xiangqi-entry-status" role="status"></p>
+        </section>
+        <section id="xiangqi-room" class="xiangqi-overlay" hidden>
+          <h2 id="xiangqi-room-title">Waiting for your opponent</h2>
+          <p id="xiangqi-room-summary"></p>
+          <div id="xiangqi-invite">
+            <code id="xiangqi-invite-code"></code
+            ><button class="button secondary" id="xiangqi-copy-invite">
+              Copy invite link
+            </button>
+          </div>
+          <div id="xiangqi-members"></div>
+          <p id="xiangqi-ready-time"></p>
+          <div class="xiangqi-actions">
+            <button class="button primary" id="xiangqi-ready">Ready</button
+            ><button class="button secondary" id="xiangqi-cancel">
+              Cancel
+            </button>
+          </div>
+        </section>
+        <section id="xiangqi-paused" class="xiangqi-overlay" hidden>
+          <h2>Paused · local only</h2>
+          <button class="button primary" id="xiangqi-resume">Continue</button>
+        </section>
+        <section id="xiangqi-result" class="xiangqi-overlay" hidden>
+          <h2 id="xiangqi-result-title"></h2>
+          <p id="xiangqi-result-detail"></p>
+          <div class="xiangqi-actions">
+            <button class="button primary" id="xiangqi-again">
+              New game setup</button
+            ><button class="button secondary" id="xiangqi-review">
+              Review game</button
+            ><button class="button secondary" id="xiangqi-result-pgn">
+              Download ICCS
+            </button>
+          </div>
+        </section>
+      </div>
+      <p
+        class="xiangqi-status"
+        id="xiangqi-status"
+        role="status"
+        aria-live="polite"
+      >
+        Choose your settings and start when you are ready.
+      </p>
+      <p id="xiangqi-warning" class="xiangqi-notice" role="status" hidden></p>
+      <div class="game-control-deck xiangqi-actions">
+        <button class="button primary" id="xiangqi-confirm" hidden>
+          Confirm move</button
+        ><button class="button secondary" id="xiangqi-pause" disabled>
+          Pause</button
+        ><button class="button secondary" id="xiangqi-undo" disabled>
+          Undo turn</button
+        ><button class="button secondary" id="xiangqi-flip">Flip board</button
+        ><button class="button secondary" id="xiangqi-draw" disabled>
+          Draw options</button
+        ><button class="button secondary" id="xiangqi-resign" disabled>
+          Resign</button
+        ><button class="button secondary" id="xiangqi-takeover" hidden>
+          Take control</button
+        ><button class="button secondary" id="xiangqi-retry" hidden>
+          Retry connection</button
+        ><button class="button secondary" data-shell-menu>Menu</button>
+      </div>
+      <div id="xiangqi-draw-offer" class="xiangqi-notice" hidden>
+        <span id="xiangqi-offer-text"></span
+        ><button class="button secondary" id="xiangqi-accept">
+          Accept draw</button
+        ><button class="button secondary" id="xiangqi-decline">Decline</button>
+      </div>
+      <section id="xiangqi-replay" class="panel" hidden>
+        <label
+          >Review move<input
+            id="xiangqi-ply"
+            type="range"
+            min="0"
+            max="0"
+            value="0" /></label
+        ><output id="xiangqi-ply-label"></output
+        ><button class="button secondary" id="xiangqi-close-review">
+          Back to result
+        </button>
+      </section>
+      <details class="xiangqi-history">
+        <summary>Moves &amp; save status</summary>
+        <div id="xiangqi-moves" class="xiangqi-moves"></div>
+        <p id="xiangqi-sync" role="status"></p>
+      </details>
+    </section>
+    <aside class="panel xiangqi-leaderboard" aria-label="Xiangqi leaderboard">
+      <div class="xiangqi-aside-heading">
+        <h2>Xiangqi records</h2>
+        <button class="text-link" id="xiangqi-rank-refresh">Refresh</button>
+      </div>
+      <p class="small muted">
+        Verified standard online human matches only. Local and computer games
+        remain private.
+      </p>
+      <div class="xiangqi-setup">
+        <label
+          >Time control<select id="xiangqi-rank-clock">
+            <option value="5+3">5 + 3</option>
+            <option value="10+5" selected>10 + 5</option>
+            <option value="15+10">15 + 10</option>
+          </select></label
+        ><label
+          >Sort<select id="xiangqi-rank-sort">
+            <option value="wins">Most wins</option>
+            <option value="rate">Win rate · 10+ games</option>
+          </select></label
+        >
+      </div>
+      <p id="xiangqi-rank-status" role="status"></p>
+      <div id="xiangqi-rankings"></div>
+      <button class="text-link" id="xiangqi-rank-more" hidden>
+        Show Top 50
+      </button>
+      <div id="xiangqi-my-ranking"></div>
+    </aside>
+  </div>
+  <dialog class="game-shell-dialog" data-shell-settings-dialog>
+    <div class="game-shell-dialog-heading">
+      <h2>Settings</h2>
+      <button class="icon-button" data-shell-close aria-label="Close">×</button>
+    </div>
+    ${preferences}
+    <label
+      >Piece labels<select id="xiangqi-piece-labels">
+        <option value="hanzi">Chinese characters</option>
+        <option value="letters">Letters</option>
+      </select></label
+    >
+  </dialog>
+  <dialog class="game-shell-dialog" data-shell-menu-dialog>
+    <div class="game-shell-dialog-heading">
+      <h2>Xiangqi</h2>
+      <button class="icon-button" data-shell-close aria-label="Close">×</button>
+    </div>
+    <div class="xiangqi-actions">
+      <button class="button secondary" id="xiangqi-new-setup">
+        New game setup</button
+      ><button class="button secondary" id="xiangqi-export">
+        Download ICCS</button
+      ><button class="button secondary" id="xiangqi-export-json">
+        Download JSON</button
+      ><button class="button secondary" id="xiangqi-fen-copy">Copy FEN</button
+      ><button class="button secondary" id="xiangqi-leave">
+        Leave online match
+      </button>
+    </div>
+    <details>
+      <summary>Import a private practice position</summary>
+      <p>
+        Import an ICCS text record, KenSei JSON record or FEN position. Imported
+        games remain private. FEN has no previous repetition or checking
+        history; those counters start here.
+      </p>
+      <label
+        >ICCS, JSON or FEN<textarea
+          id="xiangqi-import-text"
+          rows="4"
+          maxlength="256000"
+          spellcheck="false"
+        ></textarea></label
+      ><button class="button secondary" id="xiangqi-import">
+        Import practice
+      </button>
+    </details>
+    <details open>
+      <summary>How to play &amp; rules</summary>
+      <p>
+        Red moves first on the standard 9 × 10 board. Protect your general;
+        checkmate and having no legal move both lose. Select a piece and
+        destination, drag, or use the board arrow keys and Enter. On touch
+        screens, confirm your preview.
+      </p>
+      <p>
+        WXF 2018 rules apply. Horse legs, elephant eyes, cannon screens, river
+        and palace restrictions are enforced. Online play has no undo, hints or
+        single-player pause.
+      </p>
+      <p>
+        This site follows the Chinese original: after the same position returns
+        three times, the responsible player is warned to vary. Repeating that
+        prohibited transition loses. Lawful repetition draws after four returns.
+        This digital referee policy is fixed for rules v1.
+      </p>
+      <p>
+        The natural move limit is 100 qualifying plies without a capture; pawn
+        moves do not reset it. Only a player's first ten checks count toward
+        that player's verification total. The automatic referee verifies either
+        player's eligible count. Checkmate and repetition forfeits take
+        priority.
+      </p>
+      <p>
+        Online clocks continue in the background. A continuous 120-second
+        disconnection forfeits unless time expires first. Both disconnected:
+        interrupted. Draw offers keep the clock running.
+      </p>
+      <p>
+        Private progress saves on this device first; signed-in saves sync to
+        your account. Imported records never become ranked. Fairy-Stockfish runs
+        on this device; its five levels are not official ratings.
+      </p>
+      <a
+        href="https://www.wxf-xiangqi.org/images/wxf-rules/2018_World_Xiangqi_Rules_Chinese_2018.pdf"
+        target="_blank"
+        rel="noopener"
+        >World Xiangqi Rules 2018</a
+      >
+    </details>
+  </dialog>
+  <dialog class="game-shell-dialog" id="xiangqi-draw-dialog">
+    <div class="game-shell-dialog-heading">
+      <h2>Draw options</h2>
+      <button class="icon-button" id="xiangqi-draw-close" aria-label="Close">
+        ×
+      </button>
+    </div>
+    <p>The clock continues while this panel is open.</p>
+    <p id="xiangqi-draw-status" role="status" aria-live="polite"></p>
+    <div class="xiangqi-actions">
+      <button class="button secondary" id="xiangqi-offer">Offer draw</button>
+    </div>
+  </dialog>
+</section>

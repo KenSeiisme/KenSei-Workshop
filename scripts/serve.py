@@ -11,6 +11,16 @@ mimetypes.add_type("application/wasm", ".wasm")
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        route = self.path.split("?", 1)[0]
+        if route.startswith(
+            ("/games/xiangqi/", "/zh-hant/games/xiangqi/", "/vendor/fairy-stockfish/")
+        ):
+            self.send_header("Cross-Origin-Opener-Policy", "same-origin")
+            self.send_header("Cross-Origin-Embedder-Policy", "require-corp")
+            self.send_header("Cross-Origin-Resource-Policy", "same-origin")
+        super().end_headers()
+
     def log_message(self, format, *args):
         if "--quiet" not in sys.argv:
             super().log_message(format, *args)

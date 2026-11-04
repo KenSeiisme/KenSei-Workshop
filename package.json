@@ -77,7 +77,11 @@
     "test:game-audio": "node scripts/test.mjs game-audio",
     "board:edge": "node scripts/build-board-edge.mjs",
     "test:chess": "node scripts/test.mjs chess",
-    "vendor:chess": "node scripts/vendor-chess.mjs"
+    "vendor:chess": "node scripts/vendor-chess.mjs",
+    "test:xiangqi": "node scripts/test.mjs xiangqi",
+    "test:xiangqi:live": "node scripts/verify-xiangqi-online.cjs",
+    "vendor:xiangqi": "node scripts/vendor-xiangqi.mjs",
+    "test:xiangqi:matchmaking": "node scripts/verify-xiangqi-matchmaking.cjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.10",

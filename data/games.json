@@ -91,6 +91,13 @@
     "preview": "chess"
   },
   {
+    "slug": "xiangqi",
+    "name": "Xiangqi",
+    "description": "A familiar board. A new challenge. WXF rules, five computer levels and verified online matches.",
+    "category": "Board",
+    "preview": "xiangqi"
+  },
+  {
     "slug": "pong",
     "name": "Pong",
     "description": "Invite a friend. Share a rally. A private online room for two.",

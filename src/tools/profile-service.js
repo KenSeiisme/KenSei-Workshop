@@ -64,6 +64,8 @@ export function paintAvatar(node, profile, preview = "") {
   node.dataset.source = src;
   if (!src) return;
   const image = new Image();
+  // 隔離的象棋頁使用 CORS 載入外部公開頭像；失敗仍保留首字佔位。
+  if (globalThis.crossOriginIsolated) image.crossOrigin = "anonymous";
   image.alt = "";
   image.referrerPolicy = "no-referrer";
   image.onload = () => {

@@ -130,7 +130,7 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
     robots = (output / "robots.txt").read_text(encoding="utf-8")
     assert robots.count(f"Sitemap: {site_url}/sitemap.xml") == 1
     assert "Disallow:" not in robots
-    assert len(locations) == 104
+    assert len(locations) == 106
     # Studio adds one public page per locale and a real immutable download feed.
     studio = json.loads(
         (ROOT / "data/kensei-studio/download.json").read_text(encoding="utf-8")

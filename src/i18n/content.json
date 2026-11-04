@@ -962,5 +962,24 @@
       "西洋棋对战",
       "西洋棋對戰"
     ]
+  },
+  "games/xiangqi": {
+    "name": {
+      "en": "Xiangqi",
+      "zh-Hant": "中國象棋"
+    },
+    "description": {
+      "en": "A familiar board. A new challenge. WXF rules, five computer levels and verified online matches.",
+      "zh-Hant": "熟悉的棋盤，全新的較量。支援 WXF 規則、五級人機與伺服器驗證的線上對戰。"
+    },
+    "aliases": [
+      "xiangqi",
+      "Chinese chess",
+      "象棋",
+      "中國象棋",
+      "中国象棋",
+      "中国象棋对战",
+      "中國象棋對戰"
+    ]
   }
 }

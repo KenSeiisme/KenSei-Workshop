@@ -660,13 +660,15 @@ export function mountAudio(root = document) {
   const gameNode = document.querySelector?.("[data-game]");
   const game =
     gameNode?.dataset.game ||
-    (document.querySelector?.("[data-chess]")
-      ? "chess"
-      : document.querySelector?.("[data-go]")
-        ? "go"
-        : document.querySelector?.("[data-pong]")
-          ? "pong"
-          : "");
+    (document.querySelector?.("[data-xiangqi]")
+      ? "xiangqi"
+      : document.querySelector?.("[data-chess]")
+        ? "chess"
+        : document.querySelector?.("[data-go]")
+          ? "go"
+          : document.querySelector?.("[data-pong]")
+            ? "pong"
+            : "");
   if (game && !state.game) setAudioState({ game, phase: "ready" });
   for (const node of root.querySelectorAll(
     "[data-audio-toggle], [data-audio-volume], [data-music-toggle], [data-music-volume], [data-audio-countdown], [data-audio-retry]",
@@ -732,7 +734,7 @@ for (const type of ["pointerdown", "keydown"])
         return;
       if (
         event.target?.closest?.(
-          "[data-game], [data-go], [data-chess], [data-pong]",
+          "[data-game], [data-go], [data-chess], [data-xiangqi], [data-pong]",
         )
       )
         unlockAudio();

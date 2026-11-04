@@ -11,6 +11,12 @@ import {
   applyChess,
   CHESS_VERSION,
 } from "../../../src/games/chess-engine.js";
+import {
+  xiangqiSettings,
+  createXiangqi,
+  applyXiangqi,
+  XIANGQI_VERSION,
+} from "../../../src/games/xiangqi-engine.js";
 import { timeoutVerdicts } from "../../../src/games/chess-adjudication.js";
 
 const UUID =
@@ -90,7 +96,7 @@ export function makeHandler(
       }
       const body = JSON.parse(text + decoder.decode());
       const game = body.game ?? "go";
-      if (game !== "go" && game !== "chess")
+      if (game !== "go" && game !== "chess" && game !== "xiangqi")
         return send({ error: "Unknown board game." }, 400);
       const action = new URL(req.url).pathname
         .split("/")
@@ -149,7 +155,11 @@ export function makeHandler(
         if (
           (snapshot.game || "go") !== game ||
           snapshot.rules_version !==
-            (game === "chess" ? CHESS_VERSION : GO_VERSION)
+            (game === "xiangqi"
+              ? XIANGQI_VERSION
+              : game === "chess"
+                ? CHESS_VERSION
+                : GO_VERSION)
         )
           return send(
             {
@@ -159,9 +169,11 @@ export function makeHandler(
             409,
           );
         const next =
-          game === "chess"
-            ? applyChess(snapshot.state, body.action, snapshot.color)
-            : applyGo(snapshot.state, body.action, snapshot.color);
+          game === "xiangqi"
+            ? applyXiangqi(snapshot.state, body.action, snapshot.color)
+            : game === "chess"
+              ? applyChess(snapshot.state, body.action, snapshot.color)
+              : applyGo(snapshot.state, body.action, snapshot.color);
         if (game === "chess")
           next.timeout =
             body.action.type === "move"
@@ -177,7 +189,12 @@ export function makeHandler(
       };
       if (action === "create" || action === "queue") {
         if (
-          body.rules_version !== (game === "chess" ? CHESS_VERSION : GO_VERSION)
+          body.rules_version !==
+          (game === "xiangqi"
+            ? XIANGQI_VERSION
+            : game === "chess"
+              ? CHESS_VERSION
+              : GO_VERSION)
         )
           return send(
             {
@@ -187,8 +204,12 @@ export function makeHandler(
             409,
           );
         const config =
-          game === "chess" ? chessSettings(body.config) : settings(body.config);
-        if (game === "chess" && config.clock === "none")
+          game === "xiangqi"
+            ? xiangqiSettings(body.config)
+            : game === "chess"
+              ? chessSettings(body.config)
+              : settings(body.config);
+        if ((game === "chess" || game === "xiangqi") && config.clock === "none")
           return send({ error: "Choose a supported chess time control." }, 400);
         if (
           game === "go" &&
@@ -203,12 +224,16 @@ export function makeHandler(
             400,
           );
         const initial =
-          game === "chess" ? createChess(config) : createGo(config);
+          game === "xiangqi"
+            ? createXiangqi(config)
+            : game === "chess"
+              ? createChess(config)
+              : createGo(config);
         if (game === "chess") initial.timeout = timeoutVerdicts(initial);
         Object.assign(payload, {
           config,
           state: initial,
-          ranked: game === "chess" || standard(config),
+          ranked: game === "chess" || game === "xiangqi" || standard(config),
           preferred_color: [1, -1].includes(body.preferred_color)
             ? body.preferred_color
             : 0,

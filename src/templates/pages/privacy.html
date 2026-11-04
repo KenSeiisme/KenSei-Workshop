@@ -209,8 +209,18 @@
     time control. Local games, Stockfish practice and imported positions remain
     private. Stockfish runs on this device without sending positions to an
     external AI service. Unresolved and interrupted matches do not enter public
-    statistics. Go, Chess, Pong and shared Whiteboard share a two-active-room
-    limit.
+    statistics. Go, Chess, Xiangqi, Pong and shared Whiteboard share a
+    two-active-room limit.
+  </p>
+  <h3>Online Xiangqi and public records</h3>
+  <p>
+    Xiangqi uses the same private match service. The server checks WXF moves,
+    repetition, clocks and outcomes. Standard online human games publish wins,
+    losses, draws and completed games by time control. Private games, imported
+    records and computer practice do not enter public statistics.
+    Fairy-Stockfish runs locally without sending positions to an AI service.
+    Only Xiangqi pages and engine resources enable cross-origin isolation for
+    the local engine.
   </p>
   <h2>Your controls</h2>
   <p>

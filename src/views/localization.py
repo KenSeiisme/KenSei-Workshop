@@ -55,8 +55,8 @@ COMMON = {
     "games": (
         {"en": "Games", "zh-Hant": "遊戲"},
         {
-            "en": "Play 14 browser games with local saves, verified leaderboards, online Go and Chess matches.",
-            "zh-Hant": "暢玩 14 款瀏覽器遊戲，支援本機存檔、已驗證排行榜與線上圍棋及西洋棋對局。",
+            "en": "Play 15 browser games with local saves, verified leaderboards, online Go, Chess and Xiangqi matches.",
+            "zh-Hant": "暢玩 15 款瀏覽器遊戲，支援本機存檔、已驗證排行榜與線上圍棋、西洋棋及象棋對局。",
         },
     ),
     "projects": (
@@ -270,6 +270,8 @@ def styles(route):
             files.append("game-play-shell.css")
         if slug == "go":
             files.append("go.css")
+        if slug == "xiangqi" or route == "games":
+            files.append("xiangqi.css")
         if slug == "chess" or route == "games":
             files.append("chess.css")
     return files
@@ -304,15 +306,19 @@ def source_files(route):
         files.add("src/tools/profile.js")
     if route == "games" or route.startswith("games/"):
         files.add(
-            "src/games/chess.js"
-            if route == "games/chess"
+            "src/games/xiangqi.js"
+            if route == "games/xiangqi"
             else (
-                "src/games/go.js"
-                if route == "games/go"
+                "src/games/chess.js"
+                if route == "games/chess"
                 else (
-                    "src/games/pong.js"
-                    if route == "games/pong"
-                    else "src/games/games.js"
+                    "src/games/go.js"
+                    if route == "games/go"
+                    else (
+                        "src/games/pong.js"
+                        if route == "games/pong"
+                        else "src/games/games.js"
+                    )
                 )
             )
         )
@@ -321,6 +327,13 @@ def source_files(route):
         if (ROOT / advanced).is_file():
             files.add(advanced)
     pending = list(files)
+    if route == "games/xiangqi":
+        files.update(
+            [
+                "supabase/functions/board-match/index.ts",
+                "supabase/migrations/20261104040132_workshop_xiangqi_matches.sql",
+            ]
+        )
     if route == "games/chess":
         files.update(
             [

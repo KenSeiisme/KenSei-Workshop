@@ -6,6 +6,7 @@ from html import escape
 from pong_view import VIEW as PONG_VIEW
 from go_view import VIEW as GO_VIEW
 from chess_view import VIEW as CHESS_VIEW
+from xiangqi_view import VIEW as XIANGQI_VIEW
 
 HELP = {
     "go": "Play Go with Chinese, Japanese 1989 or AGA rules. Local, introductory computer and authenticated online play; optional single-color memory training.",
@@ -95,6 +96,12 @@ HELP = {
     ),
 }
 DETAILS = {
+    "xiangqi": (
+        "15",
+        "A familiar board. A new challenge.",
+        "WXF 2018 · 9 × 10",
+        "Local / Computer / Online",
+    ),
     "chess": (
         "14",
         "Your next move starts here.",
@@ -143,6 +150,12 @@ DETAILS = {
 
 
 def preview(kind):
+    if kind == "xiangqi":
+        return (
+            '<div class="preview-xiangqi" aria-hidden="true">'
+            + "".join("<i>" + p + "</i>" for p in "車馬象將炮兵相帥")
+            + "</div>"
+        )
     if kind == "chess":
         return (
             '<div class="preview-chess" aria-hidden="true">'
@@ -366,7 +379,7 @@ def directory(games):
             spec=DETAILS[g["slug"]][2],
             play_mode=(
                 "Local / Computer / Online"
-                if g["slug"] in ("go", "chess")
+                if g["slug"] in ("go", "chess", "xiangqi")
                 else (
                     "Online / Friends"
                     if g["slug"] == "pong"
@@ -386,6 +399,8 @@ def directory(games):
 
 
 def game_page(game):
+    if game["slug"] == "xiangqi":
+        return XIANGQI_VIEW
     if game["slug"] == "chess":
         return CHESS_VIEW
     if game["slug"] == "go":

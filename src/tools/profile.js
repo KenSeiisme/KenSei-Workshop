@@ -103,7 +103,8 @@ function renderPublicScores(profile) {
   );
   revealGameCards($("#public-game-scores"));
   renderGoStats(profile.board_game_stats || []);
-  renderChessStats(profile.chess_stats || []);
+  renderClockBoardStats(profile.chess_stats || [], "chess");
+  renderClockBoardStats(profile.xiangqi_stats || [], "xiangqi");
   $("#public-best-scores").innerHTML = ["en", "zh"]
     .map((lang) => {
       const score = profile.best_scores?.find((x) => x.language === lang);
@@ -111,21 +112,33 @@ function renderPublicScores(profile) {
     })
     .join("");
 }
-function renderChessStats(stats) {
-  let section = $("#public-chess-records");
+function renderClockBoardStats(stats, game) {
+  let section = $(`#public-${game}-records`);
   if (!section) {
     section = document.createElement("section");
-    section.id = "public-chess-records";
+    section.id = `public-${game}-records`;
     section.className = "panel profile-go-records";
     $("#public-go-records").after(section);
   }
   section.replaceChildren();
   const heading = document.createElement("h2");
-  uiText(heading, uiMsg("Chess · online records"));
+  uiText(
+    heading,
+    uiMsg(
+      game === "chess" ? "Chess · online records" : "Xiangqi · online records",
+    ),
+  );
   section.append(heading);
   if (!stats.length) {
     const empty = document.createElement("p");
-    uiText(empty, uiMsg("No verified chess matches yet."));
+    uiText(
+      empty,
+      uiMsg(
+        game === "chess"
+          ? "No verified chess matches yet."
+          : "No verified xiangqi matches yet.",
+      ),
+    );
     section.append(empty);
   }
   for (const r of stats) {
@@ -135,10 +148,12 @@ function renderChessStats(stats) {
     row.className = "profile-go-stat";
     uiText(
       name,
-      uiMsg("Chess rules v{0} · {1}", [
-        Number(r.rules_version),
-        r.time_control,
-      ]),
+      uiMsg(
+        game === "chess"
+          ? "Chess rules v{0} · {1}"
+          : "Xiangqi rules v{0} · {1}",
+        [Number(r.rules_version), r.time_control],
+      ),
     );
     uiText(
       detail,
@@ -154,8 +169,8 @@ function renderChessStats(stats) {
     section.append(row);
   }
   const link = document.createElement("a");
-  link.href = `${location.pathname.startsWith("/zh-hant/") ? "/zh-hant" : ""}/games/chess/`;
-  uiText(link, uiMsg("Play Chess →"));
+  link.href = `${location.pathname.startsWith("/zh-hant/") ? "/zh-hant" : ""}/games/${game}/`;
+  uiText(link, uiMsg(game === "chess" ? "Play Chess →" : "Play Xiangqi →"));
   section.append(link);
 }
 function renderGoStats(stats) {

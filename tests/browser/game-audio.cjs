@@ -50,6 +50,11 @@ async function startChess(page) {
   await page.click("#chess-start");
   await page.waitForSelector("[data-chess-phase=playing]");
 }
+async function startXiangqi(page) {
+  await page.selectOption("#xiangqi-mode", "local");
+  await page.click("#xiangqi-start");
+  await page.waitForSelector("[data-xiangqi-phase=playing]");
+}
 (async () => {
   const browser = await chromium.launch({
     channel: process.env.BROWSER_CHANNEL || "msedge",
@@ -150,6 +155,7 @@ async function startChess(page) {
         if (slug === "pong") continue;
         if (slug === "go") await startGo(page);
         else if (slug === "chess") await startChess(page);
+        else if (slug === "xiangqi") await startXiangqi(page);
         else await gameClick(page, "#game-start");
         assert.equal((await diagnostics(page)).loadError, "unsupported");
         assert.equal((await diagnostics(page)).musicPlaying, false);
@@ -186,6 +192,7 @@ async function startChess(page) {
       if (slug === "pong") continue;
       if (slug === "go") await startGo(page);
       else if (slug === "chess") await startChess(page);
+      else if (slug === "xiangqi") await startXiangqi(page);
       else await gameClick(page, "#game-start");
       await runningAudio(page);
       const d = await diagnostics(page);

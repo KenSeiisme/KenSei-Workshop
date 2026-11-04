@@ -2,6 +2,7 @@ node_modules/
 _qa/
 *.tar.gz
 !/src/vendor/sources/stockfish-js-19.0.1-source.tar.gz
+!/src/vendor/sources/fairy-stockfish-1.1.12-source.tar.gz
 .env*
 .site-workflow/
 __pycache__/

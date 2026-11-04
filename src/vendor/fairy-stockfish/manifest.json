@@ -1,0 +1,97 @@
+{
+  "package": "fairy-stockfish-nnue.wasm",
+  "version": "1.1.12",
+  "engine": "Fairy-Stockfish large-board WASM SIMD, pthread build, classical evaluation",
+  "license": "GPL-3.0",
+  "sourceCommit": "b2e693ef1e111233ce3fb40685921708b3276ed6",
+  "sourceCommitEvidence": "npm registry gitHead; runtime id commit b2e693ef",
+  "sourceUrl": "https://github.com/fairy-stockfish/fairy-stockfish.wasm/tree/b2e693ef1e111233ce3fb40685921708b3276ed6",
+  "sourceDownload": "/vendor/sources/fairy-stockfish-1.1.12-source.tar.gz",
+  "licenseUrl": "/vendor/licenses/fairy-stockfish-GPL-3.0.txt",
+  "authorsUrl": "/vendor/licenses/fairy-stockfish-AUTHORS.txt",
+  "buildInstructions": "/vendor/fairy-stockfish/README.md",
+  "modified": false,
+  "packageArchive": {
+    "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+    "bytes": 532807,
+    "sha256": "4945517be0f7a9d4520b08acadfd736e82b15758935395eb828f8f949b485f41",
+    "npmIntegrity": "sha512-E0z5fvgZgIK0NoLmI6krWt5g362G4mZguANy8obTXL7EFPzyOyQn9A8OmBcjRe/s4see2s9okfULTGVnCu+1XQ=="
+  },
+  "runtime": {
+    "worker": "/vendor/fairy-stockfish/xiangqi-worker.js",
+    "adapter": "Project-authored classic Worker UCI adapter; upstream engine files unmodified",
+    "requiresCrossOriginIsolation": true,
+    "requiresSharedArrayBuffer": true,
+    "requiresWasmSimd": true,
+    "initialMemoryBytes": 134217728,
+    "maximumMemoryBytes": 2147483648,
+    "threads": 1,
+    "hashMiB": 16,
+    "useNnue": false,
+    "externalRuntimeRequests": false,
+    "uciVariant": "xiangqi",
+    "uciRanks": "1-10",
+    "skillLevel": {
+      "min": -20,
+      "max": 20,
+      "default": 20
+    }
+  },
+  "files": [
+    {
+      "path": "/vendor/fairy-stockfish/stockfish.js",
+      "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+      "archiveEntry": "package/stockfish.js",
+      "bytes": 64273,
+      "sha256": "9080a62e3133e50da0c47b88b186d9c29ed37cc5129401bdeed8bffb5b9a4ca9"
+    },
+    {
+      "path": "/vendor/fairy-stockfish/stockfish.wasm",
+      "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+      "archiveEntry": "package/stockfish.wasm",
+      "bytes": 1636293,
+      "sha256": "7cea742b8ca1a324fbc500f89112f168134cf68eb49475df23be6c42336255c6"
+    },
+    {
+      "path": "/vendor/fairy-stockfish/stockfish.worker.js",
+      "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+      "archiveEntry": "package/stockfish.worker.js",
+      "bytes": 3321,
+      "sha256": "067be484ac62f728b0dad28496997e5862f3c61f9091f59bb35d9d1b1ed14573"
+    },
+    {
+      "path": "/vendor/fairy-stockfish/uci.js",
+      "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+      "archiveEntry": "package/uci.js",
+      "bytes": 1117,
+      "sha256": "3fb02eea10e75bdb3db8f7c3ca46dc54f2f7d3a88fd63b8b3e34708af5ff28bf"
+    },
+    {
+      "path": "/vendor/fairy-stockfish/package.json",
+      "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+      "archiveEntry": "package/package.json",
+      "bytes": 536,
+      "sha256": "9be78cadc261eebd9638e37c7cb5465efb91477a4b6249cf06d8d5a90b0a376a"
+    },
+    {
+      "path": "/vendor/licenses/fairy-stockfish-GPL-3.0.txt",
+      "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+      "archiveEntry": "package/Copying.txt",
+      "bytes": 35821,
+      "sha256": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b"
+    },
+    {
+      "path": "/vendor/licenses/fairy-stockfish-AUTHORS.txt",
+      "source": "https://registry.npmjs.org/fairy-stockfish-nnue.wasm/-/fairy-stockfish-nnue.wasm-1.1.12.tgz",
+      "archiveEntry": "package/AUTHORS",
+      "bytes": 4950,
+      "sha256": "55a0a4599358308af8349344d79176469f04119558e85595efe0a39b583cdf00"
+    },
+    {
+      "path": "/vendor/sources/fairy-stockfish-1.1.12-source.tar.gz",
+      "source": "https://codeload.github.com/fairy-stockfish/fairy-stockfish.wasm/tar.gz/b2e693ef1e111233ce3fb40685921708b3276ed6",
+      "bytes": 383237,
+      "sha256": "5c10e40812e1045cb13677ff84b3cdd3fca5c381df76245cd4d8eb5312a61bea"
+    }
+  ]
+}

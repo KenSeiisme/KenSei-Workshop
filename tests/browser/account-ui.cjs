@@ -24,7 +24,12 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
   );
   await context.route(
     "https://lh3.googleusercontent.com/a/account-ui-fixture",
-    (route) => route.fulfill({ contentType: "image/svg+xml", body: picture }),
+    (route) =>
+      route.fulfill({
+        contentType: "image/svg+xml",
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: picture,
+      }),
   );
   const page = await context.newPage();
   try {
@@ -37,6 +42,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
           "/projects/",
           "/profile/",
           "/games/minesweeper/",
+          "/games/xiangqi/",
         ]) {
           await page.setViewportSize({ width, height: 900 });
           await page.goto(base + prefix + route);
@@ -128,7 +134,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       JSON.stringify({ checks, errors }, null, 2),
     );
     console.log(
-      "PASS signed-in account UI: 48 route/locale/viewport cases, oversized source avatar stays 30px, styled menu, no overflow and image-error fallback",
+      `PASS signed-in account UI: ${checks.length} route/locale/viewport cases, oversized source avatar stays 30px, styled menu, no overflow and image-error fallback`,
     );
   } finally {
     await browser.close();
