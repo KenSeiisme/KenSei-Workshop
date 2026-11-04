@@ -190,5 +190,17 @@
   "m_499922b9674a": {
     "en": "Simulate image sweeps and sword rotations; physical POV imaging remains experimental.",
     "zh-Hant": "模擬圖片掃動及轉劍；實物 POV 成像仍為實驗功能。"
+  },
+  "m_769e03ad1641": {
+    "en": "Wireless updates preview: one USB controller forwards programs or paired firmware to selected props.",
+    "zh-Hant": "無線更新預覽：透過一台 USB 遙控器，將節目或配套韌體傳送至所選道具。"
+  },
+  "m_383e001e007c": {
+    "en": "Initial USB migration is required for the new program and OTA partitions; the PC stays connected during transfers.",
+    "zh-Hant": "首次需透過 USB 遷移至新節目槽與 OTA 分割區，傳輸期間電腦保持連線。"
+  },
+  "m_0e5daffdb4bf": {
+    "en": "Wireless update speed, range and physical power-loss recovery remain unverified.",
+    "zh-Hant": "無線更新速度、距離與實物斷電恢復仍待驗證。"
   }
 }

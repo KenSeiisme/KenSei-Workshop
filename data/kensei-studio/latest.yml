@@ -1,32 +1,38 @@
-version: 0.8.0
+version: 0.9.0
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.8.0/KenSei-Studio-0.8.0-Setup.exe
-    sha512: rHRcOx1W6U9ucfIQa+/jLxJeL3e5L+4frniiBvPJ79Z2GqPGtqisDtaeU6FMxbdWyENBtWfM5RlzjYpOU0SdnA==
-    size: 125746910
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.8.0/KenSei-Studio-0.8.0-Setup.exe
-sha512: rHRcOx1W6U9ucfIQa+/jLxJeL3e5L+4frniiBvPJ79Z2GqPGtqisDtaeU6FMxbdWyENBtWfM5RlzjYpOU0SdnA==
-releaseDate: 2026-10-31T15:45:26.896Z
-releaseName: KenSei Studio 0.8.0
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.0/KenSei-Studio-0.9.0-Setup.exe
+    sha512: f07RFfOPL8K3Q7XrEIQB3EJKR+oFJdSRn5DGGf8Qf8veKEfwKmV9JSsJVqyE+bYqc0WVqOVYw1oMpfMxF5kD+g==
+    size: 125801111
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.0/KenSei-Studio-0.9.0-Setup.exe
+sha512: f07RFfOPL8K3Q7XrEIQB3EJKR+oFJdSRn5DGGf8Qf8veKEfwKmV9JSsJVqyE+bYqc0WVqOVYw1oMpfMxF5kD+g==
+releaseDate: 2026-11-04T12:25:02.097Z
+releaseName: KenSei Studio 0.9.0
 releaseNotes: >
   ADDED
 
-  - Import static PNG/JPEG images, crop, rotate and flip them, then generate
-  editable hold-keyframe scans. Original images and settings travel with the
-  project.
+  - Update selected props through one USB-connected ESP-NOW controller. The
+  preview includes per-device program transfer and paired application OTA, with
+  capability checks, progress, cancellation, retry and version confirmation.
 
-  - Preview linear sweeps and sword rotations from the actual generated pixels,
-  with pivot, angle, direction and loop controls. POV imaging remains
-  experimental and assumes constant motion.
+  - Independent binary programs retain parameters, beats and compressed
+  pixel/image keyframes. Initial USB migration seeds two program banks alongside
+  two rollback-capable application slots.
 
 
   IMPROVED
 
-  - Image scans respect the current ~30 FPS output, with 34 ms minimum column
-  duration and bounded data size. Source metadata does not alter firmware
-  identities.
+  - Program edits no longer rebuild migrated player firmware. Unchanged prop
+  content is skipped; shared show changes block unsynced performance members.
+  All uploads use a frozen project snapshot.
+
+  - Transfer chunks authenticate sessions and offsets, verify CRC and
+  whole-object SHA-256, and negotiate large or compatible small payloads. New
+  firmware confirms health after ten seconds; program bank recovery is separate.
 
 
   FIXED
 
-  - Combined effect descriptions and animation into one edge-aware hover panel,
-  removing the native tooltip that obscured the preview.
+  - Wireless tasks now reserve the controller connection and prevent parallel
+  flashing, performance arming, configuration deletion and App-update
+  installation. Wireless reliability and power-loss recovery remain unverified
+  on physical hardware.

@@ -1,5 +1,50 @@
 [
   {
+    "version": "0.9.0",
+    "date": "2026-11-04",
+    "changes": {
+      "en": {
+        "added": [
+          "Update selected props through one USB-connected ESP-NOW controller. The preview includes per-device program transfer and paired application OTA, with capability checks, progress, cancellation, retry and version confirmation.",
+          "Independent binary programs retain parameters, beats and compressed pixel/image keyframes. Initial USB migration seeds two program banks alongside two rollback-capable application slots."
+        ],
+        "improved": [
+          "Program edits no longer rebuild migrated player firmware. Unchanged prop content is skipped; shared show changes block unsynced performance members. All uploads use a frozen project snapshot.",
+          "Transfer chunks authenticate sessions and offsets, verify CRC and whole-object SHA-256, and negotiate large or compatible small payloads. New firmware confirms health after ten seconds; program bank recovery is separate."
+        ],
+        "fixed": [
+          "Wireless tasks now reserve the controller connection and prevent parallel flashing, performance arming, configuration deletion and App-update installation. Wireless reliability and power-loss recovery remain unverified on physical hardware."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "通过一台 USB 连接的 ESP-NOW 遥控器更新所选道具。预览版包含逐件节目传输及配套应用 OTA，提供能力检查、进度、取消、重试与版本确认。",
+          "独立二进制节目保留参数、节拍及压缩的像素／图片关键帧；首次 USB 迁移初始化双节目槽，并保留支持回滚的双应用槽。"
+        ],
+        "improved": [
+          "迁移后修改编排无需重编译播放器固件；相同内容跳过，公共节目资料变更会拦截未同步的演出成员；上传使用冻结项目快照。",
+          "分块传输认证会话与偏移，验证 CRC 及完整 SHA-256，并协商大包或兼容小包；新固件健康运行十秒后确认，节目槽另有恢复机制。"
+        ],
+        "fixed": [
+          "无线任务占用遥控连接，阻止并行烧录、进入演出、删除配置及安装 App 更新。无线可靠性与断电恢复仍待实物验证。"
+        ]
+      },
+      "zh-TW": {
+        "added": [
+          "透過一台 USB 連線的 ESP-NOW 遙控器更新所選道具。預覽版包含逐件節目傳輸及配套應用 OTA，提供能力檢查、進度、取消、重試與版本確認。",
+          "獨立二進位節目保留參數、節拍及壓縮的像素／圖片關鍵影格；首次 USB 遷移初始化雙節目槽，並保留支援回滾的雙應用槽。"
+        ],
+        "improved": [
+          "遷移後修改編排無需重新編譯播放器韌體；相同內容略過，共用節目資料變更會攔截未同步的演出成員；上傳使用固定專案快照。",
+          "分塊傳輸認證工作階段與偏移，驗證 CRC 及完整 SHA-256，並協商大封包或相容小封包；新韌體健康運行十秒後確認，節目槽另有恢復機制。"
+        ],
+        "fixed": [
+          "無線任務占用遙控連線，阻止平行燒錄、進入演出、刪除設定及安裝 App 更新。無線可靠性與斷電恢復仍待實物驗證。"
+        ]
+      }
+    }
+  },
+  {
     "version": "0.8.0",
     "date": "2026-10-31",
     "changes": {
