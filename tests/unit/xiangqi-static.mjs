@@ -25,8 +25,8 @@ const isolated = config.headers.filter((x) =>
 assert.deepEqual(
   isolated.map((x) => x.source),
   [
-    "/games/xiangqi/:path*",
-    "/zh-hant/games/xiangqi/:path*",
+    "/games/xiangqi(.*)",
+    "/zh-hant/games/xiangqi(.*)",
     "/vendor/fairy-stockfish/:path*",
   ],
 );

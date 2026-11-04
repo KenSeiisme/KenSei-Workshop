@@ -22,7 +22,7 @@
       ]
     },
     {
-      "source": "/games/xiangqi/:path*",
+      "source": "/games/xiangqi(.*)",
       "headers": [
         {
           "key": "Cross-Origin-Opener-Policy",
@@ -39,7 +39,7 @@
       ]
     },
     {
-      "source": "/zh-hant/games/xiangqi/:path*",
+      "source": "/zh-hant/games/xiangqi(.*)",
       "headers": [
         {
           "key": "Cross-Origin-Opener-Policy",
