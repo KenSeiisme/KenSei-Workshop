@@ -334,7 +334,7 @@ details = {
             "Reusable templates and catalog data",
         ],
         "HTML, CSS, JavaScript and a Python static-page generator.",
-        "https://3a3d.vercel.app/",
+        "https://kenseiisme.github.io/3A3D/",
         "Launch website",
         "Car imagery from the existing project. This cover is a graphic composition, not a screenshot.",
     ),

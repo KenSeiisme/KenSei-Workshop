@@ -41,7 +41,7 @@ function pass(name) {
     await ctx.route("**/config.js", (route) =>
       route.fulfill({
         contentType: "application/javascript",
-        body: "window.KENSEI_CONFIG={personalUrl:'https://kensei-eta.vercel.app/',carUrl:'https://3a3d.vercel.app/'};",
+        body: "window.KENSEI_CONFIG={personalUrl:'https://kensei-eta.vercel.app/',carUrl:'https://kenseiisme.github.io/3A3D/'};",
       }),
     );
     const page = await ctx.newPage();
