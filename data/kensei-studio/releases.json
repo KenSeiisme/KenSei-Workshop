@@ -1,5 +1,44 @@
 [
   {
+    "version": "0.9.2",
+    "date": "2026-11-05",
+    "changes": {
+      "en": {
+        "added": [
+          "Performance preflight names the exact blocker, including the computer/controller clock requirement and a prop waiting for the selected show. Row status and main-process guards share the same checks."
+        ],
+        "improved": [
+          "Read available USB bytes immediately instead of waiting for a full 4096-byte read. Send idle-link clock/control lines without an intra-frame delay, while update data and control bursts retain receive-buffer protection."
+        ],
+        "fixed": [
+          "Fixed ready props being accompanied by an unexplained performance-not-ready warning when USB latency inflated computer/controller clock uncertainty. The 8 ms requirement remains enforced. Failed arming preserves the participant list. Existing migrated device firmware does not need reflashing; hardware synchronization remains a preview."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "演出预检明确列出阻塞原因，包括电脑／遥控器校时门槛及道具等待节目切换；行状态与主进程共用同一套检查。"
+        ],
+        "improved": [
+          "USB 立即读取已经到达的数据，不再等待 4096 字节读满；空闲链路的小型校时／控制报文不再插入帧内延时，更新数据和控制突发仍保留接收缓冲保护。"
+        ],
+        "fixed": [
+          "修复 USB 延迟抬高校时误差，导致道具显示就绪却只提示演出未就绪的问题；继续严格执行 8 ms 门槛。进入演出失败不再改变参与名单。已迁移设备无需重新烧录，实物同步仍为预览功能。"
+        ]
+      },
+      "zh-TW": {
+        "added": [
+          "演出預檢明確列出阻塞原因，包括電腦／遙控器校時門檻及道具等待節目切換；列狀態與主程序共用同一套檢查。"
+        ],
+        "improved": [
+          "USB 立即讀取已到達的資料，不再等待 4096 位元組讀滿；閒置連線的小型校時／控制封包不再插入幀內延遲，更新資料與控制突發仍保留接收緩衝保護。"
+        ],
+        "fixed": [
+          "修復 USB 延遲抬高校時誤差，導致道具顯示就緒卻只提示演出尚未就緒的問題；繼續嚴格執行 8 ms 門檻。進入演出失敗不再改變參與名單。已遷移裝置無需重新燒錄，實物同步仍為預覽功能。"
+        ]
+      }
+    }
+  },
+  {
     "version": "0.9.1",
     "date": "2026-11-05",
     "changes": {

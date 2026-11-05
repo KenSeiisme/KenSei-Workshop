@@ -1,31 +1,31 @@
-version: 0.9.1
+version: 0.9.2
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.1/KenSei-Studio-0.9.1-Setup.exe
-    sha512: D94MWduNItCiJoyFtDM3xaLLOsoiKEKeGra6xMQ7nzrVtnQRZCfyK94NpHIoqOO7yG6di0zommOWroBaHxLOSg==
-    size: 125810683
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.1/KenSei-Studio-0.9.1-Setup.exe
-sha512: D94MWduNItCiJoyFtDM3xaLLOsoiKEKeGra6xMQ7nzrVtnQRZCfyK94NpHIoqOO7yG6di0zommOWroBaHxLOSg==
-releaseDate: 2026-11-05T11:21:35.680Z
-releaseName: KenSei Studio 0.9.1
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.2/KenSei-Studio-0.9.2-Setup.exe
+    sha512: DX1yNTvYEx9n+7kH2sHaoD8ZLqAsHv7cddn8oZ9RQWrkP10mNbo5BaFD98dntw8wNcFN4iCvop66zx2gK6fa0A==
+    size: 125817416
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.2/KenSei-Studio-0.9.2-Setup.exe
+sha512: DX1yNTvYEx9n+7kH2sHaoD8ZLqAsHv7cddn8oZ9RQWrkP10mNbo5BaFD98dntw8wNcFN4iCvop66zx2gK6fa0A==
+releaseDate: 2026-11-05T12:13:19.377Z
+releaseName: KenSei Studio 0.9.2
 releaseNotes: >
   ADDED
 
-  - Wireless progress now shows the current program/firmware object, chunk size
-  and retry count. Timeout details include the byte offset and controller
-  connection state.
+  - Performance preflight names the exact blocker, including the
+  computer/controller clock requirement and a prop waiting for the selected
+  show. Row status and main-process guards share the same checks.
 
 
   IMPROVED
 
-  - Large-packet acknowledgement failures query the committed offset, then fall
-  back to smaller chunks without restarting a valid transfer. Longer
-  update-specific USB keepalive tolerates Flash erase and verification.
+  - Read available USB bytes immediately instead of waiting for a full 4096-byte
+  read. Send idle-link clock/control lines without an intra-frame delay, while
+  update data and control bursts retain receive-buffer protection.
 
 
   FIXED
 
-  - Paced and checked USB writes prevent full update frames from overflowing the
-  existing 512-byte controller receive ring. Truncated binary frames
-  resynchronize without swallowing the next valid reply. This App patch works
-  with migrated 0.9.0 firmware; no additional USB reflash is required. Physical
-  wireless reliability remains unverified.
+  - Fixed ready props being accompanied by an unexplained performance-not-ready
+  warning when USB latency inflated computer/controller clock uncertainty. The 8
+  ms requirement remains enforced. Failed arming preserves the participant list.
+  Existing migrated device firmware does not need reflashing; hardware
+  synchronization remains a preview.
