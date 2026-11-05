@@ -1,38 +1,31 @@
-version: 0.9.0
+version: 0.9.1
 files:
-  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.0/KenSei-Studio-0.9.0-Setup.exe
-    sha512: f07RFfOPL8K3Q7XrEIQB3EJKR+oFJdSRn5DGGf8Qf8veKEfwKmV9JSsJVqyE+bYqc0WVqOVYw1oMpfMxF5kD+g==
-    size: 125801111
-path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.0/KenSei-Studio-0.9.0-Setup.exe
-sha512: f07RFfOPL8K3Q7XrEIQB3EJKR+oFJdSRn5DGGf8Qf8veKEfwKmV9JSsJVqyE+bYqc0WVqOVYw1oMpfMxF5kD+g==
-releaseDate: 2026-11-04T12:25:02.097Z
-releaseName: KenSei Studio 0.9.0
+  - url: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.1/KenSei-Studio-0.9.1-Setup.exe
+    sha512: D94MWduNItCiJoyFtDM3xaLLOsoiKEKeGra6xMQ7nzrVtnQRZCfyK94NpHIoqOO7yG6di0zommOWroBaHxLOSg==
+    size: 125810683
+path: https://2nuoywu6nupmxirk.public.blob.vercel-storage.com/kensei-studio/windows/x64/0.9.1/KenSei-Studio-0.9.1-Setup.exe
+sha512: D94MWduNItCiJoyFtDM3xaLLOsoiKEKeGra6xMQ7nzrVtnQRZCfyK94NpHIoqOO7yG6di0zommOWroBaHxLOSg==
+releaseDate: 2026-11-05T11:21:35.680Z
+releaseName: KenSei Studio 0.9.1
 releaseNotes: >
   ADDED
 
-  - Update selected props through one USB-connected ESP-NOW controller. The
-  preview includes per-device program transfer and paired application OTA, with
-  capability checks, progress, cancellation, retry and version confirmation.
-
-  - Independent binary programs retain parameters, beats and compressed
-  pixel/image keyframes. Initial USB migration seeds two program banks alongside
-  two rollback-capable application slots.
+  - Wireless progress now shows the current program/firmware object, chunk size
+  and retry count. Timeout details include the byte offset and controller
+  connection state.
 
 
   IMPROVED
 
-  - Program edits no longer rebuild migrated player firmware. Unchanged prop
-  content is skipped; shared show changes block unsynced performance members.
-  All uploads use a frozen project snapshot.
-
-  - Transfer chunks authenticate sessions and offsets, verify CRC and
-  whole-object SHA-256, and negotiate large or compatible small payloads. New
-  firmware confirms health after ten seconds; program bank recovery is separate.
+  - Large-packet acknowledgement failures query the committed offset, then fall
+  back to smaller chunks without restarting a valid transfer. Longer
+  update-specific USB keepalive tolerates Flash erase and verification.
 
 
   FIXED
 
-  - Wireless tasks now reserve the controller connection and prevent parallel
-  flashing, performance arming, configuration deletion and App-update
-  installation. Wireless reliability and power-loss recovery remain unverified
-  on physical hardware.
+  - Paced and checked USB writes prevent full update frames from overflowing the
+  existing 512-byte controller receive ring. Truncated binary frames
+  resynchronize without swallowing the next valid reply. This App patch works
+  with migrated 0.9.0 firmware; no additional USB reflash is required. Physical
+  wireless reliability remains unverified.

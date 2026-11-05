@@ -1,5 +1,44 @@
 [
   {
+    "version": "0.9.1",
+    "date": "2026-11-05",
+    "changes": {
+      "en": {
+        "added": [
+          "Wireless progress now shows the current program/firmware object, chunk size and retry count. Timeout details include the byte offset and controller connection state."
+        ],
+        "improved": [
+          "Large-packet acknowledgement failures query the committed offset, then fall back to smaller chunks without restarting a valid transfer. Longer update-specific USB keepalive tolerates Flash erase and verification."
+        ],
+        "fixed": [
+          "Paced and checked USB writes prevent full update frames from overflowing the existing 512-byte controller receive ring. Truncated binary frames resynchronize without swallowing the next valid reply. This App patch works with migrated 0.9.0 firmware; no additional USB reflash is required. Physical wireless reliability remains unverified."
+        ]
+      },
+      "zh-CN": {
+        "added": [
+          "无线进度显示当前节目／固件对象、数据块大小及重试次数；超时信息包含字节位置与遥控器连接状态。"
+        ],
+        "improved": [
+          "大包确认失败时先查询已写入位置，再降为小包继续，避免重传已经接收的数据；更新专用连接等待时间容许 Flash 擦除及校验。"
+        ],
+        "fixed": [
+          "USB 改为限速分段发送并核对实际写入，避免完整更新报文溢出遥控器现有 512 字节接收缓冲；截断报文会重新同步，不再吞掉下一个有效回复。此 App 修复兼容已迁移的 0.9.0 固件，无需再次 USB 烧录；无线可靠性仍待实物复测。"
+        ]
+      },
+      "zh-TW": {
+        "added": [
+          "無線進度顯示目前節目／韌體物件、資料塊大小及重試次數；逾時資訊包含位元組位置與遙控器連線狀態。"
+        ],
+        "improved": [
+          "大封包確認失敗時先查詢已寫入位置，再降為小封包繼續，避免重傳已接收的資料；更新專用連線等待時間容許 Flash 清除及驗證。"
+        ],
+        "fixed": [
+          "USB 改為限速分段傳送並核對實際寫入，避免完整更新封包溢出遙控器現有 512 位元組接收緩衝；截斷封包會重新同步，不再吞掉下一個有效回覆。此 App 修復相容已遷移的 0.9.0 韌體，無需再次 USB 燒錄；無線可靠性仍待實物複測。"
+        ]
+      }
+    }
+  },
+  {
     "version": "0.9.0",
     "date": "2026-11-04",
     "changes": {
