@@ -5,7 +5,7 @@
   "trailingSlash": true,
   "headers": [
     {
-      "source": "/.well-known/discord",
+      "source": "/.well-known/discord(.*)",
       "headers": [
         {
           "key": "Content-Type",
