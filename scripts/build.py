@@ -60,6 +60,8 @@ arguments = parser.parse_args()
 OUT = arguments.output.resolve()
 OUT.mkdir(parents=True, exist_ok=True)
 if not arguments.pages_only:
+    # Discord 網域驗證需在每次部署後仍可由固定網址讀取純文字。
+    shutil.copytree(SOURCE / ".well-known", OUT / ".well-known", dirs_exist_ok=True)
     for name in ("app.js", "config.js"):
         shutil.copy2(SOURCE / name, OUT / name)
     for path in (SOURCE / "styles").glob("*.css"):
