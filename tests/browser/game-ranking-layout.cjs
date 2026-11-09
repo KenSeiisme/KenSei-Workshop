@@ -9,7 +9,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
 const ranked = games.filter(
   (g) => !["connect-four", "reversi", "pong"].includes(g.slug),
 );
-const sdk = `export function createClient(){const id=window.__signed?'11111111-1111-4111-8111-111111111111':null;window.__calls=[];window.__rpcCalls=[];return{auth:{getSession:async()=>({data:{session:id?{user:{id}}:null}}),onAuthStateChange(){}},from(){return{select(){return this},order:async()=>({data:[]})}},rpc:async(name,args={})=>{window.__rpcCalls.push({name,args});if(name==='ensure_my_profile')return{data:{public_id:id,nickname:'Test Player',avatar_kind:'none'}};const remoteKey='qa-remote-games:'+id;const remote=JSON.parse(localStorage.getItem(remoteKey)||'{}');if(name==='save_game_save'||name==='save_private_record'){const row={id:args.record_id,data:args.payload,revision:(args.base_revision||0)+1,ack_revision:(args.base_revision||0)+1,updated_at:new Date().toISOString(),created_at:new Date().toISOString(),deleted:!!args.remove_record};remote[row.id]=row;localStorage.setItem(remoteKey,JSON.stringify(remote));return{data:row};}if(name==='get_game_save')return{data:remote[args.record_id]||null};if(name==='get_game_saves')return{data:Object.values(remote)};if(name==='get_my_game_progress')return{data:{unlocks:[],progress:{},verified_results:0,games_ranked:0}};if(name.startsWith('get_game_leaderboard')){const delay=window.__delays?.[args.difficulty]||0;if(delay)await new Promise(r=>setTimeout(r,delay));if(window.__boardFail)return{error:{message:'board unavailable'}};const top=window.__boardEmpty?[]:Array.from({length:50},(_,i)=>({rank:i+1,public_id:'22222222-2222-4222-8222-'+String(i+1).padStart(12,'0'),nickname:args.difficulty+' Player '+(i+1),score:1000-i,elapsed_ms:60000,moves:12,achieved_at:'2026-10-25T00:00:00Z',profile:{avatar_kind:'none'}}));return{data:{version:args.rules_version||(args.game==='brick-breaker'?2:1),top,me:id&&top.length?{...top[41],rank:42}:null}};}return{data:[],error:null}},functions:{invoke:async(name,{body})=>{window.__calls.push({name,body});if(window.__failStart&&name.endsWith('/start'))return{error:{message:'Temporary session failure'},data:{error:'Temporary session failure'}};return{data:{id:'33333333-3333-4333-8333-'+String(window.__calls.length).padStart(12,'0'),seed:12345,version:body.game==='brick-breaker'?2:1},error:null}}}}}`;
+const sdk = `export function createClient(){const id=window.__signed?'11111111-1111-4111-8111-111111111111':null;window.__calls=[];window.__rpcCalls=[];return{auth:{getSession:async()=>({data:{session:id?{user:{id}}:null}}),onAuthStateChange(){}},from(){return{select(){return this},order:async()=>({data:[]})}},rpc:async(name,args={})=>{window.__rpcCalls.push({name,args});if(name==='ensure_my_profile')return{data:{public_id:id,nickname:'Test Player',avatar_kind:'none'}};const remoteKey='qa-remote-games:'+id;const remote=JSON.parse(localStorage.getItem(remoteKey)||'{}');if(name==='save_game_save'||name==='save_private_record'){const row={id:args.record_id,data:args.payload,revision:(args.base_revision||0)+1,ack_revision:(args.base_revision||0)+1,updated_at:new Date().toISOString(),created_at:new Date().toISOString(),deleted:!!args.remove_record};remote[row.id]=row;localStorage.setItem(remoteKey,JSON.stringify(remote));return{data:row};}if(name==='get_game_save')return{data:remote[args.record_id]||null};if(name==='get_game_saves')return{data:Object.values(remote)};if(name==='get_my_game_progress')return{data:{unlocks:[],progress:{},verified_results:0,games_ranked:0}};if(name.startsWith('get_game_leaderboard')){const delay=window.__delays?.[args.difficulty]||0;if(delay)await new Promise(r=>setTimeout(r,delay));if(window.__boardFail)return{error:{message:'board unavailable'}};const top=window.__boardEmpty?[]:Array.from({length:50},(_,i)=>({rank:i+1,public_id:'22222222-2222-4222-8222-'+String(i+1).padStart(12,'0'),nickname:args.difficulty+' Player '+(i+1),score:1000-i,elapsed_ms:60000,moves:12,achieved_at:'2026-10-25T00:00:00Z',profile:{avatar_kind:'none'}}));return{data:{version:args.rules_version||(args.game==='brick-breaker'?3:args.game==='snake'?2:1),top,me:id&&top.length?{...top[41],rank:42}:null}};}return{data:[],error:null}},functions:{invoke:async(name,{body})=>{window.__calls.push({name,body});if(window.__failStart&&name.endsWith('/start'))return{error:{message:'Temporary session failure'},data:{error:'Temporary session failure'}};return{data:{id:'33333333-3333-4333-8333-'+String(window.__calls.length).padStart(12,'0'),seed:12345,version:body.game==='brick-breaker'?3:body.game==='snake'?2:1},error:null}}}}}`;
 (async () => {
   const browser = await chromium.launch({
     channel: process.env.BROWSER_CHANNEL || "msedge",
@@ -297,18 +297,11 @@ const sdk = `export function createClient(){const id=window.__signed?'11111111-1
     );
     await open(q, "brick-breaker");
     await q.waitForSelector("#game-leaderboard tbody tr");
-    await gameSelect(q, "#game-board-version", "1");
+    assert.equal(await q.locator("#game-board-version").isVisible(), false);
     await q.waitForFunction(() =>
       document
         .querySelector("#game-leaderboard caption")
-        .textContent.includes("v1"),
-    );
-    assert.equal(await q.evaluate(() => window.__calls.length), 0);
-    await gameSelect(q, "#game-board-version", "current");
-    await q.waitForFunction(() =>
-      document
-        .querySelector("#game-leaderboard caption")
-        .textContent.includes("v2"),
+        .textContent.includes("v3"),
     );
     await p.setViewportSize({ width: 360, height: 800 });
     await open(p, "minesweeper");

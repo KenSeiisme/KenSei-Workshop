@@ -12,7 +12,7 @@ export const CONFIG = {
     category: "Arcade",
     ranked: true,
     default: "classic",
-    modes: { classic: { label: "Classic · 3 stages" } },
+    modes: { classic: { label: "Classic" } },
   },
 };
 

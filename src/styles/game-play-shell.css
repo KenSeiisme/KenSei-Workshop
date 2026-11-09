@@ -1247,3 +1247,29 @@ body.game-is-focused > .footer {
 [data-play-shell] [hidden] {
   display: none !important;
 }
+.hub-local-score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: center;
+  gap: 6px 10px;
+  margin-top: 8px;
+  max-width: 100%;
+}
+
+.hub-local-score label {
+  display: grid;
+  min-width: 0;
+  text-align: start;
+  font-size: 0.78rem;
+}
+
+.hub-local-score input {
+  width: min(100%, 12rem);
+  min-height: 44px;
+}
+
+.hub-local-score [role="status"] {
+  flex-basis: 100%;
+  font-size: 0.8rem;
+}

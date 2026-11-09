@@ -1,5 +1,4 @@
 import {
-  gameVersion,
   supportsVersion,
   rules,
   replay,
@@ -106,7 +105,8 @@ export function makeHandler(
       }
       if (action === "start") {
         rules(body.game, body.difficulty);
-        if ((body.rules_version ?? 1) !== gameVersion(body.game))
+        const version = body.rules_version ?? 1;
+        if (!supportsVersion(body.game, version))
           return send(
             {
               error:
@@ -118,14 +118,13 @@ export function makeHandler(
         if (!isRanked(body.game))
           throw Error("This game supports Private play only.");
         const seed = crypto.getRandomValues(new Uint32Array(1))[0] || 1;
-        return send(
-          await admin("start", {
-            game: body.game,
-            difficulty: body.difficulty,
-            seed,
-            rules_version: gameVersion(body.game),
-          }),
-        );
+        const started = await admin("start", {
+          game: body.game,
+          difficulty: body.difficulty,
+          seed,
+          rules_version: version,
+        });
+        return send(started, started.error ? 409 : 200);
       }
       if (!UUID.test(body.session_id || ""))
         return send({ error: "Invalid game session." }, 400);
@@ -134,6 +133,7 @@ export function makeHandler(
       if (action !== "finish")
         return send({ error: "Unknown game action." }, 404);
       const session = await admin("read", { session_id: body.session_id });
+      if (session.error) return send(session, 409);
       if (session.status === "completed") return send(session.result);
       if (!supportsVersion(session.game, session.version))
         throw Error("This game uses unsupported rules. Continue privately.");
@@ -152,7 +152,7 @@ export function makeHandler(
         session_id: session.id,
         metrics: result,
       });
-      return send(finished.result);
+      return finished.error ? send(finished, 409) : send(finished.result);
     } catch (error) {
       return send(
         {

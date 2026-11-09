@@ -20,6 +20,7 @@ import {
 import { formatGoClock, clockView } from "./go-clock.js";
 import { mountPlayShell } from "./play-shell.js";
 import { boardClientId } from "./board-identity.js";
+import { trackBoardGame } from "./hub-activity.js";
 import { mountEffects } from "./effects.js";
 import {
   mountAudio,
@@ -413,7 +414,19 @@ function renderClock() {
     });
   } else observeCountdown(null);
 }
+const activity = trackBoardGame("go", $("#go-result"));
+let newActivity = false;
 function render() {
+  activity({
+    state,
+    room,
+    saveId,
+    identity,
+    paused,
+    mode,
+    human,
+    started: newActivity,
+  });
   syncGoAudio();
   const phase = state?.phase,
     training = state?.config.training && phase !== "finished",
@@ -733,6 +746,7 @@ function refreshPrivateRecords() {
   );
 }
 function startLocal(restore = false) {
+  newActivity = !restore;
   confirmation = null;
   cancelAI();
   room = null;

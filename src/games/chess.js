@@ -21,6 +21,7 @@ import {
 import { timeoutVerdicts } from "./chess-adjudication.js";
 import { createChessAI } from "./chess-ai.js";
 import { boardClientId } from "./board-identity.js";
+import { trackBoardGame } from "./hub-activity.js";
 import { mountPlayShell } from "./play-shell.js";
 import { mountEffects } from "./effects.js";
 import {
@@ -331,7 +332,19 @@ function renderClock() {
       ]),
     );
 }
+const activity = trackBoardGame("chess", $("#chess-result"));
+let newActivity = false;
 function render() {
+  activity({
+    state,
+    room,
+    saveId,
+    identity,
+    paused,
+    mode,
+    human,
+    started: newActivity,
+  });
   for (const node of root.querySelectorAll(
     "#chess-start,#chess-continue,#chess-create,#chess-find,#chess-join,.chess-entry select",
   ))
@@ -618,6 +631,7 @@ async function disconnect() {
   if (previous) await api.client?.removeChannel(previous);
 }
 function startLocal(restore = false, imported = null) {
+  newActivity = !restore && !imported;
   if (room && room.status === "playing")
     throw Error("Leave the online match before starting practice.");
   cancelAI();

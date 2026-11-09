@@ -15,6 +15,7 @@ import {
 } from "./motion-state.js";
 import { paintBrick as paintBrickBoard } from "./arcade-paint.js";
 import { BRICK, brickRect } from "./arcade-engine.js";
+import { SKINS } from "./hub-model.js";
 import { uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
 
 const ease = "cubic-bezier(.2,.8,.2,1)",
@@ -297,7 +298,12 @@ export function createGamePresenter(root, game) {
           JSON.stringify(last.notes) !== JSON.stringify(state.notes)) ||
         (game === "memory-match" && last.holdUntil !== state.holdUntil));
     if (changed && !["snake", "brick-breaker"].includes(game)) clearTransient();
-    if (valid && state.ticks !== last.ticks)
+    if (
+      valid &&
+      (game === "snake" && state.version >= 2
+        ? state.body[0] !== last.body[0]
+        : state.ticks !== last.ticks)
+    )
       interpolation = { before: last, start: performance.now() };
     ticket = {
       before: valid ? last : null,
@@ -756,12 +762,20 @@ export function createGamePresenter(root, game) {
     if (!ctx) return false;
     const full = effectsMode() === "full",
       previous = interpolation?.before;
-    const rate = { slow: 6, normal: 10, fast: 14 }[state.difficulty];
+    const rate =
+      state.version >= 2
+        ? state.boostUntil > state.ticks
+          ? 15
+          : 10
+        : { slow: 6, normal: 10, fast: 14 }[state.difficulty];
+    const skin = root.dataset.snakeSkin || "classic";
+    const { hue, head } = SKINS[skin] || SKINS.classic;
     const t =
       running &&
       full &&
       state.status === "playing" &&
-      previous?.ticks + 1 === state.ticks
+      previous &&
+      (state.version >= 2 || previous.ticks + 1 === state.ticks)
         ? clamp((now - interpolation.start) / (1000 / rate))
         : 1;
     const bg = ctx.createLinearGradient(0, 0, 460, 460);
@@ -779,6 +793,25 @@ export function createGamePresenter(root, game) {
       ctx.lineTo(460, x);
       ctx.stroke();
     }
+    for (const cell of state.obstacles || []) {
+      const x = (cell % 20) * 23,
+        y = Math.floor(cell / 20) * 23;
+      ctx.fillStyle = "#576276";
+      ctx.fillRect(x + 2, y + 2, 19, 19);
+      ctx.strokeStyle = "#94a0b4";
+      ctx.strokeRect(x + 4, y + 4, 15, 15);
+    }
+    if (state.boost >= 0) {
+      const x = (state.boost % 20) * 23 + 11.5,
+        y = Math.floor(state.boost / 20) * 23 + 11.5;
+      ctx.fillStyle = "#ffe28c";
+      ctx.beginPath();
+      ctx.moveTo(x, y - 9);
+      ctx.lineTo(x + 8, y);
+      ctx.lineTo(x, y + 9);
+      ctx.lineTo(x - 8, y);
+      ctx.fill();
+    }
     for (let i = state.body.length - 1; i >= 0; i--) {
       const n = state.body[i],
         old = previous?.body[Math.min(i, previous.body.length - 1)] ?? n;
@@ -788,8 +821,8 @@ export function createGamePresenter(root, game) {
         t,
       );
       ctx.fillStyle = i
-        ? `hsl(157 48% ${Math.max(31, 66 - i * 0.7)}%)`
-        : "#d9fff0";
+        ? `hsl(${hue} 58% ${Math.max(31, 66 - i * 0.7)}%)`
+        : head;
       ctx.beginPath();
       ctx.roundRect(p.x + 1.5, p.y + 1.5, 20, 20, i ? 6 : 7);
       ctx.fill();
@@ -837,7 +870,7 @@ export function createGamePresenter(root, game) {
           ? clamp((now - interpolation.start) / (1000 / 60))
           : 1;
     const ball =
-      state.version === 2
+      state.version >= 2
         ? null
         : old && t < 1
           ? interpolatePoint(old.ball, state.ball, t)

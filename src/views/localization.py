@@ -259,6 +259,8 @@ def styles(route):
         ]
     if route == "games" or route.startswith("games/"):
         files += ["games.css", "game-neon.css", "game-next.css", "game-experience.css"]
+        if route == "games":
+            files.append("game-hub.css")
         slug = route.split("/")[-1]
         if slug in ["sudoku", "nonogram"]:
             files.append("puzzle-games.css")

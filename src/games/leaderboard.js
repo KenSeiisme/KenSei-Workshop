@@ -1,6 +1,12 @@
 import { api, esc } from "/tool-scripts/common.js";
 import { paintAvatar } from "/tool-scripts/profile-service.js";
-import { rules, isRanked, timeScored } from "./engine.js";
+import {
+  rules,
+  isRanked,
+  timeScored,
+  gameVersion,
+  retiredArcade,
+} from "./engine.js";
 import { gameIcon } from "./presentation.js";
 import { patchMarkup } from "./dom.js";
 import { uiDate, uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
@@ -99,6 +105,10 @@ export function mountLeaderboard(root, game, formatResult) {
       if (error) throw error;
       if (!Array.isArray(result?.top))
         throw Error("Invalid leaderboard response.");
+      if (retiredArcade(game) && result.version !== gameVersion(game)) {
+        uiText(note, uiMsg("The new leaderboard is being prepared."));
+        return;
+      }
       data = result;
       loadedKey = key;
       patchMarkup(

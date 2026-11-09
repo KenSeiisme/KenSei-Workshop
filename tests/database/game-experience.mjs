@@ -98,7 +98,7 @@ try {
     (await rpc("get_my_game_progress", {}, "authenticated", b)).result_count,
     0,
   );
-  for (const version of [1, 2]) {
+  for (const version of [1, 2, 3]) {
     const data = {
       game: "brick-breaker",
       difficulty: "classic",
@@ -117,7 +117,7 @@ try {
       expected_user: a,
     });
   }
-  for (const version of [null, 3]) {
+  for (const version of [null, 4]) {
     const state = create("brick-breaker", "classic", 2);
     state.version = version;
     await assert.rejects(() =>
@@ -139,7 +139,7 @@ try {
     );
   }
   const state = create("snake", "normal", 1);
-  state.version = 2;
+  state.version = 3;
   await assert.rejects(() =>
     rpc("save_game_save", {
       kind: "game",

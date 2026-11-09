@@ -1,74 +1,172 @@
-<section class="container page-section games-page" data-games-directory>
-  <div class="games-hero">
-    <div class="page-intro">
-      <div class="eyebrow">
-        <span class="game-live-dot"></span> THE PLAY CORNER
-      </div>
-      <h1>Press play.<br /><em>Find your flow.</em></h1>
-      <p>
-        Clear a board. Beat your best. Take a breather.<br />Twelve little
-        challenges. One more personal best.
-      </p>
-      <a class="button primary" href="#games-library"
-        >Find your next game <span aria-hidden="true">↘</span></a
+<section class="container games-page game-hub" data-games-directory>
+  <header class="hub-bar">
+    <a class="hub-brand" href="/games/" aria-label="Games lobby"
+      ><span class="brand-symbol" aria-hidden="true">k<span>✳</span></span>
+      <span class="hub-brand-name">KenSei <strong>Arcade</strong></span></a
+    >
+    <label class="search-box">
+      <span aria-hidden="true">⌕</span>
+      <input
+        type="search"
+        id="game-search"
+        placeholder="Find a game…"
+        aria-label="Search games"
+      />
+    </label>
+    <a class="button secondary hub-wallet" href="#game-skin-shop"
+      ><span aria-hidden="true">◉</span> <span data-hub-coins>—</span>
+      <span>Coins</span></a
+    >
+    <button
+      type="button"
+      class="button secondary"
+      data-hub-theme
+      aria-pressed="false"
+    >
+      Light theme
+    </button>
+    <nav class="filter-bar" id="game-filters" aria-label="Game categories">
+      <button class="filter active" data-game-filter="all" aria-pressed="true">
+        All games
+      </button>
+      <button class="filter" data-game-filter="puzzle" aria-pressed="false">
+        Puzzle
+      </button>
+      <button class="filter" data-game-filter="action" aria-pressed="false">
+        Action
+      </button>
+      <button class="filter" data-game-filter="casual" aria-pressed="false">
+        Casual
+      </button>
+      <button class="filter" data-game-filter="board" aria-pressed="false">
+        Board
+      </button>
+      <a class="hub-library-jump" href="#games-library"
+        >Game library <span aria-hidden="true">↓</span></a
       >
-      <div class="games-hero-note">
-        <span>${game_count} games</span><span>Solo without signing in</span
-        ><span>Your pace</span>
+    </nav>
+  </header>
+  <div class="hub-front">
+    <section
+      class="hub-feature panel"
+      aria-labelledby="hub-feature-title"
+      tabindex="0"
+    >
+      <div class="eyebrow">FEATURED GAMES</div>
+      <h1 id="hub-feature-title">Games lobby</h1>
+      ${featured}
+      <div class="hub-carousel-controls">
+        <button
+          type="button"
+          class="button secondary"
+          data-hub-slide="-1"
+          aria-label="Previous featured game"
+        >
+          ←
+        </button>
+        <span data-hub-slide-count aria-live="polite">1 / 4</span>
+        <button
+          type="button"
+          class="button secondary"
+          data-hub-slide="1"
+          aria-label="Next featured game"
+        >
+          →
+        </button>
+      </div>
+    </section>
+    <section class="hub-daily panel" aria-labelledby="hub-daily-title">
+      <div class="eyebrow">NEW TASKS EVERY DAY</div>
+      <h2 id="hub-daily-title">Daily challenge</h2>
+      <p data-hub-day class="muted">Resets at midnight in Malaysia.</p>
+      <ol data-hub-tasks></ol>
+      <p class="muted small">
+        Earn 5 coins per completed game, up to 50 per day. Each task earns 10
+        extra coins.
+      </p>
+      <p data-hub-sync role="status" class="small"></p>
+    </section>
+  </div>
+  <section class="game-continue panel" aria-labelledby="continue-title">
+    <div class="game-section-heading">
+      <div>
+        <div class="eyebrow">RIGHT WHERE YOU LEFT OFF</div>
+        <h2 id="continue-title">Continue playing</h2>
+      </div>
+      <div class="game-save-actions">
+        <button class="button secondary" id="games-sync">Refresh saves</button>
+        <button class="text-link" id="games-clear">Clear saved games</button>
       </div>
     </div>
-    <div class="games-hero-art" aria-hidden="true">
-      <div class="games-orbit"></div>
-      ${art}<span class="games-art-caption">A SMALL BREAK, WELL PLAYED.</span>
+    <p id="game-save-status" role="status">Loading local saves…</p>
+    <div id="game-saves">
+      <p>No unfinished games yet. Pick a game above.</p>
     </div>
-  </div>
+    <button class="button secondary" id="games-more" hidden>
+      Load more saves
+    </button>
+    <button class="button secondary" id="games-copy-guest" hidden>
+      Copy guest saves to account
+    </button>
+  </section>
   <section id="games-library" aria-labelledby="games-library-heading">
     <div class="game-library-heading">
       <div>
-        <div class="eyebrow">PICK YOUR LITTLE CHALLENGE</div>
-        <h2 id="games-library-heading">What are we playing?</h2>
+        <div class="eyebrow">PICK YOUR NEXT GAME</div>
+        <h2 id="games-library-heading">Game library</h2>
       </div>
-      <span class="muted">Play freely. Keep your best.</span>
-    </div>
-    <div class="game-library-toolbar">
       <label class="game-effects-control"
         >Effects
         <select data-effects-select aria-label="Game effects">
           <option value="auto">Auto</option>
           <option value="reduced">Reduced</option>
           <option value="off">Off</option>
-        </select></label
-      ><span class="game-library-count">12 GAMES / 9 RANKED GAMES</span>
-    </div>
-    <div class="tools-controls">
-      <label class="search-box"
-        >⌕
-        <input
-          type="search"
-          id="game-search"
-          placeholder="Find a game…"
-          aria-label="Search games"
-      /></label>
-      <div class="filter-bar" id="game-filters">
-        <button
-          class="filter active"
-          data-game-filter="all"
-          aria-pressed="true"
-        >
-          All games</button
-        ><button class="filter" data-game-filter="puzzle" aria-pressed="false">
-          Puzzle</button
-        ><button class="filter" data-game-filter="arcade" aria-pressed="false">
-          Arcade</button
-        ><button class="filter" data-game-filter="board" aria-pressed="false">
-          Board
-        </button>
-      </div>
+        </select>
+      </label>
     </div>
     <div class="games-grid">${cards}</div>
     <p id="games-empty" class="game-empty-state" role="status" hidden>
       No games found. Try another search.
     </p>
+  </section>
+  <section class="panel hub-rank" aria-labelledby="hub-rank-title">
+    <div class="eyebrow">RESULTS AND PLAY TIME</div>
+    <h2 id="hub-rank-title">Game records</h2>
+    <div class="hub-rank-controls">
+      <label>Game<select data-hub-rank-game></select></label>
+      <label
+        >Difficulty or time control<select data-hub-rank-mode></select
+      ></label>
+      <label
+        >Leaderboard<select data-hub-rank-kind>
+          <option value="verified">Verified</option>
+          <option value="local">On this device</option>
+          <option value="demo">Sample leaderboard</option>
+        </select></label
+      >
+    </div>
+    <p data-hub-rank-stats></p>
+    <p data-hub-rank-status role="status" class="muted"></p>
+    <div data-hub-rank-results></div>
+    <p data-hub-rank-me></p>
+    <div class="hub-rank-actions">
+      <button type="button" class="button secondary" data-hub-rank-more hidden>
+        Show Top 50
+      </button>
+      <button
+        type="button"
+        class="button secondary"
+        data-hub-rank-refresh
+        hidden
+      >
+        Refresh leaderboard
+      </button>
+    </div>
+  </section>
+  <section class="panel hub-achievements" aria-labelledby="hub-badge-title">
+    <div class="eyebrow">PLAYER BADGES</div>
+    <h2 id="hub-badge-title">Lobby achievements</h2>
+    <div class="hub-badges" data-hub-badges></div>
   </section>
   <section class="panel game-achievements" id="games-progress" hidden>
     <div class="eyebrow">EVERY LITTLE MILESTONE</div>
@@ -98,29 +196,22 @@
       <div class="achievement-grid" id="progress-all"></div>
     </details>
   </section>
-  <section class="game-continue panel" aria-labelledby="continue-title">
-    <div class="game-section-heading">
-      <div>
-        <div class="eyebrow">RIGHT WHERE YOU LEFT OFF</div>
-        <h2 id="continue-title">Continue playing</h2>
-      </div>
-      <div class="game-save-actions">
-        <button class="button secondary" id="games-sync">Refresh saves</button
-        ><button class="text-link" id="games-clear">Clear saved games</button>
-      </div>
-    </div>
-    <p id="game-save-status" role="status">Loading local saves…</p>
-    <div id="game-saves">
-      <p>No unfinished games yet. Pick a game above.</p>
-    </div>
-    <button class="button secondary" id="games-more" hidden>
-      Load more saves</button
-    ><button class="button secondary" id="games-copy-guest" hidden>
-      Copy guest saves to account
-    </button>
+
+  <section
+    class="panel hub-shop"
+    id="game-skin-shop"
+    aria-labelledby="hub-shop-title"
+  >
+    <div class="eyebrow">SPEND YOUR COINS</div>
+    <h2 id="hub-shop-title">Snake skin shop</h2>
+    <p class="muted">
+      Skins change the look of your snake. Game rules and scoring stay the same.
+    </p>
+    <div class="hub-skins" data-hub-skins></div>
+    <p role="status" data-hub-shop-status></p>
   </section>
   <p class="games-privacy-note">
-    Guest games stay on this device. Account saves are private. Only verified
-    Public results appear on leaderboards.
+    Guest progress stays on this device. Account play totals and purchases sync
+    privately. Verified leaderboards publish only server-checked results.
   </p>
 </section>

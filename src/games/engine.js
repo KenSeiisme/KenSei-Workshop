@@ -6,6 +6,12 @@ import * as brickV2 from "./brick-v2-engine.js";
 import { validateGoSave } from "./go-engine.js";
 import { validateChessSave } from "./chess-engine.js";
 import { validateXiangqiSave } from "./xiangqi-engine.js";
+import {
+  initSnake,
+  snakeStep,
+  validateSnakeV2,
+  SNAKE_TICK_LIMIT,
+} from "./snake-v2.js";
 // 浏览器与服务端共用规则；此文件不访问 DOM、网络或时钟。
 export const VERSION = 1;
 export const GAMES = {
@@ -59,12 +65,17 @@ export const GAMES = {
   ...boards.CONFIG,
   ...drop.CONFIG,
 };
-export const gameVersion = (game) => (game === "brick-breaker" ? 2 : 1);
+export const gameVersion = (game) =>
+  ({ "brick-breaker": 3, snake: 2 })[game] || 1;
+export const retiredArcade = (game) =>
+  game === "snake" || game === "brick-breaker";
 export const supportsVersion = (game, version) =>
   !!GAMES[game] &&
-  (version === 1 || (game === "brick-breaker" && version === 2));
+  Number.isInteger(version) &&
+  version >= 1 &&
+  version <= gameVersion(game);
 function extension(game, version = gameVersion(game)) {
-  return game === "brick-breaker" && version === 2
+  return game === "brick-breaker" && version >= 2
     ? brickV2
     : drop.CONFIG[game]
       ? drop
@@ -82,7 +93,7 @@ export const timeScored = (game) =>
 export const needsWin = (game) =>
   ["minesweeper", "memory-match", "sudoku", "nonogram"].includes(game);
 export function advanceBrick(state, tick) {
-  return (state.version === 2 ? brickV2 : arcade).advanceBrick(state, tick);
+  return (state.version >= 2 ? brickV2 : arcade).advanceBrick(state, tick);
 }
 export { advanceDrop } from "./block-drop-engine.js";
 export function rules(game, difficulty) {
@@ -116,11 +127,11 @@ export function create(game, difficulty, seed, version = gameVersion(game)) {
   if (!Number.isInteger(seed) || seed <= 0 || seed > 4294967295)
     throw Error("Invalid random seed.");
   if (extension(game, version))
-    return extension(game, version).create(game, difficulty, seed);
+    return extension(game, version).create(game, difficulty, seed, version);
   const s = {
     game,
     difficulty,
-    version: VERSION,
+    version,
     seed,
     rng: seed,
     score: 0,
@@ -140,6 +151,8 @@ export function create(game, difficulty, seed, version = gameVersion(game)) {
       planted: false,
     });
   if (game === "snake") {
+    if (version === 2 && difficulty !== "normal")
+      throw Error("Unsupported Snake mode.");
     Object.assign(s, {
       body: [210, 209, 208, 207],
       dir: 1,
@@ -147,6 +160,7 @@ export function create(game, difficulty, seed, version = gameVersion(game)) {
       ticks: 0,
     });
     food(s);
+    if (version === 2) initSnake(s);
   }
   if (game === "memory-match")
     Object.assign(s, {
@@ -251,9 +265,17 @@ export function advanceSnake(s, ticks) {
     s.game !== "snake" ||
     !Number.isSafeInteger(ticks) ||
     ticks < s.ticks ||
-    ticks > 100800
+    ticks > (s.version === 2 ? SNAKE_TICK_LIMIT : 100800)
   )
     throw Error("Invalid game tick.");
+  if (s.version === 2) {
+    while (s.nextStep <= ticks && s.status === "playing") {
+      s.ticks = s.nextStep;
+      snakeStep(s, random);
+    }
+    if (s.status === "playing") s.ticks = ticks;
+    return s;
+  }
   while (s.ticks < ticks && s.status === "playing") {
     if (s.pending !== null) {
       s.dir = s.pending;
@@ -409,13 +431,14 @@ export function replay(
       format,
     );
   if (game === "brick-breaker")
-    return (version === 2 ? brickV2 : arcade).replayBrick(
+    return (version >= 2 ? brickV2 : arcade).replayBrick(
       difficulty,
       seed,
       events,
       finalTick,
       durationMs,
       format,
+      version,
     );
   if (format !== "legacy") throw Error("Unsupported replay format.");
   if (
@@ -426,21 +449,23 @@ export function replay(
     durationMs > 7200000
   )
     throw Error("Replay exceeds game limits.");
-  const s = create(game, difficulty, seed);
+  const s = create(game, difficulty, seed, version);
+  const rate =
+    version === 2 && game === "snake" ? 60 : rules(game, difficulty).rate;
   let previous = 0;
   for (const e of events) {
     if (!Number.isSafeInteger(e.t) || e.t < previous || e.t > durationMs)
       throw Error("Invalid event timing.");
     previous = e.t;
     if (game === "snake") {
-      if ((e.tick * 1000) / rules(game, difficulty).rate > e.t + 250)
+      if ((e.tick * 1000) / rate > e.t + 250)
         throw Error("Impossible game speed.");
       advanceSnake(s, e.tick);
     }
     if (!apply(s, e)) throw Error("Invalid game action.");
   }
   if (game === "snake") {
-    if ((finalTick * 1000) / rules(game, difficulty).rate > durationMs + 250)
+    if ((finalTick * 1000) / rate > durationMs + 250)
       throw Error("Impossible game speed.");
     advanceSnake(s, finalTick);
     if (s.ticks !== finalTick) throw Error("Actions after game over.");
@@ -526,6 +551,7 @@ export function validateSave(data) {
       s.food > 399)
   )
     throw Error("Invalid snake board.");
+  if (game === "snake" && s.version === 2) validateSnakeV2(s);
   if (game === "memory-match") {
     const p = rules(game, difficulty).pairs,
       n = p * 2;

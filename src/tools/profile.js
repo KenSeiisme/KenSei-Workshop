@@ -1,6 +1,7 @@
 import { patchMarkup } from "/game-scripts/dom.js";
 import { mountEffects, revealGameCards } from "/game-scripts/effects.js";
 import { renderPublicAchievements } from "/game-scripts/achievements.js";
+import { gameVersion, retiredArcade } from "/game-scripts/engine.js";
 mountEffects();
 import { $, api, esc, canvasBlob } from "./common.js";
 import { ready } from "./personal-store.js";
@@ -56,10 +57,16 @@ function renderPublicScores(profile) {
       `${(profile.game_achievements || []).length} / 30`,
     );
   const games = (profile.game_best_scores || []).filter(
-    (r) => GAMES[r.game]?.ranked && GAMES[r.game]?.modes[r.difficulty],
+    (r) =>
+      GAMES[r.game]?.ranked &&
+      GAMES[r.game]?.modes[r.difficulty] &&
+      (!retiredArcade(r.game) || r.version === gameVersion(r.game)),
   );
   const legacy = (profile.game_legacy_best_scores || []).filter(
-    (r) => GAMES[r.game]?.ranked && GAMES[r.game]?.modes[r.difficulty],
+    (r) =>
+      GAMES[r.game]?.ranked &&
+      GAMES[r.game]?.modes[r.difficulty] &&
+      !retiredArcade(r.game),
   );
   uiText(
     $("#public-game-count"),

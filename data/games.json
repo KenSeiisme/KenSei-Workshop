@@ -16,7 +16,7 @@
   {
     "slug": "snake",
     "name": "Snake",
-    "description": "One more bite, one less corner. A familiar little challenge.",
+    "description": "Collect food, pick up speed boosts and weave around growing obstacles.",
     "category": "Arcade",
     "preview": "snake"
   },
@@ -51,7 +51,7 @@
   {
     "slug": "brick-breaker",
     "name": "Brick Breaker",
-    "description": "Keep the ball in play. Three stages, three lives, one more bounce.",
+    "description": "Keep the ball in play across five stages with lasers, shields and other powerups.",
     "category": "Arcade",
     "preview": "brick-breaker"
   },

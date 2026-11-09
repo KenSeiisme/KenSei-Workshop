@@ -1,0 +1,386 @@
+{
+  "m_27bee1ef8180": {
+    "en": "Games lobby",
+    "zh-Hant": "遊戲大廳"
+  },
+  "m_7ae57d9d0e8c": {
+    "en": "Coins",
+    "zh-Hant": "金幣"
+  },
+  "m_3669a1b2770f": {
+    "en": "Light theme",
+    "zh-Hant": "淺色主題"
+  },
+  "m_3f11a5cc643a": {
+    "en": "Dark theme",
+    "zh-Hant": "深色主題"
+  },
+  "m_e40ff8029e46": {
+    "en": "Game categories",
+    "zh-Hant": "遊戲分類"
+  },
+  "m_64cff1319d2f": {
+    "en": "Action",
+    "zh-Hant": "動作"
+  },
+  "m_f32445a73e56": {
+    "en": "Casual",
+    "zh-Hant": "休閒"
+  },
+  "m_5513635b3c57": {
+    "en": "FEATURED GAMES",
+    "zh-Hant": "精選遊戲"
+  },
+  "m_65dac6a9411f": {
+    "en": "Previous featured game",
+    "zh-Hant": "上一款精選遊戲"
+  },
+  "m_767efc941eb6": {
+    "en": "Next featured game",
+    "zh-Hant": "下一款精選遊戲"
+  },
+  "m_811d624c894b": {
+    "en": "NEW TASKS EVERY DAY",
+    "zh-Hant": "每日更新"
+  },
+  "m_9ca934bfdb8d": {
+    "en": "Daily challenge",
+    "zh-Hant": "每日挑戰"
+  },
+  "m_9f42a47762a3": {
+    "en": "Resets at midnight in Malaysia.",
+    "zh-Hant": "每日於馬來西亞時間午夜重置。"
+  },
+  "m_b48ae23c0a74": {
+    "en": "Earn 5 coins per completed game, up to 50 per day. Each task earns 10 extra coins.",
+    "zh-Hant": "每次完局獲得 5 枚金幣，每日最多 50 枚。每項任務另獎勵 10 枚金幣。"
+  },
+  "m_c02b9993423f": {
+    "en": "PICK YOUR NEXT GAME",
+    "zh-Hant": "選擇下一款遊戲"
+  },
+  "m_2e3c1deb7afa": {
+    "en": "Game library",
+    "zh-Hant": "遊戲庫"
+  },
+  "m_5570f2774191": {
+    "en": "RESULTS AND PLAY TIME",
+    "zh-Hant": "成績與遊玩時間"
+  },
+  "m_264c68fc6f4c": {
+    "en": "Game records",
+    "zh-Hant": "遊戲戰績"
+  },
+  "m_cf35648e4e28": {
+    "en": "Difficulty or time control",
+    "zh-Hant": "難度或用時"
+  },
+  "m_4f7838402f37": {
+    "en": "Verified",
+    "zh-Hant": "已驗證"
+  },
+  "m_38b9d88c1fdb": {
+    "en": "On this device",
+    "zh-Hant": "本機"
+  },
+  "m_25416d4293bb": {
+    "en": "Sample leaderboard",
+    "zh-Hant": "示例排行榜"
+  },
+  "m_94d3e4ef8834": {
+    "en": "PLAYER BADGES",
+    "zh-Hant": "玩家徽章"
+  },
+  "m_a84b15067c32": {
+    "en": "Lobby achievements",
+    "zh-Hant": "大廳成就"
+  },
+  "m_9e59c5593b99": {
+    "en": "SPEND YOUR COINS",
+    "zh-Hant": "使用金幣"
+  },
+  "m_af9c1e541df2": {
+    "en": "Snake skin shop",
+    "zh-Hant": "貪食蛇皮膚商店"
+  },
+  "m_186d57568707": {
+    "en": "Skins change the look of your snake. Game rules and scoring stay the same.",
+    "zh-Hant": "皮膚可改變蛇身外觀。玩法與計分規則維持不變。"
+  },
+  "m_bcc7f0914b3a": {
+    "en": "Guest progress stays on this device. Account play totals and purchases sync privately. Verified leaderboards publish only server-checked results.",
+    "zh-Hant": "訪客進度保存在此裝置。帳號遊玩統計與購買資料會私下同步。已驗證榜只公開經伺服器核對的成績。"
+  },
+  "m_70bfe9e1cddc": {
+    "en": "Games lobby progress and coins",
+    "zh-Hant": "遊戲大廳進度與金幣"
+  },
+  "m_bb5337071389": {
+    "en": "Game starts, foreground play time, daily tasks, coins and skin purchases stay on this device for guests. Account progress syncs privately. Offline account results earn coins on the Malaysia date they first sync. Optional local leaderboard nicknames and scores stay on this device. Sample leaderboards contain fictional results.",
+    "zh-Hant": "訪客的開局次數、前景遊玩時間、每日任務、金幣和皮膚購買紀錄保存在此裝置。帳號進度會私下同步。離線對局的金幣按首次同步時的馬來西亞日期入帳。自願提交的本機暱稱與分數保存在此裝置。示例排行榜使用虛構資料。"
+  },
+  "m_cbd5b7f2ae98": {
+    "en": "First finish",
+    "zh-Hant": "初出茅廬"
+  },
+  "m_49f229bd84d9": {
+    "en": "Complete your first game.",
+    "zh-Hant": "完成你的第一局遊戲。"
+  },
+  "m_87c7edab0c86": {
+    "en": "Score chaser",
+    "zh-Hant": "得分狂人"
+  },
+  "m_f52590d73902": {
+    "en": "Score over 1,000 points in a single game.",
+    "zh-Hant": "單局取得超過 1,000 分。"
+  },
+  "m_c58f2af2f9bb": {
+    "en": "Seven-day streak",
+    "zh-Hant": "全勤挑戰者"
+  },
+  "m_0bb415807671": {
+    "en": "Finish every daily task for seven days in a row.",
+    "zh-Hant": "連續七天完成當天全部任務。"
+  },
+  "m_3b3dd4b63e01": {
+    "en": "Choose a game",
+    "zh-Hant": "選擇遊戲"
+  },
+  "m_8a7f5055f4b4": {
+    "en": "Choose a game to see its leaderboard.",
+    "zh-Hant": "選擇遊戲即可查看排行榜。"
+  },
+  "m_8817332280e8": {
+    "en": "{0} starts · {1} played",
+    "zh-Hant": "開局 {0} 次 · 遊玩 {1}"
+  },
+  "m_379c310d145a": {
+    "en": "{0} h {1} min",
+    "zh-Hant": "{0} 小時 {1} 分鐘"
+  },
+  "m_dae58fb2bf4b": {
+    "en": "{0} s",
+    "zh-Hant": "{0} 秒"
+  },
+  "m_a6cb9cf68ae8": {
+    "en": "Sample data · Fictional players and results.",
+    "zh-Hant": "示例資料 · 虛構玩家與成績。"
+  },
+  "m_9cd71766ab39": {
+    "en": "No local results. Submit a nickname after completing a game.",
+    "zh-Hant": "本機尚無成績。完成遊戲後可輸入暱稱並提交。"
+  },
+  "m_94c2befb33fa": {
+    "en": "This game has no verified leaderboard. Choose local or sample results.",
+    "zh-Hant": "這款遊戲沒有已驗證榜，可查看本機或示例成績。"
+  },
+  "m_7280bad8291b": {
+    "en": "Leaderboard unavailable. Refresh to retry.",
+    "zh-Hant": "暫時無法讀取排行榜，請重新整理再試。"
+  },
+  "m_a4344b37eb79": {
+    "en": "Server-verified results",
+    "zh-Hant": "伺服器已驗證成績"
+  },
+  "m_7abb7c8e03c4": {
+    "en": "No verified results yet.",
+    "zh-Hant": "尚無已驗證成績。"
+  },
+  "m_7c8cbaa0662f": {
+    "en": "Refresh leaderboard",
+    "zh-Hant": "重新整理排行榜"
+  },
+  "m_5760151abb97": {
+    "en": "Your rank: #{0} · {1}",
+    "zh-Hant": "你的名次：第 {0} 名 · {1}"
+  },
+  "m_5c32fc90dbd7": {
+    "en": "{0} · Malaysia time",
+    "zh-Hant": "{0} · 馬來西亞時間"
+  },
+  "m_a5a4c61a2090": {
+    "en": "Complete any game",
+    "zh-Hant": "完成任意一局"
+  },
+  "m_1b793c745d7f": {
+    "en": "Complete two different games",
+    "zh-Hant": "完成兩款不同遊戲"
+  },
+  "m_48201c7cb287": {
+    "en": "Complete {0}",
+    "zh-Hant": "完成一局{0}"
+  },
+  "m_11a6767d5674": {
+    "en": "Done",
+    "zh-Hant": "已完成"
+  },
+  "m_2fe7ff1d3eb8": {
+    "en": "Sync unavailable. Your activity is queued on this device.",
+    "zh-Hant": "暫時無法同步，遊玩紀錄已在本機排隊。"
+  },
+  "m_18cffa74e033": {
+    "en": "Activity waiting to sync",
+    "zh-Hant": "遊玩紀錄等待同步"
+  },
+  "m_dd0020230d32": {
+    "en": "Guest progress · This device",
+    "zh-Hant": "訪客進度 · 此裝置"
+  },
+  "m_9481279e5d7c": {
+    "en": "Account progress",
+    "zh-Hant": "帳號進度"
+  },
+  "m_e75cb57c99ab": {
+    "en": "Local game storage is unavailable.",
+    "zh-Hant": "暫時無法使用本機遊戲儲存空間。"
+  },
+  "m_ae25d6481fc1": {
+    "en": "Classic",
+    "zh-Hant": "經典"
+  },
+  "m_618484e2c549": {
+    "en": "Neon",
+    "zh-Hant": "霓虹"
+  },
+  "m_a5cccbcead7d": {
+    "en": "Amber",
+    "zh-Hant": "琥珀"
+  },
+  "m_2a1a6355ed7e": {
+    "en": "Ice",
+    "zh-Hant": "霜藍"
+  },
+  "m_c4dc8a3877a4": {
+    "en": "Equipped",
+    "zh-Hant": "使用中"
+  },
+  "m_885fd3041d12": {
+    "en": "Equip",
+    "zh-Hant": "使用"
+  },
+  "m_9118bfdf6a69": {
+    "en": "Buy · {0} coins",
+    "zh-Hant": "購買 · {0} 枚金幣"
+  },
+  "m_6b53bdf92f42": {
+    "en": "Skin purchased. Equip it whenever you are ready.",
+    "zh-Hant": "已購買皮膚，可隨時切換使用。"
+  },
+  "m_d3c44c11f008": {
+    "en": "Skin equipped.",
+    "zh-Hant": "已切換皮膚。"
+  },
+  "m_e5fc745934ae": {
+    "en": "Not enough coins",
+    "zh-Hant": "金幣不足"
+  },
+  "m_5f70aa3c0fad": {
+    "en": "Skin is locked",
+    "zh-Hant": "尚未取得皮膚"
+  },
+  "m_cc0a81baaf33": {
+    "en": "Local leaderboard nickname",
+    "zh-Hant": "本機排行榜暱稱"
+  },
+  "m_065c4ea3e717": {
+    "en": "Save to local board",
+    "zh-Hant": "提交至本機榜"
+  },
+  "m_e495f5fbd650": {
+    "en": "Saved on this device.",
+    "zh-Hant": "已儲存在此裝置。"
+  },
+  "m_66f3810c9f1b": {
+    "en": "Enter a nickname with 2–24 characters.",
+    "zh-Hant": "請輸入 2 至 24 個字元的暱稱。"
+  },
+  "m_ef6691545d2c": {
+    "en": "Standard",
+    "zh-Hant": "標準"
+  },
+  "m_eb55dc071bd5": {
+    "en": "5 stages · 5 minutes",
+    "zh-Hant": "五關 · 五分鐘"
+  },
+  "m_104c8604f733": {
+    "en": "Boosts and obstacles",
+    "zh-Hant": "加速與障礙"
+  },
+  "m_4eaa7c60f21e": {
+    "en": "Powerups · v3",
+    "zh-Hant": "強化道具 · v3"
+  },
+  "m_37ceda4d5629": {
+    "en": "Legacy rules · v{0}",
+    "zh-Hant": "舊版規則 · v{0}"
+  },
+  "m_3be9db415157": {
+    "en": "Legacy rules · v{0} ·",
+    "zh-Hant": "舊版規則 · v{0} ·"
+  },
+  "m_b727edba67a1": {
+    "en": "STAGE {0} / {1}",
+    "zh-Hant": "關卡 {0} / {1}"
+  },
+  "m_786c6b4e7e7b": {
+    "en": "Stage {0} / {1} · {2} bricks",
+    "zh-Hant": "關卡 {0} / {1} · 剩餘 {2} 塊磚"
+  },
+  "m_56cade084127": {
+    "en": "Brick Breaker, stage {0} of {1}, {2} bricks remaining, {3} lives",
+    "zh-Hant": "打磚塊，第 {0} 關，共 {1} 關，剩餘 {2} 塊磚和 {3} 條命"
+  },
+  "m_2dcef4099c42": {
+    "en": "Wide paddle · {0}s",
+    "zh-Hant": "加寬擋板 · {0} 秒"
+  },
+  "m_363033120d4b": {
+    "en": "Slow ball · {0}s",
+    "zh-Hant": "減速球 · {0} 秒"
+  },
+  "m_31a0e7419448": {
+    "en": "Laser · {0}s",
+    "zh-Hant": "雷射 · {0} 秒"
+  },
+  "m_02363acf58bc": {
+    "en": "Shield ready",
+    "zh-Hant": "護盾就緒"
+  },
+  "m_38df4d6991b6": {
+    "en": "Laser",
+    "zh-Hant": "雷射"
+  },
+  "m_480d4be7d61f": {
+    "en": "Shield",
+    "zh-Hant": "護盾"
+  },
+  "m_0bffeda52c1c": {
+    "en": "{0} collected",
+    "zh-Hant": "已拾取{0}"
+  },
+  "m_5ad6bca1ad0b": {
+    "en": "The new leaderboard is being prepared.",
+    "zh-Hant": "新版排行榜正在準備中。"
+  },
+  "m_3047183bfd20": {
+    "en": "Collect food, pick up speed boosts and weave around growing obstacles.",
+    "zh-Hant": "收集食物、拾取加速道具，繞過不斷增加的障礙。"
+  },
+  "m_2967f3dbef3a": {
+    "en": "Keep the ball in play across five stages with lasers, shields and other powerups.",
+    "zh-Hant": "用雷射、護盾和其他道具接住下一次反彈，闖過五個關卡。"
+  },
+  "m_67aa752c0127": {
+    "en": "Move with your pointer, touch or arrow keys. Tap Launch or press Space to serve. Break bricks for 10 points across five stages with three lives and five minutes. Catch Multiball, Wide Paddle (12 seconds), Slow Ball (8 seconds), Laser (8 seconds) or a Shield that saves one ball. A life is lost when every ball falls.",
+    "zh-Hant": "用滑鼠、觸控或方向鍵移動。點擊發球或按空白鍵發球。在五分鐘內用三條命闖五關，每破一塊磚加 10 分。可接取多球、加寬擋板（12 秒）、減速球（8 秒）、雷射（8 秒），或可救一顆球的護盾。所有球落下才扣一條命。"
+  },
+  "m_d79ee7b92283": {
+    "en": "Use arrow keys, WASD, swipe or the direction buttons. Each food adds 10 points. Every third food spawns a boost that raises speed from 10 to 15 cells per second for five seconds. Every fifth adds an obstacle, up to 20. Avoid the walls, obstacles and your own body. Fill the remaining board to win.",
+    "zh-Hant": "使用方向鍵、WASD、滑動或方向按鈕。每顆食物加 10 分。每吃三顆會生成加速道具，拾取後速度從每秒 10 格增至 15 格，持續五秒。每吃五顆增加一個障礙，上限 20 個。避開牆壁、障礙與蛇身，填滿其餘棋盤即可獲勝。"
+  },
+  "m_1f320c7f43f8": {
+    "en": "Untimed",
+    "zh-Hant": "不限時"
+  }
+}

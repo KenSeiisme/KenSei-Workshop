@@ -45,15 +45,10 @@ HELP = {
         " none of the remaining shapes fits."
     ),
     "brick-breaker": (
-        "Move the paddle with your pointer, touch, arrow keys or A / D. Catch "
-        "×3 Multiball, ↔ Wide Paddle (12 seconds), and ¾ Slow Ball (8 seconds) "
-        "drops. Only losing all active balls costs a life. New games use "
-        "powerup rules v2; old saves use Legacy rules. Tap Launch or press "
-        "Space to serve. Break each brick for 10 points; clear three stages "
-        "using three shared lives. A new ball waits for your launch after a "
-        "miss. The five-minute active-play limit includes waiting to launch. "
-        "Only natural endings, time limit or all three cleared stages finish "
-        "ranked runs."
+        "Move with your pointer, touch or arrow keys. Tap Launch or press Space to serve. "
+        "Break bricks for 10 points across five stages with three lives and five minutes. "
+        "Catch Multiball, Wide Paddle (12 seconds), Slow Ball (8 seconds), Laser "
+        "(8 seconds) or a Shield that saves one ball. A life is lost when every ball falls."
     ),
     "connect-four": (
         "Drop a piece into one of seven columns. Connect four horizontally, "
@@ -83,10 +78,10 @@ HELP = {
         "require a guess. Large boards pan inside the game area."
     ),
     "snake": (
-        "Use arrow keys, WASD, swipe, or the direction buttons. Each food adds "
-        "10 points and one segment. Avoid walls and your own body; filling the "
-        "board wins. Slow, Normal and Fast use 6, 10 and 14 cells per second. "
-        "Direction changes are accepted once per game tick."
+        "Use arrow keys, WASD, swipe or the direction buttons. Each food adds 10 points. "
+        "Every third food spawns a boost that raises speed from 10 to 15 cells per "
+        "second for five seconds. Every fifth adds an obstacle, up to 20. "
+        "Avoid the walls, obstacles and your own body. Fill the remaining board to win."
     ),
     "memory-match": (
         "Select two cards to find a matching pair. Each pair of flips counts as"
@@ -132,7 +127,7 @@ DETAILS = {
     "brick-breaker": (
         "08",
         "Keep a good thing bouncing.",
-        "3 stages · 5 minutes",
+        "5 stages · 5 minutes",
         "Pointer / arrows",
     ),
     "connect-four": ("09", "One move ahead.", "3 AI levels", "Tap a column"),
@@ -144,7 +139,7 @@ DETAILS = {
         "3 difficulties",
         "Reveal / flag",
     ),
-    "snake": ("03", "One more bite.", "3 speeds", "Arrow keys / swipe"),
+    "snake": ("03", "One more bite.", "Boosts and obstacles", "Arrow keys / swipe"),
     "memory-match": ("04", "Find your other half.", "6–12 pairs", "Tap to match"),
 }
 
@@ -362,12 +357,17 @@ def preview(kind):
 
 
 def directory(games):
+    def category(game):
+        if game["slug"] in ("pong", "memory-match"):
+            return "Casual"
+        return "Action" if game["category"] == "Arcade" else game["category"]
+
     cards = "".join(
         render_template(
             "games/card.html",
             slug=g["slug"],
-            category_key=g["category"].lower(),
-            category=g["category"],
+            category_key=category(g).lower(),
+            category=category(g),
             search_text=escape(
                 (g["name"] + " " + g["description"]).lower(), quote=True
             ),
@@ -389,13 +389,19 @@ def directory(games):
         )
         for g in games
     )
-    art = "".join(
-        f'<div class="games-hero-tile" data-game-theme="{g["slug"]}">{preview(g["preview"])}</div>'
-        for g in games[:4]
+    by_slug = {game["slug"]: game for game in games}
+    featured = "".join(
+        render_template(
+            "games/featured.html",
+            slug=slug,
+            name=by_slug[slug]["name"],
+            description=by_slug[slug]["description"],
+            preview=preview(by_slug[slug]["preview"]),
+            hidden="" if index == 0 else "hidden",
+        )
+        for index, slug in enumerate(("snake", "brick-breaker", "xiangqi", "2048"))
     )
-    return render_template(
-        "games/directory.html", game_count=len(games), art=art, cards=cards
-    )
+    return render_template("games/directory.html", featured=featured, cards=cards)
 
 
 def game_page(game):
@@ -457,13 +463,13 @@ def game_page(game):
         public_hidden="hidden" if private_only else "",
         milestones=milestones,
         board_info=board_info,
-        archive_hidden="" if slug == "brick-breaker" else "hidden",
+        archive_hidden="hidden",
         leaderboard=(
             ""
             if private_only
             else render_template(
                 "games/leaderboard.html",
-                archive_hidden="" if slug == "brick-breaker" else "hidden",
+                archive_hidden="hidden",
             )
         ),
         help_text=HELP[slug],

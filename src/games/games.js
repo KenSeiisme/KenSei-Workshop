@@ -15,6 +15,7 @@ import {
 import {
   GAMES,
   gameVersion,
+  retiredArcade,
   create,
   apply,
   advanceSnake,
@@ -38,6 +39,10 @@ import { INPUTS as DROP_INPUTS } from "./block-drop-engine.js";
 import { mountAchievements } from "./achievements.js";
 import { mountPlayShell } from "./play-shell.js";
 import { mountLeaderboard } from "./leaderboard.js";
+import { mountGameHub } from "./hub.js";
+import { trackGame } from "./hub-activity.js";
+import { readHub } from "./hub-store.js";
+import { SNAKE_TICK_LIMIT } from "./snake-v2.js";
 import {
   uiDate,
   uiSource,
@@ -57,6 +62,7 @@ const $ = (s) => document.querySelector(s),
   store = createRecordStore("game", validateSave, { syncDelay: 500 });
 const root = $("[data-game]"),
   game = root?.dataset.game;
+const activity = game ? trackGame(game, $("#game-result")) : null;
 const owner = () => api.user?.id || "guest";
 const clock = (ms) =>
   `${Math.floor(ms / 60000)
@@ -155,7 +161,7 @@ function syncShell() {
           : "complete",
     label: uiMsg("{0} · {1}", [
       uiFrom(eligibilityLabel()),
-      uiFrom(rules(game, difficulty()).label),
+      uiFrom(rules(game, active?.difficulty || difficulty()).label),
     ]),
     startFailed,
     localFallback: localFallbackAvailable,
@@ -165,7 +171,7 @@ function syncShell() {
     busy,
     pending: !!pending,
     saveId: $("#game-restore").hidden ? "" : $("#game-restore").dataset.id,
-    legacy: saved?.data?.state?.version === 1 && game === "brick-breaker",
+    legacy: saved && saved.data.state.version < gameVersion(game),
   });
 }
 function statusMessage(message) {
@@ -305,7 +311,7 @@ function queueSave() {
 }
 function slotId(slug, mode, version = gameVersion(slug)) {
   const n =
-    (version === 2 ? 1000 : 0) +
+    (version - 1) * 1000 +
     Object.keys(GAMES).indexOf(slug) * 10 +
     Object.keys(GAMES[slug].modes).indexOf(mode) +
     1;
@@ -328,7 +334,7 @@ function readyUI() {
     .filter(
       (r) =>
         r.data.game === game &&
-        r.data.difficulty === difficulty() &&
+        (r.data.difficulty === difficulty() || game === "snake") &&
         r.data.state.status === "playing",
     )
     .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
@@ -366,7 +372,39 @@ const SHAPES = [
   uiHtml('<path d="M4 12c0-11 16-11 16 0s-16 11-16 0M8 12h8"/>'),
 ];
 function draw(reason = "view", event = null) {
-  if (!active) return;
+  if (!active) return activity?.(null);
+  const finished =
+      active.status !== "playing" &&
+      (game !== "brick-breaker" || active.activityLaunched || active.score > 0),
+    qualifies =
+      finished &&
+      (!(needsWin(game) || active.difficulty === "sprint") ||
+        active.status === "won"),
+    current = active.version === gameVersion(game);
+  activity({
+    id: active.activityId,
+    owner: player,
+    started: !active.activityRestored,
+    mode: active.difficulty,
+    active: running,
+    finished,
+    points: active.score,
+    score:
+      qualifies && current
+        ? isBoard()
+          ? {
+              wins: Number(
+                !!active.winner &&
+                  (active.difficulty === "local" ||
+                    active.winner === active.humanSide),
+              ),
+            }
+          : {
+              ...metrics(active),
+              elapsed_ms: Math.max(1, Math.round(elapsed())),
+            }
+        : null,
+  });
   setAudioState({
     game,
     runId: `${game}:${active.seed}`,
@@ -647,7 +685,7 @@ async function finish() {
         events,
         final_tick: active.ticks || 0,
         ...(game === "brick-breaker"
-          ? { events_format: active.version === 2 ? "paddle-v2" : "paddle-v1" }
+          ? { events_format: `paddle-v${active.version}` }
           : {}),
         ...(game === "block-drop" ? { events_format: "block-drop-v1" } : {}),
       },
@@ -688,14 +726,17 @@ function frame(now) {
       queueSave();
     }
   } else if (game === "snake") {
-    const tick = Math.floor(
-      (elapsed() * rules(game, active.difficulty).rate) / 1000,
-    );
+    const rate = active.version >= 2 ? 60 : rules(game, active.difficulty).rate;
+    const limit = active.version >= 2 ? SNAKE_TICK_LIMIT : 100800;
+    const tick = Math.min(limit, Math.floor((elapsed() * rate) / 1000));
     if (tick > active.ticks) {
-      const oldScore = active.score;
       advanceSnake(active, tick);
       draw();
       queueSave();
+    }
+    if (active.ticks >= limit && active.status === "playing") {
+      downgrade("The replay limit was reached.");
+      active.status = "lost";
     }
   } else if (
     game === "memory-match" &&
@@ -752,6 +793,8 @@ function action(event) {
     );
     if (events.length >= 20000) downgrade("The replay limit was reached.");
   }
+  if (game === "brick-breaker" && e.type === "launch")
+    active.activityLaunched = true;
   if (!event.computer) undo = old;
   draw("action", e);
   queueSave();
@@ -771,9 +814,14 @@ async function start({ localOnly = false } = {}) {
     $("#game-submit-retry").hidden = false;
     return;
   }
+  const saved = store
+    .rows()
+    .find((row) => row.id === $("#game-restore").dataset.id);
   if (
     !active &&
     !$("#game-restore").hidden &&
+    saved?.data.state.version === gameVersion(game) &&
+    saved.data.difficulty === difficulty() &&
     !uiConfirm(
       uiMsg(
         "Start a new game and replace the saved position for this difficulty?",
@@ -820,6 +868,7 @@ async function start({ localOnly = false } = {}) {
     }
     audioSnapshot = null;
     active = create(game, diff, seed);
+    active.activityId = crypto.randomUUID();
     if (isBoard()) active.humanSide = Number($("#game-human-side").value);
     publicSession = nextSession;
     submissionStatus = nextSession ? "ranked" : "local";
@@ -882,6 +931,10 @@ async function restore() {
     if (!row) throw Error("That save was removed. Refresh saves to try again.");
     const data = validateSave(row.data);
     active = data.state;
+    if (!active.activityId) {
+      active.activityId = `saved:${row.id}`;
+      active.activityRestored = true;
+    }
     activeId = row.id;
     revision = row.revision;
     accumulated = data.elapsed;
@@ -893,7 +946,8 @@ async function restore() {
     presenter.reset(active);
     if ($("#game-human-side"))
       $("#game-human-side").value = String(active.humanSide || 1);
-    $("#game-difficulty").value = data.difficulty;
+    if (game !== "snake" || data.difficulty === "normal")
+      $("#game-difficulty").value = data.difficulty;
     $("#game-restore").hidden = true;
     resume();
     draw();
@@ -915,7 +969,7 @@ async function renderSaves() {
     ? rows
         .map(
           (r) =>
-            uiHtml`<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${r.data.game === "brick-breaker" && r.data.state.version === 1 ? uiMsg("Legacy rules · v1 · ") : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
+            uiHtml`<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${retiredArcade(r.data.game) && r.data.state.version < gameVersion(r.data.game) ? uiMsg("Legacy rules · v{0} · ", [r.data.state.version]) : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
         )
         .join("")
     : uiHtml(
@@ -930,6 +984,7 @@ async function initDirectory() {
   if (directoryBound) return;
   directoryBound = true;
   bindCardDemos();
+  mountGameHub();
   let category = "all";
   const filter = () => {
     let count = 0;
@@ -946,7 +1001,7 @@ async function initDirectory() {
     const b = e.target.closest("[data-game-filter]");
     if (!b) return;
     category = b.dataset.gameFilter;
-    for (const x of $("#game-filters").children) {
+    for (const x of $("#game-filters").querySelectorAll("[data-game-filter]")) {
       x.classList.toggle("active", x === b);
       x.setAttribute("aria-pressed", String(x === b));
     }
@@ -993,8 +1048,11 @@ async function initDirectory() {
     )
       return;
     try {
-      for (const row of await store.guestRows())
-        await store.put(validateSave(row.data), row.id, owner(), 0);
+      for (const row of await store.guestRows()) {
+        const data = validateSave(row.data);
+        delete data.state.activityId;
+        await store.put(data, row.id, owner(), 0);
+      }
       renderSaves();
     } catch (e) {
       uiText($("#game-save-status"), uiError(e));
@@ -1005,8 +1063,24 @@ async function initDirectory() {
 }
 function bindGame() {
   player = owner();
+  if (game === "snake") {
+    const refreshSkin = async () => {
+      const expected = owner();
+      const data = await readHub(expected).catch(() => null);
+      if (owner() !== expected) return;
+      root.dataset.snakeSkin = data?.skin || "classic";
+      if (active && !running) draw();
+    };
+    refreshSkin();
+    window.addEventListener("game-hub-update", refreshSkin);
+    window.addEventListener("workspace-ready", refreshSkin);
+  }
   $("#game-difficulty").innerHTML = Object.entries(GAMES[game].modes)
-    .map(([id, m]) => uiHtml`<option value="${id}">${uiFrom(m.label)}</option>`)
+    .filter(([id]) => game !== "snake" || id === "normal")
+    .map(
+      ([id, m]) =>
+        uiHtml`<option value="${id}">${uiFrom(game === "snake" ? "Standard" : m.label)}</option>`,
+    )
     .join("");
   $("#game-difficulty").value = GAMES[game].default;
   $("#game-best").parentElement.hidden = isBoard();
@@ -1259,7 +1333,8 @@ try {
     if (requested) {
       const r = await store.get(requested);
       if (r?.data.game === game) {
-        $("#game-difficulty").value = r.data.difficulty;
+        if (game !== "snake" || r.data.difficulty === "normal")
+          $("#game-difficulty").value = r.data.difficulty;
         $("#game-restore").dataset.id = r.id;
         $("#game-restore").hidden = false;
         status(

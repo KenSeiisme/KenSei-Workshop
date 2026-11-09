@@ -36,7 +36,13 @@ export function paintBrick(canvas, state, view = {}) {
   ctx.fillStyle = "#aa9bbb";
   ctx.font = "11px system-ui, sans-serif";
   ctx.textAlign = "left";
-  ctx.fillText(uiRender(uiMsg("STAGE {0} / 3", [state.stage + 1])), 27, 29);
+  ctx.fillText(
+    uiRender(
+      uiMsg("STAGE {0} / {1}", [state.stage + 1, state.version >= 3 ? 5 : 3]),
+    ),
+    27,
+    29,
+  );
   ctx.textAlign = "right";
   ctx.fillText(
     uiRender(
@@ -76,12 +82,12 @@ export function paintBrick(canvas, state, view = {}) {
       ctx.fillStyle = "#222133";
       ctx.font = "bold 12px system-ui";
       ctx.textAlign = "center";
-      ctx.fillText(["", "×3", "↔", "¾"][kind], x + bw / 2, y + 13);
+      ctx.fillText(["", "×3", "↔", "¾", "⚡", "◈"][kind], x + bw / 2, y + 13);
     }
   }
-  const pw = state.version === 2 ? paddleWidth(state) : BRICK.paddleWidth;
+  const pw = state.version >= 2 ? paddleWidth(state) : BRICK.paddleWidth;
   const px =
-    (state.version === 2 ? enhancedCenter(state) : paddleCenter(state)) / q -
+    (state.version >= 2 ? enhancedCenter(state) : paddleCenter(state)) / q -
     pw / 2;
   ctx.save();
   ctx.shadowColor = "#c2a6ef";
@@ -98,15 +104,24 @@ export function paintBrick(canvas, state, view = {}) {
   for (const drop of state.drops || []) {
     const x = drop.x / q,
       y = drop.y / q;
-    ctx.fillStyle = ["", "#a1edce", "#d2b2f0", "#97cfee"][drop.kind];
+    ctx.fillStyle = ["", "#a1edce", "#d2b2f0", "#97cfee", "#ffbb91", "#a6eaf0"][
+      drop.kind
+    ];
     ctx.beginPath();
     ctx.roundRect(x - 13, y - 10, 26, 20, 7);
     ctx.fill();
     ctx.fillStyle = "#181625";
     ctx.font = "bold 13px system-ui";
     ctx.textAlign = "center";
-    ctx.fillText(["", "×3", "↔", "¾"][drop.kind], x, y + 5);
+    ctx.fillText(["", "×3", "↔", "¾", "⚡", "◈"][drop.kind], x, y + 5);
   }
+  if (state.shield) {
+    ctx.fillStyle = "#9ef4fc";
+    ctx.fillRect(8, h - 4, w - 16, 3);
+  }
+  ctx.fillStyle = "#ffb68f";
+  for (const shot of state.shots || [])
+    ctx.fillRect(shot.x / q - 1, shot.y / q, 3, 14);
   const balls = view.balls || state.balls || [{ ...state.ball, ...view.ball }];
   for (const b of balls) {
     const bx = b.x / q,

@@ -3,7 +3,7 @@ import { playCue } from "./audio.js";
 import { patchMarkup } from "./dom.js";
 import { SHAPES, BRICK, canPlace } from "./arcade-engine.js";
 import { paintBrick } from "./arcade-paint.js";
-import { uiMsg, uiText, uiAttr, uiHtml } from "../site/ui.js";
+import { uiMsg, uiText, uiAttr, uiHtml, uiJoin, uiFrom } from "../site/ui.js";
 
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 const playing = (ctx) =>
@@ -151,16 +151,21 @@ export function createArcadeUI(ctx) {
     uiAttr(
       canvas,
       "aria-label",
-      uiMsg("Brick Breaker, stage {0} of 3, {1} bricks remaining, {2} lives", [
-        s.stage + 1,
-        s.bricks.filter(Boolean).length,
-        s.lives,
-      ]),
+      uiMsg(
+        "Brick Breaker, stage {0} of {1}, {2} bricks remaining, {3} lives",
+        [
+          s.stage + 1,
+          s.version >= 3 ? 5 : 3,
+          s.bricks.filter(Boolean).length,
+          s.lives,
+        ],
+      ),
     );
     uiText(
       board.querySelector(".brick-stage"),
-      uiMsg("Stage {0} / 3 · {1} bricks", [
+      uiMsg("Stage {0} / {1} · {2} bricks", [
         s.stage + 1,
+        s.version >= 3 ? 5 : 3,
         s.bricks.filter(Boolean).length,
       ]),
     );
@@ -174,22 +179,38 @@ export function createArcadeUI(ctx) {
     );
     uiText(
       board.querySelector(".brick-rules"),
-      s.version === 1 ? uiMsg("Legacy rules · v1") : uiMsg("Powerups · v2"),
+      s.version < 3
+        ? uiMsg("Legacy rules · v{0}", [s.version])
+        : uiMsg("Powerups · v3"),
     );
     const buffs = [];
     if (s.wideUntil > s.ticks)
-      buffs.push(`↔ Wide paddle · ${Math.ceil((s.wideUntil - s.ticks) / 60)}s`);
+      buffs.push(
+        uiMsg("Wide paddle · {0}s", [Math.ceil((s.wideUntil - s.ticks) / 60)]),
+      );
     if (s.slowUntil > s.ticks)
-      buffs.push(`¾ Slow ball · ${Math.ceil((s.slowUntil - s.ticks) / 60)}s`);
-    uiText(board.querySelector(".brick-buffs"), buffs.join(" · "));
+      buffs.push(
+        uiMsg("Slow ball · {0}s", [Math.ceil((s.slowUntil - s.ticks) / 60)]),
+      );
+    if (s.laserUntil > s.ticks)
+      buffs.push(
+        uiMsg("Laser · {0}s", [Math.ceil((s.laserUntil - s.ticks) / 60)]),
+      );
+    if (s.shield) buffs.push(uiMsg("Shield ready"));
+    uiText(
+      board.querySelector(".brick-buffs"),
+      uiJoin(buffs.flatMap((buff, i) => (i ? [" · ", buff] : [buff]))),
+    );
     const notice = board.querySelector(".brick-pickup-status");
     if (notice.dataset.pickups !== String(s.pickups || 0)) {
       notice.dataset.pickups = String(s.pickups || 0);
       uiText(
         notice,
-        s.lastPickup
-          ? `${s.lastPickup} ${s.lastPickup === "Max balls" ? "" : "collected"}`
-          : "",
+        s.lastPickup === "Max balls"
+          ? uiMsg("Max balls")
+          : s.lastPickup
+            ? uiMsg("{0} collected", [uiFrom(s.lastPickup)])
+            : "",
       );
     }
     const button = board.querySelector(".brick-launch");
@@ -329,7 +350,7 @@ export function createArcadeUI(ctx) {
     if (!rect?.width) return;
     const worldX = ((e.clientX - rect.left) / rect.width) * BRICK.width;
     const width =
-      state()?.version === 2 ? enhancedPaddleWidth(state()) : BRICK.paddleWidth;
+      state()?.version >= 2 ? enhancedPaddleWidth(state()) : BRICK.paddleWidth;
     target = clamp(
       Math.round(((worldX - width / 2) / (BRICK.width - width)) * 1024),
       0,

@@ -19,7 +19,7 @@ export const AUDIO_PROFILES = Object.freeze({
 export function normalizeAudioPreference(value, legacy) {
   const clamp = (v, fallback) =>
     Number.isFinite(v) ? Math.max(0, Math.min(1, v)) : fallback;
-  if (value?.version === 2)
+  if (value?.version >= 2)
     return {
       version: 2,
       enabled: value.enabled !== false,

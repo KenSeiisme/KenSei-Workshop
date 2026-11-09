@@ -110,23 +110,19 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       await fit(width, "directory");
       assert(
         await p.evaluate(() => {
-          const caption = document
-            .querySelector(".games-art-caption")
+          const art = document
+            .querySelector("[data-hub-featured]:not([hidden]) .hub-slide-art")
             .getBoundingClientRect();
-          return [...document.querySelectorAll(".games-hero-tile")].every(
-            (el) => el.getBoundingClientRect().bottom < caption.top,
-          );
+          const feature = document
+            .querySelector(".hub-feature")
+            .getBoundingClientRect();
+          return art.left >= feature.left && art.right <= feature.right;
         }),
-        `hero art overlaps caption at ${width}`,
+        `featured art stays in its card at ${width}`,
       );
     }
-    await p.click('a[href="#games-library"]');
-    await p.waitForTimeout(250);
-    assert(
-      await p
-        .locator("#games-library-heading")
-        .evaluate((el) => el.getBoundingClientRect().top >= 72),
-    );
+    await p.locator("#games-library-heading").scrollIntoViewIfNeeded();
+    assert(await p.locator("#games-library-heading").isVisible());
     await p.fill("#game-search", "snake");
     assert.equal(await p.locator("[data-game-card]:visible").count(), 1);
     await p.fill("#game-search", "");

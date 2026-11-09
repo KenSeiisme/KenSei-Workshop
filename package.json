@@ -53,6 +53,7 @@
     "test:live": "node tests/browser/live-second-batch.cjs",
     "test:experience": "node scripts/test.mjs experience",
     "test:games": "node scripts/test.mjs games",
+    "test:game-hub": "node scripts/test.mjs game-hub",
     "games:edge": "node scripts/build-games-edge.mjs",
     "test:games-expansion": "node scripts/test.mjs games-expansion",
     "test:game-neon": "node scripts/test.mjs game-neon",

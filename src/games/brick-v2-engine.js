@@ -8,7 +8,17 @@ export const POWERUPS = Object.freeze({
   1: "Multiball",
   2: "Wide Paddle",
   3: "Slow Ball",
+  4: "Laser",
+  5: "Shield",
 });
+const MAPS = [
+  ...BRICK_LAYOUTS,
+  ["11000000", "11110000", "11111100", "11111111", "11111111"],
+  ["00011000", "00111100", "11111111", "00111100", "00011000"],
+];
+const stageCount = (s) =>
+  s.version === 3 ? MAPS.length : BRICK_LAYOUTS.length;
+const powerCount = (s) => (s.version === 3 ? 5 : 3);
 function random(s, n) {
   let x = s.rng >>> 0;
   x ^= x << 13;
@@ -24,15 +34,23 @@ export const paddleCenter = (s) =>
   );
 export const speedFactor = (s) => (s.slowUntil > s.ticks ? 0.75 : 1);
 function stage(s) {
-  s.bricks = BRICK_LAYOUTS[s.stage].join("").split("").map(Number);
+  s.bricks = MAPS[s.stage].join("").split("").map(Number);
   s.powerBricks = Array(40).fill(0);
   const available = s.bricks.map((v, i) => (v ? i : -1)).filter((i) => i >= 0);
-  for (let kind = 1; kind <= 3; kind++)
+  for (let kind = 1; kind <= powerCount(s); kind++)
     s.powerBricks[available.splice(random(s, available.length), 1)[0]] = kind;
 }
-function attach(s) {
+function clearPower(s) {
   s.wideUntil = s.slowUntil = 0;
   s.drops = [];
+  if (s.version === 3) {
+    s.laserUntil = s.nextVolley = 0;
+    s.shield = false;
+    s.shots = [];
+  }
+}
+function attach(s) {
+  clearPower(s);
   s.balls = [
     {
       id: s.nextBallId++,
@@ -44,17 +62,18 @@ function attach(s) {
     },
   ];
 }
-export function create(game, difficulty, seed) {
+export function create(game, difficulty, seed, version = 2) {
   if (
     game !== "brick-breaker" ||
     difficulty !== "classic" ||
+    ![2, 3].includes(version) ||
     !integer(seed, 1, 4294967295)
   )
     throw Error("Unknown Brick Breaker rules or seed.");
   const s = {
     game,
     difficulty,
-    version: 2,
+    version,
     seed,
     rng: seed,
     score: 0,
@@ -215,18 +234,62 @@ function collect(s, drop) {
   if (drop.kind === 1) split(s);
   if (drop.kind === 2) s.wideUntil = s.ticks + 720;
   if (drop.kind === 3) s.slowUntil = s.ticks + 480;
+  if (drop.kind === 4) {
+    if (s.laserUntil <= s.ticks) s.nextVolley = s.ticks + 1;
+    s.laserUntil = s.ticks + 480;
+  }
+  if (drop.kind === 5) s.shield = true;
+}
+function lasers(s) {
+  if (
+    s.laserUntil > s.ticks &&
+    s.nextVolley <= s.ticks &&
+    s.balls.some((b) => b.launched)
+  ) {
+    const center = paddleCenter(s);
+    const offset = (paddleWidth(s) * Q) / 4;
+    for (const x of [center - offset, center + offset])
+      s.shots.push({ x, y: BRICK.paddleY * Q });
+    s.nextVolley = s.ticks + 24;
+  }
+  s.shots = s.shots.filter((shot) => {
+    const nextY = shot.y - 12 * Q;
+    let hit = -1,
+      bottom = -Infinity;
+    for (let i = 0; i < s.bricks.length; i++) {
+      if (!s.bricks[i]) continue;
+      const rect = brickRect(i);
+      const edge = rect.y + rect.h;
+      if (
+        shot.x >= rect.x &&
+        shot.x <= rect.x + rect.w &&
+        shot.y >= rect.y &&
+        nextY <= edge &&
+        edge > bottom
+      ) {
+        hit = i;
+        bottom = edge;
+      }
+    }
+    if (hit >= 0) {
+      breakBrick(s, hit);
+      return false;
+    }
+    shot.y = nextY;
+    return nextY >= 0;
+  });
 }
 function tick(s) {
   const stageBefore = s.stage;
   for (const ball of s.balls) physics(s, ball);
+  if (s.version === 3) lasers(s);
   // Stage end takes precedence over a same-tick loss or pickup.
   if (!s.bricks.some(Boolean)) {
-    if (s.stage === 2) {
+    if (s.stage === stageCount(s) - 1) {
       s.status = "won";
       s.reason = "cleared";
       s.balls = [];
-      s.drops = [];
-      s.wideUntil = s.slowUntil = 0;
+      clearPower(s);
       return;
     }
     s.stage++;
@@ -234,11 +297,18 @@ function tick(s) {
     attach(s);
     return;
   }
+  if (s.shield) {
+    const lost = s.balls.find((ball) => ball.y > (480 + BRICK.radius) * Q);
+    if (lost) {
+      lost.y = (480 - BRICK.radius) * Q;
+      lost.vy = -Math.max(Q, Math.abs(lost.vy));
+      s.shield = false;
+    }
+  }
   s.balls = s.balls.filter((b) => b.y <= (480 + BRICK.radius) * Q);
   if (!s.balls.length) {
     s.lives--;
-    s.wideUntil = s.slowUntil = 0;
-    s.drops = [];
+    clearPower(s);
     if (!s.lives) {
       s.status = "lost";
       s.reason = "lives";
@@ -324,9 +394,10 @@ export function replayBrick(
   finalTick,
   durationMs,
   format,
+  version = 2,
 ) {
   if (
-    format !== "paddle-v2" ||
+    format !== `paddle-v${version}` ||
     !Array.isArray(events) ||
     events.length > 20000 ||
     !integer(finalTick, 0, 18000) ||
@@ -336,7 +407,7 @@ export function replayBrick(
     (finalTick * 1000) / 60 > durationMs + 250
   )
     throw Error("Invalid Brick Breaker replay or game speed.");
-  const s = create("brick-breaker", difficulty, seed);
+  const s = create("brick-breaker", difficulty, seed, version);
   let previous = 0;
   for (const item of events) {
     if (
@@ -363,6 +434,8 @@ export function replayBrick(
   return { ...metrics(s), elapsed_ms: Math.max(1, Math.round(durationMs)) };
 }
 export function validate(s) {
+  const powers = powerCount(s);
+  const stages = stageCount(s);
   const ball = (b) =>
     b &&
     integer(b.id, 1, 1000) &&
@@ -373,7 +446,7 @@ export function validate(s) {
     typeof b.launched === "boolean";
   if (
     !integer(s.ticks, 0, 18000) ||
-    !integer(s.stage, 0, 2) ||
+    !integer(s.stage, 0, stages - 1) ||
     !integer(s.lives, 0, 3) ||
     !integer(s.paddle, 0, 1024) ||
     !integer(s.lastPaddleTick, -2, s.ticks) ||
@@ -381,8 +454,8 @@ export function validate(s) {
     !integer(s.wideUntil, 0, 18720) ||
     !integer(s.slowUntil, 0, 18480) ||
     !integer(s.nextBallId, 1, 1001) ||
-    !integer(s.nextDropId, 1, 10) ||
-    !integer(s.pickups, 0, 9) ||
+    !integer(s.nextDropId, 1, stages * powers + 1) ||
+    !integer(s.pickups, 0, stages * powers) ||
     !integer(s.paddleHits, 0, 100000) ||
     !integer(s.pickupTick, -1, s.ticks)
   )
@@ -394,9 +467,9 @@ export function validate(s) {
     !Array.isArray(s.powerBricks) ||
     s.powerBricks.length !== 40 ||
     !s.powerBricks.every(
-      (n, i) => integer(n, 0, 3) && (!n || s.bricks[i] === 1),
+      (n, i) => integer(n, 0, powers) && (!n || s.bricks[i] === 1),
     ) ||
-    s.powerBricks.filter(Boolean).length > 3
+    s.powerBricks.filter(Boolean).length > powers
   )
     throw Error("Invalid power bricks.");
   if (
@@ -406,12 +479,12 @@ export function validate(s) {
     new Set(s.balls.map((b) => b.id)).size !== s.balls.length ||
     s.balls.some((b) => b.id >= s.nextBallId) ||
     !Array.isArray(s.drops) ||
-    s.drops.length > 3 ||
+    s.drops.length > powers ||
     !s.drops.every(
       (d) =>
-        integer(d.id, 1, 9) &&
+        integer(d.id, 1, stages * powers) &&
         d.id < s.nextDropId &&
-        integer(d.kind, 1, 3) &&
+        integer(d.kind, 1, powers) &&
         integer(d.x, 0, 640 * Q) &&
         integer(d.y, 0, 492 * Q),
     ) ||
@@ -420,12 +493,25 @@ export function validate(s) {
     throw Error("Invalid balls or drops.");
   if (
     (s.status === "playing" && (!s.lives || !s.balls.length)) ||
-    (s.status === "won" && (s.stage !== 2 || s.bricks.some(Boolean))) ||
+    (s.status === "won" &&
+      (s.stage !== stages - 1 || s.bricks.some(Boolean))) ||
     s.score % 10 !== 0 ||
-    s.score > 1020 ||
+    s.score > (s.version === 3 ? 1500 : 1020) ||
     ![null, "cleared", "lives", "timeout"].includes(s.reason) ||
     ![null, "Max balls", ...Object.values(POWERUPS)].includes(s.lastPickup)
   )
     throw Error("Invalid Brick Breaker result.");
+  if (
+    s.version === 3 &&
+    (typeof s.shield !== "boolean" ||
+      !integer(s.laserUntil, 0, 18480) ||
+      !integer(s.nextVolley, 0, 18024) ||
+      !Array.isArray(s.shots) ||
+      s.shots.length > 6 ||
+      s.shots.some(
+        (shot) => !integer(shot.x, 0, 640 * Q) || !integer(shot.y, 0, 480 * Q),
+      ))
+  )
+    throw Error("Invalid laser or shield state.");
   return s;
 }

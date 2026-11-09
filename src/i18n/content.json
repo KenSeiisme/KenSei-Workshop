@@ -670,8 +670,8 @@
       "zh-Hant": "貪食蛇"
     },
     "description": {
-      "en": "One more bite, one less corner. A familiar little challenge.",
-      "zh-Hant": "多吃一口，少一個轉彎空間。熟悉又耐玩的挑戰。"
+      "en": "Collect food, pick up speed boosts and weave around growing obstacles.",
+      "zh-Hant": "收集食物、拾取加速道具，繞過不斷增加的障礙。"
     },
     "aliases": ["snake", "贪吃蛇", "貪食蛇", "贪食蛇", "貪吃蛇"]
   },
@@ -753,8 +753,8 @@
       "zh-Hant": "打磚塊"
     },
     "description": {
-      "en": "Keep the ball in play. Three stages, three lives, one more bounce.",
-      "zh-Hant": "讓球持續反彈。三個關卡、三條生命，再接住下一次彈跳。"
+      "en": "Keep the ball in play across five stages with lasers, shields and other powerups.",
+      "zh-Hant": "用雷射、護盾和其他道具接住下一次反彈，闖過五個關卡。"
     },
     "aliases": [
       "brick breaker",

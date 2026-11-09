@@ -10,6 +10,7 @@ import {
   setAudioState,
 } from "./audio.js";
 import { mountPlayShell } from "./play-shell.js";
+import { trackGame } from "./hub-activity.js";
 import {
   createPong,
   advancePong,
@@ -93,6 +94,7 @@ function overlay(title, note = "") {
   uiText($("#pong-overlay-title"), uiFrom(title || ""));
   uiText($("#pong-overlay-note"), uiFrom(note));
 }
+const activity = trackGame("pong", $("#pong-overlay"));
 function renderRoom() {
   syncPongAudio();
   root.dataset.pongState = room?.status || "ready";
@@ -171,6 +173,22 @@ function renderRoom() {
       : uiMsg("Round trip {0} ms", [Math.round(latency)]),
   );
   const current = host() ? state : remoteState || state;
+  const finished =
+    room?.status === "finished" && ["won", "draw"].includes(current?.status);
+  activity(
+    room && (room.status === "playing" || room.status === "paused" || finished)
+      ? {
+          id: `${room.id}:${room.round}`,
+          owner: roomOwner,
+          mode: "normal",
+          active: active(),
+          finished,
+          score: finished
+            ? { wins: Number(current.winner === (host() ? 1 : 2)) }
+            : null,
+        }
+      : null,
+  );
   uiText($("#pong-left-score"), current?.score[0] ?? 0);
   uiText($("#pong-right-score"), current?.score[1] ?? 0);
   uiText($("#pong-time"), `${clock((current?.ticks || 0) / 120)} / 10:00`);

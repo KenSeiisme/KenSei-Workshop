@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { build } from "esbuild";
 import { gameDatabase } from "../support/games-fixture.mjs";
+import { create, advanceSnake, advanceBrick } from "../../src/games/engine.js";
 await build({
   entryPoints: ["supabase/functions/games-session/index.ts"],
   bundle: true,
@@ -131,8 +132,42 @@ try {
     (await call("start", { game: "snake", difficulty: "normal" })).data.version,
     1,
   );
+  await db.query("select workshop_private.activate_arcade_upgrade()");
+  assert.equal((await call("finish", body)).status, 409);
+  for (const [game, difficulty, rules_version] of [
+    ["snake", "normal", 2],
+    ["brick-breaker", "classic", 3],
+  ]) {
+    const { status, data: session } = await call("start", {
+      game,
+      difficulty,
+      rules_version,
+    });
+    assert.equal(status, 200);
+    assert.equal(session.version, rules_version);
+    const state = create(game, difficulty, Number(session.seed));
+    if (game === "snake") advanceSnake(state, 300);
+    else advanceBrick(state, 18000);
+    await db.query(
+      "update workshop_private.game_sessions set started_at=clock_timestamp()-interval '5 minutes' where id=$1",
+      [session.id],
+    );
+    const finish = {
+      session_id: session.id,
+      events: [],
+      events_format: game === "snake" ? "legacy" : "paddle-v3",
+      final_tick: state.ticks,
+      score: 999999,
+    };
+    const result = await call("finish", finish);
+    assert.equal(result.status, 200);
+    assert.equal(result.data.version, rules_version);
+    assert.equal(result.data.score, state.score);
+    assert.equal(result.data.qualified, true);
+    assert.deepEqual((await call("finish", finish)).data, result.data);
+  }
   console.log(
-    "PASS real bundled Edge: stale clients rejected before start, v2 canonical score, wrong format/owner denial, idempotency and in-flight v1 finish; other games stay v1.",
+    "PASS bundled Edge: compatible legacy finishes before cutover, stale session rejection, Snake v2 and Brick v3 ranked replays, score forgery rejection and idempotency.",
   );
 } finally {
   await db.close();

@@ -17,7 +17,7 @@ import {
   gameVersion,
 } from "../../src/games/engine.js";
 const q = BRICK.scale,
-  make = (seed = 42) => create("brick-breaker", "classic", seed);
+  make = (seed = 42) => create("brick-breaker", "classic", seed, 2);
 function flying(s, extra = {}) {
   Object.assign(
     s.balls[0],
@@ -43,9 +43,9 @@ for (const seed of [1, 42, 159, 4294967295]) {
   assert(s.powerBricks.every((x, i) => !x || s.bricks[i]));
   validate(s);
 }
-assert.equal(gameVersion("brick-breaker"), 2);
-assert.equal(gameVersion("snake"), 1);
-assert.equal(dispatchCreate("brick-breaker", "classic", 1).version, 2);
+assert.equal(gameVersion("brick-breaker"), 3);
+assert.equal(gameVersion("snake"), 2);
+assert.equal(dispatchCreate("brick-breaker", "classic", 1, 2).version, 2);
 assert.equal(dispatchCreate("brick-breaker", "classic", 1, 1).version, 1);
 let s = make();
 flying(s);

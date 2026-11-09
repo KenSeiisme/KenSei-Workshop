@@ -10,11 +10,12 @@ import {
 } from "../../src/games/engine.js";
 for (const [game, settings] of Object.entries(GAMES))
   for (const difficulty of Object.keys(settings.modes)) {
+    const version = game === "snake" && difficulty !== "normal" ? 1 : undefined;
     assert.deepEqual(
-      create(game, difficulty, 42),
-      create(game, difficulty, 42),
+      create(game, difficulty, 42, version),
+      create(game, difficulty, 42, version),
     );
-    const s = create(game, difficulty, 42);
+    const s = create(game, difficulty, 42, version);
     assert.deepEqual(
       validateSave({ game, difficulty, state: s, elapsed: 0 }).state,
       s,
@@ -76,12 +77,12 @@ assert.equal(apply(s, { type: "reveal", index: 0 }), false);
 assert.ok(apply(s, { type: "flag", index: 0 }));
 assert.ok(apply(s, { type: "reveal", index: 0 }));
 for (const difficulty of ["slow", "normal", "fast"]) {
-  const a = create("snake", difficulty, 12),
+  const a = create("snake", difficulty, 12, 1),
     b = structuredClone(a);
   advanceSnake(a, 5);
   for (let i = 1; i <= 5; i++) advanceSnake(b, i);
   assert.deepEqual(a, b);
-  const state = create("snake", difficulty, 12);
+  const state = create("snake", difficulty, 12, 1);
   assert.equal(apply(state, { type: "turn", dir: 3 }), false);
   assert.ok(apply(state, { type: "turn", dir: 0 }));
   assert.equal(apply(state, { type: "turn", dir: 3 }), false);
@@ -96,11 +97,13 @@ for (const difficulty of ["slow", "normal", "fast"]) {
       [{ type: "turn", dir: 0, tick: 0, t: 0 }],
       11,
       Math.ceil(11000 / rate),
+      "legacy",
+      1,
     ),
     { ...metrics(state), elapsed_ms: Math.ceil(11000 / rate) },
   );
   assert.throws(
-    () => replay("snake", difficulty, 12, [], 10, 10),
+    () => replay("snake", difficulty, 12, [], 10, 10, "legacy", 1),
     /Impossible/,
   );
 }
@@ -154,7 +157,7 @@ for (let x = 19; x >= 1; x--)
     cycle.push(y * 20 + x);
   }
 for (let y = 19; y >= 1; y--) cycle.push(y * 20);
-const longGame = create("snake", "normal", 42),
+const longGame = create("snake", "normal", 42, 1),
   longEvents = [];
 let at = cycle.indexOf(longGame.body[0]);
 while (longGame.status === "playing" && longGame.ticks < 72000) {
@@ -193,6 +196,8 @@ assert.equal(
     longEvents,
     longGame.ticks,
     longGame.ticks * 100,
+    "legacy",
+    1,
   ).score,
   3960,
 );

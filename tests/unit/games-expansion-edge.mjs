@@ -267,7 +267,7 @@ assert.equal(
   ).status,
   400,
 );
-state = create("brick-breaker", "classic", Number(session.seed));
+state = create("brick-breaker", "classic", Number(session.seed), 2);
 assert.ok(apply(state, { type: "launch", tick: 0 }));
 advanceBrick(state, BRICK.maxTicks);
 assert.equal(state.status, "lost");
