@@ -40,6 +40,7 @@ import { mountAchievements } from "./achievements.js";
 import { mountPlayShell } from "./play-shell.js";
 import { mountLeaderboard } from "./leaderboard.js";
 import { mountGameHub } from "./hub.js";
+import { localizedPath } from "./hub-rankings.js";
 import { trackGame } from "./hub-activity.js";
 import { readHub } from "./hub-store.js";
 import { SNAKE_TICK_LIMIT } from "./snake-v2.js";
@@ -964,16 +965,25 @@ async function leaderboard() {
 async function renderSaves() {
   const node = $("#game-saves");
   if (!node) return;
-  const rows = store.rows().filter((r) => r.data.state?.status === "playing");
+  const expanded =
+    node.closest("[data-saves-expanded]").dataset.savesExpanded === "true";
+  const rows = store
+    .rows()
+    .filter((r) => r.data.state?.status === "playing")
+    .sort((a, b) =>
+      (b.updated_at || b.created_at).localeCompare(
+        a.updated_at || a.created_at,
+      ),
+    );
   node.innerHTML = rows.length
     ? rows
         .map(
-          (r) =>
-            uiHtml`<div class="saved-game-row"><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${retiredArcade(r.data.game) && r.data.state.version < gameVersion(r.data.game) ? uiMsg("Legacy rules · v{0} · ", [r.data.state.version]) : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="/games/${encodeURIComponent(r.data.game)}/?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
+          (r, index) =>
+            uiHtml`<div class="saved-game-row" ${index >= 3 ? "data-save-extra" : ""} ${index >= 3 && !expanded ? "hidden" : ""}><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${retiredArcade(r.data.game) && r.data.state.version < gameVersion(r.data.game) ? uiMsg("Legacy rules · v{0} · ", [r.data.state.version]) : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="${localizedPath(`/games/${encodeURIComponent(r.data.game)}/`)}?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
         )
         .join("")
     : uiHtml(
-        '<div class="game-empty-state"><strong>A fresh start is a good start.</strong><p>No unfinished games yet. Pick a game above; your saved games will appear here.</p></div>',
+        '<p class="game-empty-state">No unfinished games yet. Pick a game above.</p>',
       );
   $("#games-more").hidden = !store.hasMore();
   saveLine();
@@ -984,7 +994,7 @@ async function initDirectory() {
   if (directoryBound) return;
   directoryBound = true;
   bindCardDemos();
-  mountGameHub();
+  mountGameHub(store);
   let category = "all";
   const filter = () => {
     let count = 0;
@@ -1010,6 +1020,18 @@ async function initDirectory() {
   // 载入模块前已经输入的搜索词也要生效；目录筛选不依赖 IndexedDB。
   filter();
   $("[data-games-directory]").dataset.ready = "true";
+  const manageSaves = $("#game-manage-saves");
+  manageSaves.onclick = () => {
+    const expanded = manageSaves.getAttribute("aria-expanded") !== "true";
+    manageSaves.setAttribute("aria-expanded", String(expanded));
+    manageSaves.closest("[data-saves-expanded]").dataset.savesExpanded =
+      String(expanded);
+    $("#game-save-management").hidden = !expanded;
+    $("#game-saves")
+      .querySelectorAll("[data-save-extra]")
+      .forEach((row) => (row.hidden = !expanded));
+  };
+  window.addEventListener("locale-change", guard(renderSaves));
   $("#games-sync").onclick = guard(async () => {
     await store.flush();
     await store.load(true);

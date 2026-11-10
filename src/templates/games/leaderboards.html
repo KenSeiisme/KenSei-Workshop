@@ -1,0 +1,59 @@
+<section class="container games-page game-hub" data-games-leaderboards>
+  <header class="hub-boards-header">
+    <div>
+      <a href="/games/" class="text-link"
+        ><span aria-hidden="true">←</span> Games lobby</a
+      >
+      <h1>All leaderboards</h1>
+      <p class="muted">Choose a game to see its leaderboard.</p>
+    </div>
+    ${theme}
+  </header>
+  <section
+    class="panel hub-rank"
+    id="leaderboard-results"
+    aria-labelledby="hub-rank-title"
+    hidden
+  >
+    <div class="game-section-heading">
+      <h2 id="hub-rank-title" tabindex="-1">Game records</h2>
+      <a class="text-link" href="#leaderboard-games">Choose a game</a>
+    </div>
+    <div
+      class="hub-rank-switches"
+      role="group"
+      aria-label="Leaderboard source"
+      data-rank-kinds
+    ></div>
+    <div
+      class="hub-rank-switches"
+      role="group"
+      aria-label="Difficulty or time control"
+      data-rank-modes
+    ></div>
+    <p data-hub-rank-stats></p>
+    <p data-hub-rank-status role="status" class="muted"></p>
+    <div data-hub-rank-results></div>
+    <p data-hub-rank-me></p>
+    <div class="hub-rank-actions">
+      <button type="button" class="button secondary" data-hub-rank-more hidden>
+        Show Top 50
+      </button>
+      <button
+        type="button"
+        class="button secondary"
+        data-hub-rank-refresh
+        hidden
+      >
+        Refresh leaderboard
+      </button>
+    </div>
+  </section>
+  <nav
+    class="hub-rank-directory"
+    id="leaderboard-games"
+    aria-label="Game leaderboards"
+  >
+    ${cards}
+  </nav>
+</section>

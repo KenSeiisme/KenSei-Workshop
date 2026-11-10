@@ -38,6 +38,13 @@ def translate(text, locale):
 
 
 COMMON = {
+    "games/leaderboards": (
+        {"en": "All leaderboards", "zh-Hant": "全部榜單"},
+        {
+            "en": "Browse verified, local and sample leaderboards for 15 KenSei Workshop games.",
+            "zh-Hant": "瀏覽 KenSei Workshop 15 款遊戲的已驗證、本機與示例榜單。",
+        },
+    ),
     "": (
         {"en": "Useful tools for everyday things", "zh-Hant": "實用工具，讓日常更順手"},
         {
@@ -142,7 +149,7 @@ class Annotator(HTMLParser):
         for name, value in attrs:
             if (
                 value is not None
-                and name in ["aria-label", "title", "placeholder", "alt"]
+                and name in ["aria-label", "aria-roledescription", "title", "placeholder", "alt"]
                 and not self.protected
             ):
                 key = key_for(value)
@@ -217,7 +224,7 @@ def metadata(route, locale, site_url):
         descriptions = CONTENT[route]["description"]
     else:
         names, descriptions = COMMON.get(route, COMMON["404"])
-    slug = route.replace("/", "-") or "home"
+    slug = "games" if route == "games/leaderboards" else route.replace("/", "-") or "home"
     return {
         "title": names[locale] + " — KenSei Workshop",
         "description": descriptions[locale],
@@ -259,7 +266,7 @@ def styles(route):
         ]
     if route == "games" or route.startswith("games/"):
         files += ["games.css", "game-neon.css", "game-next.css", "game-experience.css"]
-        if route == "games":
+        if route in {"games", "games/leaderboards"}:
             files.append("game-hub.css")
         slug = route.split("/")[-1]
         if slug in ["sudoku", "nonogram"]:
@@ -268,7 +275,7 @@ def styles(route):
             files.append("arcade-games.css")
         if slug in ["connect-four", "reversi"]:
             files.append("board-games.css")
-        if route.startswith("games/"):
+        if route.startswith("games/") and route != "games/leaderboards":
             files.append("game-play-shell.css")
         if slug == "go":
             files.append("go.css")
@@ -306,7 +313,9 @@ def source_files(route):
         )
     if route == "profile":
         files.add("src/tools/profile.js")
-    if route == "games" or route.startswith("games/"):
+    if route == "games/leaderboards":
+        files.add("src/games/hub-leaderboards.js")
+    elif route == "games" or route.startswith("games/"):
         files.add(
             "src/games/xiangqi.js"
             if route == "games/xiangqi"

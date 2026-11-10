@@ -17,14 +17,7 @@
       ><span aria-hidden="true">◉</span> <span data-hub-coins>—</span>
       <span>Coins</span></a
     >
-    <button
-      type="button"
-      class="button secondary"
-      data-hub-theme
-      aria-pressed="false"
-    >
-      Light theme
-    </button>
+    ${theme}
     <nav class="filter-bar" id="game-filters" aria-label="Game categories">
       <button class="filter active" data-game-filter="all" aria-pressed="true">
         All games
@@ -46,32 +39,100 @@
       >
     </nav>
   </header>
-  <div class="hub-front">
-    <section
-      class="hub-feature panel"
-      aria-labelledby="hub-feature-title"
-      tabindex="0"
-    >
-      <div class="eyebrow">FEATURED GAMES</div>
-      <h1 id="hub-feature-title">Games lobby</h1>
-      ${featured}
+  <section
+    class="hub-feature panel"
+    aria-labelledby="hub-feature-title"
+    aria-roledescription="carousel"
+  >
+    <div class="hub-feature-heading">
+      <div>
+        <div class="eyebrow">FEATURED GAMES</div>
+        <h1 id="hub-feature-title">Games lobby</h1>
+      </div>
       <div class="hub-carousel-controls">
         <button
           type="button"
-          class="button secondary"
+          class="button secondary hub-icon"
+          data-hub-rotate
+          aria-label="Pause slideshow"
+          title="Pause slideshow"
+        >
+          <span aria-hidden="true">Ⅱ</span>
+        </button>
+        <button
+          type="button"
+          class="button secondary hub-icon"
           data-hub-slide="-1"
           aria-label="Previous featured game"
         >
           ←
         </button>
-        <span data-hub-slide-count aria-live="polite">1 / 4</span>
+        <span data-hub-slide-count aria-live="off" aria-atomic="true"
+          >1 / 4</span
+        >
         <button
           type="button"
-          class="button secondary"
+          class="button secondary hub-icon"
           data-hub-slide="1"
           aria-label="Next featured game"
         >
           →
+        </button>
+      </div>
+    </div>
+    <div class="hub-slides">${featured}</div>
+  </section>
+  <div class="hub-front">
+    <section class="panel hub-player" aria-labelledby="hub-player-title">
+      <div class="eyebrow">MY ARCADE</div>
+      <h2 id="hub-player-title">Player profile</h2>
+      <div class="hub-player-identity">
+        <span class="hub-avatar" data-hub-avatar aria-hidden="true">G</span>
+        <div>
+          <strong data-hub-player-name>Guest player</strong>
+          <p class="muted small" data-hub-player-source>
+            Guest progress · This device
+          </p>
+        </div>
+      </div>
+      <dl class="hub-player-milestones">
+        <div>
+          <dt>Lobby achievements</dt>
+          <dd data-hub-lobby-count>—</dd>
+        </div>
+        <div data-hub-verified-count-group hidden>
+          <dt>Verified milestones</dt>
+          <dd data-hub-verified-count>—</dd>
+        </div>
+      </dl>
+      <div class="hub-player-badge">
+        <span aria-hidden="true">✦</span>
+        <div>
+          <strong data-hub-highlight>Top scoring badge</strong>
+          <p class="muted small" data-hub-highlight-detail>
+            No scoring badge unlocked yet.
+          </p>
+        </div>
+      </div>
+      <p data-hub-profile-status role="status" class="small muted"></p>
+      <div class="hub-feature-actions">
+        <button
+          type="button"
+          class="button secondary"
+          data-sign-in
+          data-hub-profile-sign-in
+        >
+          Sign in with Google
+        </button>
+        <a
+          class="button secondary"
+          href="/profile/"
+          data-hub-profile-link
+          hidden
+          >My Profile</a
+        >
+        <button type="button" class="text-link" data-hub-profile-retry hidden>
+          Retry
         </button>
       </div>
     </section>
@@ -87,27 +148,17 @@
       <p data-hub-sync role="status" class="small"></p>
     </section>
   </div>
-  <section class="game-continue panel" aria-labelledby="continue-title">
+  <section class="panel hub-rank-overview" aria-labelledby="hub-rank-title">
     <div class="game-section-heading">
       <div>
-        <div class="eyebrow">RIGHT WHERE YOU LEFT OFF</div>
-        <h2 id="continue-title">Continue playing</h2>
+        <div class="eyebrow">RESULTS AND PLAY TIME</div>
+        <h2 id="hub-rank-title">Leaderboard highlights</h2>
       </div>
-      <div class="game-save-actions">
-        <button class="button secondary" id="games-sync">Refresh saves</button>
-        <button class="text-link" id="games-clear">Clear saved games</button>
-      </div>
+      <a class="button secondary" href="/games/leaderboards/"
+        >View all leaderboards</a
+      >
     </div>
-    <p id="game-save-status" role="status">Loading local saves…</p>
-    <div id="game-saves">
-      <p>No unfinished games yet. Pick a game above.</p>
-    </div>
-    <button class="button secondary" id="games-more" hidden>
-      Load more saves
-    </button>
-    <button class="button secondary" id="games-copy-guest" hidden>
-      Copy guest saves to account
-    </button>
+    <div class="hub-rank-previews">${quick_ranks}</div>
   </section>
   <section id="games-library" aria-labelledby="games-library-heading">
     <div class="game-library-heading">
@@ -129,38 +180,38 @@
       No games found. Try another search.
     </p>
   </section>
-  <section class="panel hub-rank" aria-labelledby="hub-rank-title">
-    <div class="eyebrow">RESULTS AND PLAY TIME</div>
-    <h2 id="hub-rank-title">Game records</h2>
-    <div class="hub-rank-controls">
-      <label>Game<select data-hub-rank-game></select></label>
-      <label
-        >Difficulty or time control<select data-hub-rank-mode></select
-      ></label>
-      <label
-        >Leaderboard<select data-hub-rank-kind>
-          <option value="verified">Verified</option>
-          <option value="local">On this device</option>
-          <option value="demo">Sample leaderboard</option>
-        </select></label
-      >
-    </div>
-    <p data-hub-rank-stats></p>
-    <p data-hub-rank-status role="status" class="muted"></p>
-    <div data-hub-rank-results></div>
-    <p data-hub-rank-me></p>
-    <div class="hub-rank-actions">
-      <button type="button" class="button secondary" data-hub-rank-more hidden>
-        Show Top 50
-      </button>
+  <section
+    class="game-continue panel"
+    aria-labelledby="continue-title"
+    data-saves-expanded="false"
+  >
+    <div class="game-section-heading">
+      <h2 id="continue-title">Continue playing</h2>
       <button
-        type="button"
         class="button secondary"
-        data-hub-rank-refresh
-        hidden
+        type="button"
+        id="game-manage-saves"
+        aria-expanded="false"
+        aria-controls="game-save-management"
       >
-        Refresh leaderboard
+        Manage saves
       </button>
+    </div>
+    <div id="game-saves">
+      <p>No unfinished games yet. Pick a game above.</p>
+    </div>
+    <div id="game-save-management" hidden>
+      <p id="game-save-status" role="status">Loading local saves…</p>
+      <div class="game-save-actions">
+        <button class="button secondary" id="games-sync">Refresh saves</button>
+        <button class="button secondary" id="games-more" hidden>
+          Load more saves
+        </button>
+        <button class="button secondary" id="games-copy-guest" hidden>
+          Copy guest saves to account
+        </button>
+        <button class="text-link" id="games-clear">Clear saved games</button>
+      </div>
     </div>
   </section>
   <section class="panel hub-achievements" aria-labelledby="hub-badge-title">

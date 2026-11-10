@@ -435,10 +435,11 @@ pages["credits"] = (
     "Tools",
 )
 
-from games_view import directory as game_directory, game_page
+from games_view import directory as game_directory, game_page, leaderboards
 
 GAMES = json.loads((ROOT / "data/games.json").read_text(encoding="utf-8"))
 pages["games"] = ("Games", game_directory(GAMES), "Games")
+pages["games/leaderboards"] = ("All leaderboards", leaderboards(GAMES), "Games")
 for game in GAMES:
     pages["games/" + game["slug"]] = (game["name"], game_page(game), "Games")
 

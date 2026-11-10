@@ -386,5 +386,133 @@
   "m_b7b055576c8f": {
     "en": "Private game progress and personal bests save on this device. Signed-in account saves sync privately to Supabase, isolated from guest saves. Guest saves copy to an account only when requested. New signed-in games that support rankings automatically submit eligible completed results. Guests can play without signing in; old local results are not uploaded to rankings. Connect Four and Reversi are local-only matches. Their computer opponents run in a browser worker, and local two-player matches use the same device. Public runs send a versioned action replay to Supabase for verification and publish your current profile name, avatar, result and date. Replays are not public and are not retained after verification. Paused, hidden or restored games continue privately and cannot enter the board. Pending completed submissions stay on this device for retry, isolated by account. Leaderboards are casual and cannot prevent automated play. Game saves can be deleted in Games. Sound defaults to 35% and starts only after a game gesture; mute, volume and Effects preferences remain on this device. Snake and Brick Breaker show the current rules on public leaderboards. Legacy positions can still be finished as private games. Profile pages include qualifying game bests and unlocked milestone badges with dates. Only server-verified Public results count toward the 30 milestones and personal progress; locked milestone progress is visible only to its owner. Historical badges use only provable results.",
     "zh-Hant": "私人遊戲進度和個人最佳儲存在此裝置。已登入的帳號存檔會私下同步至 Supabase，與訪客存檔隔離。訪客存檔只在明確要求時複製至帳號。登入後，支援排名的新遊戲會自動提交合格的完成結果。訪客無須登入即可遊玩；舊本機成績不會上傳至排行榜。四子棋與黑白棋只在本機對局；電腦對手在瀏覽器 Worker 中執行，本機雙人則共用同一裝置。公開對局會將附版本的操作重播傳至 Supabase 驗證，並公開目前的個人檔案名稱、頭像、成績及日期。重播不公開，且驗證後不保留。暫停、頁面隱藏或從存檔恢復的遊戲會以私人方式繼續，不能進入排行榜。已完成但待提交的結果依帳號隔離，保留在此裝置供重試。排行榜屬休閒性質，無法防止自動遊玩。可在 Games 刪除存檔。音量預設為 35%，只在遊戲操作後啟用；靜音、音量與效果偏好只保留在此裝置。貪食蛇和打磚塊的公開排行榜採用目前的規則。舊版存檔仍可在私人遊戲中續玩。個人檔案包含合格的遊戲最佳成績，以及附解鎖日期的里程碑徽章。只有經伺服器驗證的公開成績會計入 30 項里程碑及個人進度；尚未解鎖的進度僅本人可見。歷史徽章只根據可證明的結果補發。"
+  },
+  "m_2f740f4cf688": {
+    "en": "Switch to light theme",
+    "zh-Hant": "切換為淺色主題"
+  },
+  "m_8abe9e0ba6b6": {
+    "en": "Switch to dark theme",
+    "zh-Hant": "切換為深色主題"
+  },
+  "m_2e5fb8406239": {
+    "en": "Pause slideshow",
+    "zh-Hant": "暫停輪播"
+  },
+  "m_3bb11a6c36f8": {
+    "en": "Play slideshow",
+    "zh-Hant": "播放輪播"
+  },
+  "m_b8a7e24e9549": {
+    "en": "slide",
+    "zh-Hant": "投影片"
+  },
+  "m_7565e4480e56": {
+    "en": "carousel",
+    "zh-Hant": "輪播"
+  },
+  "m_563370a7b0ef": {
+    "en": "Multiplayer",
+    "zh-Hant": "多人"
+  },
+  "m_b22ad3f2476d": {
+    "en": "My best",
+    "zh-Hant": "我的最佳"
+  },
+  "m_bb62e06e4c5b": {
+    "en": "My verified best",
+    "zh-Hant": "我的已驗證最佳"
+  },
+  "m_f61c40cb197d": {
+    "en": "My best on this device",
+    "zh-Hant": "我的本機最佳"
+  },
+  "m_c69c9d6b2d3b": {
+    "en": "Games started",
+    "zh-Hant": "開局次數"
+  },
+  "m_54eee5386507": {
+    "en": "View leaderboard",
+    "zh-Hant": "查看榜單"
+  },
+  "m_4bdda07c1b34": {
+    "en": "MY ARCADE",
+    "zh-Hant": "我的遊戲大廳"
+  },
+  "m_821916e7c8fa": {
+    "en": "Player profile",
+    "zh-Hant": "玩家資料"
+  },
+  "m_ffd3cd6a2c0f": {
+    "en": "Guest player",
+    "zh-Hant": "訪客玩家"
+  },
+  "m_01cc359cc1fe": {
+    "en": "Verified milestones",
+    "zh-Hant": "已驗證里程碑"
+  },
+  "m_6fdcf6487f17": {
+    "en": "Top scoring badge",
+    "zh-Hant": "代表計分徽章"
+  },
+  "m_dfc3195f7ca8": {
+    "en": "No scoring badge unlocked yet.",
+    "zh-Hant": "尚未解鎖計分徽章。"
+  },
+  "m_94f666794667": {
+    "en": "Manage saves",
+    "zh-Hant": "管理存檔"
+  },
+  "m_446a066840b5": {
+    "en": "Leaderboard highlights",
+    "zh-Hant": "排行榜速覽"
+  },
+  "m_e323cdfed998": {
+    "en": "View all leaderboards",
+    "zh-Hant": "查看全部榜單"
+  },
+  "m_dbabeda3cda4": {
+    "en": "All leaderboards",
+    "zh-Hant": "全部榜單"
+  },
+  "m_99f378d55bb2": {
+    "en": "Game leaderboards",
+    "zh-Hant": "遊戲榜單"
+  },
+  "m_260735e598d7": {
+    "en": "Leaderboard source",
+    "zh-Hant": "榜單來源"
+  },
+  "m_208ef1d7573b": {
+    "en": "Leaderboard unavailable.",
+    "zh-Hant": "暫時無法讀取榜單。"
+  },
+  "m_d1e28d90bebc": {
+    "en": "AI level {0} defeated",
+    "zh-Hant": "擊敗 AI 第 {0} 級"
+  },
+  "m_f7f798da97bf": {
+    "en": "{0} wins · {1}",
+    "zh-Hant": "{0} 勝 · {1}"
+  },
+  "m_10c9acabd4dc": {
+    "en": "Loading player profile…",
+    "zh-Hant": "正在載入玩家資料…"
+  },
+  "m_a615b19c0229": {
+    "en": "No verified record yet",
+    "zh-Hant": "尚無已驗證紀錄"
+  },
+  "m_b732d9544f05": {
+    "en": "No saved best yet",
+    "zh-Hant": "尚無本機最佳"
+  },
+  "m_991bfa015514": {
+    "en": "My Profile",
+    "zh-Hant": "我的個人檔案"
+  },
+  "m_942087cc2d41": {
+    "en": "Retry",
+    "zh-Hant": "重試"
   }
 }

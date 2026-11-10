@@ -356,11 +356,23 @@ def preview(kind):
     )
 
 
+FEATURED_GAMES = ("snake", "brick-breaker", "xiangqi", "2048")
+
+
+def category(game):
+    if game["slug"] in ("pong", "memory-match"):
+        return "Casual"
+    return "Action" if game["category"] == "Arcade" else game["category"]
+
+
+def play_tags(game):
+    modes = ["Solo"] if game["slug"] != "pong" else []
+    if game["category"] == "Board" or game["slug"] == "pong":
+        modes.append("Multiplayer")
+    return "".join(f"<span>{label}</span>" for label in [*modes, category(game)])
+
+
 def directory(games):
-    def category(game):
-        if game["slug"] in ("pong", "memory-match"):
-            return "Casual"
-        return "Action" if game["category"] == "Arcade" else game["category"]
 
     cards = "".join(
         render_template(
@@ -395,13 +407,39 @@ def directory(games):
             "games/featured.html",
             slug=slug,
             name=by_slug[slug]["name"],
+            play_tags=play_tags(by_slug[slug]),
             description=by_slug[slug]["description"],
             preview=preview(by_slug[slug]["preview"]),
             hidden="" if index == 0 else "hidden",
         )
-        for index, slug in enumerate(("snake", "brick-breaker", "xiangqi", "2048"))
+        for index, slug in enumerate(FEATURED_GAMES)
     )
-    return render_template("games/directory.html", featured=featured, cards=cards)
+    quick_ranks = "".join(
+        render_template("games/rank-preview.html", slug=slug, name=by_slug[slug]["name"])
+        for slug in FEATURED_GAMES
+    )
+    return render_template(
+        "games/directory.html",
+        featured=featured,
+        cards=cards,
+        quick_ranks=quick_ranks,
+        theme=render_template("games/theme.html"),
+    )
+
+
+def leaderboards(games):
+    cards = "".join(
+        render_template(
+            "games/rank-card.html",
+            slug=g["slug"],
+            name=g["name"],
+            play_tags=play_tags(g),
+        )
+        for g in games
+    )
+    return render_template(
+        "games/leaderboards.html", cards=cards, theme=render_template("games/theme.html")
+    )
 
 
 def game_page(game):

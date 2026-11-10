@@ -19,27 +19,56 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
         route.fulfill({
           contentType: "text/javascript",
           body: `export function createClient(){return {
-          auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},
-          rpc:async(name,args)=>name==='get_game_leaderboard'
-            ? (await fetch('https://fixture.supabase.co/rpc/'+name,{
+          auth:{getSession:async()=>({data:{session:localStorage.hubFixtureUser?{user:{id:localStorage.hubFixtureUser}}:null}}),onAuthStateChange(){}},
+          from:()=>({select:()=>({order:async()=>({data:[]})})}),
+          rpc:async(name,args)=>{
+            const user=localStorage.hubFixtureUser;
+            if(name.includes('leaderboard')) {
+              const response=await fetch('https://fixture.supabase.co/rpc/'+name,{
                 method:'POST',body:JSON.stringify(args)
-              })).json().then(data=>({data,error:null}))
-            : {data:[],error:null}
+              });
+              return response.ok ? {data:await response.json()} : {error:{message:'Fixture unavailable'}};
+            }
+            if(name==='ensure_my_profile') return {data:{public_id:user,nickname:user==='a'?'Player A':'Player B',avatar_kind:'none'}};
+            if(name==='game_hub_snapshot') return {data:{generatedAt:1,day:'2026-11-10',featured:'snake',balance:15,owned:['classic'],skin:'classic',today:[],badges:['score-1000'],stats:{snake:{plays:8,activeMs:2000}}}};
+            if(name==='get_my_game_progress') return {data:{unlocks:[],progress:{},game_count:0,result_count:0}};
+            if(name==='get_public_profile') return {data:{public_id:user,nickname:user==='a'?'Player A':'Player B',
+              game_best_scores:user==='a'?[{game:'snake',version:1,difficulty:'normal',score:9999},{game:'snake',version:2,difficulty:'normal',score:720}]:[],
+              xiangqi_stats:user==='a'?[{rules_version:1,time_control:'10+5',wins:3,played:5}]:[],
+              game_achievements:user==='a'?[{achievement_id:'snake-3'},{achievement_id:'brick-breaker-2'}]:[]
+            }};
+            return {data:[],error:null};
+          }
         }}`,
         }),
     );
-    await context.route("https://*.supabase.co/**", (route) => {
-      if (route.request().url().endsWith("/rpc/get_game_leaderboard")) {
-        rankingRequests.push(route.request().postDataJSON());
-        return route.fulfill({
-          headers: { "Access-Control-Allow-Origin": "*" },
-          json: { version: 2, top: [], me: null },
-        });
-      }
-      return route.abort();
+    let failXiangqi = true;
+    await context.route("https://fixture.supabase.co/**", (route) => {
+      const args = route.request().postDataJSON();
+      rankingRequests.push(args);
+      const headers = { "Access-Control-Allow-Origin": "*" };
+      if (args.time_control && failXiangqi)
+        return route.fulfill({ headers, status: 503 });
+      return route.fulfill({
+        headers,
+        json: {
+          version:
+            args.game === "snake" ? 2 : args.game === "brick-breaker" ? 3 : 1,
+          top:
+            args.game === "snake"
+              ? Array.from({ length: 15 }, (_, i) => ({
+                  rank: i + 1,
+                  nickname: "Verified player " + (i + 1),
+                  score: 900 - i * 10,
+                }))
+              : [],
+          me: args.game === "snake" ? { rank: 11, score: 800 } : null,
+        },
+      });
     });
     const hub = await context.newPage();
     hub.on("pageerror", (error) => errors.push(error.message));
+    await hub.setViewportSize({ width: 360, height: 640 });
     await hub.goto(base + "/games/");
     await hub.waitForSelector("#game-saves .game-empty-state");
     await hub.waitForFunction(
@@ -86,7 +115,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
         .getAttribute("data-hub-featured"),
       "brick-breaker",
     );
-    await hub.locator(".hub-feature").focus();
+    assert.equal(
+      await hub.locator("[data-hub-rotate]").getAttribute("aria-label"),
+      "Play slideshow",
+    );
+    await hub.locator("[data-hub-rotate]").focus();
     await hub.keyboard.press("ArrowRight");
     assert.equal(
       await hub
@@ -104,25 +137,58 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     await hub.click("[data-hub-theme]");
     await hub.reload();
     await hub.waitForSelector("body.hub-light");
-    await hub.click("[data-hub-theme]");
-    await hub.selectOption("[data-hub-rank-game]", "snake");
-    await hub.waitForFunction(
-      () =>
-        document.querySelector("[data-hub-rank-status]").textContent ===
-        "No verified results yet.",
+    assert.equal(
+      await hub.locator("[data-hub-theme]").getAttribute("aria-label"),
+      "Switch to dark theme",
     );
-    assert.deepEqual(rankingRequests, [
-      { game: "snake", difficulty: "normal" },
-    ]);
-    await hub.selectOption("[data-hub-rank-kind]", "demo");
-    await hub.waitForSelector("[data-hub-rank-results] tbody tr");
+    await hub.click("[data-hub-theme]");
+    const snakePreview = hub.locator('[data-rank-preview="snake"]');
+    const xiangqiPreview = hub.locator('[data-rank-preview="xiangqi"]');
+    await snakePreview.scrollIntoViewIfNeeded();
+    await snakePreview.locator("li").last().waitFor();
+    assert.equal(await snakePreview.locator("li").count(), 3);
+    await xiangqiPreview.scrollIntoViewIfNeeded();
+    await xiangqiPreview.locator("[data-preview-retry]").waitFor();
+    failXiangqi = false;
+    await xiangqiPreview.locator("[data-preview-retry]").click();
+    await xiangqiPreview.getByText("No verified results yet.").waitFor();
+    assert.equal(await hub.locator(".hub-rank-overview select").count(), 0);
+
+    const boards = await context.newPage();
+    boards.on("pageerror", (error) => errors.push(error.message));
+    await boards.setViewportSize({ width: 360, height: 800 });
+    const countBeforeDirectory = rankingRequests.length;
+    await boards.goto(base + "/games/leaderboards/");
+    await boards.waitForSelector(
+      '[data-games-leaderboards][data-ready="true"]',
+    );
+    assert.equal(await boards.locator("[data-rank-game]").count(), 15);
+    assert.equal(rankingRequests.length, countBeforeDirectory);
+    await boards.locator('[data-rank-game="snake"]').click();
+    await boards.waitForSelector("[data-hub-rank-results] tbody tr");
+    assert.match(boards.url(), /game=snake&mode=normal&board=verified/);
+    assert.equal(
+      await boards.locator("[data-hub-rank-results] tbody tr").count(),
+      10,
+    );
+    await boards.click("[data-hub-rank-more]");
+    assert.equal(
+      await boards.locator("[data-hub-rank-results] tbody tr").count(),
+      15,
+    );
     assert.match(
-      await hub.locator("[data-hub-rank-status]").textContent(),
+      await boards.locator("[data-hub-rank-me]").textContent(),
+      /#11/,
+    );
+    await boards.click('[data-board-kind="demo"]');
+    await boards.waitForSelector("[data-hub-rank-results] tbody tr");
+    assert.match(
+      await boards.locator("[data-hub-rank-status]").textContent(),
       /Fictional/,
     );
-    await hub.selectOption("[data-hub-rank-kind]", "local");
+    await boards.click('[data-board-kind="local"]');
     assert.equal(
-      await hub.locator("[data-hub-rank-results] tbody tr").count(),
+      await boards.locator("[data-hub-rank-results] tbody tr").count(),
       0,
     );
 
@@ -136,6 +202,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     await play.click("#game-pause");
     await play.waitForSelector("#game-resume:visible");
     await play.waitForTimeout(700);
+    await hub.waitForSelector("#game-saves .saved-game-row");
+    assert.equal(await hub.locator("#game-save-management").isVisible(), false);
+    await hub.click("#game-manage-saves");
+    assert.equal(await hub.locator("#game-save-management").isVisible(), true);
+    await hub.click("#game-manage-saves");
     await play.reload();
     await play.waitForSelector("#game-restore:visible");
     await play.click("#game-restore");
@@ -147,19 +218,30 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
         .querySelector(".hub-local-score [role=status]")
         .textContent.includes("Saved"),
     );
-    await hub.waitForFunction(() =>
+    await boards.waitForFunction(() =>
       document
         .querySelector("[data-hub-rank-results]")
         .textContent.includes("測試玩家"),
     );
     assert.match(
-      await hub.locator("[data-hub-rank-stats]").textContent(),
+      await boards.locator("[data-hub-rank-stats]").textContent(),
       /1 starts/,
     );
     assert(Number(await hub.locator("[data-hub-coins]").textContent()) >= 15);
     assert.match(
       await hub.locator("[data-hub-badges] article").first().textContent(),
       /Unlocked/,
+    );
+    await hub.waitForFunction(() =>
+      document
+        .querySelector('[data-hub-featured="snake"] [data-hub-best]')
+        .textContent.endsWith("pts"),
+    );
+    assert.equal(
+      await hub
+        .locator('[data-hub-featured="snake"] [data-hub-plays]')
+        .textContent(),
+      "1",
     );
 
     await hub.evaluate(async () => {
@@ -173,7 +255,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
           activeMs: 1000,
           started: true,
           finished: true,
-          score: 0,
+          score: i === 0 ? 1001 : 0,
         });
     });
     const neon = hub.locator('[data-hub-skins] [data-skin="neon"] button');
@@ -206,10 +288,45 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     );
     await play.waitForSelector('[data-game][data-snake-skin="neon"]');
     assert.equal(
-      await hub.locator("[data-hub-rank-results] tbody tr").count(),
+      await boards.locator("[data-hub-rank-results] tbody tr").count(),
       1,
       "sample rows never enter local board",
     );
+    assert.equal(
+      await hub.locator("[data-hub-highlight]").textContent(),
+      "Score chaser",
+    );
+
+    await hub.evaluate(async () => {
+      const { createRecordStore } =
+        await import("/tool-scripts/record-store.js");
+      const { create, validateSave } = await import("/game-scripts/engine.js");
+      const saves = createRecordStore("game", validateSave);
+      for (let i = 0; i < 4; i++)
+        await saves.put(
+          {
+            game: "2048",
+            difficulty: "classic",
+            state: create("2048", "classic", i + 1),
+            elapsed: 0,
+          },
+          crypto.randomUUID(),
+          "guest",
+        );
+    });
+    await hub.waitForSelector("#game-saves [data-save-extra]", {
+      state: "attached",
+    });
+    assert.equal(
+      await hub.locator("#game-saves .saved-game-row:visible").count(),
+      3,
+    );
+    await hub.click("#game-manage-saves");
+    assert.equal(
+      await hub.locator("#game-saves .saved-game-row:visible").count(),
+      4,
+    );
+    await hub.click("#game-manage-saves");
 
     await hub.goto(base + "/zh-hant/games/");
     await hub.waitForFunction(
@@ -220,9 +337,124 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       await hub.locator("[data-hub-tasks]").textContent(),
       /完成兩款不同遊戲/,
     );
+    assert.match(
+      await hub.locator("[data-hub-theme]").getAttribute("aria-label"),
+      /切換為淺色主題/,
+    );
+    assert.match(
+      await hub
+        .locator('[data-hub-featured="snake"] a')
+        .last()
+        .getAttribute("href"),
+      /^\/zh-hant\/games\/leaderboards\//,
+    );
+    await boards.goto(
+      base + "/zh-hant/games/leaderboards/?game=pong&board=verified",
+    );
+    await boards.waitForSelector(
+      '[data-board-kind="local"][aria-pressed="true"]',
+    );
+    assert.equal(
+      await boards.locator('[data-board-kind="verified"]').count(),
+      0,
+    );
+    assert.equal(await boards.locator("[data-rank-game]").count(), 15);
+
+    await hub.evaluate(() => localStorage.setItem("hubFixtureUser", "a"));
+    await hub.goto(base + "/games/");
+    await hub.getByText("Player A", { exact: true }).last().waitFor();
+    await hub.waitForFunction(
+      () =>
+        document.querySelector('[data-hub-featured="snake"] [data-hub-best]')
+          .textContent === "720 pts",
+    );
+    assert.equal(
+      await hub
+        .locator('[data-hub-featured="xiangqi"] [data-hub-best]')
+        .textContent(),
+      "3 wins · 10+5",
+    );
+    assert.equal(
+      await hub.locator("[data-hub-verified-count]").textContent(),
+      "2 / 30",
+    );
+    assert.equal(
+      await hub.locator("[data-hub-highlight]").textContent(),
+      "Keep it bouncing",
+    );
+    await hub.evaluate(() => localStorage.setItem("hubFixtureUser", "b"));
+    await hub.reload();
+    await hub.waitForFunction(
+      () =>
+        document.querySelector('[data-hub-featured="snake"] [data-hub-best]')
+          .textContent === "No verified record yet",
+    );
+    assert.equal(
+      await hub.locator("[data-hub-highlight-detail]").textContent(),
+      "No scoring badge unlocked yet.",
+    );
+
+    const auto = await context.newPage();
+    await auto.emulateMedia({ reducedMotion: "no-preference" });
+    await auto.setViewportSize({ width: 1366, height: 768 });
+    await auto.clock.install();
+    await auto.goto(base + "/games/");
+    await auto.waitForSelector('[data-games-directory][data-ready="true"]');
+    await auto.clock.fastForward(7300);
+    await auto.waitForSelector('[data-hub-featured="brick-breaker"]:visible');
+    await auto.focus("[data-hub-rotate]");
+    await auto.clock.fastForward(8000);
+    assert.equal(
+      await auto.locator('[data-hub-featured="brick-breaker"]').isVisible(),
+      true,
+    );
+    await auto.keyboard.press("Enter");
+    await auto.clock.fastForward(8000);
+    await auto.waitForSelector('[data-hub-featured="xiangqi"]:visible');
+    await auto.locator(".hub-feature").dispatchEvent("mouseenter");
+    await auto.clock.fastForward(8000);
+    assert.equal(
+      await auto.locator('[data-hub-featured="xiangqi"]').isVisible(),
+      true,
+    );
+    await auto.locator(".hub-feature").dispatchEvent("mouseleave");
+    await auto.evaluate(() => {
+      Object.defineProperty(document, "hidden", {
+        configurable: true,
+        value: true,
+      });
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
+    await auto.clock.fastForward(8000);
+    assert.equal(
+      await auto.locator('[data-hub-featured="xiangqi"]').isVisible(),
+      true,
+    );
+    await auto.evaluate(() => {
+      delete document.hidden;
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
+    await auto.evaluate(() => {
+      const carousel = document.querySelector(".hub-feature");
+      carousel.dispatchEvent(
+        Object.assign(new Event("touchstart"), {
+          touches: [{ clientX: 200, clientY: 80 }],
+        }),
+      );
+      carousel.dispatchEvent(
+        Object.assign(new Event("touchend"), {
+          changedTouches: [{ clientX: 90, clientY: 81 }],
+        }),
+      );
+    });
+    await auto.waitForSelector('[data-hub-featured="2048"]:visible');
+    assert.equal(
+      await auto.locator("[data-hub-rotate]").getAttribute("aria-label"),
+      "Play slideshow",
+    );
     assert.deepEqual(errors, []);
     console.log(
-      "PASS game lobby layouts, bilingual catalog, carousel, lazy rankings, resume count, local scores and cross-tab skin selection",
+      "PASS lobby layouts and motion, verified and guest profiles, leaderboard previews and deep links, resume count, local scores and cross-tab skins",
     );
   } finally {
     await browser.close();

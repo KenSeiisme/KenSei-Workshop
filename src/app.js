@@ -1268,6 +1268,10 @@
     import("/game-scripts/games.js").catch(() =>
       toast(uiMsg("Game files could not load. Reload this page to retry.")),
     );
+  if (document.querySelector("[data-games-leaderboards]"))
+    import("/game-scripts/hub-leaderboards.js").catch(() =>
+      toast(uiMsg("Leaderboard unavailable. Refresh to retry.")),
+    );
   initAuth().finally(() => {
     window.KenseiWorkspace.ready = true;
     window.dispatchEvent(new Event("workspace-ready"));
