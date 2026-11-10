@@ -18,7 +18,6 @@
   const config = window.KENSEI_CONFIG || {};
   let client = null,
     user = null,
-    toastTimeout,
     storageWarning = false,
     authReady = false,
     authStarting = false,
@@ -52,13 +51,7 @@
   }
   function toast(message) {
     window.dispatchEvent(new CustomEvent("tool-toast", { detail: message }));
-    const node = $(".toast");
-    uiText(node, uiFrom(message));
-    node.hidden = false;
-    clearTimeout(toastTimeout);
-    toastTimeout = setTimeout(() => {
-      node.hidden = true;
-    }, 5500);
+    window.KenseiNotify(uiFrom(message));
   }
   const escape = (s) =>
     String(s ?? "").replace(

@@ -9,15 +9,7 @@
   gap: 24px;
 }
 
-.hub-light {
-  background: #f5effb;
-}
-
-.hub-light .footer {
-  background: var(--bg);
-}
-
-.hub-light .game-hub {
+:root[data-site-theme="light"] .game-hub {
   color-scheme: light;
   --text: #241c30;
   --muted: #554864;
@@ -47,7 +39,7 @@
 
 .hub-bar {
   display: grid;
-  grid-template-columns: auto minmax(100px, 1fr) repeat(3, auto);
+  grid-template-columns: auto minmax(100px, 1fr) repeat(2, auto);
   align-items: center;
   gap: 10px 16px;
   padding: 13px;
@@ -237,7 +229,7 @@
   margin-top: 14px;
 }
 
-.game-hub :is(.hub-icon, .hub-theme).button {
+.game-hub .hub-icon.button {
   display: inline-grid;
   place-items: center;
   width: 44px;
@@ -506,17 +498,17 @@
   background: hsl(var(--snake-hue) 84% 80%);
 }
 
-.hub-light .game-card,
-.hub-light .game-hub select,
-.hub-light .game-hub .search-box,
-.hub-light .game-hub .secondary,
-.hub-light .game-hub .filter {
+:root[data-site-theme="light"] .game-card,
+:root[data-site-theme="light"] .game-hub select,
+:root[data-site-theme="light"] .game-hub .search-box,
+:root[data-site-theme="light"] .game-hub .secondary,
+:root[data-site-theme="light"] .game-hub .filter {
   color: var(--text);
   border-color: var(--hub-edge);
   background: var(--hub-panel);
 }
 
-.hub-light .game-hub .filter.active {
+:root[data-site-theme="light"] .game-hub .filter.active {
   background: var(--hub-soft);
   color: var(--hub-accent);
 }
@@ -531,7 +523,7 @@
   }
 
   .hub-bar {
-    grid-template-columns: minmax(0, 1fr) repeat(3, auto);
+    grid-template-columns: minmax(0, 1fr) repeat(2, auto);
     gap: 8px;
   }
 
@@ -554,8 +546,7 @@
     padding: 8px;
   }
 
-  .hub-bar .hub-wallet,
-  .hub-bar [data-hub-theme] {
+  .hub-bar .hub-wallet {
     font-size: 0.75rem;
     padding-inline: 8px;
   }

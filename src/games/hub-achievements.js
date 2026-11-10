@@ -3,7 +3,6 @@ import { mountAchievements } from "./achievements.js";
 import { patchMarkup } from "./dom.js";
 import { LOBBY_BADGES } from "./hub-model.js";
 import { hubOwner, readHub, syncHub } from "./hub-store.js";
-import { mountHubTheme } from "./hub-theme.js";
 import { uiFrom, uiHtml, uiMsg } from "../site/ui.js";
 
 const page = document.querySelector("[data-games-achievements]");
@@ -13,7 +12,6 @@ let snapshot;
 let owner = hubOwner();
 let generation = 0;
 
-mountHubTheme(page.querySelector("[data-hub-theme]"));
 mountAchievements();
 
 function paint() {

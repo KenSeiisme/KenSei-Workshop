@@ -63,7 +63,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
         headers,
         json: {
           version:
-            args.game === "snake" ? 2 : args.game === "brick-breaker" ? 3 : 1,
+            args.game === "snake" ? 2 : args.game === "brick-breaker" ? 4 : 1,
           top:
             args.game === "snake"
               ? Array.from({ length: 15 }, (_, i) => ({
@@ -144,14 +144,19 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     await hub.fill("#game-search", "");
     await hub.click('[data-game-filter="all"]');
     assert.equal(await hub.locator("[data-game-card]:visible").count(), 15);
-    await hub.click("[data-hub-theme]");
+    await hub.click("[data-site-theme-toggle]");
     await hub.reload();
-    await hub.waitForSelector("body.hub-light");
+    await hub.waitForSelector('html[data-site-theme="light"]');
     assert.equal(
-      await hub.locator("[data-hub-theme]").getAttribute("aria-label"),
+      await hub.locator("[data-site-theme-toggle]").getAttribute("aria-label"),
       "Switch to dark theme",
     );
-    await hub.click("[data-hub-theme]");
+    await hub.click("[data-site-theme-toggle]");
+    assert(await hub.locator(".header [data-site-theme-toggle]").isVisible());
+    assert.equal(
+      await hub.locator(".hub-bar [data-site-theme-toggle]").count(),
+      0,
+    );
     const snakePreview = hub.locator('[data-rank-preview="snake"]');
     const xiangqiPreview = hub.locator('[data-rank-preview="xiangqi"]');
     const preview = hub.getByRole("tabpanel", { name: "Snake" });
@@ -347,6 +352,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       1,
       "sample rows never enter local board",
     );
+    await hub
+      .locator('[data-site-notices] .toast[data-kind="achievement"]')
+      .filter({ hasText: "Score chaser" })
+      .waitFor();
     assert.equal(
       await hub.locator("[data-hub-highlight]").textContent(),
       "Score chaser",
@@ -393,7 +402,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       /完成兩款不同遊戲/,
     );
     assert.match(
-      await hub.locator("[data-hub-theme]").getAttribute("aria-label"),
+      await hub.locator("[data-site-theme-toggle]").getAttribute("aria-label"),
       /切換為淺色主題/,
     );
     assert.match(
@@ -541,7 +550,27 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
           .querySelector("[data-hub-rotate]")
           .getAttribute("aria-label") === "Pause slideshow",
     );
-    await auto.clock.fastForward(4400);
+    await auto.clock.fastForward(1000);
+    await auto
+      .locator('[data-hub-featured="snake"] .hub-art-shine')
+      .evaluate((node) => {
+        window.__shineReplays = 0;
+        const animate = node.animate.bind(node);
+        node.animate = (...args) => {
+          window.__shineReplays++;
+          return animate(...args);
+        };
+      });
+    for (let i = 0; i < 3; i++) {
+      await auto
+        .locator('[data-hub-featured="snake"] .hub-slide-art')
+        .dispatchEvent("mouseenter");
+      await auto
+        .locator('[data-hub-featured="snake"] .hub-slide-art')
+        .dispatchEvent("mouseleave");
+    }
+    assert.equal(await auto.evaluate(() => window.__shineReplays), 0);
+    await auto.clock.fastForward(3400);
     assert(await auto.locator('[data-hub-featured="snake"]').isVisible());
     await auto.clock.fastForward(1100);
     await auto.waitForSelector('[data-hub-featured="brick-breaker"]:visible');

@@ -43,7 +43,7 @@ for (const seed of [1, 42, 159, 4294967295]) {
   assert(s.powerBricks.every((x, i) => !x || s.bricks[i]));
   validate(s);
 }
-assert.equal(gameVersion("brick-breaker"), 3);
+assert.equal(gameVersion("brick-breaker"), 4);
 assert.equal(gameVersion("snake"), 2);
 assert.equal(dispatchCreate("brick-breaker", "classic", 1, 2).version, 2);
 assert.equal(dispatchCreate("brick-breaker", "classic", 1, 1).version, 1);

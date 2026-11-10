@@ -2,7 +2,8 @@ import { api, esc } from "/tool-scripts/common.js";
 import { ACHIEVEMENTS, liveValue } from "./achievement-catalog.js";
 import { patchMarkup } from "./dom.js";
 import { playCue } from "./audio.js";
-import { uiDate, uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
+import { reserveMilestones } from "./hub-store.js";
+import { uiDate, uiMsg, uiFrom, uiJoin, uiText, uiHtml } from "../site/ui.js";
 
 export { ACHIEVEMENTS };
 export function achievementCard(def, unlocked, progress = 0, live = 0) {
@@ -41,7 +42,6 @@ export function mountAchievements(game = null) {
     current = null,
     publicRun = false,
     visualSignature = "";
-  const shown = new Set();
   function render() {
     const signed = !!api.user;
     if (progressPanel) progressPanel.hidden = !signed;
@@ -156,31 +156,27 @@ export function mountAchievements(game = null) {
     },
     refresh,
     async accepted(result, sessionId) {
-      if (!result.qualified || account !== api.user?.id) return;
-      const unlocked = (result.new_achievements || []).filter(
-        (r) => !shown.has(`${sessionId}:${r.achievement_id}`),
+      const owner = api.user?.id;
+      if (!result.qualified || !owner || account !== owner) return;
+      const candidates = ACHIEVEMENTS.filter(({ id }) =>
+        result.new_achievements?.some((row) => row.achievement_id === id),
       );
-      for (const r of unlocked) shown.add(`${sessionId}:${r.achievement_id}`);
-      if (unlocked.length && panel) {
+      const ids = await reserveMilestones(
+        owner,
+        candidates.map(({ id }) => id),
+      ).catch(() => []);
+      if (ids.length && owner === api.user?.id) {
         playCue("milestone");
-        let note = panel.querySelector(".achievement-notice");
-        if (!note) {
-          note = document.createElement("p");
-          note.className = "achievement-notice";
-          note.setAttribute("role", "status");
-          panel.append(note);
-        }
-        uiText(
-          note,
+        const names = candidates
+          .filter(({ id }) => ids.includes(id))
+          .map(({ name }) => uiFrom(name));
+        window.KenseiNotify?.(
           uiMsg("Milestone unlocked · {0}", [
-            unlocked
-              .map(
-                (r) =>
-                  ACHIEVEMENTS.find((d) => d.id === r.achievement_id)?.name,
-              )
-              .filter(Boolean)
-              .join(" · "),
+            uiJoin(
+              names.flatMap((name, index) => (index ? [" · ", name] : [name])),
+            ),
           ]),
+          { kind: "achievement", key: sessionId },
         );
       }
       await refresh();

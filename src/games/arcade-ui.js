@@ -3,6 +3,7 @@ import { playCue } from "./audio.js";
 import { patchMarkup } from "./dom.js";
 import { SHAPES, BRICK, canPlace } from "./arcade-engine.js";
 import { paintBrick } from "./arcade-paint.js";
+import { FAST_STAGE_NAMES, stageCount } from "./brick-v2-engine.js";
 import { uiMsg, uiText, uiAttr, uiHtml, uiJoin, uiFrom } from "../site/ui.js";
 
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
@@ -153,19 +154,14 @@ export function createArcadeUI(ctx) {
       "aria-label",
       uiMsg(
         "Brick Breaker, stage {0} of {1}, {2} bricks remaining, {3} lives",
-        [
-          s.stage + 1,
-          s.version >= 3 ? 5 : 3,
-          s.bricks.filter(Boolean).length,
-          s.lives,
-        ],
+        [s.stage + 1, stageCount(s), s.bricks.filter(Boolean).length, s.lives],
       ),
     );
     uiText(
       board.querySelector(".brick-stage"),
       uiMsg("Stage {0} / {1} · {2} bricks", [
         s.stage + 1,
-        s.version >= 3 ? 5 : 3,
+        stageCount(s),
         s.bricks.filter(Boolean).length,
       ]),
     );
@@ -179,9 +175,9 @@ export function createArcadeUI(ctx) {
     );
     uiText(
       board.querySelector(".brick-rules"),
-      s.version < 3
+      s.version < 4
         ? uiMsg("Legacy rules · v{0}", [s.version])
-        : uiMsg("Powerups · v3"),
+        : uiFrom(FAST_STAGE_NAMES[s.stage]),
     );
     const buffs = [];
     if (s.wideUntil > s.ticks)

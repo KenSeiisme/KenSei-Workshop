@@ -14,7 +14,7 @@ import {
   shouldCelebrate,
 } from "./motion-state.js";
 import { paintBrick as paintBrickBoard } from "./arcade-paint.js";
-import { BRICK, brickRect } from "./arcade-engine.js";
+import { BRICK, brickBounds } from "./brick-v2-engine.js";
 import { SKINS } from "./hub-model.js";
 import { uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
 
@@ -699,18 +699,19 @@ export function createGamePresenter(root, game) {
       if (state.stage === before.stage)
         changes(before.bricks, state.bricks)
           .filter((i) => !state.bricks[i])
-          .forEach((i) =>
+          .forEach((i) => {
+            const rect = brickBounds(state, i);
             burst(
               world(
                 brickCanvas,
-                (brickRect(i).x + brickRect(i).w / 2) / BRICK.scale,
-                (brickRect(i).y + brickRect(i).h / 2) / BRICK.scale,
+                (rect.x + rect.w / 2) / BRICK.scale,
+                (rect.y + rect.h / 2) / BRICK.scale,
                 640,
                 480,
               ),
               9,
-            ),
-          );
+            );
+          });
       if (ball?.vy < 0 && priorBall?.vy > 0 && ball.y / BRICK.scale > 390) {
         burst(
           world(brickCanvas, ball.x / BRICK.scale, BRICK.paddleY, 640, 480),

@@ -68,9 +68,8 @@ export const ACHIEVEMENTS = [
     game: "brick-breaker",
     field: "won",
     target: 1,
-    name: "Three-stage clear",
-    description:
-      "Clear all three Brick Breaker stages in a qualifying Public run.",
+    name: "Brick Breaker clear",
+    description: "Clear every Brick Breaker stage in a qualifying Public run.",
   },
   {
     id: "block-drop-1",

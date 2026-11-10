@@ -97,10 +97,6 @@ export function mountHubCarousel(carousel) {
     button.addEventListener("click", () =>
       move(Number(button.dataset.hubSlide), true),
     );
-  for (const slide of slides)
-    slide
-      .querySelector(".hub-slide-art")
-      .addEventListener("mouseenter", () => embellish(slide));
   carousel.addEventListener("focusin", (event) => {
     if (!carousel.contains(event.relatedTarget)) setPlaying(false);
   });

@@ -3,7 +3,8 @@ import fs from "node:fs/promises";
 import { featuredGame } from "../../src/games/hub-model.js";
 import { randomUUID } from "node:crypto";
 import { gameDatabase } from "../support/games-fixture.mjs";
-import { create } from "../../src/games/engine.js";
+import { advanceBrick, apply, create } from "../../src/games/engine.js";
+import { makeHandler } from "../../supabase/functions/games-session/index.ts";
 
 const {
   db,
@@ -219,7 +220,7 @@ try {
     const saved = {
       game,
       difficulty,
-      state: create(game, difficulty, 42),
+      state: create(game, difficulty, 42, version),
       name: game,
       elapsed: 0,
     };
@@ -249,6 +250,173 @@ try {
       "select count(*)::int value from workshop_private.game_results",
     ),
     3,
+  );
+  const brickMigration = (await fs.readdir(migrationDir)).find((name) =>
+    name.endsWith("_workshop_brick_v4.sql"),
+  );
+  await db.exec(await fs.readFile(migrationDir + brickMigration, "utf8"));
+  const debut = run("2048");
+  const otherSync = () =>
+    rpc(
+      "sync_game_activity",
+      { expected_user: b, runs: [debut] },
+      "authenticated",
+      b,
+    );
+  assert.deepEqual((await otherSync()).newBadges, [
+    "first-finish",
+    "score-1000",
+  ]);
+  assert.deepEqual((await otherSync()).newBadges, []);
+  const oldV3 = await settle("brick-breaker", "classic", 3, 1030);
+  const oldActive = await admin("start", a, {
+    game: "brick-breaker",
+    difficulty: "classic",
+    rules_version: 3,
+    seed: 105,
+  });
+  const unlockBefore = await value(
+    "select count(*)::int value from workshop_private.game_achievement_unlocks",
+  );
+  const nonBrickBefore = await value(
+    "select count(*)::int value from workshop_private.game_results where game<>'brick-breaker'",
+  );
+  await assert.rejects(
+    as("authenticated", a, () =>
+      db.query("select workshop_private.activate_brick_v4()"),
+    ),
+    /permission denied/,
+  );
+  assert.equal(
+    (
+      await admin("start", a, {
+        game: "brick-breaker",
+        difficulty: "classic",
+        rules_version: 4,
+        seed: 105,
+      })
+    ).code,
+    "RULES_UPDATE_REQUIRED",
+  );
+  for (const version of [1, 2, 3, 4]) {
+    const state = create("brick-breaker", "classic", 105, version);
+    const saved = await value(
+      "select workshop_private.validate_game_save('game',$1) value",
+      [
+        {
+          game: "brick-breaker",
+          difficulty: "classic",
+          elapsed: 0,
+          name: "Brick",
+          state,
+        },
+      ],
+    );
+    assert.equal(saved.state.version, version);
+  }
+  assert.deepEqual(
+    await value("select workshop_private.activate_brick_v4() value"),
+    {
+      "brick-breaker": 4,
+      old_scores_deleted: 2,
+      old_sessions_closed: 3,
+    },
+  );
+  for (const id of [oldV3.id, oldActive.id]) {
+    assert.equal(
+      (await admin("read", a, { session_id: id })).code,
+      "RULES_UPDATE_REQUIRED",
+    );
+    assert.equal(
+      (await admin("finish", a, { session_id: id, metrics: {} })).code,
+      "RULES_UPDATE_REQUIRED",
+    );
+  }
+  assert.equal(
+    await value(
+      "select count(*)::int value from workshop_private.game_achievement_unlocks",
+    ),
+    unlockBefore,
+  );
+  assert.equal(
+    await value(
+      "select count(*)::int value from workshop_private.game_results where game<>'brick-breaker'",
+    ),
+    nonBrickBefore,
+  );
+  const args = { game: "brick-breaker", difficulty: "classic" };
+  const newBoard = await rpc("get_game_leaderboard", args, "anon", null);
+  assert.deepEqual(newBoard, { version: 4, top: [], me: null });
+  await assert.rejects(
+    rpc(
+      "get_game_leaderboard_history",
+      { ...args, rules_version: 1 },
+      "anon",
+      null,
+    ),
+    /Invalid game/,
+  );
+  const ranked = await admin("start", a, {
+    game: "brick-breaker",
+    difficulty: "classic",
+    rules_version: 4,
+    seed: 105,
+  });
+  const state = create("brick-breaker", "classic", ranked.seed, ranked.version);
+  const events = [];
+  while (state.status === "playing") {
+    if (
+      !state.balls[0].launched &&
+      apply(state, { type: "launch", tick: state.ticks })
+    )
+      events.push([state.ticks, -1]);
+    advanceBrick(state, state.ticks + 1);
+  }
+  await db.query(
+    "update workshop_private.game_sessions set started_at=clock_timestamp()-interval '5 minutes' where id=$1",
+    [ranked.id],
+  );
+  const handler = makeHandler(
+    () => "https://fixture.test",
+    async (url, init) => {
+      if (url.endsWith("/auth/v1/user")) return Response.json({ id: a });
+      const call = JSON.parse(init.body);
+      return Response.json(await admin(call.action, call.owner, call.body));
+    },
+  );
+  const finish = () =>
+    handler(
+      new Request("https://fixture.test/games-session/finish", {
+        method: "POST",
+        headers: { Authorization: "Bearer fixture.valid.jwt" },
+        body: JSON.stringify({
+          session_id: ranked.id,
+          events,
+          events_format: "paddle-v4",
+          final_tick: state.ticks,
+        }),
+      }),
+    );
+  const response = await finish();
+  assert.equal(response.status, 200);
+  const receipt = await response.json();
+  assert.equal(receipt.version, 4);
+  assert.equal(receipt.score, state.score);
+  assert.equal(receipt.qualified, true);
+  assert.deepEqual(await (await finish()).json(), receipt);
+  assert.equal(
+    (await rpc("get_game_leaderboard", args, "anon", null)).top[0].score,
+    state.score,
+  );
+  await settle("brick-breaker", "classic", 4, 800);
+  assert.equal(
+    (await rpc("get_game_leaderboard", args, "anon", null)).top[0].score,
+    800,
+  );
+  assert.equal(
+    (await value("select workshop_private.activate_brick_v4() value"))
+      .old_scores_deleted,
+    0,
   );
   console.log(
     "PASS idempotent coins, resumed active time, scoped accounts, daily claims, unclaimed streaks, and transactional arcade cutover",

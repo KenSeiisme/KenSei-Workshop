@@ -574,5 +574,97 @@
   "m_07628b86e66b": {
     "en": "Invalid daily reward.",
     "zh-Hant": "無效的每日獎勵。"
+  },
+  "m_8eaf0acc57eb": {
+    "en": "Keep the ball in play across eight faster stages with armored bricks, moving lanes and powerups.",
+    "zh-Hant": "在八個更快的關卡保持球不落地，挑戰裝甲磚、移動磚與各種道具。"
+  },
+  "m_c749026bfd8f": {
+    "en": "8 stages · 5 minutes",
+    "zh-Hant": "8 關 · 5 分鐘"
+  },
+  "m_9202f09c5895": {
+    "en": "Move with your pointer, touch or arrow keys. Tap Launch or press Space to serve. Break bricks for 10 points across eight stages with three lives and five minutes. Catch Multiball, Wide Paddle (12 seconds), Slow Ball (8 seconds), Laser (8 seconds) or a Shield that saves one ball. A life is lost when every ball falls.",
+    "zh-Hant": "用滑鼠、觸控或方向鍵移動。按 Launch 或空白鍵發球。以三條命、五分鐘挑戰八關，每打碎一塊磚得 10 分。可接取多球、寬板（12 秒）、慢球（8 秒）、雷射（8 秒）或抵消一次落球的護盾。所有球落下才失去一條命。"
+  },
+  "m_aa73048a928e": {
+    "en": "Full grid",
+    "zh-Hant": "滿陣"
+  },
+  "m_cbc96db0f918": {
+    "en": "Split lanes",
+    "zh-Hant": "分路"
+  },
+  "m_4d3d19523ec7": {
+    "en": "Staircase",
+    "zh-Hant": "階梯"
+  },
+  "m_b639c243cebd": {
+    "en": "Diamond",
+    "zh-Hant": "菱形"
+  },
+  "m_a9975df3f53c": {
+    "en": "Twin wings",
+    "zh-Hant": "雙翼"
+  },
+  "m_7f6e4bc883f7": {
+    "en": "Armored gate",
+    "zh-Hant": "裝甲門"
+  },
+  "m_7cb5ef8ec311": {
+    "en": "Moving corridor",
+    "zh-Hant": "移動走廊"
+  },
+  "m_49e499b54dba": {
+    "en": "Final mix",
+    "zh-Hant": "混合終關"
+  },
+  "m_efc01cbb83b7": {
+    "en": "Brick Breaker clear",
+    "zh-Hant": "消磚塊通關"
+  },
+  "m_ac100f67adbb": {
+    "en": "Clear every Brick Breaker stage in a qualifying Public run.",
+    "zh-Hant": "在符合資格的公開對局中完成消磚塊所有關卡。"
+  },
+  "m_6fc681ebd9d4": {
+    "en": "Achievement unlocked · {0}",
+    "zh-Hant": "已解鎖成就 · {0}"
+  },
+  "m_bb0a6637c6da": {
+    "en": "Language · {0}",
+    "zh-Hant": "語言 · {0}"
+  },
+  "m_08f8467920bf": {
+    "en": "Effects · {0}",
+    "zh-Hant": "特效 · {0}"
+  },
+  "m_5e928444bcdb": {
+    "en": "Skin · {0}",
+    "zh-Hant": "皮膚 · {0}"
+  },
+  "m_5357bcc4b8a7": {
+    "en": "Sound volume · {0}%",
+    "zh-Hant": "音效音量 · {0}%"
+  },
+  "m_5444941edcd4": {
+    "en": "Music volume · {0}%",
+    "zh-Hant": "音樂音量 · {0}%"
+  },
+  "m_3da201b09ad4": {
+    "en": "Music on",
+    "zh-Hant": "音樂已開啟"
+  },
+  "m_bfc65b0db9d8": {
+    "en": "Music off",
+    "zh-Hant": "音樂已關閉"
+  },
+  "m_2d83e6f2db75": {
+    "en": "Countdown sound on",
+    "zh-Hant": "倒數音效已開啟"
+  },
+  "m_32991f8b0989": {
+    "en": "Countdown sound off",
+    "zh-Hant": "倒數音效已關閉"
   }
 }

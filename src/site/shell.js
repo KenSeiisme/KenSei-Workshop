@@ -51,8 +51,19 @@
     feedback.hidden = false;
     label(feedback, "site.languageLoading");
     try {
+      const previous = I.getLocale();
       await I.setLocale(target);
-      if (request === languageRequest) feedback.hidden = true;
+      if (request === languageRequest) {
+        feedback.hidden = true;
+        if (I.getLocale() !== previous)
+          window.KenseiNotify(
+            I.msg("Language · {0}", [target === "en" ? "English" : "繁體中文"]),
+            {
+              kind: "setting",
+              key: "language",
+            },
+          );
+      }
     } catch {
       if (request === languageRequest) label(feedback, "site.languageFailure");
     }

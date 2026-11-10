@@ -46,7 +46,7 @@ HELP = {
     ),
     "brick-breaker": (
         "Move with your pointer, touch or arrow keys. Tap Launch or press Space to serve. "
-        "Break bricks for 10 points across five stages with three lives and five minutes. "
+        "Break bricks for 10 points across eight stages with three lives and five minutes. "
         "Catch Multiball, Wide Paddle (12 seconds), Slow Ball (8 seconds), Laser "
         "(8 seconds) or a Shield that saves one ball. A life is lost when every ball falls."
     ),
@@ -127,7 +127,7 @@ DETAILS = {
     "brick-breaker": (
         "08",
         "Keep a good thing bouncing.",
-        "5 stages · 5 minutes",
+        "8 stages · 5 minutes",
         "Pointer / arrows",
     ),
     "connect-four": ("09", "One move ahead.", "3 AI levels", "Tap a column"),
@@ -429,14 +429,11 @@ def directory(games):
         featured=featured,
         cards=cards,
         quick_ranks=quick_ranks,
-        theme=render_template("games/theme.html"),
     )
 
 
 def achievements():
-    return render_template(
-        "games/achievements.html", theme=render_template("games/theme.html")
-    )
+    return render_template("games/achievements.html")
 
 
 def leaderboards(games):
@@ -450,7 +447,7 @@ def leaderboards(games):
         for g in games
     )
     return render_template(
-        "games/leaderboards.html", cards=cards, theme=render_template("games/theme.html")
+        "games/leaderboards.html", cards=cards
     )
 
 

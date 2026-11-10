@@ -1,0 +1,170 @@
+.site-theme {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  min-height: 44px;
+}
+.site-theme svg {
+  width: 19px;
+  height: 19px;
+}
+.site-theme svg[hidden] {
+  display: none;
+}
+
+:root[data-site-theme="light"] {
+  color-scheme: light;
+  --bg: #f7f1fa;
+  --surface: #fffaff;
+  --surface2: #f1e6f7;
+  --line: #d7c5e0;
+  --text: #2c2037;
+  --muted: #65556e;
+  --accent: #703a91;
+  --pink: #8b3d70;
+  --medal: #825311;
+}
+:root[data-site-theme="light"] :is(.header, .header nav, .account-menu) {
+  background: color-mix(in srgb, var(--surface) 95%, transparent);
+  border-color: var(--line);
+}
+:root[data-site-theme="light"]
+  :is(
+    .header nav a,
+    .sign-button,
+    .account-menu a,
+    .account-menu button,
+    .site-theme
+  ) {
+  color: var(--text);
+}
+:root[data-site-theme="light"]
+  :is(.sign-button, .secondary, .filter, .icon-button) {
+  border-color: var(--line);
+  color: var(--text);
+}
+:root[data-site-theme="light"] :is(input, select, textarea, .search-box) {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--text);
+}
+:root[data-site-theme="light"]
+  :is(
+    .tools-section,
+    .footer,
+    .workspace-promo,
+    .tool-card,
+    .game-card,
+    .panel,
+    .game-shell-dialog,
+    .profile-typing-card
+  ) {
+  background: var(--surface);
+  border-color: var(--line);
+}
+:root[data-site-theme="light"]
+  :is(dialog, .game-entry-panel, .pong-join-panel) {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--line);
+}
+:root[data-site-theme="light"]
+  :is(
+    .site-drawer #navigation a,
+    .site-drawer .sign-button,
+    .site-language,
+    .game-effects-control,
+    .public-profile-section .eyebrow
+  ) {
+  color: var(--muted);
+}
+:root[data-site-theme="light"]
+  :is(
+    .header a:hover,
+    .account-menu button:hover,
+    .site-drawer #navigation a:hover
+  ) {
+  background-color: var(--surface2);
+  color: var(--text);
+}
+:root[data-site-theme="light"]
+  :is(.eyebrow, .text-link, .project-link, .tool-kicker, .back-link) {
+  color: var(--accent);
+}
+:root[data-site-theme="light"]
+  :is(
+    .game-card-copy .game-card-kicker,
+    .game-card-copy p,
+    .game-shell-mode,
+    .game-metrics span,
+    .game-rank-panel small,
+    .game-shell-preferences label,
+    .workspace-promo p
+  ) {
+  color: var(--muted);
+}
+:root[data-site-theme="light"]
+  :is(
+    .game-card-copy h2,
+    .game-shell-toolbar h1,
+    .game-rank-panel h2,
+    .game-metrics strong,
+    .game-entry-panel h2
+  ) {
+  color: var(--text);
+}
+:root[data-site-theme="light"]
+  [data-play-shell]
+  .game-layout
+  > .game-rank-panel {
+  background: var(--surface);
+  border-color: var(--line);
+}
+:root[data-site-theme="light"] .public-profile-hero {
+  background: linear-gradient(130deg, var(--surface), var(--surface2));
+  border-color: var(--line);
+}
+:root[data-site-theme="light"]
+  .public-profile
+  :is(
+    .profile-game-card,
+    .profile-typing-card,
+    .milestone-card,
+    .public-profile-summary > div
+  ) {
+  background: var(--surface);
+  border-color: var(--line);
+}
+:root[data-site-theme="light"]
+  .public-profile
+  :is(
+    #public-bio,
+    .profile-game-card p,
+    .profile-game-card time,
+    .profile-game-card small,
+    .profile-game-card footer span,
+    .profile-game-card .eyebrow,
+    .profile-score-empty > strong,
+    .profile-score-value > span,
+    .profile-section-note
+  ) {
+  color: var(--muted);
+}
+:root[data-site-theme="light"]
+  .public-profile
+  :is(
+    .profile-score-value strong,
+    .profile-game-card h3,
+    .profile-game-icon,
+    .profile-game-card footer a
+  ) {
+  color: var(--accent);
+}
+:root[data-site-theme="light"] .hero h1 em {
+  background-image: linear-gradient(110deg, #823d6d, #684298);
+}
+/* Cover art and illustrated demo surfaces keep their authored palettes. */
+:root[data-site-theme="light"] :is(.game-cover, .hero-visual) {
+  color-scheme: dark;
+}

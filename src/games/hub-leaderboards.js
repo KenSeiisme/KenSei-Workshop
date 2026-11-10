@@ -1,5 +1,5 @@
 import { api, esc } from "/tool-scripts/common.js";
-import { compareLocal } from "./hub-model.js";
+import { compareLocal, localScoreKey } from "./hub-model.js";
 import { hubOwner, readHub } from "./hub-store.js";
 import {
   boardModes,
@@ -12,7 +12,6 @@ import {
   readVerifiedBoard,
   resultLabel,
 } from "./hub-rankings.js";
-import { mountHubTheme } from "./hub-theme.js";
 import { patchMarkup } from "./dom.js";
 import { uiHtml, uiMsg, uiText } from "../site/ui.js";
 
@@ -115,7 +114,7 @@ function paint() {
       ? board?.top || []
       : kind === "demo"
         ? sampleRows(game)
-        : Object.values(snapshot?.scores?.[`${game}:${mode}`] || {})
+        : Object.values(snapshot?.scores?.[localScoreKey(game, mode)] || {})
             .sort((a, b) => compareLocal(game, mode, a, b))
             .map((row, i) => ({ ...row, rank: i + 1 }));
   const me = kind === "verified" ? board?.me : null;
@@ -273,7 +272,6 @@ window.addEventListener("game-hub-update", (event) => {
 });
 window.addEventListener("focus", loadLocal);
 window.addEventListener("locale-change", paint);
-mountHubTheme($("[data-hub-theme]"));
 selected = fromURL();
 loadBoard();
 loadLocal();

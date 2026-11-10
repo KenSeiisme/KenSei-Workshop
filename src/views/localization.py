@@ -294,7 +294,7 @@ def styles(route):
 
 
 def source_files(route):
-    files = {"src/app.js"}
+    files = {"src/app.js", "src/site/shell.js", "src/site/theme.js"}
     if route.startswith("tools/"):
         slug = route.split("/")[-1]
         files.add("src/tools/" + slug + ".js")
@@ -553,11 +553,13 @@ def head(route, locale, site_url):
                 + url
                 + '" as="font" type="font/woff2" crossorigin>'
             )
+    lines.append('<script src="/site/theme.js"></script>')
     lines.extend(
-        '<link rel="stylesheet" href="/' + name + '">' for name in styles(route)
+        '<link rel="stylesheet" href="/' + name + '">' for name in [*styles(route), "theme.css"]
     )
     lines += [
         '<script src="/site/i18n.js" defer></script>',
+        '<script src="/site/notices.js" defer></script>',
         '<script src="/site/shell.js" defer></script>',
         '<script src="/config.js" defer></script>',
         '<script src="/tools-data.js" defer></script>',

@@ -66,7 +66,7 @@ export const GAMES = {
   ...drop.CONFIG,
 };
 export const gameVersion = (game) =>
-  ({ "brick-breaker": 3, snake: 2 })[game] || 1;
+  ({ "brick-breaker": 4, snake: 2 })[game] || 1;
 export const retiredArcade = (game) =>
   game === "snake" || game === "brick-breaker";
 export const supportsVersion = (game, version) =>

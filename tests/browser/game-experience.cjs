@@ -66,7 +66,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
       {
         game: "brick-breaker",
         difficulty: "classic",
-        version: 3,
+        version: 4,
         score: 800,
         max_tile: 0,
         moves: 100,
@@ -96,7 +96,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
     (r) =>
       r.fulfill({
         contentType: "text/javascript",
-        body: `export function createClient(){return{auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async(name,args)=>({data:name==='get_public_profile'?${JSON.stringify(profile)}:{version:name==='get_game_leaderboard_history'?1:(args.game==='brick-breaker'?3:args.game==='snake'?2:1),top:[],me:null},error:null})}}`,
+        body: `export function createClient(){return{auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async(name,args)=>({data:name==='get_public_profile'?${JSON.stringify(profile)}:{version:name==='get_game_leaderboard_history'?1:(args.game==='brick-breaker'?4:args.game==='snake'?2:1),top:[],me:null},error:null})}}`,
       }),
   );
   const open = async (slug) => {
@@ -116,7 +116,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
             r(
               Object.values(q.result?.records || {}).find(
                 (x) =>
-                  x.data.game === "brick-breaker" && x.data.state.version === 3,
+                  x.data.game === "brick-breaker" && x.data.state.version === 4,
               )?.data.state,
             );
         });
@@ -141,13 +141,13 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
                 row = Object.values(scope.records).find(
                   (x) =>
                     x.data.game === "brick-breaker" &&
-                    x.data.state.version === 3,
+                    x.data.state.version === 4,
                 );
               const copy = structuredClone(row);
               copy.data.state = state;
               copy.data.elapsed = (state.ticks * 1000) / 60;
               copy.data.best = null;
-              copy.data.name = legacy ? "Legacy Brick" : "Brick v3";
+              copy.data.name = legacy ? "Legacy Brick" : "Brick v4";
               if (legacy) {
                 copy.id = "99999999-1111-4111-8111-111111111111";
                 copy.updated_at = "2026-10-23T23:59:59Z";
@@ -181,7 +181,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
     await gameClick(page, "#game-start");
     await page.waitForSelector(".brick-canvas");
     await page.waitForTimeout(550);
-    assert.equal((await current()).version, 3);
+    assert.equal((await current()).version, 4);
     assert.equal(await page.locator(".brick-paddle-slider").count(), 0);
     assert.equal(
       await page
@@ -189,7 +189,7 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
         .evaluate((n) => n.classList.contains("primary")),
       false,
     );
-    assert.match(await page.locator(".brick-rules").innerText(), /v3/);
+    assert.match(await page.locator(".brick-rules").innerText(), /Full grid/);
     await page.locator(".brick-canvas").press("Space");
     await page.waitForTimeout(200);
     assert.equal(await page.locator(".brick-launch").isVisible(), false);

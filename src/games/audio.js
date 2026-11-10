@@ -283,7 +283,14 @@ function buildContext() {
     limiter.curve = curve;
     limiter.connect(masterGain);
   }
-  effectsGain.connect(limiter || masterGain);
+  const mellow = context.createBiquadFilter?.();
+  if (mellow) {
+    mellow.type = "lowpass";
+    mellow.frequency.value = 3800;
+    mellow.Q.value = -3;
+    effectsGain.connect(mellow);
+    mellow.connect(limiter || masterGain);
+  } else effectsGain.connect(limiter || masterGain);
   musicGain.connect(limiter || masterGain);
   masterGain.connect(context.destination);
   masterGain.gain.setValueAtTime(
@@ -525,6 +532,8 @@ function reserve(kind) {
   }
   return true;
 }
+const mellowCue = (kind) =>
+  ["brick", "paddle", "error", "collision"].includes(kind);
 function sample(kind, pitch) {
   const list = profile?.cues[kind],
     descriptor = list?.[variation(list.length, kind)],
@@ -533,8 +542,17 @@ function sample(kind, pitch) {
   const source = context.createBufferSource(),
     gain = context.createGain();
   source.buffer = buffer;
-  source.playbackRate.value = Math.max(0.8, Math.min(1.7, pitch));
-  gain.gain.setValueAtTime(descriptor.gain ?? 1, context.currentTime);
+  const soften = mellowCue(kind);
+  source.playbackRate.value = Math.max(
+    0.8,
+    Math.min(soften ? 1.12 : 1.35, pitch),
+  );
+  const now = context.currentTime;
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(
+    (descriptor.gain ?? 1) * (soften ? 0.62 : 0.9),
+    now + 0.005,
+  );
   source.connect(gain);
   gain.connect(effectsGain);
   const voice = { source, gain, priority: PRIORITY_CUES.has(kind) };
@@ -563,11 +581,14 @@ function synthesize(kind, pitch) {
   notes.forEach((note, i) => {
     const start = at + i * 0.065;
     source.frequency.setValueAtTime?.(
-      Math.max(80, Math.min(1800, note * pitch)),
+      Math.max(80, Math.min(1050, note * pitch)),
       start,
     );
-    source.frequency.value = Math.max(80, Math.min(1800, note * pitch));
-    gain.gain.linearRampToValueAtTime(0.12, start + 0.007);
+    source.frequency.value = Math.max(80, Math.min(1050, note * pitch));
+    gain.gain.linearRampToValueAtTime(
+      mellowCue(kind) ? 0.075 : 0.1,
+      start + 0.01,
+    );
     gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.06);
   });
   source.connect(gain);
@@ -685,6 +706,10 @@ export function mountAudio(root = document) {
         if (preference.enabled) unlockAudio();
         else stopAudio();
         persist();
+        window.KenseiNotify?.(
+          uiMsg(preference.enabled ? "Sound on" : "Sound off"),
+          { kind: "setting", key: "sound" },
+        );
       });
     else if (node.matches("[data-audio-retry]"))
       node.addEventListener("click", async () => {
@@ -709,6 +734,28 @@ export function mountAudio(root = document) {
         persist();
         unlockAudio();
       });
+    node.addEventListener("change", () => {
+      const message = node.matches("[data-audio-volume]")
+        ? uiMsg("Sound volume · {0}%", [Math.round(preference.volume * 100)])
+        : node.matches("[data-music-volume]")
+          ? uiMsg("Music volume · {0}%", [
+              Math.round(preference.musicVolume * 100),
+            ])
+          : node.matches("[data-music-toggle]")
+            ? uiMsg(preference.musicEnabled ? "Music on" : "Music off")
+            : node.matches("[data-audio-countdown]")
+              ? uiMsg(
+                  preference.countdown
+                    ? "Countdown sound on"
+                    : "Countdown sound off",
+                )
+              : null;
+      if (message)
+        window.KenseiNotify?.(message, {
+          kind: "setting",
+          key: Object.keys(node.dataset)[0],
+        });
+    });
   }
   paint();
 }

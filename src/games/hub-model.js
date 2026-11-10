@@ -1,4 +1,4 @@
-import { GAMES, timeScored } from "./engine.js";
+import { GAMES, gameVersion, timeScored } from "./engine.js";
 
 export const CATALOG = [
   "2048",
@@ -147,6 +147,10 @@ export function modesFor(game) {
   if (game === "snake") return { normal: { label: "Standard" } };
   return GAMES[game]?.modes || {};
 }
+export const localScoreKey = (game, mode, version = gameVersion(game)) =>
+  game === "brick-breaker" && version >= 4
+    ? `${game}:${mode}:v${version}`
+    : `${game}:${mode}`;
 export const timedBoard = (game, mode) =>
   timeScored(game) || (game === "block-drop" && mode === "sprint");
 export function compareLocal(game, mode, a, b) {

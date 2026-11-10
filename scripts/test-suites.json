@@ -2,7 +2,8 @@
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],
     ["tests/database/game-hub.mjs"],
-    ["tests/browser/game-hub.cjs"]
+    ["tests/browser/game-hub.cjs"],
+    ["tests/browser/site-game-polish.cjs"]
   ],
   "base": [
     ["tests/browser/verify.cjs"],

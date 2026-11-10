@@ -386,6 +386,7 @@ function draw(reason = "view", event = null) {
     id: active.activityId,
     owner: player,
     started: !active.activityRestored,
+    version: active.version,
     mode: active.difficulty,
     active: running,
     finished,

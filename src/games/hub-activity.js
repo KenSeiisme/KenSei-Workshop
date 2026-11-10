@@ -97,6 +97,7 @@ export function trackGame(game, panel) {
         id: value.id,
         owner: value.owner,
         mode: value.mode,
+        version: value.version,
         started: value.started !== false,
         segmentId: crypto.randomUUID(),
         activeMs: 0,

@@ -1,3 +1,5 @@
+import { uiFrom, uiMsg } from "../site/ui.js";
+
 const KEY = "kensei-game-effects-v1";
 const media = matchMedia("(prefers-reduced-motion: reduce)");
 const choices = new Set(["auto", "reduced", "off"]);
@@ -70,6 +72,12 @@ export function mountEffects() {
         localStorage.setItem(KEY, choice);
       } catch {}
       applyChoice();
+      window.KenseiNotify?.(
+        uiMsg("Effects · {0}", [
+          uiFrom({ auto: "Auto", reduced: "Reduced", off: "Off" }[choice]),
+        ]),
+        { kind: "setting", key: "effects" },
+      );
     });
   });
   document.documentElement.dataset.gameEffects = effectsMode();

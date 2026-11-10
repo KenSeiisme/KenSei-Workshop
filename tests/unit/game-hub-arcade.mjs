@@ -10,6 +10,10 @@ import {
 } from "../../src/games/engine.js";
 import {
   BRICK,
+  armor,
+  brickBounds,
+  movingBrick,
+  stageCount,
   brickRect,
   paddleCenter,
   paddleWidth,
@@ -22,6 +26,7 @@ import {
   compareLocal,
   featuredGame,
   malaysiaDay,
+  localScoreKey,
 } from "../../src/games/hub-model.js";
 
 assert.equal(malaysiaDay(new Date("2026-04-01T15:59:59Z")), "2026-04-01");
@@ -96,7 +101,7 @@ assert.throws(
 );
 
 const q = BRICK.scale;
-const brick = create("brick-breaker", "classic", 5);
+const brick = create("brick-breaker", "classic", 5, 3);
 assert.equal(brick.version, 3);
 assert.deepEqual(brick.powerBricks.filter(Boolean).sort(), [1, 2, 3, 4, 5]);
 apply(brick, { type: "launch", tick: 0 });
@@ -136,8 +141,8 @@ assert.equal(brick.shield, false);
 assert.equal(brick.balls.length, 3);
 assert.equal(brick.lives, 3);
 
-function playFive(seed) {
-  const state = create("brick-breaker", "classic", seed),
+function play(seed, version) {
+  const state = create("brick-breaker", "classic", seed, version),
     log = [];
   while (state.status === "playing") {
     if (state.ticks % 2 === 0) {
@@ -147,11 +152,45 @@ function playFive(seed) {
           .sort((a, b) => (b.vy > 0 ? b.y : -1) - (a.vy > 0 ? a.y : -1))[0] ||
         state.balls[0];
       const width = paddleWidth(state);
+      let center = ball.x / q;
+      if (version === 4 && ball.launched && ball.vy > 0) {
+        const line = BRICK.paddleY - BRICK.radius;
+        const span = 640 - 2 * BRICK.radius;
+        const predicted =
+          center + ((line - ball.y / q) * ball.vx) / ball.vy - BRICK.radius;
+        center =
+          span -
+          Math.abs(
+            (((predicted % (2 * span)) + 2 * span) % (2 * span)) - span,
+          ) +
+          BRICK.radius;
+        const target = state.bricks
+          .flatMap((hp, i) =>
+            hp ? [brickBounds(state, i, state.ticks + 40)] : [],
+          )
+          .sort(
+            (a, b) =>
+              (b.y - a.y) / q +
+              (Math.abs((a.x + a.w / 2) / q - center) -
+                Math.abs((b.x + b.w / 2) / q - center)) /
+                2,
+          )[0];
+        if (target) {
+          let dx = (target.x + target.w / 2) / q - center;
+          const dy = line - (target.y + target.h) / q;
+          if (Math.abs(dx) < 35) dx = (dx < 0 ? -1 : 1) * 35;
+          const offset = Math.max(
+            -0.91,
+            Math.min(0.91, dx / Math.hypot(dx, dy) / 0.88),
+          );
+          center -= (offset * width) / 2;
+        }
+      }
       const x = Math.max(
         0,
         Math.min(
           1024,
-          Math.round(((ball.x / q - width / 2) / (640 - width)) * 1024),
+          Math.round(((center - width / 2) / (640 - width)) * 1024),
         ),
       );
       if (
@@ -170,7 +209,7 @@ function playFive(seed) {
   return { state, log };
 }
 const attempt = [12345, 14, 29, 42, 64, 100]
-  .map(playFive)
+  .map((seed) => play(seed, 3))
   .find(({ state }) => state.status === "won");
 assert(attempt, "the deterministic five-stage fixture reaches the win");
 const { state, log } = attempt;
@@ -192,6 +231,7 @@ assert.equal(
     state.ticks,
     (state.ticks * 1000) / 60,
     "paddle-v3",
+    3,
   ).score,
   state.score,
 );
@@ -204,8 +244,142 @@ assert.throws(() =>
     state.ticks,
     (state.ticks * 1000) / 60,
     "paddle-v2",
+    3,
   ),
 );
 console.log(
   "PASS Snake v2 boosts and obstacles, Brick v3 five-stage replay, laser and shield, and lobby daily boundaries",
+);
+
+const v4 = create("brick-breaker", "classic", 105);
+assert.equal(v4.version, 4);
+assert.equal(stageCount(v4), 8);
+assert.notEqual(
+  localScoreKey("brick-breaker", "classic", 3),
+  localScoreKey("brick-breaker", "classic"),
+);
+assert.equal(v4.powerBricks.filter(Boolean).length, 0);
+apply(v4, { type: "launch", tick: 0 });
+assert.equal(v4.balls[0].vy, -Math.round(3.85 * 1.25 * q));
+
+function strikeWithLasers(state, i, times = 1) {
+  const rect = brickBounds(state, i);
+  state.shots = Array.from({ length: times }, () => ({
+    x: rect.x + rect.w / 2,
+    y: rect.y + rect.h + q,
+  }));
+  advanceBrick(state, state.ticks + 1);
+}
+const dropped = [];
+const bag = create("brick-breaker", "classic", 22);
+for (let i = 0; i < 19; i++) {
+  const drops = bag.nextDropId;
+  strikeWithLasers(bag, i);
+  if (bag.nextDropId > drops)
+    dropped.push([bag.stageBroken, bag.drops.at(-1).kind]);
+}
+assert.deepEqual(
+  dropped.map(([count]) => count),
+  [1, 4, 8, 12, 16],
+);
+assert.equal(new Set(dropped.map(([, kind]) => kind)).size, 5);
+assert.equal(bag.score, 190);
+
+const fixture = create("brick-breaker", "classic", 105);
+for (let i = 0; i < 5; i++) {
+  fixture.bricks.fill(0);
+  advanceBrick(fixture, fixture.ticks + 1);
+}
+const armored = fixture.bricks.findIndex(
+  (hp, i) => hp === 2 && armor(fixture, i),
+);
+assert.notEqual(armored, -1);
+strikeWithLasers(fixture, armored);
+assert.equal(fixture.bricks[armored], 1);
+assert.equal(fixture.score, 0);
+strikeWithLasers(fixture, armored, 2);
+assert.equal(fixture.bricks[armored], 0);
+assert.equal(fixture.score, 10);
+fixture.bricks.fill(0);
+advanceBrick(fixture, fixture.ticks + 1);
+const mobileBrick = fixture.bricks.findIndex(
+  (hp, i) => hp && movingBrick(fixture, i),
+);
+assert.notEqual(mobileBrick, -1);
+assert.notEqual(
+  brickBounds(fixture, mobileBrick).x,
+  brickBounds(fixture, mobileBrick, fixture.ticks + 30).x,
+);
+const rect = brickBounds(fixture, mobileBrick);
+fixture.balls = [1, 2].map((id) => ({
+  id,
+  x: rect.x + rect.w / 2,
+  y: rect.y + rect.h + 9 * q,
+  vx: q,
+  vy: -7 * q,
+  launched: true,
+}));
+fixture.nextBallId = 3;
+advanceBrick(fixture, fixture.ticks + 1);
+assert.equal(fixture.bricks[mobileBrick], 0);
+assert.equal(
+  fixture.score,
+  20,
+  "both balls crossing a moving brick award one brick",
+);
+const victory = play(105, 4);
+assert.equal(victory.state.status, "won");
+assert.equal(victory.state.stage, 7);
+assert.equal(victory.state.score, 2140);
+assert.equal(victory.state.ticks, 16912);
+for (const rate of [30, 60, 120, 144]) {
+  const game = create("brick-breaker", "classic", 105);
+  let frame = 0,
+    index = 0;
+  while (game.status === "playing") {
+    const target = Math.min(
+      victory.state.ticks,
+      Math.floor((++frame * 60) / rate),
+    );
+    while (index < victory.log.length && victory.log[index][0] <= target) {
+      const [tick, x] = victory.log[index++];
+      assert(
+        apply(
+          game,
+          x === -1 ? { type: "launch", tick } : { type: "paddle", tick, x },
+        ),
+      );
+    }
+    advanceBrick(game, target);
+    assert(frame < 50000);
+  }
+  assert.deepEqual(game, victory.state);
+}
+const playtime = (victory.state.ticks * 1000) / 60;
+validateSave({
+  game: v4.game,
+  difficulty: v4.difficulty,
+  state: victory.state,
+  elapsed: playtime,
+});
+const cpu = process.cpuUsage();
+let replayed;
+for (let repeat = 0; repeat < 16; repeat++)
+  replayed = replay(
+    v4.game,
+    v4.difficulty,
+    v4.seed,
+    victory.log,
+    victory.state.ticks,
+    playtime,
+    "paddle-v4",
+    4,
+  );
+const usage = process.cpuUsage(cpu);
+assert.deepEqual(replayed, {
+  ...metrics(victory.state),
+  elapsed_ms: Math.round(playtime),
+});
+console.log(
+  `PASS Brick v4 eight-stage replay, rotating drop bag, armor and moving brick collision. Local replay CPU ${((usage.user + usage.system) / 16000).toFixed(1)} ms`,
 );

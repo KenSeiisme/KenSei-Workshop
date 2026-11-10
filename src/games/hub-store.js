@@ -1,9 +1,12 @@
 import { api } from "/tool-scripts/common.js";
+import { uiFrom, uiMsg } from "../site/ui.js";
 import {
   SKINS,
   awardGuest,
   guestSnapshot,
   compareLocal,
+  localScoreKey,
+  LOBBY_BADGES,
   claimGuestDaily,
 } from "./hub-model.js";
 
@@ -18,6 +21,7 @@ const blank = () => ({
   badges: [],
   scores: {},
   submitted: {},
+  notified: {},
   remote: null,
   ackedSegments: {},
   ackedStarts: {},
@@ -114,8 +118,35 @@ async function rpc(owner, name, args) {
 }
 const jobs = new Map();
 function updateSnapshot(data, snapshot) {
-  if (!data.remote || snapshot.generatedAt >= data.remote.generatedAt)
-    data.remote = snapshot;
+  const { newBadges, ...view } = snapshot;
+  if (!data.remote || view.generatedAt >= data.remote.generatedAt)
+    data.remote = view;
+}
+function reserveBadges(data, type, ids) {
+  const seen = (data.notified ||= {});
+  return ids.filter((id) => {
+    const key = type + ":" + id;
+    if (seen[key]) return false;
+    seen[key] = true;
+    return true;
+  });
+}
+export async function reserveMilestones(owner, ids) {
+  let fresh = [];
+  if (hubOwner() !== owner) return fresh;
+  await transact(owner, (data) => {
+    if (hubOwner() === owner) fresh = reserveBadges(data, "verified", ids);
+  });
+  return hubOwner() === owner ? fresh : [];
+}
+function notifyLobbyBadges(owner, ids) {
+  if (hubOwner() !== owner) return;
+  for (const [id, name] of LOBBY_BADGES)
+    if (ids.includes(id))
+      window.KenseiNotify?.(
+        uiMsg("Achievement unlocked · {0}", [uiFrom(name)]),
+        { kind: "achievement", key: id },
+      );
 }
 export function syncHub(owner = hubOwner(), refresh = false) {
   if (owner === "guest") return Promise.resolve();
@@ -130,8 +161,11 @@ export function syncHub(owner = hubOwner(), refresh = false) {
           runs: pending,
         })
       : await rpc(owner, "game_hub_snapshot");
+    let fresh = [];
     await transact(owner, (current) => {
       updateSnapshot(current, snapshot);
+      if (hubOwner() === owner)
+        fresh = reserveBadges(current, "lobby", snapshot.newBadges || []);
       for (const run of pending) {
         const key = `${run.id}:${run.segmentId}`;
         const segments = (current.ackedSegments ||= {});
@@ -141,11 +175,13 @@ export function syncHub(owner = hubOwner(), refresh = false) {
           delete current.pending[key];
       }
     });
+    notifyLobbyBadges(owner, fresh);
   })().finally(() => jobs.delete(owner));
   jobs.set(owner, job);
   return job;
 }
 export async function recordActivity(owner, run) {
+  let fresh = [];
   await transact(owner, (data) => {
     const previous = data.runs[run.id];
     const segments = previous?.segments || {};
@@ -165,8 +201,12 @@ export async function recordActivity(owner, run) {
     };
     data.runs[run.id] = stored;
     if (owner === "guest") {
-      if (stored.finished && !previous?.finished && total > 0)
+      if (stored.finished && !previous?.finished && total > 0) {
+        const prior = data.badges.length;
         awardGuest(data, run);
+        if (hubOwner() === owner)
+          fresh = reserveBadges(data, "lobby", data.badges.slice(prior));
+      }
     } else {
       const key = `${run.id}:${run.segmentId}`;
       const waiting = data.pending[key];
@@ -178,7 +218,8 @@ export async function recordActivity(owner, run) {
       };
     }
   });
-  if (owner !== "guest") syncHub(owner).catch(() => {});
+  if (owner === "guest") notifyLobbyBadges(owner, fresh);
+  else syncHub(owner).catch(() => {});
 }
 export async function changeSkin(owner, skin, purchase = false) {
   if (!Object.hasOwn(SKINS, skin)) throw Error("Unknown skin");
@@ -232,7 +273,7 @@ export async function saveLocalScore(owner, run, nickname, score) {
     throw Error("Enter a nickname with 2–24 characters.");
   return transact(owner, (data) => {
     if (data.submitted[run.id]) return;
-    const key = `${run.game}:${run.mode}`,
+    const key = localScoreKey(run.game, run.mode, run.version ?? 3),
       rows = (data.scores[key] ||= {}),
       player = name.toLocaleLowerCase("en"),
       previous = Object.hasOwn(rows, player) ? rows[player] : null,

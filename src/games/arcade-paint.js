@@ -1,6 +1,11 @@
 import { uiMsg, uiFrom, uiRender } from "../site/ui.js";
-import { BRICK, brickRect, paddleCenter } from "./arcade-engine.js";
+import { BRICK, paddleCenter } from "./arcade-engine.js";
 import {
+  armor,
+  brickBounds,
+  movingBrick,
+  stageCount,
+  FAST_STAGE_NAMES,
   paddleWidth,
   paddleCenter as enhancedCenter,
 } from "./brick-v2-engine.js";
@@ -37,12 +42,14 @@ export function paintBrick(canvas, state, view = {}) {
   ctx.font = "11px system-ui, sans-serif";
   ctx.textAlign = "left";
   ctx.fillText(
-    uiRender(
-      uiMsg("STAGE {0} / {1}", [state.stage + 1, state.version >= 3 ? 5 : 3]),
-    ),
+    uiRender(uiMsg("STAGE {0} / {1}", [state.stage + 1, stageCount(state)])),
     27,
     29,
   );
+  if (state.version === 4) {
+    ctx.textAlign = "center";
+    ctx.fillText(uiRender(uiFrom(FAST_STAGE_NAMES[state.stage])), w / 2, 29);
+  }
   ctx.textAlign = "right";
   ctx.fillText(
     uiRender(
@@ -57,7 +64,7 @@ export function paintBrick(canvas, state, view = {}) {
   const colors = ["#c7a5ef", "#a995eb", "#92c6df", "#8cdbcb", "#e3a9ca"];
   for (let i = 0; i < state.bricks.length; i++) {
     if (!state.bricks[i]) continue;
-    const r = brickRect(i),
+    const r = brickBounds(state, i),
       x = r.x / q,
       y = r.y / q,
       bw = r.w / q,
@@ -74,6 +81,23 @@ export function paintBrick(canvas, state, view = {}) {
     ctx.fill();
     ctx.fillStyle = "#ffffff35";
     ctx.fillRect(x + 6, y + 3, bw - 12, 1.5);
+    if (armor(state, i) || movingBrick(state, i)) {
+      ctx.strokeStyle = "#242131";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (movingBrick(state, i)) {
+        ctx.moveTo(x + bw / 2 - 7, y + bh / 2);
+        ctx.lineTo(x + bw / 2 + 7, y + bh / 2);
+      } else if (state.bricks[i] === 2) {
+        ctx.rect(x + 4, y + 4, bw - 8, bh - 8);
+      } else {
+        ctx.moveTo(x + bw / 2, y + 2);
+        ctx.lineTo(x + bw / 2 - 5, y + 8);
+        ctx.lineTo(x + bw / 2 + 3, y + 11);
+        ctx.lineTo(x + bw / 2 - 2, y + bh - 2);
+      }
+      ctx.stroke();
+    }
     const kind = state.powerBricks?.[i];
     if (kind) {
       ctx.strokeStyle = "#fff8e8";

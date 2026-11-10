@@ -1601,20 +1601,48 @@ textarea::placeholder {
   color: var(--muted);
   line-height: 1.9;
 }
-.toast {
+/* One viewport layer, including when a native settings dialog is open. */
+.toast-stack {
   position: fixed;
-  bottom: 25px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 13px 22px;
-  max-width: calc(100% - 30px);
-  background: #322638;
-  color: #f3e9fa;
-  border: 1px solid #c6a3de55;
-  border-radius: 8px;
-  font-size: 12px;
-  z-index: 100;
-  box-shadow: 0 12px 35px #0005;
+  inset: calc(env(safe-area-inset-top, 0px) + 12px)
+    max(12px, env(safe-area-inset-right)) auto auto;
+  width: min(340px, calc(100vw - 24px));
+  display: grid;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 110;
+}
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px #20122f35;
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+}
+.toast-icon {
+  flex: none;
+  color: var(--accent);
+}
+.toast[data-kind="achievement"] .toast-icon {
+  color: var(--medal, #ffd58e);
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-game-effects="off"]):not([data-game-effects="reduced"])
+    .toast {
+    animation: toast-in 160ms ease-out both;
+  }
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
 }
 dialog {
   background: #211b28;

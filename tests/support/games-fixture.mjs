@@ -5,7 +5,10 @@ export async function gameDatabase({ beforeDailyClaims = false } = {}) {
   const db = new PGlite();
   await db.exec(bootstrap);
   for (const file of (await fs.readdir("supabase/migrations")).sort()) {
-    if (beforeDailyClaims && file.endsWith("_workshop_daily_claims.sql"))
+    if (
+      beforeDailyClaims &&
+      /_workshop_(daily_claims|brick_v4)\.sql$/.test(file)
+    )
       continue;
     await db.exec(await fs.readFile("supabase/migrations/" + file, "utf8"));
   }

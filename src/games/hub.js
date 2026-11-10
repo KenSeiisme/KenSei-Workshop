@@ -1,4 +1,3 @@
-import { mountHubTheme } from "./hub-theme.js";
 import { mountHubCarousel } from "./hub-carousel.js";
 import { mountHubProfile } from "./hub-profile.js";
 import { mountRankPreviews, playTime } from "./hub-rankings.js";
@@ -27,7 +26,6 @@ export function mountGameHub(saves) {
     shopBusy = false,
     syncError = false;
 
-  mountHubTheme($("[data-hub-theme]"));
   mountHubCarousel($(".hub-feature"));
   mountRankPreviews(hub);
 
@@ -81,11 +79,13 @@ export function mountGameHub(saves) {
     paintProgress();
     try {
       const buy = button.dataset.skinAction === "buy";
-      await changeSkin(
-        expected,
-        button.closest("[data-skin]").dataset.skin,
-        buy,
-      );
+      const skin = button.closest("[data-skin]").dataset.skin;
+      await changeSkin(expected, skin, buy);
+      if (owner === expected && !buy)
+        window.KenseiNotify?.(uiMsg("Skin · {0}", [uiFrom(SKINS[skin].name)]), {
+          kind: "setting",
+          key: "skin",
+        });
       if (owner === expected)
         uiText(
           status,
