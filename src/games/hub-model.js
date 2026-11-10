@@ -48,6 +48,37 @@ export function tasks(games, featured) {
     ["featured", games.includes(featured)],
   ];
 }
+export const DAILY_REWARD = 10;
+export const LOBBY_BADGES = [
+  ["first-finish", "First finish", "Complete your first game."],
+  ["score-1000", "Score chaser", "Score over 1,000 points in a single game."],
+  [
+    "seven-days",
+    "Seven-day streak",
+    "Finish every daily task for seven days in a row.",
+  ],
+];
+export function dailyTaskProgress(games, featured) {
+  return [
+    { id: "warm-up", value: Math.min(1, games.length), target: 1 },
+    { id: "explorer", value: Math.min(2, games.length), target: 2 },
+    { id: "featured", value: Number(games.includes(featured)), target: 1 },
+  ];
+}
+export const malaysiaReset = (day) => Date.parse(day) + 16 * 3600000;
+
+export function claimGuestDaily(data, day, task, today = malaysiaDay()) {
+  if (data.days[day]?.tasks.includes(task)) return;
+  if (day !== today) throw Error("This daily reward has expired.");
+  if (
+    !tasks(data.days[day]?.games || [], featuredGame(day)).some(
+      ([id, complete]) => id === task && complete,
+    )
+  )
+    throw Error("Complete this task before claiming its reward.");
+  data.days[day].tasks.push(task);
+  data.balance += DAILY_REWARD;
+}
 export function guestSnapshot(data, day = malaysiaDay()) {
   const stats = {};
   for (const run of Object.values(data.runs)) {
@@ -60,6 +91,9 @@ export function guestSnapshot(data, day = malaysiaDay()) {
     featured: featuredGame(day),
     stats,
     today: data.days[day]?.games || [],
+    manualClaims: true,
+    claimedTasks: data.days[day]?.tasks || [],
+    resetAt: malaysiaReset(day),
     balance: data.balance,
     skin: data.skin,
     owned: data.owned,
@@ -81,17 +115,15 @@ export function awardGuest(data, run, day = malaysiaDay()) {
       (run.game === "block-drop" && run.mode === "classic"))
   )
     unlock("score-1000");
-  for (const [id, complete] of tasks(daily.games, featuredGame(day))) {
-    if (complete && !daily.tasks.includes(id)) {
-      daily.tasks.push(id);
-      data.balance += 10;
-    }
-  }
   const today = dayNumber(day);
   if (
     Array.from({ length: 7 }, (_, i) =>
       new Date((today - i) * 86400000).toISOString().slice(0, 10),
-    ).every((date) => data.days[date]?.tasks.length === 3)
+    ).every((date) =>
+      tasks(data.days[date]?.games || [], featuredGame(date)).every(
+        ([, complete]) => complete,
+      ),
+    )
   )
     unlock("seven-days");
 }

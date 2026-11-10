@@ -415,8 +415,14 @@ def directory(games):
         for index, slug in enumerate(FEATURED_GAMES)
     )
     quick_ranks = "".join(
-        render_template("games/rank-preview.html", slug=slug, name=by_slug[slug]["name"])
-        for slug in FEATURED_GAMES
+        render_template(
+            "games/rank-preview.html",
+            slug=slug,
+            name=by_slug[slug]["name"],
+            selected="true" if index == 0 else "false",
+            tabindex="0" if index == 0 else "-1",
+        )
+        for index, slug in enumerate(FEATURED_GAMES)
     )
     return render_template(
         "games/directory.html",
@@ -424,6 +430,12 @@ def directory(games):
         cards=cards,
         quick_ranks=quick_ranks,
         theme=render_template("games/theme.html"),
+    )
+
+
+def achievements():
+    return render_template(
+        "games/achievements.html", theme=render_template("games/theme.html")
     )
 
 

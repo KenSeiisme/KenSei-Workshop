@@ -1,6 +1,7 @@
 import { api, esc } from "/tool-scripts/common.js";
 import { isRanked, gameVersion } from "./engine.js";
 import { BOARD_GAMES, modesFor, timedBoard } from "./hub-model.js";
+import { gameIcon } from "./presentation.js";
 import { patchMarkup } from "./dom.js";
 import { uiFrom, uiHtml, uiMsg, uiText } from "../site/ui.js";
 
@@ -83,96 +84,146 @@ export async function readVerifiedBoard(game, mode) {
 }
 
 export function mountRankPreviews(root) {
-  const cards = [...root.querySelectorAll("[data-rank-preview]")];
-  for (const card of cards) {
-    const game = card.dataset.rankPreview;
-    const mode = defaultBoardMode(game);
-    const status = card.querySelector("[data-preview-status]");
-    const rows = card.querySelector("[data-preview-rows]");
-    const retry = card.querySelector("[data-preview-retry]");
-    let wanted = false,
-      generation = 0,
-      owner,
-      loading = false,
-      current,
-      failed = false;
+  const tabs = [...root.querySelectorAll("[data-rank-preview]")];
+  const panel = root.querySelector("#hub-rank-panel");
+  const status = panel.querySelector("[data-preview-status]");
+  const rows = panel.querySelector("[data-preview-rows]");
+  const retry = panel.querySelector("[data-preview-retry]");
+  const full = panel.querySelector("[data-preview-full]");
+  const boards = new Map();
+  const identity = () => api.user?.id || "guest";
+  let owner = identity();
+  let selected = tabs[0];
+  let visible = false;
 
-    function render() {
-      uiText(
-        card.querySelector("[data-preview-mode]"),
-        modeLabel(game, mode, "verified"),
-      );
-      const leaders = current?.top.slice(0, 3) || [];
-      uiText(
-        status,
-        failed
-          ? uiMsg("Leaderboard unavailable.")
-          : !current
-            ? uiMsg("Loading leaderboard…")
-            : !leaders.length
-              ? uiMsg("No verified results yet.")
-              : "",
-      );
-      patchMarkup(
-        rows,
-        leaders
-          .map(
-            (row) =>
-              uiHtml`<li><span class="hub-rank-number">${Number(row.rank)}</span><span>${esc(playerName(row))}</span><strong>${resultLabel(game, mode, row)}</strong></li>`,
-          )
-          .join(""),
-      );
-      retry.hidden = !failed;
-    }
-    async function load(force = false) {
-      const identity = api.user?.id || "guest";
-      if (identity !== owner) {
-        owner = identity;
-        current = null;
-        failed = loading = false;
-        generation++;
-      }
-      if (!wanted || loading || (!force && current)) return;
-      if (!api.ready) return;
-      const request = ++generation;
-      loading = true;
-      failed = false;
-      render();
-      const valid = () =>
-        request === generation && identity === (api.user?.id || "guest");
-      try {
-        const board = await readVerifiedBoard(game, mode);
-        if (valid()) current = board;
-      } catch {
-        if (valid()) failed = true;
-      } finally {
-        if (valid()) {
-          loading = false;
-          render();
-        }
-      }
-    }
-    retry.addEventListener("click", () => load(true));
-    window.addEventListener("workspace-ready", () => load());
-    window.addEventListener("online", () => {
-      if (failed) load();
-    });
-    window.addEventListener("locale-change", render);
-    if ("IntersectionObserver" in window) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (!entry.isIntersecting) return;
-          observer.disconnect();
-          wanted = true;
-          load();
-        },
-        { rootMargin: "160px" },
-      );
-      observer.observe(card);
-    } else {
-      wanted = true;
-      load();
-    }
-    render();
+  function render() {
+    const game = selected.dataset.rankPreview;
+    const mode = defaultBoardMode(game);
+    const board = boards.get(game);
+    const leaders = board?.data?.top.slice(0, 3) || [];
+    panel.setAttribute("aria-labelledby", selected.id);
+    panel.dataset.gameTheme = game;
+    full.href =
+      localizedPath("/games/leaderboards/") +
+      "?game=" +
+      encodeURIComponent(game) +
+      "&mode=" +
+      encodeURIComponent(mode);
+    uiText(
+      panel.querySelector("[data-preview-mode]"),
+      modeLabel(game, mode, "verified"),
+    );
+    uiText(
+      status,
+      board?.failed
+        ? uiMsg("Leaderboard unavailable.")
+        : !board?.data
+          ? uiMsg("Loading leaderboard…")
+          : leaders.length
+            ? ""
+            : uiMsg("No verified results yet."),
+    );
+    patchMarkup(
+      rows,
+      leaders
+        .map(
+          (row) =>
+            uiHtml`<li><span class="hub-rank-number">${Number(row.rank)}</span><span>${esc(playerName(row))}</span><strong>${resultLabel(game, mode, row)}</strong></li>`,
+        )
+        .join(""),
+    );
+    retry.hidden = !board?.failed;
   }
+
+  async function load(force = false) {
+    const expected = identity();
+    if (owner !== expected) {
+      owner = expected;
+      boards.clear();
+    }
+    const game = selected.dataset.rankPreview;
+    const previous = boards.get(game);
+    render();
+    if (
+      !visible ||
+      !api.ready ||
+      previous?.loading ||
+      (previous?.data && !force)
+    )
+      return;
+    const board = { loading: true };
+    boards.set(game, board);
+    render();
+    try {
+      board.data = await readVerifiedBoard(game, defaultBoardMode(game));
+    } catch {
+      board.failed = true;
+    } finally {
+      board.loading = false;
+      if (
+        owner === expected &&
+        identity() === expected &&
+        boards.get(game) === board &&
+        selected.dataset.rankPreview === game
+      )
+        render();
+    }
+  }
+
+  function focusTab(next) {
+    for (const tab of tabs) tab.tabIndex = tab === next ? 0 : -1;
+    next.focus();
+  }
+  for (const [index, tab] of tabs.entries()) {
+    patchMarkup(
+      tab.querySelector("[data-preview-icon]"),
+      gameIcon(tab.dataset.rankPreview),
+    );
+    tab.addEventListener("click", () => {
+      selected = tab;
+      focusTab(tab);
+      for (const item of tabs)
+        item.setAttribute("aria-selected", String(item === tab));
+      visible = true;
+      load();
+    });
+    tab.addEventListener("keydown", (event) => {
+      const next = {
+        ArrowRight: (index + 1) % tabs.length,
+        ArrowLeft: (index + tabs.length - 1) % tabs.length,
+        Home: 0,
+        End: tabs.length - 1,
+      }[event.key];
+      if (next === undefined || event.altKey || event.ctrlKey || event.metaKey)
+        return;
+      event.preventDefault();
+      focusTab(tabs[next]);
+    });
+  }
+  tabs[0].parentElement.addEventListener("focusout", (event) => {
+    if (!tabs.includes(event.relatedTarget))
+      for (const tab of tabs) tab.tabIndex = tab === selected ? 0 : -1;
+  });
+  retry.addEventListener("click", () => load(true));
+  window.addEventListener("workspace-ready", () => load());
+  window.addEventListener("online", () => {
+    if (boards.get(selected.dataset.rankPreview)?.failed) load();
+  });
+  window.addEventListener("locale-change", render);
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        visible = true;
+        load();
+      },
+      { rootMargin: "160px" },
+    );
+    observer.observe(panel);
+  } else {
+    visible = true;
+    load();
+  }
+  render();
 }

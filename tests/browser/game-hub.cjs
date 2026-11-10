@@ -30,7 +30,17 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
               return response.ok ? {data:await response.json()} : {error:{message:'Fixture unavailable'}};
             }
             if(name==='ensure_my_profile') return {data:{public_id:user,nickname:user==='a'?'Player A':'Player B',avatar_kind:'none'}};
-            if(name==='game_hub_snapshot') return {data:{generatedAt:1,day:'2026-11-10',featured:'snake',balance:15,owned:['classic'],skin:'classic',today:[],badges:['score-1000'],stats:{snake:{plays:8,activeMs:2000}}}};
+            if(name==='game_hub_snapshot'||name==='claim_game_hub_reward') {
+              const day=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Kuala_Lumpur'}).format(new Date());
+              if(name==='claim_game_hub_reward'){
+                if(user!=='a'||args.expected_user!==user||args.task_day!==day||args.task_id!=='warm-up') return {error:{message:'Invalid fixture claim.'}};
+                localStorage.hubFixtureClaimed=day;
+              }
+              const claimed=localStorage.hubFixtureClaimed===day;
+              return {data:{generatedAt:Date.now()/1000,day,featured:'2048',balance:user==='a'?(claimed?15:5):15,owned:['classic'],skin:'classic',today:['snake'],badges:['score-1000'],stats:{snake:{plays:8,activeMs:2000}},
+                ...(user==='a'?{manualClaims:true,claimedTasks:claimed?['warm-up']:[],resetAt:Date.parse(day)+16*3600000}:{})
+              }};
+            }
             if(name==='get_my_game_progress') return {data:{unlocks:[],progress:{},game_count:0,result_count:0}};
             if(name==='get_public_profile') return {data:{public_id:user,nickname:user==='a'?'Player A':'Player B',
               game_best_scores:user==='a'?[{game:'snake',version:1,difficulty:'normal',score:9999},{game:'snake',version:2,difficulty:'normal',score:720}]:[],
@@ -144,14 +154,31 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     await hub.click("[data-hub-theme]");
     const snakePreview = hub.locator('[data-rank-preview="snake"]');
     const xiangqiPreview = hub.locator('[data-rank-preview="xiangqi"]');
+    const preview = hub.getByRole("tabpanel", { name: "Snake" });
     await snakePreview.scrollIntoViewIfNeeded();
-    await snakePreview.locator("li").last().waitFor();
-    assert.equal(await snakePreview.locator("li").count(), 3);
-    await xiangqiPreview.scrollIntoViewIfNeeded();
-    await xiangqiPreview.locator("[data-preview-retry]").waitFor();
+    await preview.locator("li").last().waitFor();
+    assert.equal(await preview.locator("li").count(), 3);
+    const beforeSelection = rankingRequests.length;
+    await snakePreview.focus();
+    await hub.keyboard.press("ArrowLeft");
+    await hub.keyboard.press("ArrowLeft");
+    assert(
+      await xiangqiPreview.evaluate((tab) => document.activeElement === tab),
+    );
+    assert.equal(await xiangqiPreview.getAttribute("aria-selected"), "false");
+    assert.equal(rankingRequests.length, beforeSelection);
+    await hub.keyboard.press("Space");
+    const panel = hub.locator("#hub-rank-panel");
+    await panel.locator("[data-preview-retry]").waitFor();
+    assert.equal(await xiangqiPreview.getAttribute("aria-selected"), "true");
+    assert.equal(await panel.locator("[data-preview-icon]").count(), 0);
     failXiangqi = false;
-    await xiangqiPreview.locator("[data-preview-retry]").click();
-    await xiangqiPreview.getByText("No verified results yet.").waitFor();
+    await panel.locator("[data-preview-retry]").click();
+    await panel.getByText("No verified results yet.").waitFor();
+    assert.match(
+      await panel.locator("[data-preview-full]").getAttribute("href"),
+      /game=xiangqi/,
+    );
     assert.equal(await hub.locator(".hub-rank-overview select").count(), 0);
 
     const boards = await context.newPage();
@@ -202,7 +229,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     await play.click("#game-pause");
     await play.waitForSelector("#game-resume:visible");
     await play.waitForTimeout(700);
-    await hub.waitForSelector("#game-saves .saved-game-row");
+    await hub.waitForSelector("#game-saves .saved-game-row .hub-save-icon svg");
+    assert.equal(
+      await play.locator(".game-achievement-link").getAttribute("href"),
+      "/games/achievements/",
+    );
     assert.equal(await hub.locator("#game-save-management").isVisible(), false);
     await hub.click("#game-manage-saves");
     assert.equal(await hub.locator("#game-save-management").isVisible(), true);
@@ -227,11 +258,35 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       await boards.locator("[data-hub-rank-stats]").textContent(),
       /1 starts/,
     );
-    assert(Number(await hub.locator("[data-hub-coins]").textContent()) >= 15);
-    assert.match(
-      await hub.locator("[data-hub-badges] article").first().textContent(),
-      /Unlocked/,
+    await hub.waitForFunction(
+      () => document.querySelector("[data-hub-coins]").textContent === "5",
     );
+    const warmUp = hub.locator('[data-daily-task="warm-up"]');
+    await warmUp.getByRole("button", { name: "Claim +10 coins" }).click();
+    await warmUp.getByText("Claimed").waitFor();
+    assert.equal(await hub.locator("[data-hub-coins]").textContent(), "15");
+    assert.match(
+      await hub.locator("[data-hub-reset]").textContent(),
+      /^\d{2}:\d{2}:\d{2}$/,
+    );
+    assert.equal(
+      await hub.locator("[data-hub-lobby-progress]").getAttribute("value"),
+      "1",
+    );
+    const achievements = await context.newPage();
+    achievements.on("pageerror", (error) => errors.push(error.message));
+    await achievements.goto(
+      base + (await hub.locator(".hub-achievement-link").getAttribute("href")),
+    );
+    await achievements
+      .locator("[data-hub-badges] article")
+      .first()
+      .getByText("Unlocked")
+      .waitFor();
+    await achievements
+      .locator("[data-achievements-guest] [data-sign-in]")
+      .waitFor();
+    assert.equal(await hub.locator("#games-progress").count(), 0);
     await hub.waitForFunction(() =>
       document
         .querySelector('[data-hub-featured="snake"] [data-hub-best]')
@@ -360,6 +415,43 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     );
     assert.equal(await boards.locator("[data-rank-game]").count(), 15);
 
+    const midnight = await context.newPage();
+    midnight.on("pageerror", (error) => errors.push(error.message));
+    await midnight.clock.install({ time: new Date("2027-02-02T15:59:48Z") });
+    await midnight.goto(base + "/games/");
+    await midnight.evaluate(async () => {
+      const { recordActivity } = await import("/game-scripts/hub-store.js");
+      await recordActivity("guest", {
+        id: crypto.randomUUID(),
+        segmentId: crypto.randomUUID(),
+        game: "snake",
+        mode: "normal",
+        activeMs: 1000,
+        started: true,
+        finished: true,
+      });
+    });
+    await midnight.locator('[data-daily-claim="warm-up"]').waitFor();
+    assert.match(
+      await midnight.locator("[data-hub-reset]").textContent(),
+      /^00:00:\d{2}$/,
+    );
+    const lateBalance = await midnight
+      .locator("[data-hub-coins]")
+      .textContent();
+    await midnight.clock.fastForward(15000);
+    await midnight.waitForFunction(() =>
+      document
+        .querySelector("[data-hub-day]")
+        .textContent.includes("February 3"),
+    );
+    assert.equal(await midnight.locator("[data-daily-claim]").count(), 0);
+    assert.equal(
+      await midnight.locator("[data-hub-coins]").textContent(),
+      lateBalance,
+    );
+    await midnight.close();
+
     await hub.evaluate(() => localStorage.setItem("hubFixtureUser", "a"));
     await hub.goto(base + "/games/");
     await hub.getByText("Player A", { exact: true }).last().waitFor();
@@ -382,6 +474,42 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       await hub.locator("[data-hub-highlight]").textContent(),
       "Keep it bouncing",
     );
+    assert.equal(
+      await hub.locator("[data-hub-verified-progress]").getAttribute("value"),
+      "2",
+    );
+    assert.equal(
+      await hub.locator("[data-hub-profile-link]").getAttribute("href"),
+      "/profile/?id=a",
+    );
+    const accountClaim = hub.locator('[data-daily-claim="warm-up"]');
+    await accountClaim.waitFor();
+    await hub.evaluate(() => {
+      Object.defineProperty(navigator, "onLine", {
+        configurable: true,
+        value: false,
+      });
+      window.dispatchEvent(new Event("offline"));
+    });
+    assert(await accountClaim.isDisabled());
+    assert.match(
+      await hub.locator("[data-hub-claim-status]").textContent(),
+      /Go online/,
+    );
+    await hub.evaluate(() => {
+      delete navigator.onLine;
+      window.dispatchEvent(new Event("online"));
+    });
+    await accountClaim.click();
+    await warmUp.getByText("Claimed").waitFor();
+    assert.equal(await hub.locator("[data-hub-coins]").textContent(), "15");
+    await achievements.goto(base + "/zh-hant/games/achievements/");
+    await achievements.locator("#games-progress").waitFor();
+    assert.equal(await achievements.locator("h1").textContent(), "成就");
+    assert.equal(
+      await achievements.locator("#progress-all .milestone-card").count(),
+      30,
+    );
     await hub.evaluate(() => localStorage.setItem("hubFixtureUser", "b"));
     await hub.reload();
     await hub.waitForFunction(
@@ -394,13 +522,28 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       "No scoring badge unlocked yet.",
     );
 
+    await warmUp.getByText("Claimed").waitFor();
+    assert.equal(
+      await hub.locator("[data-daily-claim]").count(),
+      0,
+      "legacy snapshot still shows auto-credited tasks",
+    );
+
     const auto = await context.newPage();
     await auto.emulateMedia({ reducedMotion: "no-preference" });
     await auto.setViewportSize({ width: 1366, height: 768 });
     await auto.clock.install();
     await auto.goto(base + "/games/");
     await auto.waitForSelector('[data-games-directory][data-ready="true"]');
-    await auto.clock.fastForward(7300);
+    await auto.waitForFunction(
+      () =>
+        document
+          .querySelector("[data-hub-rotate]")
+          .getAttribute("aria-label") === "Pause slideshow",
+    );
+    await auto.clock.fastForward(4400);
+    assert(await auto.locator('[data-hub-featured="snake"]').isVisible());
+    await auto.clock.fastForward(1100);
     await auto.waitForSelector('[data-hub-featured="brick-breaker"]:visible');
     await auto.focus("[data-hub-rotate]");
     await auto.clock.fastForward(8000);

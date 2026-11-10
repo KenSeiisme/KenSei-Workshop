@@ -16,6 +16,9 @@ import {
 } from "../../src/games/brick-v2-engine.js";
 import {
   awardGuest,
+  claimGuestDaily,
+  dailyTaskProgress,
+  malaysiaReset,
   compareLocal,
   featuredGame,
   malaysiaDay,
@@ -29,7 +32,23 @@ for (let day = 1; day <= 7; day++) {
   awardGuest(guest, { game: featuredGame(date), score: 1000 }, date);
   awardGuest(guest, { game: "pong" }, date);
 }
-assert.equal(guest.balance, 280);
+assert.equal(guest.balance, 70);
+assert.equal(malaysiaReset("2026-01-07"), Date.parse("2026-01-07T16:00:00Z"));
+assert.deepEqual(
+  dailyTaskProgress(["snake"], "2048").map(({ value }) => value),
+  [1, 1, 0],
+);
+claimGuestDaily(guest, "2026-01-07", "warm-up", "2026-01-07");
+claimGuestDaily(guest, "2026-01-07", "warm-up", "2026-01-08");
+assert.equal(guest.balance, 80);
+assert.throws(
+  () => claimGuestDaily(guest, "2026-01-07", "explorer", "2026-01-08"),
+  /expired/,
+);
+assert.throws(
+  () => claimGuestDaily(guest, "2026-01-08", "featured", "2026-01-08"),
+  /Complete this task/,
+);
 assert.deepEqual(guest.badges, ["first-finish", "seven-days"]);
 awardGuest(guest, { game: "2048", score: 1001 }, "2026-01-07");
 assert(guest.badges.includes("score-1000"));

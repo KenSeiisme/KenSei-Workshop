@@ -26,7 +26,7 @@ export function mountHubCarousel(carousel) {
       !pageHidden &&
       !document.hidden
     )
-      timer = setTimeout(() => move(1, false), 7000);
+      timer = setTimeout(() => move(1, false), 5000);
   }
 
   function renderControls() {
@@ -43,12 +43,37 @@ export function mountHubCarousel(carousel) {
     schedule();
   }
 
+  let shine, float;
+  function embellish(slide) {
+    shine?.cancel();
+    float?.cancel();
+    if (effectsMode() !== "full") return;
+    shine = animateElement(
+      slide.querySelector(".hub-art-shine"),
+      [
+        { transform: "translateX(-105%)", opacity: 0 },
+        { opacity: 1, offset: 0.35 },
+        { transform: "translateX(105%)", opacity: 0 },
+      ],
+      { duration: 680, easing: "ease-out" },
+    );
+    float = animateElement(
+      slide.querySelector(".hub-art-tags"),
+      [
+        { transform: "translateY(5px)" },
+        { transform: "translateY(-2px)", offset: 0.65 },
+        { transform: "translateY(0)" },
+      ],
+      { duration: 360, easing: "ease-out" },
+    );
+  }
   function move(delta, manual) {
     if (manual) setPlaying(false);
     transition?.cancel();
     slides[index].hidden = true;
     index = (index + delta + slides.length) % slides.length;
     slides[index].hidden = false;
+    embellish(slides[index]);
     transition = animateElement(
       slides[index],
       [
@@ -72,6 +97,10 @@ export function mountHubCarousel(carousel) {
     button.addEventListener("click", () =>
       move(Number(button.dataset.hubSlide), true),
     );
+  for (const slide of slides)
+    slide
+      .querySelector(".hub-slide-art")
+      .addEventListener("mouseenter", () => embellish(slide));
   carousel.addEventListener("focusin", (event) => {
     if (!carousel.contains(event.relatedTarget)) setPlaying(false);
   });
@@ -144,5 +173,6 @@ export function mountHubCarousel(carousel) {
     if (effectsMode() !== "full") setPlaying(false);
   });
   renderControls();
+  embellish(slides[index]);
   schedule();
 }

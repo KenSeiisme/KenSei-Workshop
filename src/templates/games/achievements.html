@@ -1,0 +1,53 @@
+<section class="container games-page game-hub" data-games-achievements>
+  <header class="hub-boards-header">
+    <div>
+      <a href="/games/" class="text-link"
+        ><span aria-hidden="true">←</span> Games lobby</a
+      >
+      <h1>Achievements</h1>
+      <p class="muted">Your lobby badges and verified game milestones.</p>
+    </div>
+    ${theme}
+  </header>
+  <section class="panel hub-achievements" aria-labelledby="hub-badge-title">
+    <div class="eyebrow">PLAYER BADGES</div>
+    <h2 id="hub-badge-title">Lobby achievements</h2>
+    <div class="hub-badges" data-hub-badges></div>
+  </section>
+  <section class="panel game-achievements" id="games-progress" hidden>
+    <div class="eyebrow">EVERY LITTLE MILESTONE</div>
+    <div class="game-section-heading">
+      <h2>My Progress</h2>
+      <button class="text-link" data-progress-refresh>Refresh progress</button>
+    </div>
+    <p class="game-progress-status" role="status">
+      Loading verified Public results…
+    </p>
+    <div class="game-progress-stats">
+      <div>
+        <strong id="progress-results">—</strong
+        ><span>Verified Public runs</span>
+      </div>
+      <div>
+        <strong id="progress-games">—</strong><span>Ranked games played</span>
+      </div>
+      <div>
+        <strong id="progress-achievements">—</strong
+        ><span>Milestones unlocked</span>
+      </div>
+    </div>
+    <div class="achievement-grid" id="progress-recent"></div>
+    <details>
+      <summary>All milestones · 30</summary>
+      <div class="achievement-grid" id="progress-all"></div>
+    </details>
+  </section>
+
+  <section class="panel" data-achievements-guest hidden>
+    <h2>Verified milestones</h2>
+    <p class="muted">Sign in and complete Public runs to unlock milestones.</p>
+    <button type="button" class="button secondary" data-sign-in>
+      Sign in with Google
+    </button>
+  </section>
+</section>

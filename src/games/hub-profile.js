@@ -7,7 +7,11 @@ import {
 import { ACHIEVEMENTS } from "./achievement-catalog.js";
 import { gameVersion } from "./engine.js";
 import { XIANGQI_START, XIANGQI_VERSION } from "./xiangqi-engine.js";
-import { defaultBoardMode, resultLabel } from "./hub-rankings.js";
+import {
+  defaultBoardMode,
+  localizedPath,
+  resultLabel,
+} from "./hub-rankings.js";
 import { uiFrom, uiMsg, uiText } from "../site/ui.js";
 
 const scoreBadges = ACHIEVEMENTS.filter((item) => item.field === "score").sort(
@@ -131,13 +135,16 @@ export function mountHubProfile(hub, saves) {
       $("[data-hub-lobby-count]"),
       progress ? `${localBadges.length} / 3` : "—",
     );
+    $("[data-hub-lobby-progress]").value = localBadges.length;
     $("[data-hub-verified-count-group]").hidden = !signed;
+    const verifiedCount = ACHIEVEMENTS.filter((item) =>
+      badgeIds.includes(item.id),
+    ).length;
     uiText(
       $("[data-hub-verified-count]"),
-      ownProfile
-        ? `${ACHIEVEMENTS.filter((item) => badgeIds.includes(item.id)).length} / ${ACHIEVEMENTS.length}`
-        : "—",
+      ownProfile ? `${verifiedCount} / ${ACHIEVEMENTS.length}` : "—",
     );
+    $("[data-hub-verified-progress]").value = verifiedCount;
     uiText(
       $("[data-hub-highlight]"),
       highlight ? uiFrom(highlight.name) : uiMsg("Top scoring badge"),
@@ -160,7 +167,13 @@ export function mountHubProfile(hub, saves) {
     );
     retry.hidden = !failed;
     $("[data-hub-profile-sign-in]").hidden = signed || waiting;
-    $("[data-hub-profile-link]").hidden = !signed;
+    const link = $("[data-hub-profile-link]");
+    const publicId = signed ? identity?.public_id : null;
+    link.hidden = !publicId;
+    if (publicId)
+      link.href =
+        localizedPath("/profile/") + "?id=" + encodeURIComponent(publicId);
+    else link.removeAttribute("href");
 
     const rows = signed || waiting ? [] : saves.rows();
     for (const slide of slides) {

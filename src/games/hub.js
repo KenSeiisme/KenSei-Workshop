@@ -2,20 +2,12 @@ import { mountHubTheme } from "./hub-theme.js";
 import { mountHubCarousel } from "./hub-carousel.js";
 import { mountHubProfile } from "./hub-profile.js";
 import { mountRankPreviews, playTime } from "./hub-rankings.js";
-import { SKINS, tasks } from "./hub-model.js";
+import { SKINS } from "./hub-model.js";
+import { mountDailyChallenge } from "./hub-daily.js";
 import { hubOwner, readHub, syncHub, changeSkin } from "./hub-store.js";
 import { patchMarkup } from "./dom.js";
-import { uiDate, uiError, uiFrom, uiHtml, uiMsg, uiText } from "../site/ui.js";
+import { uiError, uiFrom, uiHtml, uiMsg, uiText } from "../site/ui.js";
 
-const BADGES = [
-  ["first-finish", "First finish", "Complete your first game."],
-  ["score-1000", "Score chaser", "Score over 1,000 points in a single game."],
-  [
-    "seven-days",
-    "Seven-day streak",
-    "Finish every daily task for seven days in a row.",
-  ],
-];
 export function mountGameHub(saves) {
   const hub = document.querySelector("[data-games-directory]");
   if (!hub) return;
@@ -39,32 +31,11 @@ export function mountGameHub(saves) {
   mountHubCarousel($(".hub-feature"));
   mountRankPreviews(hub);
 
+  const updateDaily = mountDailyChallenge($(".hub-daily"), name, sync);
   function paintProgress() {
-    const { day, featured, balance, today, badges, owned, skin, pending } =
-      current || {};
+    const { balance, owned, skin, pending } = current || {};
     uiText($("[data-hub-coins]"), balance ?? "—");
-    uiText(
-      $("[data-hub-day]"),
-      day
-        ? uiMsg("{0} · Malaysia time", [
-            uiDate(day + "T00:00:00Z", { dateStyle: "long", timeZone: "UTC" }),
-          ])
-        : uiMsg("Resets at midnight in Malaysia."),
-    );
-    const daily = [
-      uiMsg("Complete any game"),
-      uiMsg("Complete two different games"),
-      uiMsg("Complete {0}", [name(featured) || "—"]),
-    ];
-    patchMarkup(
-      $("[data-hub-tasks]"),
-      tasks(today || [], featured)
-        .map(
-          ([, done], i) =>
-            uiHtml`<li data-complete="${done}"><span aria-hidden="true">${done ? "✓" : "○"}</span><span>${daily[i]}</span><small>${done ? uiMsg("Done") : "+10"}</small></li>`,
-        )
-        .join(""),
-    );
+    updateDaily(current);
     uiText(
       $("[data-hub-sync]"),
       syncError
@@ -85,13 +56,6 @@ export function mountGameHub(saves) {
         ]),
       );
     }
-    patchMarkup(
-      $("[data-hub-badges]"),
-      BADGES.map(
-        ([id, title, description]) =>
-          uiHtml`<article><span aria-hidden="true">${badges?.includes(id) ? "✦" : "◇"}</span><strong>${uiFrom(title)}</strong><p>${uiFrom(description)}</p><small>${badges?.includes(id) ? uiMsg("Unlocked") : uiMsg("Locked")}</small></article>`,
-      ).join(""),
-    );
     patchMarkup(
       $("[data-hub-skins]"),
       Object.entries(SKINS)
@@ -144,7 +108,7 @@ export function mountGameHub(saves) {
       current = null;
       uiText($("[data-hub-shop-status]"), "");
       syncError = false;
-      updateProfile(null);
+      paintProgress();
     }
     try {
       const next = await readHub(expected);

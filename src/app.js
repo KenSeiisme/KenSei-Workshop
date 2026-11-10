@@ -1272,6 +1272,10 @@
     import("/game-scripts/hub-leaderboards.js").catch(() =>
       toast(uiMsg("Leaderboard unavailable. Refresh to retry.")),
     );
+  if (document.querySelector("[data-games-achievements]"))
+    import("/game-scripts/hub-achievements.js").catch(() =>
+      toast(uiMsg("Progress could not load. Retry when connected.")),
+    );
   initAuth().finally(() => {
     window.KenseiWorkspace.ready = true;
     window.dispatchEvent(new Event("workspace-ready"));

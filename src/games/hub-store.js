@@ -1,5 +1,11 @@
 import { api } from "/tool-scripts/common.js";
-import { SKINS, awardGuest, guestSnapshot, compareLocal } from "./hub-model.js";
+import {
+  SKINS,
+  awardGuest,
+  guestSnapshot,
+  compareLocal,
+  claimGuestDaily,
+} from "./hub-model.js";
 
 export const hubOwner = () => api.user?.id || "guest";
 const blank = () => ({
@@ -79,6 +85,7 @@ export async function readHub(owner = hubOwner()) {
           balance: null,
           today: [],
           badges: [],
+          manualClaims: false,
         };
   const waiting = Object.entries(data.pending);
   if (data.remote) {
@@ -198,6 +205,22 @@ export async function changeSkin(owner, skin, purchase = false) {
     } else if (owned) data.skin = skin;
     else throw Error("Skin is locked");
   });
+}
+export async function claimDailyReward(owner, day, task) {
+  if (owner !== hubOwner()) throw Error("Account changed. Try again.");
+  if (owner === "guest") {
+    await transact(owner, (data) => {
+      if (owner !== hubOwner()) throw Error("Account changed. Try again.");
+      claimGuestDaily(data, day, task);
+    });
+    return;
+  }
+  const snapshot = await rpc(owner, "claim_game_hub_reward", {
+    expected_user: owner,
+    task_day: day,
+    task_id: task,
+  });
+  await transact(owner, (data) => updateSnapshot(data, snapshot));
 }
 export async function saveLocalScore(owner, run, nickname, score) {
   const name = nickname.trim().normalize("NFC");

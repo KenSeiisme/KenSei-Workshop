@@ -4,6 +4,10 @@ import { uiDate, uiHtml } from "../site/ui.js";
 // 名称与难度取自同一份规则；这里只格式化展示，不改变计分。
 export { GAMES };
 const paths = {
+  "connect-four":
+    '<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M7 16h.01M10.3 13h.01M13.6 10h.01M17 7h.01" stroke-width="3"/>',
+  reversi:
+    '<ellipse cx="12" cy="12" rx="9" ry="7"/><path d="M3 12v3c0 4 4 7 9 7s9-3 9-7v-3M7 10c1-2 3-3 5-3"/>',
   chess: '<path d="M10 2h4v4h4v4h-4v4h-4v-4H6V6h4zM7 15h10l-2 5H9zM5 22h14"/>',
   xiangqi:
     '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="6"/><path d="M8 9h8M8 12h8M12 7v10M8 16h8"/>',

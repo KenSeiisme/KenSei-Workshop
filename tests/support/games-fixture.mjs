@@ -1,11 +1,14 @@
 import { PGlite } from "@electric-sql/pglite";
 import fs from "node:fs/promises";
 import { bootstrap } from "./db-fixture.cjs";
-export async function gameDatabase() {
+export async function gameDatabase({ beforeDailyClaims = false } = {}) {
   const db = new PGlite();
   await db.exec(bootstrap);
-  for (const file of (await fs.readdir("supabase/migrations")).sort())
+  for (const file of (await fs.readdir("supabase/migrations")).sort()) {
+    if (beforeDailyClaims && file.endsWith("_workshop_daily_claims.sql"))
+      continue;
     await db.exec(await fs.readFile("supabase/migrations/" + file, "utf8"));
+  }
   const users = [
     "11111111-1111-4111-8111-111111111111",
     "22222222-2222-4222-8222-222222222222",

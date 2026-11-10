@@ -47,7 +47,7 @@
 
 .hub-bar {
   display: grid;
-  grid-template-columns: auto minmax(100px, 1fr) auto auto;
+  grid-template-columns: auto minmax(100px, 1fr) repeat(3, auto);
   align-items: center;
   gap: 10px 16px;
   padding: 13px;
@@ -336,7 +336,6 @@
   color: var(--hub-accent);
 }
 
-.hub-rank-previews,
 .hub-rank-directory,
 .hub-badges,
 .hub-skins {
@@ -345,7 +344,6 @@
   gap: 10px;
 }
 
-.hub-rank-previews,
 .hub-rank-directory {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: 0;
@@ -383,12 +381,6 @@
 .hub-rank-card[aria-current="true"],
 .hub-rank-card:hover {
   border-color: var(--hub-accent);
-}
-
-.hub-rank-preview h3 a::after {
-  content: "";
-  position: absolute;
-  inset: 0;
 }
 
 .hub-rank-preview ol {
@@ -539,7 +531,7 @@
   }
 
   .hub-bar {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) repeat(3, auto);
     gap: 8px;
   }
 
@@ -548,7 +540,6 @@
     grid-row: 2;
   }
 
-  .hub-rank-previews,
   .hub-rank-directory {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -574,35 +565,208 @@
   }
 
   .hub-slide {
-    grid-template-columns: minmax(0, 1fr) minmax(65px, 0.48fr);
+    grid-template-columns: minmax(0, 1fr);
     min-height: 0;
   }
 
-  .hub-slide-copy {
-    display: contents;
-  }
-
-  .hub-slide-copy > :is(.hub-tags, h2, p) {
-    grid-column: 1;
-    margin: 0;
-  }
-
   .hub-slide .hub-slide-art {
-    grid-column: 2;
-    grid-row: 1 / 4;
-    aspect-ratio: 1;
-  }
-
-  .hub-slide-copy > :is(.hub-feature-stats, .hub-feature-actions) {
-    grid-column: 1 / -1;
+    grid-row: 1;
+    max-width: none;
+    height: 128px;
+    aspect-ratio: auto;
   }
 
   .hub-feature-stats {
     margin: 2px 0;
   }
 
-  .hub-rank-previews,
   .hub-badges {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.hub-achievement-link,
+.hub-icon-title,
+.hub-rank-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hub-achievement-link {
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 8px;
+  color: var(--hub-accent);
+}
+
+.hub-achievement-link svg,
+.hub-icon-title svg,
+.hub-rank-tabs svg,
+.hub-task-icon svg,
+.hub-save-icon svg {
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.hub-art-illustration,
+.hub-art-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hub-art-illustration {
+  display: grid;
+  place-items: center;
+}
+
+.hub-art-illustration > svg {
+  width: min(76%, 230px);
+  height: 85%;
+}
+
+.hub-art-shine {
+  background: linear-gradient(
+    112deg,
+    transparent 31%,
+    #e5d7ff55 49%,
+    transparent 65%
+  );
+  opacity: 0;
+  z-index: 1;
+}
+
+.hub-art-tags.hub-tags {
+  position: absolute;
+  z-index: 2;
+  inset: auto 8px 8px;
+  justify-content: flex-end;
+  margin: 0;
+}
+
+.hub-art-tags.hub-tags > span {
+  color: #f3eafa;
+  background: #231b35df;
+  border-color: #e5d7ff46;
+  backdrop-filter: blur(7px);
+}
+
+.hub-progress {
+  display: block;
+  width: 100%;
+  height: 7px;
+  border: 0;
+  border-radius: 999px;
+  appearance: none;
+  background: var(--hub-edge);
+  color: var(--hub-accent);
+}
+
+.hub-progress::-webkit-progress-bar {
+  border-radius: inherit;
+  background: var(--hub-edge);
+}
+
+.hub-progress::-webkit-progress-value {
+  border-radius: inherit;
+  background: linear-gradient(90deg, #995bdb, #d883bc);
+}
+
+.hub-progress::-moz-progress-bar {
+  border-radius: inherit;
+  background: linear-gradient(90deg, #995bdb, #d883bc);
+}
+
+.hub-player-milestones .hub-progress {
+  margin-top: 5px;
+}
+
+.hub-reset-line,
+.hub-task-progress,
+.hub-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hub-reset-line time {
+  font-variant-numeric: tabular-nums;
+  color: var(--hub-accent);
+}
+
+.hub-task-icon,
+.hub-save-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--hub-accent);
+  background: var(--hub-panel);
+}
+
+.hub-save-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.hub-save-icon {
+  flex: none;
+  color: var(--game-accent, var(--hub-accent));
+}
+
+.hub-task-body {
+  min-width: 0;
+}
+
+.hub-task-progress small,
+.hub-task-state {
+  color: var(--muted);
+}
+
+.hub-daily [data-hub-claim-status]:empty {
+  display: none;
+}
+
+.hub-rank-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.game-hub .hub-rank-tabs [aria-selected="true"] {
+  border-color: var(--hub-accent);
+  color: var(--hub-accent);
+  background: var(--hub-panel);
+}
+
+@media (max-width: 600px) {
+  .hub-achievement-link {
+    justify-content: center;
+    width: 44px;
+    padding: 0;
+  }
+
+  .hub-achievement-link > span {
+    display: none;
+  }
+}
+
+@media (max-width: 460px) {
+  .hub-daily li {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .hub-daily li > :last-child {
+    grid-column: 2;
+    justify-self: start;
   }
 }

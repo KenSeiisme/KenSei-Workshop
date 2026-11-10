@@ -514,5 +514,65 @@
   "m_942087cc2d41": {
     "en": "Retry",
     "zh-Hant": "重試"
+  },
+  "m_74cf2bc63fe1": {
+    "en": "Achievements",
+    "zh-Hant": "成就"
+  },
+  "m_ef7d8cf9f30a": {
+    "en": "Your lobby badges and verified game milestones.",
+    "zh-Hant": "查看你的大廳徽章與已驗證遊戲里程碑。"
+  },
+  "m_3b541f98e8f3": {
+    "en": "Resets in",
+    "zh-Hant": "距離重置"
+  },
+  "m_0086743bc5f0": {
+    "en": "Claim rewards before midnight in Malaysia.",
+    "zh-Hant": "請在馬來西亞時間午夜前領取獎勵。"
+  },
+  "m_124abae06178": {
+    "en": "Earn 5 coins per completed game, up to 50 per day. Daily tasks are worth 10 coins each.",
+    "zh-Hant": "每完成一局可獲得 5 枚金幣，每日最多 50 枚。每項每日任務可獲得 10 枚金幣。"
+  },
+  "m_ddcd2779294a": {
+    "en": "Claimed",
+    "zh-Hant": "已領取"
+  },
+  "m_5f1ad6d29454": {
+    "en": "Refreshing tasks…",
+    "zh-Hant": "正在更新任務…"
+  },
+  "m_948cc013e950": {
+    "en": "+{0} coins",
+    "zh-Hant": "+{0} 枚金幣"
+  },
+  "m_702f4ab2f2de": {
+    "en": "Claiming…",
+    "zh-Hant": "領取中…"
+  },
+  "m_1be1d2fa68a7": {
+    "en": "Claim +{0} coins",
+    "zh-Hant": "領取 +{0} 枚金幣"
+  },
+  "m_b979683c4117": {
+    "en": "Go online to claim account rewards.",
+    "zh-Hant": "請恢復連線後領取帳號獎勵。"
+  },
+  "m_fb0a7f366614": {
+    "en": "Reward added to your balance.",
+    "zh-Hant": "獎勵已加入金幣餘額。"
+  },
+  "m_a7ff3dee5279": {
+    "en": "This daily reward has expired.",
+    "zh-Hant": "這項每日獎勵已到期。"
+  },
+  "m_29b8b324eee5": {
+    "en": "Complete this task before claiming its reward.",
+    "zh-Hant": "請先完成任務，再領取獎勵。"
+  },
+  "m_07628b86e66b": {
+    "en": "Invalid daily reward.",
+    "zh-Hant": "無效的每日獎勵。"
   }
 }

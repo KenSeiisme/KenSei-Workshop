@@ -979,7 +979,7 @@ async function renderSaves() {
     ? rows
         .map(
           (r, index) =>
-            uiHtml`<div class="saved-game-row" ${index >= 3 ? "data-save-extra" : ""} ${index >= 3 && !expanded ? "hidden" : ""}><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${retiredArcade(r.data.game) && r.data.state.version < gameVersion(r.data.game) ? uiMsg("Legacy rules · v{0} · ", [r.data.state.version]) : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div><div><a class="button secondary" href="${localizedPath(`/games/${encodeURIComponent(r.data.game)}/`)}?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
+            uiHtml`<div class="saved-game-row" ${index >= 3 ? "data-save-extra" : ""} ${index >= 3 && !expanded ? "hidden" : ""}><div class="hub-save-title"><span class="hub-save-icon" data-game-theme="${esc(r.data.game)}">${gameIcon(r.data.game)}</span><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${retiredArcade(r.data.game) && r.data.state.version < gameVersion(r.data.game) ? uiMsg("Legacy rules · v{0} · ", [r.data.state.version]) : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div></div><div><a class="button secondary" href="${localizedPath(`/games/${encodeURIComponent(r.data.game)}/`)}?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
         )
         .join("")
     : uiHtml(

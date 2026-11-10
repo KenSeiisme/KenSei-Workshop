@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import { featuredGame } from "../../src/games/hub-model.js";
 import { randomUUID } from "node:crypto";
 import { gameDatabase } from "../support/games-fixture.mjs";
 import { create } from "../../src/games/engine.js";
@@ -10,7 +12,7 @@ const {
   admin,
   as,
   value,
-} = await gameDatabase();
+} = await gameDatabase({ beforeDailyClaims: true });
 const settle = (game, difficulty, version, score = 600) =>
   (async () => {
     const run = await admin("start", a, {
@@ -25,10 +27,12 @@ const settle = (game, difficulty, version, score = 600) =>
     });
     return run;
   })();
-try {
-  await db.exec(
-    "create or replace function workshop_private.hub_day() returns date language sql stable set search_path='' as $$select date '2026-01-01'$$",
+const setDay = (day) =>
+  db.exec(
+    `create or replace function workshop_private.hub_day() returns date language sql stable set search_path='' as $$select date '${day}'$$`,
   );
+try {
+  await setDay("2026-01-01");
   const run = (game = "2048") => ({
     id: randomUUID(),
     segmentId: randomUUID(),
@@ -90,9 +94,26 @@ try {
     (await rpc("game_hub_snapshot", {}, "authenticated", b)).balance,
     0,
   );
-  await db.exec(
-    "create or replace function workshop_private.hub_day() returns date language sql stable set search_path='' as $$select date '2026-01-02'$$",
+  const migrationDir = "supabase/migrations/";
+  const migration = (await fs.readdir(migrationDir)).find((name) =>
+    name.endsWith("_workshop_daily_claims.sql"),
   );
+  await db.exec(await fs.readFile(migrationDir + migration, "utf8"));
+  await setDay("2026-01-01");
+  const claim = (day, id, role = "authenticated", user = a) =>
+    rpc(
+      "claim_game_hub_reward",
+      { expected_user: a, task_day: day, task_id: id },
+      role,
+      user,
+    );
+  progress = await rpc("game_hub_snapshot", {});
+  assert.equal(progress.manualClaims, true);
+  assert.equal(progress.balance, 40);
+  assert.equal(progress.resetAt, Date.parse("2026-01-01T16:00:00Z"));
+  assert.deepEqual(progress.claimedTasks, ["explorer", "featured", "warm-up"]);
+  assert.equal((await claim("2026-01-01", "explorer")).balance, 40);
+  await setDay("2026-01-02");
   assert.equal(
     (await sync(runs)).balance,
     40,
@@ -101,7 +122,34 @@ try {
   const finishedOffline = run("minesweeper");
   progress = await sync([finishedOffline]);
   assert.equal(progress.day, "2026-01-02");
-  assert.equal(progress.balance, 65);
+  assert.equal(progress.balance, 45);
+  assert.deepEqual(progress.claimedTasks, []);
+  await assert.rejects(claim("2026-01-02", "explorer"), /Complete this task/);
+  await assert.rejects(
+    claim("2026-01-02", "warm-up", "authenticated", b),
+    /Account changed/,
+  );
+  await assert.rejects(
+    claim("2026-01-02", "warm-up", "anon", null),
+    /permission denied/,
+  );
+  await assert.rejects(claim("2026-01-02", "unknown"), /Invalid daily reward/);
+  progress = await claim("2026-01-02", "warm-up");
+  assert.deepEqual(progress.claimedTasks, ["warm-up"]);
+  assert.equal(progress.balance, 55);
+  assert.equal((await claim("2026-01-02", "warm-up")).balance, 55);
+  await setDay("2026-01-03");
+  assert.equal((await claim("2026-01-02", "warm-up")).balance, 55);
+  await assert.rejects(claim("2026-01-02", "explorer"), /expired/);
+  await sync([run("pong"), run(featuredGame("2026-01-03"))]);
+  for (let i = 4; i <= 9; i++) {
+    const day = `2026-01-0${i}`;
+    await setDay(day);
+    progress = await sync([run("pong"), run(featuredGame(day))]);
+  }
+  assert(progress.badges.includes("seven-days"));
+  assert.deepEqual(progress.claimedTasks, []);
+  assert.equal(progress.balance, 125);
 
   const snake = await settle("snake", "normal", 1);
   const brick = await settle("brick-breaker", "classic", 2);
@@ -203,7 +251,7 @@ try {
     3,
   );
   console.log(
-    "PASS idempotent coins, resumed active time, scoped accounts, Malaysia day, and transactional arcade cutover",
+    "PASS idempotent coins, resumed active time, scoped accounts, daily claims, unclaimed streaks, and transactional arcade cutover",
   );
 } finally {
   await db.close();

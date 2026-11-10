@@ -48,6 +48,23 @@ body.game-is-focused > .footer {
   font-size: 12px;
   white-space: nowrap;
 }
+[data-play-shell] .game-heading-tools .game-achievement-link {
+  gap: 6px;
+}
+.game-achievement-link svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+@media (max-width: 1080px) {
+  [data-play-shell] .game-heading-tools .game-achievement-link {
+    width: 44px;
+    padding: 0;
+  }
+  .game-achievement-link > span {
+    display: none;
+  }
+}
 [data-play-shell] .game-shell-mode {
   margin: 0;
   max-width: 260px;

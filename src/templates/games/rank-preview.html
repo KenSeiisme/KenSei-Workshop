@@ -1,15 +1,13 @@
-<article
-  class="hub-rank-preview"
+<button
+  type="button"
+  class="button secondary"
+  role="tab"
+  id="hub-rank-tab-${slug}"
+  aria-controls="hub-rank-panel"
+  aria-selected="${selected}"
+  tabindex="${tabindex}"
   data-rank-preview="${slug}"
   data-game-theme="${slug}"
 >
-  <h3><a href="/games/leaderboards/?game=${slug}">${name}</a></h3>
-  <p data-preview-mode class="muted small"></p>
-  <p data-preview-status class="muted small" role="status">
-    Loading leaderboard…
-  </p>
-  <ol data-preview-rows></ol>
-  <button type="button" class="text-link" data-preview-retry hidden>
-    Retry
-  </button>
-</article>
+  <span data-preview-icon aria-hidden="true"></span><span>${name}</span>
+</button>

@@ -18,6 +18,23 @@
       <span>Coins</span></a
     >
     ${theme}
+    <a
+      class="hub-achievement-link"
+      href="/games/achievements/"
+      aria-label="Achievements"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="9" r="5" />
+        <path d="m9 13-2 8 5-2 5 2-2-8m-5-4 1.5 1.5L14 8" />
+      </svg>
+      <span>Achievements</span>
+    </a>
     <nav class="filter-bar" id="game-filters" aria-label="Game categories">
       <button class="filter active" data-game-filter="all" aria-pressed="true">
         All games
@@ -97,12 +114,26 @@
       </div>
       <dl class="hub-player-milestones">
         <div>
-          <dt>Lobby achievements</dt>
+          <dt id="hub-lobby-label">Lobby achievements</dt>
           <dd data-hub-lobby-count>—</dd>
+          <progress
+            class="hub-progress"
+            max="3"
+            value="0"
+            data-hub-lobby-progress
+            aria-labelledby="hub-lobby-label"
+          ></progress>
         </div>
         <div data-hub-verified-count-group hidden>
-          <dt>Verified milestones</dt>
+          <dt id="hub-verified-label">Verified milestones</dt>
           <dd data-hub-verified-count>—</dd>
+          <progress
+            class="hub-progress"
+            max="30"
+            value="0"
+            data-hub-verified-progress
+            aria-labelledby="hub-verified-label"
+          ></progress>
         </div>
       </dl>
       <div class="hub-player-badge">
@@ -124,13 +155,7 @@
         >
           Sign in with Google
         </button>
-        <a
-          class="button secondary"
-          href="/profile/"
-          data-hub-profile-link
-          hidden
-          >My Profile</a
-        >
+        <a class="button secondary" data-hub-profile-link hidden>My Profile</a>
         <button type="button" class="text-link" data-hub-profile-retry hidden>
           Retry
         </button>
@@ -138,13 +163,31 @@
     </section>
     <section class="hub-daily panel" aria-labelledby="hub-daily-title">
       <div class="eyebrow">NEW TASKS EVERY DAY</div>
-      <h2 id="hub-daily-title">Daily challenge</h2>
+      <h2 id="hub-daily-title" class="hub-icon-title">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          aria-hidden="true"
+        >
+          <rect x="4" y="5" width="16" height="15" rx="2" />
+          <path d="M4 10h16M8 3v4m8-4v4m-8 8 2 2 5-5" /></svg
+        >Daily challenge
+      </h2>
       <p data-hub-day class="muted">Resets at midnight in Malaysia.</p>
+      <div class="hub-reset-line">
+        <span>Resets in</span><time role="timer" data-hub-reset>--:--:--</time>
+      </div>
       <ol data-hub-tasks></ol>
       <p class="muted small">
-        Earn 5 coins per completed game, up to 50 per day. Each task earns 10
-        extra coins.
+        Earn 5 coins per completed game, up to 50 per day. Daily tasks are worth
+        10 coins each.
       </p>
+      <p class="muted small" data-hub-claim-note hidden>
+        Claim rewards before midnight in Malaysia.
+      </p>
+      <p data-hub-claim-status role="status" class="small"></p>
       <p data-hub-sync role="status" class="small"></p>
     </section>
   </div>
@@ -152,13 +195,49 @@
     <div class="game-section-heading">
       <div>
         <div class="eyebrow">RESULTS AND PLAY TIME</div>
-        <h2 id="hub-rank-title">Leaderboard highlights</h2>
+        <h2 id="hub-rank-title" class="hub-icon-title">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <path d="M3 20h18M5 20v-7h4v7m1 0V5h4v15m1 0V9h4v11" /></svg
+          >Leaderboard highlights
+        </h2>
       </div>
       <a class="button secondary" href="/games/leaderboards/"
         >View all leaderboards</a
       >
     </div>
-    <div class="hub-rank-previews">${quick_ranks}</div>
+    <div class="hub-rank-tabs" role="tablist" aria-label="Game leaderboards">
+      ${quick_ranks}
+    </div>
+    <div
+      class="hub-rank-preview"
+      id="hub-rank-panel"
+      role="tabpanel"
+      aria-labelledby="hub-rank-tab-snake"
+      tabindex="0"
+    >
+      <div class="hub-preview-header">
+        <p data-preview-mode class="muted small"></p>
+        <a
+          class="text-link"
+          data-preview-full
+          href="/games/leaderboards/?game=snake"
+          >View leaderboard</a
+        >
+      </div>
+      <p data-preview-status class="muted small" role="status">
+        Loading leaderboard…
+      </p>
+      <ol data-preview-rows></ol>
+      <button type="button" class="text-link" data-preview-retry hidden>
+        Retry
+      </button>
+    </div>
   </section>
   <section id="games-library" aria-labelledby="games-library-heading">
     <div class="game-library-heading">
@@ -186,7 +265,17 @@
     data-saves-expanded="false"
   >
     <div class="game-section-heading">
-      <h2 id="continue-title">Continue playing</h2>
+      <h2 id="continue-title" class="hub-icon-title">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          aria-hidden="true"
+        >
+          <path d="M5 9a8 8 0 1 1 1 9M5 9V4m0 5h5m1-1 5 4-5 4z" /></svg
+        >Continue playing
+      </h2>
       <button
         class="button secondary"
         type="button"
@@ -214,40 +303,6 @@
       </div>
     </div>
   </section>
-  <section class="panel hub-achievements" aria-labelledby="hub-badge-title">
-    <div class="eyebrow">PLAYER BADGES</div>
-    <h2 id="hub-badge-title">Lobby achievements</h2>
-    <div class="hub-badges" data-hub-badges></div>
-  </section>
-  <section class="panel game-achievements" id="games-progress" hidden>
-    <div class="eyebrow">EVERY LITTLE MILESTONE</div>
-    <div class="game-section-heading">
-      <h2>My Progress</h2>
-      <button class="text-link" data-progress-refresh>Refresh progress</button>
-    </div>
-    <p class="game-progress-status" role="status">
-      Loading verified Public results…
-    </p>
-    <div class="game-progress-stats">
-      <div>
-        <strong id="progress-results">—</strong
-        ><span>Verified Public runs</span>
-      </div>
-      <div>
-        <strong id="progress-games">—</strong><span>Ranked games played</span>
-      </div>
-      <div>
-        <strong id="progress-achievements">—</strong
-        ><span>Milestones unlocked</span>
-      </div>
-    </div>
-    <div class="achievement-grid" id="progress-recent"></div>
-    <details>
-      <summary>All milestones · 30</summary>
-      <div class="achievement-grid" id="progress-all"></div>
-    </details>
-  </section>
-
   <section
     class="panel hub-shop"
     id="game-skin-shop"

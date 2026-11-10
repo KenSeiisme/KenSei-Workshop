@@ -38,6 +38,13 @@ def translate(text, locale):
 
 
 COMMON = {
+    "games/achievements": (
+        {"en": "Achievements", "zh-Hant": "成就"},
+        {
+            "en": "See your lobby badges and verified game milestones.",
+            "zh-Hant": "查看你的大廳徽章與已驗證遊戲里程碑。",
+        },
+    ),
     "games/leaderboards": (
         {"en": "All leaderboards", "zh-Hant": "全部榜單"},
         {
@@ -224,7 +231,7 @@ def metadata(route, locale, site_url):
         descriptions = CONTENT[route]["description"]
     else:
         names, descriptions = COMMON.get(route, COMMON["404"])
-    slug = "games" if route == "games/leaderboards" else route.replace("/", "-") or "home"
+    slug = "games" if route in {"games/leaderboards", "games/achievements"} else route.replace("/", "-") or "home"
     return {
         "title": names[locale] + " — KenSei Workshop",
         "description": descriptions[locale],
@@ -266,7 +273,7 @@ def styles(route):
         ]
     if route == "games" or route.startswith("games/"):
         files += ["games.css", "game-neon.css", "game-next.css", "game-experience.css"]
-        if route in {"games", "games/leaderboards"}:
+        if route in {"games", "games/leaderboards", "games/achievements"}:
             files.append("game-hub.css")
         slug = route.split("/")[-1]
         if slug in ["sudoku", "nonogram"]:
@@ -275,7 +282,7 @@ def styles(route):
             files.append("arcade-games.css")
         if slug in ["connect-four", "reversi"]:
             files.append("board-games.css")
-        if route.startswith("games/") and route != "games/leaderboards":
+        if route.startswith("games/") and route not in {"games/leaderboards", "games/achievements"}:
             files.append("game-play-shell.css")
         if slug == "go":
             files.append("go.css")
@@ -315,6 +322,8 @@ def source_files(route):
         files.add("src/tools/profile.js")
     if route == "games/leaderboards":
         files.add("src/games/hub-leaderboards.js")
+    elif route == "games/achievements":
+        files.add("src/games/hub-achievements.js")
     elif route == "games" or route.startswith("games/"):
         files.add(
             "src/games/xiangqi.js"

@@ -8,7 +8,6 @@
   ${hidden}
 >
   <div class="hub-slide-copy">
-    <div class="hub-tags">${play_tags}</div>
     <h2 id="featured-${slug}">${name}</h2>
     <p>${description}</p>
     <dl class="hub-feature-stats">
@@ -30,5 +29,9 @@
       >
     </div>
   </div>
-  <div class="game-cover hub-slide-art" aria-hidden="true">${preview}</div>
+  <div class="game-cover hub-slide-art">
+    <div class="hub-art-illustration" aria-hidden="true">${preview}</div>
+    <span class="hub-art-shine" aria-hidden="true"></span>
+    <div class="hub-tags hub-art-tags">${play_tags}</div>
+  </div>
 </article>
