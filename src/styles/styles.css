@@ -129,7 +129,6 @@ h3 {
   position: sticky;
   top: 0;
   z-index: 30;
-  backdrop-filter: blur(18px);
 }
 .nav-wrap {
   height: 100%;

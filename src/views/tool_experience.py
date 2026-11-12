@@ -175,7 +175,7 @@ def heading(tool, star):
                 else "tools/heading.html"
             )
         ),
-        category=escape(category.upper()),
+        category=escape(category),
         name=escape(name),
         description=escape(description),
         slug=slug,

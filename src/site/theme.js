@@ -20,8 +20,10 @@
     button.removeAttribute("data-ui-attrs");
     function paint() {
       const light = root.dataset.siteTheme === "light";
-      button.querySelector("[data-theme-sun]").hidden = light;
-      button.querySelector("[data-theme-moon]").hidden = !light;
+      button.querySelector("[data-theme-sun]").toggleAttribute("hidden", light);
+      button
+        .querySelector("[data-theme-moon]")
+        .toggleAttribute("hidden", !light);
       const label = ui.msg(
         light ? "Switch to dark theme" : "Switch to light theme",
       );

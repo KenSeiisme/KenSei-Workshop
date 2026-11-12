@@ -555,7 +555,7 @@ def head(route, locale, site_url):
             )
     lines.append('<script src="/site/theme.js"></script>')
     lines.extend(
-        '<link rel="stylesheet" href="/' + name + '">' for name in [*styles(route), "theme.css"]
+        '<link rel="stylesheet" href="/' + name + '">' for name in [*styles(route), "theme.css", "interface.css"]
     )
     lines += [
         '<script src="/site/i18n.js" defer></script>',

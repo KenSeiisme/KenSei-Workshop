@@ -92,13 +92,6 @@ body.game-is-focused > .footer {
   border: 1px solid var(--line);
   border-radius: 10px;
 }
-[data-play-shell] .game-shell-sound::before {
-  content: "♫";
-  font-size: 19px;
-}
-[data-play-shell] .game-shell-sound[aria-pressed="false"]::before {
-  content: "♪̸";
-}
 [data-play-shell] .game-play {
   padding: 8px;
   border-radius: 16px;
@@ -768,10 +761,6 @@ body.game-is-focused > .footer {
     width: 44px;
     padding: 0;
     font-size: 0;
-  }
-  [data-play-shell] .game-heading-tools [data-shell-settings]::before {
-    content: "⚙";
-    font-size: 20px;
   }
   [data-play-shell] .game-heading-tools [data-shell-focus] {
     padding: 6px;

@@ -1,5 +1,5 @@
 <header class="whiteboard-toolbar">
-  <a href="/tools/" class="back-link">← Tools</a>
+  <a href="/tools/" class="back-link">${svg_back} <span>All tools</span></a>
   <h1>${name}</h1>
   <button
     id="board-title"
@@ -14,16 +14,35 @@
     data-favorite="${slug}"
     aria-label="Favorite ${name}"
     aria-pressed="false"
-    hidden
   >
     ${star}
   </button>
+  <button
+    type="button"
+    class="icon-button"
+    data-open-help
+    aria-haspopup="dialog"
+    aria-label="Help"
+    title="Help"
+  >
+    ${svg_help}
+  </button>
   <div class="whiteboard-toolbar-actions">
-    <button class="button secondary" id="board-focus" hidden>Exit focus</button>
-    <button class="button secondary" id="board-boards">Boards</button>
-    <button class="button secondary" id="board-background">Background</button>
-    <button class="button secondary" id="board-fullscreen">Fullscreen</button>
-    <button class="button secondary" id="board-menu-open">More</button>
+    <button class="button secondary" id="board-focus" hidden>
+      ${svg_unfocus} <span>Exit focus</span>
+    </button>
+    <button class="button secondary" id="board-boards">
+      ${svg_cards} <span>Boards</span>
+    </button>
+    <button class="button secondary" id="board-background">
+      ${svg_grid} <span>Background</span>
+    </button>
+    <button class="button secondary" id="board-fullscreen">
+      ${svg_focus} <span>Fullscreen</span>
+    </button>
+    <button class="button secondary" id="board-menu-open">
+      ${svg_menu} <span>More</span>
+    </button>
   </div>
 </header>
 <dialog
@@ -32,7 +51,7 @@
   aria-labelledby="tool-help-title"
 >
   <button class="button secondary" data-close-help aria-label="Close help">
-    Close ×
+    <span>Close</span> ${svg_close}
   </button>
   <h2 id="tool-help-title">${name}</h2>
   <p>${description}</p>

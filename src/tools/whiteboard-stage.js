@@ -1,6 +1,6 @@
 import { $, api } from "./common.js";
 import { el, field, row, select } from "./advanced-ui.js";
-import { uiMsg, uiText, uiDate } from "../site/ui.js";
+import { uiMsg, uiText, uiDate, uiAttr } from "../site/ui.js";
 
 export function createWhiteboardStage({
   open,
@@ -67,20 +67,6 @@ export function createWhiteboardStage({
       checked: true,
       id: "board-snap-ports",
     });
-  const help = el("button", "Help", {
-    type: "button",
-    class: "button secondary",
-    "data-open-help": "",
-  });
-  const favorite =
-    document.querySelector('[data-favorite="whiteboard"]') ||
-    el("button", "Favorite", {
-      class: "favorite icon-button",
-      "data-favorite": "whiteboard",
-      "aria-pressed": "false",
-      "aria-label": "Favorite Whiteboard",
-    });
-  favorite.hidden = false;
   menu.append(
     el("h3", "Export"),
     field("Include paper pattern", include),
@@ -89,7 +75,6 @@ export function createWhiteboardStage({
     el("h3", "Drawing preferences"),
     field("Keep tool active", keep),
     field("Snap to points", snap),
-    row(help, favorite),
   );
   const lang = select(
     [
@@ -104,10 +89,6 @@ export function createWhiteboardStage({
   // 原有 Help 保持同一份內容；放入全屏容器，避免被瀏覽器隱藏。
   const helpDialog = $("#tool-help");
   stage.append(helpDialog);
-  help.onclick = () => {
-    more.close();
-    helpDialog.showModal();
-  };
   const background = dialog(
       "board-background-panel",
       "Paper background",
@@ -208,7 +189,9 @@ export function createWhiteboardStage({
     focus = value;
     document.body.classList.toggle("whiteboard-focus", focus);
     $("#board-focus").hidden = !active;
-    uiText($("#board-focus"), uiMsg(focus ? "Exit focus" : "Focus"));
+    const label = uiMsg(focus ? "Exit focus" : "Focus");
+    uiText($("#board-focus span"), label);
+    uiAttr($("#board-focus"), "title", label);
     requestAnimationFrame(resize);
   }
   $("#board-focus").onclick = async () => {
@@ -233,10 +216,11 @@ export function createWhiteboardStage({
     }
   };
   function fullChanged() {
-    uiText(
-      $("#board-fullscreen"),
-      uiMsg(document.fullscreenElement ? "Exit fullscreen" : "Fullscreen"),
+    const label = uiMsg(
+      document.fullscreenElement ? "Exit fullscreen" : "Fullscreen",
     );
+    uiText($("#board-fullscreen span"), label);
+    uiAttr($("#board-fullscreen"), "title", label);
     requestAnimationFrame(resize);
   }
   document.addEventListener("fullscreenchange", fullChanged);

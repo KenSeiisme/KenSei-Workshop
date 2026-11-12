@@ -1,14 +1,17 @@
-<section class="container page-section">
+<section class="container page-section projects-page">
   ${intro}
-  <div class="filter-bar" data-filter-group="projects">
-    <button class="filter active" data-filter="all" aria-pressed="true">
-      All projects</button
-    ><button class="filter" data-filter="web" aria-pressed="false">Web</button
-    ><button class="filter" data-filter="software" aria-pressed="false">
-      Software</button
-    ><button class="filter" data-filter="creative" aria-pressed="false">
-      Creative
-    </button>
+  <div class="projects-controls glass-surface">
+    <div class="filter-bar" data-filter-group="projects">
+      <button class="filter active" data-filter="all" aria-pressed="true">
+        All projects</button
+      ><button class="filter" data-filter="web" aria-pressed="false">Web</button
+      ><button class="filter" data-filter="software" aria-pressed="false">
+        Software</button
+      ><button class="filter" data-filter="creative" aria-pressed="false">
+        Creative
+      </button>
+    </div>
+    <p id="project-result-count" class="muted small" role="status"></p>
   </div>
   <div class="projects-grid listing-projects">${project_cards}</div>
 </section>

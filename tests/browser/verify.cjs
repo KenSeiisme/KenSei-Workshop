@@ -144,13 +144,12 @@ function pass(name) {
     );
     assert.equal(await page.locator(".project-card,.car-art").count(), 0);
     assert.equal(await page.locator(".demo-example").count(), 2);
-    assert.deepEqual(await page.locator("#navigation a").allTextContents(), [
-      "Home",
-      "Tools",
-      "Games",
-      "Projects",
-      "About Me ↗",
-    ]);
+    assert.deepEqual(
+      await page
+        .locator("#navigation a")
+        .evaluateAll((links) => links.map((link) => link.textContent.trim())),
+      ["Home", "Tools", "Games", "Projects", "About Me"],
+    );
     await page
       .getByRole("link", { name: "Explore Tools", exact: true })
       .click();
@@ -217,7 +216,14 @@ function pass(name) {
       (await page.locator(".project-card:visible").allTextContents()).join(" "),
       /KenSei Studio/,
     );
-    pass("Project category filtering");
+    assert.equal(
+      await page.locator("#project-result-count").textContent(),
+      "2 projects found",
+    );
+    for (const card of await page.locator(".project-card").all()) {
+      assert.equal(await card.locator("a").count(), 1);
+    }
+    pass("Project category count and single link per card");
     await page.goto(base + "/tools/text-toolkit/");
     await page
       .locator("#text-input")

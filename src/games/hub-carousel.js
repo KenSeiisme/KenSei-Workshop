@@ -33,7 +33,8 @@ export function mountHubCarousel(carousel) {
     const label = playing ? uiMsg("Pause slideshow") : uiMsg("Play slideshow");
     uiAttr(rotate, "aria-label", label);
     uiAttr(rotate, "title", label);
-    rotate.firstElementChild.textContent = playing ? "Ⅱ" : "▶";
+    rotate.querySelector("[data-hub-pause-icon]").hidden = !playing;
+    rotate.querySelector("[data-hub-play-icon]").hidden = playing;
     count.setAttribute("aria-live", playing ? "off" : "polite");
   }
 
@@ -93,10 +94,13 @@ export function mountHubCarousel(carousel) {
     pointerAction = null;
     setPlaying(requested ?? !playing);
   });
-  for (const button of carousel.querySelectorAll("[data-hub-slide]"))
+  for (const button of carousel.querySelectorAll("[data-hub-slide]")) {
     button.addEventListener("click", () =>
       move(Number(button.dataset.hubSlide), true),
     );
+    button.disabled = false;
+  }
+  rotate.disabled = false;
   carousel.addEventListener("focusin", (event) => {
     if (!carousel.contains(event.relatedTarget)) setPlaying(false);
   });

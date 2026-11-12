@@ -386,7 +386,6 @@ def directory(games):
             name=g["name"],
             station=DETAILS[g["slug"]][0],
             preview=preview(g["preview"]),
-            tagline=DETAILS[g["slug"]][1],
             description=g["description"],
             spec=DETAILS[g["slug"]][2],
             play_mode=(

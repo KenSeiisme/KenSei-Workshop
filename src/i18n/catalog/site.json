@@ -534,5 +534,69 @@
   "m_6d9d8dd013cd": {
     "en": "Tool records",
     "zh-Hant": "工具紀錄"
+  },
+  "m_56c4c1cb6862": {
+    "en": "1 project found",
+    "zh-Hant": "找到 1 個作品"
+  },
+  "m_8f804c1a0c78": {
+    "en": "{0} projects found",
+    "zh-Hant": "找到 {0} 個作品"
+  },
+  "m_98c12125de2c": {
+    "en": "Output settings",
+    "zh-Hant": "輸出設定"
+  },
+  "m_3ac575dcce24": {
+    "en": "Download image",
+    "zh-Hant": "下載圖片"
+  },
+  "m_ee6c65bfd324": {
+    "en": "Download for Windows x64",
+    "zh-Hant": "下載 Windows x64 版"
+  },
+  "m_e88dc363c20f": {
+    "en": "Download all as ZIP",
+    "zh-Hant": "下載全部圖片（ZIP）"
+  },
+  "m_39e511f482a8": {
+    "en": "Built with",
+    "zh-Hant": "使用技術"
+  },
+  "m_46124e023603": {
+    "en": "Sound",
+    "zh-Hant": "音效"
+  },
+  "m_5629192763b9": {
+    "en": "UPLOAD FILES",
+    "zh-Hant": "選擇檔案"
+  },
+  "m_6c0bbacf07ac": {
+    "en": "Create ZIP & download",
+    "zh-Hant": "建立 ZIP 並下載"
+  },
+  "m_620926a28d29": {
+    "en": "Download renamed ZIP",
+    "zh-Hant": "下載重新命名後的 ZIP"
+  },
+  "m_c94f75cf1a56": {
+    "en": "Download previewed PDF",
+    "zh-Hant": "下載預覽的 PDF"
+  },
+  "m_0542ec9bd1d2": {
+    "en": "Download subtitles",
+    "zh-Hant": "下載字幕"
+  },
+  "m_b3ddafaca4ca": {
+    "en": "Launch website",
+    "zh-Hant": "開啟網站"
+  },
+  "m_a46e92d02960": {
+    "en": "View source code",
+    "zh-Hant": "查看原始碼"
+  },
+  "m_96ab83187235": {
+    "en": "View on Pixiv",
+    "zh-Hant": "在 Pixiv 查看"
   }
 }

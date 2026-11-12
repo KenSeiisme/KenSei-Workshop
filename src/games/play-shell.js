@@ -72,7 +72,10 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     document.body.classList.toggle("game-is-focused", focus);
     for (const button of root.querySelectorAll("[data-shell-focus]")) {
       button.hidden = state === "ready";
-      uiText(button, focus ? uiMsg("Exit focus") : uiMsg("Focus"));
+      const label = focus ? uiMsg("Exit focus") : uiMsg("Focus");
+      uiText(button.querySelector("[data-shell-focus-label]") || button, label);
+      uiAttr(button, "aria-label", label);
+      uiAttr(button, "title", label);
       button.setAttribute("aria-pressed", String(focus));
     }
     requestSize();

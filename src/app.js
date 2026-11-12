@@ -189,7 +189,8 @@
     );
     $("[data-account-avatar]").hidden = !signed;
     $(".user-dot", toggle).hidden = signed;
-    uiText($("[data-account-chevron]"), signed ? "▾" : "↗");
+    $("[data-account-chevron]").hidden = !signed;
+    $("[data-account-external]").hidden = signed;
     toggle.setAttribute("aria-expanded", "false");
     $("#account-menu").hidden = true;
     $("#account-public-profile").hidden = !profile;
@@ -471,6 +472,8 @@
   const toolSearch = $("#tool-search");
   const toolCount = $("#tool-result-count");
   const toolEmpty = $("#search-empty");
+  const toolClear = $("#tool-search-clear");
+  const projectCount = $("#project-result-count");
   function setToolFilter(button) {
     filter = button.dataset.filter;
     $$(".filter", button.closest("[data-filter-group]")).forEach((option) => {
@@ -493,11 +496,27 @@
       if (!card.hidden) count++;
     });
     toolEmpty.hidden = count > 0;
+    toolClear.hidden = filter === "all" && !toolSearch.value.trim();
     uiText(
       toolCount,
       count === 1 ? uiMsg("1 tool found") : uiMsg("{0} tools found", [count]),
     );
   }
+  function filterProjects(category) {
+    let count = 0;
+    $$(".listing-projects .project-card").forEach((card) => {
+      card.hidden = category !== "all" && card.dataset.category !== category;
+      if (!card.hidden) count++;
+    });
+    uiText(
+      projectCount,
+      count === 1
+        ? uiMsg("1 project found")
+        : uiMsg("{0} projects found", [count]),
+    );
+  }
+  if (projectCount) filterProjects("all");
+
   $$("[data-filter-group] .filter").forEach((b) =>
     b.addEventListener("click", () => {
       const group = b.closest("[data-filter-group]");
@@ -509,15 +528,12 @@
         x.classList.toggle("active", x === b);
         x.setAttribute("aria-pressed", String(x === b));
       });
-      $$(".project-card").forEach((c) => {
-        c.hidden =
-          b.dataset.filter !== "all" && c.dataset.category !== b.dataset.filter;
-      });
+      filterProjects(b.dataset.filter);
     }),
   );
   if (toolSearch) {
     toolSearch.addEventListener("input", filterTools);
-    $("#tool-search-clear").addEventListener("click", () => {
+    toolClear.addEventListener("click", () => {
       toolSearch.value = "";
       setToolFilter($('[data-filter-group="tools"] [data-filter="all"]'));
       toolSearch.focus();

@@ -5,23 +5,21 @@
   data-search="${lower} ${lower_2} ${lower_3}"
   data-category="${lower_4}"
 >
-  <div class="tool-card-top">
-    <span class="tool-icon ${glyph}">${icon}</span
-    ><button
-      class="favorite icon-button"
-      data-favorite="${slug}"
-      aria-label="Favorite ${name}"
-      aria-pressed="false"
-    >
-      ${icon_star}
-    </button>
-  </div>
-  <a href="/tools/${slug_2}/" class="card-primary-link"
-    ><h3>${name_2} <span>↗</span></h3></a
+  <span class="tool-icon ${glyph}">${icon}</span>
+  <a href="/tools/${slug_2}/" class="card-primary-link"><h3>${name_2}</h3></a>
+  <button
+    class="favorite icon-button"
+    data-favorite="${slug}"
+    aria-label="Favorite ${name}"
+    aria-pressed="false"
   >
+    ${icon_star}
+  </button>
   <p>${desc}</p>
   <div class="tool-bottom">
     <span class="small-tag">${cat}</span
-    ><span class="text-link" aria-hidden="true">Open tool ${icon_arrow}</span>
+    ><span class="text-link" aria-hidden="true"
+      ><span>Open tool</span> ${icon_arrow}</span
+    >
   </div>
 </article>

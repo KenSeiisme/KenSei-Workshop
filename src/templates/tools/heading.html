@@ -1,7 +1,7 @@
-<a href="/tools/" class="back-link">← All tools</a>
-<div class="tool-page-heading tool-heading">
+<a href="/tools/" class="back-link">${svg_back} <span>All tools</span></a>
+<header class="tool-page-heading tool-heading">
   <div>
-    <div class="eyebrow">${category} / YOUR EVERYDAY TOOLBOX</div>
+    <div class="eyebrow">${category}</div>
     <h1>${name}</h1>
     <p>${description}</p>
   </div>
@@ -11,19 +11,19 @@
       class="button secondary favorite"
       aria-pressed="false"
     >
-      ${star} Favorite</button
+      ${star} <span>Favorite</span></button
     ><button class="button secondary" data-open-help aria-haspopup="dialog">
-      Help &amp; limits
+      ${svg_help} <span>Help &amp; limits</span>
     </button>
   </div>
-</div>
+</header>
 <dialog
   class="tool-help-dialog"
   id="tool-help"
   aria-labelledby="tool-help-title"
 >
   <button class="button secondary" data-close-help aria-label="Close help">
-    Close ×
+    <span>Close</span> ${svg_close}
   </button>
   <h2 id="tool-help-title">${name}</h2>
   <h3>Limits &amp; requirements</h3>

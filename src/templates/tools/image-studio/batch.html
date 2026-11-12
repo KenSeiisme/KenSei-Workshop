@@ -1,5 +1,5 @@
 <div class="studio-grid">
-  <section class="panel image-input">
+  <section class="panel image-input file-input-panel">
     <div class="dropzone" id="dropzone">
       <input
         id="image-file"
@@ -9,7 +9,7 @@
         accept="image/jpeg,image/png,image/webp"
         hidden
       />
-      <span class="upload-icon" aria-hidden="true">↥</span>
+      <span class="upload-icon">${svg_upload}</span>
       <strong>Drop up to 20 images here</strong>
       <button
         class="button secondary"
@@ -44,7 +44,7 @@
     ></ul>
   </section>
   <section class="panel settings-panel">
-    <h2>Make it yours</h2>
+    <h2>Output settings</h2>
     <label
       >Width <span>px</span
       ><input
@@ -92,7 +92,7 @@
     </button>
     <p id="image-result" role="status" class="muted small"></p>
     <a id="image-download" class="button secondary full-width" hidden download
-      >Download image ↓</a
+      ><span>Download image</span> ${svg_download}</a
     ><button class="text-link" id="save-preset">Save these settings</button>
   </section>
 </div>

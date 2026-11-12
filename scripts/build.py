@@ -16,6 +16,7 @@ SITE = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(SOURCE / "views"))
 from template_renderer import render_template
+from icons import icon
 from studio_view import view as studio_view, copy_update_feed
 import localization as i18n
 from tool_experience import heading as tool_heading
@@ -97,34 +98,6 @@ if not arguments.pages_only:
         (OUT / "vendor/sources").mkdir(parents=True, exist_ok=True)
         shutil.copy2(archive, OUT / "vendor/sources" / archive.name)
 
-ICONS = {
-    "cards": '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',
-    "calculator": '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M7 6h10M7 11h2M13 11h4M7 16h2M13 16h4"/>',
-    "check": '<path d="M6 2h8l4 4v16H6zM9 13l2 2 4-5"/>',
-    "audio": '<path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 10v4"/>',
-    "data": '<path d="M8 3H5v7l-3 2 3 2v7h3M16 3h3v7l3 2-3 2v7h-3M10 9h4M10 15h4"/>',
-    "network": '<path d="M2 8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8 16a5 5 0 0 1 8 0"/><circle cx="12" cy="20" r="1"/>',
-    "archive": '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M10 3h4v3h-4v3h4v3h-4v5h4v-3h-4"/>',
-    "palette": '<circle cx="8" cy="8" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="18" cy="12" r="1"/><path d="M12 22C0 22 0 2 12 2s13 13 4 13h-3c-5 0 5 7-1 7Z"/>',
-    "ruler": '<path d="m3 16 13-13 5 5L8 21zM7 12l3 3M11 8l3 3M15 4l3 3"/>',
-    "key": '<circle cx="8" cy="8" r="5"/><path d="m12 12 9 9M16 16l3-3M19 19l3-3"/>',
-    "image": '<rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 6-6 4 4 3-3 5 5"/>',
-    "text": '<path d="M4 5h16M12 5v15M8 20h8M4 5v3M20 5v3"/>',
-    "timer": '<circle cx="12" cy="13" r="8"/><path d="M12 9v5l3 2M9 2h6M12 2v3m6 2 2-2"/>',
-    "arrow": '<path d="M5 12h14m-6-6 6 6-6 6"/>',
-    "star": '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/>',
-    "book": '<path d="M12 5v16M12 5C8 2 4 3 2 4v15c4-2 7-1 10 2 3-3 6-4 10-2V4c-4-2-7-1-10 1Z"/>',
-    "wheel": '<circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"/>',
-    "keyboard": '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M5 9h2m3 0h2m3 0h3M5 13h2m3 0h2m3 0h3M7 16h10"/>',
-    "monitor": '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M12 17v4M7 21h10"/>',
-    "grid": '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
-}
-
-
-def icon(name):
-    return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[name]}</svg>'
-
-
 TOOLS = json.loads((ROOT / "data/tools.json").read_text(encoding="utf-8"))
 (OUT / "tools-data.js").write_text(
     "window.KENSEI_TOOLS="
@@ -135,14 +108,7 @@ TOOLS = json.loads((ROOT / "data/tools.json").read_text(encoding="utf-8"))
     + ";",
     encoding="utf-8",
 )
-for glyph, path in {
-    "qr": '<path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 19h2v2h-2zM19 13h2v3M13 19v2"/>',
-    "pdf": '<path d="M6 2h8l4 4v16H6zM14 2v5h4M9 12h6M9 16h6"/>',
-    "markdown": '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M5 15V9l3 3 3-3v6M14 12l3 3 3-3M17 9v6"/>',
-    "compare": '<path d="M8 3v18M16 3v18M3 7h8M13 17h8M3 11h4M17 13h4"/>',
-    "ocr": '<path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5M7 8h10M12 8v9M9 17h6"/>',
-}.items():
-    ICONS[glyph] = path
+
 
 PROJECTS = [
     (
@@ -180,9 +146,9 @@ PROJECTS = [
 ]
 
 
-def project_art(slug, large=False):
+def project_art(slug):
     if slug == "kensei-studio":
-        return '<div class="studio-card-cover"><img src="/assets/kensei-studio/preview.png" alt="KenSei Studio show editor and LED preview" loading="lazy"></div>'
+        return '<div class="studio-card-cover"><img src="/assets/kensei-studio/preview.png" alt="KenSei Studio show editor and LED preview" width="1560" height="1000"></div>'
     if slug == "3a3d":
         return render_template("projects/art-3a3d.html")
     if slug == "salon-system":
@@ -200,8 +166,6 @@ def project_card(p, featured=False):
         name=name,
         project_art=project_art(slug),
         cat=cat,
-        slug_2=slug,
-        name_2=name,
         desc=desc,
         stack=stack,
     )
@@ -245,7 +209,12 @@ def header(active):
             ("Projects", "/projects/"),
         ]
     )
-    return render_template("site/header.html", nav=nav)
+    return render_template(
+        "site/header.html",
+        nav=nav,
+        sun=icon("sun", "data-theme-sun"),
+        moon=icon("moon", "data-theme-moon hidden"),
+    )
 
 
 def layout(title, content, active="Home", route="", locale="en"):
@@ -295,7 +264,7 @@ pages["projects"] = (
 )
 pages["tools"] = (
     "Tools",
-    f'<section class="container page-section">{page_intro("THE EVERYDAY TOOLBOX", "A little help goes a long way", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{tool_directory()}</section>',
+    f'<section class="container page-section tools-page">{page_intro("THE EVERYDAY TOOLBOX", "A little help goes a long way", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{tool_directory()}</section>',
     "Tools",
 )
 
@@ -304,7 +273,7 @@ text_ui = render_template("tools/text-toolkit.html")
 timer_ui = render_template("tools/focus-timer.html")
 
 
-image_ui += '<button id="cancel-job" class="button secondary" hidden>Cancel</button><button id="image-zip" class="button secondary" hidden>Download all as ZIP ↓</button><div id="batch-results" class="batch-results" aria-live="polite"></div>'
+image_ui += f'<button id="cancel-job" class="button secondary" hidden>Cancel</button><button id="image-zip" class="button secondary" hidden>Download all as ZIP {icon("download")}</button><div id="batch-results" class="batch-results" aria-live="polite"></div>'
 image_ui = EDITOR + '<div id="image-batch-mode">' + image_ui + "</div>" + PANEL
 
 interfaces = {
@@ -385,13 +354,13 @@ for p in PROJECTS:
         name,
         render_template(
             "pages/project-detail.html",
-            category=cat.upper(),
+            category=cat,
             name=name,
             subtitle=subtitle,
             car_attribute="data-car" if slug == "3a3d" else "",
             url=url,
             cta=cta,
-            project_art=project_art(slug, True),
+            project_art=project_art(slug),
             note=note,
             overview=overview,
             highlights="".join(("<li>" + x + "</li>" for x in highlights)),

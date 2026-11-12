@@ -377,9 +377,6 @@
 #search-empty p {
   margin: 0;
 }
-#tool-search-clear {
-  margin-top: 12px;
-}
 @media (max-width: 760px) {
   .tool-search-control {
     width: 100%;

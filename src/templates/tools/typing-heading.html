@@ -1,5 +1,5 @@
 <header class="typing-toolbar">
-  <a href="/tools/" class="back-link">← Tools</a>
+  <a href="/tools/" class="back-link">${svg_back} <span>All tools</span></a>
   <h1>${name}</h1>
   <div class="typing-toolbar-actions">
     <button
@@ -15,10 +15,10 @@
       id="typing-settings-open"
       aria-haspopup="dialog"
     >
-      Settings
+      ${svg_settings} <span>Settings</span>
     </button>
     <button class="button secondary" data-open-help aria-haspopup="dialog">
-      Help
+      ${svg_help} <span>Help</span>
     </button>
     <button
       class="favorite icon-button"
@@ -36,7 +36,7 @@
   aria-labelledby="tool-help-title"
 >
   <button class="button secondary" data-close-help aria-label="Close help">
-    Close ×
+    <span>Close</span> ${svg_close}
   </button>
   <h2 id="tool-help-title">${name}</h2>
   <p>${description}</p>

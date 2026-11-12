@@ -49,7 +49,7 @@
           <p id="game-eligibility-note" class="muted small"></p>
           <div class="game-entry-actions" data-shell-entry-actions>
             <button class="button primary" id="game-start" disabled>
-              Start game →
+              <span>Start game</span> ${svg_arrow}
             </button>
             <button id="game-restore" class="button secondary" hidden>
               Continue saved game
@@ -138,7 +138,7 @@
       data-shell-close
       aria-label="Close settings"
     >
-      ×
+      ${svg_close}
     </button>
     <h2 id="game-settings-title">Game settings</h2>
     ${preferences}
@@ -158,7 +158,7 @@
       data-shell-close
       aria-label="Close menu"
     >
-      ×
+      ${svg_close}
     </button>
     <h2 id="game-menu-title">Game menu</h2>
     <div class="game-menu-actions" data-shell-menu-actions>
@@ -186,7 +186,7 @@
       data-shell-close
       aria-label="Close milestones and help"
     >
-      ×
+      ${svg_close}
     </button>
     <h2>Milestones &amp; Help</h2>
     <p class="game-local-best">Local best <strong id="game-best">—</strong></p>
@@ -199,7 +199,9 @@
     </aside>
   </dialog>
   <dialog id="game-help-dialog" class="game-shell-dialog">
-    <button class="dialog-close icon-button" aria-label="Close help">×</button>
+    <button class="dialog-close icon-button" aria-label="Close help">
+      ${svg_close}
+    </button>
     <div class="eyebrow">QUICK START GUIDE</div>
     <h2>How to play ${name}</h2>
     <p>${description}</p>

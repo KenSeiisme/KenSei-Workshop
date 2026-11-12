@@ -1,17 +1,18 @@
 <article class="project-card ${content}" data-category="${lower}">
   <a
     href="/projects/${slug}/"
-    class="project-cover"
-    aria-label="Explore ${name}"
-    >${project_art}</a
+    class="project-card-link"
+    aria-labelledby="project-card-${slug}"
   >
-  <div class="project-copy">
-    <div class="eyebrow">${cat} <span>PROJECT</span></div>
-    <a class="project-title" href="/projects/${slug_2}/"
-      ><h3>${name_2}</h3>
-      <span>↗</span></a
-    >
-    <p>${desc}</p>
-    <span class="stack-label">${stack}</span>
-  </div>
+    <div class="project-cover">${project_art}</div>
+    <div class="project-copy">
+      <div class="eyebrow">${cat}</div>
+      <div class="project-title">
+        <h3 id="project-card-${slug}">${name}</h3>
+        ${svg_arrow}
+      </div>
+      <p>${desc}</p>
+      <span class="stack-label">${stack}</span>
+    </div>
+  </a>
 </article>

@@ -1,6 +1,6 @@
 <div class="game-page-heading game-shell-toolbar">
   <a class="back-link" href="/games/" aria-label="Back to Games"
-    >← <span>Games</span></a
+    >${svg_back} <span>Games</span></a
   >
   <h1>${name}</h1>
   <button
@@ -9,7 +9,7 @@
     data-shell-setup
     aria-label="Game setup"
   >
-    <span data-shell-mode>Ready to play</span><span aria-hidden="true">⌄</span>
+    <span data-shell-mode>Ready to play</span>${svg_chevron}
   </button>
   <div class="game-heading-tools">
     <a
@@ -18,16 +18,7 @@
       aria-label="Achievements"
       title="Achievements"
     >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.7"
-        aria-hidden="true"
-      >
-        <circle cx="12" cy="9" r="5" />
-        <path d="m9 13-2 8 5-2 5 2-2-8m-5-4 1.5 1.5L14 8" /></svg
-      ><span>Achievements</span>
+      ${svg_achievement}<span>Achievements</span>
     </a>
     <button
       type="button"
@@ -35,14 +26,24 @@
       id="${sound_id}"
       data-audio-toggle
       aria-pressed="true"
+      aria-label="Sound"
+      title="Sound on"
     >
-      Sound on
+      <span class="sound-icon-on">${svg_sound}</span>
+      <span class="sound-icon-off">${svg_mute}</span>
+      <span data-audio-label class="sr-only">Sound on</span>
     </button>
-    <button type="button" class="button secondary" data-shell-settings>
-      Settings
+    <button
+      type="button"
+      class="button secondary"
+      data-shell-settings
+      aria-label="Settings"
+      title="Settings"
+    >
+      ${svg_settings} <span>Settings</span>
     </button>
     <button type="button" class="button secondary" data-shell-focus hidden>
-      Exit focus
+      ${svg_focus} <span data-shell-focus-label>Exit focus</span>
     </button>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { uiMsg, uiText } from "../site/ui.js";
+import { uiAttr, uiMsg, uiText } from "../site/ui.js";
 import {
   AUDIO_PROFILES,
   normalizeAudioPreference,
@@ -114,7 +114,9 @@ function gainTo(node, value, duration = 0.025) {
 }
 function paint() {
   for (const node of nodes("[data-audio-toggle]")) {
-    uiText(node, preference.enabled ? uiMsg("Sound on") : uiMsg("Sound off"));
+    const label = preference.enabled ? uiMsg("Sound on") : uiMsg("Sound off");
+    uiText(node.querySelector("[data-audio-label]") || node, label);
+    uiAttr(node, "title", label);
     node.setAttribute("aria-pressed", String(preference.enabled));
   }
   for (const [selector, value] of [

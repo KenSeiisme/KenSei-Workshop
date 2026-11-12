@@ -1,11 +1,11 @@
 <section class="container games-page game-hub" data-games-directory>
-  <header class="hub-bar">
+  <header class="hub-bar glass-surface">
     <a class="hub-brand" href="/games/" aria-label="Games lobby"
       ><span class="brand-symbol" aria-hidden="true">k<span>✳</span></span>
       <span class="hub-brand-name">KenSei <strong>Arcade</strong></span></a
     >
     <label class="search-box">
-      <span aria-hidden="true">⌕</span>
+      ${svg_search}
       <input
         type="search"
         id="game-search"
@@ -14,25 +14,14 @@
       />
     </label>
     <a class="button secondary hub-wallet" href="#game-skin-shop"
-      ><span aria-hidden="true">◉</span> <span data-hub-coins>—</span>
-      <span>Coins</span></a
+      >${svg_coin} <span data-hub-coins>—</span> <span>Coins</span></a
     >
     <a
       class="hub-achievement-link"
       href="/games/achievements/"
       aria-label="Achievements"
     >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.7"
-        aria-hidden="true"
-      >
-        <circle cx="12" cy="9" r="5" />
-        <path d="m9 13-2 8 5-2 5 2-2-8m-5-4 1.5 1.5L14 8" />
-      </svg>
-      <span>Achievements</span>
+      ${svg_achievement} <span>Achievements</span>
     </a>
     <nav class="filter-bar" id="game-filters" aria-label="Game categories">
       <button class="filter active" data-game-filter="all" aria-pressed="true">
@@ -51,7 +40,7 @@
         Board
       </button>
       <a class="hub-library-jump" href="#games-library"
-        >Game library <span aria-hidden="true">↓</span></a
+        ><span>Game library</span> ${svg_grid}</a
       >
     </nav>
     <section id="hub-game-results" aria-label="Game search results" hidden>
@@ -68,7 +57,7 @@
     </section>
   </header>
   <section
-    class="hub-feature panel"
+    class="hub-feature panel glass-surface"
     aria-labelledby="hub-feature-title"
     aria-roledescription="carousel"
   >
@@ -82,18 +71,21 @@
           type="button"
           class="button secondary hub-icon"
           data-hub-rotate
+          disabled
           aria-label="Pause slideshow"
           title="Pause slideshow"
         >
-          <span aria-hidden="true">Ⅱ</span>
+          <span data-hub-pause-icon>${svg_pause}</span
+          ><span data-hub-play-icon hidden>${svg_play}</span>
         </button>
         <button
           type="button"
           class="button secondary hub-icon"
           data-hub-slide="-1"
+          disabled
           aria-label="Previous featured game"
         >
-          ←
+          ${svg_back}
         </button>
         <span data-hub-slide-count aria-live="off" aria-atomic="true"
           >1 / 4</span
@@ -102,9 +94,10 @@
           type="button"
           class="button secondary hub-icon"
           data-hub-slide="1"
+          disabled
           aria-label="Next featured game"
         >
-          →
+          ${svg_arrow}
         </button>
       </div>
     </div>
@@ -207,15 +200,7 @@
       <div>
         <div class="eyebrow">RESULTS AND PLAY TIME</div>
         <h2 id="hub-rank-title" class="hub-icon-title">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-            aria-hidden="true"
-          >
-            <path d="M3 20h18M5 20v-7h4v7m1 0V5h4v15m1 0V9h4v11" /></svg
-          >Leaderboard highlights
+          ${svg_rank} Leaderboard highlights
         </h2>
       </div>
       <a class="button secondary" href="/games/leaderboards/"

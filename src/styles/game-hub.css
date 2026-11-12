@@ -197,13 +197,6 @@
   background: var(--hub-panel);
 }
 
-@supports (backdrop-filter: blur(10px)) {
-  .hub-feature-stats > div {
-    background: color-mix(in srgb, var(--hub-panel) 82%, transparent);
-    backdrop-filter: blur(10px);
-  }
-}
-
 .hub-feature-stats dt,
 .hub-player-milestones dt {
   color: var(--muted);

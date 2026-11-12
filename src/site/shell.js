@@ -30,11 +30,10 @@
   }
   select.value = I.getLocale();
   language.append(select);
-  const searchButton = node("button", "icon-button site-search-button");
-  searchButton.type = "button";
-  searchButton.textContent = "⌕";
+  const searchButton = $(".site-search-button");
   I.attr(searchButton, "aria-label", I.msg("site.search"));
-  header.insertBefore(searchButton, $("#account-controls"));
+  searchButton.hidden = false;
+  const closeIcon = $("#auth-dialog .dialog-close svg");
   header.insertBefore(language, $("#account-controls"));
   const feedback = node("p", "site-language-status");
   feedback.role = "status";
@@ -74,7 +73,7 @@
   const drawer = node("dialog", "site-drawer");
   drawer.id = "site-navigation-dialog";
   const close = node("button", "icon-button site-dialog-close");
-  close.textContent = "×";
+  close.append(closeIcon.cloneNode(true));
   I.attr(close, "aria-label", I.msg("site.close"));
   drawer.append(close);
   document.body.append(drawer);
@@ -130,7 +129,7 @@
   label(heading, "site.search");
   dialog.setAttribute("aria-labelledby", heading.id);
   const dismissSearch = node("button", "icon-button site-dialog-close");
-  dismissSearch.textContent = "×";
+  dismissSearch.append(closeIcon.cloneNode(true));
   I.attr(dismissSearch, "aria-label", I.msg("site.close"));
   const input = node("input", "site-search-input");
   input.type = "search";
