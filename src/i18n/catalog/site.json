@@ -598,5 +598,13 @@
   "m_96ab83187235": {
     "en": "View on Pixiv",
     "zh-Hant": "在 Pixiv 查看"
+  },
+  "m_39cf4430e65d": {
+    "en": "Website analytics",
+    "zh-Hant": "網站瀏覽統計"
+  },
+  "m_80faf266095b": {
+    "en": "Vercel Web Analytics measures visits to public pages on the production site without cookies. We remove query parameters and fragments before sending page URLs. Workspace, profile, and sign-in pages are excluded.",
+    "zh-Hant": "Vercel Web Analytics 統計正式站公開頁面的瀏覽量，不使用 Cookie。頁面網址在送出前會移除查詢參數和片段。工作區、個人檔案和登入頁面不列入統計。"
   }
 }

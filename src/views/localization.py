@@ -500,7 +500,10 @@ def head(route, locale, site_url):
         '<meta name="theme-color" content="#111015">',
     ]
     if is_public(route):
-        lines += ['<link rel="canonical" href="' + meta["url"] + '">']
+        lines += [
+            '<link rel="canonical" href="' + meta["url"] + '">',
+            '<script src="/site/analytics.js" defer></script>',
+        ]
         for code in ["en", "zh-Hant", "x-default"]:
             lines.append(
                 '<link rel="alternate" hreflang="'
