@@ -75,8 +75,8 @@ function example(tool, root) {
     );
   };
 }
-function fileRows(tool) {
-  const input = $(tool === "image-studio" ? "#image-file" : "#check-files");
+function checksumFileRows() {
+  const input = $("#check-files");
   if (!input) return;
   const list = el("ul", undefined, "file-state-list");
   uiAttr(list, "aria-label", uiMsg("Selected files and processing state"));
@@ -91,23 +91,6 @@ function fileRows(tool) {
       list.append(row);
     }
   });
-  if (tool === "image-studio") {
-    window.addEventListener("tool-file-state", (event) => {
-      if (event.detail?.tool !== tool) return;
-      const { index, state } = event.detail;
-      if (index === -1)
-        [...list.children].forEach((row) => {
-          if (
-            state === "Waiting" ||
-            !["Complete", "Failed"].includes(uiSource(row.lastChild))
-          )
-            uiText(row.lastChild, state);
-        });
-      else if (list.children[index])
-        uiText(list.children[index].lastChild, state);
-    });
-    return;
-  }
   const status = $("#tool-status");
   observeText(status, (node) => {
     const text = uiSource(node),
@@ -161,7 +144,6 @@ function adapt(tool, root) {
             : uiMsg("Your batch results will appear here."),
         );
       });
-      fileRows(tool);
       break;
     }
     case "qr-studio": {
@@ -228,7 +210,7 @@ function adapt(tool, root) {
       break;
     }
     case "file-check":
-      fileRows(tool);
+      checksumFileRows();
       root.classList.add("tool-checksums");
       break;
     case "text-toolkit": {

@@ -761,3 +761,41 @@
     justify-self: start;
   }
 }
+#hub-game-results {
+  grid-column: 1 / -1;
+  padding-top: 8px;
+  border-top: 1px solid var(--hub-edge);
+}
+.hub-search-feedback {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px 12px;
+}
+.hub-search-feedback > p {
+  margin: 0;
+}
+#hub-game-clear {
+  min-height: 44px;
+}
+#hub-game-matches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  gap: 8px;
+}
+#hub-game-matches .game-card-copy {
+  justify-content: center;
+  min-height: 44px;
+  padding: 9px 12px;
+}
+#hub-game-matches .game-card-copy h2 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+#hub-game-matches :is(.game-cover, .game-card-copy > :not(h2)) {
+  display: none;
+}

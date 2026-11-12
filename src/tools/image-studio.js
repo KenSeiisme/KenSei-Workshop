@@ -18,7 +18,16 @@ import {
   filename,
   download,
 } from "./common.js";
-import { uiMsg, uiError, uiText, uiHtml, uiPrompt } from "../site/ui.js";
+import {
+  uiMsg,
+  uiError,
+  uiText,
+  uiHtml,
+  uiPrompt,
+  uiAttr,
+  uiSource,
+  uiJoin,
+} from "../site/ui.js";
 
 let files = [],
   results = [],
@@ -27,6 +36,9 @@ let files = [],
 const failedIndices = new Set();
 let retryOnly = false;
 let recipe;
+let selectionRequest = 0;
+let selecting = false;
+let previewUrl;
 let resultsStale = false;
 let lastValidResults = [],
   previousUrls = [];
@@ -93,12 +105,42 @@ function showPrevious() {
   }
   document.querySelector("#batch-results").after(box);
 }
+const selection = $("#image-selection");
+const preview = $("#image-preview");
+const picker = $("#image-file");
+const process = $("#image-process");
+
 function fileState(index, state) {
-  window.dispatchEvent(
-    new CustomEvent("tool-file-state", {
-      detail: { tool: "image-studio", index, state },
-    }),
-  );
+  const rows =
+    index < 0 ? [...selection.children] : [selection.children[index]];
+  for (const row of rows) {
+    const label = row?.querySelector(".file-state");
+    if (
+      label &&
+      (state !== "Cancelled" ||
+        !["Complete", "Failed"].includes(uiSource(label)))
+    )
+      uiText(label, uiMsg(state));
+  }
+}
+
+function renderSelection() {
+  selection.replaceChildren();
+  selection.hidden = !files.length;
+  for (const [index, file] of files.entries()) {
+    const row = el("li"),
+      name = el("span"),
+      state = el("span", uiMsg("Waiting"), "file-state"),
+      remove = el("button", uiMsg("Remove"), {
+        type: "button",
+        class: "text-link",
+      });
+    name.textContent = file.name;
+    remove.dataset.imageRemove = String(index);
+    uiAttr(remove, "aria-label", uiMsg("Remove {0}", [file.name]));
+    row.append(name, state, remove);
+    selection.append(row);
+  }
 }
 function clearResults(clearHistory = false) {
   previousUrls.forEach((url) => URL.revokeObjectURL(url));
@@ -126,56 +168,119 @@ function clearResults(clearHistory = false) {
   $("#image-download").hidden = $("#image-zip").hidden = true;
   uiText($("#image-result"), "");
 }
-async function load(list) {
-  if (!list.length) return;
-  if (
-    list.length > 20 ||
-    [...list].reduce((a, f) => a + f.size, 0) > 100 * 1048576
-  )
-    return toast(
-      uiMsg("Choose up to 20 images, totaling no more than 100 MB."),
+function applySelection(next, imageSize, previous) {
+  clearResults(true);
+  files = next;
+  filesListeners.forEach((fn) => fn(previous));
+  renderSelection();
+  $("#dropzone").hidden = !!files.length;
+  $(".image-stage").hidden = !files.length;
+  w.disabled = h.disabled = !files.length;
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  previewUrl = imageSize ? URL.createObjectURL(files[0]) : null;
+  preview.hidden = !previewUrl;
+  if (previewUrl) {
+    preview.src = previewUrl;
+    if (!previous || !+w.value) w.value = presetWidth || imageSize.width;
+    h.value = Math.max(
+      1,
+      Math.round((+w.value * imageSize.height) / imageSize.width),
     );
+  } else {
+    preview.removeAttribute("src");
+    if (!files.length) h.value = "";
+  }
+  uiText(
+    $("#image-info"),
+    files.length
+      ? uiJoin([
+          files.length === 1
+            ? uiMsg("1 image selected")
+            : uiMsg("{0} images selected", [files.length]),
+          " · ",
+          size(files.reduce((sum, file) => sum + file.size, 0)),
+          ...(imageSize
+            ? [
+                " · ",
+                uiMsg("{0} × {1} first image", [
+                  imageSize.width,
+                  imageSize.height,
+                ]),
+              ]
+            : []),
+        ])
+      : uiMsg("Your image stays on this device."),
+  );
+}
+
+async function load(list, previous) {
+  const next = [...list];
+  if (picker.disabled) return;
+  if (!next.length && !previous) return;
+  const id = ++selectionRequest;
+  selecting = true;
+  process.disabled = true;
   try {
-    for (const f of list) {
+    if (
+      next.length > 20 ||
+      next.reduce((sum, file) => sum + file.size, 0) > 100 * 1048576
+    )
+      throw Error("Choose up to 20 images, totaling no more than 100 MB.");
+    for (const file of next) {
       if (
-        !["image/png", "image/jpeg", "image/webp"].includes(f.type) ||
-        f.size > 20 * 1048576
+        !["image/png", "image/jpeg", "image/webp"].includes(file.type) ||
+        file.size > 20 * 1048576
       )
-        throw new Error("Use JPG, PNG or WebP, up to 20 MB per image.");
+        throw Error("Use JPG, PNG or WebP, up to 20 MB per image.");
     }
-    const img = await image(list[0]);
-    clearResults(true);
-    files = [...list];
-    queueMicrotask(() => filesListeners.forEach((fn) => fn()));
-    w.disabled = h.disabled = false;
-    w.value = presetWidth || img.width;
-    h.value = Math.max(1, Math.round((+w.value * img.height) / img.width));
-    $("#dropzone").hidden = true;
-    $(".image-stage").hidden = false;
-    // 预览使用独立 URL，避免已释放的解码 URL 被浏览器重新读取。
-    $("#image-preview").src = URL.createObjectURL(files[0]);
-    $("#image-preview").onload = () =>
-      URL.revokeObjectURL($("#image-preview").src);
-    uiText(
-      $("#image-info"),
-      uiMsg("{0} image{1} · {2} · {3} × {4} first image", [
-        files.length,
-        files.length > 1 ? "s" : "",
-        size(files.reduce((n, f) => n + f.size, 0)),
-        img.width,
-        img.height,
-      ]),
-    );
-    $("#image-process").disabled = false;
-  } catch (e) {
-    toast(uiError(e));
+    // Removal still works if the next file cannot be decoded for a preview.
+    const imageSize = next.length
+      ? await image(next[0]).catch((error) => {
+          if (!previous) throw error;
+          return null;
+        })
+      : null;
+    if (id !== selectionRequest) return;
+    applySelection(next, imageSize, previous);
+  } catch (error) {
+    if (id === selectionRequest) toast(uiError(error));
+  } finally {
+    if (id === selectionRequest) {
+      selecting = false;
+      process.disabled = !files.length;
+    }
   }
 }
-$("#image-file").addEventListener("change", (e) => load(e.target.files));
-$("#change-image").onclick = () => {
-  $("#image-file").value = "";
-  $("#image-file").click();
-};
+picker.addEventListener("change", async () => {
+  const next = [...picker.files];
+  picker.value = "";
+  const focusWasOnPicker = document.activeElement === $("#image-pick");
+  await load(next);
+  if (
+    focusWasOnPicker &&
+    files.length &&
+    document.activeElement === document.body
+  )
+    $("#change-image").focus();
+});
+$("#image-pick").onclick = $("#change-image").onclick = () => picker.click();
+selection.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-image-remove]");
+  if (!button || selecting || picker.disabled) return;
+  const index = Number(button.dataset.imageRemove);
+  const previous = files;
+  const focused = document.activeElement === button;
+  await load(
+    previous.filter((_, i) => i !== index),
+    previous,
+  );
+  if (focused && document.activeElement === document.body)
+    (
+      selection.children[Math.min(index, files.length - 1)]?.querySelector(
+        "button",
+      ) || $("#image-pick")
+    ).focus();
+});
 for (const type of ["dragenter", "dragover", "dragleave", "drop"])
   $("#dropzone").addEventListener(type, (e) => {
     e.preventDefault();
@@ -183,7 +288,7 @@ for (const type of ["dragenter", "dragover", "dragleave", "drop"])
     if (type === "drop") load(e.dataTransfer.files);
   });
 w.addEventListener("input", () => {
-  if (files.length && +w.value > 0)
+  if (preview.naturalWidth && +w.value > 0)
     h.value = Math.max(
       1,
       Math.round(
@@ -194,7 +299,7 @@ w.addEventListener("input", () => {
   markResultsStale();
 });
 h.addEventListener("input", () => {
-  if (files.length && +h.value > 0)
+  if (preview.naturalHeight && +h.value > 0)
     w.value = Math.max(
       1,
       Math.round(
@@ -230,7 +335,8 @@ $("#cancel-job").onclick = () => {
     uiMsg("Cancelled. Finished images remain available."),
   );
 };
-$("#image-process").onclick = async () => {
+process.onclick = async () => {
+  if (selecting || !files.length) return;
   if (!targetSize.disabled && !targetSize.checkValidity())
     return toast(uiMsg("Choose a target from 1 to 20,480 KiB."));
   const width = +w.value,
@@ -546,9 +652,10 @@ function applyPreset() {
 }
 applyPreset();
 window.addEventListener("workspace-ready", applyPreset);
-window.addEventListener("beforeunload", () =>
-  results.forEach((x) => URL.revokeObjectURL(x.url)),
-);
+window.addEventListener("beforeunload", () => {
+  if (previewUrl) URL.revokeObjectURL(previewUrl);
+  results.forEach((x) => URL.revokeObjectURL(x.url));
+});
 
 receiveHandoff(
   "image-studio",

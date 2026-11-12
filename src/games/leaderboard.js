@@ -83,6 +83,11 @@ export function mountLeaderboard(root, game, formatResult) {
                 ? uiMsg("Most points, then faster completion.")
                 : uiMsg("Highest score · one best per player."),
     );
+    if (!data?.top.length) {
+      if (data) patchMarkup(destination, "");
+      panel.dataset.rankState = "loading";
+      destination.tabIndex = -1;
+    }
     uiText(note, uiMsg("Loading leaderboard…"));
     refreshButton.disabled = true;
     const current = () =>
@@ -106,11 +111,14 @@ export function mountLeaderboard(root, game, formatResult) {
       if (!Array.isArray(result?.top))
         throw Error("Invalid leaderboard response.");
       if (retiredArcade(game) && result.version !== gameVersion(game)) {
+        if (!data?.top.length) panel.dataset.rankState = "pending";
         uiText(note, uiMsg("The new leaderboard is being prepared."));
         return;
       }
       data = result;
       loadedKey = key;
+      panel.dataset.rankState = data.top.length ? "ready" : "empty";
+      destination.tabIndex = data.top.length ? 0 : -1;
       patchMarkup(
         destination,
         data.top.length
@@ -146,6 +154,7 @@ export function mountLeaderboard(root, game, formatResult) {
         note,
         uiMsg("Leaderboard unavailable. Refresh to retry; you can still play."),
       );
+      if (!data?.top.length) panel.dataset.rankState = "error";
       if (!data) uiText($("#game-my-rank"), uiMsg("Rank unavailable"));
     } finally {
       if (current()) refreshButton.disabled = false;

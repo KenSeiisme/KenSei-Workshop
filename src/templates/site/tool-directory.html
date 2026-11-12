@@ -1,12 +1,15 @@
 <div class="tools-controls">
-  <label class="search-box"
-    ><span aria-hidden="true">⌕</span
-    ><input
-      id="tool-search"
-      type="search"
-      placeholder="Find a tool…"
-      aria-label="Search tools"
-  /></label>
+  <div class="tool-search-control">
+    <label class="search-box"
+      ><span aria-hidden="true">⌕</span
+      ><input
+        id="tool-search"
+        type="search"
+        placeholder="Find a tool…"
+        aria-label="Search tools"
+    /></label>
+    <p id="tool-result-count" class="muted small" role="status"></p>
+  </div>
   <div class="filter-bar" data-filter-group="tools">
     <button class="filter active" data-filter="all" aria-pressed="true">
       All</button
@@ -27,9 +30,12 @@
   </div>
 </div>
 <div class="tools-grid">${tool_cards}</div>
-<p id="search-empty" class="empty-state" role="status" hidden>
-  No tools found. Try another search.
-</p>
+<div id="search-empty" class="empty-state" hidden>
+  <p>No tools found. Try another search.</p>
+  <button type="button" id="tool-search-clear" class="button secondary">
+    Clear search and filters
+  </button>
+</div>
 <div class="privacy-line">
   <span aria-hidden="true">◈</span> File processing stays on your device.
   Network Test connects to Cloudflare; Public typing verifies input with

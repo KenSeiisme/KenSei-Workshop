@@ -458,5 +458,81 @@
   "site.extra.c6cfe6e4f129": {
     "en": "Black",
     "zh-Hant": "黑棋"
+  },
+  "m_5389e5ebce84": {
+    "en": "Common tools",
+    "zh-Hant": "常用工具"
+  },
+  "m_c44ecec3b41f": {
+    "en": "Clear search and filters",
+    "zh-Hant": "清除搜尋與篩選"
+  },
+  "m_048b39e5ba19": {
+    "en": "1 tool found",
+    "zh-Hant": "找到 1 項工具"
+  },
+  "m_45699e2db267": {
+    "en": "{0} tools found",
+    "zh-Hant": "找到 {0} 項工具"
+  },
+  "m_e11facac0c9d": {
+    "en": "Game search results",
+    "zh-Hant": "遊戲搜尋結果"
+  },
+  "m_5a7a5297a2a9": {
+    "en": "1 game found",
+    "zh-Hant": "找到 1 款遊戲"
+  },
+  "m_1e03b6d79ae3": {
+    "en": "{0} games found",
+    "zh-Hant": "找到 {0} 款遊戲"
+  },
+  "m_2d39bc2ff82a": {
+    "en": "Choose images",
+    "zh-Hant": "選擇圖片"
+  },
+  "m_1bec8aab7fa8": {
+    "en": "Choose other images",
+    "zh-Hant": "選擇其他圖片"
+  },
+  "m_ccff2ffa91e5": {
+    "en": "Selected images",
+    "zh-Hant": "已選圖片"
+  },
+  "m_58726702c468": {
+    "en": "Start processing →",
+    "zh-Hant": "開始處理 →"
+  },
+  "m_dfbfd0da8890": {
+    "en": "Remove {0}",
+    "zh-Hant": "移除 {0}"
+  },
+  "m_3886d2e71289": {
+    "en": "1 image selected",
+    "zh-Hant": "已選 1 張圖片"
+  },
+  "m_e2b03b3f0005": {
+    "en": "{0} images selected",
+    "zh-Hant": "已選 {0} 張圖片"
+  },
+  "m_5bf07c5546de": {
+    "en": "{0} × {1} first image",
+    "zh-Hant": "第一張圖片 {0} × {1}"
+  },
+  "m_dcc3b5562979": {
+    "en": "Workspace sections",
+    "zh-Hant": "工作區區塊"
+  },
+  "m_7a1f2a83aca9": {
+    "en": "Favorites",
+    "zh-Hant": "收藏"
+  },
+  "m_f592e6a4db3c": {
+    "en": "Drafts",
+    "zh-Hant": "草稿"
+  },
+  "m_6d9d8dd013cd": {
+    "en": "Tool records",
+    "zh-Hant": "工具紀錄"
   }
 }

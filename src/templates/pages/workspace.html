@@ -1,5 +1,10 @@
 <section class="container page-section">
   ${intro}
+  <nav class="workspace-jumps" aria-label="Workspace sections">
+    <a class="button secondary" href="#workspace-favorites">Favorites</a>
+    <a class="button secondary" href="#workspace-drafts">Drafts</a>
+    <a class="button secondary" href="#workspace-records">Tool records</a>
+  </nav>
   <div class="workspace-banner" id="workspace-account">
     <div>
       <strong>On this device</strong>
@@ -18,24 +23,26 @@
       <span>Saved drafts</span><strong id="draft-count">0</strong>
     </div>
   </div>
-  <section class="workspace-section">
+  <section class="workspace-section" id="workspace-favorites" tabindex="-1">
     <h2>Favorite tools</h2>
     <div class="tools-grid" id="favorite-tools"></div>
   </section>
-  <section class="workspace-section">
+  <section class="workspace-section" id="workspace-drafts" tabindex="-1">
     <h2>Saved drafts</h2>
     <div id="saved-drafts" class="saved-list"></div>
   </section>
-  <section class="workspace-section">
-    <h2>Saved tool presets</h2>
-    <div id="saved-presets" class="saved-list"></div>
-  </section>
-  <section class="workspace-section">
-    <h2>Recent focus sessions</h2>
-    <div id="saved-sessions" class="saved-list"></div>
-  </section>
-  <div id="private-workspace">
-    ${answer_history}${decision_history}${flashcards}${planner_and_whiteboards}
+  <div id="workspace-records" tabindex="-1">
+    <section class="workspace-section">
+      <h2>Saved tool presets</h2>
+      <div id="saved-presets" class="saved-list"></div>
+    </section>
+    <section class="workspace-section">
+      <h2>Recent focus sessions</h2>
+      <div id="saved-sessions" class="saved-list"></div>
+    </section>
+    <div id="private-workspace">
+      ${answer_history}${decision_history}${flashcards}${planner_and_whiteboards}
+    </div>
   </div>
   <div class="workspace-footer">
     <button id="sign-out" class="button secondary" hidden>Sign out</button

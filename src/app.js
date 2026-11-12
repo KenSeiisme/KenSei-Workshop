@@ -468,8 +468,19 @@
     }
   }
   let filter = "all";
+  const toolSearch = $("#tool-search");
+  const toolCount = $("#tool-result-count");
+  const toolEmpty = $("#search-empty");
+  function setToolFilter(button) {
+    filter = button.dataset.filter;
+    $$(".filter", button.closest("[data-filter-group]")).forEach((option) => {
+      option.classList.toggle("active", option === button);
+      option.setAttribute("aria-pressed", String(option === button));
+    });
+    filterTools();
+  }
   function filterTools() {
-    const terms = ($("#tool-search")?.value || "")
+    const terms = toolSearch.value
       .trim()
       .toLowerCase()
       .split(/\s+/)
@@ -481,27 +492,38 @@
         !terms.every((term) => card.dataset.search.includes(term));
       if (!card.hidden) count++;
     });
-    if ($("#search-empty")) $("#search-empty").hidden = count > 0;
+    toolEmpty.hidden = count > 0;
+    uiText(
+      toolCount,
+      count === 1 ? uiMsg("1 tool found") : uiMsg("{0} tools found", [count]),
+    );
   }
   $$("[data-filter-group] .filter").forEach((b) =>
     b.addEventListener("click", () => {
       const group = b.closest("[data-filter-group]");
+      if (group.dataset.filterGroup === "tools") {
+        setToolFilter(b);
+        return;
+      }
       $$(".filter", group).forEach((x) => {
         x.classList.toggle("active", x === b);
         x.setAttribute("aria-pressed", String(x === b));
       });
-      if (group.dataset.filterGroup === "tools") {
-        filter = b.dataset.filter;
-        filterTools();
-      } else
-        $$(".project-card").forEach((c) => {
-          c.hidden =
-            b.dataset.filter !== "all" &&
-            c.dataset.category !== b.dataset.filter;
-        });
+      $$(".project-card").forEach((c) => {
+        c.hidden =
+          b.dataset.filter !== "all" && c.dataset.category !== b.dataset.filter;
+      });
     }),
   );
-  $("#tool-search")?.addEventListener("input", filterTools);
+  if (toolSearch) {
+    toolSearch.addEventListener("input", filterTools);
+    $("#tool-search-clear").addEventListener("click", () => {
+      toolSearch.value = "";
+      setToolFilter($('[data-filter-group="tools"] [data-filter="all"]'));
+      toolSearch.focus();
+    });
+    filterTools();
+  }
 
   function downloadText(text, name, type = "text/plain;charset=utf-8") {
     const url = URL.createObjectURL(new Blob([text], { type }));
@@ -1004,6 +1026,38 @@
     tick();
   }
 
+  function setupWorkspaceSections() {
+    if (!$("#workspace-records")) return;
+    const lists = $$(
+      "#favorite-tools, #saved-drafts, #saved-presets, #saved-sessions, #private-workspace :is(.saved-list, [data-history-list], #workspace-decks)",
+    );
+    for (const list of lists) {
+      const section = list.closest("section");
+      const heading = section.querySelector("h2");
+      const details = document.createElement("details");
+      const summary = document.createElement("summary");
+      details.className = "workspace-disclosure";
+      summary.append(heading);
+      details.append(summary, ...section.childNodes);
+      section.append(details);
+
+      let populated;
+      const update = () => {
+        const hasItems = !!list.querySelector(".saved-row, .tool-card");
+        if (hasItems === populated) return;
+        populated = hasItems;
+        if (
+          !hasItems &&
+          details.contains(document.activeElement) &&
+          document.activeElement !== summary
+        )
+          summary.focus();
+        details.open = hasItems;
+      };
+      new MutationObserver(update).observe(list, { childList: true });
+      update();
+    }
+  }
   function renderWorkspace() {
     if (!$("#favorite-tools")) return;
     const banner = $("#workspace-account");
@@ -1192,6 +1246,7 @@
     },
   };
   bindFavorites();
+  setupWorkspaceSections();
   renderWorkspace();
   initText();
   initTimer();

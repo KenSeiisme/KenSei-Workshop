@@ -342,13 +342,15 @@ function readyUI() {
   $("#game-restore").hidden = !row || running;
   $("#game-restore").dataset.id = row?.id || "";
   uiText($("#game-best"), displayResult(priorBest(game, difficulty()), game));
+  const eligibility = $("#game-eligibility-note");
+  eligibility.hidden = !api.user && !isBoard();
   uiText(
-    $("#game-eligibility-note"),
+    eligibility,
     newRunIsRanked()
       ? uiMsg("New games rank automatically after verification.")
       : isBoard()
         ? uiMsg("Play locally. Progress saves automatically.")
-        : uiMsg("Local best on this device. Sign in for ranked results."),
+        : "",
   );
   const setup = $("#game-setup");
   const oneOption = $("#game-difficulty").options.length === 1;
@@ -996,27 +998,66 @@ async function initDirectory() {
   directoryBound = true;
   bindCardDemos();
   mountGameHub(store);
+  const search = $("#game-search"),
+    filters = $("#game-filters"),
+    library = $("#games-library"),
+    grid = library.querySelector(".games-grid"),
+    cards = [...grid.querySelectorAll("[data-game-card]")],
+    results = $("#hub-game-results"),
+    matches = $("#hub-game-matches"),
+    clear = $("#hub-game-clear");
   let category = "all";
-  const filter = () => {
+  function filter() {
+    const query = search.value.trim().toLowerCase();
+    const active = !!query || category !== "all";
+    const target = active ? matches : grid;
+    if (cards[0].parentElement !== target) target.append(...cards);
+    library.hidden = active;
+    results.hidden = !active;
+    filters.querySelector(".hub-library-jump").href = active
+      ? "#hub-game-results"
+      : "#games-library";
     let count = 0;
-    for (const c of document.querySelectorAll("[data-game-card]")) {
-      c.hidden =
-        !(category === "all" || c.dataset.category === category) ||
-        !c.dataset.search.includes($("#game-search").value.toLowerCase());
-      if (!c.hidden) count++;
+    for (const card of cards) {
+      const found =
+        (category === "all" || card.dataset.category === category) &&
+        card.dataset.search.includes(query);
+      card.hidden = !found;
+      count += Number(found);
     }
-    $("#games-empty").hidden = !!count;
-  };
-  $("#game-search").addEventListener("input", filter);
-  $("#game-filters").addEventListener("click", (e) => {
-    const b = e.target.closest("[data-game-filter]");
-    if (!b) return;
-    category = b.dataset.gameFilter;
-    for (const x of $("#game-filters").querySelectorAll("[data-game-filter]")) {
-      x.classList.toggle("active", x === b);
-      x.setAttribute("aria-pressed", String(x === b));
+    $("#games-empty").hidden = count > 0;
+    if (active)
+      uiText(
+        $("#hub-game-count"),
+        count === 1 ? uiMsg("1 game found") : uiMsg("{0} games found", [count]),
+      );
+  }
+  function selectCategory(button) {
+    category = button.dataset.gameFilter;
+    for (const option of filters.querySelectorAll("[data-game-filter]")) {
+      option.classList.toggle("active", option === button);
+      option.setAttribute("aria-pressed", String(option === button));
     }
     filter();
+  }
+  search.addEventListener("input", filter);
+  search.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.isComposing || results.hidden) return;
+    event.preventDefault();
+    (
+      matches.querySelector(
+        "[data-game-card]:not([hidden]) .card-primary-link",
+      ) || clear
+    ).focus();
+  });
+  filters.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-game-filter]");
+    if (button) selectCategory(button);
+  });
+  clear.addEventListener("click", () => {
+    search.value = "";
+    selectCategory(filters.querySelector('[data-game-filter="all"]'));
+    search.focus();
   });
   // 载入模块前已经输入的搜索词也要生效；目录筛选不依赖 IndexedDB。
   filter();

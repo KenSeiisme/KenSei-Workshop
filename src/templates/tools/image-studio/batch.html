@@ -1,27 +1,47 @@
 <div class="studio-grid">
   <section class="panel image-input">
-    <label class="dropzone" id="dropzone"
-      ><input
+    <div class="dropzone" id="dropzone">
+      <input
         id="image-file"
         type="file"
         multiple
         data-lock
         accept="image/jpeg,image/png,image/webp"
-      /><span class="upload-icon">↥</span
-      ><strong>Drop up to 20 images here</strong
-      ><span>or click to choose files</span
-      ><small>JPG, PNG or WebP · 20 MB each · 100 MB total</small></label
-    >
+        hidden
+      />
+      <span class="upload-icon" aria-hidden="true">↥</span>
+      <strong>Drop up to 20 images here</strong>
+      <button
+        class="button secondary"
+        id="image-pick"
+        type="button"
+        aria-describedby="image-upload-limits"
+        data-lock
+      >
+        Choose images
+      </button>
+      <small id="image-upload-limits"
+        >JPG, PNG or WebP · 20 MB each · 100 MB total</small
+      >
+    </div>
+    <p id="image-info" class="muted small" role="status">
+      Your image stays on this device.
+    </p>
     <div class="image-stage" hidden>
       <img id="image-preview" alt="Selected image preview" /><button
         id="change-image"
         data-lock
         class="button secondary small-button"
       >
-        Choose another image
+        Choose other images
       </button>
     </div>
-    <p id="image-info" class="muted small">Your image stays on this device.</p>
+    <ul
+      id="image-selection"
+      class="file-state-list"
+      aria-label="Selected images"
+      hidden
+    ></ul>
   </section>
   <section class="panel settings-panel">
     <h2>Make it yours</h2>
@@ -68,7 +88,7 @@
       data-lock
       disabled
     >
-      Process image →
+      Start processing →
     </button>
     <p id="image-result" role="status" class="muted small"></p>
     <a id="image-download" class="button secondary full-width" hidden download

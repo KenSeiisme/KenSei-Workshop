@@ -154,10 +154,18 @@ export function imageRecipes(context) {
     }
     context.stale();
   };
-  function scopes() {
-    if (selected < 0) global = read();
+  function scopes(previous) {
+    flush();
+    if (previous) {
+      const remaining = [...overrides].flatMap(([index, recipe]) => {
+        const current = context.files.indexOf(previous[index]);
+        return current < 0 ? [] : [[current, recipe]];
+      });
+      overrides.clear();
+      for (const [index, recipe] of remaining) overrides.set(index, recipe);
+    } else overrides.clear();
+    if (selected >= 0) write(global);
     selected = -1;
-    overrides.clear();
     overrideList.replaceChildren(
       el("option", "Global recipe", { value: "-1" }),
     );

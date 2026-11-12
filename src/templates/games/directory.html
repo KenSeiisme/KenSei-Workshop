@@ -54,6 +54,18 @@
         >Game library <span aria-hidden="true">↓</span></a
       >
     </nav>
+    <section id="hub-game-results" aria-label="Game search results" hidden>
+      <div class="hub-search-feedback">
+        <p id="hub-game-count" class="muted small" role="status"></p>
+        <button type="button" class="text-link" id="hub-game-clear">
+          Clear search and filters
+        </button>
+      </div>
+      <div id="hub-game-matches"></div>
+      <p id="games-empty" class="muted small" hidden>
+        No games found. Try another search.
+      </p>
+    </section>
   </header>
   <section
     class="hub-feature panel"
@@ -254,9 +266,6 @@
       </label>
     </div>
     <div class="games-grid">${cards}</div>
-    <p id="games-empty" class="game-empty-state" role="status" hidden>
-      No games found. Try another search.
-    </p>
   </section>
   <section
     class="game-continue panel"

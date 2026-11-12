@@ -1,6 +1,7 @@
 <aside
   class="panel game-leaderboard game-rank-panel"
   id="game-rank-panel"
+  data-rank-state="loading"
   aria-labelledby="leaderboard-title"
 >
   <div class="game-section-heading">
@@ -38,7 +39,7 @@
     <div
       id="game-leaderboard"
       class="game-leaderboard-list"
-      tabindex="0"
+      tabindex="-1"
       aria-label="Leaderboard results"
     ></div>
     <button

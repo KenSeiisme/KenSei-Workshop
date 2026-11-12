@@ -1290,3 +1290,37 @@ body.game-is-focused > .footer {
   flex-basis: 100%;
   font-size: 0.8rem;
 }
+@media (max-width: 760px) {
+  [data-play-shell]
+    .game-rank-panel:not([data-rank-state="ready"])
+    :is(
+      #game-board-note,
+      #game-my-rank,
+      .game-rank-disclaimer,
+      .game-empty-state > :not(p)
+    ) {
+    display: none;
+  }
+  [data-play-shell]
+    .game-rank-panel:not([data-rank-state="ready"])
+    .game-leaderboard-list {
+    min-height: 0;
+    scrollbar-gutter: auto;
+  }
+  [data-play-shell]
+    .game-rank-panel[data-rank-state="empty"]
+    .game-empty-state {
+    padding: 8px;
+    margin: 4px 0 0;
+    place-items: start;
+    min-height: 0;
+    text-align: left;
+  }
+  [data-play-shell]
+    .game-rank-panel[data-rank-state="empty"]
+    .game-empty-state
+    p {
+    margin: 0;
+    max-width: none;
+  }
+}

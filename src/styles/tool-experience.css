@@ -425,3 +425,30 @@
     transition: none !important;
   }
 }
+.tool-page #dropzone {
+  height: auto;
+  min-height: 200px;
+  padding: 16px;
+  text-align: center;
+  cursor: default;
+}
+#image-pick {
+  min-height: 44px;
+}
+.tool-page #dropzone small {
+  margin: 0;
+  color: var(--muted);
+}
+.tool-page #image-selection {
+  max-height: 20rem;
+  overflow-y: auto;
+}
+.tool-page #image-selection li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+}
+#image-selection [data-image-remove] {
+  min-height: 44px;
+}
