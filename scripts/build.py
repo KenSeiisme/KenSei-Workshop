@@ -17,6 +17,7 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(SOURCE / "views"))
 from template_renderer import render_template
 from icons import icon
+from tool_previews import tool_preview
 from studio_view import view as studio_view, copy_update_feed
 import localization as i18n
 from tool_experience import heading as tool_heading
@@ -171,7 +172,7 @@ def project_card(p, featured=False):
     )
 
 
-def tool_card(t):
+def tool_card(t, illustrated=False):
     slug, glyph, name, title, desc, cat = t
     return render_template(
         "site/tool-card.html",
@@ -184,6 +185,7 @@ def tool_card(t):
         slug=slug,
         name=name,
         icon_star=icon("star"),
+        illustration=tool_preview(slug) if illustrated else "",
         slug_2=slug,
         name_2=name,
         desc=desc,
@@ -228,10 +230,11 @@ def layout(title, content, active="Home", route="", locale="en"):
     )
 
 
-def tool_directory():
+def tool_directory(illustrated=False):
     # 首页与目录共用工具数据和交互标记。
     return render_template(
-        "site/tool-directory.html", tool_cards="".join((tool_card(t) for t in TOOLS))
+        "site/tool-directory.html",
+        tool_cards="".join(tool_card(t, illustrated) for t in TOOLS),
     )
 
 
@@ -264,7 +267,7 @@ pages["projects"] = (
 )
 pages["tools"] = (
     "Tools",
-    f'<section class="container page-section tools-page">{page_intro("THE EVERYDAY TOOLBOX", "A little help goes a long way", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{tool_directory()}</section>',
+    f'<section class="container page-section tools-page">{page_intro("THE EVERYDAY TOOLBOX", "A little help goes a long way", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{tool_directory(illustrated=True)}</section>',
     "Tools",
 )
 

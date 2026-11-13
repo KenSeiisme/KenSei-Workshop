@@ -152,12 +152,13 @@ def preview(kind):
             + "</div>"
         )
     if kind == "chess":
+        pieces = {1: "bn", 10: "wp", 14: "wk"}
         return (
             '<div class="preview-chess" aria-hidden="true">'
             + "".join(
-                "<i>"
-                + ("♞" if i == 1 else "♙" if i == 10 else "♔" if i == 14 else "")
-                + "</i>"
+                f'<span><img src="/assets/chess/{pieces[i]}.svg" alt="" width="27" height="27"></span>'
+                if i in pieces
+                else "<span></span>"
                 for i in range(16)
             )
             + "</div>"
@@ -384,7 +385,6 @@ def directory(games):
                 (g["name"] + " " + g["description"]).lower(), quote=True
             ),
             name=g["name"],
-            station=DETAILS[g["slug"]][0],
             preview=preview(g["preview"]),
             description=g["description"],
             spec=DETAILS[g["slug"]][2],

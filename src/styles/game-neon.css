@@ -741,13 +741,10 @@ body:has(.games-page) {
   color: #ad98bc;
   opacity: 0.8;
 }
-.game-card-number {
-  font-size: 10px;
-}
 .game-card-copy {
   padding: 24px 21px 20px;
 }
-.game-card-copy h2 {
+.game-card-copy h3 {
   font-size: 24px;
   letter-spacing: -0.045em;
 }

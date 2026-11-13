@@ -560,6 +560,8 @@ def head(route, locale, site_url):
     lines.extend(
         '<link rel="stylesheet" href="/' + name + '">' for name in [*styles(route), "theme.css", "interface.css"]
     )
+    if route == "tools":
+        lines.append('<link rel="stylesheet" href="/tool-previews.css">')
     lines += [
         '<script src="/site/i18n.js" defer></script>',
         '<script src="/site/notices.js" defer></script>',

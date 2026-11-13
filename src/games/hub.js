@@ -17,8 +17,7 @@ export function mountGameHub(saves) {
         card,
       ]),
     ),
-    name = (game) =>
-      cards.get(game)?.querySelector("h2 a")?.textContent || game,
+    name = (game) => cards.get(game)?.querySelector("h3")?.textContent || game,
     updateProfile = mountHubProfile(hub, saves);
   let current,
     owner = hubOwner(),

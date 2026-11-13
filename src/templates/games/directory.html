@@ -4,15 +4,6 @@
       ><span class="brand-symbol" aria-hidden="true">k<span>✳</span></span>
       <span class="hub-brand-name">KenSei <strong>Arcade</strong></span></a
     >
-    <label class="search-box">
-      ${svg_search}
-      <input
-        type="search"
-        id="game-search"
-        placeholder="Find a game…"
-        aria-label="Search games"
-      />
-    </label>
     <a class="button secondary hub-wallet" href="#game-skin-shop"
       >${svg_coin} <span data-hub-coins>—</span> <span>Coins</span></a
     >
@@ -23,38 +14,9 @@
     >
       ${svg_achievement} <span>Achievements</span>
     </a>
-    <nav class="filter-bar" id="game-filters" aria-label="Game categories">
-      <button class="filter active" data-game-filter="all" aria-pressed="true">
-        All games
-      </button>
-      <button class="filter" data-game-filter="puzzle" aria-pressed="false">
-        Puzzle
-      </button>
-      <button class="filter" data-game-filter="action" aria-pressed="false">
-        Action
-      </button>
-      <button class="filter" data-game-filter="casual" aria-pressed="false">
-        Casual
-      </button>
-      <button class="filter" data-game-filter="board" aria-pressed="false">
-        Board
-      </button>
-      <a class="hub-library-jump" href="#games-library"
-        ><span>Game library</span> ${svg_grid}</a
-      >
-    </nav>
-    <section id="hub-game-results" aria-label="Game search results" hidden>
-      <div class="hub-search-feedback">
-        <p id="hub-game-count" class="muted small" role="status"></p>
-        <button type="button" class="text-link" id="hub-game-clear">
-          Clear search and filters
-        </button>
-      </div>
-      <div id="hub-game-matches"></div>
-      <p id="games-empty" class="muted small" hidden>
-        No games found. Try another search.
-      </p>
-    </section>
+    <a class="button secondary hub-library-jump" href="#games-library"
+      ><span>Game library</span> ${svg_grid}</a
+    >
   </header>
   <section
     class="hub-feature panel glass-surface"
@@ -102,6 +64,64 @@
       </div>
     </div>
     <div class="hub-slides">${featured}</div>
+  </section>
+  <section id="games-library" aria-labelledby="games-library-heading">
+    <div class="game-library-heading">
+      <div>
+        <h2 id="games-library-heading">Game library</h2>
+      </div>
+      <label class="game-effects-control"
+        >Effects
+        <select data-effects-select aria-label="Game effects">
+          <option value="auto">Auto</option>
+          <option value="reduced">Reduced</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
+    </div>
+    <div class="game-library-controls glass-surface">
+      <label class="search-box">
+        ${svg_search}
+        <input
+          type="search"
+          id="game-search"
+          placeholder="Find a game…"
+          aria-label="Search games"
+          aria-controls="game-library-grid"
+        />
+      </label>
+      <nav class="filter-bar" id="game-filters" aria-label="Game categories">
+        <button
+          class="filter active"
+          data-game-filter="all"
+          aria-pressed="true"
+        >
+          All games
+        </button>
+        <button class="filter" data-game-filter="puzzle" aria-pressed="false">
+          Puzzle
+        </button>
+        <button class="filter" data-game-filter="action" aria-pressed="false">
+          Action
+        </button>
+        <button class="filter" data-game-filter="casual" aria-pressed="false">
+          Casual
+        </button>
+        <button class="filter" data-game-filter="board" aria-pressed="false">
+          Board
+        </button>
+      </nav>
+      <div class="hub-search-feedback">
+        <p id="hub-game-count" class="muted small" role="status"></p>
+        <button type="button" class="text-link" id="hub-game-clear" hidden>
+          Clear search and filters
+        </button>
+      </div>
+    </div>
+    <div class="games-grid" id="game-library-grid">${cards}</div>
+    <p id="games-empty" class="empty-state" hidden>
+      No games found. Try another search.
+    </p>
   </section>
   <div class="hub-front">
     <section class="panel hub-player" aria-labelledby="hub-player-title">
@@ -234,23 +254,6 @@
         Retry
       </button>
     </div>
-  </section>
-  <section id="games-library" aria-labelledby="games-library-heading">
-    <div class="game-library-heading">
-      <div>
-        <div class="eyebrow">PICK YOUR NEXT GAME</div>
-        <h2 id="games-library-heading">Game library</h2>
-      </div>
-      <label class="game-effects-control"
-        >Effects
-        <select data-effects-select aria-label="Game effects">
-          <option value="auto">Auto</option>
-          <option value="reduced">Reduced</option>
-          <option value="off">Off</option>
-        </select>
-      </label>
-    </div>
-    <div class="games-grid">${cards}</div>
   </section>
   <section
     class="game-continue panel"

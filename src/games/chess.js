@@ -99,17 +99,6 @@ const names = {
   q: "Queen",
   k: "King",
 };
-const art = {
-  p: '<circle cx="24" cy="13" r="6"/><path d="M20 20h8l3 16H17zM14 37h20v5H14z"/>',
-  r: '<path d="M12 7h6v5h4V7h5v5h4V7h6v12l-5 5v12H17V24l-5-5zM13 37h23v5H13z"/>',
-  n: '<path d="m15 35 4-12-8-3 7-13 7-3 9 7-1 10 1 14zM13 37h23v5H13z"/><path d="m17 11 5 1M26 11h1" fill="none" stroke-width="3"/>',
-  b: '<path d="M24 5c-12 9-10 17 0 20 10-3 12-11 0-20zM21 25h6l5 11H16zM13 37h23v5H13z"/><path d="m24 11-4 7" fill="none" stroke-width="2"/>',
-  q: '<path d="m12 16 7 7 5-13 5 13 7-7-6 20H18zM13 37h23v5H13z"/><circle cx="11" cy="12" r="3"/><circle cx="24" cy="7" r="3"/><circle cx="37" cy="12" r="3"/>',
-  k: '<path d="M21 4h6v5h5v5h-5v7h-6v-7h-5V9h5zM17 23q7-7 14 0l-3 13h-8zM13 37h23v5H13z"/>',
-};
-function pieceSvg(piece) {
-  return `<svg viewBox="0 0 48 48" aria-hidden="true" fill="${piece.color === "w" ? "#fff5ef" : "#292237"}" stroke="${piece.color === "w" ? "#71607e" : "#d4bfec"}" stroke-width="1.35" stroke-linejoin="round">${art[piece.type]}</svg>`;
-}
 for (let rank = 8; rank >= 1; rank--)
   for (let f = 0; f < 8; f++) {
     const square = String.fromCharCode(97 + f) + rank,
@@ -122,7 +111,7 @@ for (let rank = 8; rank >= 1; rank--)
     button.setAttribute("role", "gridcell");
     const icon = document.createElement("span");
     icon.className = "chess-piece";
-    icon.style.display = "contents";
+    icon.setAttribute("aria-hidden", "true");
     const coord = document.createElement("small");
     coord.className = "coordinate";
     coord.textContent = square;
@@ -181,7 +170,15 @@ function draw() {
       code = piece ? piece.color + piece.type : "";
     cell.button.style.order = i;
     if (cell.code !== code) {
-      cell.icon.innerHTML = piece ? pieceSvg(piece) : "";
+      if (piece) {
+        const image = document.createElement("img");
+        image.src = `/assets/chess/${piece.color}${piece.type}.svg`;
+        image.alt = "";
+        image.draggable = false;
+        cell.icon.replaceChildren(image);
+      } else {
+        cell.icon.replaceChildren();
+      }
       cell.code = code;
     }
     cell.button.classList.toggle(

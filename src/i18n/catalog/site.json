@@ -606,5 +606,73 @@
   "m_80faf266095b": {
     "en": "Vercel Web Analytics measures visits to public pages on the production site without cookies. We remove query parameters and fragments before sending page URLs. Workspace, profile, and sign-in pages are excluded.",
     "zh-Hant": "Vercel Web Analytics 統計正式站公開頁面的瀏覽量，不使用 Cookie。頁面網址在送出前會移除查詢參數和片段。工作區、個人檔案和登入頁面不列入統計。"
+  },
+  "m_d029f87e3d80": {
+    "en": "Example",
+    "zh-Hant": "示意"
+  },
+  "m_2ea879f8c9f7": {
+    "en": "Ready to type",
+    "zh-Hant": "準備打字"
+  },
+  "m_e9e0d85bffef": {
+    "en": "A little clarity",
+    "zh-Hant": "讓文字更清楚"
+  },
+  "m_0ab8ed426bb1": {
+    "en": "3 words",
+    "zh-Hant": "3 個單字"
+  },
+  "m_9212cd2faf43": {
+    "en": "One step",
+    "zh-Hant": "一步一步"
+  },
+  "m_bcd8f501ca68": {
+    "en": "at a time.",
+    "zh-Hant": "慢慢來。"
+  },
+  "m_dd41cfe01f36": {
+    "en": "A new chapter",
+    "zh-Hant": "新的篇章"
+  },
+  "m_8a7525b1492f": {
+    "en": "Notes",
+    "zh-Hant": "筆記"
+  },
+  "m_360aa5ebfa18": {
+    "en": "# Notes",
+    "zh-Hant": "# 筆記"
+  },
+  "m_a6fa61ad1af0": {
+    "en": "- A task",
+    "zh-Hant": "- 一項任務"
+  },
+  "m_edcb25557f13": {
+    "en": "- An idea",
+    "zh-Hant": "- 一個想法"
+  },
+  "m_bbf1570c7731": {
+    "en": "• A task",
+    "zh-Hant": "• 一項任務"
+  },
+  "m_3659f1c33a7a": {
+    "en": "• An idea",
+    "zh-Hant": "• 一個想法"
+  },
+  "m_168bdcdf344f": {
+    "en": "− Hello world",
+    "zh-Hant": "− 你好，世界"
+  },
+  "m_6b917b918673": {
+    "en": "+ Hello Workshop",
+    "zh-Hant": "+ 你好，Workshop"
+  },
+  "m_7de203a2e088": {
+    "en": "1 line",
+    "zh-Hant": "1 行"
+  },
+  "m_e4cfd9ab038d": {
+    "en": "16 characters",
+    "zh-Hant": "6 個字元"
   }
 }
