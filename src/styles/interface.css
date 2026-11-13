@@ -443,12 +443,6 @@ dialog .dialog-close:hover {
   padding-top: 12px;
 }
 
-.game-card-play {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
 [data-play-shell] .game-shell-toolbar .back-link {
   min-width: 44px;
 }
@@ -603,20 +597,13 @@ dialog .dialog-close:hover {
     padding: 0;
   }
 
-  .whiteboard-toolbar-actions .button > span,
-  .hub-library-jump > span {
+  .whiteboard-toolbar-actions .button > span {
     position: absolute;
     clip-path: inset(50%);
     width: 1px;
     height: 1px;
     overflow: hidden;
     white-space: nowrap;
-  }
-
-  .game-hub .hub-library-jump {
-    display: inline-grid;
-    place-items: center;
-    min-width: 44px;
   }
 
   [data-play-shell] .game-shell-toolbar {

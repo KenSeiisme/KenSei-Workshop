@@ -108,7 +108,7 @@
   background: #1d153b60;
   pointer-events: none;
 }
-.chess-square.legal:has(svg)::before {
+.chess-square.legal:has(img)::before {
   width: 86%;
   height: 86%;
   border: 3px solid #e0ccffbb;
@@ -123,7 +123,7 @@
   outline-offset: -3px;
   z-index: 1;
 }
-.chess-square svg {
+.chess-square .chess-piece img {
   width: 89%;
   height: 89%;
   filter: drop-shadow(0 3px 1px #130c2c66);
@@ -313,25 +313,27 @@ body.game-is-focused:has([data-chess]) .chess-history {
 .preview-chess {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  width: 90px;
+  width: min(112px, 100%);
   aspect-ratio: 1;
   margin: auto;
   border: 1px solid #d9bbef66;
   border-radius: 5px;
   overflow: hidden;
 }
-.preview-chess i {
+.preview-chess > span {
   background: #bea8ce;
   display: grid;
   place-items: center;
-  font: normal 25px serif;
-  color: #251534;
 }
-.preview-chess i:nth-child(8n + 2),
-.preview-chess i:nth-child(8n + 4),
-.preview-chess i:nth-child(8n + 5),
-.preview-chess i:nth-child(8n + 7) {
+.preview-chess > span:nth-child(8n + 2),
+.preview-chess > span:nth-child(8n + 4),
+.preview-chess > span:nth-child(8n + 5),
+.preview-chess > span:nth-child(8n + 7) {
   background: #645275;
+}
+.preview-chess img {
+  width: min(100%, 27px);
+  height: auto;
 }
 [data-game-theme="chess"] {
   --game-accent: #bcb3ff;

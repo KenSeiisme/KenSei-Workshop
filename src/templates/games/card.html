@@ -5,21 +5,25 @@
   data-category="${category_key}"
   data-search="${search_text}"
 >
-  <div class="game-cover" aria-hidden="true">
-    <span class="game-card-number">${station}</span>${preview}<span
-      class="small-tag"
-      >${category}</span
-    ><span class="game-demo-label">DEMO PREVIEW</span>
-  </div>
-  <div class="game-card-copy">
-    <h2><a href="/games/${slug}/" class="card-primary-link">${name}</a></h2>
-    <p>${description}</p>
-    <div class="game-card-meta">
-      <span>${spec}</span><span>${play_mode}</span>
+  <a
+    href="/games/${slug}/"
+    class="game-card-link"
+    aria-labelledby="game-card-title-${slug}"
+  >
+    <div class="game-cover" aria-hidden="true">
+      ${preview}<span class="small-tag">${category}</span>
+      <span class="game-demo-label">DEMO PREVIEW</span>
     </div>
-    <p class="hub-card-stats muted small" data-hub-card-stats></p>
-    <span class="game-card-play" aria-hidden="true"
-      ><span>Play game</span> ${svg_arrow}</span
-    >
-  </div>
+    <div class="game-card-copy">
+      <h3 id="game-card-title-${slug}">${name}</h3>
+      <p>${description}</p>
+      <div class="game-card-meta">
+        <span>${spec}</span><span>${play_mode}</span>
+      </div>
+      <p class="hub-card-stats muted small" data-hub-card-stats></p>
+      <span class="game-card-play" aria-hidden="true">
+        <span>Play game</span> ${svg_arrow}
+      </span>
+    </div>
+  </a>
 </article>

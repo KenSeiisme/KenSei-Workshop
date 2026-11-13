@@ -60,18 +60,23 @@ const sdk = `export function createClient(){return {
         await page.setViewportSize({ width: 390, height: 844 });
         await open(prefix, "/games/");
         await page.waitForSelector('[data-games-directory][data-ready="true"]');
-        const search = page.locator("#game-search");
+        const search = page.locator("#games-library #game-search");
+        await page.locator(".hub-library-jump").click();
         await search.fill(prefix ? "西洋棋" : "western chess");
-        const match = page.locator(
-          '#hub-game-matches [data-game-theme="chess"] .card-primary-link',
-        );
+        const card = page.locator('#games-library [data-game-theme="chess"]');
+        const match = card.locator(".game-card-link");
+        assert.equal(await card.locator("a").count(), 1);
+        assert(await card.locator(".game-cover").isVisible());
+        assert.equal(await card.locator(".preview-chess img").count(), 3);
+        assert(await card.locator(".game-card-play").isVisible());
         await match.waitFor();
         assert.equal(
           await page.locator("#hub-game-count").textContent(),
           prefix ? "找到 1 款遊戲" : "1 game found",
         );
-        const box = await match.boundingBox();
-        assert(box && box.y + box.height <= 844);
+        const searchBox = await search.boundingBox();
+        const headerBox = await page.locator("body > .header").boundingBox();
+        assert(searchBox.y >= headerBox.height);
         assert.equal(
           await match.getAttribute("href"),
           prefix + "/games/chess/",
@@ -84,10 +89,7 @@ const sdk = `export function createClient(){return {
         assert(
           await search.evaluate((node) => node === document.activeElement),
         );
-        assert.equal(
-          await page.locator("#hub-game-results").isVisible(),
-          false,
-        );
+        assert.equal(await page.locator("#hub-game-clear").isVisible(), false);
         assert.equal(
           await page.locator("#games-library [data-game-card]:visible").count(),
           15,
@@ -95,12 +97,39 @@ const sdk = `export function createClient(){return {
         await page.click('[data-game-filter="board"]');
         assert.equal(
           await page
-            .locator("#hub-game-matches [data-game-card]:visible")
+            .locator("#game-library-grid [data-game-card]:visible")
             .count(),
           5,
         );
+        assert.equal(
+          await page.locator("#game-library-grid .game-cover:visible").count(),
+          5,
+        );
+        await search.fill(prefix ? "西洋棋" : "western chess");
+        assert.equal(
+          await page
+            .locator("#game-library-grid [data-game-card]:visible")
+            .count(),
+          1,
+        );
+        await card.locator(".game-card-play").click();
+        await page.waitForURL("**" + prefix + "/games/chess/");
         await noOverflow();
         await open(prefix, "/tools/");
+        const previews = page.locator(".tool-card-preview");
+        assert.equal(await previews.count(), 28);
+        assert.equal(
+          new Set(
+            await previews.evaluateAll((nodes) =>
+              nodes.map((node) => node.dataset.toolPreview),
+            ),
+          ).size,
+          28,
+        );
+        assert(
+          (await page.locator(".tool-card").first().boundingBox()).y <= 420,
+        );
+
         await page.locator("#tool-search").fill("no-match-123");
         assert(await page.locator("#tool-search-clear").isVisible());
         assert.match(

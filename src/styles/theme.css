@@ -106,7 +106,7 @@
 }
 :root[data-site-theme="light"]
   :is(
-    .game-card-copy h2,
+    .game-card-copy h3,
     .game-shell-toolbar h1,
     .game-rank-panel h2,
     .game-metrics strong,

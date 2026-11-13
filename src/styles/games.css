@@ -173,9 +173,6 @@
 .game-library-heading > span {
   font-size: 12px;
 }
-#games-library {
-  scroll-margin-top: 105px;
-}
 .games-page .tools-controls {
   margin-bottom: 0;
   gap: 20px;
@@ -220,15 +217,6 @@
   background-size: 18px 18px;
   mask-image: linear-gradient(transparent, #000);
 }
-.game-card-number {
-  position: absolute;
-  top: 16px;
-  left: 18px;
-  color: var(--game-accent);
-  opacity: 0.65;
-  font: 12px var(--display);
-  letter-spacing: 0.06em;
-}
 .game-cover > .small-tag {
   position: absolute;
   top: 12px;
@@ -256,7 +244,7 @@
   margin: 0 0 9px;
   min-height: 0;
 }
-.game-card-copy h2 {
+.game-card-copy h3 {
   font-size: 24px;
   margin: 0 0 13px;
   letter-spacing: -0.05em;
@@ -293,12 +281,11 @@
   color: var(--game-accent);
   font-size: 12px;
 }
-.game-card-play > span {
+.game-card-play > .ui-icon {
   width: 29px;
   height: 29px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #ffffff18;
+  padding: 5px;
+  border: 1px solid var(--line);
   border-radius: 50%;
 }
 .mini-tiles {
@@ -1349,7 +1336,7 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .game-card,
-  .game-card-play > span {
+  .game-card-play > .ui-icon {
     transition:
       transform 0.2s,
       border-color 0.2s;
@@ -1358,8 +1345,8 @@
     transform: translateY(-5px);
     border-color: var(--game-accent);
   }
-  .game-card:hover .game-card-play > span {
-    transform: rotate(45deg);
+  .game-card:hover .game-card-play > .ui-icon {
+    transform: translateX(2px);
   }
   .memory-card {
     transition:

@@ -93,8 +93,10 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     assert.match(await page.locator("#chess-turn").textContent(), /White/);
     await page.click("#chess-undo");
     assert.match(await page.locator("#chess-turn").textContent(), /Black/);
-    const piece = page.locator('[data-square="e4"] svg');
+    const piece = page.locator('[data-square="e4"] .chess-piece img');
     assert.equal(await piece.count(), 1);
+    assert.match(await piece.getAttribute("src"), /\/assets\/chess\/wp\.svg$/);
+    await piece.evaluate((img) => img.decode());
     await page.click("[data-shell-focus]");
     assert.equal(await piece.count(), 1);
     await page.click("[data-shell-focus]");
@@ -131,7 +133,10 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     assert.match(await fs.readFile(await d.path(), "utf8"), /1\/2-1\/2/);
     await page.click("#chess-review");
     await page.locator("#chess-ply").fill("0");
-    assert.equal(await page.locator('[data-square="e2"] svg').count(), 1);
+    assert.equal(
+      await page.locator('[data-square="e2"] .chess-piece img').count(),
+      1,
+    );
     await page.click("#chess-close-review");
     await page.click("#chess-again");
     await page.selectOption("#chess-mode", "ai");
@@ -153,7 +158,10 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await page.waitForSelector("[data-chess][data-ready=true]");
     await page.waitForSelector("#chess-continue:not([hidden])");
     await page.click("#chess-continue");
-    assert.equal(await page.locator('[data-square="e4"] svg').count(), 1);
+    assert.equal(
+      await page.locator('[data-square="e4"] .chess-piece img').count(),
+      1,
+    );
     await page.click("[data-shell-menu]");
     await page.click("#chess-new-setup");
     await page.selectOption("#chess-mode", "local");
@@ -195,13 +203,13 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       await touchPage.tap('[data-square="e2"]');
       await touchPage.tap('[data-square="e4"]');
       assert.equal(
-        await touchPage.locator('[data-square="e2"] svg').count(),
+        await touchPage.locator('[data-square="e2"] .chess-piece img').count(),
         1,
       );
       assert.equal(await touchPage.locator("#chess-confirm").isVisible(), true);
       await touchPage.tap("#chess-confirm");
       assert.equal(
-        await touchPage.locator('[data-square="e4"] svg').count(),
+        await touchPage.locator('[data-square="e4"] .chess-piece img').count(),
         1,
       );
       await touchContext.close();

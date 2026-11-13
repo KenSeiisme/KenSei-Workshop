@@ -1000,37 +1000,31 @@ async function initDirectory() {
   mountGameHub(store);
   const search = $("#game-search"),
     filters = $("#game-filters"),
-    library = $("#games-library"),
-    grid = library.querySelector(".games-grid"),
+    grid = $("#game-library-grid"),
     cards = [...grid.querySelectorAll("[data-game-card]")],
-    results = $("#hub-game-results"),
-    matches = $("#hub-game-matches"),
-    clear = $("#hub-game-clear");
+    clear = $("#hub-game-clear"),
+    empty = $("#games-empty"),
+    resultCount = $("#hub-game-count");
   let category = "all";
+  const fold = (value) => value.normalize("NFKC").toLowerCase();
+  const searchable = cards.map((card) => fold(card.dataset.search));
   function filter() {
-    const query = search.value.trim().toLowerCase();
-    const active = !!query || category !== "all";
-    const target = active ? matches : grid;
-    if (cards[0].parentElement !== target) target.append(...cards);
-    library.hidden = active;
-    results.hidden = !active;
-    filters.querySelector(".hub-library-jump").href = active
-      ? "#hub-game-results"
-      : "#games-library";
+    const terms = fold(search.value).trim().split(/\s+/).filter(Boolean);
     let count = 0;
-    for (const card of cards) {
+    cards.forEach((card, index) => {
       const found =
         (category === "all" || card.dataset.category === category) &&
-        card.dataset.search.includes(query);
+        terms.every((term) => searchable[index].includes(term));
       card.hidden = !found;
       count += Number(found);
-    }
-    $("#games-empty").hidden = count > 0;
-    if (active)
-      uiText(
-        $("#hub-game-count"),
-        count === 1 ? uiMsg("1 game found") : uiMsg("{0} games found", [count]),
-      );
+    });
+    grid.hidden = count === 0;
+    empty.hidden = count > 0;
+    clear.hidden = terms.length === 0 && category === "all";
+    uiText(
+      resultCount,
+      count === 1 ? uiMsg("1 game found") : uiMsg("{0} games found", [count]),
+    );
   }
   function selectCategory(button) {
     category = button.dataset.gameFilter;
@@ -1042,13 +1036,14 @@ async function initDirectory() {
   }
   search.addEventListener("input", filter);
   search.addEventListener("keydown", (event) => {
-    if (event.key !== "Enter" || event.isComposing || results.hidden) return;
+    if (event.key !== "Enter" || event.isComposing) return;
+    const result = grid.querySelector(
+      "[data-game-card]:not([hidden]) .game-card-link",
+    );
+    const target = result || (clear.hidden ? null : clear);
+    if (!target) return;
     event.preventDefault();
-    (
-      matches.querySelector(
-        "[data-game-card]:not([hidden]) .card-primary-link",
-      ) || clear
-    ).focus();
+    target.focus();
   });
   filters.addEventListener("click", (event) => {
     const button = event.target.closest("[data-game-filter]");
