@@ -195,17 +195,37 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       '[data-games-leaderboards][data-ready="true"]',
     );
     assert.equal(await boards.locator("[data-rank-game]").count(), 15);
+    assert.equal(await boards.locator(".rank-card-illustration").count(), 15);
     assert.equal(rankingRequests.length, countBeforeDirectory);
     await boards.locator('[data-rank-game="snake"]').click();
     await boards.waitForSelector("[data-hub-rank-results] tbody tr");
     assert.match(boards.url(), /game=snake&mode=normal&board=verified/);
+    assert.deepEqual(
+      await boards
+        .locator("[data-rank-podium] li")
+        .evaluateAll((nodes) => nodes.map((node) => Number(node.dataset.rank))),
+      [1, 2, 3],
+    );
     assert.equal(
-      await boards.locator("[data-hub-rank-results] tbody tr").count(),
+      await boards
+        .locator("[data-hub-rank-results] tbody tr")
+        .first()
+        .locator("td")
+        .first()
+        .textContent(),
+      "4",
+    );
+    assert.equal(
+      await boards
+        .locator("[data-hub-rank-results] tbody tr, [data-rank-podium] > li")
+        .count(),
       10,
     );
     await boards.click("[data-hub-rank-more]");
     assert.equal(
-      await boards.locator("[data-hub-rank-results] tbody tr").count(),
+      await boards
+        .locator("[data-hub-rank-results] tbody tr, [data-rank-podium] > li")
+        .count(),
       15,
     );
     assert.match(
@@ -213,6 +233,14 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       /#11/,
     );
     await boards.click('[data-board-kind="demo"]');
+    assert.equal(await boards.locator("[data-rank-podium] a").count(), 0);
+    assert.equal(
+      await boards
+        .locator("[data-rank-podium] .rank-podium-avatar")
+        .first()
+        .textContent(),
+      "P",
+    );
     await boards.waitForSelector("[data-hub-rank-results] tbody tr");
     assert.match(
       await boards.locator("[data-hub-rank-status]").textContent(),
@@ -220,7 +248,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     );
     await boards.click('[data-board-kind="local"]');
     assert.equal(
-      await boards.locator("[data-hub-rank-results] tbody tr").count(),
+      await boards
+        .locator("[data-hub-rank-results] tbody tr, [data-rank-podium] > li")
+        .count(),
       0,
     );
 
@@ -256,7 +286,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     );
     await boards.waitForFunction(() =>
       document
-        .querySelector("[data-hub-rank-results]")
+        .querySelector("#leaderboard-results")
         .textContent.includes("測試玩家"),
     );
     assert.match(
@@ -348,7 +378,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     );
     await play.waitForSelector('[data-game][data-snake-skin="neon"]');
     assert.equal(
-      await boards.locator("[data-hub-rank-results] tbody tr").count(),
+      await boards
+        .locator("[data-hub-rank-results] tbody tr, [data-rank-podium] > li")
+        .count(),
       1,
       "sample rows never enter local board",
     );
@@ -423,6 +455,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       0,
     );
     assert.equal(await boards.locator("[data-rank-game]").count(), 15);
+    assert.equal(await boards.locator(".rank-card-illustration").count(), 15);
 
     const midnight = await context.newPage();
     midnight.on("pageerror", (error) => errors.push(error.message));

@@ -13,6 +13,8 @@ import {
   resultLabel,
 } from "./hub-rankings.js";
 import { patchMarkup } from "./dom.js";
+import { gameIcon } from "./presentation.js";
+import { paintPodium, podiumEntries } from "./rank-podium.js";
 import { uiHtml, uiMsg, uiText } from "../site/ui.js";
 
 const root = document.querySelector("[data-games-leaderboards]");
@@ -80,7 +82,12 @@ function paint() {
   }
   if (!selected) return;
   const { game, mode, kind, available } = selected;
-  uiText(title, cards.get(game).querySelector("strong").textContent);
+  section.dataset.gameTheme = game;
+  patchMarkup($("[data-rank-title-icon]"), gameIcon(game));
+  uiText(
+    $("[data-rank-title-name]"),
+    cards.get(game).querySelector("strong").textContent,
+  );
   patchMarkup(
     $("[data-rank-kinds]"),
     available
@@ -152,11 +159,18 @@ function paint() {
               ? uiMsg("No verified results yet.")
               : uiMsg("Server-verified results"),
   );
+  const visible = rows.slice(0, expanded ? 50 : 10);
+  const podium = new Set(podiumEntries(visible));
+  const remaining = visible.filter((row) => !podium.has(row));
+  paintPodium($("[data-rank-podium]"), visible, {
+    linked: kind === "verified",
+    mine: me,
+    result: (row) => resultLabel(game, mode, row),
+  });
   patchMarkup(
     $("[data-hub-rank-results]"),
-    rows.length
-      ? uiHtml`<table><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Result</th></tr></thead><tbody>${rows
-          .slice(0, expanded ? 50 : 10)
+    remaining.length
+      ? uiHtml`<table><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Result</th></tr></thead><tbody>${remaining
           .map((row) => {
             const name = esc(playerName(row));
             const player =
@@ -166,7 +180,9 @@ function paint() {
             return uiHtml`<tr><td>${Number(row.rank)}</td><td>${player}</td><td>${resultLabel(game, mode, row)}</td></tr>`;
           })
           .join("")}</tbody></table>`
-      : "",
+      : !rows.length && (board || (kind === "local" && snapshot))
+        ? uiHtml`<span class="rank-empty-icon" aria-hidden="true">${gameIcon(game)}</span>`
+        : "",
   );
 }
 

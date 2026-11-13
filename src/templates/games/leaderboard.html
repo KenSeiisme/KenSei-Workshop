@@ -43,7 +43,15 @@
       class="game-leaderboard-list"
       tabindex="-1"
       aria-label="Leaderboard results"
-    ></div>
+    >
+      <ol
+        class="rank-podium"
+        data-rank-podium
+        aria-label="Top three"
+        hidden
+      ></ol>
+      <div data-rank-remainder></div>
+    </div>
     <button
       type="button"
       id="game-board-more"

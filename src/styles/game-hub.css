@@ -430,27 +430,6 @@
   border-color: var(--hub-accent);
 }
 
-.hub-rank-preview ol {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.hub-rank-preview li {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 6px;
-  align-items: baseline;
-  padding: 3px 0;
-  border-top: 1px solid var(--hub-edge);
-  font-size: 0.8rem;
-}
-
-.hub-rank-number {
-  color: var(--hub-accent);
-  min-width: 1em;
-}
-
 .hub-rank-preview [data-preview-retry] {
   position: relative;
   justify-self: start;

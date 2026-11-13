@@ -24,6 +24,13 @@ import { createXiangqiAI } from "./xiangqi-ai.js";
 import { boardClientId } from "./board-identity.js";
 import { trackBoardGame } from "./hub-activity.js";
 import { mountPlayShell } from "./play-shell.js";
+import {
+  boardPodiumDetail,
+  boardPodiumResult,
+  paintPodium,
+  podiumEntries,
+} from "./rank-podium.js";
+import { gameIcon } from "./presentation.js";
 import { mountEffects } from "./effects.js";
 import {
   mountAudio,
@@ -1287,6 +1294,15 @@ click("#xiangqi-close-review", () => {
 });
 function rankRows(rows, target) {
   const list = $(target);
+  if (target === "#xiangqi-rankings") {
+    const podium = new Set(podiumEntries(rows));
+    paintPodium($("#xiangqi-podium"), rows, {
+      result: boardPodiumResult,
+      detail: boardPodiumDetail,
+    });
+    rows = rows.filter((row) => !podium.has(row));
+    $("#xiangqi-rank-empty").hidden = rows.length > 0 || podium.size > 0;
+  }
   list.replaceChildren();
   for (const r of rows) {
     const row = document.createElement("div"),
@@ -1338,6 +1354,7 @@ async function refreshRank() {
     rankRows([], "#xiangqi-my-ranking");
     $("#xiangqi-rank-more").hidden = true;
   }
+  $("#xiangqi-rank-empty").hidden = true;
   tx("#xiangqi-rank-status", uiMsg("Loading records…"));
   try {
     const { data, error } = await api.client.rpc("get_xiangqi_leaderboard", {
@@ -1349,6 +1366,9 @@ async function refreshRank() {
     if (error) throw error;
     rankData = data;
     rankRows(data.top.slice(0, top50 ? 50 : 10), "#xiangqi-rankings");
+    const empty = $("#xiangqi-rank-empty");
+    empty.hidden = data.top.length > 0;
+    if (!empty.hidden) empty.innerHTML = gameIcon("xiangqi");
     rankRows(data.me ? [data.me] : [], "#xiangqi-my-ranking");
     $("#xiangqi-rank-more").hidden = data.top.length <= 10;
     tx(

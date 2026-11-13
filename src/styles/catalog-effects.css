@@ -1,0 +1,116 @@
+/* Accents are mixed against the active theme, keeping text at full contrast. */
+.tools-page [data-category="images"],
+.project-card[data-project="kensei-studio"] {
+  --catalog-color: #d6a4d9;
+}
+.tools-page [data-category="text"] {
+  --catalog-color: #b9a8e7;
+}
+.tools-page [data-category="documents"],
+.project-card[data-project="3a3d"] {
+  --catalog-color: #9eb3d5;
+}
+.tools-page [data-category="utilities"] {
+  --catalog-color: #88c6bf;
+}
+.tools-page [data-category="productivity"] {
+  --catalog-color: #a9cdb3;
+}
+.tools-page [data-category="testing"] {
+  --catalog-color: #a0cde7;
+}
+.tools-page [data-category="audio"],
+.project-card[data-project="ai-art"] {
+  --catalog-color: #dba4bd;
+}
+.project-card[data-project="salon-system"] {
+  --catalog-color: #d6b481;
+}
+:is(.tools-page [data-tool-card], .listing-projects .project-card) {
+  --card-tone: color-mix(in srgb, var(--catalog-color) 80%, var(--text));
+  --card-glow: color-mix(in srgb, var(--catalog-color) 24%, transparent);
+  --card-edge: color-mix(in srgb, var(--card-tone) 65%, var(--line));
+}
+:root[data-site-theme="light"]
+  :is(.tools-page [data-tool-card], .listing-projects .project-card) {
+  --card-tone: color-mix(in srgb, var(--catalog-color) 45%, var(--text));
+  --card-glow: color-mix(in srgb, var(--catalog-color) 40%, transparent);
+}
+:root[data-site-theme] .tools-page [data-tool-card] > .tool-icon {
+  color: var(--card-tone);
+  background: color-mix(in srgb, var(--catalog-color) 12%, var(--surface));
+  border-color: color-mix(in srgb, var(--card-tone) 28%, var(--line));
+}
+.listing-projects .project-card-link .project-cover {
+  position: relative;
+}
+.listing-projects .project-card-link .project-cover::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: radial-gradient(
+    ellipse at 90% 0%,
+    var(--card-glow),
+    transparent 62%
+  );
+  pointer-events: none;
+}
+.catalog-shine {
+  position: absolute;
+  z-index: 1;
+  inset: -12% 27%;
+  background: linear-gradient(
+    90deg,
+    transparent 8%,
+    #ffffff40 50%,
+    transparent 92%
+  );
+  pointer-events: none;
+  opacity: 0;
+}
+:root[data-site-theme]
+  :is(
+    .tools-page .tool-card:is(:active, :focus-within),
+    .listing-projects .project-card-link:is(:active, :focus-visible)
+  ) {
+  border-color: var(--card-edge);
+  box-shadow:
+    0 0 23px var(--card-glow),
+    inset 0 0 18px var(--card-glow);
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-site-theme]
+    :is(.tools-page .tool-card, .listing-projects .project-card-link):hover {
+    border-color: var(--card-edge);
+    box-shadow:
+      0 0 23px var(--card-glow),
+      inset 0 0 18px var(--card-glow);
+  }
+}
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  :is(.tools-page .tool-card, .listing-projects .project-card-link) {
+    transition:
+      border-color 160ms ease,
+      box-shadow 160ms ease,
+      transform 160ms ease;
+  }
+  :is(.tools-page .tool-card, .listing-projects .project-card-link):hover {
+    transform: translateY(-3px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is(
+    .tools-page .tool-card:has(:focus-visible),
+    .listing-projects .project-card-link:focus-visible
+  ) {
+    transform: translateY(-2px);
+  }
+}
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  .catalog-shine {
+    display: none;
+  }
+  .tools-page .tool-card:hover {
+    transform: none;
+  }
+}

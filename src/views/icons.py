@@ -3,6 +3,7 @@
 ICONS = {
     "cards": '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',
     "calculator": '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M7 6h10M7 11h2M13 11h4M7 16h2M13 16h4"/>',
+    "tick": '<path d="m5 12 4 4L19 6"/>',
     "check": '<path d="M6 2h8l4 4v16H6zM9 13l2 2 4-5"/>',
     "audio": '<path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 10v4"/>',
     "data": '<path d="M8 3H5v7l-3 2 3 2v7h3M16 3h3v7l3 2-3 2v7h-3M10 9h4M10 15h4"/>',

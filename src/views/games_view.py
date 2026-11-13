@@ -441,7 +441,8 @@ def leaderboards(games):
             "games/rank-card.html",
             slug=g["slug"],
             name=g["name"],
-            play_tags=play_tags(g),
+            category=category(g),
+            preview=preview(g["preview"]),
         )
         for g in games
     )

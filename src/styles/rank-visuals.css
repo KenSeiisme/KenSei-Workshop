@@ -1,0 +1,208 @@
+/* Ranking cards share the game artwork and existing result data. */
+.hub-rank-directory .hub-rank-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.hub-rank-directory
+  .hub-rank-card:is(:hover, :focus-visible, [aria-current="true"]) {
+  border-color: color-mix(in srgb, var(--game-accent) 65%, var(--accent));
+  box-shadow: 0 0 22px var(--game-tint);
+}
+.hub-rank-directory .hub-rank-card:focus-visible {
+  outline-offset: 3px;
+}
+
+.rank-card-cover.game-cover {
+  height: 112px;
+  padding: 7px;
+}
+.rank-card-illustration {
+  display: grid;
+  place-items: center;
+  width: 210px;
+  flex: none;
+  transform: scale(0.68);
+}
+.rank-card-illustration > svg {
+  width: 210px;
+  height: 132px;
+}
+.rank-card-selected {
+  position: absolute;
+  inset: 8px 8px auto auto;
+  display: none;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: var(--game-accent);
+  color: var(--game-ink);
+  z-index: 1;
+}
+.hub-rank-card[aria-current="true"] .rank-card-selected {
+  display: grid;
+}
+.rank-card-label {
+  display: grid;
+  gap: 3px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+.rank-card-label small {
+  color: var(--muted);
+}
+
+#hub-rank-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+[data-rank-title-icon],
+.rank-empty-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--surface2);
+  color: var(--accent);
+}
+.rank-empty-icon {
+  margin-block: 8px;
+}
+[data-rank-title-icon] svg,
+.rank-empty-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Narrow boards keep horizontal rows. Wide result panels can fit three columns. */
+.rank-podium,
+.hub-rank-preview .rank-podium {
+  display: grid;
+  gap: 7px;
+  list-style: none;
+  padding: 0;
+  margin: 9px 0;
+}
+.rank-podium .rank-podium-card {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 7px 9px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+}
+.rank-podium .rank-podium-card[data-rank="1"] {
+  border-color: color-mix(
+    in srgb,
+    var(--game-accent, var(--accent)) 50%,
+    var(--line)
+  );
+  background:
+    linear-gradient(120deg, var(--game-tint, transparent), transparent 75%),
+    var(--surface);
+}
+.rank-podium .rank-podium-card.is-me {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+}
+.rank-medal {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  min-width: 24px;
+  height: 23px;
+  padding: 0 3px;
+  border-radius: 6px;
+  background: var(--surface2);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+[data-rank="1"] > .rank-medal {
+  color: #392740;
+  background: #e7c68f;
+}
+[data-rank="2"] > .rank-medal {
+  color: #302746;
+  background: #d5c9eb;
+}
+[data-rank="3"] > .rank-medal {
+  color: #402330;
+  background: #dcb1ab;
+}
+.rank-podium-avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+.rank-podium-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 10px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.rank-podium-copy > a {
+  min-height: 28px;
+  align-content: center;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.rank-podium-copy > strong {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.rank-podium-copy > small {
+  flex-basis: 100%;
+  color: var(--muted);
+}
+@media (min-width: 900px) {
+  :is(.hub-rank, .hub-rank-preview) .rank-podium {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  :is(.hub-rank, .hub-rank-preview) .rank-podium-card {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    padding: 12px;
+  }
+  :is(.hub-rank, .hub-rank-preview) .rank-podium-avatar {
+    width: 43px;
+    height: 43px;
+    font-size: 17px;
+  }
+  :is(.hub-rank, .hub-rank-preview) .rank-podium-copy {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 460px) {
+  .rank-card-cover.game-cover {
+    height: 84px;
+  }
+  .rank-card-illustration {
+    transform: scale(0.5);
+  }
+}
+[data-play-shell]
+  .game-rank-panel[data-rank-state="empty"]
+  .game-empty-state
+  > svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}

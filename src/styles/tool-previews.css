@@ -4,7 +4,7 @@
 }
 
 .tool-card-preview {
-  --preview-ink: var(--accent);
+  --preview-ink: var(--card-tone, var(--accent));
   --preview-alt: var(--pink);
   grid-column: 1 / -1;
   position: relative;
@@ -18,7 +18,7 @@
   background:
     radial-gradient(
       ellipse at 65% 0%,
-      color-mix(in srgb, var(--accent) 12%, transparent),
+      color-mix(in srgb, var(--preview-ink) 19%, transparent),
       transparent 72%
     ),
     var(--surface);

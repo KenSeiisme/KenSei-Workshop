@@ -23,6 +23,13 @@ import { createChessAI } from "./chess-ai.js";
 import { boardClientId } from "./board-identity.js";
 import { trackBoardGame } from "./hub-activity.js";
 import { mountPlayShell } from "./play-shell.js";
+import {
+  boardPodiumDetail,
+  boardPodiumResult,
+  paintPodium,
+  podiumEntries,
+} from "./rank-podium.js";
+import { gameIcon } from "./presentation.js";
 import { mountEffects } from "./effects.js";
 import {
   mountAudio,
@@ -1296,6 +1303,15 @@ click("#chess-close-review", () => {
 });
 function rankRows(rows, target) {
   const list = $(target);
+  if (target === "#chess-rankings") {
+    const podium = new Set(podiumEntries(rows));
+    paintPodium($("#chess-podium"), rows, {
+      result: boardPodiumResult,
+      detail: boardPodiumDetail,
+    });
+    rows = rows.filter((row) => !podium.has(row));
+    $("#chess-rank-empty").hidden = rows.length > 0 || podium.size > 0;
+  }
   list.replaceChildren();
   for (const r of rows) {
     const row = document.createElement("div"),
@@ -1347,6 +1363,7 @@ async function refreshRank() {
     rankRows([], "#chess-my-ranking");
     $("#chess-rank-more").hidden = true;
   }
+  $("#chess-rank-empty").hidden = true;
   tx("#chess-rank-status", uiMsg("Loading records…"));
   try {
     const { data, error } = await api.client.rpc("get_chess_leaderboard", {
@@ -1358,6 +1375,9 @@ async function refreshRank() {
     if (error) throw error;
     rankData = data;
     rankRows(data.top.slice(0, top50 ? 50 : 10), "#chess-rankings");
+    const empty = $("#chess-rank-empty");
+    empty.hidden = data.top.length > 0;
+    if (!empty.hidden) empty.innerHTML = gameIcon("chess");
     rankRows(data.me ? [data.me] : [], "#chess-my-ranking");
     $("#chess-rank-more").hidden = data.top.length <= 10;
     tx(

@@ -246,10 +246,21 @@
           >View leaderboard</a
         >
       </div>
+      <span
+        class="rank-empty-icon"
+        data-preview-empty
+        aria-hidden="true"
+        hidden
+      ></span>
       <p data-preview-status class="muted small" role="status">
         Loading leaderboard…
       </p>
-      <ol data-preview-rows></ol>
+      <ol
+        class="rank-podium"
+        data-preview-rows
+        aria-label="Top three"
+        hidden
+      ></ol>
       <button type="button" class="text-link" data-preview-retry hidden>
         Retry
       </button>

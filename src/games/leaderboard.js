@@ -9,6 +9,7 @@ import {
 } from "./engine.js";
 import { gameIcon } from "./presentation.js";
 import { patchMarkup } from "./dom.js";
+import { paintPodium, podiumEntries } from "./rank-podium.js";
 import { uiDate, uiMsg, uiFrom, uiText, uiHtml } from "../site/ui.js";
 
 // 只读取已验证成绩；榜单控件不调用游戏的暂停、开局或保存逻辑。
@@ -17,6 +18,8 @@ export function mountLeaderboard(root, game, formatResult) {
   if (!panel || !isRanked(game)) return { refresh: async () => {} };
   const $ = (selector) => panel.querySelector(selector),
     destination = $("#game-leaderboard"),
+    podium = $("[data-rank-podium]"),
+    remainder = $("[data-rank-remainder]"),
     note = $("#game-leaderboard-status"),
     more = $("#game-board-more"),
     refreshButton = $("#game-board-refresh"),
@@ -36,7 +39,7 @@ export function mountLeaderboard(root, game, formatResult) {
     for (const [index, row] of [
       ...destination.querySelectorAll("tbody tr"),
     ].entries())
-      row.hidden = !expanded && index >= 10;
+      row.hidden = !expanded && index >= 10 - podium.children.length;
     more.hidden = !data || data.top.length <= 10;
     uiText(more, expanded ? uiMsg("Show Top 10") : uiMsg("Show Top 50"));
     more.setAttribute("aria-expanded", String(expanded));
@@ -60,7 +63,8 @@ export function mountLeaderboard(root, game, formatResult) {
     if (key !== loadedKey) {
       data = null;
       expanded = false;
-      patchMarkup(destination, "");
+      patchMarkup(remainder, "");
+      paintPodium(podium, []);
       uiText($("#game-my-rank"), "");
       more.hidden = true;
     }
@@ -84,7 +88,7 @@ export function mountLeaderboard(root, game, formatResult) {
                 : uiMsg("Highest score · one best per player."),
     );
     if (!data?.top.length) {
-      if (data) patchMarkup(destination, "");
+      if (data) patchMarkup(remainder, "");
       panel.dataset.rankState = "loading";
       destination.tabIndex = -1;
     }
@@ -119,11 +123,29 @@ export function mountLeaderboard(root, game, formatResult) {
       loadedKey = key;
       panel.dataset.rankState = data.top.length ? "ready" : "empty";
       destination.tabIndex = data.top.length ? 0 : -1;
+      const ranked = data.top.slice(0, 50);
+      const winners = new Set(podiumEntries(ranked));
+      const remaining = ranked.filter((row) => !winners.has(row));
+      paintPodium(podium, ranked, {
+        mine: data.me,
+        result: (row) =>
+          esc(formatResult({ ...row, difficulty: selected.difficulty }, game)),
+        detail: (row) =>
+          row.achieved_at
+            ? uiDate(new Date(row.achieved_at), {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })
+            : "",
+      });
       patchMarkup(
-        destination,
-        data.top.length
-          ? uiHtml`<table><caption>${esc(rules(game, selected.difficulty).label)} · rules v${Number(data.version)}</caption><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Result</th></tr></thead><tbody>${data.top.map((row, index) => uiHtml`<tr data-player-id="${esc(row.public_id)}" data-rank="${Number(row.rank)}" class="${data.me?.public_id === row.public_id ? "is-me" : ""}"${!expanded && index >= 10 ? uiMsg(" hidden") : ""}><td>${Number(row.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(row.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(row.public_id)}" data-preserve aria-hidden="true"></span>${esc(row.nickname)}</a><small>${uiDate(new Date(row.achieved_at), { year: "numeric", month: "short", day: "numeric" })}</small></td><td>${esc(formatResult({ ...row, difficulty: selected.difficulty }, game))}</td></tr>`).join("")}</tbody></table>`
-          : uiHtml`<div class="game-empty-state">${gameIcon(game)}<strong>Your next run could be the first.</strong><p>No verified results yet. Sign in and complete a new game.</p></div>`,
+        remainder,
+        remaining.length
+          ? uiHtml`<table><caption>${esc(rules(game, selected.difficulty).label)} · rules v${Number(data.version)}</caption><thead><tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Result</th></tr></thead><tbody>${remaining.map((row, index) => uiHtml`<tr data-player-id="${esc(row.public_id)}" data-rank="${Number(row.rank)}" class="${data.me?.public_id === row.public_id ? "is-me" : ""}"${!expanded && index >= 10 - winners.size ? uiMsg(" hidden") : ""}><td>${Number(row.rank)}</td><td><a class="game-player" href="/profile/?id=${encodeURIComponent(row.public_id)}"><span class="avatar-badge" data-game-avatar="${esc(row.public_id)}" data-preserve aria-hidden="true"></span>${esc(row.nickname)}</a><small>${uiDate(new Date(row.achieved_at), { year: "numeric", month: "short", day: "numeric" })}</small></td><td>${esc(formatResult({ ...row, difficulty: selected.difficulty }, game))}</td></tr>`).join("")}</tbody></table>`
+          : data.top.length
+            ? uiHtml`<p class="rank-rules-note muted small">${esc(rules(game, selected.difficulty).label)} · rules v${Number(data.version)}</p>`
+            : uiHtml`<div class="game-empty-state">${gameIcon(game)}<strong>Your next run could be the first.</strong><p>No verified results yet. Sign in and complete a new game.</p></div>`,
       );
       for (const row of data.top) {
         const avatar = destination.querySelector(
