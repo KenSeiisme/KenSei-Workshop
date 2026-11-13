@@ -15,7 +15,10 @@
     hidden
   >
     <div class="game-section-heading">
-      <h2 id="hub-rank-title" tabindex="-1">Game records</h2>
+      <h2 id="hub-rank-title" tabindex="-1">
+        <span data-rank-title-icon aria-hidden="true"></span
+        ><span data-rank-title-name>Game records</span>
+      </h2>
       <a class="text-link" href="#leaderboard-games">Choose a game</a>
     </div>
     <div
@@ -32,6 +35,7 @@
     ></div>
     <p data-hub-rank-stats></p>
     <p data-hub-rank-status role="status" class="muted"></p>
+    <ol class="rank-podium" data-rank-podium aria-label="Top three" hidden></ol>
     <div data-hub-rank-results></div>
     <p data-hub-rank-me></p>
     <div class="hub-rank-actions">

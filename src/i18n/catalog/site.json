@@ -674,5 +674,13 @@
   "m_e4cfd9ab038d": {
     "en": "16 characters",
     "zh-Hant": "6 個字元"
+  },
+  "m_1dc73b9111cc": {
+    "en": "Rank {0}",
+    "zh-Hant": "第 {0} 名"
+  },
+  "m_285fa4fe29cd": {
+    "en": "Top three",
+    "zh-Hant": "前三名"
   }
 }

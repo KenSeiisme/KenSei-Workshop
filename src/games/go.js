@@ -19,6 +19,13 @@ import {
 } from "./go-engine.js";
 import { formatGoClock, clockView } from "./go-clock.js";
 import { mountPlayShell } from "./play-shell.js";
+import {
+  boardPodiumDetail,
+  boardPodiumResult,
+  paintPodium,
+  podiumEntries,
+} from "./rank-podium.js";
+import { gameIcon } from "./presentation.js";
 import { boardClientId } from "./board-identity.js";
 import { trackBoardGame } from "./hub-activity.js";
 import { mountEffects } from "./effects.js";
@@ -1386,6 +1393,16 @@ for (const node of $("#go-entry").querySelectorAll(
   node.addEventListener("change", setupChanged);
 function rankRows(rows, target, mine = false) {
   const node = $(target);
+  if (target === "#go-rankings") {
+    const podium = new Set(podiumEntries(rows));
+    paintPodium($("#go-podium"), rows, {
+      result: boardPodiumResult,
+      detail: (row) =>
+        boardPodiumDetail(row, "{0} games · {1} losses / {2} draws"),
+    });
+    rows = rows.filter((row) => !podium.has(row));
+    $("#go-rank-empty").hidden = rows.length > 0 || podium.size > 0;
+  }
   node.replaceChildren();
   for (const row of rows) {
     const line = document.createElement("div");
@@ -1423,6 +1440,7 @@ function rankRows(rows, target, mine = false) {
 async function refreshRank() {
   const id = ++rankedSerial;
   if (!api.client?.rpc) return;
+  $("#go-rank-empty").hidden = true;
   text("#go-board-status", uiMsg("Loading records…"));
   try {
     const { data, error } = await api.client.rpc("get_board_game_leaderboard", {
@@ -1436,6 +1454,9 @@ async function refreshRank() {
     if (error) throw error;
     rankData = data;
     rankRows(data.top.slice(0, top50 ? 50 : 10), "#go-rankings");
+    const empty = $("#go-rank-empty");
+    empty.hidden = data.top.length > 0;
+    if (!empty.hidden) empty.innerHTML = gameIcon("go");
     rankRows(data.me ? [data.me] : [], "#go-my-ranking", true);
     if (!data.me) text("#go-my-ranking", uiMsg("Your rank: —"));
     text(

@@ -124,7 +124,11 @@ const sdk = `export function createClient(){const id=window.__signed?'11111111-1
           if (ranked.some((g) => g.slug === slug)) {
             await p.waitForSelector("#game-leaderboard tbody tr");
             assert.equal(
-              await p.locator("#game-leaderboard tbody tr:visible").count(),
+              await p
+                .locator(
+                  "#game-leaderboard :is(tbody tr, .rank-podium-card):visible",
+                )
+                .count(),
               10,
             );
             const rail = await p.locator("#game-rank-panel").boundingBox();
@@ -172,12 +176,16 @@ const sdk = `export function createClient(){const id=window.__signed?'11111111-1
     assert.deepEqual(await q.locator(".tile").allTextContents(), before);
     await q.click("#game-board-more");
     assert.equal(
-      await q.locator("#game-leaderboard tbody tr:visible").count(),
+      await q
+        .locator("#game-leaderboard :is(tbody tr, .rank-podium-card):visible")
+        .count(),
       50,
     );
     await q.click("#game-board-more");
     assert.equal(
-      await q.locator("#game-leaderboard tbody tr:visible").count(),
+      await q
+        .locator("#game-leaderboard :is(tbody tr, .rank-podium-card):visible")
+        .count(),
       10,
     );
     await q.click("#game-board-collapse");
@@ -278,7 +286,9 @@ const sdk = `export function createClient(){const id=window.__signed?'11111111-1
         .textContent.includes("unavailable"),
     );
     assert.equal(
-      await q.locator("#game-leaderboard tbody tr:visible").count(),
+      await q
+        .locator("#game-leaderboard :is(tbody tr, .rank-podium-card):visible")
+        .count(),
       10,
       "last loaded board survives failed refresh",
     );

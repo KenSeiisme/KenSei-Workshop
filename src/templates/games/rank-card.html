@@ -4,6 +4,11 @@
   data-game-theme="${slug}"
   href="/games/leaderboards/?game=${slug}"
 >
-  <strong>${name}</strong>
-  <span class="hub-tags">${play_tags}</span>
+  <div class="rank-card-cover game-cover" aria-hidden="true">
+    <div class="rank-card-illustration">${preview}</div>
+    <span class="rank-card-selected">${svg_tick}</span>
+  </div>
+  <span class="rank-card-label"
+    ><strong>${name}</strong><small>${category}</small></span
+  >
 </a>

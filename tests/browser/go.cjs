@@ -123,10 +123,10 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       /中國規則.*7\.5 點/,
     );
     await page.waitForFunction(() =>
-      document.querySelector("#go-rankings")?.textContent.includes("12 局"),
+      document.querySelector("#go-podium")?.textContent.includes("12 局"),
     );
     assert.match(
-      await page.locator("#go-rankings").textContent(),
+      await page.locator("#go-podium").textContent(),
       /10 勝.*1 負／1 和/,
     );
     await page.selectOption("#go-rule", "japanese");
@@ -162,7 +162,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     );
     assert.match(await page.locator("#go-turn").textContent(), /White/);
     assert.match(
-      await page.locator("#go-rankings").textContent(),
+      await page.locator("#go-podium").textContent(),
       /10 wins.*12 games/,
     );
     assert.deepEqual(errors, []);

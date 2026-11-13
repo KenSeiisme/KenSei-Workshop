@@ -1,9 +1,10 @@
-import { api, esc } from "/tool-scripts/common.js";
+import { api } from "/tool-scripts/common.js";
 import { isRanked, gameVersion } from "./engine.js";
 import { BOARD_GAMES, modesFor, timedBoard } from "./hub-model.js";
 import { gameIcon } from "./presentation.js";
+import { paintPodium } from "./rank-podium.js";
 import { patchMarkup } from "./dom.js";
-import { uiFrom, uiHtml, uiMsg, uiText } from "../site/ui.js";
+import { uiFrom, uiMsg, uiText } from "../site/ui.js";
 
 const onlineBoards = ["go", "chess", "xiangqi"];
 export const hasVerifiedBoard = (game) =>
@@ -88,6 +89,7 @@ export function mountRankPreviews(root) {
   const panel = root.querySelector("#hub-rank-panel");
   const status = panel.querySelector("[data-preview-status]");
   const rows = panel.querySelector("[data-preview-rows]");
+  const empty = panel.querySelector("[data-preview-empty]");
   const retry = panel.querySelector("[data-preview-retry]");
   const full = panel.querySelector("[data-preview-full]");
   const boards = new Map();
@@ -100,7 +102,7 @@ export function mountRankPreviews(root) {
     const game = selected.dataset.rankPreview;
     const mode = defaultBoardMode(game);
     const board = boards.get(game);
-    const leaders = board?.data?.top.slice(0, 3) || [];
+    const leaders = board?.data?.top || [];
     panel.setAttribute("aria-labelledby", selected.id);
     panel.dataset.gameTheme = game;
     full.href =
@@ -123,15 +125,12 @@ export function mountRankPreviews(root) {
             ? ""
             : uiMsg("No verified results yet."),
     );
-    patchMarkup(
-      rows,
-      leaders
-        .map(
-          (row) =>
-            uiHtml`<li><span class="hub-rank-number">${Number(row.rank)}</span><span>${esc(playerName(row))}</span><strong>${resultLabel(game, mode, row)}</strong></li>`,
-        )
-        .join(""),
-    );
+    empty.hidden = !board?.data || leaders.length > 0;
+    if (!empty.hidden) patchMarkup(empty, gameIcon(game));
+    paintPodium(rows, leaders, {
+      result: (row) => resultLabel(game, mode, row),
+      mine: board?.data?.me,
+    });
     retry.hidden = !board?.failed;
   }
 

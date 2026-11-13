@@ -286,9 +286,9 @@ def styles(route):
             files.append("game-play-shell.css")
         if slug == "go":
             files.append("go.css")
-        if slug == "xiangqi" or route == "games":
+        if slug == "xiangqi" or route in {"games", "games/leaderboards"}:
             files.append("xiangqi.css")
-        if slug == "chess" or route == "games":
+        if slug == "chess" or route in {"games", "games/leaderboards"}:
             files.append("chess.css")
     return files
 
@@ -562,6 +562,11 @@ def head(route, locale, site_url):
     )
     if route == "tools":
         lines.append('<link rel="stylesheet" href="/tool-previews.css">')
+    if route in {"tools", "projects"}:
+        lines.append('<link rel="stylesheet" href="/catalog-effects.css">')
+        lines.append('<script src="/site/catalog-effects.js" defer></script>')
+    if route == "games" or route.startswith("games/"):
+        lines.append('<link rel="stylesheet" href="/rank-visuals.css">')
     lines += [
         '<script src="/site/i18n.js" defer></script>',
         '<script src="/site/notices.js" defer></script>',
