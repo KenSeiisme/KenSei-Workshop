@@ -2,3 +2,9 @@ allowBuilds:
   canvas: false
   esbuild: true
   tesseract.js: false
+overrides:
+  "spin-wheel@5.0.2>canvas": "-"
+  "nanoid@3": "3.3.18"
+  "nanoid@4": "5.1.16"
+  "lodash-es@4.17.21": "4.18.1"
+  "katex@0.16.47": "0.18.11"

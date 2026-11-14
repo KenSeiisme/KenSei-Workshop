@@ -1,16 +1,25 @@
 import { PGlite } from "@electric-sql/pglite";
 import fs from "node:fs/promises";
 import { bootstrap } from "./db-fixture.cjs";
-export async function gameDatabase({ beforeDailyClaims = false } = {}) {
+export async function gameDatabase({
+  beforeDailyClaims = false,
+  currentArcade = false,
+} = {}) {
   const db = new PGlite();
   await db.exec(bootstrap);
   for (const file of (await fs.readdir("supabase/migrations")).sort()) {
     if (
       beforeDailyClaims &&
-      /_workshop_(daily_claims|brick_v4)\.sql$/.test(file)
+      /_(?:workshop_(?:daily_claims|brick_v4)|game_hub_reward_integrity)\.sql$/.test(
+        file,
+      )
     )
       continue;
     await db.exec(await fs.readFile("supabase/migrations/" + file, "utf8"));
+  }
+  if (currentArcade) {
+    await db.exec("select workshop_private.activate_arcade_upgrade()");
+    await db.exec("select workshop_private.activate_brick_v4()");
   }
   const users = [
     "11111111-1111-4111-8111-111111111111",

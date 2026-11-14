@@ -156,7 +156,8 @@ class Annotator(HTMLParser):
         for name, value in attrs:
             if (
                 value is not None
-                and name in ["aria-label", "aria-roledescription", "title", "placeholder", "alt"]
+                and name
+                in ["aria-label", "aria-roledescription", "title", "placeholder", "alt"]
                 and not self.protected
             ):
                 key = key_for(value)
@@ -231,7 +232,11 @@ def metadata(route, locale, site_url):
         descriptions = CONTENT[route]["description"]
     else:
         names, descriptions = COMMON.get(route, COMMON["404"])
-    slug = "games" if route in {"games/leaderboards", "games/achievements"} else route.replace("/", "-") or "home"
+    slug = (
+        "games"
+        if route in {"games/leaderboards", "games/achievements"}
+        else route.replace("/", "-") or "home"
+    )
     return {
         "title": names[locale] + " — KenSei Workshop",
         "description": descriptions[locale],
@@ -286,7 +291,10 @@ def styles(route):
             files.append("arcade-games.css")
         if slug in ["connect-four", "reversi"]:
             files.append("board-games.css")
-        if route.startswith("games/") and route not in {"games/leaderboards", "games/achievements"}:
+        if route.startswith("games/") and route not in {
+            "games/leaderboards",
+            "games/achievements",
+        }:
             files.append("game-play-shell.css")
         if slug == "go":
             files.append("go.css")
@@ -562,7 +570,8 @@ def head(route, locale, site_url):
             )
     lines.append('<script src="/site/theme.js"></script>')
     lines.extend(
-        '<link rel="stylesheet" href="/' + name + '">' for name in [*styles(route), "theme.css", "interface.css"]
+        '<link rel="stylesheet" href="/' + name + '">'
+        for name in [*styles(route), "theme.css", "interface.css"]
     )
     if route in {"", "tools"}:
         lines.append('<link rel="stylesheet" href="/tool-previews.css">')

@@ -156,9 +156,11 @@ def preview(kind):
         return (
             '<div class="preview-chess" aria-hidden="true">'
             + "".join(
-                f'<span><img src="/assets/chess/{pieces[i]}.svg" alt="" width="27" height="27"></span>'
-                if i in pieces
-                else "<span></span>"
+                (
+                    f'<span><img src="/assets/chess/{pieces[i]}.svg" alt="" width="27" height="27"></span>'
+                    if i in pieces
+                    else "<span></span>"
+                )
                 for i in range(16)
             )
             + "</div>"
@@ -446,9 +448,7 @@ def leaderboards(games):
         )
         for g in games
     )
-    return render_template(
-        "games/leaderboards.html", cards=cards
-    )
+    return render_template("games/leaderboards.html", cards=cards)
 
 
 def game_page(game):

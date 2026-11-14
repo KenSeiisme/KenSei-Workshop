@@ -86,6 +86,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798";
     assert(svg.buffer.toString().includes("你好"));
     await page.reload();
     await page.waitForSelector('[data-ready="true"]');
+    await page.locator("#board-welcome").waitFor({ state: "hidden" });
     await page.waitForFunction(
       () => document.querySelector("#board-name")?.value === "课程 Whiteboard",
     );

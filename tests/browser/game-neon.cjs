@@ -182,7 +182,9 @@ const seed = 12345,
     );
     assert.equal(await p.locator(".moving-tile").count(), 0);
     const full = await saved(p, "2048", (s) => s.moves === expected.moves);
-    assert.deepEqual(full, expected);
+    const { activityId, ...rulesState } = full;
+    assert.match(activityId, /^[0-9a-f-]{36}$/i);
+    assert.deepEqual(rulesState, expected);
     await p.click("#game-pause");
     assert.equal(await p.locator(".moving-tile").count(), 0);
     await p.click("#game-resume");
@@ -195,10 +197,13 @@ const seed = 12345,
       await q.keyboard.press(
         ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"][dir],
       );
-    assert.deepEqual(
-      await saved(q, "2048", (s) => s.moves === expected.moves),
-      full,
+    const { activityId: offId, ...offRulesState } = await saved(
+      q,
+      "2048",
+      (s) => s.moves === expected.moves,
     );
+    assert.match(offId, /^[0-9a-f-]{36}$/i);
+    assert.deepEqual(offRulesState, rulesState);
     assert.equal(await q.locator(".moving-tile").count(), 0);
     await q.click("#game-pause");
     await off.close();
@@ -378,7 +383,9 @@ const seed = 12345,
     const snake = await saved(p, "snake", (s) => s.ticks > 0),
       canonical = engine.create("snake", "normal", seed);
     engine.advanceSnake(canonical, snake.ticks);
-    assert.deepEqual(snake, canonical);
+    const { activityId: snakeId, ...snakeRulesState } = snake;
+    assert.match(snakeId, /^[0-9a-f-]{36}$/i);
+    assert.deepEqual(snakeRulesState, canonical);
     checks.push(
       "Snake draws fractional positions between unchanged fixed ticks and snaps/pauses to the canonical state.",
     );

@@ -7,7 +7,6 @@ from icons import icon
 from template_renderer import render_template
 from tool_previews import tool_preview
 
-
 FLOATING_ART = {
     "intro": (
         ("tools", "image"),
@@ -75,7 +74,7 @@ def atmosphere(scene, featured=()):
         "spark": "✦",
     }
     alternates = (
-        '<template data-home-float-alternates>'
+        "<template data-home-float-alternates>"
         + "".join(markup for slug, markup in previews.items() if slug not in selected)
         + "</template>"
         if selected
@@ -119,9 +118,9 @@ def home_section(kind, anchor, name, catalog, links, featured=None):
     rest = "".join(card for slug, card in catalog.items() if slug not in visible)
     source = (
         '<p class="home-list-source"><span data-home-featured>Featured</span>'
-        '<span data-home-popular hidden>Most viewed in the past 30 days</span></p>'
+        "<span data-home-popular hidden>Most viewed in the past 30 days</span></p>"
         if featured is not None
-        else '<p>Four projects from the Workshop.</p>'
+        else "<p>Four projects from the Workshop.</p>"
     )
     actions = "".join(
         f'<a class="text-link" href="{url}"><span>{label}</span> {icon(glyph)}</a>'
@@ -136,9 +135,9 @@ def home_section(kind, anchor, name, catalog, links, featured=None):
         source=source,
         actions=actions,
         cards="".join(catalog[slug] for slug in visible),
-        alternates=f"<template data-home-card-alternates>{rest}</template>"
-        if rest
-        else "",
+        alternates=(
+            f"<template data-home-card-alternates>{rest}</template>" if rest else ""
+        ),
     )
 
 

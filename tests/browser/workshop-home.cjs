@@ -173,7 +173,25 @@ async function checkLayout(engine, name) {
     );
     await page.keyboard.press("Control+k");
     await page.locator("#site-search-dialog[open]").waitFor();
-    await page.keyboard.press("Escape");
+    const searchInput = page.locator("#site-search-dialog input");
+    const results = page.locator("#site-search-results a");
+    await searchInput.fill("studio");
+    await results.first().waitFor();
+    await searchInput.press("ArrowUp");
+    assert.equal(
+      await page.locator(".site-search-result.selected").getAttribute("href"),
+      await results.last().getAttribute("href"),
+    );
+    await results.first().focus();
+    await page.keyboard.press("ArrowDown");
+    assert(
+      await results.nth(1).evaluate((node) => node === document.activeElement),
+    );
+    const destination = await results.nth(1).getAttribute("href");
+    await page.keyboard.press("Enter");
+    await page.waitForURL(base + destination);
+    await page.goto(base + "/zh-hant/");
+    await search.waitFor();
     await page.setViewportSize({ width: 1024, height: 768 });
     assert.equal(await search.innerText(), "搜尋…");
     await page.setViewportSize({ width: 390, height: 844 });

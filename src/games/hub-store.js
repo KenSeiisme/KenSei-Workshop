@@ -8,6 +8,7 @@ import {
   localScoreKey,
   LOBBY_BADGES,
   claimGuestDaily,
+  MIN_REWARDED_PLAY_MS,
 } from "./hub-model.js";
 
 export const hubOwner = () => api.user?.id || "guest";
@@ -150,35 +151,47 @@ function notifyLobbyBadges(owner, ids) {
 }
 export function syncHub(owner = hubOwner(), refresh = false) {
   if (owner === "guest") return Promise.resolve();
-  if (jobs.has(owner)) return jobs.get(owner);
-  const job = (async () => {
-    const data = await transact(owner);
-    const pending = Object.values(data.pending).slice(0, 30);
-    if (!pending.length && !refresh) return;
-    const snapshot = pending.length
-      ? await rpc(owner, "sync_game_activity", {
-          expected_user: owner,
-          runs: pending,
-        })
-      : await rpc(owner, "game_hub_snapshot");
-    let fresh = [];
-    await transact(owner, (current) => {
-      updateSnapshot(current, snapshot);
-      if (hubOwner() === owner)
-        fresh = reserveBadges(current, "lobby", snapshot.newBadges || []);
-      for (const run of pending) {
-        const key = `${run.id}:${run.segmentId}`;
-        const segments = (current.ackedSegments ||= {});
-        segments[key] = Math.max(segments[key] || 0, run.activeMs);
-        if (run.started) (current.ackedStarts ||= {})[run.id] = true;
-        if (JSON.stringify(current.pending[key]) === JSON.stringify(run))
-          delete current.pending[key];
-      }
-    });
-    notifyLobbyBadges(owner, fresh);
+  const active = jobs.get(owner);
+  if (active) {
+    active.checkAgain = true;
+    active.refresh ||= refresh;
+    return active.promise;
+  }
+  const job = { checkAgain: true, refresh };
+  job.promise = (async () => {
+    while (job.checkAgain && hubOwner() === owner) {
+      job.checkAgain = false;
+      const data = await transact(owner);
+      const pending = Object.values(data.pending).slice(0, 30);
+      const readSnapshot = job.refresh;
+      job.refresh = false;
+      if (!pending.length && !readSnapshot) continue;
+      const snapshot = pending.length
+        ? await rpc(owner, "sync_game_activity", {
+            expected_user: owner,
+            runs: pending,
+          })
+        : await rpc(owner, "game_hub_snapshot");
+      let fresh = [];
+      await transact(owner, (current) => {
+        updateSnapshot(current, snapshot);
+        if (hubOwner() === owner)
+          fresh = reserveBadges(current, "lobby", snapshot.newBadges || []);
+        for (const run of pending) {
+          const key = `${run.id}:${run.segmentId}`;
+          const segments = (current.ackedSegments ||= {});
+          segments[key] = Math.max(segments[key] || 0, run.activeMs);
+          if (run.started) (current.ackedStarts ||= {})[run.id] = true;
+          if (JSON.stringify(current.pending[key]) === JSON.stringify(run))
+            delete current.pending[key];
+        }
+        job.checkAgain ||= Object.keys(current.pending).length > 0;
+      });
+      notifyLobbyBadges(owner, fresh);
+    }
   })().finally(() => jobs.delete(owner));
   jobs.set(owner, job);
-  return job;
+  return job.promise;
 }
 export async function recordActivity(owner, run) {
   let fresh = [];
@@ -201,7 +214,16 @@ export async function recordActivity(owner, run) {
     };
     data.runs[run.id] = stored;
     if (owner === "guest") {
-      if (stored.finished && !previous?.finished && total > 0) {
+      if (
+        stored.finished &&
+        stored.started &&
+        total >= MIN_REWARDED_PLAY_MS &&
+        !(
+          previous?.finished &&
+          previous.started &&
+          previous.activeMs >= MIN_REWARDED_PLAY_MS
+        )
+      ) {
         const prior = data.badges.length;
         awardGuest(data, run);
         if (hubOwner() === owner)
@@ -212,6 +234,7 @@ export async function recordActivity(owner, run) {
       const waiting = data.pending[key];
       data.pending[key] = {
         ...run,
+        started: !!waiting?.started || run.started,
         finished: !!waiting?.finished || run.finished,
         activeMs: segments[run.segmentId],
         score: waiting?.finished ? waiting.score : run.score,
@@ -224,7 +247,7 @@ export async function recordActivity(owner, run) {
 export async function changeSkin(owner, skin, purchase = false) {
   if (!Object.hasOwn(SKINS, skin)) throw Error("Unknown skin");
   if (owner !== "guest") {
-    await jobs.get(owner);
+    await jobs.get(owner)?.promise;
     const snapshot = await rpc(
       owner,
       purchase ? "buy_game_skin" : "equip_game_skin",

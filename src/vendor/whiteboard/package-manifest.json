@@ -56,7 +56,7 @@
   },
   {
     "name": "nanoid",
-    "version": "4.0.2",
+    "version": "5.1.16",
     "license": "MIT"
   },
   {
@@ -384,7 +384,7 @@
   },
   {
     "name": "katex",
-    "version": "0.16.47",
+    "version": "0.18.11",
     "license": "MIT"
   },
   {

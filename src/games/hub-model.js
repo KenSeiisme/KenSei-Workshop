@@ -49,6 +49,7 @@ export function tasks(games, featured) {
   ];
 }
 export const DAILY_REWARD = 10;
+export const MIN_REWARDED_PLAY_MS = 1000;
 export const LOBBY_BADGES = [
   ["first-finish", "First finish", "Complete your first game."],
   ["score-1000", "Score chaser", "Score over 1,000 points in a single game."],

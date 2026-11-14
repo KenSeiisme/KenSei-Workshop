@@ -42,13 +42,12 @@ const profile = {
     record("2048", "classic", { score: 18432, max_tile: 2048 }),
     record("minesweeper", "beginner", { elapsed_ms: 18750 }),
     record("minesweeper", "intermediate", { elapsed_ms: 76120 }),
-    record("snake", "normal", { score: 250 }),
-    record("snake", "fast", { score: 180 }),
+    record("snake", "normal", { version: 2, score: 250 }),
     record("memory-match", "normal", { moves: 12 }),
     record("memory-match", "hard", { moves: 19, elapsed_ms: 65050 }),
   ],
 };
-const sdk = `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},from(){return{select(){return this},order:async()=>({data:[],error:null})}},rpc:async(name,args)=>{if(name==='get_public_profile')return{data:window.__publicFixture,error:null};if(name==='get_game_leaderboard')return{data:{version:1,me:null,top:[1,2,3].map(n=>({rank:n,public_id:'${id}',nickname:n===1?'Workshop Player 王明':'Player '+n,profile:{nickname:'Player '+n,avatar_kind:'none'},score:2400-n*100,moves:12+n,elapsed_ms:21000+n*1000,achieved_at:'${date}'}))},error:null};return{data:[],error:null}}}}`;
+const sdk = `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},from(){return{select(){return this},order:async()=>({data:[],error:null})}},rpc:async(name,args)=>{if(name==='get_public_profile')return{data:window.__publicFixture,error:null};if(name==='get_game_leaderboard')return{data:{version:args.game==='snake'?2:1,me:null,top:[1,2,3].map(n=>({rank:n,public_id:'${id}',nickname:n===1?'Workshop Player 王明':'Player '+n,profile:{nickname:'Player '+n,avatar_kind:'none'},score:2400-n*100,moves:12+n,elapsed_ms:21000+n*1000,achieved_at:'${date}'}))},error:null};return{data:[],error:null}}}}`;
 (async () => {
   const browser = await chromium.launch({
     channel: process.env.BROWSER_CHANNEL || "msedge",
@@ -127,7 +126,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     assert.equal(await p.locator("[data-game-card]:visible").count(), 1);
     await p.fill("#game-search", "");
     await p.click('[data-game-filter="puzzle"]');
-    assert.equal(await p.locator("[data-game-card]:visible").count(), 6);
+    assert.equal(await p.locator("[data-game-card]:visible").count(), 5);
     await p.click('[data-game-filter="all"]');
     await shot("games-visual-directory", 1440);
     checks.push("directory search, filters, anchor and four responsive sizes");
@@ -135,8 +134,8 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       await p.goto(base + `/games/${game}/`);
       await p.waitForSelector('[data-game][data-ready="true"]');
       assert.equal(await p.locator("#game-rank-panel").isVisible(), true);
-      assert.equal(await p.locator("#game-rank-panel").isVisible(), true);
-      await p.waitForSelector("#game-leaderboard tbody tr");
+      await p.locator("#game-rank-panel").scrollIntoViewIfNeeded();
+      await p.waitForSelector("[data-rank-podium] .rank-podium-card");
       assert.equal(
         await p.locator("#game-run-label").innerText(),
         "Ready to play",
@@ -228,7 +227,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     assert.equal(await p.locator("#public-game-count").innerText(), "4 / 9");
     assert.equal(await p.locator("#public-typing-count").innerText(), "2 / 2");
     assert.equal(await p.locator(".profile-game-card.has-score").count(), 4);
-    assert.equal(await p.locator(".profile-game-extra").count(), 3);
+    assert.equal(await p.locator(".profile-game-extra").count(), 2);
     assert.match(
       await p.locator('[data-game-theme="2048"]').innerText(),
       /Largest tile · 2,048/,

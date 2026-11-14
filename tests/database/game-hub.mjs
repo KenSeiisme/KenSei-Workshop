@@ -268,6 +268,40 @@ try {
     "score-1000",
   ]);
   assert.deepEqual((await otherSync()).newBadges, []);
+  const integrityMigration = (await fs.readdir(migrationDir)).find((name) =>
+    name.endsWith("_game_hub_reward_integrity.sql"),
+  );
+  await db.exec(await fs.readFile(migrationDir + integrityMigration, "utf8"));
+  const beforeInvalid = await rpc("game_hub_snapshot", {});
+  const unstarted = {
+    ...run("snake"),
+    started: false,
+    activeMs: 60000,
+  };
+  const tooShort = { ...run(), activeMs: 999 };
+  const invalid = await sync([unstarted, tooShort]);
+  assert.equal(invalid.balance, beforeInvalid.balance);
+  assert.deepEqual(invalid.today, beforeInvalid.today);
+  assert.deepEqual(invalid.newBadges, []);
+  const resumable = { ...run("snake"), activeMs: 700, finished: false };
+  await sync([resumable]);
+  const resumed = {
+    ...resumable,
+    started: false,
+    finished: true,
+    segmentId: randomUUID(),
+    activeMs: 300,
+  };
+  const earned = await sync([resumed]);
+  assert.equal(earned.balance, beforeInvalid.balance + 5);
+  assert.equal((await sync([resumed])).balance, earned.balance);
+  assert.equal(
+    await value(
+      "select count(*)::int value from workshop_private.hub_runs where run_id=any($1::text[]) and finished_day is not null",
+      [[unstarted.id, tooShort.id, resumed.id]],
+    ),
+    1,
+  );
   const oldV3 = await settle("brick-breaker", "classic", 3, 1030);
   const oldActive = await admin("start", a, {
     game: "brick-breaker",

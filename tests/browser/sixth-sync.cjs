@@ -146,7 +146,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
           version: 1,
           name,
           elements: [],
-          appState: { viewBackgroundColor: "#111015", gridSize: null },
+          appState: {
+            viewBackgroundColor: "#111015",
+            gridSize: null,
+            paper: { version: 1, type: "plain", spacing: 20 },
+          },
         };
   try {
     const c1 = await context(A),
