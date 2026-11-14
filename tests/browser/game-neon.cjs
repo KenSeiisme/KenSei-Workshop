@@ -457,7 +457,9 @@ const seed = 12345,
     await p.goto(base + "/games/");
     await p.waitForSelector('[data-games-directory][data-ready="true"]');
     await gameSelect(p, "[data-effects-select]", "auto");
-    await p.locator('[data-game-theme="2048"] .game-cover').hover();
+    await p
+      .locator('[data-game-card][data-game-theme="2048"] .game-cover')
+      .hover();
     assert.equal(
       await p
         .locator('[data-game-card][data-game-theme="2048"]')
