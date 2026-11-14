@@ -5,11 +5,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
 const ranking = {
   tools: {
     source: "analytics",
-    slugs: ["qr-studio", "color-studio", "image-to-text", "pdf-toolkit"],
+    slugs: ["qr-studio", "color-studio", "audio-studio", "decision-studio"],
   },
   games: {
     source: "analytics",
-    slugs: ["go", "chess", "nonogram", "snake"],
+    slugs: ["go", "reversi", "nonogram", "snake"],
   },
 };
 const routes = ["/", "/zh-hant/"];
@@ -25,6 +25,36 @@ const sizes = [
   [844, 390],
   [683, 450],
 ];
+
+function floatingSlugs(page, section) {
+  return page
+    .locator(section + " [data-float-slug]")
+    .evaluateAll((items) => items.map((item) => item.dataset.floatSlug));
+}
+
+function floatingClips(page) {
+  return page.locator("[data-float-slug]").evaluateAll((items) => {
+    return items
+      .filter((item) => {
+        for (const child of item.querySelectorAll(
+          "i, b, .mini-extra > span, .mini-drop > span, .mini-memory > span",
+        )) {
+          const art = child.getBoundingClientRect();
+          if (!art.width || !art.height) continue;
+          const frame = item.getBoundingClientRect();
+          if (
+            art.left < frame.left - 1 ||
+            art.top < frame.top - 1 ||
+            art.right > frame.right + 1 ||
+            art.bottom > frame.bottom + 1
+          )
+            return true;
+        }
+        return false;
+      })
+      .map((item) => item.dataset.floatSlug);
+  });
+}
 
 async function checkLayout(engine, name) {
   const browser = await engine.launch();
@@ -83,21 +113,17 @@ async function checkLayout(engine, name) {
     await page.setViewportSize({ width: 1366, height: 900 });
     await page.goto(base + "/", { waitUntil: "domcontentloaded" });
     await page.locator("#toolbox a[data-home-card='qr-studio']").waitFor();
-    assert.equal(
-      await page
-        .locator("#toolbox [data-float-slug]")
-        .getAttribute("data-float-slug"),
-      "audio-studio",
-    );
+    assert.deepEqual(await floatingSlugs(page, "#toolbox"), [
+      "data-studio",
+      "study-planner",
+    ]);
     await page.waitForFunction(() =>
       document.querySelector("#games [data-home-popular]:not([hidden])"),
     );
-    assert.equal(
-      await page
-        .locator("#games [data-float-slug]")
-        .getAttribute("data-float-slug"),
-      "reversi",
-    );
+    assert.deepEqual(await floatingSlugs(page, "#games"), [
+      "memory-match",
+      "block-drop",
+    ]);
     assert.equal(
       await page
         .locator("#toolbox a[data-home-card]")
@@ -173,6 +199,13 @@ async function checkLayout(engine, name) {
           .querySelector(".home-section")
           .style.getPropertyValue("--home-parallax"),
     );
+    assert.deepEqual(await floatingClips(page), []);
+    assert.equal(
+      await page.locator("#projects [data-float-art$='-preview']").count(),
+      2,
+    );
+    await page.setViewportSize({ width: 320, height: 640 });
+    assert.deepEqual(await floatingClips(page), []);
     assert.deepEqual(errors, []);
     console.log(
       "PASS",
@@ -256,12 +289,10 @@ async function checkLate() {
       "image-studio",
     );
     assert(await page.locator("#toolbox [data-home-featured]").isVisible());
-    assert.equal(
-      await page
-        .locator("#toolbox [data-float-slug]")
-        .getAttribute("data-float-slug"),
+    assert.deepEqual(await floatingSlugs(page, "#toolbox"), [
       "color-studio",
-    );
+      "audio-studio",
+    ]);
     await page
       .locator("#games [data-home-card='go']")
       .waitFor({ state: "attached" });
