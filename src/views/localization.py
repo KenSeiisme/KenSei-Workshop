@@ -444,7 +444,9 @@ def write_page(route, locale, raw, output, site_url, routes):
         for key, value in CATALOG.items()
         if key.startswith("site.")
     }
-    keys = {key for key in keys if key in CATALOG}
+    missing = keys - CATALOG.keys()
+    if missing:
+        raise ValueError(f"{route or 'home'}: unknown locale keys {sorted(missing)}")
     english = {key: ENGLISH[key] for key in sorted(keys)}
     chinese = {key: CATALOG[key]["zh-Hant"] for key in sorted(keys)}
     slug = route.replace("/", "-") or "home"

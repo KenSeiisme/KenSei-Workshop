@@ -1,6 +1,6 @@
 # KenSei Workshop
 
-KenSei Workshop 提供 **28 個瀏覽器工具**與 **15 款遊戲**。九款單人遊戲支援已驗證排行榜及 30 項里程碑。圍棋、西洋棋和中國象棋各有線上戰績。
+KenSei Workshop 提供 **28 個瀏覽器工具**與 **15 款遊戲**。九款單人遊戲支援已驗證排行榜及 30 項里程碑。圍棋、西洋棋和中國象棋各有線上戰績，四子棋和黑白棋支援私人遊玩，Pong 提供好友邀請房。
 
 - 正式网站：https://kensei-workshop.vercel.app/
 - GitHub 分支：`KenSei-Workshop`
@@ -71,6 +71,7 @@ python scripts/serve.py 8769
 ```powershell
 pnpm install
 pnpm build
+pnpm test:i18n
 pnpm test:structure
 pnpm test:unit
 pnpm test:database
@@ -88,6 +89,8 @@ pnpm test:browser
 ```
 
 浏览器测试默认使用本机 Edge。可通过 `BROWSER_CHANNEL` 选择其他已安装的 Playwright 浏览器；`pnpm exec playwright install chromium` 可安装 Chromium，再设置 `BROWSER_CHANNEL=chromium`。原有的 `pnpm test`、`test:profiles` 和各批次测试命令仍然可用。
+
+GitHub Actions 在 `preview`、`KenSei-Workshop` 和 PR 上运行格式、构建、双语、结构、单元及数据库检查。发布前先确认 `preview` 的验证和 Vercel 预览构建通过。浏览器套件仍通过本机预览服务器运行。
 
 ## 修改什么，去哪里
 
@@ -154,6 +157,6 @@ pnpm format:check
 
 Games 使用独立的霓虹舞台与动画表现层；`Effects: Auto / Reduced / Off` 仅在本机保存偏好，Auto 遵循系统减少动态效果设置。新增的 `pnpm test:game-neon` 检查动画、节点稳定性、输入一致性及响应式布局；详情见 [霓虹游戏验收](docs/validation/2026-10-23-neon-games.md)。
 
-12 款游戏页使用棋盘优先布局：进入后可从棋盘内 Start／Continue，开局自动收起网站导航进入专注模式；Exit focus 只改变布局。难度与 Start 位于开局卡；声音和 Help 从设置或菜单进入，排行榜在宽屏舞台旁显示。`pnpm test:game-shell` 检查首屏尺寸、触控、存档恢复及 Public 资格，详情见 [游戏舞台验收](docs/validation/2026-10-25-board-first-games.md)。
+15 款游戏页使用棋盘优先布局：进入后可从棋盘内 Start／Continue，开局自动收起网站导航进入专注模式；Exit focus 只改变布局。难度与 Start 位于开局卡；声音和 Help 从设置或菜单进入，排行榜在宽屏舞台旁显示。`pnpm test:game-shell` 检查首屏尺寸、触控、存档恢复及 Public 资格，详情见 [游戏舞台验收](docs/validation/2026-10-25-board-first-games.md)。
 
 游戏页的难度与开始按钮位于同一张开局卡；桌面宽度达到 1100px 时右侧常驻排行榜，较窄屏幕在棋盘下方展示。模式不再手动选择：游客直接玩，登录后的新局自动参榜；暂停或续玩只保留本机成绩。原有自动存档、Continue playing、旧记录及提交重试继续兼容。`pnpm test:game-shell` 同时覆盖布局、榜单读取与资格恢复。

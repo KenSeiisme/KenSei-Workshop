@@ -70,11 +70,9 @@ function cards() {
   }
   uiText(
     $("#study-progress"),
-    uiJoin([
-      deck.data.cards.filter((c) => c.known).length +
-        " / " +
-        deck.data.cards.length,
-      uiMsg(" known"),
+    uiMsg("{0} / {1} known", [
+      deck.data.cards.filter((c) => c.known).length,
+      deck.data.cards.length,
     ]),
   );
 }
@@ -355,10 +353,10 @@ function showReview() {
     uiText(
       $("#study-progress"),
       uiJoin([
-        deck.data.cards.filter((c) => c.known).length +
-          " / " +
+        uiMsg("{0} / {1} known", [
+          deck.data.cards.filter((c) => c.known).length,
           deck.data.cards.length,
-        uiMsg(" known"),
+        ]),
         " · ",
         uiMsg("Review complete. {0} cards reviewed; {1} known.", [
           reviewedTotal,
@@ -378,14 +376,10 @@ function showReview() {
   $("#study-again").disabled = $("#study-known").disabled = !flipped;
   uiText(
     $("#study-progress"),
-    uiJoin([
-      uiMsg("Card "),
+    uiMsg("Card {0} / {1} · {2} known", [
       position + 1,
-      " / ",
       review.length,
-      " · ",
       deck.data.cards.filter((c) => c.known).length,
-      uiMsg(" known"),
     ]),
   );
 }

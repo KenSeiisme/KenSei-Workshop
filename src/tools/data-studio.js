@@ -10,14 +10,10 @@ function render() {
   uiText(
     $("#data-page"),
     table
-      ? uiJoin([
-          page +
-            1 +
-            " / " +
-            Math.max(1, Math.ceil(table.rows.length / 50)) +
-            " · " +
-            table.rows.length,
-          uiMsg(" rows"),
+      ? uiMsg("{0} / {1} · {2} rows", [
+          page + 1,
+          Math.max(1, Math.ceil(table.rows.length / 50)),
+          table.rows.length,
         ])
       : uiMsg("No table yet"),
   );

@@ -1,6 +1,6 @@
 # Games
 
-Games have an independent catalog (`data/games.json`), native modules (`src/games`) and generated `/games/` routes. There are **12 games, 9 with Public rankings, and 28 separate tools**. Game search and Continue playing belong to Games; tool search and Workspace remain for tools.
+Games have an independent catalog (`data/games.json`), native modules (`src/games`) and generated `/games/` routes. There are **15 games and 28 separate tools**. Nine single-player games have verified leaderboards and milestones. [Go](go.md), [Chess](chess.md), and [Xiangqi](xiangqi.md) have their own online match records. Game search and Continue playing belong to Games; tool search and Workspace remain for tools.
 
 ## Games and rules
 
@@ -8,22 +8,25 @@ Games have an independent catalog (`data/games.json`), native modules (`src/game
 | ------------- | --------------------------------------------------------------- | --------------------------------------------- |
 | 2048          | Classic 4×4                                                     | Score, then largest tile                      |
 | Minesweeper   | Beginner / Intermediate / Expert                                | Winning completion time                       |
-| Snake         | Slow / Normal / Fast                                            | Score within speed mode                       |
+| Snake         | Classic v2                                                      | Score, then earliest result                   |
 | Memory Match  | 6 / 8 / 12 pairs                                                | Attempts, then completion time                |
 | Sudoku        | Easy / Normal / Hard                                            | Winning completion time                       |
 | Nonogram      | 5×5 / 10×10 / 15×15                                             | Winning completion time                       |
 | Block Puzzle  | Classic 8×8                                                     | Score at a natural terminal position          |
-| Brick Breaker | Three stages, three shared lives, five-minute active-play limit | Score, then completion time                   |
+| Brick Breaker | Eight stages, three shared lives, five-minute active-play limit | Score, then completion time                   |
 | Connect Four  | Three computer levels / same-device two players                 | Private only                                  |
 | Reversi       | Three computer levels / same-device two players                 | Private only                                  |
 | Block Drop    | Classic / 40-line Sprint                                        | Classic score, lines / winning Sprint time    |
 | Pong          | Two-account online invitation room                              | Private only, no persistent saves or rankings |
+| Go            | Same-device, AI, online invites and matchmaking                 | Verified online match records                 |
+| Chess         | Same-device, AI, online invites and matchmaking                 | Verified online match records                 |
+| Xiangqi       | Same-device, AI, online invites and matchmaking                 | Verified online match records                 |
 
 The static build copies game modules to `/game-scripts/`. `engine.js` delegates to pure versioned rules modules shared by the browser and Edge verifier. Those rules do not access DOM, clocks or network. Existing four-game rule version 1, identifiers and saves remain compatible; adding games does not rewrite old scores. Snake and Brick Breaker advance by fixed logical ticks, independent of rendering frame rate.
 
 The original puzzle bank contains **180 uniquely solvable puzzles**, 30 per Sudoku difficulty and 30 per Nonogram size. Generation is development-only; session seeds select published puzzles deterministically. Sudoku difficulty is classified by explicit solver thresholds, not clue count alone. See [puzzle generation and limitations](puzzle-generation.md). Sudoku, Nonogram, arcade and board rules are native original implementations; the retained original 2048 MIT reference notice remains applicable.
 
-Board computer search runs in a cancellable browser Worker. First/second-player selection, turn-level undo against the computer and single-move undo in same-device play remain Private. Board games are rejected by the Public session API and excluded from public Profile results.
+Board computer search runs in a cancellable browser Worker. First/second-player selection, turn-level undo against the computer and single-move undo in same-device play remain Private. The arcade session API handles single-player rankings. Go, Chess, and Xiangqi use the board-match service for verified online results. Connect Four and Reversi keep private records.
 
 ## Progress and Public sessions
 

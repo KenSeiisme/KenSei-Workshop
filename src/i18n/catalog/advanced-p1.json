@@ -542,5 +542,9 @@
   "m_94f189bee049": {
     "en": "Settings changed. Prepare the page images again.",
     "zh-Hant": "設定已變更，請重新準備頁面圖片。"
+  },
+  "m_196c81d5c9cc": {
+    "en": "Settings changed. Process the images again before downloading.",
+    "zh-Hant": "設定已變更，請重新處理圖片後再下載。"
   }
 }

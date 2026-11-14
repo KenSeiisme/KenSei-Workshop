@@ -1854,5 +1854,13 @@
   "m_72b33c672792": {
     "en": "Your language preference is stored on this device. Public site search uses a static index of tools, games and projects and does not search private records.",
     "zh-Hant": "語言偏好儲存在此裝置。全站搜尋使用工具、遊戲與作品的靜態公開索引，不會搜尋私人記錄。"
+  },
+  "m_b48b755184f0": {
+    "en": "This game could not load. Refresh and try again.",
+    "zh-Hant": "此遊戲無法載入，請重新整理後再試。"
+  },
+  "m_d913209f2f93": {
+    "en": "Chess files could not load. Reload this page to retry.",
+    "zh-Hant": "西洋棋檔案無法載入，請重新載入此頁再試。"
   }
 }

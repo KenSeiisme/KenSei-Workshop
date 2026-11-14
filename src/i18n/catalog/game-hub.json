@@ -666,5 +666,9 @@
   "m_32991f8b0989": {
     "en": "Countdown sound off",
     "zh-Hant": "倒數音效已關閉"
+  },
+  "m_e2ccab8cde27": {
+    "en": "{0} · {1}×{1}",
+    "zh-Hant": "{0} · {1}×{1}"
   }
 }

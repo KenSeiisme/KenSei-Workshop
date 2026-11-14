@@ -5,7 +5,7 @@ English routes retain their existing URLs. Traditional Chinese routes have a `/z
 ## Source ownership
 
 - `src/i18n/catalog/{shared,tools,games,site}.json`: English source messages and Traditional Chinese counterparts. Build validation rejects missing values and mismatched positional placeholders.
-- `src/i18n/content.json`: localized public names, descriptions and search aliases for 28 tools, 12 games and three projects.
+- `src/i18n/content.json`: localized public names, descriptions and search aliases for 28 tools, 15 games and four projects.
 - `src/i18n/usage.json`: source ownership of the original template messages. New explicit message strings are also discovered from the route's source dependencies.
 - `src/views/localization.py`: static annotation, route styles, page metadata, dependency selection and language-pack emission.
 - `src/site/i18n.js`: `t(key, params)`, `setLocale(locale)`, locale paths and the `locale-change` event. Language packs load on demand. Only the latest requested locale can take effect.
@@ -14,7 +14,7 @@ English routes retain their existing URLs. Traditional Chinese routes have a `/z
 
 ## Adding or editing interface text
 
-Use `uiMsg('English source', [parameter])`, then `uiText(node, message)` for visible owned labels. `uiHtml` annotates owned literal markup and explicitly marked message arguments. Add the normalized English source and Traditional Chinese counterpart to the appropriate catalog, using `m_` followed by the first 12 hex characters of SHA-256 of the whitespace-normalized English source. Namespace keys are also available for the shared shell.
+Use `uiMsg("English source", [parameter])`, then `uiText(node, message)` for visible owned labels. `uiHtml` annotates owned literal markup and explicitly marked message arguments. Add the normalized English source and Traditional Chinese counterpart to the appropriate catalog, using `m_` followed by the first 12 hex characters of SHA-256 of the whitespace-normalized English source. Namespace keys are also available for the shared shell.
 
 Keep user values as raw parameters. Never call `uiFrom` on filenames, nicknames, record names, card contents, QR payloads or editable values. Editable text, rendered Markdown, comparison text and typing passages are protected. Lazy `uiDate` values change display formatting without changing stored ISO timestamps.
 
@@ -26,14 +26,14 @@ Switching language updates existing bindings and history. It does not dispatch i
 
 ```text
 python build.py
-python tests/unit/localization.py
+pnpm test:i18n
 python scripts/verify-structure.py
 pnpm test:bilingual
 ```
 
 `--pages-only` is a development shortcut for generating pages and packs after copying changed static assets. Production uses the full build. Vercel continues to require only the Python standard library.
 
-Public pages have localized canonical, English/Traditional Chinese/x-default alternates, social metadata and committed 1200×630 PNGs. Account, callback and error pages are crawlable with `noindex, follow`. The public sitemap contains 98 URLs.
+Public pages have localized canonical, English/Traditional Chinese/x-default alternates, social metadata and committed 1200×630 PNGs. Account, callback and error pages are crawlable with `noindex, follow`. The public sitemap contains 110 URLs. The bilingual check compares it with generated pages, verifies the referenced share images and checks that selected runtime messages are carried in the correct page packs. The coverage scan checks explicit double-quoted `uiMsg` sources. Dynamic strings and template markup still need browser checks.
 
 Social cards are generated during development, after source formatting:
 

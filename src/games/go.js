@@ -612,7 +612,7 @@ function render() {
     );
     text(
       "#go-result-detail",
-      uiMsg("{0}{1}", [
+      uiJoin([
         uiFrom(
           {
             agreement: "Agreed score",

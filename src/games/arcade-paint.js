@@ -53,10 +53,9 @@ export function paintBrick(canvas, state, view = {}) {
   ctx.textAlign = "right";
   ctx.fillText(
     uiRender(
-      uiMsg("{0} {1}", [
-        state.lives,
-        uiFrom(state.lives === 1 ? "LIFE" : "LIVES"),
-      ]),
+      state.lives === 1
+        ? uiMsg("{0} LIFE", [state.lives])
+        : uiMsg("{0} LIVES", [state.lives]),
     ),
     w - 27,
     29,
