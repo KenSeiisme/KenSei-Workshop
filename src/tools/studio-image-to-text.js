@@ -145,20 +145,24 @@ export function init(ctx) {
     );
     entry.value = oldValue;
     const e = ctx.entries[oldValue];
-    if (!e) return;
     blockPage = 0;
     selectedLine = -1;
+    picture.removeAttribute("src");
+    if (url) {
+      URL.revokeObjectURL(url);
+      url = null;
+    }
+    paint();
+    if (!e) return;
     try {
       const c = await originalCanvas(e),
         blob = await canvasBlob(c);
       c.width = c.height = 0;
       if (token !== generation) return;
-      if (url) URL.revokeObjectURL(url);
       url = URL.createObjectURL(blob);
       picture.src = url;
-      paint();
     } catch (error) {
-      uiText(state, uiMsg(error.message));
+      if (token === generation) uiText(state, uiMsg(error.message));
     }
   }
   function paint() {
