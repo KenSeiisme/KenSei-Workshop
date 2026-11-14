@@ -3018,5 +3018,17 @@
   "m_cd971a70253d": {
     "en": "How to play Sudoku",
     "zh-Hant": "數獨玩法"
+  },
+  "m_531c7b28abf2": {
+    "en": "Unlocked",
+    "zh-Hant": "已解鎖"
+  },
+  "m_6ccdff31eb70": {
+    "en": "{0} LIFE",
+    "zh-Hant": "{0} 條命"
+  },
+  "m_78504b62eb59": {
+    "en": "{0} LIVES",
+    "zh-Hant": "{0} 條命"
   }
 }

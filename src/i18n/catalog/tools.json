@@ -7222,5 +7222,41 @@
   "m_8fb16042b7f7": {
     "en": "Archive progress",
     "zh-Hant": "壓縮檔進度"
+  },
+  "m_86f5562ff32e": {
+    "en": "Favorited",
+    "zh-Hant": "已收藏"
+  },
+  "m_6b497c5c1e9f": {
+    "en": "{0} / {1} · {2} rows",
+    "zh-Hant": "{0} / {1} · {2} 列"
+  },
+  "m_04d120b174ee": {
+    "en": "{0} · {1} × {1}",
+    "zh-Hant": "{0} · {1} × {1}"
+  },
+  "m_cdd2a3254bb4": {
+    "en": "Hashing file {0} of {1}…",
+    "zh-Hant": "正在計算檔案 {0}／{1} 的雜湊值…"
+  },
+  "m_fe065a57c017": {
+    "en": "Move {0} up",
+    "zh-Hant": "將 {0} 上移"
+  },
+  "m_37babe0f8c12": {
+    "en": "Move {0} down",
+    "zh-Hant": "將 {0} 下移"
+  },
+  "m_dcec43575443": {
+    "en": "{0} / {1} known",
+    "zh-Hant": "{0} / {1} 已掌握"
+  },
+  "m_bd58ab7c9778": {
+    "en": "Card {0} / {1} · {2} known",
+    "zh-Hant": "第 {0} 張／共 {1} 張 · 已掌握 {2} 張"
+  },
+  "m_347d52b617da": {
+    "en": "{0} · {1}/{2} known",
+    "zh-Hant": "{0} · {1}/{2} 已掌握"
   }
 }

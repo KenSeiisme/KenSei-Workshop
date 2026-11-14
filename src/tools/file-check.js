@@ -66,15 +66,7 @@ $("#check-run").onclick = () => {
   worker = new Worker("/tool-scripts/file-check-worker.js");
   worker.onmessage = ({ data }) => {
     if (data.type === "progress") {
-      status(
-        uiJoin([
-          uiMsg("Hashing file "),
-          data.index,
-          uiMsg(" of "),
-          data.total,
-          "…",
-        ]),
-      );
+      status(uiMsg("Hashing file {0} of {1}…", [data.index, data.total]));
       $("#check-progress").value = ((data.index - 1) / data.total) * 100;
     }
     if (data.type === "error") {

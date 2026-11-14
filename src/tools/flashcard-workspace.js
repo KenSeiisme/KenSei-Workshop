@@ -1,13 +1,6 @@
 import { $, api, downloadText } from "./common.js";
 import * as store from "./flashcard-store.js";
-import {
-  uiMsg,
-  uiJoin,
-  uiFrom,
-  uiError,
-  uiText,
-  uiConfirm,
-} from "../site/ui.js";
+import { uiMsg, uiFrom, uiError, uiText, uiConfirm } from "../site/ui.js";
 
 function draw() {
   const out = $("#workspace-decks");
@@ -20,13 +13,10 @@ function draw() {
     a.href = "/tools/flashcards/?deck=" + encodeURIComponent(row.id);
     uiText(
       a,
-      uiJoin([
-        row.data.name +
-          " · " +
-          row.data.cards.filter((c) => c.known).length +
-          "/" +
-          row.data.cards.length,
-        uiMsg(" known"),
+      uiMsg("{0} · {1}/{2} known", [
+        row.data.name,
+        row.data.cards.filter((c) => c.known).length,
+        row.data.cards.length,
       ]),
     );
     const remove = document.createElement("button");

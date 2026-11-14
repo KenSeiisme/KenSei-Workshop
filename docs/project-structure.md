@@ -11,7 +11,7 @@
 | `src/assets/`                                        | `/assets/`                        |
 | `src/tools/`                                         | `/tool-scripts/`                  |
 | `src/games/`                                         | `/game-scripts/`                  |
-| `data/games.json`                                    | 独立 Games 目录与十二款游戏路由   |
+| `data/games.json`                                    | 独立 Games 目录与十五款游戏路由   |
 | `src/vendor/`                                        | `/vendor/`                        |
 | `data/tools.json`                                    | 工具卡片、路由和 `/tools-data.js` |
 | `data/site.json`                                     | 公共 HTML 中的站点验证标记        |
@@ -40,7 +40,7 @@
 - `study_file_tools.py`：学习卡片、计算器、文件校验、字幕。
 - `planner_view.py`、`whiteboard_view.py`、`capture_views.py`：学习计划、白板和录制界面。
 - `image_editor.py`、`profile_view.py`、`workspace_sections.py`：图片编辑、用户资料及新增工作区片段。
-- `games_view.py`、`pong_view.py`：独立游戏目录与十二款游戏页面，不进入工具目录。
+- `games_view.py`、`pong_view.py`：独立游戏目录与十五款游戏页面，不进入工具目录。
 
 生成器位于 `scripts/build.py`。根目录 `build.py` 是兼容入口，Vercel 的 `python3 build.py` 配置可以继续使用。生成器只读取 `src` 和 `data`，不读取独立汽车项目或本机秘密文件。
 
@@ -70,4 +70,4 @@
 
 `pnpm test:structure` 在临时空目录构建，检查全部工具与游戏路由、完整的公开资源复制、每个站点页面 `<head>` 内的验证标记，以及输出中没有内部源码或私密配置文件。模板整理的等价性和功能回归记录见 [2026-10-25 源码整理验收](validation/2026-10-25-source-readability.md)。
 
-十二款游戏独立于工具目录和 Workspace；其中九款支持公开榜及 30 项成就，四子棋和黑白棋仅供私人游玩，Pong 使用临时好友邀请房。共享规则、账号存档及 Edge 发布流程见 [games.md](games.md)。
+十五款游戏独立于工具目录和 Workspace；其中九款支持单人公开榜及 30 项里程碑，围棋、西洋棋和中国象棋提供线上对局及战绩，四子棋和黑白棋供私人游玩，Pong 使用临时好友邀请房。共享规则、账号存档及 Edge 发布流程见 [games.md](games.md)。

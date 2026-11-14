@@ -32,6 +32,7 @@
   },
   "name": "kensei-workshop",
   "private": true,
+  "packageManager": "pnpm@12.18.0",
   "scripts": {
     "format": "node scripts/format.mjs --write",
     "format:check": "node scripts/format.mjs --check",
@@ -45,6 +46,7 @@
     "test:fifth": "node scripts/test.mjs fifth",
     "test:sixth": "node scripts/test.mjs sixth",
     "preview": "python scripts/serve.py 8769",
+    "test:i18n": "python tests/unit/i18n-coverage.py && python tests/unit/localization.py",
     "test:structure": "python scripts/verify-structure.py",
     "test:unit": "node scripts/test.mjs unit",
     "test:database": "node scripts/test.mjs database",

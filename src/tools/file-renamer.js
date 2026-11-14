@@ -57,18 +57,10 @@ function render() {
         b.dataset.lock = "";
       }
       uiText(up, "↑");
-      uiAttr(
-        up,
-        "aria-label",
-        uiJoin([uiMsg("Move "), file.name, uiMsg(" up")]),
-      );
+      uiAttr(up, "aria-label", uiMsg("Move {0} up", [file.name]));
       up.disabled = i === 0;
       uiText(down, "↓");
-      uiAttr(
-        down,
-        "aria-label",
-        uiJoin([uiMsg("Move "), file.name, uiMsg(" down")]),
-      );
+      uiAttr(down, "aria-label", uiMsg("Move {0} down", [file.name]));
       down.disabled = i === files.length - 1;
       const move = (to) => {
         [files[i], files[to]] = [files[to], files[i]];
