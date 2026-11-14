@@ -1,6 +1,7 @@
 <div class="workshop-home">
   <section class="home-intro container" aria-labelledby="home-title">
     <div class="home-intro-light" aria-hidden="true"></div>
+    ${atmosphere}
     <h1 id="home-title">KenSei <em>Workshop</em><span>.</span></h1>
     <p>Open a tool, play a game, or explore what I've been building.</p>
     <nav class="home-portals" aria-label="Explore the Workshop">
@@ -41,6 +42,21 @@
         ${svg_arrow}
       </a>
     </nav>
+    <div class="home-motion-controls">
+      <button
+        class="home-motion-toggle"
+        type="button"
+        data-home-motion-toggle
+        aria-pressed="true"
+        hidden
+      >
+        <span>Background motion</span
+        ><span class="home-motion-switch" aria-hidden="true"></span>
+      </button>
+      <span class="sr-only" id="home-motion-system" hidden
+        >Reduced motion is enabled on this device.</span
+      >
+    </div>
   </section>
   ${sections}
 </div>

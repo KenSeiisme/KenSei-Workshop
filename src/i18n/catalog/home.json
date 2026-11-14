@@ -34,5 +34,13 @@
   "m_ec19ab6ac512": {
     "en": "Leaderboards",
     "zh-Hant": "排行榜"
+  },
+  "m_ba9afd3670c7": {
+    "en": "Background motion",
+    "zh-Hant": "背景動效"
+  },
+  "m_ec910949940d": {
+    "en": "Reduced motion is enabled on this device.",
+    "zh-Hant": "此裝置已啟用減少動態效果。"
   }
 }

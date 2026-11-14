@@ -8,6 +8,39 @@ from template_renderer import render_template
 from tool_previews import tool_preview
 
 
+BUBBLE_ART = {
+    "intro": (
+        ("tools", "image"),
+        ("games", "chess"),
+        ("projects", "audio"),
+        ("tools", "timer"),
+        ("games", "grid"),
+        ("projects", "cards"),
+    ),
+    "tools": (("tools", "timer"),),
+    "games": (("games", "chess"),),
+    "projects": (("projects", "audio"),),
+}
+
+
+def atmosphere(scene):
+    bubbles = "".join(
+        f'<span class="home-bubble-anchor" data-home-section="{kind}"><span class="home-bubble">'
+        + (
+            '<img src="/assets/chess/wn.svg" alt="" width="32" height="32">'
+            if glyph == "chess"
+            else icon(glyph)
+        )
+        + "</span></span>"
+        for kind, glyph in BUBBLE_ART[scene]
+    )
+    return (
+        '<div class="home-atmosphere" aria-hidden="true">'
+        f'<div class="home-bubbles">{bubbles}</div>'
+        '<div class="home-particles"></div></div>'
+    )
+
+
 def home_card(kind, slug, name, description, art, accent, tags):
     return render_template(
         "site/home-card.html",
@@ -40,6 +73,7 @@ def home_section(kind, anchor, name, catalog, links, featured=None):
         "site/home-section.html",
         kind=kind,
         anchor=anchor,
+        atmosphere=atmosphere(kind),
         name=name,
         source=source,
         actions=actions,
@@ -112,6 +146,7 @@ def view(tools, games, projects, project_art, featured):
     ]
     return render_template(
         "pages/home.html",
+        atmosphere=atmosphere("intro"),
         tool_art=tool_preview("image-studio"),
         game_art=preview("2048"),
         sections="".join(sections),

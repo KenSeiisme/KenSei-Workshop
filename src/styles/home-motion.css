@@ -1,0 +1,302 @@
+/* The atmosphere has its own clipped layer behind the interactive content. */
+.home-atmosphere {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.home-intro > :not(.home-atmosphere, .home-intro-light) {
+  position: relative;
+  z-index: 1;
+}
+
+.home-section::before {
+  z-index: 0;
+  border-top: 1px solid var(--line);
+}
+
+.home-section-inner {
+  z-index: 1;
+}
+
+.home-atmosphere::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    radial-gradient(
+      ellipse at 83% 25%,
+      color-mix(in srgb, var(--home-color, var(--pink)) 9%, transparent),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 8% 68%,
+      color-mix(in srgb, var(--accent) 7%, transparent),
+      transparent 36%
+    );
+  transform: translateY(var(--home-parallax, 0px));
+}
+
+.home-bubbles,
+.home-particles {
+  position: absolute;
+  inset: 0;
+}
+
+.home-bubbles {
+  transform: translateY(var(--home-parallax, 0px));
+}
+
+.home-bubble-anchor {
+  --bubble-size: clamp(42px, 7vw, 94px);
+  --rise: -18px;
+  --drift: 6px;
+  --rotation: -10deg;
+  --pace: 8s;
+  position: absolute;
+  inset: var(--bubble-top, 10%) auto auto var(--bubble-left, 80%);
+  width: var(--bubble-size);
+  aspect-ratio: 1;
+}
+
+.home-bubble {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--home-color) 39%, transparent);
+  border-radius: 50%;
+  color: var(--home-color);
+  background:
+    radial-gradient(ellipse at 29% 20%, #ffffff35, transparent 43%),
+    radial-gradient(
+      ellipse at 67% 84%,
+      color-mix(in srgb, var(--home-color) 25%, transparent),
+      transparent 62%
+    ),
+    color-mix(in srgb, var(--home-color) 8%, transparent);
+  box-shadow:
+    inset 0 -2px 10px color-mix(in srgb, var(--home-color) 12%, transparent),
+    0 8px 35px color-mix(in srgb, var(--home-color) 13%, transparent);
+  opacity: var(--bubble-opacity, 0.64);
+  transform: rotate(var(--rotation));
+}
+
+.home-bubble > :is(.ui-icon, img) {
+  width: 42%;
+  height: 42%;
+}
+
+.home-bubble img {
+  object-fit: contain;
+}
+
+.home-intro .home-bubble-anchor:nth-child(1) {
+  --bubble-top: 7%;
+  --bubble-left: 16%;
+  --rotation: -16deg;
+}
+
+.home-intro .home-bubble-anchor:nth-child(2) {
+  --bubble-top: 19%;
+  --bubble-left: 76%;
+  --bubble-size: clamp(50px, 7.5vw, 104px);
+  --pace: 10s;
+  --rise: -26px;
+}
+
+.home-intro .home-bubble-anchor:nth-child(3) {
+  --bubble-top: 34%;
+  --bubble-left: 89%;
+  --bubble-size: clamp(43px, 6vw, 84px);
+  --rotation: 13deg;
+  --drift: -8px;
+}
+
+.home-intro .home-bubble-anchor:nth-child(4) {
+  --bubble-top: 84%;
+  --bubble-left: 13%;
+  --bubble-size: clamp(33px, 4vw, 56px);
+  --rotation: 12deg;
+  --pace: 9s;
+  --bubble-opacity: 0.52;
+}
+
+.home-intro .home-bubble-anchor:nth-child(5) {
+  --bubble-top: 9%;
+  --bubble-left: 52%;
+  --bubble-size: clamp(24px, 3vw, 42px);
+  --bubble-opacity: 0.46;
+}
+
+.home-intro .home-bubble-anchor:nth-child(6) {
+  --bubble-top: 82%;
+  --bubble-left: 84%;
+  --bubble-size: clamp(31px, 4vw, 58px);
+  --bubble-opacity: 0.54;
+}
+
+.home-section .home-bubble-anchor {
+  --bubble-top: 11px;
+  --bubble-left: 78%;
+  --bubble-size: clamp(38px, 5vw, 65px);
+  --bubble-opacity: 0.47;
+  --rise: -11px;
+}
+
+.home-section#games .home-bubble-anchor {
+  --bubble-left: 50%;
+  --rotation: 13deg;
+}
+
+.home-section#projects .home-bubble-anchor {
+  --bubble-left: 66%;
+  --pace: 9s;
+}
+
+.home-particle {
+  position: absolute;
+  width: var(--particle-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--home-color) 76%, var(--pink));
+  box-shadow: 0 0 8px color-mix(in srgb, var(--home-color) 72%, transparent);
+  opacity: 0;
+}
+
+.home-motion-controls {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: clamp(5px, 2.2vh, 20px);
+}
+
+.home-intro .home-motion-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 10px 0 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.home-motion-toggle:hover {
+  color: var(--text);
+}
+
+.home-motion-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.home-motion-toggle[aria-disabled="true"] {
+  cursor: default;
+}
+
+.home-motion-switch {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  padding: 2px;
+  width: 30px;
+  height: 17px;
+  border: 1px solid var(--muted);
+  border-radius: 12px;
+  color: var(--muted);
+  background: var(--surface2);
+}
+
+.home-motion-switch::before {
+  width: 11px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.home-motion-toggle[aria-pressed="true"] .home-motion-switch {
+  justify-content: flex-end;
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .workshop-home[data-home-motion="on"] .home-bubble {
+    animation: home-bubble-float var(--pace) ease-in-out infinite alternate
+      paused;
+  }
+
+  .workshop-home[data-home-motion="on"][data-home-visible]
+    .home-bubble[data-home-bubble-active] {
+    animation-play-state: running;
+  }
+}
+
+@keyframes home-bubble-float {
+  to {
+    transform: translate(var(--drift), var(--rise))
+      rotate(calc(var(--rotation) + 9deg));
+  }
+}
+
+@media (max-width: 1049px), (max-height: 699px) {
+  .home-bubble-anchor {
+    --rise: -10px;
+    --drift: 4px;
+  }
+
+  .home-intro .home-bubble-anchor:nth-child(-n + 3) {
+    --bubble-size: clamp(32px, 7.3vw, 56px);
+    --rise: -13px;
+    --bubble-opacity: 0.55;
+  }
+
+  .home-intro .home-bubble-anchor:nth-child(1) {
+    --bubble-top: 7%;
+    --bubble-left: 64%;
+  }
+
+  .home-intro .home-bubble-anchor:nth-child(2) {
+    --bubble-top: 3%;
+    --bubble-left: 85%;
+  }
+
+  .home-intro .home-bubble-anchor:nth-child(3) {
+    --bubble-top: auto;
+    --bubble-left: 82%;
+    bottom: 3%;
+  }
+
+  .home-intro .home-bubble-anchor:nth-child(n + 4) {
+    display: none;
+  }
+
+  .home-section .home-bubble-anchor {
+    --bubble-top: 6px;
+    --bubble-left: 82%;
+    --bubble-size: 32px;
+    --rise: -5px;
+  }
+
+  .home-motion-controls {
+    margin-top: 4px;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .home-atmosphere {
+    display: none;
+  }
+}
+
+.home-bubble[data-home-budget-hidden] {
+  display: none;
+}
