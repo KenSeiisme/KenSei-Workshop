@@ -418,6 +418,7 @@
   }
   .home-portal-art {
     grid-column: auto;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
     height: 51px;
     border-radius: 7px;
   }
