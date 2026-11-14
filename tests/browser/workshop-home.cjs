@@ -5,11 +5,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
 const ranking = {
   tools: {
     source: "analytics",
-    slugs: ["qr-studio", "image-to-text", "pdf-toolkit", "image-studio"],
+    slugs: ["qr-studio", "color-studio", "image-to-text", "pdf-toolkit"],
   },
   games: {
     source: "analytics",
-    slugs: ["go", "chess", "mine-sweeper", "snake"],
+    slugs: ["go", "chess", "nonogram", "snake"],
   },
 };
 const routes = ["/", "/zh-hant/"];
@@ -17,7 +17,11 @@ const sizes = [
   [320, 640],
   [390, 844],
   [768, 1024],
+  [1024, 768],
+  [1200, 900],
   [1366, 900],
+  [1920, 1080],
+  [2560, 1440],
   [844, 390],
   [683, 450],
 ];
@@ -69,12 +73,31 @@ async function checkLayout(engine, name) {
             await page.locator(".home-cards [data-home-card]").count(),
             12,
           );
+          const backdrop = await page
+            .locator(".home-intro .home-atmosphere")
+            .boundingBox();
+          assert(backdrop && backdrop.x === 0 && backdrop.width === width);
         }
       }
     }
     await page.setViewportSize({ width: 1366, height: 900 });
     await page.goto(base + "/", { waitUntil: "domcontentloaded" });
     await page.locator("#toolbox a[data-home-card='qr-studio']").waitFor();
+    assert.equal(
+      await page
+        .locator("#toolbox [data-float-slug]")
+        .getAttribute("data-float-slug"),
+      "audio-studio",
+    );
+    await page.waitForFunction(() =>
+      document.querySelector("#games [data-home-popular]:not([hidden])"),
+    );
+    assert.equal(
+      await page
+        .locator("#games [data-float-slug]")
+        .getAttribute("data-float-slug"),
+      "reversi",
+    );
     assert.equal(
       await page
         .locator("#toolbox a[data-home-card]")
@@ -95,7 +118,7 @@ async function checkLayout(engine, name) {
         .locator("#games [data-home-card]")
         .first()
         .getAttribute("data-home-card"),
-      "snake",
+      "go",
     );
     await page.evaluate(() => window.KenseiI18n.setLocale("zh-Hant"));
     assert.match(page.url(), /\/zh-hant\/#toolbox$/);
@@ -108,6 +131,34 @@ async function checkLayout(engine, name) {
       await page.locator("#toolbox [data-home-popular]").innerText(),
       "近 30 天最多瀏覽",
     );
+    const search = page.locator(".site-search-button");
+    assert.equal(await search.innerText(), "搜尋全站");
+    await search.focus();
+    await page.keyboard.press("Enter");
+    await page.locator("#site-search-dialog[open] input").fill("白板");
+    await page.locator("#site-search-results a").first().waitFor();
+    assert.equal(
+      await page.locator("#site-search-results a").first().getAttribute("href"),
+      "/zh-hant/tools/whiteboard/",
+    );
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(() =>
+      document.activeElement.matches(".site-search-button"),
+    );
+    await page.keyboard.press("Control+k");
+    await page.locator("#site-search-dialog[open]").waitFor();
+    await page.keyboard.press("Escape");
+    await page.setViewportSize({ width: 1024, height: 768 });
+    assert.equal(await search.innerText(), "搜尋…");
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.equal(await search.innerText(), "");
+    await page.locator(".menu-toggle").click();
+    assert(await page.locator(".site-drawer #account-controls").isVisible());
+    assert(
+      await page.locator(".site-drawer [data-language-select]").isVisible(),
+    );
+    await page.keyboard.press("Escape");
+    await page.setViewportSize({ width: 1366, height: 900 });
 
     await page.emulateMedia({ reducedMotion: "reduce" });
     assert.notEqual(
@@ -205,6 +256,12 @@ async function checkLate() {
       "image-studio",
     );
     assert(await page.locator("#toolbox [data-home-featured]").isVisible());
+    assert.equal(
+      await page
+        .locator("#toolbox [data-float-slug]")
+        .getAttribute("data-float-slug"),
+      "color-studio",
+    );
     await page
       .locator("#games [data-home-card='go']")
       .waitFor({ state: "attached" });

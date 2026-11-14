@@ -1,61 +1,62 @@
 <div class="workshop-home">
-  <section class="home-intro container" aria-labelledby="home-title">
-    <div class="home-intro-light" aria-hidden="true"></div>
+  <section class="home-intro" aria-labelledby="home-title">
     ${atmosphere}
-    <h1 id="home-title">KenSei <em>Workshop</em><span>.</span></h1>
-    <p>Open a tool, play a game, or explore what I've been building.</p>
-    <nav class="home-portals" aria-label="Explore the Workshop">
-      <a
-        class="home-portal glass-surface"
-        data-home-section="tools"
-        href="#toolbox"
-      >
-        <div class="home-portal-art" aria-hidden="true">${tool_art}</div>
-        <span class="home-portal-copy"
-          ><strong>Tools</strong
-          ><small>Work with files, words and everyday tasks.</small></span
+    <div class="container home-intro-content">
+      <h1 id="home-title">KenSei <em>Workshop</em><span>.</span></h1>
+      <p>Open a tool, play a game, or explore what I've been building.</p>
+      <nav class="home-portals" aria-label="Explore the Workshop">
+        <a
+          class="home-portal glass-surface"
+          data-home-section="tools"
+          href="#toolbox"
         >
-        ${svg_arrow}
-      </a>
-      <a
-        class="home-portal glass-surface"
-        data-home-section="games"
-        href="#games"
-      >
-        <div class="home-portal-art" aria-hidden="true">${game_art}</div>
-        <span class="home-portal-copy"
-          ><strong>Games</strong
-          ><small>Arcade, puzzles and board games.</small></span
+          <div class="home-portal-art" aria-hidden="true">${tool_art}</div>
+          <span class="home-portal-copy"
+            ><strong>Tools</strong
+            ><small>Work with files, words and everyday tasks.</small></span
+          >
+          ${svg_arrow}
+        </a>
+        <a
+          class="home-portal glass-surface"
+          data-home-section="games"
+          href="#games"
         >
-        ${svg_arrow}
-      </a>
-      <a
-        class="home-portal glass-surface"
-        data-home-section="projects"
-        href="#projects"
-      >
-        <div class="home-portal-art" aria-hidden="true">${svg_cards}</div>
-        <span class="home-portal-copy"
-          ><strong>Projects</strong
-          ><small>Websites, software and creative work.</small></span
+          <div class="home-portal-art" aria-hidden="true">${game_art}</div>
+          <span class="home-portal-copy"
+            ><strong>Games</strong
+            ><small>Arcade, puzzles and board games.</small></span
+          >
+          ${svg_arrow}
+        </a>
+        <a
+          class="home-portal glass-surface"
+          data-home-section="projects"
+          href="#projects"
         >
-        ${svg_arrow}
-      </a>
-    </nav>
-    <div class="home-motion-controls">
-      <button
-        class="home-motion-toggle"
-        type="button"
-        data-home-motion-toggle
-        aria-pressed="true"
-        hidden
-      >
-        <span>Background motion</span
-        ><span class="home-motion-switch" aria-hidden="true"></span>
-      </button>
-      <span class="sr-only" id="home-motion-system" hidden
-        >Reduced motion is enabled on this device.</span
-      >
+          <div class="home-portal-art" aria-hidden="true">${svg_cards}</div>
+          <span class="home-portal-copy"
+            ><strong>Projects</strong
+            ><small>Websites, software and creative work.</small></span
+          >
+          ${svg_arrow}
+        </a>
+      </nav>
+      <div class="home-motion-controls">
+        <button
+          class="home-motion-toggle"
+          type="button"
+          data-home-motion-toggle
+          aria-pressed="true"
+          hidden
+        >
+          <span>Background motion</span
+          ><span class="home-motion-switch" aria-hidden="true"></span>
+        </button>
+        <span class="sr-only" id="home-motion-system" hidden
+          >Reduced motion is enabled on this device.</span
+        >
+      </div>
     </div>
   </section>
   ${sections}

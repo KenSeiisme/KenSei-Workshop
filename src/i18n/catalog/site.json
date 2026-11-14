@@ -7,6 +7,10 @@
     "en": "Search the site",
     "zh-Hant": "搜尋全站"
   },
+  "site.searchShort": {
+    "en": "Search…",
+    "zh-Hant": "搜尋…"
+  },
   "site.searchHint": {
     "en": "Find tools, games and projects…",
     "zh-Hant": "尋找工具、遊戲與作品…"

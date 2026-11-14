@@ -18,7 +18,7 @@
   language.append(languageCaption);
   const select = node("select");
   select.dataset.languageSelect = "";
-  select.setAttribute("aria-label", I.t("site.language"));
+  I.attr(select, "aria-label", I.msg("site.language"));
   for (const [value, name] of [
     ["en", "English"],
     ["zh-Hant", "繁體中文"],
@@ -32,9 +32,12 @@
   language.append(select);
   const searchButton = $(".site-search-button");
   I.attr(searchButton, "aria-label", I.msg("site.search"));
+  label(searchButton.querySelector(".site-search-wide"), "site.search");
+  label(searchButton.querySelector(".site-search-compact"), "site.searchShort");
   searchButton.hidden = false;
   const closeIcon = $("#auth-dialog .dialog-close svg");
-  header.insertBefore(language, $("#account-controls"));
+  const account = $("#account-controls");
+  account.before(language);
   const feedback = node("p", "site-language-status");
   feedback.role = "status";
   feedback.hidden = true;
@@ -78,7 +81,6 @@
   drawer.append(close);
   document.body.append(drawer);
   const nav = $("#navigation"),
-    account = $("#account-controls"),
     toggle = $(".menu-toggle");
   const anchors = [nav, account, language].map((n) => {
     const slot = document.createComment("navigation slot");
@@ -124,6 +126,7 @@
   // Search only the generated public tools/games/projects index.
   const dialog = node("dialog", "site-search");
   dialog.id = "site-search-dialog";
+  searchButton.setAttribute("aria-controls", dialog.id);
   const heading = node("h2");
   heading.id = "site-search-title";
   label(heading, "site.search");
