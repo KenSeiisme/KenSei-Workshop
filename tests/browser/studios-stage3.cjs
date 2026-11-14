@@ -362,6 +362,13 @@ async function textPDF(bytes) {
       .locator(".ocr-review-line textarea")
       .first()
       .fill("NATIVE123 replaced");
+    assert.match(
+      await p.evaluate(
+        () => window.KenseiAdvancedContexts["image-to-text"].entries[0].text,
+      ),
+      /replaced/,
+      "the edited box belongs to the currently selected page",
+    );
     pdf = await dl(() =>
       p
         .getByRole("button", { name: "Export searchable PDF", exact: true })
