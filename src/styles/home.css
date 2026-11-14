@@ -385,9 +385,6 @@
   }
 }
 @media (min-width: 1050px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
-  .home-section::before {
-    background-position-y: var(--home-parallax, 0px);
-  }
   .home-card:first-child .home-card-cover > * {
     position: sticky;
     top: calc(var(--home-header) + 16px);

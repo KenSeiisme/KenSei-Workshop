@@ -1,3 +1,5 @@
+import { mountHomeMotion } from "./home-motion.js";
+
 const root = document.querySelector(".workshop-home");
 const featured = [
   ...root.querySelectorAll(".home-section:has([data-home-popular])"),
@@ -64,83 +66,5 @@ function updatePopular() {
     .finally(() => observer.disconnect());
 }
 
-const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-const wide = matchMedia("(min-width: 1050px) and (min-height: 700px)");
-const sections = [...root.querySelectorAll(".home-section")];
-const visibility = new Set();
-const covers = new IntersectionObserver(
-  (entries) => {
-    for (const { target, isIntersecting } of entries) {
-      if (!isIntersecting) continue;
-      covers.unobserve(target);
-      if (
-        !reduced.matches &&
-        target.animate &&
-        !target.closest(".home-section").contains(document.activeElement)
-      ) {
-        target.animate(
-          [
-            { opacity: 0.66, transform: "translateY(10px)" },
-            { opacity: 1, transform: "translateY(0)" },
-          ],
-          { duration: 380, easing: "ease-out" },
-        );
-      }
-    }
-  },
-  { threshold: 0.15 },
-);
-const entered = new WeakSet();
-const motion = new IntersectionObserver((entries) => {
-  for (const { target, isIntersecting } of entries) {
-    if (isIntersecting) {
-      visibility.add(target);
-      if (!entered.has(target)) {
-        entered.add(target);
-        covers.observe(target.querySelector("[data-home-cover]"));
-      }
-    } else visibility.delete(target);
-  }
-  queuePaint();
-});
-let frame = 0;
-
-function queuePaint() {
-  if (!frame && !reduced.matches && !document.hidden)
-    frame = requestAnimationFrame(paint);
-}
-
-function paint() {
-  frame = 0;
-  for (const section of visibility) {
-    if (wide.matches) {
-      const distance = section.getBoundingClientRect().top / innerHeight;
-      const offset = Math.max(-16, Math.min(16, Math.round(distance * 16)));
-      section.style.setProperty("--home-parallax", offset + "px");
-    }
-  }
-}
-
-function syncMotion() {
-  if (reduced.matches || !wide.matches)
-    for (const section of sections)
-      section.style.removeProperty("--home-parallax");
-  if (reduced.matches) {
-    cancelAnimationFrame(frame);
-    frame = 0;
-    for (const section of sections)
-      for (const animation of section
-        .querySelector("[data-home-cover]")
-        .getAnimations())
-        animation.cancel();
-  } else queuePaint();
-}
-
-for (const section of sections) motion.observe(section);
-reduced.addEventListener("change", syncMotion);
-wide.addEventListener("change", syncMotion);
-document.addEventListener("visibilitychange", queuePaint);
-window.addEventListener("scroll", () => wide.matches && queuePaint(), {
-  passive: true,
-});
+mountHomeMotion(root);
 updatePopular();

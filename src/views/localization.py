@@ -582,6 +582,7 @@ def head(route, locale, site_url):
     if not route:
         lines += [
             '<link rel="stylesheet" href="/home.css">',
+            '<link rel="stylesheet" href="/home-motion.css">',
             '<script type="module" src="/site/home.js"></script>',
         ]
     return "\n".join(lines)
