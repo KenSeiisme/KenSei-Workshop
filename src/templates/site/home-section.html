@@ -1,0 +1,19 @@
+<section
+  class="home-section"
+  data-home-section="${kind}"
+  id="${anchor}"
+  aria-labelledby="home-${kind}-title"
+  tabindex="-1"
+>
+  <div class="container home-section-inner">
+    <header class="home-section-heading">
+      <div>
+        <h2 id="home-${kind}-title">${name}</h2>
+        ${source}
+      </div>
+      <div class="home-section-actions">${actions}</div>
+    </header>
+    <div class="home-cards">${cards}</div>
+    ${alternates}
+  </div>
+</section>

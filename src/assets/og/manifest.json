@@ -11,9 +11,9 @@
       "file": "en/home.png",
       "width": 1200,
       "height": 630,
-      "bytes": 281127,
-      "sha256": "91a5e33c7bb1819d7d560796c3f50444981b0bb7f5df08810b7cfb9833115c76",
-      "sourceHash": "22259dfd815b39006bcbdcb1c9d776c5d8b0d89ecdf9d93d2658d206ab3fa5fc"
+      "bytes": 269336,
+      "sha256": "6f20e38609495531ab9c9c59b15ad448f582693d4bdd41f1cd1fa06e10ef1a62",
+      "sourceHash": "5fc6f223851c55460f096e81e93f1ef0605b3d2360d459707ee9fba076b8eabf"
     },
     {
       "route": "",
@@ -21,9 +21,9 @@
       "file": "zh-hant/home.png",
       "width": 1200,
       "height": 630,
-      "bytes": 260608,
-      "sha256": "9b5c658e2786998748be9a823c2ffe04a63c066cf8c1fd100273fd7026c45b1c",
-      "sourceHash": "b487f6c49f93661f42abfc8335618ef362783164c151a3e0405cad7bad674431"
+      "bytes": 250185,
+      "sha256": "e4c4b2a385ebfa750c61504bd7d4b3fbe0aab9c952e148e02ff488beb798281f",
+      "sourceHash": "818226d1dc3ebd73532ae07d9c7b860b580806643f0f5e1eaf08a41f88ff2e83"
     },
     {
       "route": "projects",

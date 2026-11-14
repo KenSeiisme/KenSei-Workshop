@@ -53,10 +53,10 @@ COMMON = {
         },
     ),
     "": (
-        {"en": "Useful tools for everyday things", "zh-Hant": "實用工具，讓日常更順手"},
+        {"en": "Tools, games and projects", "zh-Hant": "工具、遊戲與作品"},
         {
-            "en": "Free browser tools for files, text, images and everyday tasks, plus a separate collection of casual games.",
-            "zh-Hant": "免費瀏覽器工具，處理檔案、文字、圖片與日常工作，另設休閒小遊戲專區。",
+            "en": "Find free browser tools, play arcade and board games, and explore websites, software and creative projects from KenSei Workshop.",
+            "zh-Hant": "探索 KenSei Workshop 的免費瀏覽器工具、街機與棋類遊戲，以及網站、軟體與創作作品。",
         },
     ),
     "tools": (
@@ -249,6 +249,10 @@ def styles(route):
     files = ["styles.css", "site.css"]
     if route in ("", "projects", "projects/kensei-studio"):
         files.append("studio.css")
+    if not route:
+        files.extend(
+            ["games.css", "game-neon.css", "game-next.css", "chess.css", "xiangqi.css"]
+        )
     if route.startswith("tools/") or route == "workspace":
         files.append("tools.css")
     if route.startswith("tools/"):
@@ -560,9 +564,9 @@ def head(route, locale, site_url):
     lines.extend(
         '<link rel="stylesheet" href="/' + name + '">' for name in [*styles(route), "theme.css", "interface.css"]
     )
-    if route == "tools":
+    if route in {"", "tools"}:
         lines.append('<link rel="stylesheet" href="/tool-previews.css">')
-    if route in {"tools", "projects"}:
+    if route in {"", "tools", "projects"}:
         lines.append('<link rel="stylesheet" href="/catalog-effects.css">')
         lines.append('<script src="/site/catalog-effects.js" defer></script>')
     if route == "games" or route.startswith("games/"):
@@ -575,4 +579,9 @@ def head(route, locale, site_url):
         '<script src="/tools-data.js" defer></script>',
         '<script src="/app.js" defer></script>',
     ]
+    if not route:
+        lines += [
+            '<link rel="stylesheet" href="/home.css">',
+            '<script type="module" src="/site/home.js"></script>',
+        ]
     return "\n".join(lines)

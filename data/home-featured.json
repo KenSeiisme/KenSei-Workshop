@@ -1,0 +1,4 @@
+{
+  "tools": ["image-studio", "pdf-toolkit", "whiteboard", "network-test"],
+  "games": ["snake", "brick-breaker", "chess", "2048"]
+}
