@@ -64,7 +64,7 @@ async function verifyLayout(page, width, height) {
       `motion toggle below fold at ${width}x${height}`,
     );
   }
-  assert.equal(layout.bubbles, width >= 1050 && height >= 700 ? 9 : 6);
+  assert.equal(layout.bubbles, width >= 1050 && height >= 700 ? 12 : 10);
   await page.waitForFunction(
     (limit) =>
       [...document.querySelectorAll(".home-bubble")].filter(
@@ -72,7 +72,7 @@ async function verifyLayout(page, width, height) {
           getComputedStyle(bubble).animationPlayState === "running" &&
           bubble.getBoundingClientRect().width > 0,
       ).length <= limit,
-    width >= 1050 && height >= 700 ? 9 : 4,
+    width >= 1050 && height >= 700 ? 12 : 6,
   );
 }
 
@@ -196,6 +196,60 @@ async function check(engine, name) {
   }
 }
 
+async function verifySequence(page, mobile) {
+  const cards = page.locator("#toolbox .home-card");
+  await page.mouse.move(0, 12);
+  const scroll = async (index) => {
+    await cards.nth(index).evaluate((card, index) => {
+      const line = 80 + (innerHeight - 80) * 0.46;
+      const small = matchMedia("(max-width: 1049px)").matches;
+      const target =
+        card.parentElement.getBoundingClientRect().top +
+        scrollY +
+        card.offsetTop +
+        (!small && index === 0 ? 12 : card.offsetHeight * 0.5);
+      scrollTo({ top: target - line, behavior: "instant" });
+    }, index);
+    await page.waitForFunction(
+      (index) =>
+        document
+          .querySelectorAll("#toolbox .home-card")
+          [index].hasAttribute("data-home-spotlight"),
+      index,
+    );
+    assert.equal(await page.locator("[data-home-spotlight]").count(), 1);
+    assert.equal(await cards.nth(index).getAttribute("tabindex"), null);
+    const textOpacity = await cards
+      .nth((index + 1) % 4)
+      .locator(".home-card-copy")
+      .evaluate((node) => getComputedStyle(node).opacity);
+    assert.equal(textOpacity, "1");
+    if (recording) await page.waitForTimeout(320);
+  };
+  for (const index of [0, 1, 2, 3, 2, 1, 0]) await scroll(index);
+
+  if (!mobile) {
+    await cards.nth(1).hover();
+    await page.waitForFunction(() =>
+      document
+        .querySelectorAll("#toolbox .home-card")[1]
+        .hasAttribute("data-home-spotlight"),
+    );
+    await page.mouse.move(0, 12);
+    await page.keyboard.press("Tab");
+    await cards.nth(2).focus();
+    await cards
+      .nth(2)
+      .evaluate((node) =>
+        node.scrollIntoView({ block: "center", behavior: "instant" }),
+      );
+    await page.waitForFunction(() =>
+      document.activeElement?.hasAttribute("data-home-spotlight"),
+    );
+    await page.evaluate(() => document.activeElement.blur());
+  }
+}
+
 async function exerciseMotion(mobile) {
   const viewport = mobile
     ? { width: 390, height: 844 }
@@ -218,6 +272,7 @@ async function exerciseMotion(mobile) {
       );
     await context.addInitScript(() => {
       window.particleCount = {};
+      window.sectionBursts = {};
       const observer = new MutationObserver((records) => {
         for (const record of records) {
           if (
@@ -226,6 +281,12 @@ async function exerciseMotion(mobile) {
           )
             continue;
           const id = record.target.closest("section").id;
+          if (
+            [...record.addedNodes].some(
+              (node) => node.dataset?.sectionBurst === "start",
+            )
+          )
+            window.sectionBursts[id] = (window.sectionBursts[id] || 0) + 1;
           window.particleCount[id] =
             (window.particleCount[id] || 0) + record.addedNodes.length;
           window.peakParticles = Math.max(
@@ -238,15 +299,17 @@ async function exerciseMotion(mobile) {
     });
     const page = await open(context, "/zh-hant/");
     const portal = page.locator(".home-portal[href='#toolbox']");
-    if (recording) await page.waitForTimeout(750);
+    if (recording) await page.waitForTimeout(1250);
     await (mobile ? portal.tap() : portal.click());
     await landing(page, "toolbox");
-    await page.waitForFunction(() => window.particleCount.toolbox > 0);
+    await page.waitForFunction(() => window.sectionBursts.toolbox === 1);
     const count = await page.evaluate(() => window.particleCount.toolbox);
-    assert.equal(count, mobile ? 6 : 10);
+    assert(count >= (mobile ? 9 : 16));
     await page.waitForFunction(
       () => document.querySelectorAll(".home-particle").length === 0,
     );
+    await verifySequence(page, mobile);
+    if (recording) await page.waitForTimeout(500);
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await page.waitForFunction(() => scrollY <= 1);
     await page.evaluate(() =>
@@ -254,10 +317,7 @@ async function exerciseMotion(mobile) {
     );
     await (mobile ? portal.tap() : portal.click());
     await landing(page, "toolbox");
-    assert.equal(
-      await page.evaluate(() => window.particleCount.toolbox),
-      count,
-    );
+    assert.equal(await page.evaluate(() => window.sectionBursts.toolbox), 1);
 
     // Simulate the browser's visibility event without relying on headless tab focus.
     await page.evaluate(() => {
@@ -289,7 +349,7 @@ async function exerciseMotion(mobile) {
     );
     await page.waitForFunction(() => window.particleCount.projects > 0);
     assert(
-      (await page.evaluate(() => window.peakParticles)) <= (mobile ? 8 : 18),
+      (await page.evaluate(() => window.peakParticles)) <= (mobile ? 12 : 30),
     );
     const card = page.locator("#projects [data-home-card='kensei-studio']");
     await card.focus();
