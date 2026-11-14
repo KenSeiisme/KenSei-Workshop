@@ -8,31 +8,35 @@ from template_renderer import render_template
 from tool_previews import tool_preview
 
 
-BUBBLE_ART = {
+FLOATING_ART = {
     "intro": (
         ("tools", "image"),
         ("games", "chess"),
         ("projects", "audio"),
-        ("tools", "timer"),
-        ("games", "grid"),
-        ("projects", "cards"),
+        ("tools", "ring"),
+        ("games", "diamond"),
+        ("projects", "spark"),
     ),
-    "tools": (("tools", "timer"),),
-    "games": (("games", "chess"),),
-    "projects": (("projects", "audio"),),
+    "tools": (("tools", "tool-preview"), ("tools", "diamond")),
+    "games": (("games", "game-preview"), ("games", "ring")),
+    "projects": (("projects", "project-preview"), ("projects", "spark")),
 }
 
 
 def atmosphere(scene):
+    art = {
+        "chess": '<img src="/assets/chess/wn.svg" alt="" width="32" height="32">',
+        "tool-preview": tool_preview("whiteboard"),
+        "game-preview": preview("brick-breaker"),
+        "project-preview": '<img src="/assets/kensei-studio/preview.png" alt="" loading="lazy" width="1560" height="1000">',
+        "ring": "",
+        "diamond": "",
+        "spark": "✦",
+    }
     bubbles = "".join(
-        f'<span class="home-bubble-anchor" data-home-section="{kind}"><span class="home-bubble">'
-        + (
-            '<img src="/assets/chess/wn.svg" alt="" width="32" height="32">'
-            if glyph == "chess"
-            else icon(glyph)
-        )
-        + "</span></span>"
-        for kind, glyph in BUBBLE_ART[scene]
+        f'<div class="home-bubble-anchor" data-home-section="{kind}" data-float-art="{glyph}">'
+        f'<div class="home-bubble">{art[glyph] if glyph in art else icon(glyph)}</div></div>'
+        for kind, glyph in FLOATING_ART[scene]
     )
     return (
         '<div class="home-atmosphere" aria-hidden="true">'
