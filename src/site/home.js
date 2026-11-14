@@ -59,13 +59,14 @@ function updatePopular() {
         );
         if (cards.some((card) => !card)) continue;
         grid.replaceChildren(...cards);
-        const artwork = section.querySelector("[data-float-slug]");
-        if (ranking.slugs.includes(artwork?.dataset.floatSlug)) {
-          const fallback = [
-            ...section.querySelector("[data-home-float-alternates]").content
-              .children,
-          ].find((item) => !ranking.slugs.includes(item.dataset.floatSlug));
-          if (fallback) artwork.replaceWith(fallback.cloneNode(true));
+        const alternates = [
+          ...section.querySelector("[data-home-float-alternates]").content
+            .children,
+        ].filter((item) => !ranking.slugs.includes(item.dataset.floatSlug));
+        for (const artwork of section.querySelectorAll("[data-float-slug]")) {
+          if (!ranking.slugs.includes(artwork.dataset.floatSlug)) continue;
+          const replacement = alternates.shift();
+          if (replacement) artwork.replaceWith(replacement.cloneNode(true));
         }
         section.querySelector("[data-home-featured]").hidden = true;
         section.querySelector("[data-home-popular]").hidden = false;

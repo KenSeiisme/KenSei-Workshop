@@ -64,7 +64,7 @@ async function verifyLayout(page, width, height) {
       `motion toggle below fold at ${width}x${height}`,
     );
   }
-  assert.equal(layout.bubbles, width >= 1050 && height >= 700 ? 16 : 12);
+  assert.equal(layout.bubbles, width >= 1050 && height >= 700 ? 19 : 15);
   await page.waitForFunction(
     (limit) =>
       [...document.querySelectorAll(".home-bubble")].filter(
@@ -102,9 +102,11 @@ async function check(engine, name) {
         locale,
       );
       assert.equal(
-        (await en.locator(toggle).innerText()).trim(),
+        await en.locator(toggle).getAttribute("aria-label"),
         locale === "en" ? "Background motion" : "背景動效",
       );
+      assert.equal(await en.locator(toggle).innerText(), "");
+      assert.equal(await en.locator(toggle).locator("svg").count(), 1);
       for (const theme of ["dark", "light"]) {
         await en.evaluate(
           (value) => (document.documentElement.dataset.siteTheme = value),
