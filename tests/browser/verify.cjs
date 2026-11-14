@@ -138,22 +138,26 @@ function pass(name) {
     }
     pass("11 pages at 4 viewport widths, no horizontal overflow");
     await page.goto(base + "/");
+    assert.equal(await page.locator("h1").textContent(), "KenSei Workshop.");
+    assert.equal(await page.locator(".home-portal").count(), 3);
     assert.equal(
-      await page.locator("h1").textContent(),
-      "Useful tools.A little lessfriction.",
+      await page.locator(".home-cards [data-home-card]").count(),
+      12,
     );
-    assert.equal(await page.locator(".project-card,.car-art").count(), 0);
-    assert.equal(await page.locator(".demo-example").count(), 2);
     assert.deepEqual(
       await page
         .locator("#navigation a")
         .evaluateAll((links) => links.map((link) => link.textContent.trim())),
       ["Home", "Tools", "Games", "Projects", "About Me"],
     );
-    await page
-      .getByRole("link", { name: "Explore Tools", exact: true })
-      .click();
+    await page.locator('.home-portal[href="#toolbox"]').click();
     assert.equal(new URL(page.url()).hash, "#toolbox");
+    await page.waitForFunction(() => {
+      const top = document
+        .querySelector("#toolbox")
+        .getBoundingClientRect().top;
+      return top >= 80 && top < 120;
+    });
     const toolboxTop = await page
       .locator("#toolbox")
       .evaluate((el) => el.getBoundingClientRect().top);
@@ -161,6 +165,7 @@ function pass(name) {
       toolboxTop >= 80 && toolboxTop < 120,
       "Toolbox heading should clear sticky navigation",
     );
+    await page.locator('#toolbox a[href="/tools/"]').click();
     await page.locator("#tool-search").fill("batch compress");
     assert.equal(await page.locator("[data-tool-card]:visible").count(), 1);
     await page.locator('[data-filter="text"]').click();
@@ -168,7 +173,7 @@ function pass(name) {
     await page.locator('[data-filter="all"]').click();
     await page.locator("#tool-search").fill("");
     await page.locator('[data-favorite="image-studio"]').click();
-    await page.goto(base + "/tools/");
+    await page.reload();
     assert.equal(
       await page
         .locator('[data-favorite="image-studio"]')
@@ -178,7 +183,7 @@ function pass(name) {
     await page.locator('[data-favorite="image-studio"]').click();
     await page.goto(base + "/");
     pass(
-      "Tools-first homepage, navigation order, anchor offset and shared search/favorites",
+      "Workshop homepage entries, navigation order, anchor offset and Tools search/favorites",
     );
     assert.equal(await page.locator('a[href="/about/"]').count(), 0);
     await page.screenshot({ path: "_qa/home-desktop.png", fullPage: true });
@@ -225,6 +230,9 @@ function pass(name) {
     }
     pass("Project category count and single link per card");
     await page.goto(base + "/tools/text-toolkit/");
+    await page
+      .getByRole("button", { name: "Apply changes", exact: true })
+      .waitFor();
     await page
       .locator("#text-input")
       .fill("  Hello   world  \n\n\n Next line  ");

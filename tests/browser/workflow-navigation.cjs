@@ -44,7 +44,7 @@ const sdk = `export function createClient(){return {
         ]) {
           await page.setViewportSize({ width, height });
           await noOverflow();
-          const links = page.locator(".hero-tool-shortcuts a");
+          const links = page.locator(".home-portal");
           assert.equal(await links.count(), 3);
           for (const link of await links.all()) {
             const box = await link.boundingBox();
@@ -52,9 +52,9 @@ const sdk = `export function createClient(){return {
               box && box.y + box.height <= height,
               `shortcut below fold at ${width} ${prefix} ${theme}`,
             );
-            assert(
-              (await link.getAttribute("href")).startsWith(prefix + "/tools/"),
-            );
+            const anchor = await link.getAttribute("href");
+            assert(["#toolbox", "#games", "#projects"].includes(anchor));
+            assert.equal(await page.locator(anchor).count(), 1);
           }
         }
         await page.setViewportSize({ width: 390, height: 844 });

@@ -97,6 +97,19 @@ function art(entry, assets) {
   const type = String(entry.type || "page")
     .toLowerCase()
     .replace(/s$/, "");
+  if (type === "home") {
+    const symbols = [
+      ["tool", "#d9b6f0", assets.homeIcons.grid],
+      ["game", "#a8d9bf", assets.homeIcons.play],
+      ["project", "#efbdd9", assets.homeIcons.cards],
+    ];
+    return `<div class="home-art" aria-hidden="true">${symbols
+      .map(
+        ([kind, color, symbol]) =>
+          `<div class="home-tile ${kind}" style="--card-accent:${color}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">${symbol}</svg></div>`,
+      )
+      .join("")}</div>`;
+  }
   const game =
     type === "game" ||
     entry.route.includes("/games/") ||
@@ -146,6 +159,12 @@ function card(entry, assets) {
   .description{text-wrap:balance;font-size:23px;line-height:1.55;color:#b3a8bf;margin:25px 0 0;width:672px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-height:108px}
   .bottom{position:absolute;left:64px;right:64px;bottom:40px;border-top:1px solid #e7c7f01a;padding-top:21px;display:flex;justify-content:space-between;align-items:center;color:#a99fb3;font-size:15px;letter-spacing:.01em}
   .bottom strong{font-size:15px;font-weight:500;color:#ddc7eb}.bottom strong:before{content:"";display:inline-block;width:6px;height:6px;background:#d6b5ed;border-radius:50%;margin:0 10px 2px 0;box-shadow:0 0 14px #d6b5ed66}
+  .home-art{position:absolute;width:370px;height:305px;right:54px;top:157px}
+  .home-tile{position:absolute;display:grid;place-items:center;width:148px;height:148px;border:1px solid color-mix(in srgb,var(--card-accent) 52%,transparent);border-radius:24px;color:var(--card-accent);background:linear-gradient(140deg,color-mix(in srgb,var(--card-accent) 18%,#231a2b),#1c1623 85%);box-shadow:0 18px 48px #0007,inset 0 1px #ffffff15}
+  .home-tile svg{width:76px;height:76px}
+  .home-tile.tool{left:35px;top:20px;transform:rotate(-12deg)}
+  .home-tile.game{left:197px;top:48px;transform:rotate(12deg)}
+  .home-tile.project{left:122px;top:140px;transform:rotate(-5deg)}
   .art{position:absolute;width:340px;height:342px;right:35px;top:165px;color:var(--card-accent)}
   .orbit{position:absolute;left:25px;top:15px;width:285px;height:285px;border:1px solid color-mix(in srgb,var(--card-accent) 11%,transparent);border-radius:50%}.orbit-b{inset:-12px 0 auto auto;width:340px;height:340px;border-style:dashed;opacity:.5}
   .art-shadow{position:absolute;left:48px;top:104px;width:250px;height:200px;background:var(--card-accent);filter:blur(60px);opacity:.09;transform:rotate(-10deg)}
@@ -154,7 +173,7 @@ function card(entry, assets) {
   .art-front svg{position:absolute;left:57px;top:52px;width:133px;height:133px;filter:drop-shadow(0 0 18px color-mix(in srgb,var(--card-accent) 15%,transparent))}
   .art-marker{position:absolute;top:17px;left:20px;font-size:20px;color:#e9c3f3b0}.art-lines{position:absolute;bottom:24px;left:25px;right:25px;display:flex;gap:7px}.art-lines i{height:4px;border-radius:5px;background:var(--card-accent);opacity:.2;flex:1}.art-lines i:first-child{opacity:.7;flex:2.2}
   .spark{position:absolute;color:var(--card-accent);font-family:system-ui,sans-serif}.spark-one{top:4px;right:12px;font-size:38px;opacity:.8}.spark-two{bottom:15px;left:12px;font-size:24px;opacity:.7}.spark-three{bottom:5px;right:28px;font-size:36px;opacity:.6}
-  </style></head><body><main class="canvas"><header class="top"><div class="brand"><img src="${assets.logo}" alt=""><span>KenSei<span class="dot">.</span></span></div><div class="type">${escape(labels[type] || labels.page)}</div></header><section class="copy"><h1 class="title">${escape(entry.title)}</h1>${description ? `<p class="description">${escape(description)}</p>` : ""}</section>${art(entry, assets)}<footer class="bottom"><strong>${zh ? "實用工具，輕鬆遊戲。" : "Useful tools. A little room to play."}</strong><span>${escape(assets.hostname)}</span></footer></main></body></html>`;
+  </style></head><body><main class="canvas"><header class="top"><div class="brand"><img src="${assets.logo}" alt=""><span>KenSei<span class="dot">.</span></span></div><div class="type">${escape(labels[type] || labels.page)}</div></header><section class="copy"><h1 class="title">${escape(entry.title)}</h1>${description ? `<p class="description">${escape(description)}</p>` : ""}</section>${art(entry, assets)}<footer class="bottom"><strong>${type === "home" ? (zh ? "工具 · 遊戲 · 作品" : "Tools · Games · Projects") : zh ? "實用工具，輕鬆遊戲。" : "Useful tools. A little room to play."}</strong><span>${escape(assets.hostname)}</span></footer></main></body></html>`;
 }
 
 async function assets() {
@@ -184,6 +203,9 @@ async function assets() {
     path.join(root, "scripts/build.py"),
     "utf8",
   );
+  const homeIcons = iconMap(
+    await fs.readFile(path.join(root, "src/views/icons.py"), "utf8"),
+  );
   const tools = JSON.parse(
     await fs.readFile(path.join(root, "data/tools.json"), "utf8"),
   );
@@ -195,11 +217,13 @@ async function assets() {
     logo: `data:image/svg+xml;base64,${logo.toString("base64")}`,
     hostname: new URL(config.site_url).hostname,
     gameIcons: iconMap(gameSource),
+    homeIcons,
     toolIcons: iconMap(buildSource),
     toolGlyphs: Object.fromEntries(tools.map((tool) => [tool[0], tool[1]])),
     sourceHash: digest(
       JSON.stringify({
         fonts,
+        homeIcons,
         logo: digest(logo),
         gameIcons: iconMap(gameSource),
         toolIcons: iconMap(buildSource),

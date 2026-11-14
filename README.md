@@ -8,6 +8,10 @@
 
 白板另提供邀请制共享房间：最多四个已登录账号共同绘画，与私人白板分开保存，并与 Pong 共用两间同时活跃房间的容量。
 
+## 首頁熱門推薦
+
+首頁從 `data/home-featured.json` 顯示靜態精選。Production 的 `/api/home-popular` 讀取 Vercel Web Analytics 近 30 天的正式頁面瀏覽量，結果於 CDN 快取約 24 小時。請在 Vercel 專案環境變數將 `WORKSHOP_ANALYTICS_TOKEN` 設為 Production Secret。若複製到另一個 Vercel 專案，可用 `WORKSHOP_ANALYTICS_PROJECT_ID` 和 `WORKSHOP_ANALYTICS_TEAM_ID` 指定來源。缺少憑證或資料時，首頁繼續顯示精選。
+
 ## 进阶工具
 
 28 个工具按文件数据、学习写作、音视频、日常工具四批升级。兼容结果可通过本机 `Send to` 在同站标签页之间传递；文件只留在内存，不上传或进入恢复记录。

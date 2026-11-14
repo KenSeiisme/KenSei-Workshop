@@ -32,6 +32,8 @@ from planner_view import VIEW as PLANNER_VIEW
 from whiteboard_view import VIEW as WHITEBOARD_VIEW
 from capture_views import SCREEN_VIEW, augment_qr, augment_audio
 from workspace_sections import WORKSPACE as PLANNER_WORKSPACE
+from games_view import achievements, directory as game_directory, game_page, leaderboards
+from home_view import view as home_view
 
 # 后面的工具视图优先，保持既有的目录合并顺序。
 for views in (INTERACTIVE_VIEWS, DAILY_VIEWS, MEDIA_DATA_VIEWS, STUDY_FILE_VIEWS):
@@ -100,6 +102,8 @@ if not arguments.pages_only:
         shutil.copy2(archive, OUT / "vendor/sources" / archive.name)
 
 TOOLS = json.loads((ROOT / "data/tools.json").read_text(encoding="utf-8"))
+GAMES = json.loads((ROOT / "data/games.json").read_text(encoding="utf-8"))
+HOME_FEATURED = json.loads((ROOT / "data/home-featured.json").read_text(encoding="utf-8"))
 (OUT / "tools-data.js").write_text(
     "window.KENSEI_TOOLS="
     + json.dumps(
@@ -149,7 +153,7 @@ PROJECTS = [
 
 def project_art(slug):
     if slug == "kensei-studio":
-        return '<div class="studio-card-cover"><img src="/assets/kensei-studio/preview.png" alt="KenSei Studio show editor and LED preview" width="1560" height="1000"></div>'
+        return '<div class="studio-card-cover"><img src="/assets/kensei-studio/preview.png" loading="lazy" decoding="async" alt="KenSei Studio show editor and LED preview" width="1560" height="1000"></div>'
     if slug == "3a3d":
         return render_template("projects/art-3a3d.html")
     if slug == "salon-system":
@@ -231,27 +235,23 @@ def layout(title, content, active="Home", route="", locale="en"):
 
 
 def tool_directory(illustrated=False):
-    # 首页与目录共用工具数据和交互标记。
     return render_template(
         "site/tool-directory.html",
         tool_cards="".join(tool_card(t, illustrated) for t in TOOLS),
     )
 
 
-home = render_template(
-    "pages/home.html",
-    icon_arrow=icon("arrow"),
-    icon_grid=icon("grid"),
-    icon_text=icon("text"),
-    tool_directory=tool_directory(),
-)
-
-
 def page_intro(label, title, desc):
     return f'<div class="page-intro"><div class="eyebrow">{label}</div><h1>{title}<span class="accent">.</span></h1><p>{desc}</p></div>'
 
 
-pages = {"": ("Useful tools for everyday things", home, "Home")}
+pages = {
+    "": (
+        "KenSei Workshop",
+        home_view(TOOLS, GAMES, PROJECTS, project_art, HOME_FEATURED),
+        "Home",
+    )
+}
 pages["projects"] = (
     "Projects",
     render_template(
@@ -407,9 +407,6 @@ pages["credits"] = (
     "Tools",
 )
 
-from games_view import achievements, directory as game_directory, game_page, leaderboards
-
-GAMES = json.loads((ROOT / "data/games.json").read_text(encoding="utf-8"))
 pages["games"] = ("Games", game_directory(GAMES), "Games")
 pages["games/leaderboards"] = ("All leaderboards", leaderboards(GAMES), "Games")
 pages["games/achievements"] = ("Achievements", achievements(), "Games")

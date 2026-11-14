@@ -1,38 +1,48 @@
 /* Accents are mixed against the active theme, keeping text at full contrast. */
-.tools-page [data-category="images"],
-.project-card[data-project="kensei-studio"] {
+:is(.tools-page, .workshop-home) [data-category="images"],
+:is(.project-card, .home-card)[data-project="kensei-studio"] {
   --catalog-color: #d6a4d9;
 }
-.tools-page [data-category="text"] {
+:is(.tools-page, .workshop-home) [data-category="text"] {
   --catalog-color: #b9a8e7;
 }
-.tools-page [data-category="documents"],
-.project-card[data-project="3a3d"] {
+:is(.tools-page, .workshop-home) [data-category="documents"],
+:is(.project-card, .home-card)[data-project="3a3d"] {
   --catalog-color: #9eb3d5;
 }
-.tools-page [data-category="utilities"] {
+:is(.tools-page, .workshop-home) [data-category="utilities"] {
   --catalog-color: #88c6bf;
 }
-.tools-page [data-category="productivity"] {
+:is(.tools-page, .workshop-home) [data-category="productivity"] {
   --catalog-color: #a9cdb3;
 }
-.tools-page [data-category="testing"] {
+:is(.tools-page, .workshop-home) [data-category="testing"] {
   --catalog-color: #a0cde7;
 }
-.tools-page [data-category="audio"],
-.project-card[data-project="ai-art"] {
+:is(.tools-page, .workshop-home) [data-category="audio"],
+:is(.project-card, .home-card)[data-project="ai-art"] {
   --catalog-color: #dba4bd;
 }
-.project-card[data-project="salon-system"] {
+:is(.project-card, .home-card)[data-project="salon-system"] {
   --catalog-color: #d6b481;
 }
-:is(.tools-page [data-tool-card], .listing-projects .project-card) {
+:is(
+  .tools-page [data-tool-card],
+  .listing-projects .project-card,
+  .home-card[data-category],
+  .home-card[data-project]
+) {
   --card-tone: color-mix(in srgb, var(--catalog-color) 80%, var(--text));
   --card-glow: color-mix(in srgb, var(--catalog-color) 24%, transparent);
   --card-edge: color-mix(in srgb, var(--card-tone) 65%, var(--line));
 }
 :root[data-site-theme="light"]
-  :is(.tools-page [data-tool-card], .listing-projects .project-card) {
+  :is(
+    .tools-page [data-tool-card],
+    .listing-projects .project-card,
+    .home-card[data-category],
+    .home-card[data-project]
+  ) {
   --card-tone: color-mix(in srgb, var(--catalog-color) 45%, var(--text));
   --card-glow: color-mix(in srgb, var(--catalog-color) 40%, transparent);
 }
