@@ -167,7 +167,7 @@ export function mountHomeMotion(root) {
   );
 
   function fitBubbleBudget() {
-    let remaining = wide.matches ? 12 : 6;
+    let remaining = wide.matches ? 16 : 8;
     for (const anchor of anchors) {
       const bubble = anchor.firstElementChild;
       const eligible =

@@ -16,45 +16,51 @@
     </nav>
     <button
       type="button"
-      class="icon-button site-theme"
-      data-site-theme-toggle
-      aria-label="Switch to light theme"
-      title="Switch to light theme"
-    >
-      ${sun}${moon}
-    </button>
-    <button
-      type="button"
       class="icon-button site-search-button"
       aria-label="Search the site"
       aria-haspopup="dialog"
       hidden
     >
       ${svg_search}
+      <span class="site-search-caption" aria-hidden="true">
+        <span class="site-search-wide"></span>
+        <span class="site-search-compact"></span>
+      </span>
     </button>
-    <div class="account-controls" id="account-controls">
+    <div class="site-account-group">
       <button
-        class="sign-button"
-        data-sign-in
-        id="account-toggle"
-        aria-expanded="false"
-        aria-controls="account-menu"
+        type="button"
+        class="icon-button site-theme"
+        data-site-theme-toggle
+        aria-label="Switch to light theme"
+        title="Switch to light theme"
       >
-        <span class="user-dot"></span
-        ><span
-          class="avatar-badge avatar-small"
-          data-account-avatar
-          hidden
-        ></span
-        ><span data-auth-label>Sign in</span
-        ><span data-account-external>${svg_external}</span
-        ><span data-account-chevron hidden>${svg_chevron}</span>
+        ${sun}${moon}
       </button>
-      <div class="account-menu" id="account-menu" hidden>
-        <a href="/workspace/">Workspace</a><a href="/profile/">My Profile</a
-        ><a href="/profile/" id="account-public-profile" hidden
-          >Public Profile</a
-        ><button id="account-sign-out">Sign out</button>
+      <div class="account-controls" id="account-controls">
+        <button
+          class="sign-button"
+          data-sign-in
+          id="account-toggle"
+          aria-expanded="false"
+          aria-controls="account-menu"
+        >
+          <span class="user-dot"></span
+          ><span
+            class="avatar-badge avatar-small"
+            data-account-avatar
+            hidden
+          ></span
+          ><span data-auth-label>Sign in</span
+          ><span data-account-external>${svg_external}</span
+          ><span data-account-chevron hidden>${svg_chevron}</span>
+        </button>
+        <div class="account-menu" id="account-menu" hidden>
+          <a href="/workspace/">Workspace</a><a href="/profile/">My Profile</a
+          ><a href="/profile/" id="account-public-profile" hidden
+            >Public Profile</a
+          ><button id="account-sign-out">Sign out</button>
+        </div>
       </div>
     </div>
     <button

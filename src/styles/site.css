@@ -105,6 +105,22 @@
   font-size: 28px;
   flex-shrink: 0;
 }
+.site-search-caption,
+.site-search-compact {
+  display: none;
+}
+.site-account-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+.site-account-group .account-controls {
+  margin-inline-start: 0;
+}
+.site-account-group .sign-button {
+  min-height: 44px;
+}
 .site-language-status {
   position: absolute;
   top: 100%;
@@ -211,7 +227,30 @@
     gap: 15px;
   }
   .header nav {
-    gap: 20px;
+    gap: 18px;
+    margin-inline-start: clamp(0px, 2.2vw - 20px, 22px);
+    white-space: nowrap;
+  }
+  .header .site-search-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1 1 156px;
+    min-width: 120px;
+    max-width: 224px;
+    padding-inline: 12px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
+    font-size: 13px;
+    text-align: start;
+  }
+  .header .site-search-button:hover {
+    border-color: var(--accent);
+    background: var(--surface2);
+  }
+  .site-search-caption {
+    display: block;
   }
   .menu-toggle {
     display: none !important;
@@ -225,6 +264,9 @@
   .header #account-controls,
   .header .site-language {
     display: none !important;
+  }
+  .site-account-group {
+    display: contents;
   }
   .header .menu-toggle {
     display: flex !important;
@@ -307,6 +349,12 @@
 @media (min-width: 1024px) and (max-width: 1199px) {
   .site-language > span {
     display: none;
+  }
+  .site-search-wide {
+    display: none;
+  }
+  .site-search-compact {
+    display: inline;
   }
   .nav-wrap {
     gap: 10px;

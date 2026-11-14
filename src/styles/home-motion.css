@@ -7,11 +7,6 @@
   pointer-events: none;
 }
 
-.home-intro > :not(.home-atmosphere, .home-intro-light) {
-  position: relative;
-  z-index: 1;
-}
-
 .home-section::before {
   z-index: 0;
   border-top: 1px solid var(--line);
@@ -39,6 +34,21 @@
   transform: translateY(var(--home-parallax, 0px));
 }
 
+.home-intro .home-atmosphere::before {
+  background:
+    radial-gradient(
+      ellipse 49% 60% at 68% 33%,
+      color-mix(in srgb, var(--pink) 10%, transparent),
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse 46% 63% at 32% 65%,
+      color-mix(in srgb, var(--accent) 9%, transparent),
+      transparent 100%
+    );
+  mask-image: linear-gradient(transparent, black 14% 74%, transparent);
+}
+
 .home-bubbles,
 .home-particles {
   position: absolute;
@@ -54,7 +64,7 @@
   --rise: -230px;
   --drift: 20px;
   --rotation: -10deg;
-  --pace: 15s;
+  --pace: 11s;
   --phase: -3s;
   position: absolute;
   inset: var(--bubble-top, 51%) auto auto var(--bubble-left, 84%);
@@ -92,9 +102,9 @@
 }
 
 .home-intro .home-bubble-anchor:nth-child(1) {
-  --bubble-top: 27%;
-  --bubble-left: clamp(0px, 4vw - 44px, 24px);
-  --phase: -10s;
+  --bubble-top: 39%;
+  --bubble-left: max(4%, calc((100% - 1200px) / 2 - 120px));
+  --phase: -7s;
   --rotation: -16deg;
 }
 
@@ -102,8 +112,8 @@
   --bubble-top: 60%;
   --bubble-left: 78%;
   --bubble-size: clamp(50px, 7.5vw, 104px);
-  --pace: 18s;
-  --phase: -12s;
+  --pace: 13s;
+  --phase: -8.5s;
   --rise: -328px;
   --drift: 30px;
 }
@@ -111,8 +121,8 @@
 .home-intro .home-bubble-anchor:nth-child(3) {
   --bubble-top: 60%;
   --bubble-left: 90%;
-  --pace: 14s;
-  --phase: -6s;
+  --pace: 10s;
+  --phase: -4.5s;
   --rise: -283px;
   --rotation: 13deg;
   --drift: -25px;
@@ -121,22 +131,57 @@
 .home-intro .home-bubble-anchor:nth-child(4) {
   --bubble-top: 96%;
   --bubble-left: 14%;
-  --phase: -7s;
+  --phase: -5s;
   --rise: -170px;
 }
 
 .home-intro .home-bubble-anchor:nth-child(5) {
   --bubble-top: 42%;
   --bubble-left: 55%;
-  --phase: -11s;
+  --phase: -8s;
   --rise: -218px;
 }
 
 .home-intro .home-bubble-anchor:nth-child(6) {
   --bubble-top: 97%;
   --bubble-left: 88%;
-  --phase: -13s;
+  --phase: -9.5s;
   --rise: -245px;
+}
+
+.home-intro .home-bubble-anchor:nth-child(7) {
+  --bubble-left: max(2%, calc((100% - 1200px) / 2 - 235px));
+  --bubble-top: 76%;
+  --bubble-size: clamp(30px, 4vw, 66px);
+  --rise: -315px;
+  --pace: 12s;
+  --phase: -4s;
+  --drift: -14px;
+}
+
+.home-intro .home-bubble-anchor:nth-child(8) {
+  --bubble-left: 96%;
+  --bubble-top: 79%;
+  --rise: -268px;
+  --phase: -6s;
+  --drift: -14px;
+}
+
+.home-intro .home-bubble-anchor:nth-child(9) {
+  --bubble-left: 92%;
+  --bubble-top: 37%;
+  --rise: -188px;
+  --phase: -2.6s;
+}
+
+.home-intro .home-bubble-anchor:nth-child(10) {
+  --bubble-left: max(7%, calc((100% - 1200px) / 2 - 82px));
+  --bubble-top: 93%;
+  --bubble-size: clamp(29px, 4vw, 58px);
+  --rise: -255px;
+  --pace: 12s;
+  --phase: -9s;
+  --drift: -25px;
 }
 
 .home-section .home-bubble-anchor {
@@ -146,13 +191,14 @@
   --bubble-size: clamp(35px, 7vw, 106px);
   --bubble-opacity: 0.49;
   --rise: -200px;
-  --phase: -13s;
+  --pace: 12s;
+  --phase: -8.5s;
 }
 
 .home-section .home-bubble-anchor:nth-child(2) {
   --bubble-top: 305px;
   --bubble-left: clamp(12px, 3.5vw, 70px);
-  --phase: -8s;
+  --phase: -5.5s;
   --drift: -14px;
 }
 
@@ -206,7 +252,23 @@
 }
 
 .home-bubble-anchor[data-float-art="project-preview"] img {
-  filter: blur(0.65px);
+  object-fit: contain;
+  transform: translate(-22%, -5%) scale(2.65);
+}
+
+.home-bubble-art {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.home-bubble-art > .tool-card-preview {
+  width: 100%;
+  height: 100%;
+}
+
+.home-bubble-art > :not(.tool-card-preview) {
+  scale: 0.65;
 }
 
 .home-bubble .tool-card-preview {
@@ -215,12 +277,16 @@
   grid-template: minmax(0, 1fr) / minmax(0, 1fr);
 }
 
-.home-bubble .tool-card-preview small {
+.home-bubble .tool-card-preview :is(small, .tool-visual-lines) {
   display: none;
 }
 
 .home-bubble .tool-visual-art {
   transform: scale(0.62);
+}
+
+.home-bubble :is(.tool-visual-table, .tool-visual-calendar) i {
+  font-size: 0;
 }
 
 .home-cards,
@@ -420,8 +486,13 @@
     bottom: 3%;
   }
 
-  .home-intro .home-bubble-anchor:nth-child(4),
-  .home-intro .home-bubble-anchor:nth-child(5) {
+  .home-intro
+    .home-bubble-anchor:is(
+      :nth-child(4),
+      :nth-child(5),
+      :nth-child(8),
+      :nth-child(10)
+    ) {
     display: none;
   }
 
@@ -429,6 +500,20 @@
     --bubble-top: 94%;
     --bubble-left: 13%;
     --rise: -137px;
+  }
+
+  .home-intro .home-bubble-anchor:nth-child(7) {
+    --bubble-top: 67%;
+    --bubble-left: 2%;
+    --bubble-size: clamp(20px, 5vw, 34px);
+    --rise: -116px;
+  }
+
+  .home-intro .home-bubble-anchor:nth-child(9) {
+    --bubble-top: 49%;
+    --bubble-left: 93%;
+    --rise: -95px;
+    --drift: -7px;
   }
 
   .home-section .home-bubble-anchor {

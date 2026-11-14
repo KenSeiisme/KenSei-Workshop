@@ -64,7 +64,7 @@ async function verifyLayout(page, width, height) {
       `motion toggle below fold at ${width}x${height}`,
     );
   }
-  assert.equal(layout.bubbles, width >= 1050 && height >= 700 ? 12 : 10);
+  assert.equal(layout.bubbles, width >= 1050 && height >= 700 ? 16 : 12);
   await page.waitForFunction(
     (limit) =>
       [...document.querySelectorAll(".home-bubble")].filter(
@@ -72,7 +72,7 @@ async function verifyLayout(page, width, height) {
           getComputedStyle(bubble).animationPlayState === "running" &&
           bubble.getBoundingClientRect().width > 0,
       ).length <= limit,
-    width >= 1050 && height >= 700 ? 12 : 6,
+    width >= 1050 && height >= 700 ? 16 : 8,
   );
 }
 

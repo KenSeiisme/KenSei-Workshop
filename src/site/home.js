@@ -49,15 +49,24 @@ function updatePopular() {
           [...grid.children].map((card) => [card.dataset.homeCard, card]),
         );
         const templates = new Map(
-          [...section.querySelector("template").content.children].map(
-            (card) => [card.dataset.homeCard, card],
-          ),
+          [
+            ...section.querySelector("[data-home-card-alternates]").content
+              .children,
+          ].map((card) => [card.dataset.homeCard, card]),
         );
         const cards = ranking.slugs.map(
           (slug) => live.get(slug) || templates.get(slug)?.cloneNode(true),
         );
         if (cards.some((card) => !card)) continue;
         grid.replaceChildren(...cards);
+        const artwork = section.querySelector("[data-float-slug]");
+        if (ranking.slugs.includes(artwork?.dataset.floatSlug)) {
+          const fallback = [
+            ...section.querySelector("[data-home-float-alternates]").content
+              .children,
+          ].find((item) => !ranking.slugs.includes(item.dataset.floatSlug));
+          if (fallback) artwork.replaceWith(fallback.cloneNode(true));
+        }
         section.querySelector("[data-home-featured]").hidden = true;
         section.querySelector("[data-home-popular]").hidden = false;
       }

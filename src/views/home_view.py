@@ -16,23 +16,62 @@ FLOATING_ART = {
         ("tools", "ring"),
         ("games", "diamond"),
         ("projects", "spark"),
+        ("tools", "timer"),
+        ("games", "ring"),
+        ("projects", "diamond"),
+        ("tools", "palette"),
     ),
     "tools": (("tools", "tool-preview"), ("tools", "diamond")),
     "games": (("games", "game-preview"), ("games", "ring")),
     "projects": (("projects", "project-preview"), ("projects", "spark")),
 }
 
+FLOATING_PREVIEWS = {
+    "tools": {
+        slug: tool_preview(slug)
+        for slug in (
+            "color-studio",
+            "audio-studio",
+            "decision-studio",
+            "data-studio",
+            "study-planner",
+        )
+    },
+    "games": {
+        slug: preview(kind)
+        for slug, kind in (
+            ("nonogram", "nonogram"),
+            ("reversi", "reversi"),
+            ("memory-match", "memory"),
+            ("block-drop", "block-drop"),
+            ("go", "go"),
+        )
+    },
+}
 
-def atmosphere(scene):
+
+def atmosphere(scene, featured=()):
+    previews = {
+        slug: f'<div class="home-bubble-art" data-float-slug="{slug}">{markup}</div>'
+        for slug, markup in FLOATING_PREVIEWS.get(scene, {}).items()
+    }
+    selected = next((slug for slug in previews if slug not in featured), None)
     art = {
         "chess": '<img src="/assets/chess/wn.svg" alt="" width="32" height="32">',
-        "tool-preview": tool_preview("whiteboard"),
-        "game-preview": preview("brick-breaker"),
-        "project-preview": '<img src="/assets/kensei-studio/preview.png" alt="" loading="lazy" width="1560" height="1000">',
+        "project-preview": '<img src="/assets/mazda.png" alt="" loading="lazy" width="800" height="450">',
         "ring": "",
         "diamond": "",
         "spark": "✦",
     }
+    if selected:
+        art["tool-preview" if scene == "tools" else "game-preview"] = previews[selected]
+    alternates = (
+        '<template data-home-float-alternates>'
+        + "".join(markup for slug, markup in previews.items() if slug != selected)
+        + "</template>"
+        if selected
+        else ""
+    )
     bubbles = "".join(
         f'<div class="home-bubble-anchor" data-home-section="{kind}" data-float-art="{glyph}">'
         f'<div class="home-bubble">{art[glyph] if glyph in art else icon(glyph)}</div></div>'
@@ -41,7 +80,7 @@ def atmosphere(scene):
     return (
         '<div class="home-atmosphere" aria-hidden="true">'
         f'<div class="home-bubbles">{bubbles}</div>'
-        '<div class="home-particles"></div></div>'
+        f'<div class="home-particles"></div>{alternates}</div>'
     )
 
 
@@ -77,12 +116,14 @@ def home_section(kind, anchor, name, catalog, links, featured=None):
         "site/home-section.html",
         kind=kind,
         anchor=anchor,
-        atmosphere=atmosphere(kind),
+        atmosphere=atmosphere(kind, visible),
         name=name,
         source=source,
         actions=actions,
         cards="".join(catalog[slug] for slug in visible),
-        alternates=f"<template>{rest}</template>" if rest else "",
+        alternates=f"<template data-home-card-alternates>{rest}</template>"
+        if rest
+        else "",
     )
 
 
