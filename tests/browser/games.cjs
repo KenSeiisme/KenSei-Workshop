@@ -493,6 +493,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     ).length;
     await p.evaluate((id) => sessionStorage.setItem("qa-account", id), A);
     await p.reload();
+    await p.waitForSelector("[data-games-directory][data-ready=true]");
     await p.click("#game-manage-saves");
     await p.waitForSelector("#games-copy-guest:not([hidden])");
     await p.waitForFunction(() =>
