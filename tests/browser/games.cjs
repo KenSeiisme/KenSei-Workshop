@@ -21,7 +21,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
       users: [A, B],
       rpc,
       admin,
-    } = await gameDatabase();
+    } = await gameDatabase({ currentArcade: true });
   let chain = Promise.resolve(),
     failSync = false,
     loseAck = false,
@@ -457,7 +457,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8811";
     await p.screenshot({ path: "_qa/games-memory-mobile.png", fullPage: true });
     assert.ok((await p.locator("#game-pause").boundingBox()).height >= 44);
     await gameClick(p, "#game-settings-change");
-    assert.equal(await p.isEnabled("#game-difficulty"), true);
+    await p.waitForSelector("#game-difficulty:enabled");
     await gameSelect(p, "#game-difficulty", "easy");
     await gameClick(p, "#game-start");
     assert.equal(await p.locator(".memory-card").count(), 12);

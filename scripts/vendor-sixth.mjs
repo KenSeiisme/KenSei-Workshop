@@ -7,6 +7,11 @@ const require = createRequire(import.meta.url),
   out = path.join(root, "src", "vendor"),
   board = path.join(out, "whiteboard");
 await fs.mkdir(board, { recursive: true });
+const chunks = path.join(board, "chunks");
+const previousChunks = await fs.readdir(chunks).catch((error) => {
+  if (error.code !== "ENOENT") throw error;
+  return [];
+});
 const result = await build({
   stdin: {
     contents:
@@ -34,6 +39,14 @@ const result = await build({
     ".wasm": "file",
   },
 });
+const emitted = new Set(
+  Object.keys(result.metafile.outputs).map((file) => path.resolve(file)),
+);
+for (const name of previousChunks) {
+  const file = path.join(chunks, name);
+  if (/^[a-zA-Z0-9_-]+\.js$/.test(name) && !emitted.has(file))
+    await fs.unlink(file);
+}
 const excalidraw = path.dirname(require.resolve("@excalidraw/excalidraw"));
 await fs.copyFile(
   path.join(excalidraw, "index.css"),

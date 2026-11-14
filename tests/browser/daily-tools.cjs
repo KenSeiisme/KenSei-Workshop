@@ -62,7 +62,7 @@ const pass = (s) => {
         );
       }
     }
-    await p.goto(base + "/");
+    await p.goto(base + "/tools/");
     await p.fill("#tool-search", "Network");
     assert.equal(await p.locator("[data-tool-card]:visible").count(), 1);
     await p.locator('[data-favorite="network-test"]').click();

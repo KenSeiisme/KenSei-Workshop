@@ -23,6 +23,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
           from:()=>({select:()=>({order:async()=>({data:[]})})}),
           rpc:async(name,args)=>{
             const user=localStorage.hubFixtureUser;
+            if(name==="sync_game_activity" && window.auditActivity) return window.auditActivity(args);
             if(name.includes('leaderboard')) {
               const response=await fetch('https://fixture.supabase.co/rpc/'+name,{
                 method:'POST',body:JSON.stringify(args)
@@ -160,7 +161,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     const snakePreview = hub.locator('[data-rank-preview="snake"]');
     const xiangqiPreview = hub.locator('[data-rank-preview="xiangqi"]');
     const preview = hub.getByRole("tabpanel", { name: "Snake" });
-    await snakePreview.scrollIntoViewIfNeeded();
+    await preview.scrollIntoViewIfNeeded();
     await preview.locator("li").last().waitFor();
     assert.equal(await preview.locator("li").count(), 3);
     const beforeSelection = rankingRequests.length;
@@ -545,6 +546,46 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     await accountClaim.click();
     await warmUp.getByText("Claimed").waitFor();
     assert.equal(await hub.locator("[data-hub-coins]").textContent(), "15");
+    const activity = await hub.evaluate(async () => {
+      const { hubOwner, recordActivity, readHub, syncHub } =
+        await import("/game-scripts/hub-store.js");
+      const owner = hubOwner();
+      const { api } = await import("/tool-scripts/common.js");
+      const { data } = await api.client.rpc("game_hub_snapshot");
+      const snapshot = () => ({
+        data: { ...data, generatedAt: Date.now() / 1000 },
+      });
+      window.auditCompleted = [];
+      let releaseFirst;
+      window.auditActivity = ({ runs }) => {
+        window.auditCompleted.push(...runs.map((run) => run.finished));
+        if (window.auditCompleted.length === 1) {
+          return new Promise((resolve) => {
+            releaseFirst = () => resolve(snapshot());
+          });
+        }
+        return Promise.resolve(snapshot());
+      };
+      const run = {
+        id: crypto.randomUUID(),
+        segmentId: crypto.randomUUID(),
+        game: "snake",
+        mode: "normal",
+        started: true,
+      };
+      await recordActivity(owner, { ...run, activeMs: 0, finished: false });
+      while (!releaseFirst)
+        await new Promise((resolve) => setTimeout(resolve, 10));
+      await recordActivity(owner, { ...run, activeMs: 5000, finished: true });
+      const syncing = syncHub(owner);
+      releaseFirst();
+      await syncing;
+      return {
+        sent: window.auditCompleted,
+        pending: (await readHub(owner)).pending,
+      };
+    });
+    assert.deepEqual(activity, { sent: [false, true], pending: 0 });
     await achievements.goto(base + "/zh-hant/games/achievements/");
     await achievements.locator("#games-progress").waitFor();
     assert.equal(await achievements.locator("h1").textContent(), "成就");

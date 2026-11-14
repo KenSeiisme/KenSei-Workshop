@@ -21,6 +21,7 @@ globalThis.localStorage = {
 };
 const button = {
   matches: (s) => s === "[data-audio-toggle]",
+  querySelector: () => null,
   setAttribute() {},
   addEventListener: (n, fn) => hooks.set("button:" + n, fn),
 };

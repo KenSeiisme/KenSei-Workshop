@@ -2,7 +2,6 @@ from html import escape
 
 from icons import icon
 
-
 # Each tool gets a small, synthetic example in the catalog.
 # Rows contain a visual type and its sample values. No tool script runs here.
 PREVIEWS = {
@@ -17,17 +16,13 @@ PREVIEWS = {
         ("page", "02", "pdf"),
         ("page", "03", "pdf"),
     ),
-    "text-toolkit": (
-        ("lines", "A little clarity", "1 line", "16 characters"),
-    ),
+    "text-toolkit": (("lines", "A little clarity", "1 line", "16 characters"),),
     "markdown-studio": (
         ("lines", "# Notes", "- A task", "- An idea"),
         ("arrow",),
         ("lines", "Notes", "• A task", "• An idea"),
     ),
-    "text-compare": (
-        ("diff", "− Hello world", "+ Hello Workshop"),
-    ),
+    "text-compare": (("diff", "− Hello world", "+ Hello Workshop"),),
     "image-to-text": (
         ("ocr", "HELLO"),
         ("arrow",),
@@ -64,8 +59,15 @@ PREVIEWS = {
 }
 
 QR_ROWS = (
-    "111010111", "101000101", "111010111", "000111000", "101010101",
-    "011101001", "111001110", "101010011", "111101101",
+    "111010111",
+    "101000101",
+    "111010111",
+    "000111000",
+    "101010101",
+    "011101001",
+    "111001110",
+    "101010011",
+    "111101101",
 )
 
 
@@ -79,7 +81,7 @@ def element(kind, *values):
     if kind == "icon":
         return icon(values[0])
     if kind in {"picture", "page"}:
-        body = f'<b>{icon(values[1])}</b><small>{escape(values[0])}</small>'
+        body = f"<b>{icon(values[1])}</b><small>{escape(values[0])}</small>"
     elif kind == "qr":
         body = "".join(
             f'<i data-filled="{pixel}"></i>' for row in QR_ROWS for pixel in row

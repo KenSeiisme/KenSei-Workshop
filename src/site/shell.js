@@ -246,15 +246,27 @@
       return;
     }
     const links = [...list.querySelectorAll("a")];
-    if (["ArrowDown", "ArrowUp"].includes(e.key)) {
+    const focusedLink = links.indexOf(document.activeElement);
+    const inInput = document.activeElement === input;
+    if (
+      links.length &&
+      (inInput || focusedLink !== -1) &&
+      ["ArrowDown", "ArrowUp"].includes(e.key)
+    ) {
       e.preventDefault();
+      const down = e.key === "ArrowDown";
+      const current = inInput ? selected : focusedLink;
       selected =
-        (selected + (e.key === "ArrowDown" ? 1 : -1) + links.length) %
-        links.length;
+        current === -1
+          ? down
+            ? 0
+            : links.length - 1
+          : (current + (down ? 1 : -1) + links.length) % links.length;
       links.forEach((a, i) => a.classList.toggle("selected", i === selected));
-      links[selected]?.scrollIntoView({ block: "nearest" });
+      if (!inInput) links[selected].focus({ preventScroll: true });
+      links[selected].scrollIntoView({ block: "nearest" });
     }
-    if (e.key === "Enter" && document.activeElement === input && links.length) {
+    if (e.key === "Enter" && inInput && links.length) {
       e.preventDefault();
       links[Math.max(selected, 0)].click();
     }

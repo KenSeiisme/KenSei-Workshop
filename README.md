@@ -1,12 +1,12 @@
 # KenSei Workshop
 
-以浏览器工具为主的平台，目前提供 **28 个工具**，并有独立的 **12 款小游戏**栏目；其中 9 款支持公开榜及 30 项成就。四子棋、黑白棋为私人游戏，Pong 为好友在线邀请房。
+KenSei Workshop 提供 **28 個瀏覽器工具**與 **15 款遊戲**。九款單人遊戲支援已驗證排行榜及 30 項里程碑。圍棋、西洋棋和中國象棋各有線上戰績。
 
 - 正式网站：https://kensei-workshop.vercel.app/
 - GitHub 分支：`KenSei-Workshop`
 - 发布方式：push GitHub，由现有 Vercel 集成自动构建；无需另外手动部署。
 
-白板另提供邀请制共享房间：最多四个已登录账号共同绘画，与私人白板分开保存，并与 Pong 共用两间同时活跃房间的容量。
+共享白板最多四人，由登入的成員共同繪畫。共享白板、Pong 和三款線上棋類共用兩個活躍房間名額。
 
 ## 首頁熱門推薦
 
@@ -39,7 +39,7 @@ KenSei Workshop/
 │  ├─ config.js         可公开的站点与 Supabase 配置
 │  ├─ assets/           图片、图标
 │  ├─ styles/           网站及工具样式
-│  ├─ games/            十二款游戏、共享规则、成就和账号存档界面
+│  ├─ games/            游戏、共享规则、成就和账号存档界面
 │  ├─ tools/            各工具脚本、worker、同步模块
 │  ├─ templates/        可直接阅读的 HTML 布局、页面与工具片段
 │  ├─ views/            Python 页面组合、工具说明与模板参数
@@ -132,7 +132,7 @@ pnpm format:check
 
 `.env.local` 保留在本机根目录，禁止提交；`src/config.js` 只包含可公开的配置。私人草稿、学习计划和白板按账号隔离；录屏、录音和扫码内容只在浏览器处理。Google 登录、公开 Profile 和打字榜继续使用现有 Supabase 项目。
 
-`projects/3A3D` 是独立项目，不会进入主站部署。Games 使用独立目录和 `/games/` 路由；普通私人对局保存到 Games，Pong 房间只临时保留，不进入工具搜索、Workspace 或 Continue playing。成就与个人统计只计算服务器确认的有效 Public 结果。
+`projects/3A3D` 是独立项目，不会进入主站部署。Games 使用独立目录和 `/games/` 路由；普通私人对局保存到 Games，Pong 房间只临时保留，不进入工具搜索、Workspace 或 Continue playing。公開榜和已驗證里程碑使用伺服器確認的 Public 結果。大廳統計與獎勵支援離線遊玩回報；完局獎勵要求已開局且累計至少一秒有效遊玩時間，並按對局去重。
 
 更多说明见 [项目结构](docs/project-structure.md)、[各批验收](docs/validation/) 和 [历史说明](docs/history/pre-organization-readme.md)。
 

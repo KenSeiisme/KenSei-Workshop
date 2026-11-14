@@ -32,7 +32,12 @@ from planner_view import VIEW as PLANNER_VIEW
 from whiteboard_view import VIEW as WHITEBOARD_VIEW
 from capture_views import SCREEN_VIEW, augment_qr, augment_audio
 from workspace_sections import WORKSPACE as PLANNER_WORKSPACE
-from games_view import achievements, directory as game_directory, game_page, leaderboards
+from games_view import (
+    achievements,
+    directory as game_directory,
+    game_page,
+    leaderboards,
+)
 from home_view import view as home_view
 
 # 后面的工具视图优先，保持既有的目录合并顺序。
@@ -103,7 +108,9 @@ if not arguments.pages_only:
 
 TOOLS = json.loads((ROOT / "data/tools.json").read_text(encoding="utf-8"))
 GAMES = json.loads((ROOT / "data/games.json").read_text(encoding="utf-8"))
-HOME_FEATURED = json.loads((ROOT / "data/home-featured.json").read_text(encoding="utf-8"))
+HOME_FEATURED = json.loads(
+    (ROOT / "data/home-featured.json").read_text(encoding="utf-8")
+)
 (OUT / "tools-data.js").write_text(
     "window.KENSEI_TOOLS="
     + json.dumps(

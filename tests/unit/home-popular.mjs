@@ -29,6 +29,7 @@ test("home popularity merges languages and keeps the catalog tie order", async (
     assert(Number(p.get("limit")) <= 100);
     assert.equal(options.headers.Authorization, "Bearer fixture-only");
     const paths = p.get("filter");
+    assert.match(paths, /^requestPath eq '/);
     return Response.json({
       data: rows.filter(({ requestPath }) =>
         paths.includes("'" + requestPath + "'"),
@@ -67,7 +68,26 @@ test("home popularity merges languages and keeps the catalog tie order", async (
       },
       games: { source: "featured", slugs: featured.games },
     });
-    assert.equal(fetch.mock.callCount(), 4);
+    assert.equal(fetch.mock.callCount(), 8);
+
+    fetch.mock.mockImplementation(async (query) => {
+      const filter = query.searchParams.get("filter");
+      if (filter.includes("/games/"))
+        return new Response(null, { status: 429 });
+      return Response.json({
+        data: rows.filter(({ requestPath }) =>
+          filter.includes("'" + requestPath + "'"),
+        ),
+      });
+    });
+    const partial = await handler.fetch(new Request(url));
+    const partialData = await partial.json();
+    assert.equal(partialData.tools.source, "analytics");
+    assert.equal(partialData.games.source, "featured");
+    assert.match(
+      partial.headers.get("vercel-cdn-cache-control"),
+      /s-maxage=300/,
+    );
 
     fetch.mock.mockImplementation(async () => {
       throw new DOMException("Timed out", "TimeoutError");

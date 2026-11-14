@@ -193,8 +193,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797",
     await p.goto(base + "/workspace/");
     await p.waitForSelector('#workspace-decks a[href*="deck="]');
     await p.locator("#workspace-decks a").first().click();
+    await p.waitForURL("**/tools/flashcards/?deck=*");
     await p.waitForFunction(
-      () => document.querySelector("#deck-name").value === "中英复习",
+      () => document.querySelector("#deck-name")?.value === "中英复习",
     );
     await p.setInputFiles("#deck-import", {
       name: "new.csv",

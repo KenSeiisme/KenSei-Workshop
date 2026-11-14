@@ -93,7 +93,7 @@ function pass(s) {
     );
   }
   try {
-    await page.goto(base + "/");
+    await page.goto(base + "/tools/");
     assert.equal(await page.locator("[data-tool-card]").count(), 28);
     assert.equal(await page.locator(".project-card").count(), 0);
     for (const [category, count] of [

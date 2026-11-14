@@ -124,19 +124,26 @@ async function locale(page, value) {
       mimeType: "image/png",
       buffer: png,
     });
-    await page.waitForTimeout(250);
+    await page
+      .locator("#image-selection")
+      .getByText("Start game.png")
+      .waitFor();
     await page.evaluate(
-      () => (window.__file = document.querySelector("#image-file").files[0]),
+      () =>
+        (window.__imagePreview = document.querySelector("#image-preview").src),
     );
     await locale(page, "zh-Hant");
     assert(
       await page.evaluate(
-        () => __file === document.querySelector("#image-file").files[0],
+        () => __imagePreview === document.querySelector("#image-preview").src,
       ),
     );
     assert.equal(
-      await page.locator("#image-file").evaluate((n) => n.files[0].name),
-      "Start game.png",
+      await page
+        .locator("#image-selection")
+        .getByText("Start game.png")
+        .count(),
+      1,
     );
     console.log("PASS opaque Markdown preview and original file identity");
     // Older indexes may omit optional aliases on a Project; other results must survive.

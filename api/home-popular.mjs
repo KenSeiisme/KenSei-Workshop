@@ -49,10 +49,7 @@ async function readPageviews(token, now, paths) {
     since: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
     until: new Date(now).toISOString(),
     limit: String(paths.length + 1),
-    filter:
-      "requestPath in (" +
-      paths.map((path) => "'" + path + "'").join(",") +
-      ")",
+    filter: paths.map((path) => "requestPath eq '" + path + "'").join(" or "),
   }).toString();
   const response = await fetch(url, {
     headers: { Authorization: "Bearer " + token },
@@ -67,22 +64,38 @@ async function readPageviews(token, now, paths) {
 }
 
 async function loadSnapshot(token, now) {
-  const groups = Object.entries(catalog).flatMap(([kind, slugs]) =>
-    ["", "/zh-hant"].map((locale) =>
-      slugs.flatMap((slug) => {
-        const path = locale + "/" + kind + "/" + slug;
-        return [path, path + "/"];
-      }),
-    ),
+  let checked = false;
+  let incomplete = false;
+  const entries = await Promise.all(
+    Object.entries(catalog).map(async ([kind, slugs]) => {
+      try {
+        // Keep each encoded URL short and each response below the API row cap.
+        const paths = ["", "/zh-hant"].flatMap((locale) =>
+          slugs.flatMap((slug) => {
+            const path = locale + "/" + kind + "/" + slug;
+            return [path, path + "/"];
+          }),
+        );
+        const requests = [];
+        for (let i = 0; i < paths.length; i += 24)
+          requests.push(readPageviews(token, now, paths.slice(i, i + 24)));
+        const rows = (await Promise.all(requests)).flat();
+        const result = rank(kind, rows);
+        checked = true;
+        return [kind, result];
+      } catch (error) {
+        incomplete = true;
+        console.warn("Home popularity feed unavailable:", kind, error.message);
+        return [kind, { source: "featured", slugs: featured[kind] }];
+      }
+    }),
   );
-  // Each locale and catalog stays below the Analytics API's 100-row cap.
-  const rows = (
-    await Promise.all(groups.map((paths) => readPageviews(token, now, paths)))
-  ).flat();
   return {
-    updatedAt: new Date(now).toISOString(),
-    tools: rank("tools", rows),
-    games: rank("games", rows),
+    snapshot: {
+      updatedAt: checked ? new Date(now).toISOString() : null,
+      ...Object.fromEntries(entries),
+    },
+    lifetime: incomplete ? 300 : 86400,
   };
 }
 
@@ -99,26 +112,18 @@ export default {
         headers: { "Cache-Control": "no-store" },
       });
     const now = Date.now();
-    const token = process.env.WORKSHOP_ANALYTICS_TOKEN;
+    const token = process.env.WORKSHOP_ANALYTICS_TOKEN?.trim();
     let snapshot = { updatedAt: null, ...snapshotFallback() };
     let lifetime = 300;
-    if (token) {
-      try {
-        snapshot = await loadSnapshot(token, now);
-        lifetime = 86400;
-      } catch (error) {
-        console.warn(
-          "Home popularity feed unavailable:",
-          error.name,
-          error.message,
-        );
-      }
-    }
+    if (token) ({ snapshot, lifetime } = await loadSnapshot(token, now));
     const headers = {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "public, max-age=60",
       "Vercel-CDN-Cache-Control":
-        "public, s-maxage=" + lifetime + ", stale-while-revalidate=3600",
+        "public, s-maxage=" +
+        lifetime +
+        ", stale-while-revalidate=" +
+        (lifetime === 86400 ? 3600 : 60),
     };
     return new Response(
       request.method === "HEAD" ? null : JSON.stringify(snapshot),

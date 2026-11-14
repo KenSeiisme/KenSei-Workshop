@@ -199,16 +199,18 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
       countBefore,
     );
     await gameClick(p, "#game-milestones>summary");
-    assert.match(await p.innerText("#game-milestones"), /First verified/);
-    await p.goto(base + "/games/");
+    assert.match(await p.innerText("#game-milestones"), /A clean ten/);
+    await p.goto(base + "/games/achievements/");
     await p.waitForFunction(
-      () => document.querySelector("#progress-results").textContent === "1",
+      () => document.querySelector("#progress-results")?.textContent === "1",
     );
-    assert.equal(await p.locator("[data-game-card]").count(), 13);
+    assert.match(await p.innerText("#progress-recent"), /First verified/);
     assert.equal(
       await p.locator("#progress-all [data-achievement]").count(),
       30,
     );
+    await p.goto(base + "/games/");
+    assert.equal(await p.locator("[data-game-card]").count(), 15);
     const host = await context(A),
       guest = await context(B);
     for (const page of [host, guest]) {

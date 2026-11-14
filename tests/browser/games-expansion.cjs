@@ -187,11 +187,12 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
   try {
     await p.goto(`${base}/games/`);
     await p.waitForSelector("[data-game-card]");
-    assert.equal(await p.locator("[data-game-card]").count(), 12);
+    assert.equal(await p.locator("[data-game-card]").count(), 15);
     for (const [filter, count] of [
-      ["puzzle", 6],
-      ["arcade", 4],
-      ["board", 2],
+      ["puzzle", 5],
+      ["action", 3],
+      ["casual", 2],
+      ["board", 5],
     ]) {
       await p.click(`[data-game-filter="${filter}"]`);
       assert.equal(await p.locator("[data-game-card]:visible").count(), count);
