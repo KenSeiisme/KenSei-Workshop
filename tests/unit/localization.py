@@ -87,6 +87,25 @@ def verify_pack(html, locale, route):
         assert pack.get(key) == L.CATALOG[key]["zh-Hant"], (route, source)
 
 
+def verify_structured_data(html, url):
+    head = html.split("</head>", 1)[0]
+    scripts = re.findall(
+        r'<script type="application/ld\+json">(.*?)</script>', head, re.S
+    )
+    if url == base + "/":
+        assert len(scripts) == 1, url
+        assert "<" not in scripts[0], url
+        assert json.loads(scripts[0]) == {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "KenSei Workshop",
+            "url": url,
+        }
+        assert 'property="og:site_name" content="KenSei Workshop"' in head, url
+    else:
+        assert not scripts, url
+
+
 for url in urls:
     path = url.removeprefix(base)
     locale = "zh-Hant" if path.startswith("/zh-hant/") else "en"
@@ -108,6 +127,7 @@ for url in urls:
         630,
     ), str(image)
     verify_pack(html, locale, route)
+    verify_structured_data(html, url)
     assert all(
         "/assets/fonts/" in item
         for item in re.findall(r'rel="preload" href="([^"]+)"', html)
@@ -118,6 +138,7 @@ for locale in L.LOCALES:
         html = (output / prefix / route / "index.html").read_text(encoding="utf-8")
         assert 'name="robots" content="noindex, follow"' in html
         verify_pack(html, locale, route)
+        verify_structured_data(html, base + L.page_path(route, locale))
 assert "Disallow:" not in (output / "robots.txt").read_text()
 assert "@import" not in (ROOT / "src/styles/styles.css").read_text(encoding="utf-8")
 index = json.loads((output / "assets/search-index.json").read_text(encoding="utf-8"))
@@ -127,6 +148,6 @@ assert {x["type"] for x in index} == {"tools", "games", "projects"}
 assert all(isinstance(x.get("aliases"), list) for x in index)
 print(
     f"PASS {len(urls)} public URLs, {len(page_files)} localized pages, "
-    "per-route dictionary parity, canonical/hreflang, noindex, self-hosted fonts, "
+    "per-route dictionary parity, canonical/hreflang, noindex, root WebSite markup, fonts, "
     f"{len(images)} social PNGs and {len(index)} public search entries."
 )

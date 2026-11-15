@@ -10,6 +10,7 @@ import re
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "src"
 LOCALES = ("en", "zh-Hant")
+SITE_NAME = "KenSei Workshop"
 CATALOG = {}
 for file in sorted((SOURCE / "i18n/catalog").glob("*.json")):
     CATALOG.update(json.loads(file.read_text(encoding="utf-8")))
@@ -403,6 +404,15 @@ def source_files(route):
     return files
 
 
+def json_for_script(value):
+    return (
+        json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        .replace("<", r"\u003c")
+        .replace(">", r"\u003e")
+        .replace("&", r"\u0026")
+    )
+
+
 def write_page(route, locale, raw, output, site_url, routes):
     parser = Annotator(locale)
     parser.feed(raw)
@@ -466,16 +476,10 @@ def write_page(route, locale, raw, output, site_url, routes):
         "routes": routes,
         "meta": meta,
     }
-    encoded = (
-        json.dumps(initial, ensure_ascii=False, separators=(",", ":"))
-        .replace("<", r"\u003c")
-        .replace(">", r"\u003e")
-        .replace("&", r"\u0026")
-    )
     body = body.replace(
         "</head>",
         '<script id="site-locale-data" type="application/json">'
-        + encoded
+        + json_for_script(initial)
         + "</script>\n</head>",
     )
 
@@ -529,7 +533,7 @@ def head(route, locale, site_url):
             )
         for prop, value in [
             ("og:type", "website"),
-            ("og:site_name", "KenSei Workshop"),
+            ("og:site_name", SITE_NAME),
             ("og:title", meta["title"]),
             ("og:description", meta["description"]),
             ("og:url", meta["url"]),
@@ -552,6 +556,19 @@ def head(route, locale, site_url):
         ]:
             lines.append(
                 '<meta name="' + prop + '" content="' + escape(value, quote=True) + '">'
+            )
+        if route == "" and locale == "en":
+            # Google reads the site name from the domain root.
+            website = {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": SITE_NAME,
+                "url": meta["url"],
+            }
+            lines.append(
+                '<script type="application/ld+json">'
+                + json_for_script(website)
+                + "</script>"
             )
     else:
         lines.append('<meta name="robots" content="noindex, follow">')
