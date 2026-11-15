@@ -383,6 +383,22 @@
     "en": "Allow microphone access to begin. Nothing is recorded until access is granted…",
     "zh-Hant": "請允許麥克風存取以開始。在授予權限之前不會錄音…"
   },
+  "m_fc91ca6df3a0": {
+    "en": "Still waiting for microphone access. Check the browser prompt or this site's microphone permission. You can cancel and try again.",
+    "zh-Hant": "還在等待麥克風存取。請查看瀏覽器提示或本站的麥克風權限。你可以取消後再試一次。"
+  },
+  "m_f280d08443a8": {
+    "en": "Microphone request cancelled. Start recording to try again.",
+    "zh-Hant": "已取消麥克風請求。可再次點選開始錄音。"
+  },
+  "m_ba2440ecfd8d": {
+    "en": "Microphone permission was not granted. Allow microphone access for this site and for your browser app in system settings, then try again.",
+    "zh-Hant": "未取得麥克風權限。請允許本站使用麥克風，並檢查系統設定中的瀏覽器麥克風權限，然後再試。"
+  },
+  "m_c940a6276217": {
+    "en": "Cancel microphone request",
+    "zh-Hant": "取消麥克風請求"
+  },
   "m_7e0f570266eb": {
     "en": "{0}. Opening {1} in the editor…",
     "zh-Hant": "{0}。正在編輯器中開啟 {1}…"

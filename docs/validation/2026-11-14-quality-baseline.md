@@ -25,3 +25,8 @@ pnpm test:database
 - GitHub 的 `preview` 同時觸發 Actions 和 Vercel。兩者通過後，將已驗證的同一份來源推到 `KenSei-Workshop`。
 - 複查首頁四項安全標頭、帶雜湊的字型一年快取、`fonts.css` 與 Whiteboard 入口的重新驗證、象棋的隔離標頭及 KenSei Studio 更新檔的 `no-store`。在 HTTPS 正式頁面檢查相機、錄音、錄屏頁面仍允許使用本站權限。實機權限提示與模擬串流分開記錄。
 - 首頁熱門資料使用 Vercel Production 環境中的 `WORKSHOP_ANALYTICS_TOKEN`。若 `/api/home-popular/` 回傳 `updatedAt: null`，在 Vercel 後台確認環境變數、專案權限及函數記錄。調整環境變數後重新部署。同一區有至少四個實際瀏覽項目時會使用 `analytics`。成功讀取但樣本不足時仍以 `featured` 顯示，正常快取可維持約一天。
+
+## 2026-11-15 Android 實機回報
+
+- 使用者確認 Google 登入回跳、QR 掃碼、檔案下載和 Whiteboard 觸控通過。
+- Audio Studio 點擊錄音後未顯示麥克風權限提示。權限等待、取消、重試與錄音匯出由瀏覽器自動化複驗，修正後的 Android 麥克風流程待實機複驗。

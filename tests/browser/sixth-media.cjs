@@ -267,6 +267,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     pass(
       "real microphone stream recording, pause/resume, WebM metadata fallback, decode/waveform and WAV export",
     );
+    const originalRecording = await page.getAttribute(
+      "#audio-record-preview",
+      "src",
+    );
     await page.evaluate(() => {
       __captureDeny = true;
     });
@@ -274,10 +278,83 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     await page.waitForFunction(() =>
       document
         .querySelector("#audio-record-status")
-        .textContent.includes("Permission"),
+        .textContent.includes("browser app in system settings"),
     );
     assert.equal(await page.isDisabled("#audio-file"), false);
-    pass("microphone denial leaves existing audio editor usable");
+    assert.equal(
+      await page.getAttribute("#audio-record-preview", "src"),
+      originalRecording,
+    );
+    pass(
+      "microphone denial explains site and system settings and keeps the recording",
+    );
+
+    await page.evaluate(() => {
+      __captureDeny = false;
+      __captureWait = true;
+    });
+    await page.click("#audio-record-start");
+    await page.waitForFunction(() =>
+      document
+        .querySelector("#audio-record-status")
+        .textContent.includes("Still waiting for microphone access"),
+    );
+    await captureLocale();
+    await page.evaluate(() => {
+      window.__cancelledMicrophone = {
+        resolve: __captureResolve,
+        stream: __captureStreams.at(-1),
+      };
+      __captureResolve = null;
+    });
+    await page.click("#audio-record-cancel");
+    assert.equal(await page.isVisible("#audio-record-cancel"), false);
+    assert.equal(await page.isDisabled("#audio-file"), false);
+    assert.equal(
+      await page.getAttribute("#audio-record-preview", "src"),
+      originalRecording,
+    );
+    assert.equal(
+      await page.evaluate(() => document.activeElement.id),
+      "audio-record-start",
+    );
+
+    await page.click("#audio-record-start");
+    await page.waitForFunction(() => typeof __captureResolve === "function");
+    await page.evaluate(() => {
+      window.__nativeAudioContext = window.AudioContext;
+      window.AudioContext = class extends window.AudioContext {
+        get state() {
+          return "suspended";
+        }
+        resume() {
+          return new Promise(() => {});
+        }
+      };
+      __captureResolve();
+    });
+    await page.waitForSelector("#audio-record-stop:enabled", { timeout: 5000 });
+    await page.evaluate(() => {
+      window.AudioContext = __nativeAudioContext;
+      __cancelledMicrophone.resolve();
+    });
+    await page.waitForFunction(() =>
+      __cancelledMicrophone.stream
+        .getTracks()
+        .every((track) => track.readyState === "ended"),
+    );
+    assert.equal(await page.isDisabled("#audio-record-stop"), false);
+    await page.waitForTimeout(850);
+    await page.click("#audio-record-stop");
+    await page.waitForFunction(() =>
+      document
+        .querySelector("#audio-record-status")
+        .textContent.includes("Recording ready in the editor"),
+    );
+    assert.equal(await allStopped(), true);
+    pass(
+      "unanswered microphone request is cancellable; late grants are released and a suspended meter never blocks retry",
+    );
 
     await open("qr-studio");
     await page.fill(
