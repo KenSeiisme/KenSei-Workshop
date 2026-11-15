@@ -417,17 +417,21 @@ let microphoneStream = null,
   recordedUrl = null,
   recordingUnsaved = false;
 if ($("#audio-record-start")) {
+  const canEdit = supportsAudioEditing(),
+    canRecord =
+      canEdit &&
+      navigator.mediaDevices?.getUserMedia &&
+      globalThis.MediaRecorder,
+    cancelRequest = $("#audio-record-cancel");
+  let permissionHintTimer = null;
   const recordStatus = (text, error = false) => {
     uiText($("#audio-record-status"), text);
     $("#audio-record-status").classList.toggle("error-text", error);
   };
   function recordingControls() {
     $("#audio-record-start").disabled =
-      !supportsAudioEditing() ||
-      recordPending ||
-      recordingState !== "idle" ||
-      !navigator.mediaDevices?.getUserMedia ||
-      !globalThis.MediaRecorder;
+      !canRecord || recordPending || recordingState !== "idle";
+    cancelRequest.hidden = !recordPending;
     $("#audio-record-pause").disabled = !["recording", "paused"].includes(
       recordingState,
     );
@@ -449,6 +453,33 @@ if ($("#audio-record-start")) {
     microphoneContext?.close().catch(() => {});
     microphoneContext = null;
     $("#audio-record-level").value = 0;
+  }
+  function startMicrophoneMeter(stream) {
+    // Recording can start while the optional level meter waits for audio playback.
+    try {
+      microphoneContext = new (audioContextType())();
+      if (microphoneContext.state === "suspended")
+        microphoneContext.resume().catch(() => {});
+      const analyser = microphoneContext.createAnalyser();
+      analyser.fftSize = 256;
+      microphoneContext.createMediaStreamSource(stream).connect(analyser);
+      const data = new Float32Array(analyser.fftSize);
+      const tick = () => {
+        if (!microphoneStream) return;
+        analyser.getFloatTimeDomainData(data);
+        let sum = 0;
+        for (const value of data) sum += value * value;
+        $("#audio-record-level").value =
+          recordingState === "paused"
+            ? 0
+            : Math.min(1, Math.sqrt(sum / data.length) * 4);
+        levelFrame = requestAnimationFrame(tick);
+      };
+      tick();
+    } catch {
+      microphoneContext?.close().catch(() => {});
+      microphoneContext = null;
+    }
   }
   function clearRecording() {
     if (recordedUrl) URL.revokeObjectURL(recordedUrl);
@@ -474,7 +505,7 @@ if ($("#audio-record-start")) {
     recordingControls();
   }
   $("#audio-record-start").onclick = async () => {
-    if (recordPending || recordingState !== "idle") return;
+    if (!canRecord || recordPending || recordingState !== "idle") return;
     if (
       recordingUnsaved &&
       !uiConfirm(
@@ -485,7 +516,6 @@ if ($("#audio-record-start")) {
     )
       return;
     stopPlayback();
-    clearRecording();
     const token = ++recordingGeneration;
     recordPending = true;
     busy(true);
@@ -494,6 +524,11 @@ if ($("#audio-record-start")) {
     recordStatus(
       "Allow microphone access to begin. Nothing is recorded until access is granted…",
     );
+    permissionHintTimer = setTimeout(() => {
+      recordStatus(
+        "Still waiting for microphone access. Check the browser prompt or this site's microphone permission. You can cancel and try again.",
+      );
+    }, 8000);
     let incoming = null;
     try {
       incoming = await navigator.mediaDevices.getUserMedia({
@@ -505,34 +540,6 @@ if ($("#audio-record-start")) {
         return;
       }
       microphoneStream = incoming;
-      try {
-        microphoneContext = new (audioContextType())();
-        if (microphoneContext.state === "suspended")
-          await microphoneContext.resume();
-        if (token !== recordingGeneration) {
-          releaseMicrophone();
-          return;
-        }
-        const analyser = microphoneContext.createAnalyser();
-        analyser.fftSize = 256;
-        microphoneContext.createMediaStreamSource(incoming).connect(analyser);
-        const data = new Float32Array(analyser.fftSize);
-        const tick = () => {
-          if (!microphoneStream) return;
-          analyser.getFloatTimeDomainData(data);
-          let sum = 0;
-          for (const value of data) sum += value * value;
-          $("#audio-record-level").value =
-            recordingState === "paused"
-              ? 0
-              : Math.min(1, Math.sqrt(sum / data.length) * 4);
-          levelFrame = requestAnimationFrame(tick);
-        };
-        tick();
-      } catch {
-        microphoneContext?.close().catch(() => {});
-        microphoneContext = null;
-      }
       microphoneRecorder = makeRecording(incoming, {
         types: AUDIO_TYPES,
         maxSeconds: 300,
@@ -582,7 +589,9 @@ if ($("#audio-record-start")) {
         },
       });
       microphoneRecorder.start();
+      clearRecording();
       recordingUnsaved = true;
+      startMicrophoneMeter(incoming);
       uiText($("#audio-record-time"), "00:00");
       recordStatus(
         "Recording from your microphone. Stop to edit and export your clip.",
@@ -596,16 +605,32 @@ if ($("#audio-record-start")) {
       microphoneRecorder = null;
       releaseMicrophone();
       recordingState = "idle";
-      recordingUnsaved = false;
       busy(false);
       controls();
-      recordStatus(mediaError(error), true);
+      recordStatus(
+        ["NotAllowedError", "SecurityError"].includes(error?.name)
+          ? "Microphone permission was not granted. Allow microphone access for this site and for your browser app in system settings, then try again."
+          : mediaError(error),
+        true,
+      );
     } finally {
       if (token === recordingGeneration) {
+        clearTimeout(permissionHintTimer);
         recordPending = false;
         recordingControls();
       }
     }
+  };
+  cancelRequest.onclick = () => {
+    if (!recordPending) return;
+    recordingGeneration++;
+    clearTimeout(permissionHintTimer);
+    recordPending = false;
+    busy(false);
+    controls();
+    recordingControls();
+    recordStatus("Microphone request cancelled. Start recording to try again.");
+    $("#audio-record-start").focus();
   };
   $("#audio-record-stop").onclick = () =>
     microphoneRecorder?.stop("Stopped by you");
@@ -630,13 +655,18 @@ if ($("#audio-record-start")) {
   };
   $("#audio-record-retry").onclick = openRecording;
   window.addEventListener("beforeunload", (event) => {
-    if (recordingUnsaved || recordPending || recordingState !== "idle") {
+    if (recordingUnsaved || recordingState !== "idle") {
       event.preventDefault();
       event.returnValue = "";
     }
   });
   window.addEventListener("pagehide", () => {
     recordingGeneration++;
+    clearTimeout(permissionHintTimer);
+    if (recordPending)
+      recordStatus(
+        "Microphone request cancelled. Start recording to try again.",
+      );
     microphoneRecorder?.dispose();
     microphoneRecorder = null;
     releaseMicrophone();
@@ -644,9 +674,12 @@ if ($("#audio-record-start")) {
     recordingState = "idle";
     recordingControls();
   });
-  if (!navigator.mediaDevices?.getUserMedia || !globalThis.MediaRecorder)
+  if (!canRecord)
     recordStatus(
-      "Microphone recording is unavailable in this browser. You can still open an audio file below.",
+      canEdit
+        ? "Microphone recording is unavailable in this browser. You can still open an audio file below."
+        : AUDIO_UNAVAILABLE,
+      true,
     );
   recordingControls();
 }
