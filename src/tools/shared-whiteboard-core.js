@@ -3,8 +3,35 @@ import {
   sceneSettings,
   validateWhiteboard,
 } from "./whiteboard-core.js";
+import { recordSignature } from "./record-store.js";
+
+export function elementContent(element) {
+  if (element.isDeleted)
+    return JSON.stringify([element.id, element.type, true]);
+  const { version, versionNonce, updated, ...content } =
+    compactDeleted(element);
+  return recordSignature(content);
+}
 export const elementStamp = (e) =>
   `${e.version}:${e.versionNonce}:${e.index}:${e.isDeleted}`;
+
+export function mergeSharedElements(existing, incoming) {
+  const merged = new Map(existing.map((element) => [element.id, element]));
+  for (const element of incoming) {
+    const previous = merged.get(element.id);
+    if (
+      !previous ||
+      element.version > previous.version ||
+      (element.version === previous.version &&
+        element.versionNonce < previous.versionNonce)
+    )
+      merged.set(element.id, element);
+  }
+  return [...merged.values()].sort((a, b) => {
+    if (a.index !== b.index) return a.index < b.index ? -1 : 1;
+    return a.id < b.id ? -1 : a.id === b.id ? 0 : 1;
+  });
+}
 export function sharedChanges(elements) {
   assertVectorScene(elements);
   for (const e of elements) {
