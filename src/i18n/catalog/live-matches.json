@@ -1,0 +1,106 @@
+{
+  "m_7900c231436f": {
+    "en": "Online matches",
+    "zh-Hant": "線上對局"
+  },
+  "m_c1be60c35e3f": {
+    "en": "Waiting for Ready",
+    "zh-Hant": "等待玩家準備"
+  },
+  "m_a47186f64a83": {
+    "en": "In play",
+    "zh-Hant": "對局進行中"
+  },
+  "m_d26b18b0dc16": {
+    "en": "Confirming the score",
+    "zh-Hant": "確認計分"
+  },
+  "m_691ffc45978d": {
+    "en": "Scoring dispute",
+    "zh-Hant": "計分爭議"
+  },
+  "m_16e29a3401c3": {
+    "en": "Waiting to resume",
+    "zh-Hant": "等待恢復對局"
+  },
+  "m_eb7dcbd885fa": {
+    "en": "Online matches could not load. Retry when connected.",
+    "zh-Hant": "無法載入線上對局。請在恢復連線後重試。"
+  },
+  "m_1ba2a20348b6": {
+    "en": "Score · {0}–{1}",
+    "zh-Hant": "比分 · {0}–{1}"
+  },
+  "m_1b5652b42338": {
+    "en": "Return to match",
+    "zh-Hant": "返回對局"
+  },
+  "m_2b3611ef7d89": {
+    "en": "· {0} s remaining",
+    "zh-Hant": "· 剩餘 {0} 秒"
+  },
+  "m_14249cb6207e": {
+    "en": "Sign in to return to this online match.",
+    "zh-Hant": "登入後即可返回這場線上對局。"
+  },
+  "m_f1f90b12cb68": {
+    "en": "Opening your online match…",
+    "zh-Hant": "正在開啟線上對局…"
+  },
+  "m_66571a6091fc": {
+    "en": "The match could not load. Retry when connected.",
+    "zh-Hant": "無法載入對局。請在恢復連線後重試。"
+  },
+  "m_4ea3357cf91b": {
+    "en": "This match has ended, expired or is unavailable to this account.",
+    "zh-Hant": "對局已結束、已逾期，或此帳號無法存取。"
+  },
+  "m_396483ccc571": {
+    "en": "Read-only tab",
+    "zh-Hant": "唯讀分頁"
+  },
+  "m_9e1c15517720": {
+    "en": "Take control in this tab to play.",
+    "zh-Hant": "在此分頁接管後即可繼續遊玩。"
+  },
+  "m_2125bd955188": {
+    "en": "Take control of this match in this tab?",
+    "zh-Hant": "要在此分頁接管這場對局嗎？"
+  },
+  "m_511a2896853b": {
+    "en": "Confirming the score…",
+    "zh-Hant": "正在確認比分…"
+  },
+  "m_e8a8877216f8": {
+    "en": "Both players must press Ready within {0} s.",
+    "zh-Hant": "雙方須在 {0} 秒內按下準備。"
+  },
+  "m_2f5920f702f6": {
+    "en": "Use Retry connection to confirm the point.",
+    "zh-Hant": "請按「重試連線」確認這一分。"
+  },
+  "m_9861b5091508": {
+    "en": "Restoring the room connection.",
+    "zh-Hant": "正在恢復房間連線。"
+  },
+  "m_bc74b97817ae": {
+    "en": "Return from Online matches in the Games lobby within 60 seconds. Both players press Ready to resume.",
+    "zh-Hant": "請在 60 秒內從遊戲大廳的「線上對局」返回。雙方按下準備後繼續。"
+  },
+  "m_d600481d77ae": {
+    "en": "Returning to a match keeps the confirmed score and time, then starts with a new serve.",
+    "zh-Hant": "返回對局後保留已確認的比分與用時，並重新發球。"
+  },
+  "m_dc29e0ff2bb4": {
+    "en": "Refresh Pong to join this room.",
+    "zh-Hant": "請重新整理 Pong 再加入這個房間。"
+  },
+  "m_f17dd4ba426c": {
+    "en": "Invalid Pong checkpoint.",
+    "zh-Hant": "Pong 恢復資料無效。"
+  },
+  "m_44e09332f425": {
+    "en": "Only the room host can save the score",
+    "zh-Hant": "只有房主可以儲存比分。"
+  }
+}

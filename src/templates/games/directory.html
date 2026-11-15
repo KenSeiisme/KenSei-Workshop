@@ -65,6 +65,19 @@
     </div>
     <div class="hub-slides">${featured}</div>
   </section>
+  <section
+    class="panel hub-live"
+    aria-labelledby="hub-live-title"
+    data-hub-live
+    hidden
+  >
+    <h2 id="hub-live-title">Online matches</h2>
+    <p class="small muted" data-live-game-status role="status"></p>
+    <div data-live-game-list></div>
+    <button type="button" class="text-link" data-live-game-retry hidden>
+      Retry
+    </button>
+  </section>
   <section id="games-library" aria-labelledby="games-library-heading">
     <div class="game-library-heading">
       <div>

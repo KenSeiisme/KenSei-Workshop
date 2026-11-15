@@ -1,3 +1,4 @@
+import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, downloadText } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import { createRecordStore } from "/tool-scripts/record-store.js";
@@ -835,6 +836,7 @@ async function acceptRoom(next) {
   cancelAI();
   room = next;
   if (matchEnded(room) || !room.controller) pending = null;
+  showMatchLink("");
   showMissingSave(root, false);
   mode = "online";
   queued = false;
@@ -1445,6 +1447,32 @@ function setupChanged() {
 }
 for (const select of root.querySelectorAll(".xiangqi-entry select"))
   select.onchange = setupChanged;
+const showMatchLink = mountMatchLink(root);
+async function openBoardMatchLink() {
+  const requested = requestedMatch();
+  const epoch = onlineEpoch;
+  if (requested !== null && !MATCH_ID.test(requested)) {
+    showMatchLink("unavailable");
+    return;
+  }
+  if (requested !== null) showMatchLink("loading");
+  try {
+    const data = await rpc("get", requested ? { match_id: requested } : {});
+    if (epoch !== onlineEpoch) return;
+    if (data?.id) await acceptRoom(data);
+    if (epoch === onlineEpoch)
+      showMatchLink(requested !== null && !room ? "unavailable" : "");
+  } catch (error) {
+    if (error.staleBoardRequest || epoch !== onlineEpoch) return;
+    if (requested !== null) {
+      const retry =
+        !error.status ||
+        [408, 429].includes(error.status) ||
+        error.status >= 500;
+      showMatchLink(retry ? "retry" : "unavailable", openBoardMatchLink);
+    } else say(uiError(error));
+  }
+}
 async function authChanged() {
   if (identity !== owner()) {
     onlineEpoch++;
@@ -1465,16 +1493,9 @@ async function authChanged() {
   }
   await refreshSaves().catch((e) => say(uiError(e)));
   refreshRank();
-  if (api.user && !state && !room) {
-    const epoch = onlineEpoch;
-    try {
-      const requested = new URLSearchParams(location.search).get("match");
-      const data = await rpc("get", requested ? { match_id: requested } : {});
-      if (epoch === onlineEpoch && data.id) await acceptRoom(data);
-    } catch (e) {
-      if (!e.staleBoardRequest) say(uiError(e));
-    }
-  }
+  if (api.user && !state && !room) await openBoardMatchLink();
+  else if (!api.user && requestedMatch() !== null) showMatchLink("guest");
+  else showMatchLink("");
   if (
     new URLSearchParams(location.search).has("save") &&
     savedRow &&

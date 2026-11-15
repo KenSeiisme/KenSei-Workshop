@@ -1,3 +1,4 @@
+import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, esc, downloadText } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import { createRecordStore } from "/tool-scripts/record-store.js";
@@ -932,6 +933,7 @@ async function acceptRoom(next) {
   const changed = room?.id !== next.id || room?.revision !== next.revision;
   room = next;
   if (matchEnded(room) || !room.controller) pendingCommand = null;
+  showMatchLink("");
   showMissingSave(root, false);
   clockOffset = next.server_now - Date.now();
   mode = "online";
@@ -1536,6 +1538,32 @@ $("#go-board-more").onclick = () => {
 };
 for (const node of $(".go-leaderboard-filters").querySelectorAll("select"))
   node.onchange = refreshRank;
+const showMatchLink = mountMatchLink(root);
+async function openBoardMatchLink() {
+  const requested = requestedMatch();
+  const epoch = onlineEpoch;
+  if (requested !== null && !MATCH_ID.test(requested)) {
+    showMatchLink("unavailable");
+    return;
+  }
+  if (requested !== null) showMatchLink("loading");
+  try {
+    const data = await rpc("get", requested ? { match_id: requested } : {});
+    if (epoch !== onlineEpoch) return;
+    if (data?.id) await acceptRoom(data);
+    if (epoch === onlineEpoch)
+      showMatchLink(requested !== null && !room ? "unavailable" : "");
+  } catch (error) {
+    if (error.staleBoardRequest || epoch !== onlineEpoch) return;
+    if (requested !== null) {
+      const retry =
+        !error.status ||
+        [408, 429].includes(error.status) ||
+        error.status >= 500;
+      showMatchLink(retry ? "retry" : "unavailable", openBoardMatchLink);
+    } else say(uiError(error));
+  }
+}
 async function authChanged() {
   const next = owner();
   if (next !== identity) {
@@ -1559,14 +1587,9 @@ async function authChanged() {
   }
   await refreshSaves().catch((e) => say(uiError(e)));
   refreshRank();
-  if (api.user && !state && !room) {
-    try {
-      const data = await rpc("get");
-      if (data?.id) await acceptRoom(data);
-    } catch (e) {
-      if (!e.staleBoardRequest) say(uiError(e));
-    }
-  }
+  if (api.user && !state && !room) await openBoardMatchLink();
+  else if (!api.user && requestedMatch() !== null) showMatchLink("guest");
+  else showMatchLink("");
   const requested = new URLSearchParams(location.search).get("save");
   if (requested && savedRow && !state && !room) startLocal(true);
   render();
