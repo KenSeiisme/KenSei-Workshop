@@ -1,5 +1,5 @@
 import { $ } from "./common.js";
-import { el, row, field, select, button } from "./advanced-ui.js";
+import { row, field, select } from "./advanced-ui.js";
 import { sendControl } from "./handoff.js";
 export function init() {
   const ctx = window.KenseiAdvancedContexts["screen-recorder"],
@@ -9,12 +9,7 @@ export function init() {
     ]);
   window.KenseiRecorderPreset = 1080;
   preset.onchange = () => (window.KenseiRecorderPreset = +preset.value);
-  $("#screen-start").before(
-    row(
-      field("Recording preset", preset),
-      button("Cancel countdown", () => ctx.cancelCountdown()),
-    ),
-  );
+  $("#screen-start").before(row(field("Recording preset", preset)));
   sendControl(
     $("#screen-download").parentElement,
     () =>

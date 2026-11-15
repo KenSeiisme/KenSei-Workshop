@@ -95,6 +95,14 @@ export function makeRecording(
       onState("stopping");
       try {
         recorder.stop();
+        if (!disposed) {
+          finalTimer = setTimeout(() => {
+            failure ||= Error(
+              "The browser did not finish the recording. Please try again.",
+            );
+            complete();
+          }, 5000);
+        }
       } catch (error) {
         failure = error;
         complete();
@@ -105,12 +113,12 @@ export function makeRecording(
     stop("Capture source ended");
   }
   function complete() {
+    if (disposed) return;
     const seconds = Math.max(
       0,
       ((pausedAt ?? endedAt ?? now()) - started - pausedFor) / 1000,
     );
     clean();
-    if (disposed) return;
     disposed = true;
     const blob = new Blob(chunks, {
       type:
@@ -150,6 +158,7 @@ export function makeRecording(
       clearInterval(timer);
       onState("stopping");
       // 错误事件后浏览器通常仍发送最终 dataavailable 和 stop，先接收再收尾。
+      clearTimeout(finalTimer);
       finalTimer = setTimeout(complete, 1000);
     } else stop("Recording interrupted");
   };

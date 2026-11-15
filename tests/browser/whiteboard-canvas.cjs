@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("../support/browser.cjs");
+const { saveBrowserFailure } = require("../support/browser-artifacts.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8780";
 const out = "_qa/whiteboard-canvas";
 fs.mkdirSync(out, { recursive: true });
@@ -383,6 +384,9 @@ fs.mkdirSync(out, { recursive: true });
     console.log(
       "PASS canvas entry, repeated drawing, native lock/selection, 12-port sharp/round/elbow bindings and transforms, no idle loops, focus/fullscreen/locale identity, real PNG/SVG/JSON exports, all paper presets, reload/Continue and six layouts; no file uploads",
     );
+  } catch (error) {
+    await saveBrowserFailure(context, "whiteboard-canvas");
+    throw error;
   } finally {
     await browser.close();
   }

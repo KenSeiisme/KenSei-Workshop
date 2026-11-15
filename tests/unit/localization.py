@@ -48,6 +48,8 @@ messages_by_route = {
     "": ["Chess files could not load. Reload this page to retry."],
     "workspace": ["Favorited", "{0} · {1}/{2} known"],
     "tools/file-check": ["Hashing file {0} of {1}…"],
+    "tools/qr-studio": ["Cancel camera request"],
+    "tools/screen-recorder": ["Cancel capture", "Cancel countdown"],
     "tools/file-renamer": ["Move {0} up", "Move {0} down"],
     "tools/data-studio": ["{0} / {1} · {2} rows"],
     "tools/flashcards": ["{0} / {1} known", "Card {0} / {1} · {2} known"],

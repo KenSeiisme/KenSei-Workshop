@@ -1,5 +1,6 @@
 const assert = require("node:assert/strict");
 const { chromium } = require("../support/browser.cjs");
+const { saveBrowserFailure } = require("../support/browser-artifacts.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
 
 (async () => {
@@ -702,6 +703,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     console.log(
       "PASS lobby layouts and motion, verified and guest profiles, leaderboard previews and deep links, resume count, local scores and cross-tab skins",
     );
+  } catch (error) {
+    await saveBrowserFailure(context, "game-hub");
+    throw error;
   } finally {
     await browser.close();
   }

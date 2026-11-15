@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs");
 const { chromium } = require("../support/browser.cjs");
+const { saveBrowserFailure } = require("../support/browser-artifacts.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
 async function locale(page, value) {
   await page.evaluate((value) => window.KenseiI18n.setLocale(value), value);
@@ -250,6 +251,9 @@ async function locale(page, value) {
     assert.deepEqual(errors, []);
     assert.deepEqual(writes, []);
     console.log("PASS no file/recovery/media upload requests");
+  } catch (error) {
+    await saveBrowserFailure(context, "localization");
+    throw error;
   } finally {
     await browser.close();
   }
