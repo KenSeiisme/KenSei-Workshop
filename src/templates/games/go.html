@@ -118,6 +118,12 @@
               Continue saved game
             </button>
           </div>
+          <p data-missing-game-save class="small muted" role="status" hidden>
+            <span></span>
+            <a class="text-link" href="/games/#continue-title"
+              >Back to saved games</a
+            >
+          </p>
           <div id="go-online-entry" hidden>
             <div class="go-start-actions">
               <button class="button primary" id="go-create">Create room</button
@@ -170,6 +176,12 @@
           </div>
         </section>
       </div>
+      <p
+        data-board-connection
+        class="small game-connection-status"
+        role="status"
+        hidden
+      ></p>
       <p id="go-status" class="go-status" role="status" aria-live="polite">
         Choose your settings and start when you are ready.
       </p>
@@ -186,6 +198,13 @@
           Take control</button
         ><button class="button secondary" id="go-retry" hidden>
           Retry connection</button
+        ><button
+          class="button secondary"
+          id="go-retry-move"
+          data-board-retry-move
+          hidden
+        >
+          Retry move</button
         ><button class="button secondary" data-shell-menu>Menu</button>
       </div>
       <div class="go-zoom">

@@ -20,6 +20,18 @@ import {
 import { formatGoClock, clockView } from "./go-clock.js";
 import { mountPlayShell } from "./play-shell.js";
 import {
+  invokeBoardRequest,
+  matchEnded,
+  paintBoardConnection,
+  rejectedBoardCommand,
+  requireCurrentBoardRequest,
+} from "./board-connection.js";
+import {
+  isUnfinishedSave,
+  lookupSavedGame,
+  showMissingSave,
+} from "./saved-game-ui.js";
+import {
   boardPodiumDetail,
   boardPodiumResult,
   paintPodium,
@@ -174,7 +186,8 @@ let cursor = 40,
   channelKey = "",
   channelEpoch = 0,
   pollTimer = null,
-  polling = false,
+  polling = null,
+  onlineEpoch = 0,
   pendingCommand = null,
   clockOffset = 0,
   replayPly = null,
@@ -491,7 +504,14 @@ function render() {
     ]),
   );
   $("#go-takeover").hidden = !room || room.controller;
-  $("#go-retry").hidden = !room || (connected && !pendingCommand);
+  $("#go-retry").hidden = !room || matchEnded(room) || connected;
+  $("#go-retry").disabled = busy;
+  paintBoardConnection(root, {
+    room,
+    connected,
+    pending: pendingCommand,
+    busy,
+  });
   $("#go-confirm-place").hidden = candidate === null || locked();
   $("#go-score-confirm").disabled =
     phase !== "scoring" || busy || (!!room && (!connected || !room.controller));
@@ -655,7 +675,7 @@ async function guarded(fn) {
   try {
     await fn();
   } catch (e) {
-    say(uiError(e));
+    if (!e.staleBoardRequest) say(uiError(e));
   } finally {
     busy = false;
     render();
@@ -706,9 +726,11 @@ async function refreshSaves() {
   await store.load(true);
   if (identity !== owner()) return;
   const c = setup(),
-    id = new URLSearchParams(location.search).get("save");
-  savedRow = id
-    ? await store.get(id)
+    id = new URLSearchParams(location.search).get("save"),
+    expected = owner(),
+    epoch = onlineEpoch;
+  const row = id
+    ? await lookupSavedGame(store, id, "go")
     : store
         .rows()
         .find(
@@ -718,6 +740,9 @@ async function refreshSaves() {
             r.data.state.config.size === c.size &&
             r.data.state.status === "playing",
         );
+  if (expected !== owner() || epoch !== onlineEpoch) return;
+  savedRow = isUnfinishedSave(row, "go") ? row : null;
+  showMissingSave(root, !!id && !savedRow && !room && !state);
   $("#go-continue").hidden = !savedRow;
   text(
     "#go-save-info",
@@ -753,6 +778,11 @@ function refreshPrivateRecords() {
   );
 }
 function startLocal(restore = false) {
+  if (room && !matchEnded(room))
+    throw Error("Leave the online match before starting practice.");
+  onlineEpoch++;
+  queued = false;
+  pendingCommand = null;
   newActivity = !restore;
   confirmation = null;
   cancelAI();
@@ -837,19 +867,28 @@ async function rpc(action, body = {}) {
     api.openAuth(location.pathname + location.search);
     throw Error("Sign in to play online Go.");
   }
-  const expected = owner(),
-    result = await api.client.functions.invoke(`board-match/${action}`, {
-      body: { ...body, client_id: tab },
-    });
-  if (expected !== owner()) throw Error("Account changed. Reopen this game.");
-  let data = result.data;
-  if (result.error?.context?.json) {
-    try {
-      data = await result.error.context.json();
-    } catch {}
-  }
-  if (result.error || data?.error) {
-    if (data?.snapshot) await acceptRoom(data.snapshot);
+  const expectedOwner = owner(),
+    epoch = onlineEpoch,
+    expectedRoom = room?.id;
+  const isCurrent = () =>
+    !closed &&
+    expectedOwner === owner() &&
+    epoch === onlineEpoch &&
+    room?.id === expectedRoom;
+  const { reply: data, error } = await invokeBoardRequest(
+    api.client,
+    action,
+    {
+      ...body,
+      client_id: tab,
+    },
+    isCurrent,
+  );
+  requireCurrentBoardRequest(isCurrent);
+  if (error || data?.error) {
+    if (data?.snapshot && data.snapshot.id === expectedRoom)
+      await acceptRoom(data.snapshot);
+    requireCurrentBoardRequest(isCurrent);
     throw Object.assign(
       Error(
         data?.error ||
@@ -857,8 +896,8 @@ async function rpc(action, body = {}) {
       ),
       {
         status:
-          result.error?.context?.status ||
-          result.error?.status ||
+          error?.context?.status ||
+          error?.status ||
           (data?.error ? 400 : undefined),
         code: data?.code,
       },
@@ -884,9 +923,16 @@ async function subscribeRoom() {
 }
 async function acceptRoom(next) {
   if (!next?.id) return;
-  if (room?.id === next.id && next.revision < room.revision) return;
+  if (
+    room?.id === next.id &&
+    (next.revision < room.revision ||
+      (next.revision === room.revision && next.server_now < room.server_now))
+  )
+    return;
   const changed = room?.id !== next.id || room?.revision !== next.revision;
   room = next;
+  if (matchEnded(room) || !room.controller) pendingCommand = null;
+  showMissingSave(root, false);
   clockOffset = next.server_now - Date.now();
   mode = "online";
   queued = false;
@@ -921,7 +967,9 @@ async function onlineStart(action) {
     !uiConfirm(uiMsg("Leave the current practice game and open online play?"))
   )
     return;
+  const epoch = ++onlineEpoch;
   await ensureProfile();
+  if (epoch !== onlineEpoch) return;
   cancelAI();
   const config = setup();
   if (action === "queue" && (!standard(config) || config.clock !== config.size))
@@ -947,35 +995,54 @@ async function onlineStart(action) {
   render();
 }
 async function poll() {
-  if (polling || closed || !api.user || (!room && !queued)) return;
-  polling = true;
+  if (
+    polling?.epoch === onlineEpoch ||
+    closed ||
+    !api.user ||
+    (!queued && (!room || matchEnded(room)))
+  )
+    return;
+  const request = { epoch: onlineEpoch };
+  const previousRoom = room;
+  polling = request;
   try {
-    if (queued) {
-      const data = await rpc("queue", {
-        config: setup(),
-        rules_version: GO_VERSION,
-      });
-      if (data.id) await acceptRoom(data);
-    } else {
-      const data = await rpc("get", { match_id: room.id });
-      await acceptRoom(data);
-    }
-  } catch (e) {
+    const data = await rpc(
+      queued ? "queue" : "get",
+      queued
+        ? { config: setup(), rules_version: GO_VERSION }
+        : { match_id: room.id },
+    );
+    if (request.epoch === onlineEpoch && data?.id) await acceptRoom(data);
+  } catch (error) {
+    if (error.staleBoardRequest || room !== previousRoom) return;
     connected = false;
-    say(uiError(e));
+    say(uiError(error));
     render();
   } finally {
-    polling = false;
+    if (polling === request) polling = null;
   }
 }
-function reconcileFailure(error) {
-  const rejected =
-    Number.isInteger(error.status) &&
-    error.status >= 400 &&
-    error.status < 500 &&
-    ![408, 429].includes(error.status);
-  if (rejected) pendingCommand = null;
-  connected = rejected && error.status !== 401 && error.status !== 403;
+
+async function sendPendingMove() {
+  if (!pendingCommand || !connected || !room?.controller || matchEnded(room))
+    return;
+  const command = pendingCommand;
+  try {
+    const data = await rpc("command", command);
+    if (pendingCommand !== command) return;
+    pendingCommand = null;
+    await acceptRoom(data);
+    say("");
+  } catch (error) {
+    if (error.staleBoardRequest || pendingCommand !== command) throw error;
+    if (rejectedBoardCommand(error)) {
+      pendingCommand = null;
+      if (error.status === 401 || error.status === 403) connected = false;
+      if (error.code === "VERSION_CONFLICT")
+        throw Error("The board changed. Choose your move again.");
+    } else connected = false;
+    throw error;
+  }
 }
 async function act(action, actor) {
   if (!state || paused) return;
@@ -983,20 +1050,14 @@ async function act(action, actor) {
   if (room) {
     if (!connected || !room.controller)
       throw Error("Reconnect or take control before playing.");
-    pendingCommand ||= {
+    if (pendingCommand) return;
+    pendingCommand = {
       match_id: room.id,
       expected_version: room.revision,
       request_id: crypto.randomUUID(),
       action,
     };
-    try {
-      const data = await rpc("command", pendingCommand);
-      pendingCommand = null;
-      await acceptRoom(data);
-    } catch (e) {
-      reconcileFailure(e);
-      throw e;
-    }
+    await sendPendingMove();
   } else {
     chargePracticeClock();
     state = applyGo(
@@ -1139,8 +1200,8 @@ function newSetup() {
   )
     return;
   guarded(async () => {
-    if (room && !["finished", "closed", "interrupted"].includes(room.status))
-      await rpc("leave", { match_id: room.id });
+    onlineEpoch++;
+    if (room && !matchEnded(room)) await rpc("leave", { match_id: room.id });
     if (queued) await rpc("cancel");
     queued = false;
     room = null;
@@ -1280,21 +1341,11 @@ $("#go-takeover").onclick = () =>
     )
       await acceptRoom(await rpc("takeover", { match_id: room.id }));
   });
-$("#go-retry").onclick = () =>
-  guarded(async () => {
-    if (pendingCommand) {
-      try {
-        const data = await rpc("command", pendingCommand);
-        pendingCommand = null;
-        await acceptRoom(data);
-      } catch (e) {
-        reconcileFailure(e);
-        throw e;
-      }
-    } else await poll();
-  });
+$("#go-retry").onclick = () => guarded(poll);
+$("#go-retry-move").onclick = () => guarded(sendPendingMove);
 $("#go-cancel-wait").onclick = () =>
   guarded(async () => {
+    onlineEpoch++;
     if (queued) await rpc("cancel");
     else if (room) await rpc("leave", { match_id: room.id });
     room = null;
@@ -1488,6 +1539,7 @@ for (const node of $(".go-leaderboard-filters").querySelectorAll("select"))
 async function authChanged() {
   const next = owner();
   if (next !== identity) {
+    onlineEpoch++;
     stopAudio();
     generation++;
     cancelAI();
@@ -1512,7 +1564,7 @@ async function authChanged() {
       const data = await rpc("get");
       if (data?.id) await acceptRoom(data);
     } catch (e) {
-      say(uiError(e));
+      if (!e.staleBoardRequest) say(uiError(e));
     }
   }
   const requested = new URLSearchParams(location.search).get("save");
@@ -1525,6 +1577,7 @@ window.addEventListener("locale-change", () => {
   refreshRank();
 });
 window.addEventListener("online", poll);
+window.addEventListener("offline", poll);
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     reveal(false);
@@ -1538,6 +1591,7 @@ document.addEventListener("visibilitychange", () => {
   } else poll();
 });
 window.addEventListener("pagehide", () => {
+  onlineEpoch++;
   closed = true;
   generation++;
   cancelAI();

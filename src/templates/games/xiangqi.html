@@ -78,6 +78,12 @@
               Continue saved game
             </button>
           </div>
+          <p data-missing-game-save class="small muted" role="status" hidden>
+            <span></span>
+            <a class="text-link" href="/games/#continue-title"
+              >Back to saved games</a
+            >
+          </p>
           <div id="xiangqi-online-entry" hidden>
             <div class="xiangqi-actions">
               <button class="button primary" id="xiangqi-create">
@@ -142,6 +148,12 @@
         </section>
       </div>
       <p
+        data-board-connection
+        class="small game-connection-status"
+        role="status"
+        hidden
+      ></p>
+      <p
         class="xiangqi-status"
         id="xiangqi-status"
         role="status"
@@ -166,6 +178,13 @@
           Take control</button
         ><button class="button secondary" id="xiangqi-retry" hidden>
           Retry connection</button
+        ><button
+          class="button secondary"
+          id="xiangqi-retry-move"
+          data-board-retry-move
+          hidden
+        >
+          Retry move</button
         ><button class="button secondary" data-shell-menu>Menu</button>
       </div>
       <div id="xiangqi-draw-offer" class="xiangqi-notice" hidden>

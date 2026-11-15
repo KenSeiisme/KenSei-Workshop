@@ -165,6 +165,13 @@ export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
           b.created_at.localeCompare(a.created_at) || b.id.localeCompare(a.id),
       );
   const hasMore = () => active?.more || false;
+  function recordSaveStatus(id) {
+    if (!active || active.scope !== account()) return null;
+    if (active.scope === "guest") return "device";
+    if (!pending(active, id)) return "synced";
+    if (active.localError || active.failure) return "failed";
+    return active.flushing ? "syncing" : "pending";
+  }
   const saveState = () =>
     active?.localError ||
     active?.failure ||
@@ -311,6 +318,7 @@ export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
   async function get(id) {
     const s = await session();
     if (s.scope !== "guest" && api.client && !pending(s, id)) {
+      const revision = s.state.records[id]?.revision;
       try {
         const { data, error } = await rpc("get_private_record", {
           kind,
@@ -320,6 +328,11 @@ export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
         if (error) throw error;
         if (account() !== s.scope) return null;
         if (data) await merge(s, [data]);
+        else if (kind === "game" && s.state.records[id])
+          await change(s, () => {
+            if (!pending(s, id) && s.state.records[id]?.revision === revision)
+              delete s.state.records[id];
+          });
         s.failure = "";
       } catch {
         s.failure =
@@ -481,6 +494,7 @@ export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
     rows,
     hasMore,
     saveState,
+    recordSaveStatus,
     put,
     remove,
     clear,

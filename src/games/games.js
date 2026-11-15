@@ -40,9 +40,15 @@ import { mountAchievements } from "./achievements.js";
 import { mountPlayShell } from "./play-shell.js";
 import { mountLeaderboard } from "./leaderboard.js";
 import { mountGameHub } from "./hub.js";
+import {
+  isUnfinishedSave,
+  lookupSavedGame,
+  showMissingSave,
+} from "./saved-game-ui.js";
 import { localizedPath } from "./hub-rankings.js";
 import { trackGame } from "./hub-activity.js";
 import { readHub } from "./hub-store.js";
+import { GO_RULES } from "./go-engine.js";
 import { SNAKE_TICK_LIMIT } from "./snake-v2.js";
 import {
   uiDate,
@@ -63,6 +69,7 @@ const $ = (s) => document.querySelector(s),
   store = createRecordStore("game", validateSave, { syncDelay: 500 });
 const root = $("[data-game]"),
   game = root?.dataset.game;
+let requestedSave = null;
 const activity = game ? trackGame(game, $("#game-result")) : null;
 const owner = () => api.user?.id || "guest";
 const clock = (ms) =>
@@ -72,9 +79,7 @@ const clock = (ms) =>
     .toString()
     .padStart(2, "0")}`;
 const title = (d) =>
-  ["go", "chess", "xiangqi"].includes(d.game)
-    ? `${d.game === "go" ? "Go" : d.game === "chess" ? "Chess" : "Xiangqi"} · ${d.difficulty}`
-    : `${GAMES[d.game].name} · ${rules(d.game, d.difficulty).label}`;
+  `${GAMES[d.game].name} · ${rules(d.game, d.difficulty).label}`;
 let active = null,
   saveTimer,
   lastWritten = "",
@@ -330,15 +335,12 @@ function readyUI() {
     if (uiSource($("#game-status")).trim() === "Loading game…")
       status(uiMsg("Ready when you are."));
   }
-  const row = store
-    .rows()
-    .filter(
-      (r) =>
-        r.data.game === game &&
-        (r.data.difficulty === difficulty() || game === "snake") &&
-        r.data.state.status === "playing",
-    )
-    .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
+  const candidates = store.rows().filter((row) => isUnfinishedSave(row, game));
+  const row =
+    candidates.find((row) => row.id === requestedSave) ||
+    candidates
+      .filter((row) => row.data.difficulty === difficulty() || game === "snake")
+      .sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
   $("#game-restore").hidden = !row || running;
   $("#game-restore").dataset.id = row?.id || "";
   uiText($("#game-best"), displayResult(priorBest(game, difficulty()), game));
@@ -931,8 +933,20 @@ async function restore() {
   busy = true;
   syncShell();
   try {
-    const row = await store.get($("#game-restore").dataset.id);
-    if (!row) throw Error("That save was removed. Refresh saves to try again.");
+    const expected = owner();
+    const row = await lookupSavedGame(
+      store,
+      $("#game-restore").dataset.id,
+      game,
+    );
+    if (expected !== owner()) return;
+    requestedSave = null;
+    if (!row) {
+      readyUI();
+      showMissingSave(root, true);
+      return;
+    }
+    showMissingSave(root, false);
     const data = validateSave(row.data);
     active = data.state;
     if (!active.activityId) {
@@ -965,6 +979,51 @@ async function restore() {
 async function leaderboard() {
   return rankedBoard.refresh();
 }
+function saveMarkup(row, index, expanded) {
+  const { data, id, updated_at: updatedAt } = row;
+  const { game: slug, state } = data;
+  const mode =
+    data.mode === "ai" ? uiMsg("Computer") : uiMsg("Local two-player");
+  const summary =
+    slug === "go"
+      ? uiMsg("{0} · {1}×{1}", [
+          uiFrom(GO_RULES[state.config.rule].name),
+          state.config.size,
+        ])
+      : ["chess", "xiangqi"].includes(slug)
+        ? uiMsg("{0} · {1}", [
+            mode,
+            state.config.clock === "none"
+              ? uiMsg("Unlimited")
+              : state.config.clock,
+          ])
+        : uiMsg("{0} · {1}", [
+            uiFrom(rules(slug, data.difficulty).label),
+            clock(data.elapsed),
+          ]);
+  const sync = {
+    device: uiMsg("Saved on this device"),
+    synced: uiMsg("Saved · Synced"),
+    pending: uiMsg("Saved locally · Pending sync"),
+    syncing: uiMsg("Saved locally · Syncing"),
+    failed: uiMsg("Saved locally · Sync failed"),
+  }[store.recordSaveStatus(id)];
+  const legacy = retiredArcade(slug) && state.version < gameVersion(slug);
+  const name =
+    slug === "go"
+      ? uiMsg("Go")
+      : slug === "chess"
+        ? uiMsg("Chess")
+        : slug === "xiangqi"
+          ? uiMsg("Xiangqi")
+          : uiFrom(GAMES[slug].name);
+  const savedAt = uiDate(new Date(updatedAt || row.created_at), {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+  return uiHtml`<div class="saved-game-row" ${index >= 3 ? "data-save-extra" : ""} ${index >= 3 && !expanded ? "hidden" : ""}><div class="hub-save-title"><span class="hub-save-icon" data-game-theme="${esc(slug)}">${gameIcon(slug)}</span><div><strong>${name}${row.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${summary} · ${savedAt}</small><small><span>${uiMsg("Unranked")}</span>${legacy ? uiMsg(" · Legacy rules · v{0}", [state.version]) : ""}${sync ? uiJoin([" · ", sync]) : ""}</small></div></div><div><a class="button secondary" href="${localizedPath("/games/" + encodeURIComponent(slug) + "/")}?save=${encodeURIComponent(id)}">Continue</a><button class="text-link" data-delete-save="${esc(id)}">Delete</button></div></div>`;
+}
+
 async function renderSaves() {
   const node = $("#game-saves");
   if (!node) return;
@@ -972,19 +1031,14 @@ async function renderSaves() {
     node.closest("[data-saves-expanded]").dataset.savesExpanded === "true";
   const rows = store
     .rows()
-    .filter((r) => r.data.state?.status === "playing")
+    .filter((row) => isUnfinishedSave(row))
     .sort((a, b) =>
       (b.updated_at || b.created_at).localeCompare(
         a.updated_at || a.created_at,
       ),
     );
   node.innerHTML = rows.length
-    ? rows
-        .map(
-          (r, index) =>
-            uiHtml`<div class="saved-game-row" ${index >= 3 ? "data-save-extra" : ""} ${index >= 3 && !expanded ? "hidden" : ""}><div class="hub-save-title"><span class="hub-save-icon" data-game-theme="${esc(r.data.game)}">${gameIcon(r.data.game)}</span><div><strong>${esc(r.data.name || title(r.data))}${r.conflict ? uiMsg(" · conflict copy") : ""}</strong><small>${retiredArcade(r.data.game) && r.data.state.version < gameVersion(r.data.game) ? uiMsg("Legacy rules · v{0} · ", [r.data.state.version]) : ""}Local only · ${uiDate(new Date(r.updated_at), { dateStyle: "medium", timeStyle: "short" })} · ${clock(r.data.elapsed)}</small></div></div><div><a class="button secondary" href="${localizedPath(`/games/${encodeURIComponent(r.data.game)}/`)}?save=${encodeURIComponent(r.id)}">Continue</a><button class="text-link" data-delete-save="${esc(r.id)}">Delete</button></div></div>`,
-        )
-        .join("")
+    ? rows.map((r, index) => saveMarkup(r, index, expanded)).join("")
     : uiHtml(
         '<p class="game-empty-state">No unfinished games yet. Pick a game above.</p>',
       );
@@ -1214,6 +1268,8 @@ function bindGame() {
   const report = $("#game-result");
   if (report) $(".game-board-shell").append(report);
   $("#game-difficulty").onchange = () => {
+    requestedSave = null;
+    showMissingSave(root, false);
     localFallbackAvailable = false;
     startFailed = false;
     readyUI();
@@ -1389,9 +1445,11 @@ try {
   if (game) {
     readyUI();
     const requested = new URLSearchParams(location.search).get("save");
-    if (requested) {
-      const r = await store.get(requested);
-      if (r?.data.game === game) {
+    if (requested && !active) {
+      const expected = owner();
+      const r = await lookupSavedGame(store, requested, game);
+      if (owner() === expected && !active && r) {
+        requestedSave = r.id;
         if (game !== "snake" || r.data.difficulty === "normal")
           $("#game-difficulty").value = r.data.difficulty;
         $("#game-restore").dataset.id = r.id;
@@ -1401,6 +1459,8 @@ try {
         );
         syncShell();
         leaderboard();
+      } else if (owner() === expected && !active) {
+        showMissingSave(root, true);
       }
     }
   } else renderSaves();

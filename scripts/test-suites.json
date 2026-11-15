@@ -4,7 +4,8 @@
     ["tests/browser/tools-workflows.cjs"],
     ["tests/browser/sixth-media.cjs"],
     ["tests/browser/game-hub.cjs"],
-    ["tests/browser/whiteboard-canvas.cjs"]
+    ["tests/browser/whiteboard-canvas.cjs"],
+    ["tests/browser/navigation-recovery.cjs"]
   ],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],

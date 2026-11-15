@@ -158,14 +158,17 @@ function renderRoom() {
       else uiText(node, "?");
     }
   }
-  uiText(
-    $("#pong-connection-status"),
-    live
-      ? connected
-        ? uiMsg("Private connection · connected")
-        : uiMsg("Reconnecting · game paused")
-      : uiMsg("No active online match."),
-  );
+  const connectionStatus =
+    room?.status === "interrupted"
+      ? uiMsg("Match interrupted. Create a new room to play again.")
+      : !live
+        ? uiMsg("No active online match.")
+        : connecting || !connected || interruptedAt
+          ? uiMsg("Reconnecting… Use Retry connection if needed.")
+          : room.status === "paused"
+            ? uiMsg("Connected · Both players must press Ready to resume.")
+            : uiMsg("Private connection · connected");
+  uiText($("#pong-connection-status"), connectionStatus);
   uiText(
     $("#pong-latency"),
     latency === null
@@ -204,7 +207,9 @@ function renderRoom() {
   else if (room.status === "paused")
     overlay(
       "Paused",
-      "Both players press Ready to resume. Pauses last up to 60 seconds.",
+      connecting || !connected
+        ? "Play is paused. Reconnect within 15 seconds."
+        : "Both players press Ready to resume. Pauses last up to 60 seconds.",
     );
   else if (room.status === "interrupted" || room.status === "closed")
     overlay(
@@ -227,11 +232,8 @@ function renderRoom() {
           : "Match complete",
       "Private casual result · both players can Ready for a rematch.",
     );
-  } else if (!connected || interruptedAt)
-    overlay(
-      "Connection interrupted",
-      "Play is paused. Reconnect within 15 seconds.",
-    );
+  } else if (connecting || !connected || interruptedAt)
+    overlay("Reconnecting…", "Play is paused. Reconnect within 15 seconds.");
   else if (current && current.ticks < current.serveAt)
     overlay(
       current.ticks < 360
@@ -418,7 +420,13 @@ function receive(role, payload) {
   }
 }
 async function connect() {
-  if (!room || connecting || stopped) return;
+  if (
+    !room ||
+    connecting ||
+    stopped ||
+    ["closed", "interrupted"].includes(room.status)
+  )
+    return;
   connecting = true;
   disconnect(false);
   lastHeard = performance.now();
@@ -471,7 +479,7 @@ async function connect() {
     $("#pong-retry").hidden = true;
     tell("control");
     await poll();
-    if (reconnectCuePending) {
+    if (reconnectCuePending && connected) {
       reconnectCuePending = false;
       playCue("reconnect");
     }
