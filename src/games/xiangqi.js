@@ -25,6 +25,18 @@ import { boardClientId } from "./board-identity.js";
 import { trackBoardGame } from "./hub-activity.js";
 import { mountPlayShell } from "./play-shell.js";
 import {
+  invokeBoardRequest,
+  matchEnded,
+  paintBoardConnection,
+  rejectedBoardCommand,
+  requireCurrentBoardRequest,
+} from "./board-connection.js";
+import {
+  isUnfinishedSave,
+  lookupSavedGame,
+  showMissingSave,
+} from "./saved-game-ui.js";
+import {
   boardPodiumDetail,
   boardPodiumResult,
   paintPodium,
@@ -86,7 +98,7 @@ let identity = owner(),
   onlineEpoch = 0,
   savesSerial = 0,
   pending = null,
-  polling = false,
+  polling = null,
   channel = null,
   channelKey = "",
   channelEpoch = 0,
@@ -392,13 +404,14 @@ function render() {
     (!!room && (!connected || !room.controller)) ||
     (state.phase === "finished" && !isUnresolved());
   $("#xiangqi-takeover").hidden = !room || room.controller;
-  $("#xiangqi-retry").hidden =
-    (!pending && !room && !thinking) || (!pending && connected && !!room);
-  if (!room)
-    $("#xiangqi-retry").hidden =
-      !state ||
+  const retry = $("#xiangqi-retry");
+  retry.hidden = room
+    ? matchEnded(room) || connected
+    : !state ||
       state.phase !== "playing" ||
       !$("#xiangqi-status").dataset.retry;
+  retry.disabled = busy;
+  paintBoardConnection(root, { room, connected, pending, busy });
   for (const [color, id] of [
     [1, "red"],
     [-1, "black"],
@@ -560,6 +573,7 @@ async function guarded(fn) {
   try {
     await fn();
   } catch (e) {
+    if (e.staleBoardRequest) return;
     failed = true;
     say(uiError(e));
     tx("#xiangqi-entry-status", uiError(e));
@@ -624,12 +638,13 @@ async function refreshSaves() {
         (record) => record.data.game === "xiangqi" && !record.data.state.result,
       );
   const row = id
-    ? await store.get(id)
+    ? await lookupSavedGame(store, id, "xiangqi")
     : unfinished.find(
         (record) => record.data.state.config.clock === setup().clock,
       ) || unfinished[0];
   if (serial !== savesSerial || expected !== owner()) return;
-  savedRow = row?.data.game === "xiangqi" ? row : null;
+  savedRow = isUnfinishedSave(row, "xiangqi") ? row : null;
+  showMissingSave(root, !!id && !savedRow && !room && !state);
   $("#xiangqi-continue").hidden = !savedRow;
   tx(
     "#xiangqi-save-info",
@@ -655,6 +670,7 @@ function startLocal(restore = false, imported = null) {
   newActivity = !restore && !imported;
   if (room && room.status === "playing")
     throw Error("Leave the online match before starting practice.");
+  onlineEpoch++;
   cancelAI();
   tx("#xiangqi-entry-status", "");
   disconnect();
@@ -746,36 +762,29 @@ async function rpc(action, body = {}) {
     api.openAuth(location.pathname + location.search);
     throw Error("Sign in to play online xiangqi.");
   }
-  const expected = owner();
-  let timer, result;
-  try {
-    result = await Promise.race([
-      api.client.functions.invoke(`board-match/${action}`, {
-        body: { ...body, game: "xiangqi", client_id: tab },
-      }),
-      new Promise((_, reject) => {
-        timer = setTimeout(
-          () =>
-            reject(
-              Error(
-                "The online board could not be updated. Check your connection and retry.",
-              ),
-            ),
-          15000,
-        );
-      }),
-    ]);
-  } finally {
-    clearTimeout(timer);
-  }
-  if (expected !== owner()) throw Error("Account changed. Reopen this game.");
-  let data = result.data;
-  if (result.error?.context?.json)
-    try {
-      data = await result.error.context.json();
-    } catch {}
-  if (result.error || data?.error) {
-    if (data?.snapshot) await acceptRoom(data.snapshot);
+  const expectedOwner = owner(),
+    epoch = onlineEpoch,
+    expectedRoom = room?.id;
+  const isCurrent = () =>
+    !disposed &&
+    expectedOwner === owner() &&
+    epoch === onlineEpoch &&
+    room?.id === expectedRoom;
+  const { reply: data, error } = await invokeBoardRequest(
+    api.client,
+    action,
+    {
+      ...body,
+      game: "xiangqi",
+      client_id: tab,
+    },
+    isCurrent,
+  );
+  requireCurrentBoardRequest(isCurrent);
+  if (error || data?.error) {
+    if (data?.snapshot && data.snapshot.id === expectedRoom)
+      await acceptRoom(data.snapshot);
+    requireCurrentBoardRequest(isCurrent);
     throw Object.assign(
       Error(
         data?.error ||
@@ -783,9 +792,9 @@ async function rpc(action, body = {}) {
       ),
       {
         status:
-          result.error?.context?.status ||
-          result.error?.status ||
-          (data?.error ? 409 : undefined),
+          error?.context?.status ||
+          error?.status ||
+          (data?.error ? 400 : undefined),
         code: data?.code,
       },
     );
@@ -815,11 +824,18 @@ async function acceptRoom(next) {
   if (!next?.id) return;
   if (next.game !== "xiangqi")
     throw Error("This room belongs to another board game.");
-  if (room?.id === next.id && next.revision < room.revision) return;
+  if (
+    room?.id === next.id &&
+    (next.revision < room.revision ||
+      (next.revision === room.revision && next.server_now < room.server_now))
+  )
+    return;
   const newRoom = room?.id !== next.id,
     changed = newRoom || room.revision !== next.revision;
   cancelAI();
   room = next;
+  if (matchEnded(room) || !room.controller) pending = null;
+  showMissingSave(root, false);
   mode = "online";
   queued = false;
   connected = true;
@@ -893,9 +909,16 @@ async function onlineStart(action) {
   render();
 }
 async function poll() {
-  if (polling || disposed || !api.user || (!room && !queued)) return;
-  polling = true;
-  const epoch = onlineEpoch;
+  if (
+    polling?.epoch === onlineEpoch ||
+    disposed ||
+    !api.user ||
+    (!queued && (!room || matchEnded(room)))
+  )
+    return;
+  const request = { epoch: onlineEpoch };
+  const previousRoom = room;
+  polling = request;
   try {
     const data = await rpc(
       queued ? "queue" : "get",
@@ -903,44 +926,50 @@ async function poll() {
         ? { config: queueConfig, rules_version: XIANGQI_VERSION }
         : { match_id: room.id },
     );
-    if (epoch === onlineEpoch && data.id) await acceptRoom(data);
-  } catch (e) {
-    if (epoch !== onlineEpoch) return;
+    if (request.epoch === onlineEpoch && data?.id) await acceptRoom(data);
+  } catch (error) {
+    if (error.staleBoardRequest || room !== previousRoom) return;
     connected = false;
-    say(uiError(e));
+    say(uiError(error));
     render();
   } finally {
-    polling = false;
+    if (polling === request) polling = null;
+  }
+}
+
+async function sendPendingMove() {
+  if (!pending || !connected || !room?.controller || matchEnded(room)) return;
+  const command = pending;
+  try {
+    const data = await rpc("command", command);
+    if (pending !== command) return;
+    pending = null;
+    await acceptRoom(data);
+    say("");
+  } catch (error) {
+    if (error.staleBoardRequest || pending !== command) throw error;
+    if (rejectedBoardCommand(error)) {
+      pending = null;
+      if (error.status === 401 || error.status === 403) connected = false;
+      if (error.code === "VERSION_CONFLICT")
+        throw Error("The board changed. Choose your move again.");
+    } else connected = false;
+    throw error;
   }
 }
 async function act(action, localActor) {
   if (!state || paused) return;
   if (room) {
-    const epoch = onlineEpoch;
     if (!connected || !room.controller)
       throw Error("Reconnect or take control before playing.");
-    pending ||= {
+    if (pending) return;
+    pending = {
       match_id: room.id,
       expected_version: room.revision,
       request_id: crypto.randomUUID(),
       action,
     };
-    try {
-      const data = await rpc("command", pending);
-      if (epoch !== onlineEpoch) return;
-      pending = null;
-      await acceptRoom(data);
-    } catch (e) {
-      if (
-        Number.isInteger(e.status) &&
-        e.status >= 400 &&
-        e.status < 500 &&
-        ![408, 429].includes(e.status)
-      )
-        pending = null;
-      else connected = false;
-      throw e;
-    }
+    await sendPendingMove();
   } else {
     const before = state,
       next = applyXiangqi(
@@ -1159,6 +1188,7 @@ click("#xiangqi-ready", async () => {
   await acceptRoom(await rpc("ready", { match_id: room.id }));
 });
 click("#xiangqi-cancel", async () => {
+  onlineEpoch++;
   if (queued) await rpc("cancel");
   else if (room) await rpc("leave", { match_id: room.id });
   queued = false;
@@ -1230,6 +1260,7 @@ click("#xiangqi-leave", async () => {
       uiMsg("Leave this online match? A started game counts as resignation."),
     )
   ) {
+    onlineEpoch++;
     const result = await rpc("leave", { match_id: room.id });
     await acceptRoom(result);
     shell.closeDialogs();
@@ -1239,17 +1270,14 @@ click("#xiangqi-takeover", async () =>
   acceptRoom(await rpc("takeover", { match_id: room.id })),
 );
 click("#xiangqi-retry", async () => {
-  if (pending) {
-    const data = await rpc("command", pending);
-    pending = null;
-    await acceptRoom(data);
-  } else if (room) await poll();
+  if (room) await poll();
   else {
     cancelAI();
     delete $("#xiangqi-status").dataset.retry;
     await maybeAI();
   }
 });
+click("#xiangqi-retry-move", sendPendingMove);
 click("#xiangqi-again", newSetup);
 click("#xiangqi-new-setup", newSetup);
 click("#xiangqi-export", exportICCS);
@@ -1444,7 +1472,7 @@ async function authChanged() {
       const data = await rpc("get", requested ? { match_id: requested } : {});
       if (epoch === onlineEpoch && data.id) await acceptRoom(data);
     } catch (e) {
-      say(uiError(e));
+      if (!e.staleBoardRequest) say(uiError(e));
     }
   }
   if (
@@ -1466,12 +1494,14 @@ window.addEventListener("locale-change", () => {
   refreshRank();
 });
 window.addEventListener("online", poll);
+window.addEventListener("offline", poll);
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     if (!room && state?.phase === "playing" && !paused) togglePause();
   } else poll();
 });
 window.addEventListener("pagehide", () => {
+  onlineEpoch++;
   if (state && !room) saveSoon(true)?.catch(() => {});
   disposed = true;
   cancelAI();

@@ -474,6 +474,85 @@
   const toolEmpty = $("#search-empty");
   const toolClear = $("#tool-search-clear");
   const projectCount = $("#project-result-count");
+  const recentTools = $("#recent-tools");
+  const recentKey = () => key() + ":recent-tools";
+  function readRecentTools() {
+    try {
+      const entries = JSON.parse(localStorage.getItem(recentKey()));
+      return Array.isArray(entries)
+        ? entries
+            .filter(
+              (entry) =>
+                entry &&
+                typeof entry.slug === "string" &&
+                Object.hasOwn(tools, entry.slug) &&
+                Number.isFinite(entry.at),
+            )
+            .slice(0, 4)
+        : [];
+    } catch {
+      return [];
+    }
+  }
+  function rememberTool(slug) {
+    if (!Object.hasOwn(tools, slug)) return;
+    const record = () => {
+      try {
+        const entries = readRecentTools().filter(
+          (entry) => entry.slug !== slug,
+        );
+        localStorage.setItem(
+          recentKey(),
+          JSON.stringify([{ slug, at: Date.now() }, ...entries].slice(0, 4)),
+        );
+      } catch {}
+    };
+    if (window.KenseiWorkspace.ready) record();
+    else window.addEventListener("workspace-ready", record, { once: true });
+  }
+  function paintRecentTools() {
+    if (!recentTools) return;
+    const focused = $("[data-recent-tool]:focus", recentTools)?.dataset
+      .recentTool;
+    const clearFocused = $("#recent-tools-clear") === document.activeElement;
+    const entries = window.KenseiWorkspace?.ready ? readRecentTools() : [];
+    const list = $("#recent-tool-links");
+    const cards = $$("[data-tool-card]");
+    list.replaceChildren(
+      ...entries.flatMap(({ slug }) => {
+        const card = cards.find(
+          (candidate) => candidate.dataset.toolSlug === slug,
+        );
+        if (!card) return [];
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        const title = document.createElement("span");
+        link.dataset.recentTool = slug;
+        link.dataset.category = card.dataset.category;
+        link.href = $(".card-primary-link", card).href;
+        title.textContent = $("h3", card).textContent;
+        link.append($(".tool-icon", card).cloneNode(true), title);
+        item.append(link);
+        return [item];
+      }),
+    );
+    updateRecentVisibility();
+    if (focused)
+      (
+        $$("[data-recent-tool]", list).find(
+          (link) => link.dataset.recentTool === focused,
+        ) || toolSearch
+      ).focus({ preventScroll: true });
+    else if (clearFocused && recentTools.hidden)
+      toolSearch.focus({ preventScroll: true });
+  }
+  function updateRecentVisibility() {
+    if (recentTools)
+      recentTools.hidden =
+        filter !== "all" ||
+        !!toolSearch.value.trim() ||
+        !$("#recent-tool-links").childElementCount;
+  }
   function setToolFilter(button) {
     filter = button.dataset.filter;
     $$(".filter", button.closest("[data-filter-group]")).forEach((option) => {
@@ -495,6 +574,7 @@
         !terms.every((term) => card.dataset.search.includes(term));
       if (!card.hidden) count++;
     });
+    updateRecentVisibility();
     toolEmpty.hidden = count > 0;
     toolClear.hidden = filter === "all" && !toolSearch.value.trim();
     uiText(
@@ -533,6 +613,29 @@
   );
   if (toolSearch) {
     toolSearch.addEventListener("input", filterTools);
+    toolSearch.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" || event.isComposing || event.keyCode === 229)
+        return;
+      const first = $("[data-tool-card]:not([hidden]) .card-primary-link");
+      const target = first || (toolClear.hidden ? null : toolClear);
+      if (!target) return;
+      event.preventDefault();
+      target.focus();
+    });
+    $("#recent-tools-clear")?.addEventListener("click", () => {
+      try {
+        localStorage.removeItem(recentKey());
+      } catch {
+        return;
+      }
+      paintRecentTools();
+      toolSearch.focus({ preventScroll: true });
+    });
+    window.addEventListener("workspace-ready", paintRecentTools);
+    window.addEventListener("locale-change", paintRecentTools);
+    window.addEventListener("storage", (event) => {
+      if (event.key === recentKey() || event.key === null) paintRecentTools();
+    });
     toolClear.addEventListener("click", () => {
       toolSearch.value = "";
       setToolFilter($('[data-filter-group="tools"] [data-filter="all"]'));
@@ -1278,6 +1381,7 @@
         const ui = await import("/tool-scripts/tool-ui.js");
         await ui.initToolUI();
         document.querySelector("[data-tool]").dataset.ready = "true";
+        rememberTool(slug);
       })
       .catch((error) => {
         const root = document.querySelector("[data-tool]"),

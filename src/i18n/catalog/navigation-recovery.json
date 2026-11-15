@@ -1,0 +1,78 @@
+{
+  "m_07d9b609cc7e": {
+    "en": "Recently opened",
+    "zh-Hant": "最近開啟"
+  },
+  "m_2799fea83e6a": {
+    "en": "Clear recent tools",
+    "zh-Hant": "清除最近開啟紀錄"
+  },
+  "m_43f9a1fee14e": {
+    "en": "Back to saved games",
+    "zh-Hant": "返回遊戲存檔"
+  },
+  "m_59804cabaf9d": {
+    "en": "This saved game is unavailable. Choose another save or start a new game.",
+    "zh-Hant": "無法開啟這份存檔。可選擇另一份存檔或開始新遊戲。"
+  },
+  "m_099c283cce00": {
+    "en": "Local two-player",
+    "zh-Hant": "本機雙人"
+  },
+  "m_02e44119022f": {
+    "en": "Saved locally · Sync failed",
+    "zh-Hant": "已儲存於本機 · 同步失敗"
+  },
+  "m_88b0e9820ff3": {
+    "en": "Unranked",
+    "zh-Hant": "不計排名"
+  },
+  "m_fbc69d4c5b4e": {
+    "en": "· Legacy rules · v{0}",
+    "zh-Hant": " · 舊版規則 · v{0}"
+  },
+  "m_23cae9bb30c6": {
+    "en": "Online match ended",
+    "zh-Hant": "線上對局已結束"
+  },
+  "m_8ff81b1bdfe4": {
+    "en": "Reconnecting… The server clock is still running during play.",
+    "zh-Hant": "正在重新連線…對局中的伺服器時鐘仍在計時。"
+  },
+  "m_fa58c86c6c60": {
+    "en": "Read-only tab. Take control here to play.",
+    "zh-Hant": "此分頁僅供觀戰。接管後即可在此出手。"
+  },
+  "m_0b0fef1fff2d": {
+    "en": "Checking move…",
+    "zh-Hant": "正在確認著手…"
+  },
+  "m_eefa10ffa8c3": {
+    "en": "Move awaiting confirmation. Retry to check its result.",
+    "zh-Hant": "著手等待確認。可重試以查看結果。"
+  },
+  "m_8047850c7c79": {
+    "en": "Retry move",
+    "zh-Hant": "重試著手"
+  },
+  "m_82a0d2643760": {
+    "en": "The board changed. Choose your move again.",
+    "zh-Hant": "棋局已更新。請重新選擇著手。"
+  },
+  "m_b45633584b8c": {
+    "en": "Match interrupted. Create a new room to play again.",
+    "zh-Hant": "對局已中斷。請建立新房間再玩一局。"
+  },
+  "m_104a9d9ea985": {
+    "en": "Reconnecting… Use Retry connection if needed.",
+    "zh-Hant": "正在重新連線…可按「重試連線」。"
+  },
+  "m_8f9da0499813": {
+    "en": "Connected · Both players must press Ready to resume.",
+    "zh-Hant": "已連線 · 雙方按下「準備」後繼續。"
+  },
+  "m_27b80374e115": {
+    "en": "Reconnecting…",
+    "zh-Hant": "正在重新連線…"
+  }
+}

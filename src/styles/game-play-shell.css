@@ -1313,3 +1313,9 @@ body.game-is-focused > .footer {
     max-width: none;
   }
 }
+
+.game-connection-status {
+  margin-block: 0.35rem;
+  padding-inline-start: 0.65rem;
+  border-inline-start: 2px solid var(--accent);
+}
