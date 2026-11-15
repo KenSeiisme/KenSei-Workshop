@@ -757,7 +757,6 @@ shared = mountSharedBoard({
     presentation.remote(elements, appState);
   },
   state: () => presentation.state(drawing?.getAppState() || {}),
-  reconcile: (...args) => engine.reconcileElements(...args),
   collaborators: (collaborators) =>
     drawing?.updateScene({
       collaborators,

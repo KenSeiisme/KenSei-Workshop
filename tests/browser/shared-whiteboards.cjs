@@ -25,11 +25,35 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
   let chain = Promise.resolve(),
     messages = 0,
     failSave = false;
+  let holdUndoReceipt = false;
+  let undoReceipt;
+  let holdRead = false,
+    oldRead,
+    lostReceipt = false,
+    lostOperation;
+  let skipElementsForLast = false,
+    lastNotice = 0;
+  let stalePacket;
+  let timedOutPacket, retriedOperation;
   const queue = (fn) => {
     const out = chain.then(fn);
     chain = out.catch(() => {});
     return out;
   };
+  const deliver = (page, message) =>
+    page.evaluate((m) => {
+      for (const c of window.__channels || []) {
+        if (m.topic ? c.topic === m.topic : c.topic.endsWith(":control"))
+          c.receive("broadcast", m.event, m.payload);
+      }
+    }, message);
+  async function waitUntil(predicate, message) {
+    for (let attempt = 0; attempt < 60; attempt++) {
+      if (predicate()) return;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    assert.fail(message);
+  }
   async function as(user, fn) {
     await db.exec(
       `set role authenticated;select set_config('request.jwt.claim.sub','${user}',false)`,
@@ -79,15 +103,31 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
     );
     await c.exposeBinding("__send", async ({ page: sender }, msg) => {
       messages++;
-      for (const p of pages)
-        if (p !== sender && !p.isClosed())
-          await p
-            .evaluate((m) => {
-              for (const c of window.__channels || [])
-                if (c.topic === m.topic)
-                  c.receive("broadcast", m.event, m.payload);
-            }, msg)
-            .catch(() => {});
+      if (
+        holdUndoReceipt &&
+        i === 0 &&
+        !timedOutPacket &&
+        msg.payload.elements?.some((element) => element.isDeleted)
+      ) {
+        timedOutPacket = msg;
+        return "timed out";
+      }
+      if (
+        holdUndoReceipt &&
+        i === 0 &&
+        msg.payload.elements?.some((element) => element.isDeleted)
+      )
+        stalePacket = structuredClone(msg);
+      for (const p of pages) {
+        if (p === sender || p.isClosed()) continue;
+        const update =
+          skipElementsForLast && p === pages[3]
+            ? { ...msg, payload: { ...msg.payload, elements: undefined } }
+            : msg;
+        await deliver(p, update).catch(() => {});
+        if (i === 0 && p === pages[3] && msg.payload.revision)
+          lastNotice = Math.max(lastNotice, msg.payload.revision);
+      }
       return "ok";
     });
     await c.route("**/__qa/rpc/**", async (r) =>
@@ -117,10 +157,57 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
                 )
               ).rows[0].value,
           );
+          if (
+            holdRead &&
+            i === 3 &&
+            name === "whiteboard_room" &&
+            args.action === "get"
+          ) {
+            holdRead = false;
+            oldRead = () => r.fulfill({ json: { data, error: null } });
+            return;
+          }
+          if (
+            lostOperation &&
+            i === 0 &&
+            name === "whiteboard_room" &&
+            args.action === "save" &&
+            !retriedOperation
+          )
+            retriedOperation = args.body.operation_id;
+          if (
+            lostReceipt &&
+            i === 0 &&
+            name === "whiteboard_room" &&
+            args.action === "save"
+          ) {
+            lostReceipt = false;
+            lostOperation = {
+              id: args.body.operation_id,
+              revision: data.revision,
+            };
+            await r.fulfill({
+              json: {
+                data: null,
+                error: { message: "Simulated lost committed save receipt" },
+              },
+            });
+            return;
+          }
+          if (
+            holdUndoReceipt &&
+            i === 0 &&
+            name === "whiteboard_room" &&
+            args.action === "save"
+          ) {
+            holdUndoReceipt = false;
+            undoReceipt = () => r.fulfill({ json: { data, error: null } });
+            return;
+          }
           await r.fulfill({ json: { data, error: null } });
           if (
             name === "whiteboard_room" &&
-            ["join", "remove", "save", "leave"].includes(args.action) &&
+            ["join", "remove", "leave"].includes(args.action) &&
             !data.error
           ) {
             const id = args.body.room_id || data.id,
@@ -236,6 +323,138 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
     await count(3);
     for (const p of pages) assert.equal((await snapshot(p)).length, 3);
     console.log("PASS remote changes stay out of local Undo and do not echo");
+    const sceneDigest = (p) =>
+      p.evaluate(() =>
+        window.KenseiAdvancedContexts.whiteboard
+          .currentData()
+          .elements.map((e) => [
+            e.id,
+            e.version,
+            e.versionNonce,
+            e.isDeleted,
+            e.startBinding?.elementId ?? null,
+            e.endBinding?.elementId ?? null,
+          ])
+          .sort((a, b) => a[0].localeCompare(b[0])),
+      );
+    // Recreate the edited rectangle, then hold the durable Undo receipt while Redo is already visible.
+    await a.keyboard.press("Control+Shift+z");
+    await a.waitForFunction(
+      () => window.__drawing.getSceneElements().length === 4,
+    );
+    await a.waitForFunction(
+      () =>
+        document.querySelector("#shared-save-status").textContent === "Saved",
+    );
+    holdUndoReceipt = true;
+    await a.keyboard.press("Control+z");
+    for (const p of pages)
+      await p.waitForFunction(
+        () => window.__drawing.getSceneElements().length === 3,
+      );
+    for (let attempt = 0; !undoReceipt && attempt < 50; attempt++)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    assert.ok(undoReceipt, "Undo save reached the server");
+    await a.keyboard.press("Control+Shift+z");
+    try {
+      for (const p of pages)
+        await p.waitForFunction(
+          () => window.__drawing.getSceneElements().length === 4,
+        );
+    } catch (error) {
+      console.error("Redo digests", await Promise.all(pages.map(sceneDigest)));
+      throw error;
+    }
+    await undoReceipt();
+    await a.waitForFunction(
+      () =>
+        document.querySelector("#shared-save-status").textContent === "Saved",
+    );
+    await count(4);
+    const stored = await queue(() =>
+      db.query(
+        "select data from workshop_private.shared_whiteboard_elements where room_id=$1",
+        [roomId],
+      ),
+    );
+    const expected = stored.rows
+      .map(({ data: e }) => [
+        e.id,
+        e.version,
+        e.versionNonce,
+        e.isDeleted,
+        e.startBinding?.elementId ?? null,
+        e.endBinding?.elementId ?? null,
+      ])
+      .sort((a, b) => a[0].localeCompare(b[0]));
+    let settled;
+    for (let attempt = 0; attempt < 50; attempt++) {
+      settled = await Promise.all(pages.map(sceneDigest));
+      if (
+        settled.every(
+          (scene) => JSON.stringify(scene) === JSON.stringify(expected),
+        )
+      )
+        break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    for (const scene of settled) assert.deepEqual(scene, expected);
+    // Duplicate the old deletion after every editor has seen the newer redo.
+    assert.ok(stalePacket);
+    assert.deepEqual(
+      stalePacket.payload.elements,
+      timedOutPacket.payload.elements,
+    );
+    await Promise.all(pages.slice(1).map((peer) => deliver(peer, stalePacket)));
+    for (const peer of pages)
+      assert.deepEqual(await sceneDigest(peer), expected);
+
+    // Keep the following background and bound-arrow checks on their original three-element fixture.
+    // Park a stale read on one peer and drop its live elements. Only the newer revision notice
+    // can trigger the follow-up read while the old reply is still in flight.
+    holdRead = true;
+    await deliver(pages[3], { event: "changed", payload: {} });
+    await waitUntil(() => oldRead, "First scene read was parked");
+    skipElementsForLast = true;
+    lostReceipt = true;
+    await a.keyboard.press("Control+z");
+    await waitUntil(
+      () => lostOperation,
+      "Undo committed before losing its reply",
+    );
+    await a.waitForFunction(
+      () =>
+        document.querySelector("#shared-save-status").textContent ===
+        "Save failed",
+    );
+    await a.evaluate(() => window.dispatchEvent(new Event("online")));
+    await waitUntil(
+      () => lastNotice >= lostOperation.revision,
+      "New revision arrived during old read",
+    );
+    assert.equal((await snapshot(pages[3])).length, 4);
+    await oldRead();
+    const receipt = await queue(() =>
+      db.query(
+        "select revision from workshop_private.shared_whiteboard_mutations where room_id=$1 and operation_id=$2",
+        [roomId, lostOperation.id],
+      ),
+    );
+    assert.equal(receipt.rows.length, 1);
+    assert.equal(retriedOperation, lostOperation.id);
+    assert.equal(Number(receipt.rows[0].revision), lostOperation.revision);
+    skipElementsForLast = false;
+    for (const p of pages)
+      await p.waitForFunction(
+        () => window.__drawing.getSceneElements().length === 3,
+      );
+    await a.waitForFunction(
+      () =>
+        document.querySelector("#shared-save-status").textContent === "Saved",
+    );
+    console.log(
+      "PASS native rapid Undo/Redo converges with an older committed reply in flight",
+    );
     await a.locator("#board-background").click();
     await a.selectOption("#board-paper-type", "graph");
     await a.selectOption("#board-paper-spacing", "40");

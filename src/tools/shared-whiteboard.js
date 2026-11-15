@@ -2,6 +2,8 @@ import { $, api, downloadText, filename } from "./common.js";
 import { ensureProfile, paintAvatar } from "./profile-service.js";
 import {
   elementStamp,
+  elementContent,
+  mergeSharedElements,
   sharedChanges,
   sharedData,
   checkedSharedData,
@@ -28,8 +30,10 @@ export function mountSharedBoard(bridge) {
     connected = false;
   let privateSnapshot = null,
     known = new Map(),
+    rendered = new Map(),
     pending = new Map(),
     outbound = new Map(),
+    deferred = [],
     settingsKnown = "",
     settingsPending = null;
   let channels = [],
@@ -41,8 +45,12 @@ export function mountSharedBoard(bridge) {
     recoveryTimer = null;
   let cursor = null,
     operation = null,
-    saving = false,
-    refreshing = false,
+    saving = null,
+    refreshing = null,
+    beating = null,
+    broadcasting = null,
+    refreshAgain = false,
+    wantedRevision = 0,
     installing = false,
     buffered = [],
     lastRevision = 0;
@@ -70,12 +78,15 @@ export function mountSharedBoard(bridge) {
   async function rpc(action, body = {}) {
     if (!api.user || !api.client)
       throw Error("Sign in to use shared whiteboards.");
-    const expected = actor();
-    if (api.client.auth?.getSession) {
-      const current = await api.client.auth.getSession();
+    const expected = actor(),
+      client = api.client;
+    if (client.auth?.getSession) {
+      const current = await client.auth.getSession();
+      if (actor() !== expected || api.client !== client)
+        throw Error("Account changed. Please reload.");
       accessToken = current.data?.session?.access_token || null;
     }
-    const { data, error } = await api.client.rpc("whiteboard_room", {
+    const { data, error } = await client.rpc("whiteboard_room", {
       action,
       body: {
         client_id: clientId,
@@ -91,6 +102,18 @@ export function mountSharedBoard(bridge) {
     return data;
   }
   const body = () => ({ room_id: room.id });
+  function scope() {
+    const board = room?.id,
+      account = owner,
+      epoch = generation,
+      serial = connectionSerial;
+    return () =>
+      board === room?.id &&
+      account === owner &&
+      account === actor() &&
+      epoch === generation &&
+      serial === connectionSerial;
+  }
   const topic = (speaker) =>
     `whiteboard:${room.id}:${room.channel_key}:${speaker}`;
   function setEditing(value) {
@@ -221,17 +244,38 @@ export function mountSharedBoard(bridge) {
         return;
       }
       sharedChanges(elements);
-      const changes = elements.filter(
-        (e) => known.get(e.id) !== elementStamp(e),
-      );
+      const changes = [];
+      for (const element of elements) {
+        const previous = known.get(element.id);
+        const view = rendered.get(element.id) || previous;
+        if (
+          view &&
+          (elementStamp(view) === elementStamp(element) ||
+            elementContent(view) === elementContent(element))
+        )
+          continue;
+        // Undo/Redo and fractional index repair use Excalidraw's native counters.
+        // The shared revision advances only for an actual change to the user's scene.
+        const copy = structuredClone(element);
+        if (previous) {
+          copy.version = previous.version + 1;
+          copy.versionNonce =
+            crypto.getRandomValues(new Uint32Array(1))[0] & 0x7fffffff;
+          if (copy.index === view.index) copy.index = previous.index;
+        }
+        changes.push(copy);
+        known.set(copy.id, copy);
+        pending.set(copy.id, copy);
+        outbound.set(copy.id, copy);
+        rendered.set(copy.id, structuredClone(element));
+      }
       const settings = sceneSettings(state),
         signature = JSON.stringify(settings);
-      if (!changes.length && signature === settingsKnown) return;
-      for (const e of changes) {
-        known.set(e.id, elementStamp(e));
-        pending.set(e.id, structuredClone(e));
-        outbound.set(e.id, structuredClone(e));
+      if (!changes.length && signature === settingsKnown && !overLimit) {
+        applyDeferredScene();
+        return;
       }
+      const next = mergeSharedElements([...known.values()], []);
       if (
         signature !== settingsKnown ||
         (!room.appState?.paper && changes.length)
@@ -239,11 +283,11 @@ export function mountSharedBoard(bridge) {
         settingsKnown = signature;
         settingsPending = settings;
       }
-      latest = sharedData(room.name, elements, settings);
+      latest = sharedData(room.name, next, settings);
       saved("Pending save");
       queueRecovery();
       try {
-        checkedSharedData(room.name, elements, settings);
+        checkedSharedData(room.name, next, settings);
       } catch (e) {
         notice(uiError(e), true);
         overLimit = true;
@@ -253,26 +297,98 @@ export function mountSharedBoard(bridge) {
       }
       overLimit = false;
       queueSave();
+      applyDeferredScene();
     } catch (e) {
       notice(uiError(e), true);
       setEditing(false);
     }
+  }
+  function activeElements(native) {
+    return new Set(
+      [
+        native?.editingTextElement?.id,
+        native?.resizingElement?.id,
+        native?.newElement?.id,
+      ].filter(Boolean),
+    );
+  }
+  function queueDeferredScene(elements) {
+    deferred = mergeSharedElements(deferred, elements);
+  }
+  function applyDeferredScene() {
+    if (!deferred.length) return;
+    const elements = deferred;
+    deferred = [];
+    applyScene({ elements });
   }
   function applyScene(data, fromRecovery = false) {
     if (!data?.elements) return;
     if (!fromRecovery) sharedChanges(data.elements);
     const apiDrawing = bridge.api();
     if (!apiDrawing) return;
-    const merged = bridge.reconcile(
-      apiDrawing.getSceneElementsIncludingDeleted(),
-      data.elements,
-      apiDrawing.getAppState(),
+    const activeIds = activeElements(apiDrawing.getAppState());
+    const applicable = data.elements.filter(
+      (element) => !activeIds.has(element.id),
     );
-    known = new Map(merged.map((e) => [e.id, elementStamp(e)]));
-    const settings = settingsPending || data.appState || room.appState;
+    if (applicable.length < data.elements.length)
+      queueDeferredScene(
+        data.elements.filter((element) => activeIds.has(element.id)),
+      );
+    const merged = mergeSharedElements([...known.values()], applicable);
+    const settings =
+      settingsPending || data.appState || latest?.appState || room.appState;
+    if (
+      !fromRecovery &&
+      merged.length === known.size &&
+      JSON.stringify(sceneSettings(settings)) === settingsKnown &&
+      merged.every((element) => {
+        const previous = known.get(element.id);
+        return previous && elementStamp(previous) === elementStamp(element);
+      })
+    )
+      return;
+    installScene(merged, settings);
+  }
+  function installScene(merged, settings) {
     settingsKnown = JSON.stringify(sceneSettings(settings));
     latest = sharedData(room.name, merged, settings);
-    bridge.remote(merged, settings);
+    known = new Map(latest.elements.map((e) => [e.id, e]));
+    // Fractional-index repair mutates the objects it receives. Keep those copies off the wire.
+    const drawing = bridge.api();
+    const activeIds = activeElements(drawing?.getAppState());
+    const editing = new Map(
+      (drawing?.getSceneElementsIncludingDeleted() || [])
+        .filter((element) => activeIds.has(element.id))
+        .map((element) => [element.id, element]),
+    );
+    const display = structuredClone(merged).map((element) => {
+      const native = editing.get(element.id);
+      editing.delete(element.id);
+      return native || element;
+    });
+    bridge.remote([...display, ...editing.values()], settings);
+    const view = drawing?.getSceneElementsIncludingDeleted() || merged;
+    rendered = new Map(
+      view.map((element) => [element.id, structuredClone(element)]),
+    );
+  }
+  function membershipChanged(next) {
+    return (
+      next.channel_key !== room.channel_key ||
+      next.members.map((member) => member.id).join() !==
+        room.members.map((member) => member.id).join()
+    );
+  }
+  function acceptSnapshot(next, { reconnect = false } = {}) {
+    if (next.revision < lastRevision || next.revision < room.revision) return;
+    room = next;
+    if (reconnect && !overLimit) {
+      const elements = mergeSharedElements(next.elements, [
+        ...pending.values(),
+      ]);
+      installScene(elements, settingsPending || next.appState);
+    } else if (reconnect || next.revision > lastRevision) applyScene(next);
+    lastRevision = next.revision;
   }
   function collaborators() {
     const map = new Map();
@@ -297,11 +413,12 @@ export function mountSharedBoard(bridge) {
       if (buffered.length < 100) buffered.push([speaker, payload]);
       return;
     }
+    if (!connected) return;
     try {
       if (payload.elements) {
         if (JSON.stringify(payload.elements).length > 60000)
           throw Error("Remote update is too large.");
-        applyScene({ elements: payload.elements, appState: room.appState });
+        applyScene({ elements: payload.elements });
       }
       if (
         payload.cursor &&
@@ -311,7 +428,11 @@ export function mountSharedBoard(bridge) {
         cursors.set(speaker, payload.cursor);
         collaborators();
       }
-      if (payload.revision) refresh();
+      if (
+        Number.isSafeInteger(payload.revision) &&
+        payload.revision > lastRevision
+      )
+        refresh(payload.revision);
     } catch {
       notice(
         uiMsg(
@@ -323,33 +444,45 @@ export function mountSharedBoard(bridge) {
   }
   async function disconnect() {
     connectionSerial++;
-    for (const c of channels)
-      await api.client?.removeChannel(c).catch(() => {});
+    saving = refreshing = broadcasting = null;
+    const previous = channels;
+    const client = api.client;
     channels = [];
     ownChannel = null;
     connected = false;
     cursors.clear();
+    onlineMembers.clear();
+    buffered = [];
+    deferred = [];
     bridge.collaborators(new Map());
+    await Promise.all(
+      previous.map((channel) => client?.removeChannel(channel).catch(() => {})),
+    );
   }
   async function connect(token) {
-    await disconnect();
     if (token !== generation || !room) return;
+    const teardown = disconnect();
+    const current = scope();
     installing = true;
+    setEditing(editing);
     live("Connecting");
-    const connectionToken = connectionSerial;
+    await teardown;
+    if (!current()) return;
+    let channelFailed = false;
     try {
       const create = (speaker) =>
         new Promise((resolve, reject) => {
           const channel = api.client.channel(topic(speaker), {
             config: {
               private: true,
-              broadcast: { self: false },
+              broadcast: { self: false, ack: true },
               presence: { key: api.user.id },
             },
           });
           channels.push(channel);
           if (speaker !== "control")
             channel.on("presence", { event: "sync" }, () => {
+              if (!current()) return;
               onlineMembers.set(
                 speaker,
                 Object.keys(channel.presenceState()).length > 0,
@@ -357,19 +490,20 @@ export function mountSharedBoard(bridge) {
               controls();
             });
           if (speaker === "control")
-            channel.on("broadcast", { event: "changed" }, () => refresh());
+            channel.on("broadcast", { event: "changed" }, () => {
+              if (current()) refresh();
+            });
           else
-            channel.on("broadcast", { event: "update" }, ({ payload }) =>
-              receive(speaker, payload),
-            );
+            channel.on("broadcast", { event: "update" }, ({ payload }) => {
+              if (current()) receive(speaker, payload);
+            });
           const deadline = setTimeout(
             () =>
               reject(Error("Shared connection timed out. Reconnect to retry.")),
             10000,
           );
           channel.subscribe((status) => {
-            if (token !== generation || connectionToken !== connectionSerial)
-              return;
+            if (!current()) return;
             if (status === "SUBSCRIBED") {
               clearTimeout(deadline);
               if (speaker === api.user.id) {
@@ -383,6 +517,7 @@ export function mountSharedBoard(bridge) {
             ) {
               clearTimeout(deadline);
               connected = false;
+              channelFailed = true;
               setEditing(false);
               reject(
                 Error("Shared connection was interrupted. Reconnect to retry."),
@@ -393,12 +528,24 @@ export function mountSharedBoard(bridge) {
       await Promise.all(
         ["control", ...room.members.map((x) => x.id)].map(create),
       );
-      if (token !== generation) return;
+      if (!current()) return;
+      const channelKey = room.channel_key;
       const snapshot = await rpc("get", body());
-      if (token !== generation) return;
-      room = snapshot;
-      applyScene(snapshot);
-      lastRevision = snapshot.revision;
+      if (!current()) return;
+      if (channelFailed)
+        throw Error("Shared connection was interrupted. Reconnect to retry.");
+      if (membershipChanged(snapshot)) {
+        if (snapshot.revision < room.revision)
+          throw Error("Shared connection was interrupted. Reconnect to retry.");
+        room = snapshot;
+        return await connect(token);
+      }
+      if (
+        snapshot.channel_key !== channelKey ||
+        snapshot.revision < lastRevision
+      )
+        throw Error("Shared connection was interrupted. Reconnect to retry.");
+      acceptSnapshot(snapshot, { reconnect: true });
       installing = false;
       connected = true;
       const waiting = buffered;
@@ -406,66 +553,102 @@ export function mountSharedBoard(bridge) {
       for (const item of waiting) receive(...item);
       controls();
       setEditing(editing);
+      if (refreshAgain || wantedRevision > lastRevision)
+        refresh(wantedRevision);
+      if (editing && (pending.size || settingsPending || operation))
+        queueSave();
     } catch (e) {
-      if (token !== generation) return;
+      if (!current()) return;
       installing = false;
       connected = false;
       setEditing(false);
       notice(uiError(e), true);
     }
   }
-  async function refresh() {
-    if (!room || refreshing || !active) return;
-    refreshing = true;
-    const token = generation;
+  async function refresh(revision) {
+    if (!room || !active) return;
+    if (revision === undefined) refreshAgain = true;
+    else wantedRevision = Math.max(wantedRevision, revision);
+    if (refreshing || installing) return;
+    const task = {},
+      current = scope(),
+      token = generation;
+    refreshing = task;
     try {
-      const next = await rpc("get", body());
-      if (token !== generation) return;
-      const changed =
-        next.channel_key !== room.channel_key ||
-        next.members.map((x) => x.id).join() !==
-          room.members.map((x) => x.id).join();
-      room = next;
-      if (next.revision !== lastRevision) {
-        applyScene(next);
-        lastRevision = next.revision;
-      }
-      controls();
-      if (changed) await connect(token);
+      do {
+        refreshAgain = false;
+        const requestedRevision = wantedRevision;
+        const next = await rpc("get", body());
+        if (!current()) return;
+        if (next.revision >= room.revision && next.revision >= lastRevision) {
+          const changed = membershipChanged(next);
+          acceptSnapshot(next);
+          controls();
+          if (changed) {
+            await connect(token);
+            return;
+          }
+        }
+        if (wantedRevision > requestedRevision && wantedRevision > lastRevision)
+          refreshAgain = true;
+      } while (refreshAgain);
     } catch (e) {
-      if (token === generation) {
-        setEditing(false);
-        notice(uiError(e), true);
-      }
-    } finally {
-      refreshing = false;
-    }
-  }
-  async function beat() {
-    if (!room || !active || !navigator.onLine) return;
-    const token = generation;
-    try {
-      const next = await rpc("heartbeat", body());
-      if (token !== generation) return;
-      const changed =
-        next.channel_key !== room.channel_key ||
-        next.members.map((x) => x.id).join() !==
-          room.members.map((x) => x.id).join();
-      const needsScene = next.revision !== lastRevision;
-      room = { ...room, ...next, elements: room.elements };
-      if (changed) await connect(token);
-      else if (!connected) await connect(token);
-      ownsRecovery ||= next.editing;
-      setEditing(next.editing);
-      controls();
-      if (needsScene) await refresh();
-      if (editing && (pending.size || operation)) flush();
-    } catch (e) {
-      if (token === generation) {
+      if (current()) {
         connected = false;
         setEditing(false);
         notice(uiError(e), true);
       }
+    } finally {
+      if (refreshing === task) {
+        refreshing = null;
+        // The new connection may have buffered a notice while this request was retiring.
+        if (
+          token === generation &&
+          !current() &&
+          connected &&
+          !installing &&
+          (refreshAgain || wantedRevision > lastRevision)
+        )
+          refresh(wantedRevision);
+      }
+    }
+  }
+  async function beat() {
+    if (!room || !active || installing || beating || !navigator.onLine) return;
+    const task = {},
+      current = scope(),
+      token = generation;
+    beating = task;
+    try {
+      const next = await rpc("heartbeat", body());
+      if (!current()) return;
+      if (next.revision < room.revision || next.revision < lastRevision) return;
+      const changed = membershipChanged(next);
+      room = { ...room, ...next, elements: room.elements };
+      ownsRecovery ||= next.editing;
+      if (changed || !connected) {
+        editing = !!next.editing;
+        await connect(token);
+        return;
+      }
+      setEditing(next.editing);
+      controls();
+      if (next.revision > lastRevision || wantedRevision > lastRevision)
+        await refresh(next.revision);
+      if (
+        current() &&
+        editing &&
+        (pending.size || settingsPending || operation)
+      )
+        flush();
+    } catch (e) {
+      if (current()) {
+        connected = false;
+        setEditing(false);
+        notice(uiError(e), true);
+      }
+    } finally {
+      if (beating === task) beating = null;
     }
   }
   async function flush() {
@@ -482,8 +665,11 @@ export function mountSharedBoard(bridge) {
       (!pending.size && !settingsPending && !operation)
     )
       return;
-    const token = generation;
-    saving = true;
+    const current = scope(),
+      task = {},
+      roomBody = body(),
+      channelKey = room.channel_key;
+    saving = task;
     saved("Saving");
     operation ||= {
       id: crypto.randomUUID(),
@@ -495,14 +681,17 @@ export function mountSharedBoard(bridge) {
     const sent = operation;
     try {
       await recovery(draft());
+      if (!current() || !connected || !editing) return;
       const next = await rpc("save", {
-        ...body(),
-        channel_key: room.channel_key,
+        ...roomBody,
+        channel_key: channelKey,
         operation_id: sent.id,
         elements: sent.elements,
         ...(sent.appState ? { appState: sent.appState } : {}),
       });
-      if (token !== generation) return;
+      if (!current()) return;
+      if (next.saved_operation !== sent.id)
+        throw Error("Shared connection was interrupted. Reconnect to retry.");
       for (const e of sent.elements)
         if (elementStamp(pending.get(e.id) || {}) === elementStamp(e))
           pending.delete(e.id);
@@ -512,28 +701,42 @@ export function mountSharedBoard(bridge) {
       )
         settingsPending = null;
       operation = null;
-      room = next;
-      applyScene(next);
-      lastRevision = next.revision;
+      acceptSnapshot(next);
       saved(pending.size || settingsPending ? "Pending save" : "Saved");
-      await recovery(pending.size || settingsPending ? draft() : null);
-      revisionOutbound = next.revision;
+      revisionOutbound = Math.max(revisionOutbound || 0, next.revision);
       for (const e of sent.elements)
         if (elementStamp(outbound.get(e.id) || {}) === elementStamp(e))
           outbound.delete(e.id);
       if (pending.size || settingsPending) queueSave();
+      await recovery(pending.size || settingsPending ? draft() : null).catch(
+        () => {
+          if (current())
+            notice(
+              uiMsg("Local recovery failed. Export a backup before leaving."),
+              true,
+            );
+        },
+      );
     } catch (e) {
-      if (token === generation) {
+      if (current()) {
         saved("Save failed");
         notice(uiError(e), true);
         queueRecovery();
       }
     } finally {
-      saving = false;
+      if (saving === task) saving = null;
     }
   }
-  function send() {
-    if (!active || !connected || !editing || !ownChannel || overLimit) return;
+  async function send() {
+    if (
+      !active ||
+      !connected ||
+      !editing ||
+      !ownChannel ||
+      overLimit ||
+      broadcasting
+    )
+      return;
     const elements = [...outbound.values()];
     const payload = {
       ...(elements.length ? { elements } : {}),
@@ -545,15 +748,26 @@ export function mountSharedBoard(bridge) {
       queueSave();
       return;
     }
-    outbound.clear();
+    const task = {},
+      current = scope();
+    broadcasting = task;
     cursor = null;
-    revisionOutbound = null;
-    ownChannel
-      .send({ type: "broadcast", event: "update", payload })
-      .catch(() => {
-        connected = false;
-        setEditing(false);
+    try {
+      const result = await ownChannel.send({
+        type: "broadcast",
+        event: "update",
+        payload,
       });
+      if (!current() || result !== "ok") return;
+      for (const e of elements)
+        if (elementStamp(outbound.get(e.id) || {}) === elementStamp(e))
+          outbound.delete(e.id);
+      if (revisionOutbound === payload.revision) revisionOutbound = null;
+    } catch {
+      // Keep elements and the revision for the next broadcast or durable save.
+    } finally {
+      if (broadcasting === task) broadcasting = null;
+    }
   }
   async function stop() {
     generation++;
@@ -562,21 +776,30 @@ export function mountSharedBoard(bridge) {
     clearTimeout(saveTimer);
     clearTimeout(maxSaveTimer);
     clearTimeout(recoveryTimer);
-    if (room) {
-      if (pending.size || operation) await recovery(draft()).catch(() => {});
-      await rpc("release", body()).catch(() => {});
-    }
-    await disconnect();
+    const backup =
+      room && (pending.size || settingsPending || operation)
+        ? recovery(draft()).catch(() => {})
+        : null;
+    const release =
+      room && owner === actor() ? rpc("release", body()).catch(() => {}) : null;
+    const teardown = disconnect();
+    saving = refreshing = beating = broadcasting = null;
+    installing = refreshAgain = false;
+    wantedRevision = 0;
+    revisionOutbound = cursor = null;
     editing = false;
     room = null;
     operation = null;
     pending.clear();
     outbound.clear();
     known.clear();
+    rendered.clear();
+    deferred = [];
     buffered = [];
     settingsPending = null;
     latest = null;
     invites = null;
+    await Promise.all([backup, release, teardown]);
   }
   async function loadRoom(data) {
     const loadingOwner = actor();
@@ -592,12 +815,13 @@ export function mountSharedBoard(bridge) {
     const token = ++generation;
     lastRevision = data.revision;
     pending = new Map();
-    known = new Map(data.elements.map((e) => [e.id, elementStamp(e)]));
     settingsKnown = JSON.stringify(sceneSettings(data.appState));
     latest = sharedData(data.name, data.elements, data.appState);
-    await bridge.mount(latest);
+    known = new Map(latest.elements.map((e) => [e.id, e]));
+    await bridge.mount(structuredClone(latest));
     if (token !== generation) return;
     const restored = await recovery().catch(() => null);
+    if (token !== generation) return;
     if (restored?.owner === owner) {
       pending = new Map((restored.elements || []).map((e) => [e.id, e]));
       settingsPending = restored.appState;
@@ -622,6 +846,7 @@ export function mountSharedBoard(bridge) {
     ownsRecovery ||= editing;
     room = access;
     await connect(token);
+    if (token !== generation) return;
     controls();
     // Coalesce edits/cursors at about 1.5 Hz, reserving Free-plan capacity for Pong and reconnects.
     interval = setInterval(send, 650);
@@ -761,8 +986,10 @@ export function mountSharedBoard(bridge) {
     )
       return;
     try {
-      const previous = room;
+      const previous = room,
+        current = scope();
       const next = await rpc(action, { ...body(), ...extra });
+      if (!current()) return;
       if (["delete", "leave"].includes(action)) {
         await stop();
         requested = null;
@@ -783,9 +1010,9 @@ export function mountSharedBoard(bridge) {
         );
         return;
       }
-      room = next;
+      acceptSnapshot(next);
       controls();
-      if (previous.channel_key !== next.channel_key) await connect(generation);
+      if (previous.channel_key !== room.channel_key) await connect(generation);
       await list();
     } catch (e) {
       notice(uiError(e), true);
@@ -864,9 +1091,22 @@ export function mountSharedBoard(bridge) {
   function data() {
     if (!room) throw Error("Choose a shared whiteboard.");
     const drawing = bridge.api();
+    const elements =
+      drawing?.getSceneElementsIncludingDeleted() || latest?.elements || [];
     return sharedData(
       room.name,
-      drawing?.getSceneElementsIncludingDeleted() || latest?.elements || [],
+      elements.map((element) => {
+        const revision = known.get(element.id);
+        // Excalidraw can change native history counters even when the scene is unchanged.
+        const view = rendered.get(element.id) || revision;
+        return revision && elementContent(view) === elementContent(element)
+          ? {
+              ...element,
+              version: revision.version,
+              versionNonce: revision.versionNonce,
+            }
+          : element;
+      }),
       bridge.state?.() ||
         drawing?.getAppState() ||
         latest?.appState ||
@@ -874,7 +1114,10 @@ export function mountSharedBoard(bridge) {
     );
   }
   window.addEventListener("offline", () => {
-    connected = false;
+    if (!room || !active) return;
+    disconnect();
+    beating = null;
+    installing = false;
     setEditing(false);
     queueRecovery();
   });
@@ -899,7 +1142,7 @@ export function mountSharedBoard(bridge) {
     stop();
   });
   window.addEventListener("beforeunload", (e) => {
-    if (active && (pending.size || operation)) {
+    if (active && (pending.size || settingsPending || operation)) {
       e.preventDefault();
       e.returnValue = "";
     }

@@ -33,9 +33,7 @@ async function request(path, token, body) {
   let d = await r.json();
   if (!r.ok || d.error) {
     const detail = d.message || d.error?.message || d.error || r.status;
-    const error = Error("Backend " + path.split("?")[0] + " failed: " + detail);
-    error.code = d.code;
-    throw error;
+    throw new Error("Backend " + path.split("?")[0] + " failed: " + detail);
   }
   return d;
 }
@@ -55,12 +53,59 @@ async function snapshot(p) {
   );
 }
 async function waitCount(p, n) {
-  await p.waitForFunction(
-    (n) =>
-      window.__drawing
-        ?.getSceneElementsIncludingDeleted()
-        .filter((x) => !x.isDeleted).length === n,
-    n,
+  await p
+    .waitForFunction(
+      (n) =>
+        window.__drawing
+          ?.getSceneElementsIncludingDeleted()
+          .filter((x) => !x.isDeleted).length === n,
+      n,
+    )
+    .catch(async (error) => {
+      const actual = await snapshot(p);
+      throw new Error(
+        "Editor " +
+          (pages.indexOf(p) + 1) +
+          " expected " +
+          n +
+          " elements, observed " +
+          actual.length +
+          ": " +
+          error.message,
+      );
+    });
+}
+async function waitCheckpoint(id, count) {
+  const editors = pages.slice(0, 4);
+  const visibleElements = (items) =>
+    items.filter((item) => !item.isDeleted).length;
+  const deadline = Date.now() + 25000;
+  let durableCount;
+  do {
+    durableCount = visibleElements((await scene(0, id)).elements);
+    if (durableCount === count) {
+      try {
+        await Promise.all(editors.map((editor) => waitCount(editor, count)));
+        return;
+      } catch (error) {
+        throw new Error(
+          error.message + " (durable elements: " + durableCount + ")",
+        );
+      }
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  } while (Date.now() < deadline);
+  const observed = await Promise.all(
+    editors.map(async (editor) => visibleElements(await snapshot(editor))),
+  );
+  throw new Error(
+    "Checkpoint expected " +
+      count +
+      " elements, observed " +
+      durableCount +
+      " on the server and [" +
+      observed.join(", ") +
+      "] in the editors",
   );
 }
 async function add(p, x) {
@@ -257,6 +302,47 @@ async function exerciseCanvas(owner) {
   );
   return updated;
 }
+async function checkMemberRevocation(a, { id, firstKey, oldCode, ownerId }) {
+  await a.locator("#board-boards").click();
+  await a.locator("#shared-member-panel").evaluate((n) => (n.open = true));
+  await a.locator("#shared-members button").last().click();
+  await pages[3].waitForFunction(() =>
+    /unavailable|removed/.test(
+      document.querySelector("#shared-status").textContent,
+    ),
+  );
+  // The public RPC exposes domain errors as JSON messages.
+  const removed =
+    /This shared whiteboard is unavailable or access was removed\./;
+  await assert.rejects(() => rpc(3, "get", { room_id: id }), removed);
+  await assert.rejects(
+    () =>
+      rpc(3, "save", {
+        room_id: id,
+        channel_key: firstKey,
+        operation_id: crypto.randomUUID(),
+        elements: [],
+      }),
+    removed,
+  );
+  await assert.rejects(
+    () => rpc(3, "join", { code: oldCode }),
+    /Invitation is invalid or was reset\./,
+  );
+  const fresh = await scene(0, id);
+  assert.notEqual(fresh.channel_key, firstKey);
+  const old = await deniedSub(
+    pages[3],
+    `whiteboard:${id}:${fresh.channel_key}:${ownerId}`,
+  );
+  assert(
+    !["SUBSCRIBED", "timeout"].includes(old),
+    "A removed member must be denied by Realtime",
+  );
+  check(
+    "Removal rotates channels and invitation; former member loses read, join and publish access",
+  );
+}
 async function main() {
   if (process.stdin.isTTY) process.stdin.setRawMode(true);
   console.log("Ready for temporary credentials on hidden stdin");
@@ -329,6 +415,7 @@ async function main() {
     await b.locator("#shared-code").fill(invite.code);
     await b.locator("#shared-join").click();
     await connected(b);
+    check("Second editor joined using the room code");
     for (let i = 2; i < 4; i++) {
       const p = await boardPage(
         i,
@@ -337,37 +424,77 @@ async function main() {
       await p.locator("#shared-join").click();
       await connected(p);
       assert(!p.url().includes("#invite"));
+      check("Editor " + (i + 1) + " joined using an invitation link");
+    }
+    if (process.env.QA_WHITEBOARD_ACCESS_ONLY === "1") {
+      await checkMemberRevocation(a, {
+        id,
+        firstKey,
+        oldCode: invite.code,
+        ownerId: users[0].id,
+      });
+      return;
     }
     await Promise.all(
       pages.slice(0, 4).map((page, i) => add(page, 100 + i * 110)),
     );
-    for (const p of pages.slice(0, 4)) await waitCount(p, 4);
-    await a.waitForTimeout(5000);
-    assert.equal(
-      (await scene(0, id)).elements.filter((e) => !e.isDeleted).length,
-      4,
-    );
+    await waitCheckpoint(id, 4);
     check("Four native editors converge and checkpoints are durably saved");
     await a.bringToFront();
     await a
       .locator("#board-canvas canvas")
       .last()
       .click({ position: { x: 800, y: 500 } });
+    const rpcRoute = "**/rest/v1/rpc/whiteboard_room";
+    let heldReceipt;
+    let holdNextSave = true;
+    await a.route(rpcRoute, async (route) => {
+      const input = route.request().postDataJSON();
+      if (!holdNextSave || input?.action !== "save") return route.continue();
+      holdNextSave = false;
+      const response = await route.fetch();
+      assert.ok(response.ok(), "Undo must commit before holding the response");
+      heldReceipt = () => route.fulfill({ response });
+    });
     await a.keyboard.press("Control+z");
-    for (const p of pages.slice(0, 4)) await waitCount(p, 3);
-    await a.keyboard.press("Control+Shift+z");
-    for (const p of pages.slice(0, 4)) await waitCount(p, 4);
-    check("Local Undo/Redo preserves the other three members’ drawings");
+    try {
+      await Promise.all(pages.slice(0, 4).map((page) => waitCount(page, 3)));
+      const deadline = Date.now() + 10000;
+      while (!heldReceipt && Date.now() < deadline)
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      assert.ok(heldReceipt, "The server returned an Undo save receipt");
+      await a.keyboard.press("Control+Shift+z");
+      await Promise.all(pages.slice(0, 4).map((page) => waitCount(page, 4)));
+      check("Four editors see Redo before the Undo save receipt is delivered");
+    } finally {
+      if (heldReceipt) await heldReceipt();
+      await a.unroute(rpcRoute);
+    }
+    await waitCheckpoint(id, 4);
+    check(
+      "Rapid Undo/Redo is permanently saved with all four editors' work intact",
+    );
     // No scene/root replacement when switching the interface language.
     const beforeLocale = await snapshot(a);
-    await a.evaluate(() => window.KenseiI18n.setLocale("zh-Hant"));
+    await a.evaluate(() => {
+      void window.KenseiI18n.setLocale("zh-Hant");
+    });
+    await a.waitForFunction(() => document.documentElement.lang === "zh-Hant");
     assert.deepEqual(await snapshot(a), beforeLocale);
     assert.equal(await a.locator("html").getAttribute("lang"), "zh-Hant");
-    await a.evaluate(() => window.KenseiI18n.setLocale("en"));
+    await a.evaluate(() => {
+      void window.KenseiI18n.setLocale("en");
+    });
+    await a.waitForFunction(() => document.documentElement.lang === "en");
+    await a.locator("#board-boards").click();
+    const drawer = a.locator("#board-drawer");
     for (const format of ["json", "svg", "png"]) {
-      const waiting = a.waitForEvent("download");
-      await a.locator("#shared-" + format).click();
-      const dl = await waiting;
+      const button = a.locator("#shared-" + format);
+      await button.waitFor({ state: "visible" });
+      const [dl] = await Promise.all([
+        a.waitForEvent("download"),
+        button.click(),
+      ]);
       const stream = await dl.createReadStream();
       let chunks = [];
       for await (const c of stream) chunks.push(c);
@@ -381,6 +508,7 @@ async function main() {
       if (format === "png") assert.equal(data.subarray(1, 4).toString(), "PNG");
       if (format === "svg") assert(data.toString().includes("<svg"));
     }
+    await drawer.evaluate((dialog) => dialog.close());
     check(
       "Shared PNG/SVG/editable exports and live bilingual switching preserve the drawing",
     );
@@ -438,7 +566,9 @@ async function main() {
         "Save failed",
     );
     denySave = false;
+    await a.locator("#board-boards").click();
     await a.locator("#shared-reconnect").click();
+    await drawer.evaluate((dialog) => dialog.close());
     await a.waitForFunction(
       () =>
         document.querySelector("#shared-save-status").textContent === "Saved",
@@ -597,41 +727,12 @@ async function main() {
     check(
       "Refresh restores the saved paper, bound ports and editing connection",
     );
-    await a.locator("#board-boards").click();
-    await a.locator("#shared-member-panel").evaluate((n) => (n.open = true));
-    await a.locator("#shared-members button").last().click();
-    await pages[3].waitForFunction(() =>
-      /unavailable|removed/.test(
-        document.querySelector("#shared-status").textContent,
-      ),
-    );
-    await assert.rejects(() => rpc(3, "get", { room_id: id }), {
-      code: "42501",
+    await checkMemberRevocation(a, {
+      id,
+      firstKey,
+      oldCode: invite.code,
+      ownerId: users[0].id,
     });
-    await assert.rejects(
-      () =>
-        rpc(3, "save", {
-          room_id: id,
-          channel_key: firstKey,
-          operation_id: crypto.randomUUID(),
-          elements: [],
-        }),
-      { code: "42501" },
-    );
-    await assert.rejects(() => rpc(3, "join", { code: invite.code }));
-    const fresh = await scene(0, id);
-    assert.notEqual(fresh.channel_key, firstKey);
-    const old = await deniedSub(
-      pages[3],
-      `whiteboard:${id}:${fresh.channel_key}:${users[0].id}`,
-    );
-    assert(
-      !["SUBSCRIBED", "timeout"].includes(old),
-      "A removed member must be denied by Realtime",
-    );
-    check(
-      "Removal rotates channels and invitation; former member loses read, join and publish access",
-    );
     for (const width of [320, 360, 768, 1440]) {
       await a.setViewportSize({ width, height: 900 });
       assert(
@@ -662,10 +763,12 @@ async function main() {
 }
 main().catch((e) => {
   console.error(
-    String(e.message).replace(
-      /[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+/g,
-      "[redacted]",
-    ),
+    String(e.stack || e.message)
+      .replace(
+        /[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]+/g,
+        "[redacted]",
+      )
+      .replace(/#invite=[A-Za-z0-9_-]+/g, "#invite=[redacted]"),
   );
   process.exitCode = 1;
 });
