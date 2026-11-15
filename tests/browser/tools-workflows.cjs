@@ -3,6 +3,7 @@ const assert = require("node:assert/strict"),
   path = require("node:path"),
   crypto = require("node:crypto");
 const { chromium } = require("../support/browser.cjs");
+const { saveBrowserFailure } = require("../support/browser-artifacts.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769",
   output = process.env.TOOLS_AUDIT_OUTPUT || "_qa/tools-workflows",
   checks = [];
@@ -348,6 +349,9 @@ fs.mkdirSync(output, { recursive: true });
       checks.every((c) => c.status === "pass"),
       "Workflow failures: see workflows.json",
     );
+  } catch (error) {
+    await saveBrowserFailure(context, "tools-workflows");
+    throw error;
   } finally {
     await context.close();
     await browser.close();

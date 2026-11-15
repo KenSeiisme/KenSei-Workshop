@@ -1,12 +1,14 @@
 import { $, library, image, copy } from "./common.js";
 import { stopTracks, mediaError } from "./media-capture.js";
-import { uiText } from "../site/ui.js";
+import { uiMsg, uiText } from "../site/ui.js";
 
 if ($("#qr-scan-panel")) {
   let stream = null,
     frame = null,
     generation = 0,
     busy = false,
+    waitingForCamera = false,
+    cameraHint = null,
     lastFrame = 0;
   const video = $("#qr-camera-video"),
     canvas = document.createElement("canvas"),
@@ -18,11 +20,17 @@ if ($("#qr-scan-panel")) {
   function controls() {
     $("#qr-camera-start").disabled =
       busy || Boolean(stream) || !navigator.mediaDevices?.getUserMedia;
-    $("#qr-camera-stop").disabled = !stream && !busy;
+    $("#qr-camera-stop").disabled = !stream && !waitingForCamera;
+    uiText(
+      $("#qr-camera-stop"),
+      waitingForCamera ? uiMsg("Cancel camera request") : uiMsg("Stop camera"),
+    );
     $("#qr-scan-file").disabled = busy || Boolean(stream);
   }
   function stop() {
     generation++;
+    clearTimeout(cameraHint);
+    waitingForCamera = false;
     cancelAnimationFrame(frame);
     frame = null;
     stopTracks(stream);
@@ -109,9 +117,16 @@ if ($("#qr-scan-panel")) {
   $("#qr-camera-start").onclick = async () => {
     stop();
     const token = generation;
-    busy = true;
+    busy = waitingForCamera = true;
     controls();
     state("Allow camera access to begin scanning…");
+    cameraHint = setTimeout(() => {
+      state(
+        uiMsg(
+          "Still waiting for camera access. Check the browser prompt, or cancel and choose an image.",
+        ),
+      );
+    }, 8000);
     let incoming = null;
     try {
       incoming = await navigator.mediaDevices.getUserMedia({
@@ -126,7 +141,10 @@ if ($("#qr-scan-panel")) {
         stopTracks(incoming);
         return;
       }
+      clearTimeout(cameraHint);
+      waitingForCamera = false;
       stream = incoming;
+      controls();
       stream.getVideoTracks().forEach((track) =>
         track.addEventListener(
           "ended",
@@ -186,13 +204,28 @@ if ($("#qr-scan-panel")) {
       stopTracks(incoming);
       if (token === generation) {
         stop();
-        state(mediaError(error), true);
+        state(
+          ["NotAllowedError", "SecurityError"].includes(error?.name)
+            ? uiMsg(
+                "Camera permission was not granted. Check camera access for this site and for your browser app in system settings, or choose an image.",
+              )
+            : mediaError(error),
+          true,
+        );
       }
     }
   };
   $("#qr-camera-stop").onclick = () => {
+    const waiting = waitingForCamera;
     stop();
-    state("Camera off. Your result stays here until you clear it.");
+    state(
+      waiting
+        ? uiMsg(
+            "Camera request cancelled. You can try again or choose an image.",
+          )
+        : uiMsg("Camera off. Your result stays here until you clear it."),
+    );
+    if (waiting) $("#qr-camera-start").focus();
   };
   $("#qr-camera-facing").onchange = () => {
     if (stream || busy) {

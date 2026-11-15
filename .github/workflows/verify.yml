@@ -41,3 +41,52 @@ jobs:
         run: pnpm test:unit
       - name: Run isolated database tests
         run: pnpm test:database
+
+  browser-smoke:
+    name: Browser smoke (Chromium)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      BROWSER_CHANNEL: chromium
+      TEST_BASE_URL: http://127.0.0.1:8769
+      WORKSHOP_BROWSER_ARTIFACTS: _qa/browser-smoke
+      TOOLS_AUDIT_OUTPUT: _qa/browser-smoke/tools-workflows
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: pnpm
+      - name: Install dependencies and Chromium
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm exec playwright install --with-deps chromium
+      - name: Build browser fixtures
+        run: python build.py
+      - name: Run browser smoke against static preview
+        shell: bash
+        run: |
+          mkdir -p "$WORKSHOP_BROWSER_ARTIFACTS"
+          python -u scripts/serve.py 8769 > "$WORKSHOP_BROWSER_ARTIFACTS/preview.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..25}; do
+            if curl --fail --silent --max-time 2 "$TEST_BASE_URL/" > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent --show-error --max-time 2 "$TEST_BASE_URL/" > /dev/null
+          pnpm test:browser:smoke 2>&1 | tee "$WORKSHOP_BROWSER_ARTIFACTS/smoke.log"
+      - name: Save failed browser checks
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: workshop-browser-smoke
+          path: _qa/browser-smoke/
+          retention-days: 7
+          if-no-files-found: ignore

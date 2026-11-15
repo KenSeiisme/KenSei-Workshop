@@ -1,4 +1,11 @@
 {
+  "browser-smoke": [
+    ["tests/browser/localization.cjs"],
+    ["tests/browser/tools-workflows.cjs"],
+    ["tests/browser/sixth-media.cjs"],
+    ["tests/browser/game-hub.cjs"],
+    ["tests/browser/whiteboard-canvas.cjs"]
+  ],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],
     ["tests/database/game-hub.mjs"],

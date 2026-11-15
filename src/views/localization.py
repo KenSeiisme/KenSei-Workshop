@@ -380,7 +380,7 @@ def source_files(route):
         if not file.is_file():
             continue
         for target in re.findall(
-            r"(?:from\s*|import\s*\()\s*[\'\"]([^\'\"]+)",
+            r"(?:from\s*|import(?:\s*\(|\s+))\s*[\'\"]([^\'\"]+)",
             file.read_text(encoding="utf-8"),
         ):
             if name == "src/app.js":

@@ -29,4 +29,11 @@ pnpm test:database
 ## 2026-11-15 Android 實機回報
 
 - 使用者確認 Google 登入回跳、QR 掃碼、檔案下載和 Whiteboard 觸控通過。
-- Audio Studio 點擊錄音後未顯示麥克風權限提示。權限等待、取消、重試與錄音匯出由瀏覽器自動化複驗，修正後的 Android 麥克風流程待實機複驗。
+- Audio Studio 點擊錄音後未顯示麥克風權限提示。權限等待、取消、重試與錄音匯出由瀏覽器自動化複驗，修正上線後，使用者在 Android 實機確認可開始錄音。
+
+## 錄影恢復與瀏覽器回歸
+
+- `pnpm test:browser:smoke` 沿用現有五組 Chromium 測試。GitHub Actions 使用本機預覽和測試資料，失敗時保留日誌與截圖七天。
+- Chromium 合成媒體驗證拒絕權限、倒數取消、遲到授權、裝置提前停止、錄影失敗與下載的位元組一致性。另用桌面 Chromium 的原生螢幕擷取 API 自動選取合成標籤頁，實際播放並下載錄影。
+- Firefox 定向驗證錄製停止事件未送出時能釋放裝置、重新開始，以及拒絕相機權限後可改用圖片。Windows WebKit 缺少此環境的錄製與相機 API，已驗證相應提示及 QR 圖片匯入與解碼。
+- 本機四編輯器白板測試已驗證背景、連接點、同步及移除成員。正式環境待四個獲授權的臨時帳號，使用 `TEST_BASE_URL=https://kensei-workshop.vercel.app`、`QA_WHITEBOARD_ONLY=1` 執行 `node scripts/verify-shared-whiteboard-online.cjs`。透過隱藏 stdin 提供帳號 ID、電子郵件及臨時密碼的 JSON 陣列。驗證腳本確認房間已刪除，帳號建立者再確認四個臨時帳號已清理。

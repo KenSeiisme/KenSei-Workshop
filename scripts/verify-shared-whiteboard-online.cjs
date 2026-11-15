@@ -31,13 +31,12 @@ async function request(path, token, body) {
     body: JSON.stringify(body),
   });
   let d = await r.json();
-  if (!r.ok || d.error)
-    throw Error(
-      "Backend " +
-        path.split("?")[0] +
-        " failed: " +
-        (d.error?.message || d.error || r.status),
-    );
+  if (!r.ok || d.error) {
+    const detail = d.message || d.error?.message || d.error || r.status;
+    const error = Error("Backend " + path.split("?")[0] + " failed: " + detail);
+    error.code = d.code;
+    throw error;
+  }
   return d;
 }
 const rpc = (i, action, body = {}) =>
@@ -158,6 +157,106 @@ async function deniedSub(p, topic) {
     return s;
   }, topic);
 }
+async function checkPaperAndPorts(page, expected) {
+  await page.waitForFunction(
+    async ({ arrowId, nodeId, x, secondId, y }) => {
+      const data = window.KenseiAdvancedContexts.whiteboard.currentData();
+      const { paper } = data.appState;
+      const arrow = data.elements.find((item) => item.id === arrowId);
+      const node = data.elements.find((item) => item.id === nodeId);
+      const second = data.elements.find((item) => item.id === secondId);
+      if (
+        paper?.type !== "graph" ||
+        paper.spacing !== 40 ||
+        arrow?.customData?.kenseiPorts?.start !== 3 ||
+        arrow.startBinding?.elementId !== nodeId ||
+        node?.x !== x ||
+        second?.y !== y
+      )
+        return false;
+      const { nodePorts, arrowPoints } =
+        await import("/tool-scripts/whiteboard-geometry.js");
+      const port = nodePorts(node)[3],
+        point = arrowPoints(arrow)[0];
+      return Math.hypot(port.x - point.x, port.y - point.y) < 0.01;
+    },
+    expected,
+    { timeout: 30000 },
+  );
+}
+async function updateCanvas(page, id, patch) {
+  await page.evaluate(
+    ({ id, patch }) => {
+      const c = window.KenseiAdvancedContexts.whiteboard;
+      c.drawing.updateScene({
+        elements: c.drawing
+          .getSceneElementsIncludingDeleted()
+          .map((item) =>
+            item.id === id ? c.engine.newElementWith(item, patch) : item,
+          ),
+        captureUpdate: c.engine.CaptureUpdateAction.IMMEDIATELY,
+      });
+    },
+    { id, patch },
+  );
+}
+async function exerciseCanvas(owner) {
+  await owner.locator("#board-background").click();
+  await owner.selectOption("#board-paper-type", "graph");
+  await owner.selectOption("#board-paper-spacing", "40");
+  await owner
+    .locator("#board-background-panel")
+    .evaluate((node) => node.close());
+  const details = await owner.evaluate(() => {
+    const c = window.KenseiAdvancedContexts.whiteboard;
+    const [first, second] = c.drawing
+      .getSceneElements()
+      .filter((item) => item.type === "rectangle");
+    const arrow = c.engine.convertToExcalidrawElements([
+      {
+        type: "arrow",
+        x: 0,
+        y: 0,
+        points: [
+          [0, 0],
+          [200, 0],
+        ],
+      },
+    ])[0];
+    arrow.startBinding = { elementId: first.id, focus: 0, gap: 1 };
+    arrow.customData = { kenseiPorts: { version: 1, start: 3, end: null } };
+    c.drawing.updateScene({
+      elements: [...c.drawing.getSceneElementsIncludingDeleted(), arrow],
+      captureUpdate: c.engine.CaptureUpdateAction.IMMEDIATELY,
+    });
+    return {
+      arrowId: arrow.id,
+      nodeId: first.id,
+      x: first.x,
+      secondId: second.id,
+      y: second.y,
+    };
+  });
+  await Promise.all(
+    [pages[0], pages[2], pages[3]].map((page) =>
+      checkPaperAndPorts(page, details),
+    ),
+  );
+  const updated = { ...details, x: details.x + 60, y: details.y + 45 };
+  await Promise.all([
+    updateCanvas(pages[2], updated.nodeId, {
+      x: updated.x,
+      angle: Math.PI / 4,
+    }),
+    updateCanvas(pages[3], updated.secondId, { y: updated.y }),
+  ]);
+  await Promise.all(
+    [pages[0], pages[2], pages[3]].map((page) =>
+      checkPaperAndPorts(page, updated),
+    ),
+  );
+  return updated;
+}
 async function main() {
   if (process.stdin.isTTY) process.stdin.setRawMode(true);
   console.log("Ready for temporary credentials on hidden stdin");
@@ -176,28 +275,46 @@ async function main() {
   });
   const users = JSON.parse(raw);
   assert.equal(users.length, 4);
+  assert.equal(new Set(users.map((u) => u.id)).size, 4);
   for (const u of users) {
-    sessions.push(
-      await request("/auth/v1/token?grant_type=password", null, {
-        email: u.email,
-        password: u.password,
-      }),
+    const session = await request("/auth/v1/token?grant_type=password", null, {
+      email: u.email,
+      password: u.password,
+    });
+    assert.equal(
+      session.user.id,
+      u.id,
+      "Only the supplied temporary accounts may be used",
     );
+    sessions.push(session);
     clients.push(crypto.randomUUID());
   }
   check(
     "Four actual temporary Auth accounts; no mail and no credentials logged",
   );
-  browser = await chromium.launch({ channel: "msedge", headless: true });
+  const deployedEngine = await fetch(
+    new URL("/vendor/whiteboard/engine.js", base),
+  );
+  assert(deployedEngine.ok, "Whiteboard engine is unavailable at the target");
+  assert.deepEqual(
+    Buffer.from(await deployedEngine.arrayBuffer()),
+    fs.readFileSync("src/vendor/whiteboard/engine.js"),
+    "Browser instrumentation must wrap the exact deployed engine",
+  );
+  browser = await chromium.launch({
+    channel: process.env.BROWSER_CHANNEL || "msedge",
+    headless: true,
+  });
   try {
     const a = await boardPage(0);
     await a.locator("#board-boards").click();
     await a.locator("#board-shared-tab").click();
     await a.locator("#shared-new").click();
-    await connected(a);
+    await a.waitForURL((url) => url.searchParams.has("room"));
     const id = new URL(a.url()).searchParams.get("room");
     rooms.push({ id, owner: 0 });
-    let initial = await scene(0, id);
+    await connected(a);
+    const initial = await scene(0, id);
     const firstKey = initial.channel_key,
       invite = await rpc(0, "invite", { room_id: id });
     const b = await boardPage(1);
@@ -221,7 +338,9 @@ async function main() {
       await connected(p);
       assert(!p.url().includes("#invite"));
     }
-    for (let i = 0; i < 4; i++) await add(pages[i], 100 + i * 110);
+    await Promise.all(
+      pages.slice(0, 4).map((page, i) => add(page, 100 + i * 110)),
+    );
     for (const p of pages.slice(0, 4)) await waitCount(p, 4);
     await a.waitForTimeout(5000);
     assert.equal(
@@ -340,102 +459,144 @@ async function main() {
         document.querySelector("#shared-live-status").textContent ===
         "Reconnecting",
     );
+    const canvas = await exerciseCanvas(a);
     await contexts[1].setOffline(false);
     await b.evaluate(() => dispatchEvent(new Event("online")));
     await connected(b);
-    await waitCount(b, 5);
-    check("Offline view is retained; reconnect merges before resuming editing");
-    // Open one Pong room concurrently with the active whiteboard.
-    const pong = await boardPage(0, "/games/pong/");
-    await pong.locator("#pong-create").click();
-    await pong.waitForFunction(
-      () =>
-        document.querySelector("#pong-invite-code").textContent.length === 8,
-    );
-    const pongCode = await pong.locator("#pong-invite-code").textContent();
-    const pongGuest = await boardPage(1, "/games/pong/");
-    await pongGuest.locator("[data-pong-join-open]").click();
-    await pongGuest.locator("#pong-code").fill(pongCode);
-    await pongGuest.locator("#pong-join").click();
-    await pongGuest.waitForFunction(() =>
-      document
-        .querySelector("#pong-connection-status")
-        .textContent.includes("connected"),
-    );
-    const full = await request(
-      "/rest/v1/rpc/pong_room",
-      sessions[2].access_token,
-      { action: "create", body: { client_id: clients[2] } },
-    ).catch(() => ({ error: true }));
-    assert(full.error, "Third live room must be rejected");
-    check(
-      "One whiteboard plus one Pong room fills the shared two-room capacity",
-    );
     await Promise.all(
-      [pong, pongGuest].map((p) => p.locator("#pong-ready").click()),
+      pages.slice(0, 4).map((page) => checkPaperAndPorts(page, canvas)),
     );
-    await pong.waitForFunction(() =>
-      document
-        .querySelector("#pong-room-state")
-        .textContent.includes("Playing"),
-    );
-    counting = true;
-    const started = Date.now();
-    while (Date.now() - started < 10000) {
-      for (let i = 0; i < 4; i++)
-        await pages[i].evaluate((i) => {
-          const a = window.__drawing,
-            items = a.getSceneElementsIncludingDeleted(),
-            target = items.find((x) => !x.isDeleted);
-          if (target)
-            a.updateScene({
-              elements: items.map((e) =>
-                e.id === target.id
-                  ? {
-                      ...e,
-                      x: e.x + 1,
-                      version: e.version + 1,
-                      versionNonce: Math.floor(Math.random() * 2e9),
-                    }
-                  : e,
-              ),
-            });
-          a.updateScene({ appState: { scrollX: 10 + i } });
-        }, i);
-      await a.waitForTimeout(450);
-    }
-    counting = false;
-    let peak = 0;
-    for (const t of frames)
-      peak = Math.max(
-        peak,
-        frames.filter((x) => x >= t && x < t + 1000).length,
-      );
-    console.log(
-      "MEASURE " +
-        JSON.stringify({
-          seconds: 10,
-          sent,
-          received,
-          peakOneSecondWireFrames: peak,
-        }),
-    );
+    const deadline = Date.now() + 25000;
+    let durable = false;
+    do {
+      const saved = await scene(0, id);
+      durable =
+        saved.appState.paper?.type === "graph" &&
+        saved.appState.paper.spacing === 40 &&
+        saved.elements.some(
+          (item) =>
+            item.id === canvas.arrowId &&
+            item.customData?.kenseiPorts?.start === 3,
+        ) &&
+        saved.elements.some(
+          (item) => item.id === canvas.nodeId && item.x === canvas.x,
+        ) &&
+        saved.elements.some(
+          (item) => item.id === canvas.secondId && item.y === canvas.y,
+        );
+      if (!durable) await new Promise((resolve) => setTimeout(resolve, 1000));
+    } while (!durable && Date.now() < deadline);
     assert(
-      peak < 100,
-      "Combined traffic must stay below 100 events/s, even counting wire control frames",
+      durable,
+      "Paper and simultaneous node edits must reach the durable scene",
     );
     check(
-      "Four board editors plus live two-player Pong leave Realtime control margin",
+      "Paper and bound ports converge after simultaneous edits and reconnect",
     );
-    for (const p of [pong, pongGuest]) {
-      await p.locator("#pong-leave").evaluate((n) => n.click());
-      await p.close();
+    // Keep the existing mixed-game check available for a dedicated capacity run.
+    if (process.env.QA_WHITEBOARD_ONLY !== "1") {
+      const pong = await boardPage(0, "/games/pong/");
+      await pong.locator("#pong-create").click();
+      await pong.waitForFunction(
+        () =>
+          document.querySelector("#pong-invite-code").textContent.length === 8,
+      );
+      const pongCode = await pong.locator("#pong-invite-code").textContent();
+      const pongGuest = await boardPage(1, "/games/pong/");
+      await pongGuest.locator("[data-pong-join-open]").click();
+      await pongGuest.locator("#pong-code").fill(pongCode);
+      await pongGuest.locator("#pong-join").click();
+      await pongGuest.waitForFunction(() =>
+        document
+          .querySelector("#pong-connection-status")
+          .textContent.includes("connected"),
+      );
+      const full = await request(
+        "/rest/v1/rpc/pong_room",
+        sessions[2].access_token,
+        { action: "create", body: { client_id: clients[2] } },
+      ).catch(() => ({ error: true }));
+      assert(full.error, "Third live room must be rejected");
+      check(
+        "One whiteboard plus one Pong room fills the shared two-room capacity",
+      );
+      await Promise.all(
+        [pong, pongGuest].map((p) => p.locator("#pong-ready").click()),
+      );
+      await pong.waitForFunction(() =>
+        document
+          .querySelector("#pong-room-state")
+          .textContent.includes("Playing"),
+      );
+      counting = true;
+      const started = Date.now();
+      while (Date.now() - started < 10000) {
+        for (let i = 0; i < 4; i++)
+          await pages[i].evaluate(
+            ({ i, protectedIds }) => {
+              const a = window.__drawing,
+                items = a.getSceneElementsIncludingDeleted(),
+                target = items.find(
+                  (x) => !x.isDeleted && !protectedIds.includes(x.id),
+                );
+              if (target)
+                a.updateScene({
+                  elements: items.map((e) =>
+                    e.id === target.id
+                      ? {
+                          ...e,
+                          x: e.x + 1,
+                          version: e.version + 1,
+                          versionNonce: Math.floor(Math.random() * 2e9),
+                        }
+                      : e,
+                  ),
+                });
+              a.updateScene({ appState: { scrollX: 10 + i } });
+            },
+            {
+              i,
+              protectedIds: [canvas.arrowId, canvas.nodeId, canvas.secondId],
+            },
+          );
+        await a.waitForTimeout(450);
+      }
+      counting = false;
+      let peak = 0;
+      for (const t of frames)
+        peak = Math.max(
+          peak,
+          frames.filter((x) => x >= t && x < t + 1000).length,
+        );
+      console.log(
+        "MEASURE " +
+          JSON.stringify({
+            seconds: 10,
+            sent,
+            received,
+            peakOneSecondWireFrames: peak,
+          }),
+      );
+      assert(
+        peak < 100,
+        "Combined traffic must stay below 100 events/s, even counting wire control frames",
+      );
+      check(
+        "Four board editors plus live two-player Pong leave Realtime control margin",
+      );
+      for (const p of [pong, pongGuest]) {
+        await p.locator("#pong-leave").evaluate((n) => n.click());
+        await p.close();
+      }
     }
     // A refresh obtains a released lease and reloads the shared saved canvas.
     await a.waitForTimeout(3500);
     await b.reload({ waitUntil: "domcontentloaded" });
     await connected(b);
-    check("Refresh restores the saved room and editing connection");
+    await checkPaperAndPorts(b, canvas);
+    check(
+      "Refresh restores the saved paper, bound ports and editing connection",
+    );
     await a.locator("#board-boards").click();
     await a.locator("#shared-member-panel").evaluate((n) => (n.open = true));
     await a.locator("#shared-members button").last().click();
@@ -444,7 +605,19 @@ async function main() {
         document.querySelector("#shared-status").textContent,
       ),
     );
-    await assert.rejects(() => rpc(3, "get", { room_id: id }));
+    await assert.rejects(() => rpc(3, "get", { room_id: id }), {
+      code: "42501",
+    });
+    await assert.rejects(
+      () =>
+        rpc(3, "save", {
+          room_id: id,
+          channel_key: firstKey,
+          operation_id: crypto.randomUUID(),
+          elements: [],
+        }),
+      { code: "42501" },
+    );
     await assert.rejects(() => rpc(3, "join", { code: invite.code }));
     const fresh = await scene(0, id);
     assert.notEqual(fresh.channel_key, firstKey);
@@ -452,7 +625,10 @@ async function main() {
       pages[3],
       `whiteboard:${id}:${fresh.channel_key}:${users[0].id}`,
     );
-    assert.notEqual(old, "SUBSCRIBED");
+    assert(
+      !["SUBSCRIBED", "timeout"].includes(old),
+      "A removed member must be denied by Realtime",
+    );
     check(
       "Removal rotates channels and invitation; former member loses read, join and publish access",
     );
@@ -467,12 +643,21 @@ async function main() {
     await a.screenshot({ path: "_qa/shared-live.png", fullPage: false });
     check("Actual shared screen fits 320–1440px");
   } finally {
-    if (browser) await browser.close();
-    for (const r of rooms)
-      try {
-        await rpc(r.owner, "delete", { room_id: r.id });
-      } catch {}
-    // Every test-owned Pong room is closed via its owner; Auth cleanup is done by the caller.
+    try {
+      if (browser) await browser.close();
+    } finally {
+      for (const room of rooms) {
+        const result = await rpc(room.owner, "delete", { room_id: room.id });
+        assert.equal(result.deleted, true, "Test room cleanup failed");
+        const remaining = await rpc(room.owner, "list");
+        assert(
+          !remaining.some((board) => board.id === room.id),
+          "Test room still present",
+        );
+        check("Test-owned Whiteboard room deleted and absence verified");
+      }
+      // The operator who provisions the test Auth accounts verifies their cleanup separately.
+    }
   }
 }
 main().catch((e) => {

@@ -139,6 +139,29 @@ try {
     asynchronousError.completions[0][1].error.message,
     "native error",
   );
+  const nativeSetTimeout = globalThis.setTimeout;
+  let finalize;
+  try {
+    globalThis.setTimeout = (callback, delay) => {
+      assert.equal(delay, 5000);
+      finalize = callback;
+    };
+    const missingStopEvent = make();
+    missingStopEvent.recording.start();
+    Recorder.last.stop = () => {
+      Recorder.last.state = "inactive";
+    };
+    missingStopEvent.recording.stop();
+    assert.deepEqual(missingStopEvent.failures, []);
+    finalize();
+    assert.match(missingStopEvent.failures[0].message, /did not finish/);
+    assert.equal(missingStopEvent.track.stops, 1);
+    Recorder.last.onstop();
+    assert.equal(missingStopEvent.failures.length, 1);
+    assert.equal(missingStopEvent.track.stops, 1);
+  } finally {
+    globalThis.setTimeout = nativeSetTimeout;
+  }
   let stops = 0;
   const track = {
       stop() {

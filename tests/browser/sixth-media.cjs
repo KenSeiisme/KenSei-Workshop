@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict"),
   fs = require("node:fs");
 const { chromium } = require("../support/browser.cjs");
+const { saveBrowserFailure } = require("../support/browser-artifacts.cjs");
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
 (async () => {
   const browser = await chromium.launch({
@@ -29,6 +30,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     window.__captureCalls = [];
     window.__captureDeny = false;
     window.__captureWait = false;
+    window.__captureWaitFor = null;
     window.__captureQRImage = null;
     const camera = async (settings, display = false) => {
       __captureCalls.push({ display, settings });
@@ -83,7 +85,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
         __captureAudio.push(audio);
       }
       __captureStreams.push(stream);
-      if (__captureWait)
+      if (
+        __captureWait ||
+        __captureWaitFor === (display ? "screen" : "microphone")
+      )
         await new Promise((resolve) => {
           window.__captureResolve = resolve;
         });
@@ -218,7 +223,14 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
       }),
       true,
     );
-    await page.click("#screen-discard");
+    const priorVideo = page.locator("#screen-result"),
+      priorUrl = await priorVideo.getAttribute("src");
+    const preservesVideo = async () => {
+      assert.equal(await priorVideo.isVisible(), true);
+      assert.equal(await priorVideo.getAttribute("src"), priorUrl);
+      assert.equal(await page.isDisabled("#screen-download"), false);
+      assert.equal(await allStopped(), true);
+    };
     await page.evaluate(() => {
       __captureDeny = true;
     });
@@ -232,8 +244,128 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     await page.evaluate(() => {
       __captureDeny = false;
     });
+    await preservesVideo();
     pass(
-      "shared/microphone audio mixing, native source ending, unsaved warning, permission rejection/retry",
+      "shared/microphone audio mixing, native source ending, and a denied retry keep the finished video",
+    );
+
+    const cancelCapture = page.locator("#screen-cancel");
+    await page.uncheck("#screen-microphone");
+    await page.uncheck("#screen-shared-audio");
+    await page.evaluate(() => {
+      __captureWaitFor = "screen";
+    });
+    await page.click("#screen-start");
+    await page.waitForFunction(() =>
+      document
+        .querySelector("#screen-status")
+        .textContent.includes("Still waiting for a screen"),
+    );
+    assert.equal(await cancelCapture.textContent(), "Cancel capture");
+    await captureLocale();
+    await page.evaluate(() => {
+      window.__previousScreenRequest = {
+        resolve: __captureResolve,
+        stream: __captureStreams.at(-1),
+      };
+      __captureWaitFor = null;
+      __captureResolve = null;
+    });
+    await cancelCapture.click();
+    assert.equal(await page.isDisabled("#screen-start"), false);
+    await page.click("#screen-start");
+    await page.getByRole("button", { name: "Cancel countdown" }).waitFor();
+    await page.evaluate(() => __previousScreenRequest.resolve());
+    await page.waitForFunction(() =>
+      __previousScreenRequest.stream
+        .getTracks()
+        .every((track) => track.readyState === "ended"),
+    );
+    assert.equal(
+      await page.evaluate(
+        () => __captureStreams.at(-1).getVideoTracks()[0].readyState,
+      ),
+      "live",
+    );
+    await cancelCapture.click();
+    await preservesVideo();
+
+    await page.check("#screen-microphone");
+    await page.evaluate(() => {
+      __captureWaitFor = "microphone";
+    });
+    for (const shouldCancel of [true, false]) {
+      await page.evaluate(() => {
+        __captureResolve = null;
+      });
+      await page.click("#screen-start");
+      await page.waitForFunction(() => typeof __captureResolve === "function");
+      assert.match(
+        await page.textContent("#screen-status"),
+        /Allow microphone/,
+      );
+      if (shouldCancel) await cancelCapture.click();
+      else
+        await page.evaluate(() => {
+          const screenTrack = __captureStreams.at(-2).getVideoTracks()[0];
+          screenTrack.stop();
+          screenTrack.dispatchEvent(new Event("ended"));
+        });
+      assert.equal(await page.isDisabled("#screen-start"), false);
+      assert.equal(
+        await page.evaluate(
+          () => __captureStreams.at(-2).getVideoTracks()[0].readyState,
+        ),
+        "ended",
+      );
+      await page.evaluate(() => __captureResolve());
+      await page.waitForFunction(() =>
+        __captureStreams
+          .at(-1)
+          .getAudioTracks()
+          .every((track) => track.readyState === "ended"),
+      );
+      await preservesVideo();
+    }
+    await page.uncheck("#screen-microphone");
+    await page.evaluate(() => {
+      __captureWaitFor = null;
+      window.__startRecorder = MediaRecorder.prototype.start;
+      MediaRecorder.prototype.start = function () {
+        MediaRecorder.prototype.start = __startRecorder;
+        throw Error("Recorder start failed");
+      };
+    });
+    await page.click("#screen-start");
+    await page.waitForFunction(() =>
+      document
+        .querySelector("#screen-status")
+        .textContent.includes("Recorder start failed"),
+    );
+    await preservesVideo();
+    assert.ok(
+      await priorVideo.evaluate(async (video) => {
+        await video.play();
+        const playable = video.readyState >= 2 && !video.paused;
+        video.pause();
+        return playable;
+      }),
+    );
+    const saved = await download(() => page.click("#screen-download"));
+    assert.ok(saved.bytes.length > 1000);
+    assert.deepEqual(
+      saved.bytes,
+      Buffer.from(
+        await page.evaluate(
+          async (url) => [
+            ...new Uint8Array(await (await fetch(url)).arrayBuffer()),
+          ],
+          priorUrl,
+        ),
+      ),
+    );
+    pass(
+      "screen and microphone waits, late grants, source ending and recorder failure preserve the playable download",
     );
 
     await open("audio-studio");
@@ -483,6 +615,13 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     });
     await page.click("#qr-camera-start");
     await page.waitForFunction(() => typeof __captureResolve === "function");
+    assert.equal(
+      await page.textContent("#qr-camera-stop"),
+      "Cancel camera request",
+    );
+    await page.evaluate(() => KenseiI18n.setLocale("zh-Hant"));
+    assert.equal(await page.textContent("#qr-camera-stop"), "取消相機請求");
+    await page.evaluate(() => KenseiI18n.setLocale("en"));
     await page.click("#qr-camera-stop");
     await page.evaluate(() => __captureResolve());
     await page.waitForFunction(() =>
@@ -490,7 +629,20 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
         stream.getTracks().every((track) => track.readyState === "ended"),
       ),
     );
-    pass("cancelled QR permission request releases late-granted camera");
+    await page.evaluate(() => {
+      __captureWait = false;
+      __captureDeny = true;
+    });
+    await page.click("#qr-camera-start");
+    await page.waitForFunction(() =>
+      document
+        .querySelector("#qr-scan-status")
+        .textContent.includes("system settings"),
+    );
+    assert.equal(await page.isDisabled("#qr-scan-file"), false);
+    pass(
+      "QR camera cancellation, late grant cleanup, localized guidance and image fallback",
+    );
     for (const slug of ["screen-recorder", "audio-studio", "qr-studio"]) {
       await open(slug);
       for (const width of [360, 768, 1440]) {
@@ -515,6 +667,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     pass(
       "three media tools at 360/768/1440 without overflow; zero file upload requests and page errors",
     );
+  } catch (error) {
+    await saveBrowserFailure(context, "sixth-media");
+    throw error;
   } finally {
     await browser.close();
   }

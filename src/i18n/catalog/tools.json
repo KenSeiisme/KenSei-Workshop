@@ -7274,5 +7274,53 @@
   "m_347d52b617da": {
     "en": "{0} · {1}/{2} known",
     "zh-Hant": "{0} · {1}/{2} 已掌握"
+  },
+  "m_f2d63563780f": {
+    "en": "Cancel camera request",
+    "zh-Hant": "取消相機請求"
+  },
+  "m_72b011591310": {
+    "en": "Still waiting for camera access. Check the browser prompt, or cancel and choose an image.",
+    "zh-Hant": "還在等待相機存取。請查看瀏覽器提示，或取消後選擇圖片。"
+  },
+  "m_7230290101c2": {
+    "en": "Camera permission was not granted. Check camera access for this site and for your browser app in system settings, or choose an image.",
+    "zh-Hant": "未取得相機權限。請檢查本站與系統設定中的瀏覽器相機權限，或選擇圖片。"
+  },
+  "m_c3f4d7ab7142": {
+    "en": "Camera request cancelled. You can try again or choose an image.",
+    "zh-Hant": "已取消相機請求。你可以重試或選擇圖片。"
+  },
+  "m_c0f6037104c5": {
+    "en": "Cancel capture",
+    "zh-Hant": "取消錄製請求"
+  },
+  "m_ddc314419b5e": {
+    "en": "Start a new capture? Your current recording stays available until a new recording succeeds.",
+    "zh-Hant": "要開始新的錄製嗎？成功完成新錄影前會保留目前的錄影。"
+  },
+  "m_f336e0397184": {
+    "en": "Still waiting for a screen. Check the browser's capture picker, or cancel and try again.",
+    "zh-Hant": "還在等待畫面。請查看瀏覽器的畫面選擇器，或取消後重試。"
+  },
+  "m_c5e4069455e6": {
+    "en": "Preparing shared and microphone audio…",
+    "zh-Hant": "正在準備共享音訊與麥克風音訊…"
+  },
+  "m_2dcf5fcdec24": {
+    "en": "Still preparing audio. You can cancel and retry with one audio source.",
+    "zh-Hant": "還在準備音訊。你可以取消，只選一個音訊來源再試。"
+  },
+  "m_36e803f034f8": {
+    "en": "Recording failed. Your previous recording is still available.",
+    "zh-Hant": "錄影失敗。上一段錄影仍可播放和下載。"
+  },
+  "m_c33c92b7b378": {
+    "en": "Capture cancelled. Ready to try again.",
+    "zh-Hant": "已取消錄製請求。你可以再試一次。"
+  },
+  "m_a8928479e16b": {
+    "en": "The browser did not finish the recording. Please try again.",
+    "zh-Hant": "瀏覽器沒有完成錄製。請再試一次。"
   }
 }

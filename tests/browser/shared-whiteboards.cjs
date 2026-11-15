@@ -15,7 +15,10 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
       "insert into auth.users(id,raw_user_meta_data) values($1,$2)",
       [users[i], { full_name: "Drawer " + i }],
     );
-  const browser = await chromium.launch({ channel: "msedge", headless: true });
+  const browser = await chromium.launch({
+    channel: process.env.BROWSER_CHANNEL || "msedge",
+    headless: true,
+  });
   const pages = [],
     contexts = [],
     errors = [];
