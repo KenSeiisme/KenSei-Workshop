@@ -1,3 +1,4 @@
+import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, esc } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import { mountEffects, effectsMode } from "./effects.js";
@@ -13,6 +14,7 @@ import { mountPlayShell } from "./play-shell.js";
 import { trackGame } from "./hub-activity.js";
 import {
   createPong,
+  restorePong,
   advancePong,
   validPongState,
   pongTickAt,
@@ -25,6 +27,7 @@ mountAudio();
 const $ = (s) => document.querySelector(s),
   root = $("[data-pong]"),
   canvas = $(".pong-canvas");
+const showMatchLink = mountMatchLink(root);
 const shell = mountPlayShell(root, {
   beforeCover: () => {
     if (room?.status === "playing") operation("pause");
@@ -37,16 +40,10 @@ const clock = (t) =>
     .padStart(2, "0")}:${Math.floor(t % 60)
     .toString()
     .padStart(2, "0")}`;
-let clientId;
+// Every page starts with a fresh controller token, including duplicated tabs.
+const clientId = crypto.randomUUID();
 let endCueRound = -1;
 let reconnectCuePending = false;
-try {
-  clientId =
-    sessionStorage.getItem("kensei-pong-tab-v1") || crypto.randomUUID();
-  sessionStorage.setItem("kensei-pong-tab-v1", clientId);
-} catch {
-  clientId = crypto.randomUUID();
-}
 let room = null,
   roomOwner = null,
   channels = [],
@@ -79,12 +76,25 @@ let pollAt = 0,
   channelGeneration = 0,
   profileSignatures = new Map(),
   closedByPage = false,
-  authTimer;
+  heartbeatTimer,
+  roomEpoch = 0,
+  readSerial = 0,
+  requestedOwner,
+  pendingPoint = null,
+  savingPoint = false,
+  clockOffset = 0,
+  peerSeen = false;
 const message = (text) => uiText($("#pong-status"), uiFrom(text));
 const host = () => room?.role === "host";
+const recoverable = (match = room) => match?.protocol_version === 2;
+const controls = () => !!room && room.controller !== false;
+const ended = () => ["closed", "interrupted"].includes(room?.status);
 const active = () =>
   room?.status === "playing" &&
   connected &&
+  controls() &&
+  !pendingPoint &&
+  (!recoverable() || peerSeen) &&
   !interruptedAt &&
   !document.hidden &&
   state?.status === "playing";
@@ -110,15 +120,22 @@ function renderRoom() {
   });
   $("#pong-create").disabled = busy || !!live;
   $("#pong-join").disabled = busy || !!live;
-  $("#pong-invite").hidden = !live;
+  $("#pong-invite").hidden = !live || !controls();
   uiText($("#pong-invite-code"), room?.code || "");
-  $("#pong-leave").disabled = !live || busy;
+  $("#pong-leave").disabled = !live || !controls() || busy;
+  $("#pong-takeover").hidden = !live || controls();
+  $("#pong-takeover").disabled = busy;
+  $("#pong-retry").hidden =
+    !live ||
+    !controls() ||
+    (connected && !interruptedAt && (!pendingPoint || savingPoint));
   const me = room?.players?.find((p) => p.role === room.role),
     two = room?.players?.length === 2;
   $("#pong-ready").disabled =
     !live ||
     !two ||
     !connected ||
+    !controls() ||
     busy ||
     room.status === "playing" ||
     !!me?.ready;
@@ -134,7 +151,7 @@ function renderRoom() {
           ? uiMsg("Ready to resume →")
           : uiMsg("Ready →"),
   );
-  $("#pong-pause").disabled = room?.status !== "playing" || busy;
+  $("#pong-pause").disabled = room?.status !== "playing" || !controls() || busy;
   uiText(
     $("#pong-room-state"),
     room
@@ -159,15 +176,19 @@ function renderRoom() {
     }
   }
   const connectionStatus =
-    room?.status === "interrupted"
-      ? uiMsg("Match interrupted. Create a new room to play again.")
-      : !live
-        ? uiMsg("No active online match.")
-        : connecting || !connected || interruptedAt
-          ? uiMsg("Reconnecting… Use Retry connection if needed.")
-          : room.status === "paused"
-            ? uiMsg("Connected · Both players must press Ready to resume.")
-            : uiMsg("Private connection · connected");
+    live && !controls()
+      ? uiMsg("Read-only tab. Take control here to play.")
+      : pendingPoint
+        ? uiMsg("Confirming the score…")
+        : room?.status === "interrupted"
+          ? uiMsg("Match interrupted. Create a new room to play again.")
+          : !live
+            ? uiMsg("No active online match.")
+            : connecting || !connected || interruptedAt
+              ? uiMsg("Reconnecting… Use Retry connection if needed.")
+              : room.status === "paused"
+                ? uiMsg("Connected · Both players must press Ready to resume.")
+                : uiMsg("Private connection · connected");
   uiText($("#pong-connection-status"), connectionStatus);
   uiText(
     $("#pong-latency"),
@@ -192,11 +213,15 @@ function renderRoom() {
         }
       : null,
   );
-  uiText($("#pong-left-score"), current?.score[0] ?? 0);
-  uiText($("#pong-right-score"), current?.score[1] ?? 0);
+  const displayedScore =
+    current?.ticks >= (room?.ticks || 0) ? current?.score : room?.score;
+  uiText($("#pong-left-score"), displayedScore?.[0] ?? 0);
+  uiText($("#pong-right-score"), displayedScore?.[1] ?? 0);
   uiText($("#pong-time"), `${clock((current?.ticks || 0) / 120)} / 10:00`);
   if (!room)
     overlay("Bring a friend.", "Create or join a private room to play.");
+  else if (live && !controls())
+    overlay("Read-only tab", "Take control in this tab to play.");
   else if (room.status === "waiting")
     overlay(
       two ? "Ready for a rally?" : "Waiting for your friend…",
@@ -204,14 +229,22 @@ function renderRoom() {
         ? "Both players press Ready."
         : "Share the invitation link or room code.",
     );
-  else if (room.status === "paused")
+  else if (room.status === "paused") {
+    const remaining = Math.max(
+      0,
+      Math.ceil(
+        (Date.parse(room.resume_until) - Date.now() - clockOffset) / 1000,
+      ),
+    );
     overlay(
       "Paused",
-      connecting || !connected
-        ? "Play is paused. Reconnect within 15 seconds."
-        : "Both players press Ready to resume. Pauses last up to 60 seconds.",
+      recoverable()
+        ? uiMsg("Both players must press Ready within {0} s.", [remaining])
+        : connecting || !connected
+          ? "Play is paused. Reconnect within 15 seconds."
+          : "Both players press Ready to resume. Pauses last up to 60 seconds.",
     );
-  else if (room.status === "interrupted" || room.status === "closed")
+  } else if (room.status === "interrupted" || room.status === "closed")
     overlay(
       room.status === "interrupted" ? "Interrupted" : "Room closed",
       "Create a fresh invitation when you are ready.",
@@ -223,7 +256,7 @@ function renderRoom() {
     const winner = current?.winner;
     const name = room.players?.find(
       (p) => p.role === (winner === 1 ? "host" : "guest"),
-    )?.profile.nickname;
+    )?.profile?.nickname;
     overlay(
       current?.status === "draw"
         ? "An even match"
@@ -232,8 +265,18 @@ function renderRoom() {
           : "Match complete",
       "Private casual result · both players can Ready for a rematch.",
     );
-  } else if (connecting || !connected || interruptedAt)
-    overlay("Reconnecting…", "Play is paused. Reconnect within 15 seconds.");
+  } else if (pendingPoint)
+    overlay(
+      "Confirming the score…",
+      savingPoint ? "" : "Use Retry connection to confirm the point.",
+    );
+  else if (connecting || !connected || interruptedAt)
+    overlay(
+      "Reconnecting…",
+      recoverable()
+        ? "Restoring the room connection."
+        : "Play is paused. Reconnect within 15 seconds.",
+    );
   else if (current && current.ticks < current.serveAt)
     overlay(
       current.ticks < 360
@@ -262,48 +305,74 @@ function syncPongAudio() {
 async function rpc(action, extra = {}) {
   if (!api.user || !api.client)
     throw Error("Sign in with Google to play online.");
-  const owner = api.user.id;
-  const { data, error } = await api.client.rpc("pong_room", {
+  const owner = api.user.id,
+    epoch = roomEpoch;
+  const query = api.client.rpc("pong_room", {
     action,
     body: {
       client_id: clientId,
-      ...(room ? { room_id: room.id, round: room.round } : {}),
+      protocol_version: 2,
+      ...(room
+        ? { room_id: room.id, round: room.round, generation: room.generation }
+        : {}),
       ...extra,
     },
   });
-  if (api.user?.id !== owner)
-    throw Error("Account changed. Reopen Pong before joining.");
+  const { data, error } = await (query.abortSignal?.(
+    AbortSignal.timeout(10000),
+  ) ?? query);
+  if (api.user?.id !== owner || epoch !== roomEpoch || stopped)
+    throw Object.assign(new Error(), { stale: true });
   if (error || data?.error)
-    throw Error(
-      data?.error ||
-        error?.message ||
-        "Room service is unavailable. Retry when connected.",
+    throw Object.assign(
+      Error(
+        data?.error ||
+          error?.message ||
+          "Room service is unavailable. Retry when connected.",
+      ),
+      { unavailable: error?.code === "42501" || error?.code === "22P02" },
     );
   return data;
 }
 function installRoom(next) {
-  if (!next || (room && next.id !== room.id)) return;
-  if (!room) reconnectCuePending = false;
+  if (!next?.id || (room && next.id !== room.id)) return;
+  if (recoverable(next) && room?.revision > next.revision) return;
   const wasRunning = room?.status === "playing",
     oldRound = round;
+  const changedChannel = !!room && room.channel_key !== next.channel_key;
+  const restore =
+    recoverable(next) &&
+    (!room ||
+      next.round !== round ||
+      (changedChannel && next.restart_serve) ||
+      (next.status === "finished" && state?.status === "playing") ||
+      (next.status === "paused" &&
+        pendingPoint &&
+        next.score.join() !== state?.score.join()));
+  if (!room) reconnectCuePending = false;
   room = next;
-  if (wasRunning && next.status === "paused") {
-    pauseAudio();
-  }
   roomOwner = api.user?.id;
-  if (next.round !== oldRound) {
-    endCueRound = -1;
+  if (recoverable()) clockOffset = Number(next.server_now) - Date.now();
+  if (next.round !== oldRound || restore) {
+    if (next.round !== oldRound) endCueRound = -1;
     round = next.round;
-    state = round ? createPong(Number(next.seed)) : null;
-    remoteState = null;
-    previousRemote = null;
-    lastRemoteSequence = -1;
-    sequence = 0;
-    baseTicks = 0;
+    state = round
+      ? recoverable()
+        ? restorePong(next)
+        : createPong(Number(next.seed))
+      : null;
+    remoteState = previousRemote = null;
+    baseTicks = state?.ticks || 0;
     runAt = performance.now();
     lastEcho = 0;
   }
-  if (next.status === "playing" && !wasRunning) {
+  if (changedChannel || next.round !== oldRound) {
+    lastRemoteSequence = -1;
+    sequence = 0;
+  }
+  if (next.status !== "playing" || changedChannel) pendingPoint = null;
+  if (wasRunning && next.status === "paused") pauseAudio();
+  if (next.status === "playing" && (!wasRunning || changedChannel)) {
     syncPongAudio();
     if (next.round !== oldRound)
       playCue("serve", 1, { id: `${next.id}:${next.round}:serve` });
@@ -316,37 +385,51 @@ function installRoom(next) {
     keys.clear();
     baseTicks = state?.ticks || 0;
   }
-  if (["closed", "interrupted"].includes(next.status)) {
-    disconnect();
-    keys.clear();
-  }
+  if (ended() || !controls() || changedChannel) disconnect();
+  if (changedChannel && controls() && !ended()) queueMicrotask(() => connect());
   renderRoom();
 }
 function tell(kind, payload = {}) {
-  if (!room || !connected) return;
+  if (!controls() || !connected) return;
   const own = channels.find((c) => c.role === room.role)?.channel;
   if (!own) return;
   own
     .send({
       type: "broadcast",
       event: "pong",
-      payload: { kind, round: room.round, seq: ++sequence, ...payload },
+      payload: {
+        kind,
+        round: room.round,
+        generation: room.generation,
+        seq: ++sequence,
+        ...payload,
+      },
     })
     .catch?.(() => connectionLost());
 }
 async function poll() {
-  if (!room || pollBusy || ["closed", "interrupted"].includes(room.status))
-    return;
+  if (!room || pollBusy || ended() || stopped || document.hidden) return;
+  const epoch = roomEpoch;
   pollBusy = true;
   try {
-    const next = await rpc("heartbeat");
+    const clock =
+      recoverable() &&
+      host() &&
+      state?.status === "playing" &&
+      room.status === "playing"
+        ? { ticks: Math.min(state.ticks, PONG.maxTicks - 1) }
+        : {};
+    const next = controls() ? await rpc("heartbeat", clock) : await rpc("get");
     installRoom(next);
   } catch (e) {
+    if (e.stale) return;
     message(uiError(e));
     connectionLost();
   } finally {
-    pollBusy = false;
-    pollAt = performance.now();
+    if (epoch === roomEpoch) {
+      pollBusy = false;
+      pollAt = performance.now();
+    }
   }
 }
 function receive(role, payload) {
@@ -360,13 +443,21 @@ function receive(role, payload) {
     return;
   const now = performance.now();
   // 先隔离比赛编号，再检查本局序号；旧局的大序号不能锁死重赛消息。
-  if (payload.round !== room.round) {
+  if (
+    payload.round !== room.round ||
+    (recoverable() && payload.generation !== room.generation)
+  ) {
     poll();
     return;
   }
   if (!Number.isSafeInteger(payload.seq) || payload.seq <= lastRemoteSequence)
     return;
   lastRemoteSequence = payload.seq;
+  if (!peerSeen && recoverable()) {
+    peerSeen = true;
+    baseTicks = state?.ticks || 0;
+    runAt = now;
+  }
   lastHeard = now;
   interruptedAt = 0;
   if (payload.kind === "control") {
@@ -421,7 +512,7 @@ function receive(role, payload) {
 }
 async function connect() {
   if (
-    !room ||
+    !controls() ||
     connecting ||
     stopped ||
     ["closed", "interrupted"].includes(room.status)
@@ -450,8 +541,11 @@ async function connect() {
               10000,
             );
             let settled = false;
-            channel.on("broadcast", { event: "pong" }, ({ payload }) =>
-              receive(role, payload),
+            channel.on(
+              "broadcast",
+              { event: "pong" },
+              ({ payload }) =>
+                generation === channelGeneration && receive(role, payload),
             );
             channel.subscribe((status) => {
               if (generation !== channelGeneration) return;
@@ -474,9 +568,13 @@ async function connect() {
           }),
       ),
     );
+    if (generation !== channelGeneration || stopped) return;
     connected = true;
+    if (room.status === "playing") {
+      baseTicks = state?.ticks || 0;
+      runAt = performance.now();
+    }
     interruptedAt = 0;
-    $("#pong-retry").hidden = true;
     tell("control");
     await poll();
     if (reconnectCuePending && connected) {
@@ -484,16 +582,20 @@ async function connect() {
       playCue("reconnect");
     }
   } catch (e) {
-    connected = false;
-    message(uiError(e));
-    $("#pong-retry").hidden = false;
+    if (generation === channelGeneration && !stopped) {
+      connected = false;
+      message(uiError(e));
+    }
   } finally {
     connecting = false;
+    if (generation !== channelGeneration && controls() && !ended() && !stopped)
+      queueMicrotask(connect);
     renderRoom();
   }
 }
 function disconnect(clear = true) {
   channelGeneration++;
+  peerSeen = false;
   const old = channels;
   channels = [];
   connected = false;
@@ -503,7 +605,7 @@ function disconnect(clear = true) {
 }
 function connectionLost() {
   stopAudio();
-  if (!room || ["closed", "interrupted"].includes(room.status)) return;
+  if (!controls() || ended()) return;
   reconnectCuePending = true;
   if (!interruptedAt) interruptedAt = performance.now();
   connected = false;
@@ -511,11 +613,19 @@ function connectionLost() {
   $("#pong-retry").hidden = false;
   if (room.status === "playing") {
     baseTicks = state?.ticks || 0;
-    rpc("pause")
+    rpc("pause", { recovery: recoverable() })
       .then(installRoom)
       .catch(() => {});
   }
   renderRoom();
+}
+function updateMatchUrl(match) {
+  const url = new URL(location.href);
+  url.searchParams.delete("room");
+  url.searchParams.delete("match");
+  if (recoverable(match)) url.searchParams.set("match", match.id);
+  else if (match) url.searchParams.set("room", match.code);
+  history.replaceState(null, "", url);
 }
 async function operation(action, extra = {}) {
   if (action === "ready") unlockAudio();
@@ -526,26 +636,40 @@ async function operation(action, extra = {}) {
     api.openAuth(location.pathname + location.search);
     return;
   }
+  const owner = api.user.id,
+    epoch = roomEpoch;
+  if (action === "create" || action === "join") readSerial++;
   busy = true;
   renderRoom();
   try {
     await ensureProfile();
-    const result = await rpc(action, extra);
+    if (owner !== api.user?.id || epoch !== roomEpoch || stopped) return;
+    const payload =
+      action === "pause" &&
+      recoverable() &&
+      host() &&
+      state?.status === "playing"
+        ? { ticks: state.ticks, ...extra }
+        : extra;
+    const result = await rpc(action, payload);
     if (action === "create" || action === "join") {
       room = null;
       roomOwner = api.user.id;
       installRoom(result);
-      $("#pong-code").value = result.code;
+      $("#pong-code").value = result.code || "";
+      showMatchLink("");
       lastRemoteSequence = -1;
       sequence = 0;
-      history.replaceState(
-        null,
-        "",
-        `/games/pong/?room=${encodeURIComponent(result.code)}`,
-      );
+      updateMatchUrl(result);
       await connect();
-      message(uiMsg("Share the room link. Both players press Ready to begin."));
+      if (epoch === roomEpoch && owner === api.user?.id)
+        message(
+          result.controller === false
+            ? uiMsg("Read-only tab. Take control here to play.")
+            : uiMsg("Share the room link. Both players press Ready to begin."),
+        );
     } else {
+      tell("control");
       installRoom(result);
       tell("control");
       if (action === "ready")
@@ -555,19 +679,86 @@ async function operation(action, extra = {}) {
             : uiMsg("Ready sent. Waiting for your friend."),
         );
       if (action === "leave") {
-        history.replaceState(null, "", "/games/pong/");
+        roomEpoch++;
+        busy = savingPoint = pollBusy = false;
+        updateMatchUrl(null);
+        showMatchLink("");
         room = null;
         state = null;
         remoteState = null;
         round = 0;
+        renderRoom();
         message(uiMsg("You left the room. Create or join a new one."));
       }
     }
   } catch (e) {
-    message(uiError(e));
+    if (!e.stale && epoch === roomEpoch) {
+      message(uiError(e));
+      if (room) poll();
+    }
   } finally {
-    busy = false;
-    renderRoom();
+    if (epoch === roomEpoch) {
+      busy = false;
+      renderRoom();
+    }
+  }
+}
+
+async function confirmPoint() {
+  if (!pendingPoint || savingPoint) return;
+  const point = pendingPoint,
+    version = room.generation,
+    epoch = roomEpoch;
+  savingPoint = true;
+  renderRoom();
+  try {
+    const snapshot = await rpc("checkpoint", {
+      ticks: point.ticks,
+      score_host: point.score[0],
+      score_guest: point.score[1],
+    });
+    if (
+      point !== pendingPoint ||
+      epoch !== roomEpoch ||
+      version !== room?.generation
+    )
+      return;
+    pendingPoint = null;
+    if (
+      snapshot.generation === version &&
+      snapshot.score?.join() === point.score.join() &&
+      snapshot.ticks >= point.ticks
+    ) {
+      const scored = state.score.join() !== point.score.join();
+      state = point;
+      baseTicks = state.ticks;
+      runAt = performance.now();
+      if (scored) playCue("point");
+      if (snapshot.status === "finished" && endCueRound !== round) {
+        endCueRound = round;
+        playCue(
+          state.status === "draw"
+            ? "draw"
+            : state.winner === 1
+              ? "win"
+              : "loss",
+        );
+      }
+      tell("state", {
+        state,
+        status: snapshot.status,
+        t0: runAt,
+        echo: lastEcho,
+      });
+    }
+    installRoom(snapshot);
+  } catch (e) {
+    if (!e.stale && point === pendingPoint) message(uiError(e));
+  } finally {
+    if (epoch === roomEpoch) {
+      savingPoint = false;
+      renderRoom();
+    }
   }
 }
 function paint(now) {
@@ -663,7 +854,22 @@ function frame(now) {
       const tick = pongTickAt(state.ticks, baseTicks, runAt, now),
         score = state.score.join(),
         previousVX = state.ball.vx;
-      advancePong(state, tick, target, remoteTarget);
+      const next = recoverable()
+        ? { ...state, score: [...state.score], ball: { ...state.ball } }
+        : state;
+      advancePong(
+        next,
+        recoverable() ? Math.min(tick, state.ticks + PONG.fps) : tick,
+        target,
+        remoteTarget,
+      );
+      if (
+        recoverable() &&
+        (score !== next.score.join() || next.status !== "playing")
+      ) {
+        pendingPoint = next;
+        confirmPoint();
+      } else state = next;
       if (
         previousVX * state.ball.vx < 0 &&
         (state.ball.x < 80 || state.ball.x > 880)
@@ -705,21 +911,22 @@ function frame(now) {
       });
     else tell("input", { target, t0: now, echo: lastEcho });
   }
-  if (room && !["closed", "interrupted"].includes(room.status)) {
+  if (room && !ended() && !document.hidden) {
     if (now - pollAt > 5000) poll();
     if (
       room.players?.length === 2 &&
       connected &&
       lastHeard &&
-      now - lastHeard > 2000
+      now - lastHeard > (recoverable() && !peerSeen ? 8000 : 2000)
     ) {
       if (!interruptedAt) {
         interruptedAt = now;
         keys.clear();
-        if (room.status === "playing") operation("pause");
+        if (room.status === "playing")
+          operation("pause", { recovery: recoverable() });
       }
     }
-    if (interruptedAt && now - interruptedAt > 15000) {
+    if (!recoverable() && interruptedAt && now - interruptedAt > 15000) {
       operation("interrupt");
       interruptedAt = 0;
     }
@@ -732,7 +939,7 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 function move(e) {
-  if (!room || !connected) return;
+  if (!controls() || !connected) return;
   const rect = canvas.getBoundingClientRect();
   target = Math.max(
     0,
@@ -787,6 +994,10 @@ $("[data-pong-join-open]").onclick = () => {
 $("#pong-join").onclick = () =>
   operation("join", { code: $("#pong-code").value });
 $("#pong-ready").onclick = () => operation("ready");
+$("#pong-takeover").onclick = () => {
+  if (uiConfirm(uiMsg("Take control of this match in this tab?")))
+    operation("takeover");
+};
 $("#pong-pause").onclick = () => operation("pause");
 $("#pong-leave").onclick = () => {
   if (
@@ -800,8 +1011,9 @@ $("#pong-leave").onclick = () => {
 };
 $("#pong-retry").onclick = async () => {
   unlockAudio();
+  if (pendingPoint) await confirmPoint();
   await poll();
-  if (room && !["closed", "interrupted"].includes(room.status)) connect();
+  if (controls() && !ended() && !connected) connect();
 };
 $("#pong-copy").onclick = async () => {
   try {
@@ -825,7 +1037,7 @@ $("#pong-copy").onclick = async () => {
 document.addEventListener("visibilitychange", () => {
   keys.clear();
   if (document.hidden) {
-    if (room?.status === "playing") operation("pause");
+    if (controls() && room.status === "playing") operation("pause");
   } else {
     lastFrame = 0;
     poll();
@@ -838,40 +1050,87 @@ window.addEventListener("online", () => {
   }
 });
 window.addEventListener("pagehide", () => {
+  if (controls() && api.user?.id === roomOwner && !ended()) {
+    if (!recoverable()) rpc("leave").catch(() => {});
+    else if (room.status === "playing")
+      rpc("pause", { recovery: true }).catch(() => {});
+  }
   stopped = true;
   closedByPage = true;
-  clearInterval(authTimer);
+  roomEpoch++;
+  readSerial++;
   clearInterval(heartbeatTimer);
   keys.clear();
-  if (room && api.user?.id === roomOwner) rpc("leave").catch(() => {});
   disconnect();
 });
-const heartbeatTimer = setInterval(() => {
-  if (room && !stopped) poll();
-}, 5000);
-authTimer = setInterval(() => {
-  if (roomOwner && api.user?.id !== roomOwner) {
-    closedByPage = true;
-    disconnect();
-    room = null;
-    state = null;
-    remoteState = null;
-    round = 0;
-    renderRoom();
-    message(uiMsg("Account changed. Create or join a fresh room."));
+function startHeartbeat() {
+  clearInterval(heartbeatTimer);
+  heartbeatTimer = setInterval(() => {
+    if (room && !stopped && !document.hidden) poll();
+  }, 5000);
+}
+
+async function openPongMatch() {
+  const id = requestedMatch(),
+    owner = api.user?.id,
+    serial = ++readSerial;
+  if (id === null) return;
+  if (!MATCH_ID.test(id)) return showMatchLink("unavailable");
+  if (!owner) return showMatchLink("guest");
+  showMatchLink("loading");
+  try {
+    const next = await rpc("get", { room_id: id });
+    if (serial !== readSerial || (room && room.id !== id)) return;
+    if (!next?.id) return showMatchLink("unavailable");
+    installRoom(next);
+    showMatchLink(ended() ? "unavailable" : "");
+    if (controls() && !ended()) connect();
+  } catch (e) {
+    if (!e.stale && serial === readSerial)
+      showMatchLink(e.unavailable ? "unavailable" : "retry", openPongMatch);
   }
-  if (!room)
+}
+function authChanged() {
+  const owner = api.user?.id;
+  if (owner === requestedOwner && room) return;
+  if (requestedOwner !== owner || (roomOwner && roomOwner !== owner)) {
+    requestedOwner = owner;
+    roomEpoch++;
+    disconnect();
+    room = state = remoteState = previousRemote = pendingPoint = null;
+    round = 0;
+    roomOwner = null;
+    busy = savingPoint = pollBusy = false;
+    renderRoom();
+  }
+  if (!room && requestedMatch() !== null) openPongMatch();
+  else if (!room)
     message(
-      api.user
+      owner
         ? uiMsg("Create a room or enter your friend's invitation code.")
         : uiMsg("Sign in with Google to create or join a room."),
     );
-}, 1000);
+}
+window.addEventListener("workspace-ready", authChanged);
+window.addEventListener("locale-change", renderRoom);
+window.addEventListener("pageshow", (event) => {
+  if (!event.persisted) return;
+  stopped = closedByPage = false;
+  lastFrame = 0;
+  startHeartbeat();
+  authChanged();
+  pollBusy = savingPoint = busy = false;
+  if (room && recoverable()) poll().then(() => connect());
+  else if (room) poll();
+  requestAnimationFrame(frame);
+});
+startHeartbeat();
 const invitation = new URLSearchParams(location.search).get("room");
 if (invitation) {
   $("#pong-code").value = invitation.slice(0, 8).toUpperCase();
   $(".pong-join-fields").hidden = false;
 }
 root.dataset.ready = "true";
+authChanged();
 renderRoom();
 requestAnimationFrame(frame);

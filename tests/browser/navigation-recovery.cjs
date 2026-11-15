@@ -261,6 +261,8 @@ async function main() {
   let requests = [];
   let receipt = null;
   let pongRoom = null;
+  let lobbyFailure = false;
+  let requestedIds = [];
   await context.route(sdkPath, (route) =>
     route.fulfill({ contentType: "application/javascript", body: sdk }),
   );
@@ -268,8 +270,61 @@ async function main() {
     const { id, body } = route.request().postDataJSON();
     const endpoint = new URL(route.request().url()).pathname.split("/").at(-1);
     if (route.request().url().includes("/_fixture/rpc/")) {
-      if (endpoint === "pong_room")
+      if (endpoint === "get_my_live_games") {
+        if (lobbyFailure) return route.abort();
+        return route.fulfill({
+          json: {
+            server_now: Date.now(),
+            matches:
+              id !== fixtureUser
+                ? []
+                : active
+                  ? [
+                      {
+                        game: active.game,
+                        id: active.id,
+                        status: active.status,
+                        rule: "chinese",
+                        size: 9,
+                        clock: "10+5",
+                      },
+                    ]
+                  : pongRoom?.protocol_version === 2
+                    ? [
+                        {
+                          game: "pong",
+                          id: pongRoom.id,
+                          status: pongRoom.status,
+                          score: pongRoom.score,
+                          deadline: pongRoom.resume_until,
+                        },
+                      ]
+                    : [],
+          },
+        });
+      }
+      if (endpoint === "pong_room") {
+        if (
+          pongRoom?.protocol_version === 2 &&
+          body.action === "get" &&
+          !pongRoom.taken
+        )
+          return route.fulfill({
+            json: {
+              ...pongRoom,
+              controller: false,
+              channel_key: null,
+              code: null,
+            },
+          });
+        if (pongRoom?.protocol_version === 2 && body.action === "takeover") {
+          pongRoom.taken = true;
+          pongRoom.generation++;
+          pongRoom.channel_key = "fixture-controlled";
+          pongRoom.revision++;
+        }
         return route.fulfill({ json: pongRoom || {} });
+      }
       const map = id === fixtureUser ? saved : [];
       const json =
         endpoint === "get_game_saves"
@@ -284,6 +339,7 @@ async function main() {
     }
     if (!active || id !== fixtureUser) return route.fulfill({ json: {} });
     if (endpoint === "get") {
+      if (body.match_id) requestedIds.push(body.match_id);
       if (blocked) return route.abort();
       if (stale) {
         const old = stale;
@@ -350,7 +406,15 @@ async function main() {
       const readyTurn =
         game === "go" ? "Black" : game === "chess" ? "White" : "Red";
       const nextTurn = game === "go" ? "White" : "Black";
-      await page.goto(base + "/games/" + game + "/");
+      await page.goto(base + "/games/");
+      const match = page.locator("[data-live-game-list] a");
+      await match.waitFor();
+      assert.match(
+        await match.getAttribute("href"),
+        new RegExp("/games/" + game + "/\\?match=" + roomId),
+      );
+      await match.click();
+      await page.waitForURL("**/games/" + game + "/?match=" + roomId);
       const turn = page.locator("#" + game + "-turn");
       await page.waitForFunction(
         ({ game, readyTurn }) =>
@@ -359,6 +423,7 @@ async function main() {
             .textContent.includes(readyTurn + " to move"),
         { game, readyTurn },
       );
+      assert.equal(requestedIds.at(-1), roomId);
       if (sample.first) {
         for (const square of sample.first)
           await page.click('[data-square="' + square + '"]');
@@ -450,8 +515,66 @@ async function main() {
     console.log(
       "PASS Pong reconnect, both players Ready prompt, and interrupted room",
     );
+    active = null;
+    pongRoom = {
+      ...pongRoom,
+      status: "paused",
+      protocol_version: 2,
+      controller: true,
+      generation: 3,
+      revision: 7,
+      restart_serve: true,
+      score: [2, 1],
+      ticks: 2640,
+      resume_until: new Date(Date.now() + 60000).toISOString(),
+      server_now: Date.now(),
+    };
+    lobbyFailure = true;
+    await page.goto(base + "/zh-hant/games/");
+    const hub = page.locator("[data-hub-live]");
+    await hub.locator("[data-live-game-retry]").waitFor();
+    lobbyFailure = false;
+    await hub.locator("[data-live-game-retry]").click();
+    const link = hub.locator("a");
+    await link.waitFor();
+    assert.equal(await hub.locator("h2").textContent(), "線上對局");
+    assert.match(
+      await link.getAttribute("href"),
+      /\/zh-hant\/games\/pong\/\?match=/,
+    );
+    assert.match(await hub.textContent(), /2–1/);
+    await link.click();
+    await page.locator("#pong-takeover").waitFor();
+    assert.equal(await page.locator("#pong-ready").isDisabled(), true);
+    assert.equal(await page.locator("#pong-left-score").textContent(), "2");
+    assert.match(await page.locator("#pong-time").textContent(), /00:22/);
+    page.once("dialog", (dialog) => dialog.accept());
+    await page.locator("#pong-takeover").click();
+    await page.waitForFunction(
+      () => !document.querySelector("#pong-ready").disabled,
+    );
+    assert.equal(await page.locator("#pong-left-score").textContent(), "2");
+    assert.equal(await page.locator("#pong-takeover").isVisible(), false);
+
+    await activeUser(page, secondUser);
+    await page.goto(base + "/games/");
+    await page.waitForFunction(() => window.KenseiWorkspace.ready);
+    assert.equal(await page.locator("[data-hub-live]").isVisible(), false);
+    await page.goto(base + "/games/go/?match=" + roomId);
+    await page.locator("[data-match-link]").waitFor();
+    assert.match(
+      await page.locator("[data-match-link]").textContent(),
+      /unavailable/,
+    );
+    await activeUser(page, null);
+    await page.goto(base + "/games/chess/?match=" + roomId);
+    await page.locator("[data-match-link-sign-in]").waitFor();
+    console.log(
+      "PASS live lobby links for all four games, bilingual retry, durable Pong score, read-only takeover and account isolation",
+    );
     assert.deepEqual(errors, []);
   } catch (error) {
+    if (errors.length) console.error(errors.join("\n"));
     await saveBrowserFailure(context, "navigation-recovery");
     throw error;
   } finally {

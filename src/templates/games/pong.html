@@ -79,9 +79,31 @@
         ><button class="button secondary" id="pong-pause" disabled>Pause</button
         ><button class="button secondary" type="button" data-shell-menu>
           Menu</button
+        ><button class="button primary" id="pong-takeover" type="button" hidden>
+          Take control</button
         ><button class="button secondary" id="pong-retry" hidden>
           Retry connection
         </button>
+      </div>
+      <div class="game-match-link" data-match-link hidden>
+        <p data-match-link-message role="status"></p>
+        <button
+          class="button primary"
+          type="button"
+          data-match-link-sign-in
+          hidden
+        >
+          Sign in
+        </button>
+        <button
+          class="button secondary"
+          type="button"
+          data-match-link-retry
+          hidden
+        >
+          Retry
+        </button>
+        <a class="text-link" href="/games/">Back to Games</a>
       </div>
       <p
         class="pong-room-message"
@@ -164,12 +186,12 @@
         draw.
       </li>
       <li>
-        Switching away pauses the match. Reconnect within 15 seconds after a
-        lost connection.
+        Return from Online matches in the Games lobby within 60 seconds. Both
+        players press Ready to resume.
       </li>
       <li>
-        A pause lasts up to 60 seconds. Online matches are temporary and do not
-        enter Continue playing.
+        Returning to a match keeps the confirmed score and time, then starts
+        with a new serve.
       </li>
       <li>This casual room has no Public rank or achievements.</li>
     </ul>

@@ -49,6 +49,21 @@ export function createPong(seed) {
   serve(s, random(s) < 0.5 ? -1 : 1, 360);
   return s;
 }
+// Resume at the center from the last acknowledged score and active ticks.
+export function restorePong(room) {
+  const state = createPong(Number(room.seed));
+  state.ticks = room.ticks;
+  state.score = [...room.score];
+  if (room.status === "finished") {
+    const [host, guest] = state.score;
+    state.winner = host === guest ? 0 : host > guest ? 1 : 2;
+    state.status = state.winner ? "won" : "draw";
+  } else if (room.restart_serve || room.ticks) {
+    state.rng = (Number(room.seed) ^ room.ticks ^ room.generation) >>> 0 || 1;
+    serve(state, random(state) < 0.5 ? -1 : 1, 360);
+  }
+  return state;
+}
 export function advancePong(s, target, leftTarget = 512, rightTarget = 512) {
   if (
     !Number.isSafeInteger(target) ||
