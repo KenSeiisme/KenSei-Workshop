@@ -19,6 +19,8 @@ export function createClient() {
     },
     from: () => ({select() { return this; }, order: async () => ({data: []})}),
     rpc: async (name, body) => {
+      if (name === "sync_game_activity" || name === "game_hub_snapshot")
+        return {data: {generatedAt: Date.now(), stats: {}, balance: 0, owned: ["classic"], skin: "classic", today: [], badges: []}};
       if (name === "ensure_my_profile")
         return {data: {public_id: id, nickname: "Test player", avatar_kind: "none"}};
       try {
