@@ -1,5 +1,5 @@
 import { api, esc } from "/tool-scripts/common.js";
-import { uiDate, uiHtml, uiMsg, uiText } from "../site/ui.js";
+import { uiDate, uiFrom, uiHtml, uiMsg, uiText } from "../site/ui.js";
 import { localizedPath, modeLabel } from "./hub-rankings.js";
 import { boardResult } from "./board-result.js";
 import { gameIcon } from "./presentation.js";
@@ -8,6 +8,11 @@ import { MATCH_ID } from "./match-link.js";
 
 export const reviewGames = ["go", "chess", "xiangqi"];
 const pageSize = 20;
+const goClocks = {
+  9: "5 min + 3 × 20 sec",
+  13: "10 min + 3 × 30 sec",
+  19: "20 min + 5 × 30 sec",
+};
 
 export function mountRecentMatches(root, name) {
   const $ = (selector) => root.querySelector(selector);
@@ -43,13 +48,14 @@ export function mountRecentMatches(root, name) {
         .map((row) => {
           const setting =
             row.game === "go" ? row.rule + ":" + row.size : row.clock;
+          const clock = row.game === "go" && goClocks[row.clock];
           const link =
             localizedPath("/games/" + row.game + "/") + "?review=" + row.id;
           return uiHtml`<article class="hub-live-match">
         <span class="hub-live-icon">${gameIcon(row.game)}</span>
         <div><strong>${name(row.game)} · ${boardResult(row)}</strong>
         <p class="small muted">${row.opponent ? esc(row.opponent) : uiMsg("Opponent")} · ${modeLabel(row.game, setting)}
-        ${row.game === "go" && row.clock ? " · " + esc(row.clock) : ""} ·
+        ${clock ? uiHtml` · ${uiFrom(clock)}` : ""} ·
         ${uiDate(new Date(row.ended_at), { dateStyle: "medium", timeStyle: "short" })}</p></div>
         <a class="button secondary" href="${link}">${uiMsg("Review game")}</a>
       </article>`;

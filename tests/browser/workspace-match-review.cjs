@@ -64,7 +64,7 @@ export function createClient() {
         return { data: [{ ...preset, kind: "preset", name: preset.data.name, tool: "data-studio" }, ...records] };
       }
       if (name === "get_my_board_match_history")
-        return { data: [{ id, game: args.game_filter || "go", color: 1, result: { winner: 1 }, rule: "chinese", size: 9, clock: "10+5", opponent: "Rival", ended_at: date }] };
+        return { data: [{ id, game: args.game_filter || "go", color: 1, result: { winner: 1 }, rule: "chinese", size: 9, clock: args.game_filter && args.game_filter !== "go" ? "10+5" : "9", opponent: "Rival", ended_at: date }] };
       if (name === "get_my_board_match_review") return { data: args.match_id === id ? await boardMatch() : null };
       if (name === "ensure_my_profile") return { data: null };
       if (name === "get_my_live_games") return { data: { matches: [{ id, game: "chess", status: "playing", clock: "10+5" }] } };
@@ -116,7 +116,11 @@ export function createClient() {
       await page.locator("[data-hub-recent] h2").textContent(),
       /近期對局/,
     );
-    assert(await page.locator("[data-live-game-list] a").isVisible());
+    await page.locator("[data-live-game-list] a").waitFor();
+    assert.match(
+      await page.locator("[data-recent-list]").textContent(),
+      /5 分鐘.*20 秒/,
+    );
     for (const [game, pattern] of [
       ["go", /;B\[ee\]/],
       ["chess", /e4/],
