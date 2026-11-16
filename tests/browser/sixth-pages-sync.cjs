@@ -42,13 +42,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8798",
       },
       { id: user, recordKind: kind },
     );
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) =>
-        r.fulfill({
-          contentType: "text/javascript",
-          body: `export function createClient(){let listener;window.__switchUser=id=>{window.__testUser=id;listener?.(id?"SIGNED_IN":"SIGNED_OUT",id?{user:{id}}:null);};return{auth:{getSession:async()=>({data:{session:window.__testUser?{user:{id:window.__testUser}}:null}}),onAuthStateChange:fn=>{listener=fn;}},from(){return{select(){return this;},order:async()=>({data:[]})}},rpc:async(name,args)=>{const response=await fetch("/__qa/rpc/"+name,{method:"POST",headers:{"x-test-user":window.__testUser||""},body:JSON.stringify(args)});return response.json();}}}`,
-        }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({
+        contentType: "text/javascript",
+        body: `export function createClient(){let listener;window.__switchUser=id=>{window.__testUser=id;listener?.(id?"SIGNED_IN":"SIGNED_OUT",id?{user:{id}}:null);};return{auth:{getSession:async()=>({data:{session:window.__testUser?{user:{id:window.__testUser}}:null}}),onAuthStateChange:fn=>{listener=fn;}},from(){return{select(){return this;},order:async()=>({data:[]})}},rpc:async(name,args)=>{const response=await fetch("/__qa/rpc/"+name,{method:"POST",headers:{"x-test-user":window.__testUser||""},body:JSON.stringify(args)});return response.json();}}}`,
+      }),
     );
     await c.route("**/__qa/rpc/*", async (r) => {
       const args = JSON.parse(r.request().postData()),

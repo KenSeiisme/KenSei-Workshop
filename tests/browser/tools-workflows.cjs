@@ -32,14 +32,12 @@ fs.mkdirSync(output, { recursive: true });
       contentType: "application/javascript",
     }),
   );
-  await context.route(
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-    (r) =>
-      r.fulfill({
-        body: sdk,
-        contentType: "application/javascript",
-        headers: { "access-control-allow-origin": "*" },
-      }),
+  await context.route("**/vendor/supabase-2.119.0.js*", (r) =>
+    r.fulfill({
+      body: sdk,
+      contentType: "application/javascript",
+      headers: { "access-control-allow-origin": "*" },
+    }),
   );
   page.on("dialog", (d) =>
     d.type() === "beforeunload" ? d.accept() : d.dismiss(),

@@ -7,7 +7,9 @@
     ["tests/browser/whiteboard-canvas.cjs"],
     ["tests/browser/navigation-recovery.cjs"],
     ["tests/browser/handoff-recovery.cjs"],
-    ["tests/browser/shared-whiteboards.cjs"]
+    ["tests/browser/shared-whiteboards.cjs"],
+    ["tests/browser/auth.cjs"],
+    ["tests/browser/workspace-match-review.cjs"]
   ],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],

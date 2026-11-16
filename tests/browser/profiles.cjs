@@ -45,14 +45,12 @@ const sdk = `export function createClient(){const initial=window.__qaUser,actor=
     const c = await browser.newContext({ reducedMotion: "reduce" });
     contexts.push(c);
     await c.addInitScript((id) => (window.__qaUser = id), id);
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) =>
-        r.fulfill({
-          contentType: "application/javascript",
-          body: sdk,
-          headers: { "access-control-allow-origin": "*" },
-        }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({
+        contentType: "application/javascript",
+        body: sdk,
+        headers: { "access-control-allow-origin": "*" },
+      }),
     );
     await c.route("https://*.googleusercontent.com/**", (r) =>
       r.fulfill({ status: 404, body: "Unavailable" }),

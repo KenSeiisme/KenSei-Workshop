@@ -13,9 +13,8 @@ const sdk = `export function createClient(){return {
   });
   try {
     const context = await browser.newContext({ reducedMotion: "reduce" });
-    await context.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (route) => route.fulfill({ contentType: "text/javascript", body: sdk }),
+    await context.route("**/vendor/supabase-2.119.0.js*", (route) =>
+      route.fulfill({ contentType: "text/javascript", body: sdk }),
     );
     const page = await context.newPage();
     const errors = [];

@@ -44,9 +44,8 @@ const sdk = `export function createClient(){let listener;return {auth:{getSessio
     const c = await browser.newContext({ reducedMotion: "reduce" });
     await c.addInitScript((u) => (window.__qaUser = u), user || null);
     c.on("page", (p) => p.on("pageerror", (e) => errors.push(e.message)));
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) => r.fulfill({ contentType: "application/javascript", body: sdk }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({ contentType: "application/javascript", body: sdk }),
     );
     await c.route("**/__qa/rpc/**", async (r) => {
       chain = chain.then(async () => {

@@ -11,6 +11,7 @@ import {
   uiPrompt,
 } from "../site/ui.js";
 
+export const workspaceStores = new Map();
 for (const [kind, slug, validate] of [
   ["planner", "study-planner", validatePlanner],
   ["whiteboard", "whiteboard", validateWhiteboard],
@@ -20,6 +21,7 @@ for (const [kind, slug, validate] of [
     state = $(`#${kind}-workspace-state`),
     out = $(`#${kind}-workspace-list`);
   if (!out) continue;
+  workspaceStores.set(kind, store);
   function draw() {
     out.replaceChildren();
     for (const row of store.rows()) {

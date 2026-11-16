@@ -1,4 +1,5 @@
 import { mountLiveGames } from "./hub-live.js";
+import { mountRecentMatches } from "./hub-recent.js";
 import { mountHubCarousel } from "./hub-carousel.js";
 import { mountHubProfile } from "./hub-profile.js";
 import { mountRankPreviews, playTime } from "./hub-rankings.js";
@@ -29,6 +30,7 @@ export function mountGameHub(saves) {
   mountHubCarousel($(".hub-feature"));
   mountRankPreviews(hub);
   mountLiveGames($("[data-hub-live]"), name);
+  mountRecentMatches($("[data-hub-recent]"), name);
 
   const updateDaily = mountDailyChallenge($(".hub-daily"), name, sync);
   function paintProgress() {

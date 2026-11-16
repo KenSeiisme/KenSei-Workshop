@@ -3,7 +3,7 @@ const { chromium } = require("../support/browser.cjs");
 const { saveBrowserFailure } = require("../support/browser-artifacts.cjs");
 
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
-const sdkPath = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+const sdkPath = "**/vendor/supabase-2.119.0.js*";
 const fixtureUser = "00000000-0000-4000-8000-000000000011";
 const secondUser = "00000000-0000-4000-8000-000000000022";
 const olderId = "00000000-0000-4000-8000-000000000031";

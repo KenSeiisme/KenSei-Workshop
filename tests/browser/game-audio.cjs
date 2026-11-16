@@ -68,9 +68,8 @@ async function startXiangqi(page) {
       viewport: { width: 1440, height: 900 },
     });
     contexts.push(c);
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) => r.fulfill({ contentType: "text/javascript", body: sdk }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({ contentType: "text/javascript", body: sdk }),
     );
     await c.addInitScript(
       ({ legacy }) => {

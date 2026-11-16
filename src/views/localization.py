@@ -290,6 +290,8 @@ def styles(route):
             files.append("puzzle-games.css")
         if slug in ["block-puzzle", "brick-breaker"]:
             files.append("arcade-games.css")
+        if slug in {"go", "chess", "xiangqi"}:
+            files.append("board-review.css")
         if slug in ["connect-four", "reversi"]:
             files.append("board-games.css")
         if route.startswith("games/") and route not in {
@@ -355,6 +357,8 @@ def source_files(route):
                 )
             )
         )
+    if route in {"games/go", "games/chess", "games/xiangqi"}:
+        files.add("src/games/board-review.js")
     if route.startswith("tools/"):
         advanced = "src/tools/advanced-" + route.split("/")[-1] + ".js"
         if (ROOT / advanced).is_file():

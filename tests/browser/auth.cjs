@@ -7,26 +7,35 @@ export function createClient(url, key, options) {
   window.__sdkOptions = options;
   window.__sdkProject = url;
   let listener;
+  let checks = 0;
+  window.__authSubscriptions = 0;
   const mode = window.__authScenario;
   const signed = () => ['success', 'cloud-error'].includes(mode) && !sessionStorage.getItem('mock-signed-out');
   const session = () => signed() ? { user: { id: 'mock-user', email: 'test@example.invalid' } } : null;
   window.__expireSession = () => { sessionStorage.setItem('mock-signed-out','1'); listener?.('SIGNED_OUT',null); };
   return {
     auth: {
-      getSession: async () => ({ data: { session: session() }, error: null }),
+      getSession: async () => {
+        checks++;
+        if (checks === 1 && mode === 'slow-session') {
+          await new Promise(resolve => { window.__finishSlowCheck = resolve; });
+          return { data: { session: { user: { id: 'stale-user' } } }, error: null };
+        }
+        return { data: { session: session() }, error: null };
+      },
       exchangeCodeForSession: async code => {
         sessionStorage.setItem('exchange-count', String(+(sessionStorage.getItem('exchange-count') || 0) + 1));
         if (options.auth.detectSessionInUrl !== false) throw new Error('Automatic exchange must be disabled');
         return { error: mode === 'exchange-error' ? new Error('Used or invalid code') : null };
       },
       signInWithOAuth: async opts => { window.__oauthOptions = opts; if (mode === 'oauth-error') throw new Error('Network failed'); return { error: null }; },
-      onAuthStateChange: fn => { listener = fn; },
+      onAuthStateChange: fn => { listener = fn; window.__authSubscriptions++; },
       signOut: async () => { window.__expireSession(); return {error:null}; }
     },
     from: table => ({
       select() { return this; },
       async order() {
-        return { data: mode === 'cloud-error' ? null : [{ id: 'cloud-draft', type: 'draft', data: { name: 'Cloud draft', text: 'A synced thought.' }, updated_at: '2026-10-19T00:00:00Z' }], error: mode === 'cloud-error' ? new Error('Permission denied') : null };
+        return { data: mode === 'cloud-error' && !window.__recoverCloud ? null : [{ id: 'cloud-draft', type: 'draft', data: { name: 'Cloud draft', text: 'A synced thought.' }, updated_at: '2026-10-19T00:00:00Z' }], error: mode === 'cloud-error' && !window.__recoverCloud ? new Error('Permission denied') : null };
       }
     })
   };
@@ -45,20 +54,18 @@ export function createClient(url, key, options) {
     await context.addInitScript((value) => {
       window.__authScenario = value;
     }, mode);
-    await context.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) =>
-        mode === "sdk-error"
-          ? r.fulfill({
-              status: 503,
-              body: "Unavailable",
-              headers: { "access-control-allow-origin": "*" },
-            })
-          : r.fulfill({
-              contentType: "application/javascript",
-              body: sdk,
-              headers: { "access-control-allow-origin": "*" },
-            }),
+    await context.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      mode === "sdk-error" && !r.request().url().includes("?retry=")
+        ? r.fulfill({
+            status: 503,
+            body: "Unavailable",
+            headers: { "access-control-allow-origin": "*" },
+          })
+        : r.fulfill({
+            contentType: "application/javascript",
+            body: sdk,
+            headers: { "access-control-allow-origin": "*" },
+          }),
     );
     try {
       await page.goto(base + route);
@@ -217,6 +224,12 @@ export function createClient(url, key, options) {
           "Cloud saves enabled",
         ),
       );
+      await p.evaluate(() => (window.__recoverCloud = true));
+      await p.locator("#workspace-account button").click();
+      await p.waitForFunction(
+        () => document.querySelector("#draft-count").textContent === "1",
+      );
+      assert.equal(await p.evaluate(() => __authSubscriptions), 1);
     });
     await scenario("sdk-error", "/tools/text-toolkit/", async (p) => {
       await p.waitForFunction(() =>
@@ -228,6 +241,31 @@ export function createClient(url, key, options) {
       assert.equal(await p.locator("#stat-words").textContent(), "3");
       await p.locator("[data-sign-in]").first().click();
       assert(await p.locator("#google-login").isDisabled());
+      await p.locator("#auth-retry").click();
+      await p.waitForFunction(
+        () => !document.querySelector("#google-login").disabled,
+      );
+      assert.equal(
+        await p.locator("#text-input").inputValue(),
+        "Still works locally.",
+      );
+      assert.equal(await p.evaluate(() => __authSubscriptions), 1);
+    });
+    await scenario("slow-session", "/tools/text-toolkit/", async (p) => {
+      await p.locator("#text-input").fill("Keep this text.");
+      await p.evaluate(() => KenseiWorkspace.openAuth());
+      await p.locator("#auth-retry").waitFor({ timeout: 15000 });
+      await p.locator("#auth-retry").click();
+      await p.waitForFunction(
+        () => !document.querySelector("#google-login").disabled,
+      );
+      await p.evaluate(() => window.__finishSlowCheck());
+      assert.equal(await p.evaluate(() => KenseiWorkspace.user), null);
+      assert.equal(
+        await p.locator("#text-input").inputValue(),
+        "Keep this text.",
+      );
+      assert.equal(await p.evaluate(() => __authSubscriptions), 1);
     });
     await scenario(
       "guest",

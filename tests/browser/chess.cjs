@@ -13,9 +13,8 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     errors = [],
     requests = [];
   await fs.mkdir("_qa/chess", { recursive: true });
-  await context.route(
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-    (r) => r.fulfill({ contentType: "text/javascript", body: sdk }),
+  await context.route("**/vendor/supabase-2.119.0.js*", (r) =>
+    r.fulfill({ contentType: "text/javascript", body: sdk }),
   );
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("request", (r) => requests.push(r.url()));
@@ -190,9 +189,8 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
         isMobile: true,
         hasTouch: true,
       });
-      await touchContext.route(
-        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-        (r) => r.fulfill({ contentType: "text/javascript", body: sdk }),
+      await touchContext.route("**/vendor/supabase-2.119.0.js*", (r) =>
+        r.fulfill({ contentType: "text/javascript", body: sdk }),
       );
       const touchPage = await touchContext.newPage();
       touchPage.on("pageerror", (e) => errors.push(e.message));

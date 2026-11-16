@@ -503,6 +503,9 @@ export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
     flush,
     exportRows,
     guestRows,
+    workspaceState() {
+      return active?.scope === account() ? active.state : null;
+    },
   };
 }
 

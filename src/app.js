@@ -22,6 +22,13 @@
     authReady = false,
     authStarting = false,
     cloudError = false,
+    cloudPending = null,
+    authPending = null,
+    authFailed = false,
+    sdkAttempt = 0,
+    callbackExchange,
+    authSubscribed = false,
+    linkedItem = null,
     profile = null;
   const tools = window.KENSEI_TOOLS || {};
   const key = () => "kensei-workshop:v1:" + (user?.id || "guest");
@@ -66,12 +73,47 @@
         })[c],
     );
   const uid = () => crypto.randomUUID();
-  const items = (type) => read().items.filter((x) => x.type === type);
+  const items = (type) => {
+    const saved = read().items.filter((x) => x.type === type);
+    if (
+      linkedItem?.owner === user?.id &&
+      linkedItem?.item.type === type &&
+      !saved.some((x) => x.id === linkedItem.item.id)
+    )
+      saved.push(linkedItem.item);
+    return saved;
+  };
+
+  async function loadLinkedItem() {
+    const tool = $("[data-tool]")?.dataset.tool;
+    if (!tool) return;
+    const query = new URLSearchParams(location.search);
+    const type = query.has("draft") ? "draft" : "preset";
+    const id = query.get(type);
+    if (!/^[a-z0-9_-]{1,128}$/i.test(id || "")) return;
+    const owner = user.id;
+    const request = client
+      .from("workspace_items")
+      .select("id,type,data,updated_at")
+      .eq("type", type)
+      .eq("id", id);
+    const { data, error } = await bounded(request.maybeSingle(), 7000);
+    if (error) throw error;
+    if (
+      data &&
+      owner === user?.id &&
+      (data.data.tool ||
+        (type === "draft" ? "text-toolkit" : "image-studio")) === tool
+    )
+      linkedItem = { owner, item: data };
+  }
   function localSave(item) {
     const data = read();
     data.items = data.items.filter((x) => x.id !== item.id);
     data.items.push(item);
-    return write(data);
+    const saved = write(data);
+    if (saved) window.dispatchEvent(new Event("workspace-items-change"));
+    return saved;
   }
   async function saveItem(type, data, id = uid(), expected = null) {
     const ownerAtStart = user?.id || "guest";
@@ -123,14 +165,21 @@
     write(data);
     updateFavorites();
     renderWorkspace();
+    window.dispatchEvent(new Event("workspace-items-change"));
   }
   async function loadCloud() {
-    if (!client || !user) return;
-    const { data, error } = await client
+    const owner = user?.id;
+    if (!client || !owner) return;
+    const request = client
       .from("workspace_items")
       .select("id,type,data,updated_at")
       .order("updated_at", { ascending: false });
+    const { data, error } = await bounded(
+      request.abortSignal?.(AbortSignal.timeout(9000)) ?? request,
+      10000,
+    );
     if (error) throw error;
+    if (user?.id !== owner) return;
     const pending = read().items.filter(
       (x) =>
         x.type === "session" &&
@@ -277,27 +326,7 @@
       }
       return;
     }
-    if (!config.supabaseUrl || !config.supabasePublishableKey) {
-      $("#google-login").disabled = true;
-      uiText(
-        $("#auth-note"),
-        uiMsg(
-          "Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. Local tools and private practice work without an account.",
-        ),
-      );
-    } else {
-      $("#google-login").disabled = !authReady || authStarting;
-      uiText(
-        $("#auth-note"),
-        authReady
-          ? uiMsg(
-              "Local tools and Typing Practice are available without an account.",
-            )
-          : uiMsg(
-              "Sign-in is connecting. If this takes a moment, close this window and try again.",
-            ),
-      );
-    }
+    paintAuth();
     dialog.showModal();
   }
   $$("[data-sign-in]").forEach((b) => b.addEventListener("click", openAuth));
@@ -342,7 +371,88 @@
       $("#google-login").disabled = !authReady;
     }
   });
-  async function initAuth() {
+  function paintAuth() {
+    const configured = !!(config.supabaseUrl && config.supabasePublishableKey);
+    $("#google-login").disabled = !authReady || authStarting;
+    $("#auth-retry").hidden = !configured || !authFailed;
+    uiText(
+      $("#auth-note"),
+      !configured
+        ? uiMsg(
+            "Cloud sign-in is not connected yet. This site needs its own Supabase and Google OAuth configuration. Local tools and private practice work without an account.",
+          )
+        : authReady
+          ? uiMsg(
+              "Local tools and Typing Practice are available without an account.",
+            )
+          : authFailed
+            ? uiMsg("Sign-in connection unavailable. Local tools still work.")
+            : uiMsg("Connecting to sign-in…"),
+    );
+  }
+
+  function bounded(promise, milliseconds) {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(
+        () => reject(Error("Sign-in connection timed out.")),
+        milliseconds,
+      );
+      Promise.resolve(promise)
+        .then(resolve, reject)
+        .finally(() => clearTimeout(timer));
+    });
+  }
+
+  function announceWorkspace() {
+    window.KenseiWorkspace.ready = true;
+    window.dispatchEvent(new Event("workspace-ready"));
+  }
+
+  function syncWorkspace() {
+    if (!user) return Promise.resolve();
+    if (cloudPending) return cloudPending;
+    const owner = user.id;
+    cloudPending = loadCloud()
+      .then(() => {
+        if (user?.id === owner) cloudError = false;
+      })
+      .catch(() => {
+        if (user?.id === owner) cloudError = true;
+      })
+      .finally(() => {
+        cloudPending = null;
+        renderWorkspace();
+        window.dispatchEvent(new Event("workspace-items-change"));
+      });
+    renderWorkspace();
+    return cloudPending;
+  }
+
+  function subscribeAuth() {
+    if (authSubscribed) return;
+    authSubscribed = true;
+    client.auth.onAuthStateChange((event, session) => {
+      if (!authReady) return;
+      if (session?.user && session.user.id !== user?.id) {
+        profile = null;
+        user = session.user;
+        location.replace(location.pathname + location.search);
+        return;
+      }
+      if (event === "SIGNED_OUT" || (!session && user)) {
+        const oldKey = key();
+        try {
+          localStorage.removeItem(oldKey);
+          sessionStorage.removeItem(oldKey + ":active-timer");
+        } catch {}
+        user = null;
+        profile = null;
+        location.replace(window.KenseiI18n.localePath("/workspace/"));
+      }
+    });
+  }
+
+  async function connectAuth() {
     if (!config.supabaseUrl || !config.supabasePublishableKey) {
       if ($("#callback-status"))
         uiText(
@@ -351,123 +461,91 @@
         );
       return;
     }
+    authFailed = false;
+    paintAuth();
+    const callback = $("#callback-status");
     try {
-      // 账号服务超时后仍开放本机工具；迟到的结果不会切换当前保存范围。
-      const bounded = (promise, milliseconds) =>
-        new Promise((resolve, reject) => {
-          const timer = setTimeout(
-            () => reject(new Error("Account connection timed out")),
-            milliseconds,
-          );
-          promise.then(
-            (value) => {
-              clearTimeout(timer);
-              resolve(value);
-            },
-            (error) => {
-              clearTimeout(timer);
-              reject(error);
-            },
-          );
-        });
-      const { createClient } = await bounded(
-        import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"),
-        5000,
-      );
-      client = createClient(config.supabaseUrl, config.supabasePublishableKey, {
-        auth: { flowType: "pkce", detectSessionInUrl: false },
-      });
-      const callback = location.pathname
-        .replace(/^\/zh-hant(?=\/|$)/, "")
-        .startsWith("/auth/callback");
-      if (callback) {
+      if (!client) {
+        const attempt = sdkAttempt++;
+        const asset = "/vendor/supabase-2.119.0.js";
+        const { createClient } = await bounded(
+          import(attempt ? `${asset}?retry=${attempt}` : asset),
+          5000,
+        );
+        client = createClient(
+          config.supabaseUrl,
+          config.supabasePublishableKey,
+          {
+            auth: { flowType: "pkce", detectSessionInUrl: false },
+          },
+        );
+      }
+      if (callback && !callbackExchange) {
         const params = new URLSearchParams(location.search);
-        // 回调 code 只由这里交换一次，避免 SDK 自动处理后再次交换。
         const code = params.get("code");
         history.replaceState(null, "", location.pathname);
-        if (params.get("error"))
-          throw new Error("Sign-in was cancelled or could not be completed.");
-        if (code) {
-          const { error } = await client.auth.exchangeCodeForSession(code);
-          if (error) throw error;
-        }
+        callbackExchange = params.get("error")
+          ? Promise.resolve({ error: true })
+          : code
+            ? client.auth
+                .exchangeCodeForSession(code)
+                .catch(() => ({ error: true }))
+            : Promise.resolve({});
       }
+      const exchange =
+        callbackExchange && (await bounded(callbackExchange, 7000));
       const { data, error } = await bounded(client.auth.getSession(), 7000);
       if (error) throw error;
       user = data.session?.user || null;
       authReady = true;
-      $("#google-login").disabled = false;
-      uiText(
-        $("#auth-note"),
-        uiMsg(
-          "Local tools and Typing Practice are available without an account.",
-        ),
-      );
+      subscribeAuth();
       if (user) {
         renderAccount();
-        import("/tool-scripts/profile-service.js")
-          .then((module) => module.ensureProfile())
-          .catch(() => {
-            renderAccount();
-          });
-        try {
-          await loadCloud();
-        } catch {
-          cloudError = true;
-          renderWorkspace();
-          toast(
-            uiMsg(
-              "Signed in, but cloud data could not be loaded. Please refresh to retry.",
-            ),
-          );
-        }
-        if (callback) location.replace(consumeReturn());
-      } else if (callback)
-        uiText(
-          $("#callback-status"),
-          uiMsg("No active session. Try signing in again."),
-        );
-      client.auth.onAuthStateChange((event, session) => {
-        if (session?.user && session.user.id !== user?.id) {
-          profile = null;
-          user = session.user;
-          location.replace(location.pathname + location.search);
+        if (dialog.open) dialog.close();
+        if (callback) {
+          location.replace(consumeReturn());
           return;
         }
-        if (event === "SIGNED_OUT" || (!session && user)) {
-          const oldKey = key();
-          try {
-            localStorage.removeItem(oldKey);
-            sessionStorage.removeItem(oldKey + ":active-timer");
-          } catch {}
-          user = null;
-          profile = null;
-          location.replace(window.KenseiI18n.localePath("/workspace/"));
-        }
-      });
-    } catch (e) {
-      authReady = !!client;
-      $("#google-login").disabled = !authReady;
-      uiText(
-        $("#auth-note"),
-        authReady
-          ? uiMsg(
-              "Sign-in could not be completed. Please try Google sign-in again.",
-            )
-          : uiMsg(
-              "Sign-in is unavailable right now. Refresh the page to try again. Local tools still work.",
-            ),
-      );
-      toast(uiMsg("Sign-in connection unavailable. Local tools still work."));
-      if ($("#callback-status"))
+        import("/tool-scripts/profile-service.js")
+          .then((module) => module.ensureProfile())
+          .catch(() => renderAccount());
+        await Promise.allSettled([syncWorkspace(), loadLinkedItem()]);
+        import("/tool-scripts/personal-store.js")
+          .then((store) => store.flush())
+          .catch(() => {});
+      } else if (callback) {
         uiText(
-          $("#callback-status"),
-          uiMsg(
-            "Sign-in could not be completed. Please use Sign in to try again.",
-          ),
+          callback,
+          exchange?.error
+            ? uiMsg(
+                "Sign-in could not be completed. Please use Sign in to try again.",
+              )
+            : uiMsg("No active session. Try signing in again."),
+        );
+      }
+    } catch {
+      authReady = false;
+      authFailed = true;
+      if (callback)
+        uiText(
+          callback,
+          uiMsg("Sign-in connection unavailable. Local tools still work."),
         );
     }
   }
+
+  function initAuth() {
+    if (!authPending)
+      authPending = connectAuth().finally(() => {
+        authPending = null;
+        paintAuth();
+        announceWorkspace();
+      });
+    return authPending;
+  }
+
+  $("#auth-retry").addEventListener("click", initAuth);
+
   let filter = "all";
   const toolSearch = $("#tool-search");
   const toolCount = $("#tool-result-count");
@@ -1181,11 +1259,19 @@
     if (!$("#favorite-tools")) return;
     const banner = $("#workspace-account");
     if (user)
-      banner.innerHTML = uiHtml`<div><strong>Your connected workspace</strong><p>${escape(user.email)} · ${cloudError ? "Cloud data could not be loaded. Refresh to retry." : "Cloud saves enabled"}</p></div><span class="small-tag">${cloudError ? "Sync unavailable" : "Connected"}</span>`;
+      banner.innerHTML = uiHtml`<div><strong>Your connected workspace</strong><p>${escape(user.email)} · ${cloudError ? "Cloud data could not be loaded." : "Cloud saves enabled"}</p></div><span class="small-tag">${cloudError ? "Sync unavailable" : "Connected"}</span>`;
     else
       banner.innerHTML = uiHtml(
         '<div><strong>On this device</strong><p>Your local saves stay on this device. Sign in with Google to sync new saves across devices.</p></div><button class="button secondary" id="workspace-login">Sign in with Google ↗</button>',
       );
+    if (user && cloudError) {
+      const retry = document.createElement("button");
+      retry.className = "button secondary";
+      retry.disabled = !!cloudPending;
+      uiText(retry, uiMsg("Retry sync"));
+      retry.onclick = syncWorkspace;
+      banner.append(retry);
+    }
     $("#workspace-login")?.addEventListener("click", openAuth);
     $("#sign-out").hidden = !user;
     const drafts = items("draft"),
@@ -1251,9 +1337,13 @@
         .map((x) =>
           row(
             x,
-            x.data.tool === "qr-studio"
-              ? `QR appearance · ${x.data.size} px`
-              : `${x.data.format.replace("image/", "").toUpperCase()} · ${x.data.quality}% quality${x.data.width ? " · " + x.data.width + " px wide" : ""}`,
+            x.data.recipe
+              ? tools[x.data.tool]?.name || "Settings recipe"
+              : x.data.tool === "qr-studio"
+                ? `QR appearance · ${x.data.size} px`
+                : `${String(x.data.format || "image/png")
+                    .replace("image/", "")
+                    .toUpperCase()} · ${x.data.quality}% quality${x.data.width ? " · " + x.data.width + " px wide" : ""}`,
             uiHtml`<a class="text-link" href="/tools/${tools[x.data.tool] ? x.data.tool : "image-studio"}/?preset=${encodeURIComponent(x.id)}">Use →</a>`,
           ),
         )
@@ -1337,6 +1427,7 @@
     if (e.key === key()) {
       updateFavorites();
       renderWorkspace();
+      window.dispatchEvent(new Event("workspace-items-change"));
     }
   });
   window.KenseiWorkspace = {
@@ -1420,18 +1511,29 @@
     import("/game-scripts/pong.js").catch(() =>
       toast(uiMsg("Pong files could not load. Reload to retry.")),
     );
-  if (document.querySelector("[data-go]"))
-    import("/game-scripts/go.js").catch(() =>
-      toast(uiMsg("Go files could not load. Reload this page to retry.")),
-    );
-  if (document.querySelector("[data-xiangqi]"))
-    import("/game-scripts/xiangqi.js").catch(() =>
-      toast(uiMsg("This game could not load. Refresh and try again.")),
-    );
-  if (document.querySelector("[data-chess]"))
-    import("/game-scripts/chess.js").catch(() =>
-      toast(uiMsg("Chess files could not load. Reload this page to retry.")),
-    );
+  const boardReview =
+    new URLSearchParams(location.search).has("review") &&
+    document.querySelector(":is([data-go], [data-chess], [data-xiangqi])");
+  if (boardReview)
+    import("/game-scripts/board-review.js")
+      .then(({ mountBoardReview }) => mountBoardReview(boardReview))
+      .catch(() =>
+        toast(uiMsg("Replay could not load. Refresh and try again.")),
+      );
+  else {
+    if (document.querySelector("[data-go]"))
+      import("/game-scripts/go.js").catch(() =>
+        toast(uiMsg("Go files could not load. Reload this page to retry.")),
+      );
+    if (document.querySelector("[data-xiangqi]"))
+      import("/game-scripts/xiangqi.js").catch(() =>
+        toast(uiMsg("This game could not load. Refresh and try again.")),
+      );
+    if (document.querySelector("[data-chess]"))
+      import("/game-scripts/chess.js").catch(() =>
+        toast(uiMsg("Chess files could not load. Reload this page to retry.")),
+      );
+  }
   if (document.querySelector("[data-game], [data-games-directory]"))
     import("/game-scripts/games.js").catch(() =>
       toast(uiMsg("Game files could not load. Reload this page to retry.")),
@@ -1444,12 +1546,5 @@
     import("/game-scripts/hub-achievements.js").catch(() =>
       toast(uiMsg("Progress could not load. Retry when connected.")),
     );
-  initAuth().finally(() => {
-    window.KenseiWorkspace.ready = true;
-    window.dispatchEvent(new Event("workspace-ready"));
-    if (user)
-      import("/tool-scripts/personal-store.js")
-        .then((store) => store.flush())
-        .catch(() => {});
-  });
+  initAuth();
 })();

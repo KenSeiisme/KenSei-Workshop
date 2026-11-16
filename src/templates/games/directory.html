@@ -78,6 +78,31 @@
       Retry
     </button>
   </section>
+  <section
+    class="panel hub-live"
+    aria-labelledby="hub-recent-title"
+    data-hub-recent
+    hidden
+  >
+    <h2 id="hub-recent-title">Recent matches</h2>
+    <label class="field"
+      >Board game
+      <select data-recent-game>
+        <option value="">All board games</option>
+        <option value="go">Go</option>
+        <option value="chess">Chess</option>
+        <option value="xiangqi">Xiangqi</option>
+      </select>
+    </label>
+    <p class="small muted" data-recent-status role="status"></p>
+    <div data-recent-list></div>
+    <button type="button" class="text-link" data-recent-more hidden>
+      Load more
+    </button>
+    <button type="button" class="text-link" data-recent-retry hidden>
+      Retry
+    </button>
+  </section>
   <section id="games-library" aria-labelledby="games-library-heading">
     <div class="game-library-heading">
       <div>

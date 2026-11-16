@@ -71,9 +71,8 @@ const sdk = `export function createClient(){const channels=[];return{auth:{getSe
     });
     contexts.push(c);
     await c.addInitScript((id) => (window.__actor = id), users[i]);
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) => r.fulfill({ contentType: "application/javascript", body: sdk }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({ contentType: "application/javascript", body: sdk }),
     );
     await c.route("**/vendor/whiteboard/test-engine.js", (r) =>
       r.fulfill({

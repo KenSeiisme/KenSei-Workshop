@@ -50,10 +50,8 @@ async function main() {
   });
   const context = await browser.newContext();
   try {
-    await context.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (route) =>
-        route.fulfill({ contentType: "application/javascript", body: sdk }),
+    await context.route("**/vendor/supabase-2.119.0.js*", (route) =>
+      route.fulfill({ contentType: "application/javascript", body: sdk }),
     );
     await context.addInitScript(() => {
       const Native = window.BroadcastChannel;

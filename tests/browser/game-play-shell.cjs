@@ -24,9 +24,8 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
   await context.route("https://fonts.googleapis.com/**", (route) =>
     route.fulfill({ contentType: "text/css", body: "" }),
   );
-  await context.route(
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-    (route) => route.fulfill({ contentType: "text/javascript", body: sdk }),
+  await context.route("**/vendor/supabase-2.119.0.js*", (route) =>
+    route.fulfill({ contentType: "text/javascript", body: sdk }),
   );
   context.on("page", (page) => {
     page.on("pageerror", (e) => errors.push(e.message));
@@ -252,9 +251,8 @@ const sdk = `export function createClient(){const id=window.__shellSigned?'11111
     await signed.route("https://fonts.googleapis.com/**", (route) =>
       route.fulfill({ contentType: "text/css", body: "" }),
     );
-    await signed.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (route) => route.fulfill({ contentType: "text/javascript", body: sdk }),
+    await signed.route("**/vendor/supabase-2.119.0.js*", (route) =>
+      route.fulfill({ contentType: "text/javascript", body: sdk }),
     );
     const q = await signed.newPage();
     q.on("pageerror", (e) => errors.push(e.message));

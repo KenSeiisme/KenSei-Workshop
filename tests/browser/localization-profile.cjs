@@ -4,13 +4,11 @@ const assert = require("node:assert/strict"),
   const b = await chromium.launch({ channel: "msedge", headless: true }),
     c = await b.newContext(),
     p = await c.newPage();
-  await c.route(
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-    (r) =>
-      r.fulfill({
-        contentType: "application/javascript",
-        body: `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async()=>({data:{public_id:'11111111-1111-4111-8111-111111111111',nickname:'Start game',bio:'points',avatar_kind:'none',best_scores:[],game_achievements:[],game_best_scores:[{game:'2048',difficulty:'classic',version:1,score:2048,max_tile:256,moves:100,elapsed_ms:10000,achieved_at:'2026-10-26T00:00:00Z'}]}})}}`,
-      }),
+  await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+    r.fulfill({
+      contentType: "application/javascript",
+      body: `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async()=>({data:{public_id:'11111111-1111-4111-8111-111111111111',nickname:'Start game',bio:'points',avatar_kind:'none',best_scores:[],game_achievements:[],game_best_scores:[{game:'2048',difficulty:'classic',version:1,score:2048,max_tile:256,moves:100,elapsed_ms:10000,achieved_at:'2026-10-26T00:00:00Z'}]}})}}`,
+    }),
   );
   await p.goto(
     (process.env.TEST_BASE_URL || "http://127.0.0.1:8771") +
