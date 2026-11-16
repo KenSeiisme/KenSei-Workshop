@@ -14,12 +14,10 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
   try {
     const errors = [],
       rankingRequests = [];
-    await context.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (route) =>
-        route.fulfill({
-          contentType: "text/javascript",
-          body: `export function createClient(){return {
+    await context.route("**/vendor/supabase-2.119.0.js*", (route) =>
+      route.fulfill({
+        contentType: "text/javascript",
+        body: `export function createClient(){return {
           auth:{getSession:async()=>({data:{session:localStorage.hubFixtureUser?{user:{id:localStorage.hubFixtureUser}}:null}}),onAuthStateChange(){}},
           from:()=>({select:()=>({order:async()=>({data:[]})})}),
           rpc:async(name,args)=>{
@@ -52,7 +50,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
             return {data:[],error:null};
           }
         }}`,
-        }),
+      }),
     );
     let failXiangqi = true;
     await context.route("https://fixture.supabase.co/**", (route) => {

@@ -20,3 +20,8 @@ grant execute on function realtime.topic() to authenticated;
 grant select,insert on realtime.messages to authenticated;
 grant usage,select on sequence realtime.messages_id_seq to authenticated;
 `;
+
+exports.bootstrap += require("node:fs").readFileSync(
+  require("node:path").resolve(__dirname, "../../supabase/schema.sql"),
+  "utf8",
+);

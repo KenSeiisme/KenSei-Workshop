@@ -10,14 +10,12 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     ctx = await browser.newContext(),
     errors = [],
     uploads = [];
-  await ctx.route(
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-    (r) =>
-      r.fulfill({
-        body: sdk,
-        contentType: "application/javascript",
-        headers: { "access-control-allow-origin": "*" },
-      }),
+  await ctx.route("**/vendor/supabase-2.119.0.js*", (r) =>
+    r.fulfill({
+      body: sdk,
+      contentType: "application/javascript",
+      headers: { "access-control-allow-origin": "*" },
+    }),
   );
   ctx.on("page", (p) => {
     p.on("pageerror", (e) => errors.push(e.message));

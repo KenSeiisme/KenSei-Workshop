@@ -15,9 +15,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8780";
       p = await c.newPage(),
       errors = [];
     p.on("pageerror", (e) => errors.push(e.message));
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) => r.fulfill({ contentType: "text/javascript", body: sdk }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({ contentType: "text/javascript", body: sdk }),
     );
     await p.goto(base + "/games/go/");
     await p.waitForSelector("[data-go-phase=playing]");

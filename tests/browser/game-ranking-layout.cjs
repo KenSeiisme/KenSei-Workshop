@@ -26,9 +26,8 @@ const sdk = `export function createClient(){const id=window.__signed?'11111111-1
     await c.route("https://fonts.googleapis.com/**", (route) =>
       route.fulfill({ contentType: "text/css", body: "" }),
     );
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) => r.fulfill({ contentType: "text/javascript", body: sdk }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({ contentType: "text/javascript", body: sdk }),
     );
     c.on("page", (p) => {
       p.on("pageerror", (e) => errors.push(e.message));

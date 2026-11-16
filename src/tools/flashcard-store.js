@@ -151,6 +151,8 @@ export const rows = () =>
       (a, b) =>
         b.created_at.localeCompare(a.created_at) || b.id.localeCompare(a.id),
     );
+export const workspaceState = () =>
+  active?.scope === (api.user?.id || "guest") ? active.state : null;
 export const hasMore = () => active?.more || false;
 export const saveState = () =>
   active?.localError ||

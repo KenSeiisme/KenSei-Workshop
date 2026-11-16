@@ -1,0 +1,170 @@
+{
+  "m_2e765a8be4d8": {
+    "en": "Connecting to sign-in…",
+    "zh-Hant": "正在連線至登入服務…"
+  },
+  "m_c09d280e6001": {
+    "en": "Cloud data could not be loaded.",
+    "zh-Hant": "無法載入雲端資料。"
+  },
+  "m_1fb6cc130dc8": {
+    "en": "Find saved work",
+    "zh-Hant": "尋找已儲存的內容"
+  },
+  "m_64713fa2bd76": {
+    "en": "Search saved work",
+    "zh-Hant": "搜尋已儲存的內容"
+  },
+  "m_c17acab03fd1": {
+    "en": "Search by name or tool",
+    "zh-Hant": "按名稱或工具搜尋"
+  },
+  "m_91cf117b1d70": {
+    "en": "Record type",
+    "zh-Hant": "記錄類型"
+  },
+  "m_1aa1e44dea28": {
+    "en": "All records",
+    "zh-Hant": "全部記錄"
+  },
+  "m_cf9cbd95b8d2": {
+    "en": "Presets and recipes",
+    "zh-Hant": "預設與配方"
+  },
+  "m_264d16fcc3a8": {
+    "en": "Card decks",
+    "zh-Hant": "閃卡牌組"
+  },
+  "m_3ef5062dce47": {
+    "en": "Personal whiteboards",
+    "zh-Hant": "私人白板"
+  },
+  "m_ebf12ef47cf5": {
+    "en": "Draft",
+    "zh-Hant": "草稿"
+  },
+  "m_91c16b01fe78": {
+    "en": "Preset or recipe",
+    "zh-Hant": "預設或配方"
+  },
+  "m_81dc3ad18027": {
+    "en": "Decision scheme",
+    "zh-Hant": "選擇方案"
+  },
+  "m_bc20390656e6": {
+    "en": "Card deck",
+    "zh-Hant": "閃卡牌組"
+  },
+  "m_7b8143a31969": {
+    "en": "Study plan",
+    "zh-Hant": "學習計畫"
+  },
+  "m_038bbd463fb8": {
+    "en": "Personal whiteboard",
+    "zh-Hant": "私人白板"
+  },
+  "m_e344e9b0c4c5": {
+    "en": "Untitled record",
+    "zh-Hant": "未命名記錄"
+  },
+  "m_7786ae057821": {
+    "en": "Loading saved work…",
+    "zh-Hant": "正在載入已儲存的內容…"
+  },
+  "m_232664ac7c47": {
+    "en": "Showing saved work on this device. Retry when connected.",
+    "zh-Hant": "目前顯示此裝置上的記錄。連線後可重試。"
+  },
+  "m_5aa18462115f": {
+    "en": "No matching saved work.",
+    "zh-Hant": "沒有相符的儲存記錄。"
+  },
+  "m_a6744087301e": {
+    "en": "Recent matches",
+    "zh-Hant": "近期對局"
+  },
+  "m_7cc5c4651a76": {
+    "en": "Board game",
+    "zh-Hant": "棋類遊戲"
+  },
+  "m_5e87d7ff23bd": {
+    "en": "All board games",
+    "zh-Hant": "所有棋類遊戲"
+  },
+  "m_36afca802c4d": {
+    "en": "Unresolved",
+    "zh-Hant": "未決"
+  },
+  "m_d00d613e115a": {
+    "en": "Both players lost",
+    "zh-Hant": "雙方均負"
+  },
+  "m_acdf2907db3d": {
+    "en": "Won",
+    "zh-Hant": "勝"
+  },
+  "m_51e1357de85b": {
+    "en": "Lost",
+    "zh-Hant": "負"
+  },
+  "m_0f3934e44c0d": {
+    "en": "Loading recent matches…",
+    "zh-Hant": "正在載入近期對局…"
+  },
+  "m_a8e682299608": {
+    "en": "Recent matches could not load. Retry when connected.",
+    "zh-Hant": "無法載入近期對局。連線後可重試。"
+  },
+  "m_a3c884302bd2": {
+    "en": "No completed online matches yet.",
+    "zh-Hant": "尚無已結束的線上對局。"
+  },
+  "m_e5a74bb8ecc1": {
+    "en": "Match replay",
+    "zh-Hant": "對局復盤"
+  },
+  "m_415e50e2c879": {
+    "en": "Reviewed position",
+    "zh-Hant": "復盤棋盤"
+  },
+  "m_3e5719cc5762": {
+    "en": "Previous move",
+    "zh-Hant": "上一手"
+  },
+  "m_f46484a373a0": {
+    "en": "Next move",
+    "zh-Hant": "下一手"
+  },
+  "m_f8ef96c81a91": {
+    "en": "Download record",
+    "zh-Hant": "下載棋譜"
+  },
+  "m_70ca9cfb1544": {
+    "en": "Loading match replay…",
+    "zh-Hant": "正在載入復盤…"
+  },
+  "m_bca8ff252e20": {
+    "en": "This match is unavailable.",
+    "zh-Hant": "無法開啟此對局。"
+  },
+  "m_454311011435": {
+    "en": "Sign in to review your matches.",
+    "zh-Hant": "登入後即可復盤自己的對局。"
+  },
+  "m_09eff8f07a26": {
+    "en": "Replay could not load. Retry when connected.",
+    "zh-Hant": "無法載入棋譜。連線後可重試。"
+  },
+  "m_b13008b17d82": {
+    "en": "Replay could not load. Refresh and try again.",
+    "zh-Hant": "無法載入復盤介面，請重新整理後再試。"
+  },
+  "m_3ea011dd78e7": {
+    "en": "Supabase JS license",
+    "zh-Hant": "Supabase JS 授權"
+  },
+  "m_0df22261d8ac": {
+    "en": "Sign-in connection timed out.",
+    "zh-Hant": "登入服務連線逾時。"
+  }
+}

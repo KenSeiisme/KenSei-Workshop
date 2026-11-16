@@ -17,10 +17,8 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
   context.on("page", (page) =>
     page.on("pageerror", (error) => errors.push(error.message)),
   );
-  await context.route(
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-    (route) =>
-      route.fulfill({ contentType: "application/javascript", body: sdk }),
+  await context.route("**/vendor/supabase-2.119.0.js*", (route) =>
+    route.fulfill({ contentType: "application/javascript", body: sdk }),
   );
   await context.route(
     "https://lh3.googleusercontent.com/a/account-ui-fixture",

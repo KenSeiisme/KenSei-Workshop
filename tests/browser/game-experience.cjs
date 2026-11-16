@@ -91,13 +91,11 @@ const games = JSON.parse(fs.readFileSync("data/games.json", "utf8")).filter(
   await context.route("https://fonts.googleapis.com/**", (route) =>
     route.fulfill({ contentType: "text/css", body: "" }),
   );
-  await context.route(
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-    (r) =>
-      r.fulfill({
-        contentType: "text/javascript",
-        body: `export function createClient(){return{auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async(name,args)=>({data:name==='get_public_profile'?${JSON.stringify(profile)}:{version:name==='get_game_leaderboard_history'?1:(args.game==='brick-breaker'?4:args.game==='snake'?2:1),top:[],me:null},error:null})}}`,
-      }),
+  await context.route("**/vendor/supabase-2.119.0.js*", (r) =>
+    r.fulfill({
+      contentType: "text/javascript",
+      body: `export function createClient(){return{auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async(name,args)=>({data:name==='get_public_profile'?${JSON.stringify(profile)}:{version:name==='get_game_leaderboard_history'?1:(args.game==='brick-breaker'?4:args.game==='snake'?2:1),top:[],me:null},error:null})}}`,
+    }),
   );
   const open = async (slug) => {
     await page.goto(base + "/games/" + slug + "/");

@@ -26,14 +26,12 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
     const c = await browser.newContext({ reducedMotion: "reduce", ...options });
     contexts.push(c);
     await c.addInitScript((id) => (window.__testUser = id), user);
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) =>
-        r.fulfill({
-          contentType: "application/javascript",
-          body: sdk,
-          headers: { "access-control-allow-origin": "*" },
-        }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({
+        contentType: "application/javascript",
+        body: sdk,
+        headers: { "access-control-allow-origin": "*" },
+      }),
     );
     await c.route("**/__qa/rpc/*", async (route) => {
       if (fail) {

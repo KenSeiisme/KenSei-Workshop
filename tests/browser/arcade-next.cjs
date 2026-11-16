@@ -104,13 +104,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8812";
     await c.route("https://fonts.googleapis.com/**", (route) =>
       route.fulfill({ contentType: "text/css", body: "" }),
     );
-    await c.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) =>
-        r.fulfill({
-          contentType: "text/javascript",
-          body: `export function createClient(){const id=window.__qaUser;window.__qaListeners=new Map();return{auth:{getSession:async()=>({data:{session:id?{user:{id},access_token:'aaa.userA.ccc'}:null}}),onAuthStateChange(){}},from(){return{select(){return this},order:async()=>({data:[]})}},rpc:async(name,args)=>{const r=await fetch('/__qa/next/rpc/'+name,{method:'POST',headers:{'x-user':id||''},body:JSON.stringify(args)});return r.json()},functions:{invoke:async(name,{body})=>{const r=await fetch('/__qa/next/function/'+name.split('/').at(-1),{method:'POST',headers:{'x-user':id||''},body:JSON.stringify(body)});const data=await r.json();return r.ok?{data}:{error:{message:data.error,context:{json:async()=>data}}}}},channel(topic){const ch={topic,on(type,opt,fn){window.__qaListeners.set(topic,fn);return ch},subscribe(fn){window.__qaChannel({topic,join:true}).then(()=>fn('SUBSCRIBED'),()=>fn('CHANNEL_ERROR'));return ch},send(message){return window.__qaBroadcast({topic,payload:message.payload})}};return ch},removeChannel(ch){window.__qaListeners.delete(ch.topic);return window.__qaChannel({topic:ch.topic,join:false})}}}`,
-        }),
+    await c.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({
+        contentType: "text/javascript",
+        body: `export function createClient(){const id=window.__qaUser;window.__qaListeners=new Map();return{auth:{getSession:async()=>({data:{session:id?{user:{id},access_token:'aaa.userA.ccc'}:null}}),onAuthStateChange(){}},from(){return{select(){return this},order:async()=>({data:[]})}},rpc:async(name,args)=>{const r=await fetch('/__qa/next/rpc/'+name,{method:'POST',headers:{'x-user':id||''},body:JSON.stringify(args)});return r.json()},functions:{invoke:async(name,{body})=>{const r=await fetch('/__qa/next/function/'+name.split('/').at(-1),{method:'POST',headers:{'x-user':id||''},body:JSON.stringify(body)});const data=await r.json();return r.ok?{data}:{error:{message:data.error,context:{json:async()=>data}}}}},channel(topic){const ch={topic,on(type,opt,fn){window.__qaListeners.set(topic,fn);return ch},subscribe(fn){window.__qaChannel({topic,join:true}).then(()=>fn('SUBSCRIBED'),()=>fn('CHANNEL_ERROR'));return ch},send(message){return window.__qaBroadcast({topic,payload:message.payload})}};return ch},removeChannel(ch){window.__qaListeners.delete(ch.topic);return window.__qaChannel({topic:ch.topic,join:false})}}}`,
+      }),
     );
     await c.route("**/__qa/next/rpc/*", async (r) => {
       const name = r.request().url().split("/").at(-1),

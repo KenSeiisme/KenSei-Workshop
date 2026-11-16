@@ -202,6 +202,7 @@ console.log(
   "Prepared local browser libraries and four pinned OCR language packs.",
 );
 
+await import("./vendor-auth.mjs");
 await import("./vendor-fourth.mjs");
 
 await import("./vendor-fifth.mjs");

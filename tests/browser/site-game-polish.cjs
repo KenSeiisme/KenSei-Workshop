@@ -8,13 +8,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
   });
   const context = await browser.newContext({ reducedMotion: "reduce" });
   try {
-    await context.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (route) =>
-        route.fulfill({
-          contentType: "text/javascript",
-          body: `export function createClient(){return{auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async()=>({data:{top:[],version:4}})}}`,
-        }),
+    await context.route("**/vendor/supabase-2.119.0.js*", (route) =>
+      route.fulfill({
+        contentType: "text/javascript",
+        body: `export function createClient(){return{auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async()=>({data:{top:[],version:4}})}}`,
+      }),
     );
     await context.addInitScript(() => {
       if (!localStorage.getItem("kensei-game-hub-theme"))

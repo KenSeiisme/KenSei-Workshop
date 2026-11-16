@@ -12,6 +12,54 @@
     </div>
     <button class="button secondary" data-sign-in>Sign in with Google ↗</button>
   </div>
+  <section
+    class="workspace-section"
+    aria-labelledby="workspace-index-title"
+    data-workspace-index
+  >
+    <h2 id="workspace-index-title">Find saved work</h2>
+    <div class="action-row">
+      <label class="field"
+        >Search saved work
+        <input
+          type="search"
+          data-workspace-query
+          maxlength="200"
+          placeholder="Search by name or tool"
+        />
+      </label>
+      <label class="field"
+        >Record type
+        <select data-workspace-kind>
+          <option value="">All records</option>
+          <option value="draft">Drafts</option>
+          <option value="preset">Presets and recipes</option>
+          <option value="decision">Decision schemes</option>
+          <option value="deck">Card decks</option>
+          <option value="planner">Study plans</option>
+          <option value="whiteboard">Personal whiteboards</option>
+        </select>
+      </label>
+    </div>
+    <p data-workspace-index-status class="muted small" role="status"></p>
+    <div class="saved-list" data-workspace-index-list></div>
+    <button
+      type="button"
+      class="button secondary"
+      data-workspace-index-more
+      hidden
+    >
+      Load more
+    </button>
+    <button
+      type="button"
+      class="button secondary"
+      data-workspace-index-retry
+      hidden
+    >
+      Retry
+    </button>
+  </section>
   <div class="workspace-stats">
     <div class="panel">
       <span>Focused today</span><strong id="today-focus">0 min</strong>

@@ -1,0 +1,28 @@
+.board-review-heading,
+.board-review-content {
+  width: min(100%, 38rem);
+  margin-inline: auto;
+}
+.board-review-heading h1 {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  margin: 0.5rem 0;
+}
+.board-review-content .archive-board {
+  width: 100%;
+  max-width: min(100%, 58vh);
+  margin: 1rem auto;
+}
+.board-review-content .go-board {
+  display: block;
+}
+.board-review-content canvas {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius, 12px);
+}
+.board-review-actions {
+  flex-wrap: wrap;
+}
+.board-review-actions button {
+  min-height: 44px;
+}

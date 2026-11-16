@@ -9,13 +9,11 @@ const { chromium } = require("../support/browser.cjs");
     const page = await browser.newPage({
       viewport: { width: 360, height: 800 },
     });
-    await page.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) =>
-        r.fulfill({
-          contentType: "application/javascript",
-          body: `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async()=>({data:{public_id:'11111111-1111-4111-8111-111111111111',nickname:'Xiangqi fixture',bio:'Private content is absent',avatar_kind:'none',best_scores:[],game_achievements:[],game_best_scores:[],chess_stats:[],board_game_stats:[],xiangqi_stats:[{rules_version:1,time_control:'10+5',played:12,wins:8,losses:3,draws:1,win_rate:8/12}]}})}}`,
-        }),
+    await page.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({
+        contentType: "application/javascript",
+        body: `export function createClient(){return {auth:{getSession:async()=>({data:{session:null}}),onAuthStateChange(){}},rpc:async()=>({data:{public_id:'11111111-1111-4111-8111-111111111111',nickname:'Xiangqi fixture',bio:'Private content is absent',avatar_kind:'none',best_scores:[],game_achievements:[],game_best_scores:[],chess_stats:[],board_game_stats:[],xiangqi_stats:[{rules_version:1,time_control:'10+5',played:12,wins:8,losses:3,draws:1,win_rate:8/12}]}})}}`,
+      }),
     );
     await page.goto(
       (process.env.TEST_BASE_URL || "http://127.0.0.1:8769") +

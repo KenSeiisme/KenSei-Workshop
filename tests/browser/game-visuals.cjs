@@ -69,14 +69,12 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await context.route("https://fonts.googleapis.com/**", (route) =>
       route.fulfill({ contentType: "text/css", body: "" }),
     );
-    await context.route(
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm",
-      (r) =>
-        r.fulfill({
-          contentType: "application/javascript",
-          body: sdk,
-          headers: { "access-control-allow-origin": "*" },
-        }),
+    await context.route("**/vendor/supabase-2.119.0.js*", (r) =>
+      r.fulfill({
+        contentType: "application/javascript",
+        body: sdk,
+        headers: { "access-control-allow-origin": "*" },
+      }),
     );
     context.on("page", (p) => {
       p.on("pageerror", (e) => errors.push(e.message));
