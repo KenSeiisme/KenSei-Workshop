@@ -11,16 +11,22 @@
     <section class="panel game-play">
       <div class="pong-player-row">
         <div class="pong-player">
-          <span class="avatar-badge" id="pong-host-avatar"></span
-          ><strong id="pong-host-name">Player one</strong>
+          <span class="avatar-badge" id="pong-host-avatar"></span>
+          <div class="pong-player-info">
+            <strong id="pong-host-name">Player one</strong>
+            <small id="pong-host-ready" class="muted" hidden></small>
+          </div>
         </div>
         <div class="pong-score">
           <b id="pong-left-score">0</b><span>:</span
           ><b id="pong-right-score">0</b>
         </div>
         <div class="pong-player">
-          <span class="avatar-badge" id="pong-guest-avatar"></span
-          ><strong id="pong-guest-name">Waiting for a friend</strong>
+          <span class="avatar-badge" id="pong-guest-avatar"></span>
+          <div class="pong-player-info">
+            <strong id="pong-guest-name">Waiting for a friend</strong>
+            <small id="pong-guest-ready" class="muted" hidden></small>
+          </div>
         </div>
       </div>
 

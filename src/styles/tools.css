@@ -1977,3 +1977,16 @@ progress {
 .pdf-form-fields label > span {
   overflow-wrap: anywhere;
 }
+
+.handoff-progress {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+.handoff-progress p {
+  flex-basis: 100%;
+  margin: 0;
+}

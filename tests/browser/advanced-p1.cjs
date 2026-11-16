@@ -225,6 +225,30 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
         .textContent.includes("Page images ready"),
     );
     assert((await p.locator(".pdf-thumb").count()) === 3);
+    const pagesToOcr = p.waitForEvent("popup");
+    await p.getByRole("button", { name: "Image to Text", exact: true }).click();
+    const pdfOcr = await pagesToOcr;
+    await pdfOcr.waitForFunction(() =>
+      document.querySelector("#ocr-file-info")?.textContent.includes("1"),
+    );
+    assert.equal(await pdfOcr.locator("#ocr-output").inputValue(), "");
+    await pdfOcr.fill("#ocr-output", "Reviewed text from the PDF pages");
+    const textTransfer = pdfOcr.waitForEvent("popup");
+    await pdfOcr
+      .getByRole("button", { name: "Text Toolkit", exact: true })
+      .click();
+    const reviewed = await textTransfer;
+    await reviewed.waitForFunction(
+      () =>
+        document.querySelector("#text-input")?.value ===
+        "Reviewed text from the PDF pages",
+    );
+    await reviewed.close();
+    await pdfOcr.close();
+    console.log(
+      "PASS PDF page images to OCR and reviewed text to Text Toolkit",
+    );
+
     console.log(
       "PASS native PDF text, page thumbnails and transfer-ready page images",
     );

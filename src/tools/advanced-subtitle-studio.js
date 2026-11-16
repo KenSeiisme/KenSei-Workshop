@@ -11,7 +11,6 @@ import {
 } from "./advanced-ui.js";
 import { validateCue, serialize } from "./subtitle-core.js";
 import { receiveHandoff } from "./handoff.js";
-import { fileInput } from "./advanced-ui.js";
 export function retimeCues(cues, a, b, c, d) {
   if (![a, b, c, d].every(Number.isFinite) || c <= a || d <= b)
     throw Error("Use two increasing source and target anchors.");
@@ -160,11 +159,7 @@ export function init() {
   refresh();
   receiveHandoff(
     "subtitle-studio",
-    (payload) => {
-      const input = $("#sub-video-file");
-      input.files = fileInput(payload.files);
-      input.dispatchEvent(new Event("change", { bubbles: true }));
-    },
+    (payload, current) => ctx.receiveVideo(payload.files[0], current),
     () => !!$("#sub-video").getAttribute("src"),
   );
 }

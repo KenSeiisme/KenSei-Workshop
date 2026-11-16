@@ -256,6 +256,7 @@ async function main() {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   let active = null;
+  let queueScenario = null;
   let blocked = false;
   let stale = null;
   let requests = [];
@@ -338,6 +339,37 @@ async function main() {
         body: JSON.stringify(json),
         contentType: "application/json",
       });
+    }
+    if (queueScenario && id === fixtureUser) {
+      const scenario = queueScenario;
+      scenario.actions.push(endpoint);
+      if (endpoint === "queue") {
+        scenario.configs.push(body.config);
+        if (scenario.hold)
+          await new Promise((resolve) => {
+            scenario.release = resolve;
+          });
+        return route.fulfill({
+          json: scenario.room || { waiting: true, capacity: scenario.capacity },
+        });
+      }
+      if (endpoint === "cancel") {
+        scenario.room = null;
+        return route.fulfill({ json: { cancelled: true } });
+      }
+      if (endpoint === "ready") {
+        await new Promise((resolve) => {
+          scenario.releaseReady = resolve;
+        });
+        scenario.room = {
+          ...scenario.room,
+          revision: scenario.room.revision + 1,
+          members: scenario.room.members.map((member) =>
+            member.color === 1 ? { ...member, ready: true } : member,
+          ),
+        };
+      }
+      return route.fulfill({ json: scenario.room || { match: null } });
     }
     if (!active || id !== fixtureUser) return route.fulfill({ json: {} });
     if (endpoint === "get") {
@@ -581,6 +613,126 @@ async function main() {
     await page.locator("[data-match-link-sign-in]").waitFor();
     console.log(
       "PASS live lobby links for all four games, bilingual retry, durable Pong score, read-only takeover and account isolation",
+    );
+    await activeUser(page, fixtureUser);
+    queueScenario = { actions: [], configs: [], capacity: false, room: null };
+    await page.goto(base + "/games/go/");
+    await page.waitForFunction(() => window.KenseiWorkspace?.ready);
+    await page.selectOption("#go-mode", "online");
+    await page.click("#go-find");
+    const lobby = page.locator("#go-room-panel");
+    await lobby.getByText("Finding an opponent…", { exact: true }).waitFor();
+    await lobby.getByText(/^Waiting · \d+ s$/).waitFor();
+    queueScenario.capacity = true;
+    await page.evaluate(() => {
+      document.querySelector("#go-size").value = "13";
+      window.dispatchEvent(new Event("online"));
+    });
+    await lobby.getByText("Waiting for a free online room.").waitFor();
+    assert.deepEqual(queueScenario.configs[0], queueScenario.configs[1]);
+
+    const settings = cases.go.create();
+    const sampleRoom = {
+      game: "go",
+      id: roomId,
+      revision: 1,
+      status: "ready",
+      rules_version: 1,
+      controller: true,
+      color: 1,
+      channel_key: "fixture",
+      ranked: true,
+      clock: null,
+      config: settings.config,
+      state: settings,
+      origin: "random",
+      members: [
+        { color: 1, nickname: "Player one" },
+        { color: -1, nickname: "Player two" },
+      ],
+      ready_deadline: new Date(Date.now() + 30000).toISOString(),
+      server_now: Date.now(),
+    };
+    queueScenario.room = sampleRoom;
+    queueScenario.hold = true;
+    await page.evaluate(() => window.dispatchEvent(new Event("online")));
+    for (let i = 0; i < 30 && !queueScenario.release; i++)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    assert.ok(queueScenario.release);
+    await page.click("#go-cancel-wait");
+    await lobby.getByText("Cancelling search…").waitFor();
+    assert.equal(queueScenario.actions.includes("cancel"), false);
+    queueScenario.hold = false;
+    queueScenario.release();
+    await page
+      .locator("#go-status")
+      .filter({ hasText: "Search or room cancelled." })
+      .waitFor();
+    assert.deepEqual(queueScenario.actions.slice(-2), ["cancel", "get"]);
+
+    await page.click("#go-find");
+    await lobby.getByText("Waiting for a free online room.").waitFor();
+    await page.clock.setFixedTime(new Date(Date.now() + 61000));
+    await page.evaluate(() => window.dispatchEvent(new Event("online")));
+    await lobby.getByRole("button", { name: "Search again" }).waitFor();
+    assert.equal(queueScenario.actions.at(-1), "get");
+    await page.clock.setFixedTime(new Date());
+
+    queueScenario.room = {
+      ...sampleRoom,
+      origin: "invite",
+      code: "AB12CD34",
+      ready_deadline: new Date(Date.now() + 30000).toISOString(),
+      server_now: Date.now(),
+    };
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "clipboard", {
+        value: {
+          writeText: async () => {
+            throw Error("Fixture clipboard denial");
+          },
+        },
+      });
+    });
+    await page.reload();
+    await lobby
+      .getByText("Opponent found. Both players must press Ready.")
+      .waitFor();
+    await lobby.getByText("You are not ready").waitFor();
+    await lobby.getByText("Opponent is not ready").waitFor();
+    await page.click("#go-copy-invite");
+    assert.match(
+      await page.getByRole("textbox", { name: "Invitation link" }).inputValue(),
+      /\?code=AB12CD34$/,
+    );
+    await page.click("#go-ready");
+    await lobby.getByRole("button", { name: "Confirming Ready…" }).waitFor();
+    for (let i = 0; i < 30 && !queueScenario.releaseReady; i++)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    assert.ok(queueScenario.releaseReady);
+    queueScenario.releaseReady();
+    await lobby.getByText("You are ready").waitFor();
+    queueScenario.room = {
+      ...queueScenario.room,
+      revision: queueScenario.room.revision + 1,
+      ready_deadline: new Date(Date.now() - 1000).toISOString(),
+      server_now: Date.now(),
+    };
+    await page.evaluate(() => window.dispatchEvent(new Event("online")));
+    await lobby.getByText("Checking room status…").waitFor();
+    assert.equal(await page.locator("#go-ready").isDisabled(), true);
+    queueScenario.room = {
+      ...queueScenario.room,
+      status: "closed",
+      revision: queueScenario.room.revision + 1,
+    };
+    await page.evaluate(() => window.dispatchEvent(new Event("online")));
+    await page
+      .locator("#go-status")
+      .filter({ hasText: "The Ready window expired." })
+      .waitFor();
+    console.log(
+      "PASS matchmaking settings, capacity, cancel race, expiry recovery, invitation fallback and confirmed Ready",
     );
     assert.deepEqual(errors, []);
   } catch (error) {

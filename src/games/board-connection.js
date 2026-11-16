@@ -9,13 +9,14 @@ export function requireCurrentBoardRequest(isCurrent) {
 }
 
 export async function invokeBoardRequest(client, action, body, isCurrent) {
+  const controller = new AbortController();
   let timer;
   try {
     const response = await Promise.race([
       (async () => {
         const { data, error } = await client.functions.invoke(
           "board-match/" + action,
-          { body },
+          { body, signal: controller.signal },
         );
         let reply = data;
         if (error?.context?.json) {
@@ -26,15 +27,14 @@ export async function invokeBoardRequest(client, action, body, isCurrent) {
         return { reply, error };
       })(),
       new Promise((_, reject) => {
-        timer = setTimeout(
-          () =>
-            reject(
-              new Error(
-                "The online board could not be updated. Check your connection and retry.",
-              ),
+        timer = setTimeout(() => {
+          reject(
+            new Error(
+              "The online board could not be updated. Check your connection and retry.",
             ),
-          15000,
-        );
+          );
+          controller.abort();
+        }, 15000);
       }),
     ]);
     requireCurrentBoardRequest(isCurrent);

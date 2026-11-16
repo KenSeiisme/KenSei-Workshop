@@ -1,0 +1,170 @@
+{
+  "m_a5195c1c464b": {
+    "en": "Transfer unavailable. Download and import the file, or copy the text.",
+    "zh-Hant": "無法傳遞。請下載後匯入檔案，或複製文字。"
+  },
+  "m_a6ef90947308": {
+    "en": "Transfer cancelled.",
+    "zh-Hant": "已取消傳遞。"
+  },
+  "m_f02a54c56ebd": {
+    "en": "Waiting for the receiving tool. Keep this tab open.",
+    "zh-Hant": "正在等待接收工具，請保持此分頁開啟。"
+  },
+  "m_ed82af01fad1": {
+    "en": "The receiving tool is taking longer than expected. Open it or retry.",
+    "zh-Hant": "接收工具載入較久。請開啟接收頁或重試。"
+  },
+  "m_e8900ca07d3a": {
+    "en": "Retry transfer",
+    "zh-Hant": "重試傳遞"
+  },
+  "m_f48e8dc778dc": {
+    "en": "Cancel transfer",
+    "zh-Hant": "取消傳遞"
+  },
+  "m_55defeae2041": {
+    "en": "Sending result to the receiving tool…",
+    "zh-Hant": "正在傳送結果至接收工具…"
+  },
+  "m_e8e7b635a3bf": {
+    "en": "Waiting for import in the receiving tool.",
+    "zh-Hant": "正在等待接收工具匯入。"
+  },
+  "m_c5c58862bfdf": {
+    "en": "Importing in the receiving tool…",
+    "zh-Hant": "接收工具正在匯入…"
+  },
+  "m_c98694ed676e": {
+    "en": "The receiving tool could not import the result. Retry there or send it again.",
+    "zh-Hant": "接收工具無法匯入。請在接收頁重試或重新傳送。"
+  },
+  "m_0bf1920f5ed0": {
+    "en": "Import result",
+    "zh-Hant": "匯入結果"
+  },
+  "m_6ce7aee23b32": {
+    "en": "Waiting for the result from the source tab…",
+    "zh-Hant": "正在等待來源分頁傳送結果…"
+  },
+  "m_ad94f4b13d88": {
+    "en": "Still waiting. Retry or send the result again from the source tool.",
+    "zh-Hant": "仍在等待。請重試，或從來源工具重新傳送。"
+  },
+  "m_6967c3900b24": {
+    "en": "This tool is busy. Wait for it to finish, then import the result.",
+    "zh-Hant": "此工具正在處理。完成後即可匯入結果。"
+  },
+  "m_609692a8cccb": {
+    "en": "Importing the received result…",
+    "zh-Hant": "正在匯入接收的結果…"
+  },
+  "m_304f4413b052": {
+    "en": "The result could not be imported.",
+    "zh-Hant": "無法匯入結果。"
+  },
+  "m_8d283fdb0309": {
+    "en": "Importing this result will replace the current input.",
+    "zh-Hant": "匯入這份結果會取代目前輸入。"
+  },
+  "m_2d870ecd4ae8": {
+    "en": "This browser could not open the received video.",
+    "zh-Hant": "此瀏覽器無法開啟接收的影片。"
+  },
+  "m_116f836355df": {
+    "en": "Matchmaking",
+    "zh-Hant": "配對搜尋"
+  },
+  "m_27c37c1d400f": {
+    "en": "Online room",
+    "zh-Hant": "線上房間"
+  },
+  "m_9b75ffead630": {
+    "en": "The Ready window expired. Search again or open a new room.",
+    "zh-Hant": "準備時間已過期。請重新搜尋或開啟新房間。"
+  },
+  "m_998195e4aaa2": {
+    "en": "Search again",
+    "zh-Hant": "重新搜尋"
+  },
+  "m_e8ba335c0651": {
+    "en": "Cancelling search…",
+    "zh-Hant": "正在取消搜尋…"
+  },
+  "m_fb9e7cc9ed7a": {
+    "en": "Waiting to confirm cancellation. Retry Cancel.",
+    "zh-Hant": "尚未確認取消。請再按一次取消。"
+  },
+  "m_3de579b2004d": {
+    "en": "This search expired. Search again to rejoin the queue.",
+    "zh-Hant": "這次搜尋已過期。重新搜尋即可加入佇列。"
+  },
+  "m_78677b30cc58": {
+    "en": "Reconnecting to check your search…",
+    "zh-Hant": "正在重新連線以確認搜尋狀態…"
+  },
+  "m_37c53c80926a": {
+    "en": "Waiting for a free online room.",
+    "zh-Hant": "正在等待空出的線上房間。"
+  },
+  "m_f33ae0abc198": {
+    "en": "Opponent found. Both players must press Ready.",
+    "zh-Hant": "已找到對手。雙方都需按準備。"
+  },
+  "m_f0040d79ff0e": {
+    "en": "Share the invitation with your opponent.",
+    "zh-Hant": "請將邀請連結分享給對手。"
+  },
+  "m_3c1cfb65c605": {
+    "en": "Confirming Ready…",
+    "zh-Hant": "正在確認準備狀態…"
+  },
+  "m_8e38a4c25458": {
+    "en": "Waiting · {0} s",
+    "zh-Hant": "已等待 · {0} 秒"
+  },
+  "m_b381de9bbdcd": {
+    "en": "Checking room status…",
+    "zh-Hant": "正在確認房間狀態…"
+  },
+  "m_cfba76de8442": {
+    "en": "You are ready",
+    "zh-Hant": "你已準備"
+  },
+  "m_82cb775f6044": {
+    "en": "You are not ready",
+    "zh-Hant": "你尚未準備"
+  },
+  "m_eb3b48738e9d": {
+    "en": "Opponent is ready",
+    "zh-Hant": "對手已準備"
+  },
+  "m_a350d79bcad6": {
+    "en": "Opponent is not ready",
+    "zh-Hant": "對手尚未準備"
+  },
+  "m_88c3be350635": {
+    "en": "Invitation link",
+    "zh-Hant": "邀請連結"
+  },
+  "m_e713972c66d3": {
+    "en": "Copy the invitation link shown next to the room code.",
+    "zh-Hant": "請複製房間碼旁顯示的邀請連結。"
+  },
+  "m_12f9baee2b97": {
+    "en": "Cancellation could not be confirmed. Retry Cancel.",
+    "zh-Hant": "無法確認取消。請再按一次取消。"
+  },
+  "m_89097b02a42c": {
+    "en": "Search or room cancelled.",
+    "zh-Hant": "已取消搜尋或候場房間。"
+  },
+  "m_73beea09fa25": {
+    "en": "This match has already started.",
+    "zh-Hant": "對局已開始。"
+  },
+  "m_5e0b25bf1ea2": {
+    "en": "Both players may already be ready. Leaving a started match counts as resignation. Leave the room?",
+    "zh-Hant": "雙方可能已準備好。離開已開始的對局會被視為認輸。要離開房間嗎？"
+  }
+}

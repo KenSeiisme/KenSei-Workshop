@@ -191,6 +191,22 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     pass(
       "real canvas MediaRecorder video download, native format, pause/resume, background continuity and track release",
     );
+    const subtitleWindow = page.waitForEvent("popup");
+    await page
+      .getByRole("button", { name: "Subtitle Studio", exact: true })
+      .click();
+    const subtitle = await subtitleWindow;
+    await subtitle.waitForFunction(() => {
+      const video = document.querySelector("#sub-video");
+      return (
+        video?.readyState >= 1 && video.src.startsWith("blob:") && video.paused
+      );
+    });
+    assert.doesNotMatch(subtitle.url(), /handoff=/);
+    await subtitle.close();
+    pass(
+      "recording passed to Subtitle Studio, validated and ready for manual playback",
+    );
     await page.click("#screen-discard");
     await page.check("#screen-microphone");
     await page.check("#screen-shared-audio");

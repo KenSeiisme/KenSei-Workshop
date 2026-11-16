@@ -1,3 +1,4 @@
+import { copyRoomInvite, readyLabel } from "./room-lobby.js";
 import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, esc } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
@@ -83,7 +84,9 @@ let pollAt = 0,
   pendingPoint = null,
   savingPoint = false,
   clockOffset = 0,
-  peerSeen = false;
+  peerSeen = false,
+  confirmingReady = false,
+  checkingDeadline = null;
 const message = (text) => uiText($("#pong-status"), uiFrom(text));
 const host = () => room?.role === "host";
 const recoverable = (match = room) => match?.protocol_version === 2;
@@ -131,9 +134,25 @@ function renderRoom() {
     (connected && !interruptedAt && (!pendingPoint || savingPoint));
   const me = room?.players?.find((p) => p.role === room.role),
     two = room?.players?.length === 2;
+  const deadline = Date.parse(
+    room?.status === "paused"
+      ? room.resume_until
+      : room?.status === "waiting"
+        ? room.expires_at
+        : undefined,
+  );
+  const atDeadline =
+    recoverable() &&
+    Number.isFinite(deadline) &&
+    deadline <= Date.now() + clockOffset;
+  if (atDeadline && checkingDeadline !== deadline) {
+    checkingDeadline = deadline;
+    queueMicrotask(poll);
+  }
   $("#pong-ready").disabled =
     !live ||
     !two ||
+    atDeadline ||
     !connected ||
     !controls() ||
     busy ||
@@ -141,15 +160,17 @@ function renderRoom() {
     !!me?.ready;
   uiText(
     $("#pong-ready"),
-    room?.status === "finished"
-      ? me?.ready
-        ? uiMsg("Waiting for rematch…")
-        : uiMsg("Ready for rematch →")
-      : me?.ready
-        ? uiMsg("Waiting for friend…")
-        : room?.status === "paused"
-          ? uiMsg("Ready to resume →")
-          : uiMsg("Ready →"),
+    confirmingReady
+      ? uiMsg("Confirming Ready…")
+      : room?.status === "finished"
+        ? me?.ready
+          ? uiMsg("Waiting for rematch…")
+          : uiMsg("Ready for rematch →")
+        : me?.ready
+          ? uiMsg("Waiting for friend…")
+          : room?.status === "paused"
+            ? uiMsg("Ready to resume →")
+            : uiMsg("Ready →"),
   );
   $("#pong-pause").disabled = room?.status !== "playing" || !controls() || busy;
   uiText(
@@ -161,7 +182,11 @@ function renderRoom() {
       : uiMsg("Not connected"),
   );
   for (const role of ["host", "guest"]) {
-    const p = room?.players?.find((x) => x.role === role)?.profile;
+    const player = room?.players?.find((x) => x.role === role);
+    const p = player?.profile;
+    const readiness = $("#pong-" + role + "-ready");
+    readiness.hidden = !player || !live || room.status === "playing";
+    uiText(readiness, readyLabel(role === room?.role, !!player?.ready));
     uiText(
       $(`#pong-${role}-name`),
       p?.nickname ||
@@ -238,11 +263,13 @@ function renderRoom() {
     );
     overlay(
       "Paused",
-      recoverable()
-        ? uiMsg("Both players must press Ready within {0} s.", [remaining])
-        : connecting || !connected
-          ? "Play is paused. Reconnect within 15 seconds."
-          : "Both players press Ready to resume. Pauses last up to 60 seconds.",
+      atDeadline
+        ? uiMsg("Checking room status…")
+        : recoverable()
+          ? uiMsg("Both players must press Ready within {0} s.", [remaining])
+          : connecting || !connected
+            ? "Play is paused. Reconnect within 15 seconds."
+            : "Both players press Ready to resume. Pauses last up to 60 seconds.",
     );
   } else if (room.status === "interrupted" || room.status === "closed")
     overlay(
@@ -640,6 +667,7 @@ async function operation(action, extra = {}) {
     epoch = roomEpoch;
   if (action === "create" || action === "join") readSerial++;
   busy = true;
+  confirmingReady = action === "ready";
   renderRoom();
   try {
     await ensureProfile();
@@ -692,7 +720,7 @@ async function operation(action, extra = {}) {
         );
       if (action === "leave") {
         roomEpoch++;
-        busy = savingPoint = pollBusy = false;
+        busy = confirmingReady = savingPoint = pollBusy = false;
         updateMatchUrl(null);
         showMatchLink("");
         room = null;
@@ -710,7 +738,7 @@ async function operation(action, extra = {}) {
     }
   } finally {
     if (epoch === roomEpoch) {
-      busy = false;
+      busy = confirmingReady = false;
       renderRoom();
     }
   }
@@ -1027,24 +1055,9 @@ $("#pong-retry").onclick = async () => {
   await poll();
   if (controls() && !ended() && !connected) connect();
 };
-$("#pong-copy").onclick = async () => {
-  try {
-    await navigator.clipboard.writeText(
-      `${location.origin}/games/pong/?room=${room.code}`,
-    );
-    message(
-      uiMsg(
-        "Invite link copied. Your friend signs in, joins, then presses Ready.",
-      ),
-    );
-  } catch {
-    message(
-      uiMsg("Copy this invitation: {0}/games/pong/?room={1}", [
-        location.origin,
-        room.code,
-      ]),
-    );
-  }
+$("#pong-copy").onclick = () => {
+  if (room?.code)
+    void copyRoomInvite($("#pong-copy"), "room", room.code, message);
 };
 document.addEventListener("visibilitychange", () => {
   keys.clear();
@@ -1112,7 +1125,7 @@ function authChanged() {
     room = state = remoteState = previousRemote = pendingPoint = null;
     round = 0;
     roomOwner = null;
-    busy = savingPoint = pollBusy = false;
+    busy = confirmingReady = savingPoint = pollBusy = false;
     renderRoom();
   }
   if (!room && requestedMatch() !== null) openPongMatch();

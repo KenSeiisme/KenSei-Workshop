@@ -296,6 +296,13 @@
   flex-direction: row-reverse;
   text-align: right;
 }
+.pong-player-info {
+  display: grid;
+  min-width: 0;
+}
+.pong-player-info small {
+  overflow-wrap: anywhere;
+}
 .pong-player strong {
   font-size: 0.9rem;
   overflow-wrap: anywhere;
