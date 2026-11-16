@@ -177,27 +177,39 @@ async function preview(p) {
       );
   }
 }
-fileInput.onchange = async (e) => {
-  const list = [...e.target.files];
-  if (!list.length) return;
-  clearEnhanced();
+async function loadFiles(list, selectedMode, current) {
+  if (!list.length) return false;
   if (list.reduce((n, f) => n + f.size, 0) > 50 * 1048576)
-    return status(uiMsg("Choose files totaling no more than 50 MB."), true);
+    throw Error("Choose files totaling no more than 50 MB.");
   const token = ++revision;
   busy(true);
   status(uiMsg("Opening files…"));
   try {
     await dependencies();
-    if (["stamp", "metadata"].includes(operation.value) && list.length !== 1)
+    if (["stamp", "metadata"].includes(selectedMode) && list.length !== 1)
       throw Error("Choose one PDF for this operation.");
+    const assertCurrent = () => token === revision && (!current || current());
+    function commitInput() {
+      if (current) {
+        const dt = new DataTransfer();
+        list.forEach((file) => dt.items.add(file));
+        fileInput.files = dt.files;
+        operation.value = selectedMode;
+        mode();
+      }
+      clearEnhanced();
+      $("#pdf-preview").hidden = true;
+    }
     const nextSources = [],
       nextPages = [];
-    if (operation.value === "images") {
+    if (selectedMode === "images") {
       if (list.length > 200) throw new Error("Use at most 200 images.");
       for (const f of list) {
-        if (token !== revision) return;
+        if (!assertCurrent()) return false;
         await image(f);
       }
+      if (!assertCurrent()) return false;
+      commitInput();
       images = list;
       releaseSources();
       sources = [];
@@ -212,7 +224,7 @@ fileInput.onchange = async (e) => {
       );
     } else {
       for (const f of list) {
-        if (token !== revision) return;
+        if (!assertCurrent()) return false;
         if (!/\.pdf$/i.test(f.name) && f.type !== "application/pdf")
           throw new Error("Choose PDF files for this operation.");
         const bytes = new Uint8Array(await f.arrayBuffer());
@@ -243,7 +255,8 @@ fileInput.onchange = async (e) => {
           }),
         );
       }
-      if (token !== revision) return;
+      if (!assertCurrent()) return false;
+      commitInput();
       releaseSources();
       sources = nextSources;
       pages = nextPages;
@@ -255,14 +268,23 @@ fileInput.onchange = async (e) => {
           ? JSON.stringify(metadata(nextSources[0].doc), null, 2)
           : "",
       );
-      if (pages.length) await preview(pages[0]);
+      if (pages.length) {
+        const firstPreview = preview(pages[0]);
+        if (!current) await firstPreview;
+      }
     }
     if (token === revision)
       status(uiMsg("Files ready. Choose pages and run the operation."));
-  } catch (e) {
-    if (token === revision) status(uiError(e), true);
   } finally {
     if (token === revision) busy(false);
+  }
+}
+
+fileInput.onchange = async (event) => {
+  try {
+    await loadFiles([...event.target.files], operation.value);
+  } catch (error) {
+    status(uiError(error), true);
   }
 };
 function ranges(value) {
@@ -556,12 +578,11 @@ window.KenseiAdvancedContexts["pdf-toolkit"] = {
   next() {
     return ++revision;
   },
-  async loadFiles(fs) {
-    operation.value = fs[0]?.type === "application/pdf" ? "organize" : "images";
-    mode();
-    const dt = new DataTransfer();
-    fs.forEach((f) => dt.items.add(f));
-    fileInput.files = dt.files;
-    await fileInput.onchange({ target: fileInput });
+  loadFiles(fs, current) {
+    return loadFiles(
+      fs,
+      fs[0]?.type === "application/pdf" ? "organize" : "images",
+      current,
+    );
   },
 };

@@ -1496,3 +1496,8 @@
     flex-wrap: wrap;
   }
 }
+
+.games-page [data-invite-copy] {
+  width: 100%;
+  max-width: 100%;
+}

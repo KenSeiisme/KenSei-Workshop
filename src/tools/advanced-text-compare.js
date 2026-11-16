@@ -71,5 +71,9 @@ export function init() {
       right.replaceChildren();
       differences = [];
     });
-  textReceiver("text-compare", "#compare-left");
+  textReceiver(
+    "text-compare",
+    "#compare-left",
+    () => !!($("#compare-left").value || $("#compare-right").value),
+  );
 }

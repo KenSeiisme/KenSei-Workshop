@@ -6,6 +6,7 @@
     ["tests/browser/game-hub.cjs"],
     ["tests/browser/whiteboard-canvas.cjs"],
     ["tests/browser/navigation-recovery.cjs"],
+    ["tests/browser/handoff-recovery.cjs"],
     ["tests/browser/shared-whiteboards.cjs"]
   ],
   "game-hub": [

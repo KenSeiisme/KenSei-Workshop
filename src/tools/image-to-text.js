@@ -188,9 +188,9 @@ function stop() {
   running = false;
   busy(false);
 }
-async function load(fs) {
+async function load(fs, currentTransfer) {
   if (running) stop();
-  if (!fs.length) return;
+  if (!fs.length) return false;
   if (
     fs.some((f) => f.type === "application/pdf") &&
     (fs.length !== 1 || fs[0].size > 50 * 1048576)
@@ -202,62 +202,62 @@ async function load(fs) {
   const next = [];
   let incomingTask = null,
     incomingPdf = null;
-  if (fs[0].type === "application/pdf") {
-    await library("pdf-lib.js", "PDFLib").then((lib) =>
-      fs[0].arrayBuffer().then((b) => lib.PDFDocument.load(b)),
-    );
-    const mod = await import("/vendor/pdfjs/build/pdf.min.mjs");
-    mod.GlobalWorkerOptions.workerSrc =
-      "/vendor/pdfjs/build/pdf.worker.min.mjs";
-    incomingTask = mod.getDocument({
-      data: new Uint8Array(await fs[0].arrayBuffer()),
-      cMapUrl: "/vendor/pdfjs/cmaps/",
-      cMapPacked: true,
-      standardFontDataUrl: "/vendor/pdfjs/standard_fonts/",
-      wasmUrl: "/vendor/pdfjs/wasm/",
-      isEvalSupported: false,
-    });
-    incomingPdf = await incomingTask.promise;
-    if (incomingPdf.numPages > 200)
-      throw Error("Choose PDFs with no more than 200 pages in total.");
-    range.value =
-      incomingPdf.numPages > 20 ? "1-20" : "1-" + incomingPdf.numPages;
-    range.disabled = false;
-    for (let n = 1; n <= incomingPdf.numPages; n++)
-      next.push({
-        name: fs[0].name + " · " + n,
-        page: n,
-        settings: defaults(),
+  try {
+    if (fs[0].type === "application/pdf") {
+      await library("pdf-lib.js", "PDFLib").then((lib) =>
+        fs[0].arrayBuffer().then((b) => lib.PDFDocument.load(b)),
+      );
+      const mod = await import("/vendor/pdfjs/build/pdf.min.mjs");
+      mod.GlobalWorkerOptions.workerSrc =
+        "/vendor/pdfjs/build/pdf.worker.min.mjs";
+      incomingTask = mod.getDocument({
+        data: new Uint8Array(await fs[0].arrayBuffer()),
+        cMapUrl: "/vendor/pdfjs/cmaps/",
+        cMapPacked: true,
+        standardFontDataUrl: "/vendor/pdfjs/standard_fonts/",
+        wasmUrl: "/vendor/pdfjs/wasm/",
+        isEvalSupported: false,
       });
-  } else {
-    for (const f of fs) {
-      await image(f);
-      next.push({ name: f.name, file: f, settings: defaults() });
+      incomingPdf = await incomingTask.promise;
+      if (incomingPdf.numPages > 200)
+        throw Error("Choose PDFs with no more than 200 pages in total.");
+      for (let n = 1; n <= incomingPdf.numPages; n++)
+        next.push({
+          name: fs[0].name + " · " + n,
+          page: n,
+          settings: defaults(),
+        });
+    } else {
+      for (const f of fs) {
+        if (currentTransfer && !currentTransfer()) return false;
+        await image(f);
+        next.push({ name: f.name, file: f, settings: defaults() });
+      }
     }
-
-    range.value = "";
-    range.disabled = true;
+    if (token !== generation || (currentTransfer && !currentTransfer()))
+      return false;
+    range.value = incomingPdf ? "1-" + Math.min(20, incomingPdf.numPages) : "";
+    range.disabled = !incomingPdf;
+    pdfTask?.destroy();
+    pdfTask = incomingTask;
+    incomingTask = null;
+    pdf = incomingPdf;
+    selected = fs;
+    entries = next;
+    current = -1;
+    render();
+    choose(0);
+    uiText($("#ocr-file-info"), fs.map((f) => f.name).join(", "));
+    status(
+      uiMsg(
+        !pdf && fs.length === 1
+          ? "Image ready. Choose languages, then extract text."
+          : "Files ready. Choose settings, then extract text.",
+      ),
+    );
+  } finally {
+    incomingTask?.destroy().catch(() => {});
   }
-  if (token !== generation) {
-    incomingTask?.destroy();
-    return;
-  }
-  pdfTask?.destroy();
-  pdfTask = incomingTask;
-  pdf = incomingPdf;
-  selected = fs;
-  entries = next;
-  current = -1;
-  render();
-  choose(0);
-  uiText($("#ocr-file-info"), fs.map((f) => f.name).join(", "));
-  status(
-    uiMsg(
-      !pdf && fs.length === 1
-        ? "Image ready. Choose languages, then extract text."
-        : "Files ready. Choose settings, then extract text.",
-    ),
-  );
 }
 input.onchange = async (e) => {
   try {
@@ -559,7 +559,7 @@ sendControl(
 );
 receiveHandoff(
   "image-to-text",
-  (p) => load(p.files),
+  (p, current) => load(p.files, current),
   () => selected.length > 0,
 );
 window.addEventListener("pagehide", () => {

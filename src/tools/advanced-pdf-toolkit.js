@@ -208,8 +208,8 @@ export async function init() {
   ]);
   receiveHandoff(
     "pdf-toolkit",
-    (p) => ctx.loadFiles(p.files),
-    () => ctx.pages.length > 0,
+    (p, current) => ctx.loadFiles(p.files, current),
+    () => ctx.pages.length > 0 || $("#pdf-files").files.length > 0,
   );
   install();
   await professionalPDF();

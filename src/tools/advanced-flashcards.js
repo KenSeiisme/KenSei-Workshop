@@ -13,7 +13,7 @@ export function init() {
       "Choose CSV columns for the front and back. Nothing is saved until import.",
     );
   let table = null;
-  const load = async (file) => {
+  const load = async (file, current) => {
     if (file.size > 1000000) throw Error("Import files up to 1 MB.");
     const Papa = await library("papaparse.js", "Papa");
     const parsed = Papa.parse(await file.text(), {
@@ -24,6 +24,7 @@ export function init() {
       throw Error("Use valid CSV rows.");
     if (parsed.data.length < 2 || parsed.data.length > 201)
       throw Error("Use a header and up to 200 cards.");
+    if (current && !current()) return false;
     table = parsed.data;
     for (const n of [front, back]) {
       n.replaceChildren();
@@ -55,7 +56,7 @@ export function init() {
   );
   receiveHandoff(
     "flashcards",
-    async (payload) => load(payload.files[0]),
+    (payload, current) => load(payload.files[0], current),
     () => !!table,
   );
 }

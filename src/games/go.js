@@ -1,3 +1,4 @@
+import { copyRoomInvite, mountBoardLobby, readyLabel } from "./room-lobby.js";
 import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, esc, downloadText } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
@@ -434,6 +435,7 @@ function renderClock() {
       overtime: view.main === 0 && !view.expired,
     });
   } else observeCountdown(null);
+  lobby.tick(room, clockOffset);
 }
 const activity = trackBoardGame("go", $("#go-result"));
 let newActivity = false;
@@ -565,11 +567,9 @@ function render() {
   if (waitingRoom || queued) {
     text(
       "#go-room-title",
-      queued
-        ? uiMsg("Waiting for an opponent")
-        : uiMsg("Room {0}", [room.code]),
+      queued ? uiMsg("Matchmaking") : uiMsg("Online room"),
     );
-    const config = room?.config || setup();
+    const config = room?.config || lobby.search?.config || setup();
     text(
       "#go-room-summary",
       uiMsg("{0} · {1}", [
@@ -605,7 +605,7 @@ function render() {
         label,
         uiMsg("{0} · {1}", [
           m.nickname,
-          uiFrom(m.ready ? "Ready" : "Not ready"),
+          readyLabel(m.color === room.color, m.ready),
         ]),
       );
       div.append(avatar, label);
@@ -668,6 +668,7 @@ function render() {
   });
   renderClock();
   draw();
+  lobby.paint(room, clockOffset, busy);
 }
 async function guarded(fn) {
   if (busy) return;
@@ -783,6 +784,7 @@ function startLocal(restore = false) {
     throw Error("Leave the online match before starting practice.");
   onlineEpoch++;
   queued = false;
+  lobby.search = null;
   pendingCommand = null;
   newActivity = !restore;
   confirmation = null;
@@ -938,6 +940,7 @@ async function acceptRoom(next) {
   clockOffset = next.server_now - Date.now();
   mode = "online";
   queued = false;
+  lobby.search = null;
   connected = true;
   paused = false;
   cancelAI();
@@ -954,12 +957,16 @@ async function acceptRoom(next) {
     state = null;
     confirmation = null;
     room = null;
-    say(uiMsg("The room closed before play started. No result was recorded."));
+    say(
+      Date.parse(next.ready_deadline) <= Date.now() + clockOffset
+        ? uiMsg("The Ready window expired. Search again or open a new room.")
+        : uiMsg("The room closed before play started. No result was recorded."),
+    );
   }
   await subscribeRoom();
   render();
 }
-async function onlineStart(action) {
+async function onlineStart(action, settings) {
   if (!api.user) {
     api.openAuth(location.pathname + location.search);
     return;
@@ -969,11 +976,12 @@ async function onlineStart(action) {
     !uiConfirm(uiMsg("Leave the current practice game and open online play?"))
   )
     return;
+  const startedAt = Date.now();
+  const config = settings || setup();
   const epoch = ++onlineEpoch;
   await ensureProfile();
   if (epoch !== onlineEpoch) return;
   cancelAI();
-  const config = setup();
   if (action === "queue" && (!standard(config) || config.clock !== config.size))
     throw Error("Matchmaking requires standard settings and normal colors.");
   const data = await rpc(action, {
@@ -981,47 +989,109 @@ async function onlineStart(action) {
     rules_version: GO_VERSION,
     code: $("#go-code").value,
   });
+  if (epoch !== onlineEpoch) return;
   if (data.waiting) {
     queued = true;
+    lobby.start(config, data, startedAt);
     state = null;
     room = null;
-    say(
-      uiMsg(
-        data.capacity
-          ? "Waiting for a free online room and an opponent. You can cancel at any time."
-          : "Waiting for an opponent with the same rules and board size.",
-      ),
-    );
+    say("");
   } else await acceptRoom(data);
   unlockAudio();
   render();
 }
 async function poll() {
+  const search = lobby.search;
   if (
     polling?.epoch === onlineEpoch ||
+    lobby.cancelling ||
     closed ||
     !api.user ||
-    (!queued && (!room || matchEnded(room)))
+    (queued
+      ? !search || search.expired || search.stopping
+      : !room || matchEnded(room))
   )
     return;
   const request = { epoch: onlineEpoch };
   const previousRoom = room;
+  const lookup = queued && lobby.lookup();
   polling = request;
   try {
-    const data = await rpc(
-      queued ? "queue" : "get",
-      queued
-        ? { config: setup(), rules_version: GO_VERSION }
-        : { match_id: room.id },
-    );
-    if (request.epoch === onlineEpoch && data?.id) await acceptRoom(data);
+    request.done = queued
+      ? lookup
+        ? rpc("get")
+        : rpc("queue", { config: search.config, rules_version: GO_VERSION })
+      : rpc("get", { match_id: room.id });
+    const data = await request.done;
+    if (request.epoch !== onlineEpoch) return;
+    if (data?.id) await acceptRoom(data);
+    else if (queued && search === lobby.search) {
+      if (lookup) lobby.afterLookup();
+      else if (data?.waiting) lobby.ack(data);
+      say("");
+      lobby.paint(room, clockOffset, busy);
+    }
   } catch (error) {
     if (error.staleBoardRequest || room !== previousRoom) return;
     connected = false;
+    if (queued && search === lobby.search) search.lost = true;
     say(uiError(error));
     render();
   } finally {
     if (polling === request) polling = null;
+  }
+}
+async function cancelWaiting() {
+  const search = lobby.search;
+  if (search) search.stopping = true;
+  lobby.cancelling = true;
+  const request = polling?.done;
+  const epoch = ++onlineEpoch;
+  render();
+  try {
+    await request?.catch(() => {});
+    if (epoch !== onlineEpoch) return;
+    if (queued || room?.origin === "random") {
+      const reply = await rpc("cancel");
+      if (!reply?.cancelled)
+        throw Error("Cancellation could not be confirmed. Retry Cancel.");
+      const snapshot = await rpc("get", room ? { match_id: room.id } : {});
+      if (snapshot?.id && !matchEnded(snapshot)) {
+        await acceptRoom(snapshot);
+        if (snapshot.status === "playing")
+          say(uiMsg("This match has already started."));
+        return;
+      }
+    } else if (room) {
+      if (
+        room.members?.some(
+          (member) => member.color === room.color && member.ready,
+        ) &&
+        !uiConfirm(
+          uiMsg(
+            "Both players may already be ready. Leaving a started match counts as resignation. Leave the room?",
+          ),
+        )
+      )
+        return;
+      const snapshot = await rpc("leave", { match_id: room.id });
+      if (snapshot?.status === "finished") {
+        await acceptRoom(snapshot);
+        return;
+      }
+    }
+    queued = false;
+    lobby.search = null;
+    room = null;
+    state = null;
+
+    channelEpoch++;
+    if (channel) await api.client.removeChannel(channel);
+    channel = null;
+    channelKey = "";
+    say(uiMsg("Search or room cancelled."));
+  } finally {
+    lobby.cancelling = false;
   }
 }
 
@@ -1204,8 +1274,9 @@ function newSetup() {
   guarded(async () => {
     onlineEpoch++;
     if (room && !matchEnded(room)) await rpc("leave", { match_id: room.id });
-    if (queued) await rpc("cancel");
+    if (queued) return cancelWaiting();
     queued = false;
+    lobby.search = null;
     room = null;
     state = null;
     pendingCommand = null;
@@ -1249,15 +1320,18 @@ $("#go-create").onclick = () => guarded(() => onlineStart("create"));
 $("#go-find").onclick = () => guarded(() => onlineStart("queue"));
 $("#go-join").onclick = () => guarded(() => onlineStart("join"));
 $("#go-ready").onclick = () =>
-  guarded(async () => {
-    unlockAudio();
-    await acceptRoom(
-      await rpc("ready", {
-        match_id: room.id,
-        accept_training: $("#go-accept-training").checked,
-      }),
-    );
-  });
+  guarded(() =>
+    lobby.ready(async () => {
+      unlockAudio();
+      if (!room || room.status !== "ready") return;
+      await acceptRoom(
+        await rpc("ready", {
+          match_id: room.id,
+          accept_training: $("#go-accept-training").checked,
+        }),
+      );
+    }),
+  );
 $("#go-pass").onclick = () => guarded(() => act({ type: "pass" }));
 $("#go-confirm-place").onclick = () => selectPoint(candidate);
 $("#go-resign").onclick = () => {
@@ -1345,15 +1419,7 @@ $("#go-takeover").onclick = () =>
   });
 $("#go-retry").onclick = () => guarded(poll);
 $("#go-retry-move").onclick = () => guarded(sendPendingMove);
-$("#go-cancel-wait").onclick = () =>
-  guarded(async () => {
-    onlineEpoch++;
-    if (queued) await rpc("cancel");
-    else if (room) await rpc("leave", { match_id: room.id });
-    room = null;
-    queued = false;
-    state = null;
-  });
+$("#go-cancel-wait").onclick = () => guarded(cancelWaiting);
 for (const id of ["#go-new-setup", "#go-again"]) $(id).onclick = newSetup;
 $("#go-leave").onclick = newSetup;
 for (const id of ["#go-export", "#go-export-result"])
@@ -1389,15 +1455,10 @@ $("#go-review-close").onclick = () => {
   render();
 };
 $("#go-zoom").oninput = draw;
-$("#go-copy-invite").onclick = () =>
-  guarded(async () => {
-    const url = new URL(location.href);
-    url.search = "";
-    url.searchParams.set("code", room.code);
-    url.hash = "";
-    await navigator.clipboard.writeText(url.href);
-    say(uiMsg("Invite link copied."));
-  });
+$("#go-copy-invite").onclick = () => {
+  if (room?.code)
+    void copyRoomInvite($("#go-copy-invite"), "code", room.code, say);
+};
 async function setupChanged(event) {
   if (state || room || queued) return;
   if (["go-rule", "go-handicap"].includes(event?.target.id))
@@ -1579,6 +1640,7 @@ async function authChanged() {
     state = null;
     room = null;
     queued = false;
+    lobby.search = null;
     pendingCommand = null;
     identity = next;
     confirmation = null;
@@ -1594,13 +1656,23 @@ async function authChanged() {
   if (requested && savedRow && !state && !room) startLocal(true);
   render();
 }
+const lobby = mountBoardLobby(root, "go", {
+  poll,
+  render,
+  restart: (config) => guarded(() => onlineStart("queue", config)),
+});
 window.addEventListener("workspace-ready", authChanged);
 window.addEventListener("locale-change", () => {
   render();
   refreshRank();
 });
 window.addEventListener("online", poll);
-window.addEventListener("offline", poll);
+window.addEventListener("offline", () => {
+  if (lobby.search) {
+    lobby.search.lost = true;
+    render();
+  } else poll();
+});
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     reveal(false);

@@ -1,3 +1,4 @@
+import { copyRoomInvite, mountBoardLobby, readyLabel } from "./room-lobby.js";
 import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, downloadText } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
@@ -78,7 +79,6 @@ let identity = owner(),
   state = null,
   room = null,
   queued = false,
-  queueConfig = null,
   mode = "ai",
   human = 1,
   level = 2,
@@ -356,6 +356,7 @@ function renderClock() {
         ),
       ]),
     );
+  lobby.tick(room, offset);
 }
 const activity = trackBoardGame("xiangqi", $("#xiangqi-result"));
 let newActivity = false;
@@ -477,11 +478,11 @@ function render() {
   if (waiting) {
     tx(
       "#xiangqi-room-title",
-      uiFrom(queued ? "Finding an opponent…" : "Waiting for your opponent"),
+      queued ? uiMsg("Matchmaking") : uiMsg("Online room"),
     );
     tx(
       "#xiangqi-room-summary",
-      configLabel(room?.config || queueConfig || setup()),
+      configLabel(room?.config || lobby.search?.config || setup()),
     );
     $("#xiangqi-invite").hidden = !room || room.origin !== "invite";
     tx("#xiangqi-invite-code", room?.code || "");
@@ -505,7 +506,7 @@ function render() {
         uiMsg("{0} · {1} · {2}", [
           m.nickname,
           uiFrom(m.color === 1 ? "Red" : "Black"),
-          uiFrom(m.ready ? "Ready" : "Not ready"),
+          readyLabel(m.color === room.color, m.ready),
         ]),
       );
       row.append(avatar, label);
@@ -565,6 +566,7 @@ function render() {
   draw();
   renderClock();
   syncAudio();
+  lobby.paint(room, offset, busy);
 }
 async function guarded(fn) {
   if (busy) return;
@@ -677,6 +679,7 @@ function startLocal(restore = false, imported = null) {
   disconnect();
   room = null;
   queued = false;
+  lobby.search = null;
   pending = null;
   connected = false;
   endRead = false;
@@ -840,6 +843,7 @@ async function acceptRoom(next) {
   showMissingSave(root, false);
   mode = "online";
   queued = false;
+  lobby.search = null;
   connected = true;
   offset = next.server_now - Date.now();
   paused = false;
@@ -864,11 +868,15 @@ async function acceptRoom(next) {
     room = null;
     state = null;
     await disconnect();
-    say(uiMsg("The room closed before play started. No result was recorded."));
+    say(
+      Date.parse(next.ready_deadline) <= Date.now() + offset
+        ? uiMsg("The Ready window expired. Search again or open a new room.")
+        : uiMsg("The room closed before play started. No result was recorded."),
+    );
   } else await subscribe();
   render();
 }
-async function onlineStart(action) {
+async function onlineStart(action, settings) {
   if (!api.user) {
     api.openAuth(location.pathname + location.search);
     return;
@@ -879,10 +887,11 @@ async function onlineStart(action) {
     !uiConfirm(uiMsg("Leave the current practice game and open online play?"))
   )
     return;
+  const startedAt = Date.now();
+  const config = settings || setup();
   const epoch = ++onlineEpoch;
   await ensureProfile();
   if (epoch !== onlineEpoch) return;
-  const config = setup();
   if (config.clock === "none")
     throw Error("Choose a supported xiangqi time control.");
   const data = await rpc(action, {
@@ -898,44 +907,105 @@ async function onlineStart(action) {
   endRead = false;
   if (data.waiting) {
     queued = true;
-    queueConfig = config;
+    lobby.start(config, data, startedAt);
+    state = null;
     room = null;
-    say(
-      uiFrom(
-        data.capacity
-          ? "Waiting for a free online room and an opponent. You can cancel at any time."
-          : "Waiting for an opponent with the same time control.",
-      ),
-    );
+    say("");
   } else await acceptRoom(data);
   render();
 }
 async function poll() {
+  const search = lobby.search;
   if (
     polling?.epoch === onlineEpoch ||
+    lobby.cancelling ||
     disposed ||
     !api.user ||
-    (!queued && (!room || matchEnded(room)))
+    (queued
+      ? !search || search.expired || search.stopping
+      : !room || matchEnded(room))
   )
     return;
   const request = { epoch: onlineEpoch };
   const previousRoom = room;
+  const lookup = queued && lobby.lookup();
   polling = request;
   try {
-    const data = await rpc(
-      queued ? "queue" : "get",
-      queued
-        ? { config: queueConfig, rules_version: XIANGQI_VERSION }
-        : { match_id: room.id },
-    );
-    if (request.epoch === onlineEpoch && data?.id) await acceptRoom(data);
+    request.done = queued
+      ? lookup
+        ? rpc("get")
+        : rpc("queue", {
+            config: search.config,
+            rules_version: XIANGQI_VERSION,
+          })
+      : rpc("get", { match_id: room.id });
+    const data = await request.done;
+    if (request.epoch !== onlineEpoch) return;
+    if (data?.id) await acceptRoom(data);
+    else if (queued && search === lobby.search) {
+      if (lookup) lobby.afterLookup();
+      else if (data?.waiting) lobby.ack(data);
+      say("");
+      lobby.paint(room, offset, busy);
+    }
   } catch (error) {
     if (error.staleBoardRequest || room !== previousRoom) return;
     connected = false;
+    if (queued && search === lobby.search) search.lost = true;
     say(uiError(error));
     render();
   } finally {
     if (polling === request) polling = null;
+  }
+}
+async function cancelWaiting() {
+  const search = lobby.search;
+  if (search) search.stopping = true;
+  lobby.cancelling = true;
+  const request = polling?.done;
+  const epoch = ++onlineEpoch;
+  render();
+  try {
+    await request?.catch(() => {});
+    if (epoch !== onlineEpoch) return;
+    if (queued || room?.origin === "random") {
+      const reply = await rpc("cancel");
+      if (!reply?.cancelled)
+        throw Error("Cancellation could not be confirmed. Retry Cancel.");
+      const snapshot = await rpc("get", room ? { match_id: room.id } : {});
+      if (snapshot?.id && !matchEnded(snapshot)) {
+        await acceptRoom(snapshot);
+        if (snapshot.status === "playing")
+          say(uiMsg("This match has already started."));
+        return;
+      }
+    } else if (room) {
+      if (
+        room.members?.some(
+          (member) => member.color === room.color && member.ready,
+        ) &&
+        !uiConfirm(
+          uiMsg(
+            "Both players may already be ready. Leaving a started match counts as resignation. Leave the room?",
+          ),
+        )
+      )
+        return;
+      const snapshot = await rpc("leave", { match_id: room.id });
+      if (snapshot?.status === "finished") {
+        await acceptRoom(snapshot);
+        return;
+      }
+    }
+    queued = false;
+    lobby.search = null;
+    room = null;
+    state = null;
+
+    await disconnect();
+    say(uiMsg("Search or room cancelled."));
+  } finally {
+    lobby.cancelling = false;
   }
 }
 
@@ -1124,7 +1194,7 @@ async function newSetup() {
   )
     return;
   onlineEpoch++;
-  if (queued) await rpc("cancel");
+  if (queued) return cancelWaiting();
   if (room && ["waiting", "ready"].includes(room.status))
     await rpc("leave", { match_id: room.id });
   await saveSoon(true);
@@ -1138,7 +1208,7 @@ async function newSetup() {
   audioSnapshot = null;
   shell.closeDialogs();
   queued = false;
-  queueConfig = null;
+  lobby.search = null;
   pending = null;
   connected = false;
   const address = new URL(location.href);
@@ -1185,23 +1255,18 @@ click("#xiangqi-continue", () => startLocal(true));
 click("#xiangqi-create", () => onlineStart("create"));
 click("#xiangqi-find", () => onlineStart("queue"));
 click("#xiangqi-join", () => onlineStart("join"));
-click("#xiangqi-ready", async () => {
-  unlockAudio();
-  await acceptRoom(await rpc("ready", { match_id: room.id }));
-});
-click("#xiangqi-cancel", async () => {
-  onlineEpoch++;
-  if (queued) await rpc("cancel");
-  else if (room) await rpc("leave", { match_id: room.id });
-  queued = false;
-  room = null;
-  state = null;
-  await disconnect();
-  render();
-});
-click("#xiangqi-copy-invite", () =>
-  copy(`${location.origin}${location.pathname}?code=${room.code}`),
+click("#xiangqi-ready", () =>
+  lobby.ready(async () => {
+    unlockAudio();
+    if (room?.status === "ready")
+      await acceptRoom(await rpc("ready", { match_id: room.id }));
+  }),
 );
+click("#xiangqi-cancel", cancelWaiting);
+click("#xiangqi-copy-invite", () => {
+  if (room?.code)
+    return copyRoomInvite($("#xiangqi-copy-invite"), "code", room.code, say);
+});
 click("#xiangqi-pause", () => togglePause());
 click("#xiangqi-resume", () => togglePause());
 click("#xiangqi-undo", () => {
@@ -1483,6 +1548,7 @@ async function authChanged() {
     identity = owner();
     state = room = null;
     queued = false;
+    lobby.search = null;
     pending = null;
     saveId = null;
     selected = candidate = null;
@@ -1509,13 +1575,23 @@ store.subscribe(() => tx("#xiangqi-sync", uiFrom(store.saveState())));
 window.addEventListener("record-conflict", ({ detail }) => {
   if (detail.kind === "game" && detail.from === saveId) saveId = detail.to;
 });
+const lobby = mountBoardLobby(root, "xiangqi", {
+  poll,
+  render,
+  restart: (config) => guarded(() => onlineStart("queue", config)),
+});
 window.addEventListener("workspace-ready", authChanged);
 window.addEventListener("locale-change", () => {
   render();
   refreshRank();
 });
 window.addEventListener("online", poll);
-window.addEventListener("offline", poll);
+window.addEventListener("offline", () => {
+  if (lobby.search) {
+    lobby.search.lost = true;
+    render();
+  } else poll();
+});
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     if (!room && state?.phase === "playing" && !paused) togglePause();

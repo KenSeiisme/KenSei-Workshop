@@ -179,21 +179,51 @@ $("#sub-next").onclick = () => {
   page++;
   draw();
 };
-$("#sub-video-file").onchange = (e) => {
-  const file = e.target.files[0];
-  e.target.value = "";
-  if (!file) return;
-  if (file.size > 500000000)
-    return status(uiMsg("Choose a video no larger than 500 MB."), true);
+function showVideo(file, nextUrl = URL.createObjectURL(file)) {
   if (url) URL.revokeObjectURL(url);
-  url = URL.createObjectURL(file);
+  url = nextUrl;
   video.src = url;
   video.hidden = false;
   video.load();
   status(
     uiMsg("Local video ready. Browser codec support determines playback."),
   );
+}
+$("#sub-video-file").onchange = (event) => {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  if (file.size > 500000000)
+    return status(uiMsg("Choose a video no larger than 500 MB."), true);
+  showVideo(file);
 };
+
+async function receiveVideo(file, current) {
+  const candidate = URL.createObjectURL(file);
+  const probe = document.createElement("video");
+  let committed = false,
+    timer;
+  try {
+    await new Promise((resolve, reject) => {
+      const unavailable = () =>
+        reject(Error("This browser could not open the received video."));
+      probe.preload = "metadata";
+      probe.onloadedmetadata = resolve;
+      probe.onerror = unavailable;
+      timer = setTimeout(unavailable, 10000);
+      probe.src = candidate;
+    });
+    if (!current()) return false;
+    showVideo(file, candidate);
+    committed = true;
+  } finally {
+    clearTimeout(timer);
+    probe.onloadedmetadata = probe.onerror = null;
+    probe.removeAttribute("src");
+    probe.load();
+    if (!committed) URL.revokeObjectURL(candidate);
+  }
+}
 video.ontimeupdate = overlay;
 video.onerror = () =>
   status(
@@ -228,6 +258,7 @@ export function restoreRecovery(text) {
 
 window.KenseiAdvancedContexts ||= {};
 window.KenseiAdvancedContexts["subtitle-studio"] = {
+  receiveVideo,
   get cues() {
     return cues;
   },

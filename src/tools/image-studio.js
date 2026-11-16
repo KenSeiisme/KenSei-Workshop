@@ -213,9 +213,9 @@ function applySelection(next, imageSize, previous) {
   );
 }
 
-async function load(list, previous) {
+async function load(list, previous, current) {
   const next = [...list];
-  if (picker.disabled) return;
+  if (picker.disabled) return false;
   if (!next.length && !previous) return;
   const id = ++selectionRequest;
   selecting = true;
@@ -240,9 +240,15 @@ async function load(list, previous) {
           return null;
         })
       : null;
-    if (id !== selectionRequest) return;
+    if (current)
+      for (const file of next.slice(1)) {
+        if (!current()) return false;
+        await image(file);
+      }
+    if (id !== selectionRequest || (current && !current())) return false;
     applySelection(next, imageSize, previous);
   } catch (error) {
+    if (current) throw error;
     if (id === selectionRequest) toast(uiError(error));
   } finally {
     if (id === selectionRequest) {
@@ -659,7 +665,7 @@ window.addEventListener("beforeunload", () => {
 
 receiveHandoff(
   "image-studio",
-  (p) => load(p.files),
+  (p, current) => load(p.files, undefined, current),
   () => files.length > 0,
 );
 
