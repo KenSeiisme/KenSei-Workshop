@@ -261,6 +261,7 @@ async function main() {
   let requests = [];
   let receipt = null;
   let pongRoom = null;
+  let readyGeneration;
   let lobbyFailure = false;
   let requestedIds = [];
   await context.route(sdkPath, (route) =>
@@ -304,6 +305,7 @@ async function main() {
         });
       }
       if (endpoint === "pong_room") {
+        if (body.action === "ready") readyGeneration = body.body.generation;
         if (
           pongRoom?.protocol_version === 2 &&
           body.action === "get" &&
@@ -555,6 +557,14 @@ async function main() {
     );
     assert.equal(await page.locator("#pong-left-score").textContent(), "2");
     assert.equal(await page.locator("#pong-takeover").isVisible(), false);
+    // The other player takes over between our heartbeat and pressing Ready.
+    pongRoom.generation++;
+    pongRoom.revision++;
+    pongRoom.channel_key = "fixture-peer-took-control";
+    await page.locator("#pong-ready").click();
+    for (let i = 0; i < 30 && readyGeneration === undefined; i++)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    assert.equal(readyGeneration, pongRoom.generation);
 
     await activeUser(page, secondUser);
     await page.goto(base + "/games/");

@@ -644,6 +644,18 @@ async function operation(action, extra = {}) {
   try {
     await ensureProfile();
     if (owner !== api.user?.id || epoch !== roomEpoch || stopped) return;
+    if (action === "ready" && recoverable()) {
+      // A teammate can take control while this tab is between room polls.
+      const previousRound = room.round;
+      installRoom(await rpc("get"));
+      if (
+        !controls() ||
+        ended() ||
+        room.round !== previousRound ||
+        room.status === "playing"
+      )
+        return;
+    }
     const payload =
       action === "pause" &&
       recoverable() &&
