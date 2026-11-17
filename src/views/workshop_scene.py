@@ -6,9 +6,24 @@ from tool_previews import tool_preview
 
 ROOTS = {"tools", "games", "projects"}
 ART = {
-    "tools": (("tool", "color-studio"), ("icon", "timer"), ("icon", "pdf"), ("icon", "qr")),
-    "games": (("game", "nonogram"), ("chess", ""), ("icon", "grid"), ("icon", "achievement")),
-    "projects": (("project", ""), ("gallery", ""), ("icon", "audio"), ("icon", "cards")),
+    "tools": (
+        ("tool", "color-studio"),
+        ("icon", "timer"),
+        ("icon", "pdf"),
+        ("icon", "qr"),
+    ),
+    "games": (
+        ("game", "nonogram"),
+        ("chess", ""),
+        ("icon", "grid"),
+        ("icon", "achievement"),
+    ),
+    "projects": (
+        ("project", ""),
+        ("gallery", ""),
+        ("icon", "audio"),
+        ("icon", "cards"),
+    ),
 }
 SHAPES = (("ring", ""), ("diamond", ""), ("spark", ""), ("orb", ""))
 

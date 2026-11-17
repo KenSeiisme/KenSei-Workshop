@@ -272,7 +272,9 @@ pages["projects"] = (
             "Projects",
             "Websites, software and creative experiments. Each one starts with a little curiosity.",
         ),
-        project_cards="".join(project_card(p, featured=p[0] == "kensei-studio") for p in PROJECTS),
+        project_cards="".join(
+            project_card(p, featured=p[0] == "kensei-studio") for p in PROJECTS
+        ),
     ),
     "Projects",
 )
