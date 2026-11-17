@@ -116,7 +116,14 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
         logical_parts = (
             relative.parts[1:] if relative.parts[0] == "zh-hant" else relative.parts
         )
-        if logical_parts[0] in {"workspace", "auth", "profile", "404", "404.html"}:
+        if logical_parts[0] in {
+            "workspace",
+            "auth",
+            "profile",
+            "friends",
+            "404",
+            "404.html",
+        }:
             continue
         assert path.name == "index.html", str(relative)
         route = relative.parent.as_posix()
