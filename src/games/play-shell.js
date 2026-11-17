@@ -89,9 +89,9 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
   function closeDialogs() {
     for (const dialog of root.querySelectorAll("dialog[open]")) dialog.close();
   }
-  function openDialog(dialog, cover = false) {
+  function openDialog(dialog, opener = document.activeElement, cover = false) {
     if (!dialog || dialog.open || (cover && !beforeCover())) return;
-    returnFocus = document.activeElement;
+    if (!opener?.closest("dialog[open]")) returnFocus = opener;
     closeDialogs();
     dialog.showModal();
     if (dialog.classList.contains("game-setup-drawer"))
@@ -119,10 +119,10 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
   }
   for (const button of root.querySelectorAll("[data-shell-setup]"))
     button.addEventListener("click", () => {
-      if (options && state === "ready") openDialog(options);
-      else if (!entry) openDialog(settings);
+      if (options && state === "ready") openDialog(options, button);
+      else if (!entry) openDialog(settings, button);
       else if (state === "ready") focusSetup();
-      else openDialog(menu);
+      else openDialog(menu, button);
     });
   function paintSetupChoices() {
     if (!details) return;
@@ -144,9 +144,9 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     queueMicrotask(paintSetupChoices);
   }
   for (const button of root.querySelectorAll("[data-shell-options]"))
-    button.addEventListener("click", () => openDialog(options));
+    button.addEventListener("click", () => openDialog(options, button));
   for (const button of root.querySelectorAll("[data-shell-invite]"))
-    button.addEventListener("click", () => openDialog(invite));
+    button.addEventListener("click", () => openDialog(invite, button));
 
   const inviteCode = new URLSearchParams(location.search).get("code");
   if (invite && /^[a-z0-9]{8}$/i.test(inviteCode || "")) {
@@ -161,11 +161,11 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     uiText(preview, uiMsg("Room code · {0}", [inviteCode.toUpperCase()]));
   }
   for (const button of root.querySelectorAll("[data-shell-settings]"))
-    button.addEventListener("click", () => openDialog(settings));
+    button.addEventListener("click", () => openDialog(settings, button));
   for (const button of root.querySelectorAll("[data-shell-menu]"))
-    button.addEventListener("click", () => openDialog(menu));
+    button.addEventListener("click", () => openDialog(menu, button));
   for (const button of root.querySelectorAll("[data-shell-info]"))
-    button.addEventListener("click", () => openDialog(info, true));
+    button.addEventListener("click", () => openDialog(info, button, true));
   for (const button of root.querySelectorAll("[data-shell-focus]"))
     button.addEventListener("click", () => {
       setFocus(!focus);
