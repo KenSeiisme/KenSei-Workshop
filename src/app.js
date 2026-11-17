@@ -1533,6 +1533,7 @@
   window.KenseiWorkspace = {
     items,
     saveItem,
+    sync: syncWorkspace,
     toast,
     escape,
     ready: false,

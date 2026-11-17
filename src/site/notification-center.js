@@ -539,7 +539,12 @@ trigger.onclick = () => {
 trigger.hidden = false;
 dialog.onclose = () => {
   trigger.setAttribute("aria-expanded", "false");
-  if (trigger.getClientRects().length) trigger.focus({ preventScroll: true });
+  const active = document.activeElement;
+  if (
+    trigger.getClientRects().length &&
+    (active === document.body || dialog.contains(active) || active === trigger)
+  )
+    trigger.focus({ preventScroll: true });
 };
 $("[data-close-notices]").onclick = () => dialog.close();
 signIn.onclick = () => {

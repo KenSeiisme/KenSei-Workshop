@@ -590,5 +590,17 @@
   "m_52569811ad0d": {
     "en": "Request no longer pending",
     "zh-Hant": "此申請已結束"
+  },
+  "m_2d330ea5ac8e": {
+    "en": "Retry all sync",
+    "zh-Hant": "重試全部同步"
+  },
+  "m_21237b47bb63": {
+    "en": "Syncing saved work…",
+    "zh-Hant": "正在同步已儲存內容…"
+  },
+  "m_ae8c2b483f08": {
+    "en": "{0} changes pending sync",
+    "zh-Hant": "{0} 項變更待同步"
   }
 }

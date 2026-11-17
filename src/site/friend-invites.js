@@ -29,7 +29,8 @@ export function mountFriendInvites(game, getRoom) {
     pending = false,
     version = 0,
     sentRoom = null,
-    lastSentRead = 0;
+    lastSentRead = 0,
+    inviteOwner = api.user?.id || null;
   if (!profileId(requested)) requested = null;
   if (requested) {
     uiText(create, uiMsg("Create room and invite"));
@@ -268,7 +269,8 @@ export function mountFriendInvites(game, getRoom) {
     lastSentRead++;
     pending = false;
     selected = null;
-    requested = null;
+    if (inviteOwner && inviteOwner !== api.user?.id) requested = null;
+    inviteOwner = api.user?.id || null;
     sentRoom = null;
     retry.hidden = true;
     outgoing.replaceChildren();

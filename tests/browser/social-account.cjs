@@ -282,6 +282,7 @@ export function createClient() {
       await page
         .locator("[data-workspace-query]")
         .evaluate((el) => document.activeElement === el),
+      "Notice changed the active input",
     );
     await bell.click();
     await page.locator("#notice-center:modal .toast").first().waitFor();

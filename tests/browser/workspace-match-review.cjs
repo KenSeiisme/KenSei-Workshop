@@ -15,7 +15,7 @@ export function createClient() {
     data: { tool: "data-studio", name: "Analysis recipe", recipe: { version: 1, settings: {} } },
     updated_at: date
   };
-  const old = { id: "old-draft", kind: "draft", tool: "text-toolkit", name: "Old draft", updated_at: date };
+  const old = { id: "old-draft", kind: "draft", tool: "text-toolkit", name: "Old draft", updated_at: "2026-11-15T12:00:00Z" };
   window.__rpc = [];
   let listener;
   window.__endSession = () => listener("SIGNED_OUT", null);
@@ -60,7 +60,7 @@ export function createClient() {
           return { data: args.search_text === "Old" || args.tool_ids?.includes("text-toolkit") ? [old] : [] };
         }
         if (args.before_id) return { data: [old] };
-        const records = Array.from({ length: 20 }, (_, i) => ({ ...old, id: "draft-" + i, name: "Draft " + i }));
+        const records = Array.from({ length: 20 }, (_, i) => ({ ...old, id: "draft-" + i, name: "Draft " + i, updated_at: date }));
         return { data: [{ ...preset, kind: "preset", name: preset.data.name, tool: "data-studio" }, ...records] };
       }
       if (name === "get_my_board_match_history")
@@ -172,10 +172,18 @@ export function createClient() {
     assert(await page.locator("[data-review-content]").isHidden());
 
     await page.goto(base + "/workspace/");
-    await results.getByText("Analysis recipe").waitFor();
+    await page
+      .locator("[data-workspace-recent-list]")
+      .getByText("Analysis recipe")
+      .waitFor();
     await page.evaluate(() => __endSession());
     await page.getByText("On this device", { exact: true }).waitFor();
     assert(!(await results.textContent()).includes("Analysis recipe"));
+    assert(
+      !(
+        await page.locator("[data-workspace-recent-list]").textContent()
+      ).includes("Analysis recipe"),
+    );
     assert.deepEqual(errors, []);
     console.log(
       "Workspace search, account isolation, archived board navigation and three game downloads passed.",
