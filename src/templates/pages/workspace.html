@@ -1,10 +1,11 @@
-<section class="container page-section">
-  ${intro}
-  <nav class="workspace-jumps" aria-label="Workspace sections">
-    <a class="button secondary" href="#workspace-favorites">Favorites</a>
-    <a class="button secondary" href="#workspace-drafts">Drafts</a>
-    <a class="button secondary" href="#workspace-records">Tool records</a>
-  </nav>
+<section class="container page-section account-dashboard workspace-dashboard">
+  <header class="account-hero glass-surface">
+    ${intro}
+    <div class="account-hero-actions">
+      <a class="button secondary" href="/profile/">My Profile</a
+      ><a class="button secondary" href="/friends/">Friends</a>
+    </div>
+  </header>
   <div class="workspace-banner" id="workspace-account">
     <div>
       <strong>On this device</strong>
@@ -41,6 +42,14 @@
         </select>
       </label>
     </div>
+    <section
+      class="workspace-recent"
+      data-workspace-recent
+      aria-labelledby="workspace-recent-title"
+    >
+      <h3 id="workspace-recent-title">Continue editing</h3>
+      <div class="saved-list" data-workspace-recent-list></div>
+    </section>
     <p data-workspace-index-status class="muted small" role="status"></p>
     <div class="saved-list" data-workspace-index-list></div>
     <button
@@ -71,6 +80,11 @@
       <span>Saved drafts</span><strong id="draft-count">0</strong>
     </div>
   </div>
+  <nav class="workspace-jumps" aria-label="Workspace sections">
+    <a class="button secondary" href="#workspace-favorites">Favorites</a>
+    <a class="button secondary" href="#workspace-drafts">Drafts</a>
+    <a class="button secondary" href="#workspace-records">Tool records</a>
+  </nav>
   <section class="workspace-section" id="workspace-favorites" tabindex="-1">
     <h2>Favorite tools</h2>
     <div class="tools-grid" id="favorite-tools"></div>

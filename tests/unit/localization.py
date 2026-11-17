@@ -32,7 +32,7 @@ page_files = {
 }
 excluded = {
     L.page_path(route, locale).strip("/")
-    for route in ("profile", "workspace", "auth/callback", "404")
+    for route in ("profile", "workspace", "friends", "auth/callback", "404")
     for locale in L.LOCALES
 }
 expected = {
@@ -136,7 +136,7 @@ for url in urls:
     )
 for locale in L.LOCALES:
     prefix = "zh-hant/" if locale == "zh-Hant" else ""
-    for route in ["profile", "workspace", "auth/callback", "404"]:
+    for route in ["profile", "workspace", "friends", "auth/callback", "404"]:
         html = (output / prefix / route / "index.html").read_text(encoding="utf-8")
         assert 'name="robots" content="noindex, follow"' in html
         verify_pack(html, locale, route)

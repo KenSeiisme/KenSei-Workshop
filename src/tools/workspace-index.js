@@ -66,6 +66,8 @@ export function mountWorkspaceIndex(root) {
   const query = $("[data-workspace-query]");
   const kind = $("[data-workspace-kind]");
   const list = $("[data-workspace-index-list]");
+  const recent = $("[data-workspace-recent]");
+  const recentList = $("[data-workspace-recent-list]");
   const status = $("[data-workspace-index-status]");
   const moreButton = $("[data-workspace-index-more]");
   const retry = $("[data-workspace-index-retry]");
@@ -85,6 +87,19 @@ export function mountWorkspaceIndex(root) {
         name?.toLowerCase().includes(term),
       );
     });
+
+  function recordRow(row, isRecent = false) {
+    const [label, param] = kinds[row.kind];
+    const path = window.KenseiI18n.localePath("/tools/" + row.tool + "/");
+    const timestamp = new Date(row.updated_at);
+    return uiHtml`<div class="saved-row"><div>
+      <strong>${row.name ? esc(row.name) : uiMsg("Untitled record")}</strong>
+      <p>${uiFrom(label)} · ${uiFrom(tools[row.tool].name)}
+      ${Number.isFinite(+timestamp) ? uiDate(timestamp, { dateStyle: "medium", timeStyle: "short" }) : ""}
+      ${owner && row.pending ? uiMsg("Pending sync") : ""}</p></div>
+      <a class="text-link" data-record="${esc(key(row))}" href="${path}?${param}=${encodeURIComponent(row.id)}">${isRecent ? uiMsg("Continue editing") : uiMsg("Open")}</a>
+    </div>`;
+  }
 
   function paint() {
     const online = owner && !failed && navigator.onLine;
@@ -111,23 +126,28 @@ export function mountWorkspaceIndex(root) {
           Object.hasOwn(kinds, row.kind) && Object.hasOwn(tools, row.tool),
       )
       .sort(compare);
+    const showRecent = !term && !kind.value && visible.length > 0;
+    recent.hidden = !showRecent;
+    if (showRecent) {
+      const focus = recentList.contains(document.activeElement)
+        ? document.activeElement.dataset.record
+        : null;
+      const next = visible
+        .slice(0, 4)
+        .map((row) => recordRow(row, true))
+        .join("");
+      if (recentList.innerHTML !== next) recentList.innerHTML = next;
+      if (focus)
+        [...recentList.querySelectorAll("a")]
+          .find((node) => node.dataset.record === focus)
+          ?.focus();
+    } else if (recentList.childElementCount) recentList.replaceChildren();
     const focusKey = list.contains(document.activeElement)
       ? document.activeElement.dataset.record
       : null;
     list.innerHTML = visible
       .slice(0, limit)
-      .map((row) => {
-        const [label, param] = kinds[row.kind];
-        const path = window.KenseiI18n.localePath("/tools/" + row.tool + "/");
-        const timestamp = new Date(row.updated_at);
-        return uiHtml`<div class="saved-row"><div>
-        <strong>${row.name ? esc(row.name) : uiMsg("Untitled record")}</strong>
-        <p>${uiFrom(label)} · ${uiFrom(tools[row.tool].name)}
-        ${Number.isFinite(+timestamp) ? uiDate(timestamp, { dateStyle: "medium", timeStyle: "short" }) : ""}
-        ${owner && row.pending ? uiMsg("Pending sync") : ""}</p></div>
-        <a class="text-link" data-record="${esc(key(row))}" href="${path}?${param}=${encodeURIComponent(row.id)}">${uiMsg("Open")}</a>
-      </div>`;
-      })
+      .map((row) => recordRow(row))
       .join("");
     if (focusKey)
       [...list.querySelectorAll("a")]

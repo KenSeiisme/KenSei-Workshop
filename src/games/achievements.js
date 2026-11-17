@@ -1,7 +1,6 @@
 import { api, esc } from "/tool-scripts/common.js";
 import { ACHIEVEMENTS, liveValue } from "./achievement-catalog.js";
 import { patchMarkup } from "./dom.js";
-import { playCue } from "./audio.js";
 import { reserveMilestones } from "./hub-store.js";
 import { uiDate, uiMsg, uiFrom, uiJoin, uiText, uiHtml } from "../site/ui.js";
 
@@ -166,7 +165,6 @@ export function mountAchievements(game = null) {
         candidates.map(({ id }) => id),
       ).catch(() => []);
       if (ids.length && owner === api.user?.id) {
-        playCue("milestone");
         const names = candidates
           .filter(({ id }) => ids.includes(id))
           .map(({ name }) => uiFrom(name));
@@ -176,7 +174,12 @@ export function mountAchievements(game = null) {
               names.flatMap((name, index) => (index ? [" · ", name] : [name])),
             ),
           ]),
-          { kind: "achievement", key: sessionId },
+          {
+            kind: "achievement",
+            key: sessionId,
+            account: owner,
+            events: ids.map((id) => owner + ":reward:milestone:" + id),
+          },
         );
       }
       await refresh();

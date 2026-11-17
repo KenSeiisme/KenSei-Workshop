@@ -147,7 +147,7 @@ with tempfile.TemporaryDirectory(prefix="structure-", dir=qa) as temporary:
         )
         assert studio["downloadUrl"] in page and studio["sha256"] in page
     for prefix in ("", "zh-hant/"):
-        for route in ("workspace", "profile", "auth/callback", "404"):
+        for route in ("workspace", "profile", "friends", "auth/callback", "404"):
             assert 'name="robots" content="noindex, follow"' in (
                 output / prefix / route / "index.html"
             ).read_text(encoding="utf-8")

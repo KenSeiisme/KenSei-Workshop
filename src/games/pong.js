@@ -1,3 +1,4 @@
+import { mountFriendInvites } from "../site/friend-invites.js";
 import { copyRoomInvite, readyLabel } from "./room-lobby.js";
 import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, esc } from "/tool-scripts/common.js";
@@ -108,7 +109,9 @@ function overlay(title, note = "") {
   uiText($("#pong-overlay-note"), uiFrom(note));
 }
 const activity = trackGame("pong", $("#pong-overlay"));
+const friendInvites = mountFriendInvites("pong", () => room);
 function renderRoom() {
+  friendInvites.paint();
   syncPongAudio();
   root.dataset.pongState = room?.status || "ready";
   const live = room && !["closed", "interrupted"].includes(room.status);
@@ -702,6 +705,7 @@ async function operation(action, extra = {}) {
       lastRemoteSequence = -1;
       sequence = 0;
       updateMatchUrl(result);
+      if (action === "create") friendInvites.created();
       await connect();
       if (epoch === roomEpoch && owner === api.user?.id)
         message(
@@ -735,6 +739,11 @@ async function operation(action, extra = {}) {
   } catch (e) {
     if (!e.stale && epoch === roomEpoch) {
       message(uiError(e));
+      window.KenseiNotify?.(uiError(e), {
+        kind: "error",
+        announced: true,
+        account: owner,
+      });
       if (room) poll();
     }
   } finally {

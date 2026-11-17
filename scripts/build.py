@@ -240,6 +240,7 @@ def layout(title, content, active="Home", route="", locale="en"):
         head_html=i18n.head(route, locale, SITE["site_url"].rstrip("/")),
         header=header(active),
         main_class="workshop-scene" if atmosphere else "",
+        notice_center=render_template("site/notice-center.html"),
         content=atmosphere + content,
     )
 
@@ -402,6 +403,7 @@ pages["workspace"] = (
     "Workspace",
 )
 pages["profile"] = ("Profile", PROFILE_VIEW, "Workspace")
+pages["friends"] = ("Friends", render_template("pages/friends.html"), "Workspace")
 pages["auth/callback"] = (
     "Signing in",
     render_template("pages/auth-callback.html"),

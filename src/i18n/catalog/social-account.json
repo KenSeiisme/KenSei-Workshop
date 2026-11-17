@@ -1,0 +1,390 @@
+{
+  "m_bd104d1b98d0": {
+    "en": "Friends",
+    "zh-Hant": "好友"
+  },
+  "m_309af5e489a9": {
+    "en": "Find a player, manage requests, or invite someone to a game.",
+    "zh-Hant": "尋找玩家、管理好友申請，或邀請好友一起玩遊戲。"
+  },
+  "m_31d7741788a4": {
+    "en": "Sign in to add friends",
+    "zh-Hant": "登入以新增好友"
+  },
+  "m_feb7bfd1726e": {
+    "en": "Find friends",
+    "zh-Hant": "尋找好友"
+  },
+  "m_d6ae61016ccd": {
+    "en": "Public nickname",
+    "zh-Hant": "公開暱稱"
+  },
+  "m_328dbd6f45a2": {
+    "en": "Search public names",
+    "zh-Hant": "搜尋公開暱稱"
+  },
+  "m_bf64a915acbd": {
+    "en": "Enter at least two characters.",
+    "zh-Hant": "請輸入至少兩個字元。"
+  },
+  "m_ee393a425e2e": {
+    "en": "Your friends",
+    "zh-Hant": "你的好友"
+  },
+  "m_b9bbd08981ba": {
+    "en": "Incoming requests",
+    "zh-Hant": "收到的申請"
+  },
+  "m_874d69d66eb2": {
+    "en": "Sent requests",
+    "zh-Hant": "送出的申請"
+  },
+  "m_fe9b29c1d380": {
+    "en": "Blocked players",
+    "zh-Hant": "已封鎖的玩家"
+  },
+  "m_36974c72d388": {
+    "en": "Close game choice",
+    "zh-Hant": "關閉遊戲選擇"
+  },
+  "m_6a4a9d59c031": {
+    "en": "Choose an online game",
+    "zh-Hant": "選擇線上遊戲"
+  },
+  "m_788011833a5a": {
+    "en": "Notifications",
+    "zh-Hant": "通知"
+  },
+  "m_25c57a564163": {
+    "en": "Close notifications",
+    "zh-Hant": "關閉通知"
+  },
+  "m_a8f813d653e5": {
+    "en": "Notification sound",
+    "zh-Hant": "通知音效"
+  },
+  "m_65d98a13e639": {
+    "en": "Notification volume",
+    "zh-Hant": "通知音量"
+  },
+  "m_c6fbfb2045db": {
+    "en": "Mute notifications",
+    "zh-Hant": "將通知靜音"
+  },
+  "m_217ae6a72ba2": {
+    "en": "Unmute notifications",
+    "zh-Hant": "取消通知靜音"
+  },
+  "m_d7592650e1c9": {
+    "en": "Mark all as read",
+    "zh-Hant": "全部標為已讀"
+  },
+  "m_50c8b81faf51": {
+    "en": "Mark as read",
+    "zh-Hant": "標為已讀"
+  },
+  "m_a17991767970": {
+    "en": "Dismiss notice",
+    "zh-Hant": "關閉提示"
+  },
+  "m_1cb0ba125f84": {
+    "en": "Information",
+    "zh-Hant": "資訊"
+  },
+  "m_c88a0b907419": {
+    "en": "Success",
+    "zh-Hant": "成功"
+  },
+  "m_e981ddae45d8": {
+    "en": "Warning",
+    "zh-Hant": "警告"
+  },
+  "m_54a0e8c17ebb": {
+    "en": "Error",
+    "zh-Hant": "錯誤"
+  },
+  "m_55ac8cbae095": {
+    "en": "Reward",
+    "zh-Hant": "獎勵"
+  },
+  "m_f1b7505afa5c": {
+    "en": "Social",
+    "zh-Hant": "社交"
+  },
+  "m_07e49b37cbf4": {
+    "en": "A Workshop member",
+    "zh-Hant": "一位 Workshop 會員"
+  },
+  "m_4f3132a198f0": {
+    "en": "{0} sent you a friend request.",
+    "zh-Hant": "{0} 向你送出了好友申請。"
+  },
+  "m_575680c0a4a3": {
+    "en": "{0} accepted your friend request.",
+    "zh-Hant": "{0} 接受了你的好友申請。"
+  },
+  "m_830a78dbbf98": {
+    "en": "{0} invited you to play {1}.",
+    "zh-Hant": "{0} 邀請你遊玩 {1}。"
+  },
+  "m_4eff8acca8a8": {
+    "en": "Daily reward claimed · +{0} coins",
+    "zh-Hant": "已領取每日獎勵 · +{0} 枚金幣"
+  },
+  "m_4436ab12ab80": {
+    "en": "You earned a lobby badge.",
+    "zh-Hant": "你獲得了一枚大廳徽章。"
+  },
+  "m_7cacc78a5de4": {
+    "en": "You unlocked a verified milestone.",
+    "zh-Hant": "你解鎖了一項已驗證的里程碑。"
+  },
+  "m_1b49e6fb99a2": {
+    "en": "You have a new notification.",
+    "zh-Hant": "你有一則新通知。"
+  },
+  "m_e295bb6bcd93": {
+    "en": "Notifications · {0} unread",
+    "zh-Hant": "通知 · {0} 則未讀"
+  },
+  "m_8772b9cb1a22": {
+    "en": "{0} new notifications",
+    "zh-Hant": "{0} 則新通知"
+  },
+  "m_58f77ac710a9": {
+    "en": "Sign in to see your notifications.",
+    "zh-Hant": "登入以查看通知。"
+  },
+  "m_6858584e921d": {
+    "en": "Notifications could not load. Retry when connected.",
+    "zh-Hant": "無法載入通知。請於恢復連線後重試。"
+  },
+  "m_eae12e0d3bab": {
+    "en": "Loading notifications…",
+    "zh-Hant": "正在載入通知…"
+  },
+  "m_ca02c722b098": {
+    "en": "No notifications yet.",
+    "zh-Hant": "目前沒有通知。"
+  },
+  "m_5aa56ab42916": {
+    "en": "Open invitation",
+    "zh-Hant": "開啟邀請"
+  },
+  "m_65904f364220": {
+    "en": "View achievements",
+    "zh-Hant": "查看成就"
+  },
+  "m_aea0eb32aa3b": {
+    "en": "View friends",
+    "zh-Hant": "查看好友"
+  },
+  "m_dcfe382dafc5": {
+    "en": "Could not mark notifications as read.",
+    "zh-Hant": "無法將通知標為已讀。"
+  },
+  "m_301c61f1b14c": {
+    "en": "Could not open the invitation. Try again.",
+    "zh-Hant": "無法開啟邀請。請再試一次。"
+  },
+  "m_d1b7c4dd65bc": {
+    "en": "This room has closed.",
+    "zh-Hant": "此房間已關閉。"
+  },
+  "m_77e67ec97e3e": {
+    "en": "This invitation has expired.",
+    "zh-Hant": "此邀請已過期。"
+  },
+  "m_ea8e3af71884": {
+    "en": "This room is already full.",
+    "zh-Hant": "此房間已滿。"
+  },
+  "m_917f38477a4d": {
+    "en": "This invitation is unavailable.",
+    "zh-Hant": "此邀請目前無法使用。"
+  },
+  "m_c1f872819746": {
+    "en": "Add friend",
+    "zh-Hant": "新增好友"
+  },
+  "m_1f4d92f70d15": {
+    "en": "Block player",
+    "zh-Hant": "封鎖玩家"
+  },
+  "m_56196683592d": {
+    "en": "Cancel request",
+    "zh-Hant": "取消申請"
+  },
+  "m_038829409be4": {
+    "en": "Accept request",
+    "zh-Hant": "接受申請"
+  },
+  "m_72740f4a78a7": {
+    "en": "Decline request",
+    "zh-Hant": "拒絕申請"
+  },
+  "m_f2c4fc85b789": {
+    "en": "Remove friend",
+    "zh-Hant": "移除好友"
+  },
+  "m_8d3ebfbb0798": {
+    "en": "Unblock player",
+    "zh-Hant": "解除封鎖"
+  },
+  "m_539c4bed4713": {
+    "en": "Block this player and cancel pending friend requests and invitations?",
+    "zh-Hant": "封鎖此玩家並取消未處理的好友申請與邀請？"
+  },
+  "m_a77cd92f4806": {
+    "en": "Remove this friend?",
+    "zh-Hant": "要移除此好友嗎？"
+  },
+  "m_acd8f6644016": {
+    "en": "Friend",
+    "zh-Hant": "好友"
+  },
+  "m_be36a5ec877a": {
+    "en": "This player is unavailable.",
+    "zh-Hant": "目前無法與此玩家互動。"
+  },
+  "m_4732c7b4af18": {
+    "en": "Friend status updated.",
+    "zh-Hant": "好友狀態已更新。"
+  },
+  "m_66362aaaa9ff": {
+    "en": "Could not update this friendship. Try again.",
+    "zh-Hant": "無法更新好友關係。請再試一次。"
+  },
+  "m_4d9d363010dd": {
+    "en": "Sign in to add a friend",
+    "zh-Hant": "登入以新增好友"
+  },
+  "m_fc2fb2738bd9": {
+    "en": "Retry friend status",
+    "zh-Hant": "重試取得好友狀態"
+  },
+  "m_1da86616fcdf": {
+    "en": "Invite to game",
+    "zh-Hant": "邀請遊戲"
+  },
+  "m_1efe5a1a01e2": {
+    "en": "Invite a friend",
+    "zh-Hant": "邀請好友"
+  },
+  "m_28bfc20bc7dc": {
+    "en": "Create room and invite",
+    "zh-Hant": "建立房間並邀請"
+  },
+  "m_35a26fda10c1": {
+    "en": "Choose a friend",
+    "zh-Hant": "選擇好友"
+  },
+  "m_dba4038b651b": {
+    "en": "Send invitation",
+    "zh-Hant": "送出邀請"
+  },
+  "m_36d712854978": {
+    "en": "Game invitation sent.",
+    "zh-Hant": "已送出遊戲邀請。"
+  },
+  "m_f1617714fc33": {
+    "en": "Invitation could not send. Your room is still open.",
+    "zh-Hant": "無法送出邀請。你的房間仍開放中。"
+  },
+  "m_fe14b130cb27": {
+    "en": "No friends yet.",
+    "zh-Hant": "目前沒有好友。"
+  },
+  "m_b1cd8bf2581b": {
+    "en": "Nothing to show.",
+    "zh-Hant": "目前沒有資料。"
+  },
+  "m_f988388b0ab6": {
+    "en": "Loading friends…",
+    "zh-Hant": "正在載入好友…"
+  },
+  "m_f2f2703ed051": {
+    "en": "Friends could not load. Try again.",
+    "zh-Hant": "無法載入好友。請再試一次。"
+  },
+  "m_6a0cbfe73bcd": {
+    "en": "Searching for players…",
+    "zh-Hant": "正在搜尋玩家…"
+  },
+  "m_cf7f0037e84f": {
+    "en": "No matching players.",
+    "zh-Hant": "找不到符合的玩家。"
+  },
+  "m_e5e6f2888920": {
+    "en": "Search unavailable. Try again.",
+    "zh-Hant": "搜尋目前無法使用。請再試一次。"
+  },
+  "m_f948bc4505a1": {
+    "en": "Public preview",
+    "zh-Hant": "公開頁預覽"
+  },
+  "m_8ce07cfa57fe": {
+    "en": "Your preview updates as you edit. Save changes to update the public page.",
+    "zh-Hant": "編輯時會即時更新預覽。儲存變更後才會更新公開頁。"
+  },
+  "m_8a29ed34cf47": {
+    "en": "Copy public link",
+    "zh-Hant": "複製公開連結"
+  },
+  "m_7dbd4aa8be70": {
+    "en": "Public profile link",
+    "zh-Hant": "公開個人檔案連結"
+  },
+  "m_c3b95f37113e": {
+    "en": "Manage friends",
+    "zh-Hant": "管理好友"
+  },
+  "m_b836c95b2610": {
+    "en": "verified milestones",
+    "zh-Hant": "已驗證里程碑"
+  },
+  "m_d0f7433ae9dd": {
+    "en": "Public profile link copied.",
+    "zh-Hant": "已複製公開個人檔案連結。"
+  },
+  "m_5c9cfae60fc3": {
+    "en": "Copy the selected link manually.",
+    "zh-Hant": "請手動複製已選取的連結。"
+  },
+  "m_c1632eafd446": {
+    "en": "Profile saved.",
+    "zh-Hant": "已儲存個人檔案。"
+  },
+  "m_6e0333c297ad": {
+    "en": "Could not save your profile. Try again.",
+    "zh-Hant": "無法儲存個人檔案。請再試一次。"
+  },
+  "m_422f24539e15": {
+    "en": "Continue editing",
+    "zh-Hant": "繼續編輯"
+  },
+  "m_9c3b758a022c": {
+    "en": "Workspace sync failed. Try again.",
+    "zh-Hant": "工作區同步失敗。請再試一次。"
+  },
+  "m_a32d0dafa34d": {
+    "en": "Workspace synced.",
+    "zh-Hant": "已同步工作區。"
+  },
+  "m_8a046cc90ab0": {
+    "en": "Syncing…",
+    "zh-Hant": "正在同步…"
+  },
+  "m_0b535e44969b": {
+    "en": "Game complete.",
+    "zh-Hant": "遊戲已完成。"
+  },
+  "m_222adacbef8b": {
+    "en": "Friend lists, blocks and notifications are private to your account. Friend requests and game invitations show your public profile to the recipient. Confirmed achievements and daily rewards appear in your notification center.",
+    "zh-Hant": "好友名單、封鎖名單與通知僅供你的帳號查看。好友申請和遊戲邀請會向接收者顯示你的公開個人檔案。已確認的成就和每日獎勵會出現在通知中心。"
+  },
+  "m_deb5113c988c": {
+    "en": "Edit your photo, public name and biography.",
+    "zh-Hant": "編輯頭像、公開暱稱與自我介紹。"
+  }
+}

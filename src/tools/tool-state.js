@@ -8,7 +8,8 @@ const labels = {
   error: "Needs attention",
   stale: "Needs updating",
 };
-export function feedback(state, message) {
+let lastNotice;
+export function feedback(state, message, notify = true) {
   // 初始化失敗必須一直可見，不能被已載入部分的輸入提示蓋掉。
   if (document.querySelector("[data-tool][data-load-error]")) return;
   const box = document.querySelector(".tool-feedback");
@@ -19,6 +20,21 @@ export function feedback(state, message) {
     value = labels[state] || labels.ready;
   uiText(label, uiFrom(value));
   if (message) uiText(text, uiFrom(message));
+  const category = {
+    success: "success",
+    error: "error",
+    stale: "warning",
+    cancelled: "info",
+  }[state];
+  if (!category) {
+    lastNotice = null;
+    return;
+  }
+  if (!message) return;
+  const key = state + ":" + String(message);
+  if (notify && key !== lastNotice)
+    window.KenseiNotify?.(uiFrom(message), { kind: category, announced: true });
+  lastNotice = key;
 }
 export function stateFor(message, error = false) {
   if (

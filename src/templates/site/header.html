@@ -30,6 +30,18 @@
     <div class="site-account-group">
       <button
         type="button"
+        class="icon-button site-notice-trigger"
+        data-open-notices
+        aria-label="Notifications"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="notice-center"
+        hidden
+      >
+        ${svg_bell}<span data-notice-count hidden aria-hidden="true"></span>
+      </button>
+      <button
+        type="button"
         class="icon-button site-theme"
         data-site-theme-toggle
         aria-label="Switch to light theme"
@@ -57,6 +69,7 @@
         </button>
         <div class="account-menu" id="account-menu" hidden>
           <a href="/workspace/">Workspace</a><a href="/profile/">My Profile</a
+          ><a href="/friends/">Friends</a
           ><a href="/profile/" id="account-public-profile" hidden
             >Public Profile</a
           ><button id="account-sign-out">Sign out</button>

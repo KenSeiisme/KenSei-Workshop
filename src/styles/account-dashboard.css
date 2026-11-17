@@ -1,0 +1,268 @@
+.account-dashboard {
+  padding-top: clamp(1.15rem, 3vw, 2.5rem);
+}
+.account-dashboard .account-hero {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  margin: 0 0 1rem;
+  max-width: none;
+  overflow-wrap: anywhere;
+  background:
+    radial-gradient(
+      ellipse at 95% 0%,
+      color-mix(in srgb, var(--accent) 18%, transparent),
+      transparent 62%
+    ),
+    var(--surface);
+}
+.account-hero :is(h1, p, .page-intro) {
+  margin: 0;
+}
+.account-hero h1 {
+  font-size: clamp(1.7rem, 5vw, 2.9rem);
+}
+.account-hero p {
+  margin-top: 0.4rem;
+  color: var(--muted);
+}
+.account-hero-actions,
+.friend-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+.account-dashboard :is(.button, .text-link) {
+  min-height: 44px;
+}
+.account-dashboard .text-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.profile-edit-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(0.65rem, 2vw, 1.25rem);
+}
+.profile-edit-layout :is(.profile-preview, .profile-editor) {
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+}
+.profile-edit-layout .profile-editor {
+  display: grid;
+  gap: 0.6rem;
+}
+.profile-edit-layout .profile-editor[hidden] {
+  display: none;
+}
+.profile-editor > label,
+.friends-grid .field,
+.workspace-dashboard [data-workspace-index] .field {
+  display: grid;
+  gap: 0.35rem;
+}
+.profile-editor > label :is(input, textarea),
+.friends-grid input {
+  width: 100%;
+  min-width: 0;
+}
+.profile-editor .profile-avatar-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.8rem;
+}
+.profile-editor .profile-avatar-row .avatar-large,
+#profile-preview-avatar {
+  width: clamp(58px, 8vw, 90px);
+  height: clamp(58px, 8vw, 90px);
+  border-radius: 1.1rem;
+}
+.profile-editor > p {
+  margin-block: 0;
+}
+.profile-visibility-note {
+  color: var(--muted);
+  background: var(--surface2);
+  border-radius: 0.65rem;
+  padding: 0.6rem 0.75rem;
+}
+.profile-preview {
+  display: grid;
+  gap: 0.55rem;
+  padding: clamp(0.9rem, 3vw, 1.35rem);
+}
+.profile-preview h2,
+.friends-grid h2 {
+  margin: 0 0 0.55rem;
+  font-size: 1.12rem;
+}
+.profile-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+  padding: 0.9rem;
+  border-radius: 0.85rem;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--accent) 17%, var(--surface)),
+    var(--surface2)
+  );
+}
+.profile-preview-card > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.profile-preview-card p {
+  color: var(--muted);
+  font-size: 0.86rem;
+  margin: 0.3rem 0 0;
+}
+#profile-preview-avatar {
+  flex: none;
+}
+.account-dashboard .public-profile-hero {
+  background:
+    radial-gradient(
+      ellipse at 94% 0%,
+      color-mix(in srgb, var(--accent) 25%, transparent),
+      transparent 59%
+    ),
+    var(--surface);
+  border-color: var(--line);
+}
+.account-dashboard .public-profile .public-profile-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+.account-dashboard .public-profile #public-bio {
+  color: var(--muted);
+}
+.account-dashboard .public-profile-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(8.6rem, 100%), 1fr));
+  gap: 0.55rem;
+  padding-top: 0.75rem;
+  margin-top: 1rem;
+}
+.account-dashboard .public-profile-summary > div {
+  display: grid;
+  gap: 0.1rem;
+  background: color-mix(in srgb, var(--surface2) 82%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 0.55rem 0.8rem;
+}
+.account-dashboard .public-profile-summary :is(strong, span) {
+  color: var(--text);
+}
+
+.workspace-dashboard .workspace-banner,
+.workspace-dashboard [data-workspace-index] {
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  padding: clamp(0.8rem, 2vw, 1.2rem);
+  background: var(--surface);
+}
+.workspace-dashboard [data-workspace-index] h2 {
+  margin-top: 0;
+}
+.workspace-recent {
+  margin-block: 1.15rem;
+}
+.workspace-recent h3 {
+  font-size: 1rem;
+}
+.workspace-recent .saved-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.workspace-recent .saved-row {
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: 0.7rem;
+  padding: 0.55rem 0.75rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.friends-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 0.8rem;
+}
+.friends-grid > .panel,
+.friends-login {
+  min-width: 0;
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+}
+.friend-rows {
+  display: grid;
+  gap: 0.45rem;
+}
+.friend-row {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.72rem;
+  background: var(--surface2);
+}
+.friend-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+}
+.friend-identity .avatar-badge {
+  flex: none;
+}
+.friends-grid details {
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--line);
+  margin-top: 0.55rem;
+}
+.friends-grid summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding-block: 0.55rem;
+}
+.friend-game-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+.friend-game-links .button {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .profile-edit-layout,
+  .friends-grid,
+  .workspace-recent .saved-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .account-dashboard .public-profile-hero {
+    padding: 0.85rem;
+  }
+  .account-dashboard .public-profile-heading {
+    gap: 0.7rem;
+  }
+  .account-dashboard .public-profile #public-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 15px;
+  }
+}

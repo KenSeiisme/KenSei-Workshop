@@ -1,11 +1,13 @@
-<section class="container page-section profile-page" id="profile-page">
-  <div class="page-intro">
-    <div class="eyebrow">YOUR CORNER OF THE WORKSHOP</div>
-    <h1 id="profile-heading">Your profile<span class="accent">.</span></h1>
-    <p id="profile-intro">
-      A name, a little personality, and your next best score.
-    </p>
-  </div>
+<section
+  class="container page-section profile-page account-dashboard"
+  id="profile-page"
+>
+  <header class="account-hero glass-surface">
+    <div>
+      <h1 id="profile-heading">Your profile<span class="accent">.</span></h1>
+      <p id="profile-intro">Edit your photo, public name and biography.</p>
+    </div>
+  </header>
   <p id="profile-status" class="muted small" role="status">Loading profile…</p>
   <div id="profile-login" class="panel tool-form" hidden>
     <h2>Make this space yours.</h2>
@@ -14,62 +16,90 @@
       Continue with Google
     </button>
   </div>
-  <form id="profile-form" class="panel tool-form profile-editor" hidden>
-    <div class="profile-avatar-row">
-      <span
-        id="profile-avatar"
-        class="avatar-badge avatar-large"
-        aria-label="Avatar preview"
-      ></span>
-      <div>
-        <label class="button secondary file-button"
-          >Choose avatar<input
-            id="profile-avatar-file"
-            type="file"
-            accept="image/jpeg,image/png,image/webp" /></label
-        ><button type="button" class="text-link" id="profile-remove-avatar">
-          Remove avatar
-        </button>
-        <p class="muted small">
-          JPG, PNG or WebP · up to 5 MB. Center-cropped to a square. Uploaded
-          when you save.
-        </p>
+  <div class="profile-edit-layout">
+    <form id="profile-form" class="panel tool-form profile-editor" hidden>
+      <div class="profile-avatar-row">
+        <span
+          id="profile-avatar"
+          class="avatar-badge avatar-large"
+          aria-label="Avatar preview"
+        ></span>
+        <div>
+          <label class="button secondary file-button"
+            >Choose avatar<input
+              id="profile-avatar-file"
+              type="file"
+              accept="image/jpeg,image/png,image/webp" /></label
+          ><button type="button" class="text-link" id="profile-remove-avatar">
+            Remove avatar
+          </button>
+          <p class="muted small">
+            JPG, PNG or WebP · up to 5 MB. Center-cropped to a square. Uploaded
+            when you save.
+          </p>
+        </div>
       </div>
-    </div>
-    <label
-      >Public name<input
-        id="profile-name"
-        maxlength="64"
-        autocomplete="nickname"
-        required
-    /></label>
-    <p class="muted small">
-      2–32 characters. Your Google name is used initially; you can choose
-      another unique name.
-    </p>
-    <label
-      >Biography<textarea
-        id="profile-bio"
-        rows="4"
-        maxlength="600"
-        placeholder="A little about you…"
-      ></textarea>
-    </label>
-    <p class="muted small">
-      <output id="profile-bio-count">0</output> / 300 characters
-    </p>
-    <p class="profile-visibility-note">
-      Your name, avatar, biography and qualifying best typing and game scores
-      are public. Your email, drafts and tool histories stay private.
-    </p>
-    <div class="action-row">
-      <button class="button primary" id="profile-save" type="submit">
-        Save changes</button
-      ><a class="button secondary" id="profile-view-public" href="/profile/"
-        >View public profile ↗</a
-      >
-    </div>
-  </form>
+      <label
+        >Public name<input
+          id="profile-name"
+          maxlength="64"
+          autocomplete="nickname"
+          required
+      /></label>
+      <p class="muted small">
+        2–32 characters. Your Google name is used initially; you can choose
+        another unique name.
+      </p>
+      <label
+        >Biography<textarea
+          id="profile-bio"
+          rows="4"
+          maxlength="600"
+          placeholder="A little about you…"
+        ></textarea>
+      </label>
+      <p class="muted small">
+        <output id="profile-bio-count">0</output> / 300 characters
+      </p>
+      <p class="profile-visibility-note">
+        Your name, avatar, biography and qualifying best typing and game scores
+        are public. Your email, drafts and tool histories stay private.
+      </p>
+      <div class="action-row">
+        <button class="button primary" id="profile-save" type="submit">
+          Save changes</button
+        ><a class="button secondary" id="profile-view-public" href="/profile/"
+          >View public profile ↗</a
+        >
+      </div>
+    </form>
+    <aside class="panel profile-preview" id="profile-preview" hidden>
+      <h2>Public preview</h2>
+      <div class="profile-preview-card">
+        <span
+          class="avatar-badge avatar-large"
+          id="profile-preview-avatar"
+          aria-hidden="true"
+        ></span>
+        <div>
+          <strong id="profile-preview-name"></strong>
+          <p id="profile-preview-bio"></p>
+        </div>
+      </div>
+      <p class="muted small">
+        Your preview updates as you edit. Save changes to update the public
+        page.
+      </p>
+      <button class="button secondary" id="copy-profile-link" type="button">
+        Copy public link
+      </button>
+      <label class="field" id="profile-link-fallback" hidden
+        >Public profile link
+        <input id="profile-link-text" type="url" readonly />
+      </label>
+      <a class="text-link" href="/friends/">Manage friends</a>
+    </aside>
+  </div>
   <article class="public-profile" id="public-profile" hidden>
     <header class="public-profile-hero">
       <div class="public-profile-orbit" aria-hidden="true"></div>
@@ -80,12 +110,12 @@
           aria-label="Profile avatar"
         ></span>
         <div class="public-profile-identity">
-          <div class="eyebrow">THE PERSON BEHIND THE PERSONAL BESTS</div>
           <h1 id="public-name"></h1>
           <p id="public-bio"></p>
           <a class="text-link" id="public-edit-profile" href="/profile/" hidden
             >Edit my profile ↗</a
           >
+          <div id="public-friend-actions" class="friend-actions"></div>
         </div>
       </div>
       <label class="game-effects-control profile-effects"
@@ -99,6 +129,10 @@
         <div>
           <strong id="public-game-count">—</strong
           ><span>games with a ranked best</span>
+        </div>
+        <div>
+          <strong id="public-milestone-total">—</strong
+          ><span>verified milestones</span>
         </div>
         <div>
           <strong id="public-typing-count">0 / 2</strong

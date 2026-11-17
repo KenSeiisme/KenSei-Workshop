@@ -53,6 +53,8 @@ export async function initToolUI() {
         feedback(
           stateFor(message, n.classList.contains("error-text")),
           uiFrom(message),
+          !["focus-timer", "typing-sprint"].includes(tool) ||
+            n.classList.contains("error-text"),
         );
     };
     observeText(node, update);
@@ -111,7 +113,7 @@ export async function initToolUI() {
     }
   });
   window.addEventListener("tool-toast", (event) =>
-    feedback(stateFor(event.detail), event.detail),
+    feedback(stateFor(event.detail), event.detail, false),
   );
   adapt(tool, root);
   example(tool, root);
