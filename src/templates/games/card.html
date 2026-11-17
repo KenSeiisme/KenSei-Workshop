@@ -2,6 +2,7 @@
   class="game-card"
   data-game-card
   data-game-theme="${slug}"
+  data-play-modes="${play_modes}"
   data-category="${category_key}"
   data-search="${search_text}"
 >
@@ -17,9 +18,7 @@
     <div class="game-card-copy">
       <h3 id="game-card-title-${slug}">${name}</h3>
       <p>${description}</p>
-      <div class="game-card-meta">
-        <span>${spec}</span><span>${play_mode}</span>
-      </div>
+      <div class="game-card-meta">${play_tags}</div>
       <p class="hub-card-stats muted small" data-hub-card-stats></p>
       <span class="game-card-play" aria-hidden="true">
         <span>Play game</span> ${svg_arrow}

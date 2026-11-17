@@ -156,16 +156,17 @@ export function mountBoardReview(root) {
   </header>
   <div class="board-review-content" data-review-content hidden>
     <div id="game-board" class="${game}-board archive-board" data-review-board role="${game === "go" ? "img" : "grid"}" tabindex="0" aria-label="Reviewed position"></div>
+    <label class="field">Review move
+      <input data-review-ply type="range" min="0" max="0" value="0">
+    </label>
+    <output data-review-number></output>
     <div class="action-row board-review-actions">
       <button type="button" class="button secondary" data-review-prev>Previous move</button>
       <button type="button" class="button secondary" data-review-next>Next move</button>
       <button type="button" class="button secondary" data-review-flip>Flip board</button>
       <button type="button" class="button primary" data-review-download>Download record</button>
     </div>
-    <label class="field">Review move
-      <input data-review-ply type="range" min="0" max="0" value="0">
-    </label>
-    <output data-review-number></output>
+
   </div>`;
   const $ = (selector) => root.querySelector(selector);
   const board = $("[data-review-board]");

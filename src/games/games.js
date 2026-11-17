@@ -170,6 +170,10 @@ function syncShell() {
       uiFrom(rules(game, active?.difficulty || difficulty()).label),
     ]),
     startFailed,
+    metric:
+      active && !isBoard() && Number.isFinite(active.score)
+        ? String(active.score)
+        : undefined,
     localFallback: localFallbackAvailable,
     saveInfo: saved
       ? `${rules(game, saved.data.difficulty).label} · ${uiDate(new Date(saved.updated_at), { dateStyle: "medium", timeStyle: "short" })} · Local only`
@@ -1059,7 +1063,58 @@ async function initDirectory() {
     clear = $("#hub-game-clear"),
     empty = $("#games-empty"),
     resultCount = $("#hub-game-count");
+  const play = $("#game-play-filter");
+  const categoryButtons = [...filters.querySelectorAll("[data-game-filter]")];
+  const library = $("#games-library");
+  const historyKey = "kensei-games-library-v1";
+  let remembered;
+  try {
+    remembered = JSON.parse(sessionStorage.getItem(historyKey));
+  } catch {}
+  const backwards =
+    performance.getEntriesByType("navigation")[0]?.type === "back_forward";
+  const fromGame =
+    document.referrer.startsWith(location.origin + "/") &&
+    /\/(?:zh-hant\/)?games\/[^/]+\/$/.test(new URL(document.referrer).pathname);
+  const returning = (backwards || fromGame) && !location.hash;
   let category = "all";
+  if (returning && remembered) {
+    if (typeof remembered.query === "string")
+      search.value = remembered.query.slice(0, 200);
+    if (
+      categoryButtons.some(
+        (button) => button.dataset.gameFilter === remembered.category,
+      )
+    )
+      category = remembered.category;
+    if ([...play.options].some((option) => option.value === remembered.play))
+      play.value = remembered.play;
+  }
+  function remember() {
+    try {
+      sessionStorage.setItem(
+        historyKey,
+        JSON.stringify({
+          query: search.value,
+          category,
+          play: play.value,
+          y: window.scrollY,
+        }),
+      );
+    } catch {}
+  }
+  $(".hub-library-jump").addEventListener("click", (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
+      return;
+    event.preventDefault();
+    library.scrollIntoView({ block: "start", behavior: "instant" });
+    search.focus({ preventScroll: true });
+  });
+  grid.addEventListener("click", (event) => {
+    if (event.target.closest(".game-card-link")) remember();
+  });
+  window.addEventListener("pagehide", remember);
+
   const fold = (value) => value.normalize("NFKC").toLowerCase();
   const searchable = cards.map((card) => fold(card.dataset.search));
   function filter() {
@@ -1068,13 +1123,16 @@ async function initDirectory() {
     cards.forEach((card, index) => {
       const found =
         (category === "all" || card.dataset.category === category) &&
+        (play.value === "all" ||
+          card.dataset.playModes.split(" ").includes(play.value)) &&
         terms.every((term) => searchable[index].includes(term));
       card.hidden = !found;
       count += Number(found);
     });
     grid.hidden = count === 0;
     empty.hidden = count > 0;
-    clear.hidden = terms.length === 0 && category === "all";
+    clear.hidden =
+      terms.length === 0 && category === "all" && play.value === "all";
     uiText(
       resultCount,
       count === 1 ? uiMsg("1 game found") : uiMsg("{0} games found", [count]),
@@ -1082,13 +1140,14 @@ async function initDirectory() {
   }
   function selectCategory(button) {
     category = button.dataset.gameFilter;
-    for (const option of filters.querySelectorAll("[data-game-filter]")) {
+    for (const option of categoryButtons) {
       option.classList.toggle("active", option === button);
       option.setAttribute("aria-pressed", String(option === button));
     }
     filter();
   }
   search.addEventListener("input", filter);
+  play.addEventListener("change", filter);
   search.addEventListener("keydown", (event) => {
     if (event.key !== "Enter" || event.isComposing) return;
     const result = grid.querySelector(
@@ -1105,11 +1164,18 @@ async function initDirectory() {
   });
   clear.addEventListener("click", () => {
     search.value = "";
+    play.value = "all";
     selectCategory(filters.querySelector('[data-game-filter="all"]'));
     search.focus();
   });
   // 载入模块前已经输入的搜索词也要生效；目录筛选不依赖 IndexedDB。
-  filter();
+  selectCategory(
+    categoryButtons.find((option) => option.dataset.gameFilter === category),
+  );
+  if (returning && Number.isFinite(remembered?.y))
+    requestAnimationFrame(() =>
+      window.scrollTo({ top: remembered.y, behavior: "instant" }),
+    );
   $("[data-games-directory]").dataset.ready = "true";
   const manageSaves = $("#game-manage-saves");
   manageSaves.onclick = () => {

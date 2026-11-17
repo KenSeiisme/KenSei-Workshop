@@ -368,11 +368,26 @@ def category(game):
     return "Action" if game["category"] == "Arcade" else game["category"]
 
 
+def play_modes(game):
+    slug = game["slug"]
+    modes = ["solo"] if slug != "pong" else []
+    if game["category"] == "Board":
+        modes.append("local")
+    if slug in ("pong", "go", "chess", "xiangqi"):
+        modes.append("online")
+    return modes
+
+
 def play_tags(game):
     modes = ["Solo"] if game["slug"] != "pong" else []
     if game["category"] == "Board" or game["slug"] == "pong":
         modes.append("Multiplayer")
     return "".join(f"<span>{label}</span>" for label in [*modes, category(game)])
+
+
+def directory_mode_tags(game):
+    labels = {"solo": "Solo", "local": "Local two players", "online": "Online"}
+    return "".join(f"<span>{labels[mode]}</span>" for mode in play_modes(game))
 
 
 def directory(games):
@@ -389,16 +404,8 @@ def directory(games):
             name=g["name"],
             preview=preview(g["preview"]),
             description=g["description"],
-            spec=DETAILS[g["slug"]][2],
-            play_mode=(
-                "Local / Computer / Online"
-                if g["slug"] in ("go", "chess", "xiangqi")
-                else (
-                    "Online / Friends"
-                    if g["slug"] == "pong"
-                    else "Computer / Local" if g["category"] == "Board" else "Solo"
-                )
-            ),
+            play_modes=" ".join(play_modes(g)),
+            play_tags=directory_mode_tags(g),
         )
         for g in games
     )
@@ -415,6 +422,13 @@ def directory(games):
         )
         for index, slug in enumerate(FEATURED_GAMES)
     )
+    feature_selectors = "".join(
+        f'<button class="hub-feature-select" type="button" data-hub-goto="{index}" '
+        f'aria-pressed="{"true" if index == 0 else "false"}" disabled>'
+        f'<span class="sr-only">{escape(by_slug[slug]["name"])}</span>'
+        '<span class="hub-feature-track" aria-hidden="true"><span></span></span></button>'
+        for index, slug in enumerate(FEATURED_GAMES)
+    )
     quick_ranks = "".join(
         render_template(
             "games/rank-preview.html",
@@ -428,6 +442,7 @@ def directory(games):
     return render_template(
         "games/directory.html",
         featured=featured,
+        feature_selectors=feature_selectors,
         cards=cards,
         quick_ranks=quick_ranks,
     )
@@ -464,7 +479,7 @@ def game_page(game):
     number, tagline, spec, controls = DETAILS[slug]
     private_only = game["category"] == "Board"
     first_side = (
-        '<label>Play as<select id="game-human-side"><option value="1">First player</option><option value="2">Second player</option></select></label>'
+        '<label>Play as<select id="game-human-side" data-setup-choice><option value="1">First player</option><option value="2">Second player</option></select></label>'
         if private_only
         else ""
     )
@@ -499,7 +514,17 @@ def game_page(game):
         tagline=tagline,
         description=game["description"],
         difficulty_label="Opponent" if private_only else "Difficulty",
-        first_side=first_side,
+        setup_options_button=(
+            '<button type="button" class="button secondary" data-shell-options '
+            'aria-haspopup="dialog" aria-controls="game-setup-drawer">Options</button>'
+            if first_side
+            else ""
+        ),
+        setup_options=(
+            render_template("games/setup-drawer.html", fields=first_side)
+            if first_side
+            else ""
+        ),
         mine_mode=mine_mode,
         preview=idle_preview(slug),
         spec=spec,

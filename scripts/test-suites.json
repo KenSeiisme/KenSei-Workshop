@@ -9,7 +9,8 @@
     ["tests/browser/handoff-recovery.cjs"],
     ["tests/browser/shared-whiteboards.cjs"],
     ["tests/browser/auth.cjs"],
-    ["tests/browser/workspace-match-review.cjs"]
+    ["tests/browser/workspace-match-review.cjs"],
+    ["tests/browser/game-ui-upgrade.cjs"]
   ],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],

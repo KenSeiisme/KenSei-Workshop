@@ -25,10 +25,17 @@ export function mountRecentMatches(root, name) {
     owner,
     request,
     failed = false,
-    more = false;
+    more = false,
+    scrollToHistory = false;
 
   function paint() {
     root.hidden = !owner;
+    if (scrollToHistory && !root.hidden) {
+      scrollToHistory = false;
+      requestAnimationFrame(() =>
+        root.scrollIntoView({ block: "start", behavior: "instant" }),
+      );
+    }
     next.hidden = !more || failed;
     next.disabled = !!request;
     retry.hidden = !failed;
@@ -110,6 +117,14 @@ export function mountRecentMatches(root, name) {
       }
     }
   }
+  function revealHistory() {
+    if (location.hash !== "#hub-recent-title") return;
+    root.open = true;
+    scrollToHistory = true;
+    paint();
+  }
+  window.addEventListener("hashchange", revealHistory);
+  revealHistory();
   game.onchange = () => load();
   next.onclick = () => load(true);
   retry.onclick = () => load(!!rows.length);

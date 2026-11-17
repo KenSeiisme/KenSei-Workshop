@@ -32,11 +32,11 @@
         ></div>
         <section
           id="chess-entry"
+          data-game-launch
           class="chess-overlay chess-entry"
           aria-label="Chess setup"
         >
-          <span class="eyebrow">Your next move starts here.</span>
-          <div class="chess-setup">
+          <div class="chess-setup game-quick-setup" data-quick-setup>
             <label
               >Mode<select id="chess-mode">
                 <option value="ai">Computer</option>
@@ -44,31 +44,62 @@
                 <option value="online">Online</option>
               </select></label
             >
-            <label
-              >Time control<select id="chess-clock">
-                <option value="none">Unlimited · local only</option>
-                <option value="5+3">5 + 3</option>
-                <option value="10+5">10 + 5</option>
-                <option value="15+10">15 + 10</option>
-              </select></label
+            <button
+              type="button"
+              class="button secondary"
+              data-shell-options
+              aria-haspopup="dialog"
+              aria-controls="chess-setup-drawer"
             >
-            <label id="chess-level-label"
-              >Computer level<select id="chess-level">
-                <option value="1">Level 1</option>
-                <option value="2" selected>Level 2</option>
-                <option value="3">Level 3</option>
-                <option value="4">Level 4</option>
-                <option value="5">Level 5</option>
-              </select></label
-            >
-            <label id="chess-side-label"
-              >Play as<select id="chess-side">
-                <option value="1">White</option>
-                <option value="-1">Black</option>
-                <option value="0">Random</option>
-              </select></label
-            >
+              Options
+            </button>
           </div>
+          <dialog
+            id="chess-setup-drawer"
+            class="game-shell-dialog game-setup-drawer"
+            data-shell-options-dialog
+            aria-labelledby="chess-setup-title"
+          >
+            <button
+              class="icon-button dialog-close"
+              type="button"
+              data-shell-close
+              aria-label="Close settings"
+            >
+              ${svg_close}
+            </button>
+            <h2 id="chess-setup-title">Game setup</h2>
+            <div class="chess-setup">
+              <label
+                >Time control<select id="chess-clock">
+                  <option value="none">Unlimited · local only</option>
+                  <option value="5+3">5 + 3</option>
+                  <option value="10+5">10 + 5</option>
+                  <option value="15+10">15 + 10</option>
+                </select></label
+              >
+              <label id="chess-level-label"
+                >Computer level<select id="chess-level" data-setup-choice>
+                  <option value="1">Level 1</option>
+                  <option value="2" selected>Level 2</option>
+                  <option value="3">Level 3</option>
+                  <option value="4">Level 4</option>
+                  <option value="5">Level 5</option>
+                </select></label
+              >
+              <label id="chess-side-label"
+                >Play as<select id="chess-side" data-setup-choice>
+                  <option value="1">White</option>
+                  <option value="-1">Black</option>
+                  <option value="0">Random</option>
+                </select></label
+              >
+            </div>
+            <button class="button primary" type="button" data-shell-close>
+              Done
+            </button>
+          </dialog>
+          <p class="small muted" data-shell-options-summary hidden></p>
           <p class="small muted" id="chess-setup-summary">
             Standard chess · 8 × 8
           </p>
@@ -85,33 +116,71 @@
             >
           </p>
           <div id="chess-online-entry" hidden>
-            <div class="chess-actions">
-              <button class="button primary" id="chess-create">
-                Create room</button
-              ><button class="button secondary" id="chess-find">
+            <div class="game-online-launch" data-online-launch>
+              <button class="button primary" type="button" id="chess-find">
                 Find opponent
               </button>
-            </div>
-            <div class="chess-code-row">
-              <label
-                >Room code<input
-                  id="chess-code"
-                  maxlength="8"
-                  autocomplete="off"
-                  autocapitalize="characters" /></label
-              ><button class="button secondary" id="chess-join">
-                Join room
+              <button
+                class="button secondary"
+                type="button"
+                data-shell-invite
+                aria-haspopup="dialog"
+                aria-controls="chess-invite-drawer"
+              >
+                Invite / Join
               </button>
             </div>
-            <p class="small muted">
-              Online play requires Google sign-in. Standard human matches count
-              toward public statistics.
-            </p>
+            <p class="small muted" data-invite-preview hidden></p>
+            <dialog
+              id="chess-invite-drawer"
+              class="game-shell-dialog game-setup-drawer"
+              data-shell-invite-dialog
+              aria-labelledby="chess-invite-title"
+            >
+              <button
+                class="icon-button dialog-close"
+                type="button"
+                data-shell-close
+                aria-label="Close"
+              >
+                ${svg_close}
+              </button>
+              <h2 id="chess-invite-title">Invite or join</h2>
+              <button
+                class="button primary"
+                type="button"
+                id="chess-create"
+                data-shell-close
+              >
+                Create room
+              </button>
+              <div class="chess-code-row">
+                <label
+                  >Room code<input
+                    id="chess-code"
+                    maxlength="8"
+                    autocomplete="off"
+                    autocapitalize="characters" /></label
+                ><button
+                  class="button secondary"
+                  id="chess-join"
+                  type="button"
+                  data-invite-join
+                  data-shell-close
+                >
+                  Join room
+                </button>
+              </div>
+              <p class="small muted">
+                Online play requires Google sign-in. Standard human matches
+                count toward public statistics.
+              </p>
+            </dialog>
           </div>
           <p class="small" id="chess-save-info"></p>
           <p id="chess-entry-status" role="status"></p>
         </section>
-        <section id="chess-room" class="chess-overlay" hidden>
+        <section id="chess-room" data-game-lobby class="chess-overlay" hidden>
           <h2 id="chess-room-title">Waiting for your opponent</h2>
           <p id="chess-room-summary"></p>
           <div id="chess-invite">
@@ -131,12 +200,16 @@
           <h2>Paused · local only</h2>
           <button class="button primary" id="chess-resume">Continue</button>
         </section>
-        <section id="chess-result" class="chess-overlay" hidden>
+        <section
+          id="chess-result"
+          data-match-result
+          class="chess-overlay"
+          hidden
+        >
           <h2 id="chess-result-title"></h2>
           <p id="chess-result-detail"></p>
           <div class="chess-actions">
-            <button class="button primary" id="chess-again">
-              New game setup</button
+            <button class="button primary" id="chess-again">Play again</button
             ><button class="button secondary" id="chess-review">
               Review game</button
             ><button class="button secondary" id="chess-result-pgn">

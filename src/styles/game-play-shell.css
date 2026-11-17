@@ -1319,3 +1319,140 @@ body.game-is-focused > .footer {
   padding-inline-start: 0.65rem;
   border-inline-start: 2px solid var(--accent);
 }
+
+[data-play-shell] [data-game-launch],
+[data-play-shell] [data-game-lobby],
+[data-play-shell] [data-match-result],
+[data-play-shell] #game-result {
+  border-color: color-mix(in srgb, var(--game-accent) 55%, var(--line));
+  box-shadow:
+    0 12px 40px #08060c64,
+    0 0 26px color-mix(in srgb, var(--game-accent) 14%, transparent);
+}
+[data-play-shell] [data-game-launch] {
+  background: color-mix(in srgb, var(--surface) 94%, var(--game-accent));
+  color: var(--text);
+}
+[data-play-shell] .game-quick-setup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 8px;
+}
+[data-play-shell]
+  :is(.game-quick-setup, .game-setup-drawer)
+  :is(select, input:not([type="checkbox"])) {
+  min-height: 44px;
+}
+[data-play-shell] :is([data-shell-options-summary], [data-invite-preview]) {
+  margin-block: 5px;
+}
+[data-play-shell] .game-online-launch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+[data-play-shell] .game-online-launch > .button {
+  flex: 1 0 auto;
+  min-height: 44px;
+}
+[data-play-shell] .game-setup-drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(100%, 440px);
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 24px max(18px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom)) 20px;
+  border-radius: 16px 0 0 16px;
+  background: color-mix(in srgb, var(--surface) 94%, var(--game-accent));
+  color: var(--text);
+  text-align: start;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+@supports (backdrop-filter: blur(16px)) {
+  @media (prefers-reduced-transparency: no-preference) {
+    [data-play-shell] .game-setup-drawer {
+      backdrop-filter: blur(18px);
+      background: color-mix(in srgb, var(--surface) 95%, transparent);
+    }
+  }
+}
+[data-play-shell]
+  .game-setup-drawer
+  :is(
+    .go-setup,
+    .chess-setup,
+    .xiangqi-setup,
+    .go-code-row,
+    .chess-code-row,
+    .xiangqi-code-row
+  ) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+[data-play-shell]
+  .game-setup-drawer
+  > :is(.button, .go-setup, .chess-setup, .xiangqi-setup, div) {
+  margin-block: 10px;
+}
+[data-play-shell] .game-setup-drawer .dialog-close {
+  min-height: 44px;
+  min-width: 44px;
+}
+[data-play-shell] [data-match-result],
+[data-play-shell] #game-result {
+  background: color-mix(in srgb, var(--surface) 88%, var(--game-accent));
+  color: var(--text);
+}
+[data-play-shell] [data-game-lobby] :is(h2, p),
+[data-play-shell] [data-match-result] :is(h2, p) {
+  margin-block: 4px 8px;
+}
+[data-play-shell]
+  :is(.game-metrics, .go-hud, .chess-hud, .xiangqi-hud, .pong-score)
+  strong {
+  font-variant-numeric: tabular-nums;
+}
+[data-play-shell] :is(.game-control-deck, .pong-room-controls) .button {
+  min-height: 44px;
+}
+@media (max-width: 640px) {
+  [data-play-shell] .game-setup-drawer {
+    inset: auto 0 0;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    max-height: min(78dvh, 560px);
+    border-radius: 18px 18px 0 0;
+  }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  [data-play-shell] .game-setup-drawer {
+    max-height: 100dvh;
+  }
+  [data-play-shell] .game-entry-panel > [data-shell-options-summary] {
+    display: none;
+  }
+}
+
+[data-play-shell] :is(.go-hud, .chess-hud, .xiangqi-hud) > div {
+  border-block-end: 2px solid transparent;
+  border-radius: 6px;
+}
+[data-play-shell]
+  :is(
+    .go-hud[data-turn="1"] > :first-child,
+    .go-hud[data-turn="-1"] > :last-child,
+    .chess-hud[data-turn="1"] > :first-child,
+    .chess-hud[data-turn="-1"] > :last-child,
+    .xiangqi-hud[data-turn="1"] > :first-child,
+    .xiangqi-hud[data-turn="-1"] > :last-child
+  ) {
+  border-block-end-color: var(--game-accent);
+  background: color-mix(in srgb, var(--game-accent) 12%, transparent);
+}

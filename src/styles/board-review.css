@@ -21,7 +21,18 @@
   border-radius: var(--radius, 12px);
 }
 .board-review-actions {
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+@media (max-width: 640px) {
+  .board-review-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.board-review-content [data-review-number] {
+  font-variant-numeric: tabular-nums;
 }
 .board-review-actions button {
   min-height: 44px;

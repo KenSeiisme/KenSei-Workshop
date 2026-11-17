@@ -68,6 +68,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     }
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.selectOption("#chess-mode", "online");
+    await page.click("[data-shell-invite]");
     await page.click("#chess-create");
     await page.waitForSelector("#auth-dialog[open]");
     assert.doesNotMatch(

@@ -1,3 +1,4 @@
+import { animateElement } from "./effects.js";
 import { uiMsg, uiFrom, uiText, uiAttr } from "../site/ui.js";
 // 仅管理页面布局和焦点；对局状态、计时、随机数及 Public 资格由调用方管理。
 export function mountPlayShell(root, { beforeCover = () => true } = {}) {
@@ -8,6 +9,9 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     initialPreview = board?.innerHTML,
     initialClass = board?.className,
     settings = $("[data-shell-settings-dialog]"),
+    options = $("[data-shell-options-dialog]"),
+    invite = $("[data-shell-invite-dialog]"),
+    details = $("[data-shell-options-summary]"),
     menu = $("[data-shell-menu-dialog]"),
     info = $("[data-shell-info-dialog]"),
     entry = $("[data-shell-entry]"),
@@ -27,7 +31,9 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     disposed = false,
     previousSession = null,
     last = {},
-    returnFocus = null;
+    returnFocus = null,
+    metricCue,
+    lastMetricCue = 0;
   const move = (node, parent) => {
     if (node && parent && node.parentElement !== parent) parent.append(node);
   };
@@ -88,19 +94,72 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     returnFocus = document.activeElement;
     closeDialogs();
     dialog.showModal();
+    if (dialog.classList.contains("game-setup-drawer"))
+      animateElement(
+        dialog,
+        [
+          {
+            opacity: 0,
+            transform: matchMedia("(max-width: 640px)").matches
+              ? "translateY(18px)"
+              : "translateX(18px)",
+          },
+          { opacity: 1, transform: "none" },
+        ],
+        { duration: 200, easing: "ease-out" },
+      );
   }
   function focusSetup() {
     const target = [
-      ...root.querySelectorAll("#game-setup select, #game-start"),
+      ...root.querySelectorAll(
+        "[data-quick-setup] select, #game-setup select, #game-start",
+      ),
     ].find((node) => !node.disabled && node.getClientRects().length);
     target?.focus({ preventScroll: true });
   }
   for (const button of root.querySelectorAll("[data-shell-setup]"))
     button.addEventListener("click", () => {
-      if (!entry) openDialog(settings);
+      if (options && state === "ready") openDialog(options);
+      else if (!entry) openDialog(settings);
       else if (state === "ready") focusSetup();
       else openDialog(menu);
     });
+  function paintSetupChoices() {
+    if (!details) return;
+    const online = $("[data-quick-setup] select")?.value === "online";
+    const labels = [...options.querySelectorAll("[data-setup-choice]")]
+      .filter(
+        (select) =>
+          !select.closest("label[hidden]") &&
+          (!select.hasAttribute("data-setup-online") || online),
+      )
+      .map((select) => select.selectedOptions[0]?.textContent.trim())
+      .filter(Boolean);
+    details.hidden = !labels.length;
+    uiText(details, labels.join(" · "));
+  }
+  if (options) {
+    root.addEventListener("change", paintSetupChoices);
+    window.addEventListener("locale-change", paintSetupChoices);
+    queueMicrotask(paintSetupChoices);
+  }
+  for (const button of root.querySelectorAll("[data-shell-options]"))
+    button.addEventListener("click", () => openDialog(options));
+  for (const button of root.querySelectorAll("[data-shell-invite]"))
+    button.addEventListener("click", () => openDialog(invite));
+
+  const inviteCode = new URLSearchParams(location.search).get("code");
+  if (invite && /^[a-z0-9]{8}$/i.test(inviteCode || "")) {
+    const join = invite.querySelector("[data-invite-join]");
+    const launch = $("[data-online-launch]");
+    const find = launch.querySelector(".primary");
+    find.classList.replace("primary", "secondary");
+    join.classList.replace("secondary", "primary");
+    launch.prepend(join);
+    const preview = $("[data-invite-preview]");
+    preview.hidden = false;
+    uiText(preview, uiMsg("Room code · {0}", [inviteCode.toUpperCase()]));
+  }
   for (const button of root.querySelectorAll("[data-shell-settings]"))
     button.addEventListener("click", () => openDialog(settings));
   for (const button of root.querySelectorAll("[data-shell-menu]"))
@@ -135,6 +194,25 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
     const changed =
       state !== oldState ||
       Object.keys(next).some((key) => next[key] !== last[key]);
+    if (
+      state === "playing" &&
+      oldState === "playing" &&
+      typeof next.metric === "string" &&
+      typeof last.metric === "string" &&
+      next.metric !== last.metric &&
+      performance.now() - lastMetricCue > 150
+    ) {
+      lastMetricCue = performance.now();
+      metricCue?.cancel();
+      metricCue = animateElement(
+        $(".game-primary-metric strong, .pong-score"),
+        [
+          { opacity: 0.6, transform: "scale(0.96)" },
+          { opacity: 1, transform: "scale(1)" },
+        ],
+        { duration: 180, easing: "ease-out" },
+      );
+    }
     last = { ...next };
     if (!changed) return;
     root.dataset.shellState = state;
@@ -190,6 +268,8 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
       move(discard, state === "complete" ? resultActions : entryActions);
       move(localStart, destination);
       move(saveLine, $("[data-shell-status-slot]"));
+      if (start && oldState !== state && state === "complete")
+        uiText(start, uiMsg("Play again"));
       if (next.startFailed && start) uiText(start, uiMsg("Retry start"));
     }
     const setupButton = $("#game-settings-change");
@@ -206,6 +286,23 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
       restore.disabled = !!next.busy;
       restore.classList.remove("primary");
       restore.classList.add("secondary");
+    }
+    if (state !== oldState && ["complete", "finished"].includes(state)) {
+      const completed = state;
+      requestAnimationFrame(() => {
+        if (disposed || state !== completed) return;
+        const result = $(
+          "#game-result:not([hidden]), [data-match-result]:not([hidden])",
+        );
+        animateElement(
+          result,
+          [
+            { opacity: 0.5, translate: "0 6px", filter: "brightness(1.25)" },
+            { opacity: 1, translate: "0 0", filter: "none" },
+          ],
+          { duration: 250, easing: "ease-out" },
+        );
+      });
     }
     if (state === "playing" && oldState !== "playing") {
       closeDialogs();

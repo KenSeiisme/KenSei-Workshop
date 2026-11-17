@@ -111,9 +111,10 @@ export function createClient() {
     );
 
     await page.goto(base + "/zh-hant/games/");
+    await page.locator("#hub-recent-title").click();
     await page.locator("[data-recent-list] a").waitFor();
     assert.match(
-      await page.locator("[data-hub-recent] h2").textContent(),
+      await page.locator("[data-hub-recent] summary").textContent(),
       /近期對局/,
     );
     await page.locator("[data-live-game-list] a").waitFor();

@@ -120,6 +120,7 @@ function renderRoom() {
       : "ready",
     label: room ? `Private · ${room.status}` : "Online · Friends",
     session: live ? room.id : null,
+    metric: room ? `${room.score_host}:${room.score_guest}` : undefined,
   });
   $("#pong-create").disabled = busy || !!live;
   $("#pong-join").disabled = busy || !!live;

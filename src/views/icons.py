@@ -1,6 +1,7 @@
 """Shared line icons for static templates and runtime controls."""
 
 ICONS = {
+    "profile": '<circle cx="12" cy="8" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/>',
     "cards": '<rect x="5" y="4" width="16" height="17" rx="2"/><path d="M2 17V2h15M9 9h8M9 14h6"/>',
     "calculator": '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M7 6h10M7 11h2M13 11h4M7 16h2M13 16h4"/>',
     "tick": '<path d="m5 12 4 4L19 6"/>',

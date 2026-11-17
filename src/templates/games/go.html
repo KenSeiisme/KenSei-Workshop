@@ -36,9 +36,13 @@
             aria-label="Go board. Arrow keys select an intersection; Enter places a stone."
           ></canvas>
         </div>
-        <section class="go-entry" id="go-entry" aria-label="Go setup">
-          <span class="eyebrow">A quiet board. A world of moves.</span>
-          <div class="go-setup">
+        <section
+          class="go-entry"
+          id="go-entry"
+          data-game-launch
+          aria-label="Go setup"
+        >
+          <div class="go-setup game-quick-setup" data-quick-setup>
             <label
               >Mode<select id="go-mode">
                 <option value="ai">Computer</option>
@@ -46,72 +50,107 @@
                 <option value="online">Online</option>
               </select></label
             >
-            <label
-              >Rules<select id="go-rule">
-                <option value="chinese">Chinese</option>
-                <option value="japanese">Japanese 1989</option>
-                <option value="aga">AGA</option>
-              </select></label
+            <button
+              type="button"
+              class="button secondary"
+              data-shell-options
+              aria-haspopup="dialog"
+              aria-controls="go-setup-drawer"
             >
-            <label
-              >Board size<select id="go-size">
-                <option value="9">9 × 9</option>
-                <option value="13">13 × 13</option>
-                <option value="19">19 × 19</option>
-              </select></label
-            >
-            <label id="go-ai-label"
-              >Computer level<select id="go-level">
-                <option value="1">Beginner 1</option>
-                <option value="2">Beginner 2</option>
-                <option value="3">Beginner 3</option>
-              </select></label
-            >
-            <label
-              ><input type="checkbox" id="go-training" /> Single-color
-              memory</label
-            >
-            <label id="go-color-label"
-              >Play as<select id="go-human">
-                <option value="1">Black</option>
-                <option value="-1">White</option>
-              </select></label
-            >
+              Options
+            </button>
           </div>
-          <p id="go-setup-summary" class="small muted"></p>
-          <details id="go-advanced">
-            <summary>Advanced settings · local / invitation</summary>
+          <dialog
+            id="go-setup-drawer"
+            class="game-shell-dialog game-setup-drawer"
+            data-shell-options-dialog
+            aria-labelledby="go-setup-title"
+          >
+            <button
+              class="icon-button dialog-close"
+              type="button"
+              data-shell-close
+              aria-label="Close settings"
+            >
+              ${svg_close}
+            </button>
+            <h2 id="go-setup-title">Game setup</h2>
             <div class="go-setup">
               <label
-                >Handicap<select id="go-handicap">
-                  <option value="0">Even game</option>
-                  <option value="1">No komi · Black first</option>
-                  <option value="2">2 stones</option>
-                  <option value="3">3 stones</option>
-                  <option value="4">4 stones</option>
-                  <option value="5">5 stones</option>
-                  <option value="6">6 stones</option>
-                  <option value="7">7 stones</option>
-                  <option value="8">8 stones</option>
-                  <option value="9">9 stones</option>
+                >Rules<select id="go-rule">
+                  <option value="chinese">Chinese</option>
+                  <option value="japanese">Japanese 1989</option>
+                  <option value="aga">AGA</option>
                 </select></label
-              ><label
-                >Komi · points<input
-                  id="go-komi"
-                  type="number"
-                  step="0.5"
-                  min="-100"
-                  max="100"
-                  value="7.5" /></label
-              ><label
-                >Online clock<select id="go-clock">
-                  <option value="9">5 min + 3 × 20 sec</option>
-                  <option value="13">10 min + 3 × 30 sec</option>
-                  <option value="19">20 min + 5 × 30 sec</option>
+              >
+              <label
+                >Board size<select id="go-size">
+                  <option value="9">9 × 9</option>
+                  <option value="13">13 × 13</option>
+                  <option value="19">19 × 19</option>
+                </select></label
+              >
+              <label id="go-ai-label"
+                >Computer level<select id="go-level" data-setup-choice>
+                  <option value="1">Beginner 1</option>
+                  <option value="2">Beginner 2</option>
+                  <option value="3">Beginner 3</option>
+                </select></label
+              >
+              <label
+                ><input type="checkbox" id="go-training" /> Single-color
+                memory</label
+              >
+              <label id="go-color-label"
+                >Play as<select id="go-human" data-setup-choice>
+                  <option value="1">Black</option>
+                  <option value="-1">White</option>
                 </select></label
               >
             </div>
-          </details>
+            <div id="go-advanced">
+              <div class="go-setup">
+                <label
+                  >Handicap<select id="go-handicap">
+                    <option value="0">Even game</option>
+                    <option value="1">No komi · Black first</option>
+                    <option value="2">2 stones</option>
+                    <option value="3">3 stones</option>
+                    <option value="4">4 stones</option>
+                    <option value="5">5 stones</option>
+                    <option value="6">6 stones</option>
+                    <option value="7">7 stones</option>
+                    <option value="8">8 stones</option>
+                    <option value="9">9 stones</option>
+                  </select></label
+                ><label
+                  >Komi · points<input
+                    id="go-komi"
+                    type="number"
+                    step="0.5"
+                    min="-100"
+                    max="100"
+                    value="7.5" /></label
+                ><label
+                  >Online clock<select
+                    id="go-clock"
+                    data-setup-choice
+                    data-setup-online
+                  >
+                    <option value="9">5 min + 3 × 20 sec</option>
+                    <option value="13">10 min + 3 × 30 sec</option>
+                    <option value="19">20 min + 5 × 30 sec</option>
+                  </select></label
+                >
+              </div>
+            </div>
+
+            <button class="button primary" type="button" data-shell-close>
+              Done
+            </button>
+          </dialog>
+          <p class="small muted" data-shell-options-summary hidden></p>
+          <p id="go-setup-summary" class="small muted"></p>
           <div class="go-start-actions">
             <button class="button primary" id="go-start">Start game</button
             ><button class="button secondary" id="go-continue" hidden>
@@ -125,29 +164,75 @@
             >
           </p>
           <div id="go-online-entry" hidden>
-            <div class="go-start-actions">
-              <button class="button primary" id="go-create">Create room</button
-              ><button class="button secondary" id="go-find">
+            <div class="game-online-launch" data-online-launch>
+              <button class="button primary" type="button" id="go-find">
                 Find opponent
               </button>
+              <button
+                class="button secondary"
+                type="button"
+                data-shell-invite
+                aria-haspopup="dialog"
+                aria-controls="go-invite-drawer"
+              >
+                Invite / Join
+              </button>
             </div>
-            <div class="go-code-row">
-              <label
-                >Room code<input
-                  id="go-code"
-                  maxlength="8"
-                  autocomplete="off"
-                  autocapitalize="characters" /></label
-              ><button class="button secondary" id="go-join">Join room</button>
-            </div>
-            <p class="small muted">
-              Online play requires Google sign-in. Standard human matches count
-              toward public statistics.
-            </p>
+            <p class="small muted" data-invite-preview hidden></p>
+            <dialog
+              id="go-invite-drawer"
+              class="game-shell-dialog game-setup-drawer"
+              data-shell-invite-dialog
+              aria-labelledby="go-invite-title"
+            >
+              <button
+                class="icon-button dialog-close"
+                type="button"
+                data-shell-close
+                aria-label="Close"
+              >
+                ${svg_close}
+              </button>
+              <h2 id="go-invite-title">Invite or join</h2>
+              <button
+                class="button primary"
+                type="button"
+                id="go-create"
+                data-shell-close
+              >
+                Create room
+              </button>
+              <div class="go-code-row">
+                <label
+                  >Room code<input
+                    id="go-code"
+                    maxlength="8"
+                    autocomplete="off"
+                    autocapitalize="characters" /></label
+                ><button
+                  class="button secondary"
+                  id="go-join"
+                  type="button"
+                  data-invite-join
+                  data-shell-close
+                >
+                  Join room
+                </button>
+              </div>
+              <p class="small muted">
+                Online play requires Google sign-in. Standard human matches
+                count toward public statistics.
+              </p>
+            </dialog>
           </div>
           <p id="go-save-info" class="small muted"></p>
         </section>
-        <section id="go-room-panel" class="go-room-panel" hidden>
+        <section
+          id="go-room-panel"
+          data-game-lobby
+          class="go-room-panel"
+          hidden
+        >
           <h2 id="go-room-title">Waiting for your opponent</h2>
           <p id="go-room-summary"></p>
           <div id="go-invite">
@@ -164,11 +249,11 @@
           ><button class="button primary" id="go-ready">Ready</button
           ><button class="button secondary" id="go-cancel-wait">Cancel</button>
         </section>
-        <section id="go-result" class="go-result" hidden>
+        <section id="go-result" data-match-result class="go-result" hidden>
           <h2 id="go-result-title"></h2>
           <p id="go-result-detail"></p>
           <div class="go-start-actions">
-            <button class="button primary" id="go-again">New game setup</button
+            <button class="button primary" id="go-again">Play again</button
             ><button class="button secondary" id="go-review">Review game</button
             ><button class="button secondary" id="go-export-result">
               Download SGF
