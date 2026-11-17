@@ -246,6 +246,9 @@
   .projects-page .listing-projects {
     --project-columns: repeat(2, minmax(0, 1fr));
   }
+  .tools-page .workshop-catalog-heading .page-intro p {
+    line-height: 1.45;
+  }
   .tool-page .workshop-tool-toolbar {
     grid-template-columns: auto minmax(0, 1fr) auto;
     padding-inline: 0;
