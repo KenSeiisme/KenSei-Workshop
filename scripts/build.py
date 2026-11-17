@@ -280,7 +280,7 @@ pages["projects"] = (
 )
 pages["tools"] = (
     "Tools",
-    f'<section class="container page-section tools-page"><div class="workshop-catalog-heading">{page_intro("", "Tools", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{motion_control(icon_only=True)}</div>{tool_directory(illustrated=True)}</section>',
+    f'<section class="container page-section tools-page"><div class="workshop-catalog-heading">{page_intro("", "Tools", "Work with files, words and everyday tasks.")}{motion_control(icon_only=True)}</div>{tool_directory(illustrated=True)}</section>',
     "Tools",
 )
 

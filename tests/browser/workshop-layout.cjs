@@ -40,6 +40,19 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       await layer.locator(".workshop-bubble-anchor:visible").count(),
       4,
     );
+    await page.evaluate(() => {
+      Object.defineProperty(document, "hidden", {
+        configurable: true,
+        value: true,
+      });
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
+    assert.equal(await layer.getAttribute("data-motion-running"), null);
+    assert.notEqual(await layer.getAttribute("data-motion-enabled"), null);
+    await page.evaluate(() => {
+      delete document.hidden;
+      document.dispatchEvent(new Event("visibilitychange"));
+    });
     await motion.click();
     assert.equal(await motion.getAttribute("aria-pressed"), "false");
     await open("/");
@@ -160,7 +173,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       [683, 384],
     ]) {
       await page.setViewportSize({ width, height });
-      for (const path of ["/tools/", "/zh-hant/games/", "/projects/"]) {
+      const paths = ["/tools/", "/games/", "/projects/"];
+      for (const path of [
+        ...paths,
+        ...paths.map((path) => "/zh-hant" + path),
+      ]) {
         await open(path);
         await motion.waitFor();
         for (const theme of ["dark", "light"]) {
@@ -168,6 +185,16 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
             document.documentElement.dataset.siteTheme = theme;
           }, theme);
           assert(await noOverflow(), path + " " + width + " " + theme);
+        }
+        if (height >= 640 && width <= 390 && path.endsWith("/tools/")) {
+          const firstCard = await page
+            .locator(".tool-card")
+            .first()
+            .boundingBox();
+          assert(
+            firstCard && firstCard.y <= 420,
+            path + " first card below 420px",
+          );
         }
         assert.equal(
           await layer.locator(".workshop-bubble-anchor:visible").count(),
