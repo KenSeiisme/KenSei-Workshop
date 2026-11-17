@@ -10,7 +10,8 @@
     ["tests/browser/shared-whiteboards.cjs"],
     ["tests/browser/auth.cjs"],
     ["tests/browser/workspace-match-review.cjs"],
-    ["tests/browser/game-ui-upgrade.cjs"]
+    ["tests/browser/game-ui-upgrade.cjs"],
+    ["tests/browser/workshop-layout.cjs"]
   ],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],

@@ -15,7 +15,7 @@ SOURCE = ROOT / "src"
 SITE = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(SOURCE / "views"))
-from template_renderer import render_template
+from template_renderer import motion_control, render_template
 from icons import icon
 from tool_previews import tool_preview
 from studio_view import view as studio_view, copy_update_feed
@@ -39,6 +39,7 @@ from games_view import (
     leaderboards,
 )
 from home_view import view as home_view
+from workshop_scene import scene
 
 # 后面的工具视图优先，保持既有的目录合并顺序。
 for views in (INTERACTIVE_VIEWS, DAILY_VIEWS, MEDIA_DATA_VIEWS, STUDY_FILE_VIEWS):
@@ -231,13 +232,15 @@ def header(active):
 
 
 def layout(title, content, active="Home", route="", locale="en"):
+    atmosphere = scene(route)
     return render_template(
         "site/layout.html",
         google_site_verification=SITE["google_site_verification"],
         locale=locale,
         head_html=i18n.head(route, locale, SITE["site_url"].rstrip("/")),
         header=header(active),
-        content=content,
+        main_class="workshop-scene" if atmosphere else "",
+        content=atmosphere + content,
     )
 
 
@@ -249,7 +252,8 @@ def tool_directory(illustrated=False):
 
 
 def page_intro(label, title, desc):
-    return f'<div class="page-intro"><div class="eyebrow">{label}</div><h1>{title}<span class="accent">.</span></h1><p>{desc}</p></div>'
+    eyebrow = f'<div class="eyebrow">{label}</div>' if label else ""
+    return f'<div class="page-intro">{eyebrow}<h1>{title}<span class="accent">.</span></h1><p>{desc}</p></div>'
 
 
 pages = {
@@ -264,17 +268,17 @@ pages["projects"] = (
     render_template(
         "pages/projects.html",
         intro=page_intro(
-            "THE PROJECT SHELF",
-            "Ideas, made tangible",
+            "",
+            "Projects",
             "Websites, software and creative experiments. Each one starts with a little curiosity.",
         ),
-        project_cards="".join((project_card(p) for p in PROJECTS)),
+        project_cards="".join(project_card(p, featured=p[0] == "kensei-studio") for p in PROJECTS),
     ),
     "Projects",
 )
 pages["tools"] = (
     "Tools",
-    f'<section class="container page-section tools-page">{page_intro("THE EVERYDAY TOOLBOX", "A little help goes a long way", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{tool_directory(illustrated=True)}</section>',
+    f'<section class="container page-section tools-page"><div class="workshop-catalog-heading">{page_intro("", "Tools", "Everyday tools for files, words, colors, connections and focus. Local tools need no sign-up.")}{motion_control(icon_only=True)}</div>{tool_directory(illustrated=True)}</section>',
     "Tools",
 )
 

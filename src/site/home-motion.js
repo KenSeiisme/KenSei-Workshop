@@ -1,13 +1,15 @@
 import { mountHomeDepth } from "./home-depth.js";
 
-const preferenceKey = "kensei-home-motion-v1";
+import {
+  backgroundMotion,
+  observeMotionVisibility,
+} from "./background-motion.js";
 const sceneSelector = ".home-intro, .home-section";
 
 export function mountHomeMotion(root) {
   if (!("IntersectionObserver" in window) || !Element.prototype.animate) return;
 
   const toggle = root.querySelector("[data-home-motion-toggle]");
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const wide = matchMedia("(min-width: 1050px) and (min-height: 700px)");
   const scenes = [...root.querySelectorAll(sceneSelector)];
   const anchors = [...root.querySelectorAll(".home-bubble-anchor")];
@@ -16,7 +18,6 @@ export function mountHomeMotion(root) {
   const gridVisible = new Set();
   const pendingEntry = new Set();
   const effects = new Map();
-  let preference = true;
   let frame = 0;
   let lastY = scrollY;
   let movingDown = scrollY > 0;
@@ -29,11 +30,7 @@ export function mountHomeMotion(root) {
     return node;
   });
 
-  try {
-    preference = localStorage.getItem(preferenceKey) !== "off";
-  } catch {}
-
-  const enabled = () => preference && !reduced.matches;
+  const enabled = backgroundMotion.enabled;
   const playing = () => enabled() && !document.hidden;
 
   function play(scene, element, frames, options, particle = false) {
@@ -157,7 +154,8 @@ export function mountHomeMotion(root) {
   );
 
   // Observe bubble silhouettes independently of their slow animated offset.
-  const bubbleVisibility = new IntersectionObserver(
+  observeMotionVisibility(
+    anchors,
     (entries) => {
       for (const { target, isIntersecting } of entries)
         target.toggleAttribute("data-home-bubble-visible", isIntersecting);
@@ -234,8 +232,8 @@ export function mountHomeMotion(root) {
     root.dataset.homeMotion = enabled() ? "on" : "off";
     root.toggleAttribute("data-home-visible", playing());
     toggle.setAttribute("aria-pressed", String(enabled()));
-    toggle.setAttribute("aria-disabled", String(reduced.matches));
-    if (reduced.matches)
+    toggle.setAttribute("aria-disabled", String(backgroundMotion.reduced()));
+    if (backgroundMotion.reduced())
       toggle.setAttribute("aria-describedby", "home-motion-system");
     else toggle.removeAttribute("aria-describedby");
     if (!playing() || !wide.matches) {
@@ -250,7 +248,6 @@ export function mountHomeMotion(root) {
     } else queuePaint();
   }
 
-  for (const anchor of anchors) bubbleVisibility.observe(anchor);
   for (const scene of scenes) {
     visibility.observe(scene);
     const cards = scene.querySelector(".home-cards");
@@ -272,7 +269,7 @@ export function mountHomeMotion(root) {
     },
     { passive: true },
   );
-  reduced.addEventListener("change", sync);
+  backgroundMotion.subscribe(sync);
   wide.addEventListener("change", () => {
     cancelEffects(null, true);
     fitBubbleBudget();
@@ -283,14 +280,7 @@ export function mountHomeMotion(root) {
     lastBurst = performance.now();
     sync();
   });
-  toggle.addEventListener("click", () => {
-    if (reduced.matches) return;
-    preference = !preference;
-    try {
-      localStorage.setItem(preferenceKey, preference ? "on" : "off");
-    } catch {}
-    sync();
-  });
+  toggle.addEventListener("click", () => backgroundMotion.toggle());
   toggle.hidden = false;
   sync();
 }

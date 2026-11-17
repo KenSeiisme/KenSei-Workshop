@@ -87,7 +87,12 @@ function tabs(panels, labels, { mobile = false, name = "Tool sections" } = {}) {
     });
     parent.classList.toggle("tool-tabs-host", single);
   }
-  query.addEventListener("change", () => show(active));
+  query.addEventListener("change", () => {
+    const focused = panels.findIndex((panel) =>
+      panel.contains(document.activeElement),
+    );
+    show(focused < 0 ? active : focused);
+  });
   show(0);
   window.addEventListener("tool-show-tab", (event) => {
     const node = $(event.detail?.selector || "__none__");

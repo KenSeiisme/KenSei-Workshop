@@ -551,9 +551,47 @@
   const toolCount = $("#tool-result-count");
   const toolEmpty = $("#search-empty");
   const toolClear = $("#tool-search-clear");
+  const favoritesFilter = $("#tool-favorite-filter");
+  const emptyFavorites = $("#tool-no-favorites");
+  let favoritesOnly = false;
+  let projectCategory = "all";
   const projectCount = $("#project-result-count");
   const recentTools = $("#recent-tools");
   const recentKey = () => key() + ":recent-tools";
+  function catalogReturnState(area, read) {
+    const storageKey = "kensei-catalog-return-v1:" + area;
+    const detailPath = new RegExp("^/(?:zh-hant/)?" + area + "/[^/]+/$");
+    let saved;
+    const fromHistory =
+      performance.getEntriesByType("navigation")[0]?.type === "back_forward";
+    const fromDetail =
+      document.referrer.startsWith(location.origin + "/") &&
+      detailPath.test(new URL(document.referrer).pathname);
+    if (!location.hash && (fromHistory || fromDetail)) {
+      try {
+        saved = JSON.parse(sessionStorage.getItem(storageKey));
+      } catch {}
+    }
+    const save = () => {
+      try {
+        sessionStorage.setItem(
+          storageKey,
+          JSON.stringify({ ...read(), y: window.scrollY }),
+        );
+      } catch {}
+    };
+    window.addEventListener("pagehide", save);
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest?.("a[href]");
+      if (link?.origin === location.origin && detailPath.test(link.pathname))
+        save();
+    });
+    if (Number.isFinite(saved?.y))
+      requestAnimationFrame(() =>
+        window.scrollTo({ top: saved.y, behavior: "instant" }),
+      );
+    return saved;
+  }
   function readRecentTools() {
     try {
       const entries = JSON.parse(localStorage.getItem(recentKey()));
@@ -628,6 +666,7 @@
     if (recentTools)
       recentTools.hidden =
         filter !== "all" ||
+        favoritesOnly ||
         !!toolSearch.value.trim() ||
         !$("#recent-tool-links").childElementCount;
   }
@@ -642,25 +681,37 @@
   function filterTools() {
     const terms = toolSearch.value
       .trim()
+      .normalize("NFKC")
       .toLowerCase()
       .split(/\s+/)
       .filter(Boolean);
+    const favoriteSlugs = favoritesOnly
+      ? new Set(items("favorite").map((item) => item.data.slug))
+      : null;
     let count = 0;
     $$("[data-tool-card]").forEach((card) => {
       card.hidden =
         !(filter === "all" || card.dataset.category === filter) ||
-        !terms.every((term) => card.dataset.search.includes(term));
+        (favoriteSlugs && !favoriteSlugs.has(card.dataset.toolSlug)) ||
+        !terms.every((term) =>
+          card.dataset.search.normalize("NFKC").includes(term),
+        );
       if (!card.hidden) count++;
     });
     updateRecentVisibility();
-    toolEmpty.hidden = count > 0;
-    toolClear.hidden = filter === "all" && !toolSearch.value.trim();
+    const noFavorites = favoritesOnly && !favoriteSlugs.size && !count;
+    toolEmpty.hidden = count > 0 || noFavorites;
+    emptyFavorites.hidden = !noFavorites;
+    favoritesFilter.setAttribute("aria-pressed", String(favoritesOnly));
+    toolClear.hidden = !favoritesOnly && filter === "all" && !terms.length;
     uiText(
       toolCount,
       count === 1 ? uiMsg("1 tool found") : uiMsg("{0} tools found", [count]),
     );
   }
   function filterProjects(category) {
+    projectCategory = category;
+    $(".listing-projects").dataset.projectCategory = category;
     let count = 0;
     $$(".listing-projects .project-card").forEach((card) => {
       card.hidden = category !== "all" && card.dataset.category !== category;
@@ -673,7 +724,19 @@
         : uiMsg("{0} projects found", [count]),
     );
   }
-  if (projectCount) filterProjects("all");
+  if (projectCount) {
+    const saved = catalogReturnState("projects", () => ({
+      category: projectCategory,
+    }));
+    const buttons = $$('[data-filter-group="projects"] .filter');
+    const selected =
+      buttons.find((b) => b.dataset.filter === saved?.category) || buttons[0];
+    for (const button of buttons) {
+      button.classList.toggle("active", button === selected);
+      button.setAttribute("aria-pressed", String(button === selected));
+    }
+    filterProjects(selected.dataset.filter);
+  }
 
   $$("[data-filter-group] .filter").forEach((b) =>
     b.addEventListener("click", () => {
@@ -690,6 +753,29 @@
     }),
   );
   if (toolSearch) {
+    const saved = catalogReturnState("tools", () => ({
+      query: toolSearch.value,
+      category: filter,
+      favoritesOnly,
+    }));
+    if (typeof saved?.query === "string")
+      toolSearch.value = saved.query.slice(0, 200);
+    favoritesOnly = saved?.favoritesOnly === true;
+    const selected = $$('[data-filter-group="tools"] .filter').find(
+      (b) => b.dataset.filter === saved?.category,
+    );
+    if (selected) setToolFilter(selected);
+    favoritesFilter.addEventListener("click", () => {
+      favoritesOnly = !favoritesOnly;
+      filterTools();
+    });
+    for (const event of ["workspace-items-change", "workspace-ready"])
+      window.addEventListener(event, () => {
+        if (!favoritesOnly) return;
+        const activeCard = document.activeElement?.closest("[data-tool-card]");
+        filterTools();
+        if (activeCard?.hidden) favoritesFilter.focus({ preventScroll: true });
+      });
     toolSearch.addEventListener("input", filterTools);
     toolSearch.addEventListener("keydown", (event) => {
       if (event.key !== "Enter" || event.isComposing || event.keyCode === 229)
@@ -716,6 +802,7 @@
     });
     toolClear.addEventListener("click", () => {
       toolSearch.value = "";
+      favoritesOnly = false;
       setToolFilter($('[data-filter-group="tools"] [data-filter="all"]'));
       toolSearch.focus();
     });

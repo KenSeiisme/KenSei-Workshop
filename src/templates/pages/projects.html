@@ -1,5 +1,5 @@
 <section class="container page-section projects-page">
-  ${intro}
+  <div class="workshop-catalog-heading">${intro} ${background_motion_icon}</div>
   <div class="projects-controls glass-surface">
     <div class="filter-bar" data-filter-group="projects">
       <button class="filter active" data-filter="all" aria-pressed="true">
@@ -13,5 +13,7 @@
     </div>
     <p id="project-result-count" class="muted small" role="status"></p>
   </div>
-  <div class="projects-grid listing-projects">${project_cards}</div>
+  <div class="projects-grid listing-projects" data-project-category="all">
+    ${project_cards}
+  </div>
 </section>

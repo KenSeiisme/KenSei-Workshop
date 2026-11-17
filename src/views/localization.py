@@ -598,6 +598,15 @@ def head(route, locale, site_url):
     )
     if route in {"", "tools"}:
         lines.append('<link rel="stylesheet" href="/tool-previews.css">')
+    workshop_section = route.split("/", 1)[0] in {"tools", "games", "projects"}
+    if not route or workshop_section:
+        lines.append('<link rel="stylesheet" href="/glass-bubbles.css">')
+    if workshop_section:
+        lines += [
+            '<link rel="stylesheet" href="/workshop-scenes.css">',
+            '<link rel="stylesheet" href="/workshop-layout.css">',
+            '<script type="module" src="/site/workshop-scenes.js"></script>',
+        ]
     if route in {"", "tools", "projects"}:
         lines.append('<link rel="stylesheet" href="/catalog-effects.css">')
         lines.append('<script src="/site/catalog-effects.js" defer></script>')

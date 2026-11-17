@@ -14,4 +14,4 @@ def augment_qr(view):
 
 
 def augment_audio(view):
-    return AUDIO_RECORD + view
+    return view + AUDIO_RECORD

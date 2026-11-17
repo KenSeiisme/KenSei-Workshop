@@ -1,7 +1,6 @@
-<a href="/tools/" class="back-link">${svg_back} <span>All tools</span></a>
-<header class="tool-page-heading tool-heading">
-  <div>
-    <div class="eyebrow">${category}</div>
+<header class="tool-page-heading tool-heading workshop-tool-toolbar">
+  <a href="/tools/" class="back-link">${svg_back} <span>All tools</span></a>
+  <div class="workshop-tool-title">
     <h1>${name}</h1>
     <p>${description}</p>
   </div>
@@ -26,12 +25,14 @@
     <span>Close</span> ${svg_close}
   </button>
   <h2 id="tool-help-title">${name}</h2>
+  <p>${description}</p>
   <h3>Limits &amp; requirements</h3>
   <p>${limits}</p>
   <h3>How it works</h3>
   <p>${usage}</p>
   <h3>Saving &amp; privacy</h3>
   <p>${privacy}</p>
+  ${background_motion}
 </dialog>
 <div
   class="tool-feedback"
