@@ -63,6 +63,15 @@ async function gameSelect(page, selector, value) {
     await openMenu(page);
     await page.click("#game-settings-change");
   }
+  if (selector === "#game-human-side") {
+    await page.locator("[data-shell-options]").click();
+    await page.selectOption(selector, value);
+    await page
+      .locator("[data-shell-options-dialog] [data-shell-close]")
+      .last()
+      .click();
+    return [value];
+  }
   return page.selectOption(selector, value);
 }
 async function gameClick(page, selector) {
