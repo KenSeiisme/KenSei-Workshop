@@ -36,16 +36,18 @@
         <section
           class="game-entry-panel"
           data-shell-entry
+          data-game-launch
           aria-label="Start ${name}"
         >
-          <span class="game-preview-label">Ready preview</span>
           <strong id="game-mode-summary">Choose your run</strong>
           <div class="game-entry-setup" id="game-setup">
             <label
               >${difficulty_label}<select id="game-difficulty"></select
             ></label>
-            ${first_side}
+            ${setup_options_button}
           </div>
+          ${setup_options}
+          <p class="small muted" data-shell-options-summary hidden></p>
           <p id="game-eligibility-note" class="muted small"></p>
           <div class="game-entry-actions" data-shell-entry-actions>
             <button class="button primary" id="game-start" disabled>

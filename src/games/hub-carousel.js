@@ -6,6 +6,8 @@ export function mountHubCarousel(carousel) {
   const rotate = carousel.querySelector("[data-hub-rotate]");
   rotate.removeAttribute("data-ui-attrs");
   const count = carousel.querySelector("[data-hub-slide-count]");
+  const points = [...carousel.querySelectorAll("[data-hub-goto]")];
+  const duration = 5000;
   let index = 0,
     playing = effectsMode() === "full",
     inView = !("IntersectionObserver" in window),
@@ -14,22 +16,48 @@ export function mountHubCarousel(carousel) {
     touch = null,
     pointerAction = null,
     timer,
+    startedAt = null,
+    remaining = duration,
+    progress,
     transition;
 
-  function schedule() {
+  function stopTimer() {
     clearTimeout(timer);
+    if (startedAt !== null) {
+      remaining = Math.max(0, remaining - (performance.now() - startedAt));
+      startedAt = null;
+    }
+    progress?.pause();
+  }
+
+  function schedule() {
+    stopTimer();
     if (
       playing &&
       inView &&
       !hovering &&
       !touch &&
       !pageHidden &&
-      !document.hidden
-    )
-      timer = setTimeout(() => move(1, false), 5000);
+      !document.hidden &&
+      effectsMode() === "full"
+    ) {
+      startedAt = performance.now();
+      timer = setTimeout(() => move(1, false), remaining);
+      const bar = points[index]?.querySelector(".hub-feature-track > span");
+      if (bar?.animate) {
+        if (!progress || progress.playState === "idle")
+          progress = bar.animate(
+            [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
+            { duration, fill: "both" },
+          );
+        progress.currentTime = duration - remaining;
+        progress.play();
+      }
+    }
   }
 
   function renderControls() {
+    rotate.disabled = effectsMode() !== "full";
     const label = playing ? uiMsg("Pause slideshow") : uiMsg("Play slideshow");
     uiAttr(rotate, "aria-label", label);
     uiAttr(rotate, "title", label);
@@ -70,9 +98,17 @@ export function mountHubCarousel(carousel) {
   }
   function move(delta, manual) {
     if (manual) setPlaying(false);
+    const next = (index + delta + slides.length) % slides.length;
+    if (next === index) return;
+    stopTimer();
+    progress?.cancel();
+    progress = null;
+    remaining = duration;
     transition?.cancel();
     slides[index].hidden = true;
-    index = (index + delta + slides.length) % slides.length;
+    index = next;
+    for (const [i, point] of points.entries())
+      point.setAttribute("aria-pressed", String(i === index));
     slides[index].hidden = false;
     embellish(slides[index]);
     transition = animateElement(
@@ -100,7 +136,10 @@ export function mountHubCarousel(carousel) {
     );
     button.disabled = false;
   }
-  rotate.disabled = false;
+  for (const [i, point] of points.entries()) {
+    point.onclick = () => move(i - index, true);
+    point.disabled = false;
+  }
   carousel.addEventListener("focusin", (event) => {
     if (!carousel.contains(event.relatedTarget)) setPlaying(false);
   });
@@ -171,6 +210,7 @@ export function mountHubCarousel(carousel) {
   });
   window.addEventListener("game-effects-change", () => {
     if (effectsMode() !== "full") setPlaying(false);
+    else schedule();
   });
   renderControls();
   embellish(slides[index]);

@@ -93,8 +93,9 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     await page.click("#go-review-close");
     await page.click("#go-again");
     await page.selectOption("#go-mode", "ai");
-    await page.locator("#go-advanced summary").click();
+    await page.click("[data-shell-options]");
     await page.selectOption("#go-human", "-1");
+    await page.keyboard.press("Escape");
     await page.click("#go-start");
     await page.waitForTimeout(3000);
     assert.match(await page.locator("#go-turn").textContent(), /White/);
@@ -128,14 +129,16 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
       await page.locator("#go-podium").textContent(),
       /10 勝.*1 負／1 和/,
     );
+    await page.click("[data-shell-options]");
     await page.selectOption("#go-rule", "japanese");
     assert.match(
       await page.locator("#go-setup-summary").textContent(),
       /日本 1989 規則.*6\.5 目/,
     );
     await page.selectOption("#go-rule", "chinese");
-    await page.selectOption("#go-mode", "local");
     await page.check("#go-training");
+    await page.keyboard.press("Escape");
+    await page.selectOption("#go-mode", "local");
     await page.click("#go-start");
     await board.focus();
     await page.keyboard.press("Enter");

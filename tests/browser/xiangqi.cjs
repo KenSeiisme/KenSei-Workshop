@@ -75,6 +75,7 @@ const sdk = `export function createClient(){return {auth:{getSession:async()=>({
     }
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.selectOption("#xiangqi-mode", "online");
+    await page.click("[data-shell-invite]");
     await page.click("#xiangqi-create");
     await page.waitForSelector("#auth-dialog[open]");
     assert.doesNotMatch(

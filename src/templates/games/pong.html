@@ -39,11 +39,15 @@
           role="img"
           aria-label="Online Pong court. Move your paddle with pointer, touch or up and down keys."
         ></canvas>
-        <div class="pong-stage-overlay" id="pong-overlay">
+        <div class="pong-stage-overlay" id="pong-overlay" data-match-result>
           <strong id="pong-overlay-title">Bring a friend.</strong>
           <p id="pong-overlay-note">Create or join a private room to play.</p>
         </div>
-        <section class="pong-join-panel" aria-label="Pong room">
+        <section
+          class="pong-join-panel"
+          aria-label="Pong room"
+          data-game-launch
+        >
           <div class="pong-room-form">
             <button class="button primary" id="pong-create">
               Create room →</button

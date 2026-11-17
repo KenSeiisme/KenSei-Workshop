@@ -519,6 +519,10 @@ function render() {
   $("#go-score-confirm").disabled =
     phase !== "scoring" || busy || (!!room && (!connected || !room.controller));
   $("#go-score-dispute").disabled = phase !== "scoring" || busy;
+  $(".go-hud").dataset.turn =
+    state?.phase === "playing" && !state.config.training
+      ? String(state.turn)
+      : "";
   text(
     "#go-turn",
     !state
@@ -1710,8 +1714,6 @@ if (code) {
   $("#go-code").value = code;
   $("#go-mode").value = "online";
 }
-$("#go-advanced .go-setup").append($("#go-ai-label"), $("#go-color-label"));
-$("#go-advanced").before($(".go-start-actions"));
 setupChanged();
 if (api.ready) authChanged();
 render();

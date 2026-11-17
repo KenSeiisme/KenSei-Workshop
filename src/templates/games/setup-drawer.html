@@ -1,0 +1,18 @@
+<dialog
+  id="game-setup-drawer"
+  class="game-shell-dialog game-setup-drawer"
+  data-shell-options-dialog
+  aria-labelledby="game-option-title"
+>
+  <button
+    class="icon-button dialog-close"
+    type="button"
+    data-shell-close
+    aria-label="Close settings"
+  >
+    ${svg_close}
+  </button>
+  <h2 id="game-option-title">Game setup</h2>
+  ${fields}
+  <button class="button primary" type="button" data-shell-close>Done</button>
+</dialog>

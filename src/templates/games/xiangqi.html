@@ -32,11 +32,11 @@
         ></div>
         <section
           id="xiangqi-entry"
+          data-game-launch
           class="xiangqi-overlay xiangqi-entry"
           aria-label="Xiangqi setup"
         >
-          <span class="eyebrow">A familiar board. A new challenge.</span>
-          <div class="xiangqi-setup">
+          <div class="xiangqi-setup game-quick-setup" data-quick-setup>
             <label
               >Mode<select id="xiangqi-mode">
                 <option value="ai">Computer</option>
@@ -44,31 +44,62 @@
                 <option value="online">Online</option>
               </select></label
             >
-            <label
-              >Time control<select id="xiangqi-clock">
-                <option value="none">Unlimited · local only</option>
-                <option value="5+3">5 + 3</option>
-                <option value="10+5">10 + 5</option>
-                <option value="15+10">15 + 10</option>
-              </select></label
+            <button
+              type="button"
+              class="button secondary"
+              data-shell-options
+              aria-haspopup="dialog"
+              aria-controls="xiangqi-setup-drawer"
             >
-            <label id="xiangqi-level-label"
-              >Computer level<select id="xiangqi-level">
-                <option value="1">Level 1</option>
-                <option value="2" selected>Level 2</option>
-                <option value="3">Level 3</option>
-                <option value="4">Level 4</option>
-                <option value="5">Level 5</option>
-              </select></label
-            >
-            <label id="xiangqi-side-label"
-              >Play as<select id="xiangqi-side">
-                <option value="1">Red</option>
-                <option value="-1">Black</option>
-                <option value="0">Random</option>
-              </select></label
-            >
+              Options
+            </button>
           </div>
+          <dialog
+            id="xiangqi-setup-drawer"
+            class="game-shell-dialog game-setup-drawer"
+            data-shell-options-dialog
+            aria-labelledby="xiangqi-setup-title"
+          >
+            <button
+              class="icon-button dialog-close"
+              type="button"
+              data-shell-close
+              aria-label="Close settings"
+            >
+              ${svg_close}
+            </button>
+            <h2 id="xiangqi-setup-title">Game setup</h2>
+            <div class="xiangqi-setup">
+              <label
+                >Time control<select id="xiangqi-clock">
+                  <option value="none">Unlimited · local only</option>
+                  <option value="5+3">5 + 3</option>
+                  <option value="10+5">10 + 5</option>
+                  <option value="15+10">15 + 10</option>
+                </select></label
+              >
+              <label id="xiangqi-level-label"
+                >Computer level<select id="xiangqi-level" data-setup-choice>
+                  <option value="1">Level 1</option>
+                  <option value="2" selected>Level 2</option>
+                  <option value="3">Level 3</option>
+                  <option value="4">Level 4</option>
+                  <option value="5">Level 5</option>
+                </select></label
+              >
+              <label id="xiangqi-side-label"
+                >Play as<select id="xiangqi-side" data-setup-choice>
+                  <option value="1">Red</option>
+                  <option value="-1">Black</option>
+                  <option value="0">Random</option>
+                </select></label
+              >
+            </div>
+            <button class="button primary" type="button" data-shell-close>
+              Done
+            </button>
+          </dialog>
+          <p class="small muted" data-shell-options-summary hidden></p>
           <p class="small muted" id="xiangqi-setup-summary">
             WXF 2018 · 9 × 10
           </p>
@@ -85,33 +116,76 @@
             >
           </p>
           <div id="xiangqi-online-entry" hidden>
-            <div class="xiangqi-actions">
-              <button class="button primary" id="xiangqi-create">
-                Create room</button
-              ><button class="button secondary" id="xiangqi-find">
+            <div class="game-online-launch" data-online-launch>
+              <button class="button primary" type="button" id="xiangqi-find">
                 Find opponent
               </button>
-            </div>
-            <div class="xiangqi-code-row">
-              <label
-                >Room code<input
-                  id="xiangqi-code"
-                  maxlength="8"
-                  autocomplete="off"
-                  autocapitalize="characters" /></label
-              ><button class="button secondary" id="xiangqi-join">
-                Join room
+              <button
+                class="button secondary"
+                type="button"
+                data-shell-invite
+                aria-haspopup="dialog"
+                aria-controls="xiangqi-invite-drawer"
+              >
+                Invite / Join
               </button>
             </div>
-            <p class="small muted">
-              Online play requires Google sign-in. Standard human matches count
-              toward public statistics.
-            </p>
+            <p class="small muted" data-invite-preview hidden></p>
+            <dialog
+              id="xiangqi-invite-drawer"
+              class="game-shell-dialog game-setup-drawer"
+              data-shell-invite-dialog
+              aria-labelledby="xiangqi-invite-title"
+            >
+              <button
+                class="icon-button dialog-close"
+                type="button"
+                data-shell-close
+                aria-label="Close"
+              >
+                ${svg_close}
+              </button>
+              <h2 id="xiangqi-invite-title">Invite or join</h2>
+              <button
+                class="button primary"
+                type="button"
+                id="xiangqi-create"
+                data-shell-close
+              >
+                Create room
+              </button>
+              <div class="xiangqi-code-row">
+                <label
+                  >Room code<input
+                    id="xiangqi-code"
+                    maxlength="8"
+                    autocomplete="off"
+                    autocapitalize="characters" /></label
+                ><button
+                  class="button secondary"
+                  id="xiangqi-join"
+                  type="button"
+                  data-invite-join
+                  data-shell-close
+                >
+                  Join room
+                </button>
+              </div>
+              <p class="small muted">
+                Online play requires Google sign-in. Standard human matches
+                count toward public statistics.
+              </p>
+            </dialog>
           </div>
           <p class="small" id="xiangqi-save-info"></p>
           <p id="xiangqi-entry-status" role="status"></p>
         </section>
-        <section id="xiangqi-room" class="xiangqi-overlay" hidden>
+        <section
+          id="xiangqi-room"
+          data-game-lobby
+          class="xiangqi-overlay"
+          hidden
+        >
           <h2 id="xiangqi-room-title">Waiting for your opponent</h2>
           <p id="xiangqi-room-summary"></p>
           <div id="xiangqi-invite">
@@ -133,12 +207,16 @@
           <h2>Paused · local only</h2>
           <button class="button primary" id="xiangqi-resume">Continue</button>
         </section>
-        <section id="xiangqi-result" class="xiangqi-overlay" hidden>
+        <section
+          id="xiangqi-result"
+          data-match-result
+          class="xiangqi-overlay"
+          hidden
+        >
           <h2 id="xiangqi-result-title"></h2>
           <p id="xiangqi-result-detail"></p>
           <div class="xiangqi-actions">
-            <button class="button primary" id="xiangqi-again">
-              New game setup</button
+            <button class="button primary" id="xiangqi-again">Play again</button
             ><button class="button secondary" id="xiangqi-review">
               Review game</button
             ><button class="button secondary" id="xiangqi-result-pgn">

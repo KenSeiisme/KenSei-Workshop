@@ -1,22 +1,27 @@
 <section class="container games-page game-hub" data-games-directory>
   <header class="hub-bar glass-surface">
-    <a class="hub-brand" href="/games/" aria-label="Games lobby"
-      ><span class="brand-symbol" aria-hidden="true">k<span>✳</span></span>
-      <span class="hub-brand-name">KenSei <strong>Arcade</strong></span></a
-    >
-    <a class="button secondary hub-wallet" href="#game-skin-shop"
-      >${svg_coin} <span data-hub-coins>—</span> <span>Coins</span></a
-    >
-    <a
-      class="hub-achievement-link"
-      href="/games/achievements/"
-      aria-label="Achievements"
-    >
-      ${svg_achievement} <span>Achievements</span>
-    </a>
     <a class="button secondary hub-library-jump" href="#games-library"
-      ><span>Game library</span> ${svg_grid}</a
+      >${svg_grid} <span>Browse games</span></a
     >
+    <div class="hub-shortcuts">
+      <a
+        class="icon-button hub-profile-jump"
+        href="#hub-player-title"
+        aria-label="Player profile"
+        title="Player profile"
+        >${svg_profile}</a
+      >
+      <a class="button secondary hub-wallet" href="#game-skin-shop"
+        >${svg_coin} <span data-hub-coins>—</span> <span>Coins</span></a
+      >
+      <a
+        class="hub-achievement-link"
+        href="/games/achievements/"
+        aria-label="Achievements"
+      >
+        ${svg_achievement} <span>Achievements</span>
+      </a>
+    </div>
   </header>
   <section
     class="hub-feature panel glass-surface"
@@ -64,6 +69,9 @@
       </div>
     </div>
     <div class="hub-slides">${featured}</div>
+    <div class="hub-carousel-progress" role="group" aria-label="Featured games">
+      ${feature_selectors}
+    </div>
   </section>
   <section
     class="panel hub-live"
@@ -75,31 +83,6 @@
     <p class="small muted" data-live-game-status role="status"></p>
     <div data-live-game-list></div>
     <button type="button" class="text-link" data-live-game-retry hidden>
-      Retry
-    </button>
-  </section>
-  <section
-    class="panel hub-live"
-    aria-labelledby="hub-recent-title"
-    data-hub-recent
-    hidden
-  >
-    <h2 id="hub-recent-title">Recent matches</h2>
-    <label class="field"
-      >Board game
-      <select data-recent-game>
-        <option value="">All board games</option>
-        <option value="go">Go</option>
-        <option value="chess">Chess</option>
-        <option value="xiangqi">Xiangqi</option>
-      </select>
-    </label>
-    <p class="small muted" data-recent-status role="status"></p>
-    <div data-recent-list></div>
-    <button type="button" class="text-link" data-recent-more hidden>
-      Load more
-    </button>
-    <button type="button" class="text-link" data-recent-retry hidden>
       Retry
     </button>
   </section>
@@ -149,6 +132,15 @@
           Board
         </button>
       </nav>
+      <label class="hub-play-filter"
+        ><span>Play mode</span>
+        <select id="game-play-filter" aria-controls="game-library-grid">
+          <option value="all">All play modes</option>
+          <option value="solo">Solo</option>
+          <option value="local">Local two players</option>
+          <option value="online">Online</option>
+        </select>
+      </label>
       <div class="hub-search-feedback">
         <p id="hub-game-count" class="muted small" role="status"></p>
         <button type="button" class="text-link" id="hub-game-clear" hidden>
@@ -161,6 +153,33 @@
       No games found. Try another search.
     </p>
   </section>
+  <details
+    class="panel hub-live"
+    aria-labelledby="hub-recent-title"
+    data-hub-recent
+    hidden
+  >
+    <summary id="hub-recent-title">Recent matches</summary>
+    <div class="hub-recent-body">
+      <label class="field"
+        >Board game
+        <select data-recent-game>
+          <option value="">All board games</option>
+          <option value="go">Go</option>
+          <option value="chess">Chess</option>
+          <option value="xiangqi">Xiangqi</option>
+        </select>
+      </label>
+      <p class="small muted" data-recent-status role="status"></p>
+      <div data-recent-list></div>
+      <button type="button" class="text-link" data-recent-more hidden>
+        Load more
+      </button>
+      <button type="button" class="text-link" data-recent-retry hidden>
+        Retry
+      </button>
+    </div>
+  </details>
   <div class="hub-front">
     <section class="panel hub-player" aria-labelledby="hub-player-title">
       <div class="eyebrow">MY ARCADE</div>

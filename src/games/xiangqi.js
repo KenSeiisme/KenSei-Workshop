@@ -424,6 +424,8 @@ function render() {
       member?.nickname || uiFrom(color === 1 ? "Red" : "Black"),
     );
   }
+  $(".xiangqi-hud").dataset.turn =
+    state?.phase === "playing" ? String(state.turn) : "";
   tx(
     "#xiangqi-turn",
     !state

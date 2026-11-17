@@ -414,6 +414,8 @@ function render() {
       member?.nickname || uiFrom(color === 1 ? "White" : "Black"),
     );
   }
+  $(".chess-hud").dataset.turn =
+    state?.phase === "playing" ? String(state.turn) : "";
   tx(
     "#chess-turn",
     !state
