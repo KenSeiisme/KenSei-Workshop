@@ -63,6 +63,9 @@
   grid-column: 1 / -1;
   justify-content: flex-start;
 }
+.tool-favorite-filter {
+  margin-inline-start: auto;
+}
 .game-hub .game-card-meta > span {
   color: var(--text);
 }
