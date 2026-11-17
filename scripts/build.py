@@ -115,7 +115,15 @@ HOME_FEATURED = json.loads(
 (OUT / "tools-data.js").write_text(
     "window.KENSEI_TOOLS="
     + json.dumps(
-        {t[0]: {"name": t[2], "description": t[4], "category": t[5]} for t in TOOLS},
+        {
+            t[0]: {
+                "name": t[2],
+                "description": t[4],
+                "category": t[5],
+                "icon": icon(t[1]),
+            }
+            for t in TOOLS
+        },
         ensure_ascii=False,
     )
     + ";",

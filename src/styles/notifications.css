@@ -1,3 +1,24 @@
+.notice-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-block: 0.7rem;
+}
+.notice-filter select {
+  flex: 1;
+  min-width: 0;
+}
+.notice-row > small {
+  grid-column: 2;
+  color: var(--muted);
+}
+.notice-marker.avatar-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+}
 .site-notice-trigger {
   position: relative;
   min-width: 44px;

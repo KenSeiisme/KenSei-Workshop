@@ -14,6 +14,14 @@
       ${svg_close}
     </button>
   </div>
+  <label class="field notice-filter"
+    >Show notifications
+    <select data-notice-filter>
+      <option value="all">All</option>
+      <option value="social">Social</option>
+      <option value="rewards">Rewards</option>
+    </select>
+  </label>
   <details class="notice-settings">
     <summary>${svg_sound} <span>Notification sound</span></summary>
     <label class="field"
@@ -22,6 +30,9 @@
     </label>
     <div class="notice-settings-actions">
       <output data-notice-volume-value>25%</output>
+      <button class="button secondary" type="button" data-test-notice-sound>
+        Test sound
+      </button>
       <button class="button secondary" type="button" data-mute-notices>
         Mute notifications
       </button>

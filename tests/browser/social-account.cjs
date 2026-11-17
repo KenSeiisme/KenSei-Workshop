@@ -20,14 +20,17 @@ export function createClient() {
   const relation=()=>get("state","none");
   window.__socialCalls=[];
   return {
-    auth:{getSession:async()=>({data:{session:{user}}}),onAuthStateChange(){}},
+    auth:{getSession:async()=>({data:{session:localStorage.getItem("fixture:guest")==="true"?null:{user}}}),onAuthStateChange(){}},
     from:()=>({select(){return this},eq(){return this},order:async()=>({data:[]})}),
     rpc:async(name,args={})=>{
       window.__socialCalls.push([name,args]);
       switch(name){
         case "ensure_my_profile": return {data:{...me,...get("profile",{})}};
-        case "update_my_profile": set("profile",args.patch);return {data:{...me,...args.patch}};
-        case "get_public_profile": return {data:{...friend,game_achievements:[],best_scores:[]}};
+        case "update_my_profile": if(get("saveFail",false))return {error:Error("Fixture save failed")};set("profile",{...get("profile",{}),...args.patch});return {data:{...me,...get("profile",{})}};
+        case "get_public_profile": return {data:{...(args.profile_id==="${publicId}"?{...me,...get("profile",{})}:friend),game_achievements:["2048-1","2048-2","2048-3","snake-1"].map(achievement_id=>({achievement_id,unlocked_at:date})),best_scores:[]}};
+        case "touch_social_activity":return {data:{visible:get("visible",true)}};
+        case "get_social_preferences":return {data:{visible:get("visible",true)}};
+        case "set_social_visibility":set("visible",args.visible);return {data:{visible:args.visible}};
         case "get_friendship": return {data:{state:relation(),id:"${requestId}"}};
         case "search_friend_profiles": return {data:[{...friend,state:relation(),id:"${requestId}"}]};
         case "list_friendships": return {data:relation()==="none"?[]:[{...friend,state:relation(),id:"${requestId}"}]};
@@ -36,9 +39,14 @@ export function createClient() {
           return {data:{state:relation(),id:"${requestId}"}};
         case "get_workspace_index":
           return {data:Array.from({length:6},(_,i)=>({id:"draft-"+i,kind:"draft",name:"Draft "+i,tool:"text-toolkit",updated_at:date}))};
+        case "get_site_notifications_page":
         case "get_site_notifications":
           const read=get("read",false);
-          return {data:{unread:read?0:1,rows:[{id:"${notification}",kind:"game_invite",created_at:date,read_at:read?date:null,actor:friend,payload:{game:"chess",id:"${invite}"}}]}};
+          const rawRows=get("noticeRows",[{id:"${notification}",kind:"game_invite",source:"invite:${invite}",created_at:date,read_at:read?date:null,actor:friend,payload:{game:"chess",id:"${invite}"}}]);
+          const rows=rawRows.map(row=>row.kind==="friend_request"?{...row,payload:{...row.payload,relationship:{id:"${requestId}",state:relation()}}}:row);
+          const response={data:{unread:read?0:rows.filter(r=>!r.read_at).length,rows:args.category==="rewards"?rows.filter(r=>r.kind==="reward"):args.category==="social"?rows.filter(r=>r.kind!=="reward"):rows}};
+          if(window.__holdNextInbox){window.__holdNextInbox=false;await new Promise(resolve=>window.__resumeInbox=resolve);}
+          return response;
         case "read_site_notifications":set("read",true);return {data:0};
         case "open_friend_game_invite":return {data:{status:get("expired",true)?"expired":"available",game:"chess",code:"ABCD1234"}};
         default:return {data:[]};
@@ -86,6 +94,14 @@ export function createClient() {
     await go("/zh-hant/friends/");
     const row = page.locator('[data-friend-list="friend"] .friend-row');
     await row.waitFor();
+    await page.locator("[data-social-visibility]").selectOption("hidden");
+    await page.waitForFunction(
+      () => localStorage.getItem("fixture:visible") === "false",
+    );
+    assert.equal(
+      await page.locator("[data-social-visibility]").inputValue(),
+      "hidden",
+    );
     await row.getByRole("button", { name: "邀請遊戲" }).click();
     const choices = page.locator("#friend-game-choice:modal a");
     assert.equal(await choices.count(), 4);
@@ -118,6 +134,8 @@ export function createClient() {
     assert.match(await center.locator(".toast").textContent(), /過期/);
     await center.locator(".toast-close").click();
     await page.evaluate(() => localStorage.setItem("fixture:expired", "false"));
+    await center.locator("[data-close-notices]").click();
+    await bell.click();
     await center.getByRole("button", { name: "開啟邀請" }).click();
     await page.waitForURL("**/zh-hant/games/chess/?code=ABCD1234");
     await page.locator('[data-chess][data-ready="true"]').waitFor();
@@ -126,9 +144,39 @@ export function createClient() {
     await go("/profile/");
     await page.locator("#profile-preview").waitFor();
     await page.locator("#profile-name").fill("New name");
+    await page.locator("#profile-cover").selectOption("aurora");
+    await page.locator("#profile-accent").selectOption("ice");
+    assert.equal(
+      await page
+        .locator(".profile-preview-card")
+        .getAttribute("data-profile-cover"),
+      "aurora",
+    );
+    await page
+      .locator("[data-profile-milestone-options] input")
+      .first()
+      .waitFor();
+    await page.locator("[data-profile-milestone-options] input").nth(0).check();
+    await page.locator("[data-profile-milestone-options] input").nth(1).check();
+    await page.locator("[data-profile-milestone-options] input").nth(2).check();
+    await page.locator("[data-profile-milestone-options] input").nth(3).click();
+    assert.equal(
+      await page
+        .locator("[data-profile-milestone-options] input:checked")
+        .count(),
+      3,
+    );
     assert.equal(
       await page.locator("#profile-preview-name").textContent(),
       "New name",
+    );
+    await page.evaluate(() => localStorage.setItem("fixture:saveFail", "true"));
+    await page.locator("#profile-save").click();
+    await page.getByText(/Save failed\. Your changes are still here/).waitFor();
+    assert.equal(await page.locator("#profile-name").inputValue(), "New name");
+    assert.equal(await page.locator("#profile-cover").inputValue(), "aurora");
+    await page.evaluate(() =>
+      localStorage.setItem("fixture:saveFail", "false"),
     );
     await page.locator("#profile-save").click();
     await page
@@ -141,6 +189,8 @@ export function createClient() {
       .getByText("Friend", { exact: true })
       .waitFor();
     assert(await noOverflow());
+    assert.equal(await page.locator("#profile-status").textContent(), "");
+    assert.equal(await page.locator("#profile-retry").isVisible(), false);
     await go("/workspace/");
     await page.locator("[data-workspace-recent-list] a").first().waitFor();
     assert.equal(
@@ -149,9 +199,65 @@ export function createClient() {
     );
     assert.equal(
       await page.locator("[data-workspace-index-list] a").count(),
-      6,
+      2,
     );
     assert(await noOverflow());
+    await page.evaluate(() => localStorage.setItem("fixture:read", "false"));
+    await bell.click();
+    await center.locator("[data-notice-read-all]:visible").waitFor();
+    await page.evaluate(() => {
+      window.__holdNextInbox = true;
+      window.dispatchEvent(new Event("social-change"));
+    });
+    await page.waitForFunction(
+      () => typeof window.__resumeInbox === "function",
+    );
+    await center.locator("[data-notice-read-all]").click();
+    await page.evaluate(() => window.__resumeInbox());
+    await page.waitForFunction(
+      () => document.querySelector("[data-notice-count]").hidden,
+    );
+    assert.equal(
+      await center.locator("[data-notice-read-all]").isVisible(),
+      false,
+    );
+    await page.evaluate(
+      ({ peer, requestId }) => {
+        localStorage.setItem("fixture:state", JSON.stringify("incoming"));
+        localStorage.setItem("fixture:read", "false");
+        localStorage.setItem(
+          "fixture:noticeRows",
+          JSON.stringify([
+            {
+              id: "dddddddd-dddd-4ddd-8ddd-000000000001",
+              source: "request:" + requestId,
+              kind: "friend_request",
+              created_at: "2026-11-18T00:00:00Z",
+              read_at: null,
+              actor: { nickname: "Second Player", public_id: peer },
+              payload: { relationship: { id: requestId, state: "incoming" } },
+            },
+          ]),
+        );
+        window.dispatchEvent(new Event("social-change"));
+      },
+      { peer, requestId },
+    );
+    await center.locator('[data-friend-action="accept"]').click();
+    await page.waitForFunction(
+      () => localStorage.getItem("fixture:state") === JSON.stringify("friend"),
+    );
+    await center
+      .locator('[data-friend-action="accept"]')
+      .waitFor({ state: "detached" });
+    await center.locator("[data-notice-filter]").selectOption("rewards");
+    await center.getByText("No notifications yet.", { exact: true }).waitFor();
+    await center.locator("[data-close-notices]").click();
+    await page.waitForFunction(
+      () =>
+        document.activeElement ===
+        document.querySelector("[data-open-notices]"),
+    );
     await page.evaluate(() => {
       const target = document.querySelector("[data-workspace-query]");
       target.focus();
@@ -186,6 +292,17 @@ export function createClient() {
       await page.evaluate(() => window.KenseiNoticeSettings.volume),
       0,
     );
+    await page.locator("[data-close-notices]").click();
+    await go("/profile/?id=invalid");
+    await page.getByText("Profile not found.", { exact: true }).waitFor();
+    assert.equal(await page.locator("#public-profile").isVisible(), false);
+    await page.evaluate(() => localStorage.setItem("fixture:guest", "true"));
+    await go("/profile/?id=" + peer);
+    await page.locator("#public-name").waitFor();
+    assert.equal(await page.locator("#profile-status").textContent(), "");
+    await page
+      .getByRole("button", { name: "Sign in to add a friend" })
+      .waitFor();
     assert.deepEqual(errors, []);
     console.log(
       "PASS friends and invitations, localized inbox, priority toasts, profile editing, workspace recent records and 320px layout",

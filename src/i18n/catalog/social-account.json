@@ -386,5 +386,209 @@
   "m_deb5113c988c": {
     "en": "Edit your photo, public name and biography.",
     "zh-Hant": "編輯頭像、公開暱稱與自我介紹。"
+  },
+  "m_21dc907f5988": {
+    "en": "This request has changed. The current status is shown.",
+    "zh-Hant": "此申請已變更，已顯示目前狀態。"
+  },
+  "m_a1a5c7c4cb9d": {
+    "en": "Invite {0}",
+    "zh-Hant": "邀請 {0}"
+  },
+  "m_89d7d1e12cd0": {
+    "en": "Retry invitation",
+    "zh-Hant": "重試邀請"
+  },
+  "m_d92ae5485c78": {
+    "en": "{0} · Room {1} · {2}",
+    "zh-Hant": "{0} · 房間 {1} · {2}"
+  },
+  "m_18b8006ca8c8": {
+    "en": "Invitation withdrawn",
+    "zh-Hant": "邀請已撤回"
+  },
+  "m_7d40f14c98b5": {
+    "en": "Invitation ignored",
+    "zh-Hant": "邀請已忽略"
+  },
+  "m_fa5dcca03424": {
+    "en": "Invitation sent",
+    "zh-Hant": "邀請已送出"
+  },
+  "m_164546a9c548": {
+    "en": "Withdraw",
+    "zh-Hant": "撤回"
+  },
+  "m_194756e023d4": {
+    "en": "Invitation could not update. Try again.",
+    "zh-Hant": "無法更新邀請，請重試。"
+  },
+  "m_70c436d295fd": {
+    "en": "Your status is visible to friends.",
+    "zh-Hant": "好友可查看你的在線狀態。"
+  },
+  "m_b805cd2d9457": {
+    "en": "You appear offline to friends.",
+    "zh-Hant": "你目前向好友顯示為離線。"
+  },
+  "m_4cc8659b3ff9": {
+    "en": "Visibility could not save. Try again.",
+    "zh-Hant": "無法儲存可見性設定，請重試。"
+  },
+  "m_bb7662c5c8d7": {
+    "en": "Unlocked · {0}",
+    "zh-Hant": "已解鎖 · {0}"
+  },
+  "m_815c7edaf70a": {
+    "en": "Ignore invitation",
+    "zh-Hant": "忽略邀請"
+  },
+  "m_5677e99e6643": {
+    "en": "Playing · {0}",
+    "zh-Hant": "遊玩中 · {0}"
+  },
+  "m_ee5c8e87c1c0": {
+    "en": "Loading milestones…",
+    "zh-Hant": "正在載入里程碑…"
+  },
+  "m_ca66a2769b54": {
+    "en": "Choose up to three milestones.",
+    "zh-Hant": "最多可選擇三枚里程碑。"
+  },
+  "m_41a0dab27aa7": {
+    "en": "Unlock verified milestones to feature them here.",
+    "zh-Hant": "解鎖已驗證里程碑後，即可在此置頂。"
+  },
+  "m_552001f440e5": {
+    "en": "Milestones could not load. Your selection is preserved.",
+    "zh-Hant": "無法載入里程碑，已保留你的選擇。"
+  },
+  "m_19f6539bc3b4": {
+    "en": "Show notifications",
+    "zh-Hant": "顯示通知"
+  },
+  "m_59afe47d9d37": {
+    "en": "Rewards",
+    "zh-Hant": "獎勵"
+  },
+  "m_85e22d3d13e7": {
+    "en": "Test sound",
+    "zh-Hant": "試聽音效"
+  },
+  "m_a2a45f011045": {
+    "en": "Find in your friends",
+    "zh-Hant": "搜尋現有好友"
+  },
+  "m_8ad689791a7b": {
+    "en": "Activity visibility",
+    "zh-Hant": "活動狀態可見性"
+  },
+  "m_56ed8c27b52e": {
+    "en": "Visible to friends",
+    "zh-Hant": "好友可見"
+  },
+  "m_ec36f358bb0a": {
+    "en": "Appear offline",
+    "zh-Hant": "顯示為離線"
+  },
+  "m_856d35c01dd4": {
+    "en": "Profile appearance",
+    "zh-Hant": "個人檔案外觀"
+  },
+  "m_fa8d84566676": {
+    "en": "Cover",
+    "zh-Hant": "封面"
+  },
+  "m_a5c6fb18c9af": {
+    "en": "Accent",
+    "zh-Hant": "強調色"
+  },
+  "m_baf5d82057e7": {
+    "en": "Orchid",
+    "zh-Hant": "蘭紫"
+  },
+  "m_e10d850954a8": {
+    "en": "Rose",
+    "zh-Hant": "玫瑰"
+  },
+  "m_eaae3408200c": {
+    "en": "Mist",
+    "zh-Hant": "薄霧"
+  },
+  "m_ced97cc4a377": {
+    "en": "Mint",
+    "zh-Hant": "薄荷"
+  },
+  "m_abd7160c1f46": {
+    "en": "Dusk",
+    "zh-Hant": "暮色"
+  },
+  "m_e9de098c7733": {
+    "en": "Aurora",
+    "zh-Hant": "極光"
+  },
+  "m_60707cfeb40e": {
+    "en": "Lavender",
+    "zh-Hant": "薰衣草"
+  },
+  "m_8b84a884090e": {
+    "en": "Ice blue",
+    "zh-Hant": "冰藍"
+  },
+  "m_a5cccbcead7d": {
+    "en": "Amber",
+    "zh-Hant": "琥珀"
+  },
+  "m_e4f2c7b0e12f": {
+    "en": "Featured milestones · up to 3",
+    "zh-Hant": "置頂里程碑 · 最多 3 枚"
+  },
+  "m_848e9021083a": {
+    "en": "Retry milestones",
+    "zh-Hant": "重新載入里程碑"
+  },
+  "m_c27c778ba00f": {
+    "en": "Public profile sections",
+    "zh-Hant": "公開檔案分區"
+  },
+  "m_264c68fc6f4c": {
+    "en": "Game records",
+    "zh-Hant": "遊戲紀錄"
+  },
+  "m_57c1ad6c5404": {
+    "en": "Board matches",
+    "zh-Hant": "棋類對局"
+  },
+  "m_814f32bf3cf4": {
+    "en": "Typing scores",
+    "zh-Hant": "打字成績"
+  },
+  "m_a5a4c61a2090": {
+    "en": "Complete any game",
+    "zh-Hant": "完成任一遊戲"
+  },
+  "m_1b793c745d7f": {
+    "en": "Complete two different games",
+    "zh-Hant": "完成兩款不同遊戲"
+  },
+  "m_3fdc448423fd": {
+    "en": "Complete today's featured game",
+    "zh-Hant": "完成今日指定遊戲"
+  },
+  "m_e144792b10b4": {
+    "en": "Daily reward",
+    "zh-Hant": "每日獎勵"
+  },
+  "m_1aa12ddf9d04": {
+    "en": "Friends can see your online status and current game when activity visibility is enabled. You can appear offline in Friends. Only selected cover colors and verified milestones are added to your public profile.",
+    "zh-Hant": "啟用活動狀態可見性時，好友可查看你的在線狀態與目前遊戲。你可在好友頁選擇顯示為離線。公開檔案會展示你選擇的封面配色與已驗證里程碑。"
+  },
+  "m_2b98dea7c162": {
+    "en": "Already friends",
+    "zh-Hant": "已是好友"
+  },
+  "m_52569811ad0d": {
+    "en": "Request no longer pending",
+    "zh-Hant": "此申請已結束"
   }
 }

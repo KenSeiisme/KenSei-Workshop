@@ -2,7 +2,7 @@
   class="container page-section profile-page account-dashboard"
   id="profile-page"
 >
-  <header class="account-hero glass-surface">
+  <header class="account-hero glass-surface" data-profile-header>
     <div>
       <h1 id="profile-heading">Your profile<span class="accent">.</span></h1>
       <p id="profile-intro">Edit your photo, public name and biography.</p>
@@ -61,6 +61,43 @@
       <p class="muted small">
         <output id="profile-bio-count">0</output> / 300 characters
       </p>
+      <fieldset class="profile-personalization">
+        <legend>Profile appearance</legend>
+        <label class="field"
+          >Cover
+          <select id="profile-cover">
+            <option value="orchid">Orchid</option>
+            <option value="rose">Rose</option>
+            <option value="mist">Mist</option>
+            <option value="mint">Mint</option>
+            <option value="dusk">Dusk</option>
+            <option value="aurora">Aurora</option>
+          </select>
+        </label>
+        <label class="field"
+          >Accent
+          <select id="profile-accent">
+            <option value="lavender">Lavender</option>
+            <option value="rose">Rose</option>
+            <option value="ice">Ice blue</option>
+            <option value="mint">Mint</option>
+            <option value="amber">Amber</option>
+          </select>
+        </label>
+        <fieldset id="profile-featured">
+          <legend>Featured milestones · up to 3</legend>
+          <div data-profile-milestone-options></div>
+        </fieldset>
+        <p class="muted small" data-profile-milestone-status role="status"></p>
+        <button
+          class="text-link"
+          type="button"
+          data-profile-milestone-retry
+          hidden
+        >
+          Retry milestones
+        </button>
+      </fieldset>
       <p class="profile-visibility-note">
         Your name, avatar, biography and qualifying best typing and game scores
         are public. Your email, drafts and tool histories stay private.
@@ -90,6 +127,7 @@
         Your preview updates as you edit. Save changes to update the public
         page.
       </p>
+      <div class="profile-featured-badges" data-preview-featured></div>
       <button class="button secondary" id="copy-profile-link" type="button">
         Copy public link
       </button>
@@ -115,6 +153,7 @@
           <a class="text-link" id="public-edit-profile" href="/profile/" hidden
             >Edit my profile ↗</a
           >
+          <div class="profile-featured-badges" data-public-featured></div>
           <div id="public-friend-actions" class="friend-actions"></div>
         </div>
       </div>
@@ -140,6 +179,16 @@
         </div>
       </div>
     </header>
+    <nav class="profile-record-jumps" aria-label="Public profile sections">
+      <a class="button secondary" href="#public-games-heading">Game records</a>
+      <a class="button secondary" href="#public-go-records">Board matches</a>
+      <a class="button secondary" href="#public-typing-heading"
+        >Typing scores</a
+      >
+      <a class="button secondary" href="#public-milestones"
+        >Verified milestones</a
+      >
+    </nav>
     <section
       class="public-record-section"
       aria-labelledby="public-games-heading"
@@ -159,7 +208,7 @@
       </p>
       <div id="public-game-scores" class="profile-game-grid"></div>
     </section>
-    <details class="public-achievements panel">
+    <details class="public-achievements panel" id="public-milestones">
       <summary>
         <span
           >Verified milestones ·

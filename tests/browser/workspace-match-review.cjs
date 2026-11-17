@@ -90,8 +90,15 @@ export function createClient() {
   try {
     await page.goto(base + "/workspace/");
     const results = page.locator("[data-workspace-index-list]");
-    await results.getByText("Analysis recipe").waitFor();
-    assert.equal(await results.locator(".saved-row").count(), 20);
+    await page
+      .locator("[data-workspace-recent-list]")
+      .getByText("Analysis recipe")
+      .waitFor();
+    assert.equal(await results.locator(".saved-row").count(), 16);
+    assert.equal(
+      await page.locator("[data-workspace-recent-list] .saved-row").count(),
+      4,
+    );
     assert.match(
       await page.locator("#saved-presets").textContent(),
       /Analysis recipe/,

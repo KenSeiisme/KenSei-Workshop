@@ -39,7 +39,23 @@
       <div class="friend-rows" data-friends-results></div>
     </section>
     <section class="panel" aria-labelledby="friend-list-title">
-      <h2 id="friend-list-title">Your friends</h2>
+      <h2 id="friend-list-title">
+        Your friends <output data-friend-count>0</output>
+      </h2>
+      <label class="field"
+        >Find in your friends<input
+          type="search"
+          data-friend-filter
+          maxlength="32"
+      /></label>
+      <label class="field"
+        >Activity visibility
+        <select data-social-visibility>
+          <option value="visible">Visible to friends</option>
+          <option value="hidden">Appear offline</option>
+        </select>
+      </label>
+      <p data-social-visibility-status class="muted small" role="status"></p>
       <div class="friend-rows" data-friend-list="friend"></div>
       <details open>
         <summary>Incoming requests</summary>

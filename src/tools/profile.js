@@ -1,5 +1,11 @@
 import { mountPublicFriendActions } from "../site/friend-actions.js";
 import { socialPath } from "../site/social-api.js";
+import {
+  appearance,
+  paintAppearance,
+  paintFeatured,
+} from "../site/profile-appearance.js";
+import { ACHIEVEMENTS } from "/game-scripts/achievement-catalog.js";
 import { patchMarkup } from "/game-scripts/dom.js";
 import { mountEffects, revealGameCards } from "/game-scripts/effects.js";
 import { renderPublicAchievements } from "/game-scripts/achievements.js";
@@ -27,6 +33,10 @@ let original = null,
   working = false,
   selection = 0,
   uploadedPath = null;
+let profileLoad = 0,
+  milestoneLoad = 0,
+  ownMilestones = [],
+  featured = [];
 const message = (text) => uiText($("#profile-status"), text);
 function markDirty() {
   dirty = true;
@@ -44,6 +54,9 @@ function paintPreview() {
   const bio = $("#profile-bio").value;
   uiText($("#profile-preview-name"), nickname || uiMsg("Public name"));
   uiText($("#profile-preview-bio"), bio);
+  paintAppearance($(".profile-preview-card"), editedAppearance());
+  paintAppearance($("#profile-preview"), editedAppearance());
+  paintFeatured($("[data-preview-featured]"), featured, ownMilestones);
   const key = [
     nickname[0],
     avatarKind,
@@ -60,7 +73,82 @@ function paintPreview() {
     );
   }
 }
+function editedAppearance() {
+  return appearance({
+    cover: $("#profile-cover").value,
+    accent: $("#profile-accent").value,
+    featured,
+  });
+}
+async function loadMilestoneChoices() {
+  if (!original || requested) return;
+  const account = owner,
+    id = original.public_id,
+    ticket = ++milestoneLoad;
+  const root = $("[data-profile-milestone-options]"),
+    note = $("[data-profile-milestone-status]");
+  $("[data-profile-milestone-retry]").hidden = true;
+  uiText(note, uiMsg("Loading milestones…"));
+  try {
+    const data = await profileRPC("get_public_profile", { profile_id: id });
+    if (
+      account !== api.user?.id ||
+      ticket !== milestoneLoad ||
+      original?.public_id !== id
+    )
+      return;
+    ownMilestones = data?.game_achievements || [];
+    root.replaceChildren();
+    for (const earned of ownMilestones) {
+      const def = ACHIEVEMENTS.find((a) => a.id === earned.achievement_id);
+      if (!def) continue;
+      const label = document.createElement("label"),
+        checkbox = document.createElement("input"),
+        text = document.createElement("span");
+      checkbox.type = "checkbox";
+      checkbox.value = def.id;
+      checkbox.checked = featured.includes(def.id);
+      uiText(text, uiFrom(def.name));
+      checkbox.onchange = () => {
+        if (checkbox.checked && featured.length >= 3) {
+          checkbox.checked = false;
+          uiText(note, uiMsg("Choose up to three milestones."));
+          return;
+        }
+        featured = checkbox.checked
+          ? [...featured, def.id]
+          : featured.filter((id) => id !== def.id);
+        uiText(note, "");
+        markDirty();
+      };
+      label.append(checkbox, text);
+      root.append(label);
+    }
+    uiText(
+      note,
+      ownMilestones.length
+        ? ""
+        : uiMsg("Unlock verified milestones to feature them here."),
+    );
+    paintPreview();
+  } catch {
+    if (account === api.user?.id && ticket === milestoneLoad) {
+      uiText(
+        note,
+        uiMsg("Milestones could not load. Your selection is preserved."),
+      );
+      $("[data-profile-milestone-retry]").hidden = false;
+    }
+  }
+}
+$("#profile-cover").onchange = markDirty;
+$("#profile-accent").onchange = markDirty;
+$("[data-profile-milestone-retry]").onclick = loadMilestoneChoices;
 function fill(profile) {
+  const look = appearance(profile.appearance);
+  $("#profile-cover").value = look.cover;
+  $("#profile-accent").value = look.accent;
+  featured = [...look.featured];
   original = profile;
   owner = api.user?.id;
   $("#profile-name").value = profile.nickname;
@@ -274,6 +362,8 @@ function renderGoStats(stats) {
   section.append(link);
 }
 async function load() {
+  const ticket = ++profileLoad,
+    account = api.user?.id;
   $("#profile-retry").hidden = true;
   message(uiMsg("Loading profile…"));
   try {
@@ -291,6 +381,7 @@ async function load() {
       const p = await profileRPC("get_public_profile", {
         profile_id: requested,
       });
+      if (ticket !== profileLoad || account !== api.user?.id) return;
       if (!p) {
         message(uiMsg("Profile not found."));
         return;
@@ -303,9 +394,15 @@ async function load() {
       );
       paintAvatar($("#public-avatar"), p);
       renderPublicScores(p);
+      paintAppearance($(".public-profile-hero"), p.appearance);
+      paintFeatured(
+        $("[data-public-featured]"),
+        appearance(p.appearance).featured,
+        p.game_achievements || [],
+      );
       void mountPublicFriendActions($("#public-friend-actions"), p);
       $("#profile-page").classList.add("is-public-profile");
-      $("#profile-heading").closest(".page-intro").hidden = true;
+      $("#profile-heading").closest(".account-hero").hidden = true;
       if (api.user) {
         ensureProfile()
           .then(
@@ -319,7 +416,10 @@ async function load() {
       $("#profile-login").hidden = false;
       message(uiMsg("Sign in to edit your profile."));
     } else {
-      fill(await ensureProfile(true));
+      const me = await ensureProfile(true);
+      if (ticket !== profileLoad || account !== api.user?.id) return;
+      fill(me);
+      void loadMilestoneChoices();
       $("#profile-form").hidden = false;
       message(
         uiMsg(
@@ -328,6 +428,7 @@ async function load() {
       );
     }
   } catch {
+    if (ticket !== profileLoad || account !== api.user?.id) return;
     message(uiMsg("Profile could not load. Check your connection and retry."));
     $("#profile-retry").hidden = false;
   }
@@ -444,6 +545,8 @@ $("#profile-form").addEventListener("submit", async (e) => {
     message(uiMsg("Account changed. Reload before saving."));
     return;
   }
+  const saveOwner = owner,
+    saveEpoch = profileLoad;
   const nickname = $("#profile-name")
       .value.normalize("NFC")
       .trim()
@@ -462,11 +565,14 @@ $("#profile-form").addEventListener("submit", async (e) => {
     return;
   }
   const patch = {};
+  const look = editedAppearance();
+  if (JSON.stringify(look) !== JSON.stringify(appearance(original.appearance)))
+    patch.appearance = look;
   if (nickname !== original.nickname) patch.nickname = nickname;
   if (bio !== original.bio) patch.bio = bio;
   working = true;
   $("#profile-form")
-    .querySelectorAll("input,textarea,button")
+    .querySelectorAll("input,textarea,button,select")
     .forEach((node) => (node.disabled = true));
   $("#profile-form").setAttribute("aria-busy", "true");
   message(uiMsg("Saving your profile…"));
@@ -478,6 +584,7 @@ $("#profile-form").addEventListener("submit", async (e) => {
         .from("avatars")
         .upload(path, avatarBlob, { contentType: "image/webp", upsert: false });
       if (error) throw error;
+      if (saveOwner !== api.user?.id || saveEpoch !== profileLoad) return;
       uploadedPath = path;
     }
     if (avatarKind !== original.avatar_kind || avatarBlob) {
@@ -486,9 +593,9 @@ $("#profile-form").addEventListener("submit", async (e) => {
     }
     const saved = await profileRPC("update_my_profile", {
       patch,
-      expected_user: owner,
+      expected_user: saveOwner,
     });
-    if (api.user?.id !== owner)
+    if (api.user?.id !== saveOwner || saveEpoch !== profileLoad)
       throw new Error("Account changed. Please reload.");
     api.setProfile(saved, owner);
     dirty = false;
@@ -515,6 +622,7 @@ $("#profile-form").addEventListener("submit", async (e) => {
         await api.client.storage.from("avatars").remove([snapshot.avatar_path]);
     } catch {}
   } catch (error) {
+    if (saveOwner !== api.user?.id || saveEpoch !== profileLoad) return;
     window.KenseiNotify?.(uiMsg("Could not save your profile. Try again."), {
       kind: "error",
       account: owner,
@@ -526,9 +634,10 @@ $("#profile-form").addEventListener("submit", async (e) => {
       ]),
     );
   } finally {
+    if (saveOwner !== api.user?.id || saveEpoch !== profileLoad) return;
     working = false;
     $("#profile-form")
-      .querySelectorAll("input,textarea,button")
+      .querySelectorAll("input,textarea,button,select")
       .forEach((node) => (node.disabled = false));
     $("#profile-form").removeAttribute("aria-busy");
   }
@@ -538,6 +647,31 @@ window.addEventListener("beforeunload", (e) => {
     e.preventDefault();
     e.returnValue = "";
   }
+});
+window.addEventListener("auth-identity-change", () => {
+  profileLoad++;
+  milestoneLoad++;
+  selection++;
+  dirty = false;
+  working = false;
+  original = null;
+  avatarBlob = null;
+  uploadedPath = null;
+  ownMilestones = [];
+  featured = [];
+  releasePreview();
+  for (const node of document.querySelectorAll(
+    "#profile-form input,#profile-form textarea",
+  )) {
+    if (node.type !== "checkbox") node.value = "";
+  }
+  $("#profile-form").hidden = true;
+  $("#profile-preview").hidden = true;
+  $("#profile-form")
+    .querySelectorAll("input,textarea,button,select")
+    .forEach((node) => (node.disabled = false));
+  $("#profile-form").removeAttribute("aria-busy");
+  void load();
 });
 window.addEventListener("pagehide", releasePreview);
 await ready;
