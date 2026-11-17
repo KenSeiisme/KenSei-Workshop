@@ -51,10 +51,7 @@ const tasks = {
 };
 const order = (a, b) =>
   b.created_at.localeCompare(a.created_at) || b.id.localeCompare(a.id);
-const later = (row, mark) =>
-  !mark ||
-  row.created_at > mark.created_at ||
-  (row.created_at === mark.created_at && row.id > mark.id);
+const observed = new Map();
 function textButton(label, action) {
   const button = document.createElement("button");
   button.type = "button";
@@ -259,6 +256,7 @@ function reset(nextOwner) {
   more = false;
   unread = 0;
   watermark = null;
+  observed.clear();
   pending = null;
   mutations = 0;
   queued = false;
@@ -311,7 +309,10 @@ async function load({ append = false, force = false } = {}) {
     if (!Array.isArray(snapshot?.rows) || !Array.isArray(all?.rows))
       throw Error("Invalid notification feed");
     const fresh = all.rows.filter(
-      (row) => !row.read_at && later(row, watermark),
+      (row) =>
+        !row.read_at &&
+        !observed.has(row.id) &&
+        (!watermark || row.created_at >= watermark.created_at),
     );
     if (watermark && !quietReturn && fresh.length) {
       window.KenseiNotify?.(
@@ -336,6 +337,11 @@ async function load({ append = false, force = false } = {}) {
     }
     if (all.rows[0])
       watermark = { created_at: all.rows[0].created_at, id: all.rows[0].id };
+    for (const row of all.rows) observed.set(row.id, row.created_at);
+    if (observed.size > 500 && watermark) {
+      for (const [id, date] of observed)
+        if (date < watermark.created_at) observed.delete(id);
+    }
     quietReturn = false;
     unread = Number(all.unread) || 0;
     let incoming = snapshot.rows.slice(0, pageSize),

@@ -232,7 +232,7 @@ export function createClient() {
               id: "dddddddd-dddd-4ddd-8ddd-000000000001",
               source: "request:" + requestId,
               kind: "friend_request",
-              created_at: "2026-11-18T00:00:00Z",
+              created_at: "2026-11-17T17:00:00.000Z",
               read_at: null,
               actor: { nickname: "Second Player", public_id: peer },
               payload: { relationship: { id: requestId, state: "incoming" } },
@@ -243,6 +243,10 @@ export function createClient() {
       },
       { peer, requestId },
     );
+    await page
+      .locator('.toast[data-category="social"]')
+      .getByText("Second Player sent you a friend request.", { exact: true })
+      .waitFor();
     await center.locator('[data-friend-action="accept"]').click();
     await page.waitForFunction(
       () => localStorage.getItem("fixture:state") === JSON.stringify("friend"),
