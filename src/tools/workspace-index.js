@@ -54,7 +54,14 @@ function localRecords() {
       name: row.data?.name,
       updated_at: row.updated_at,
       deleted: row.deleted,
-      pending: clearQueued || queuedIds.has(row.id),
+      pending: clearQueued || queuedIds.has(row.id) || !!row.data?.pending,
+      save_status:
+        workspaceStores.get(kind)?.recordSaveStatus(row.id) ||
+        (api.user
+          ? clearQueued || queuedIds.has(row.id) || row.data?.pending
+            ? "pending"
+            : "synced"
+          : "device"),
     }));
   });
   return { rows, cleared };
@@ -92,11 +99,20 @@ export function mountWorkspaceIndex(root) {
     const [label, param] = kinds[row.kind];
     const path = window.KenseiI18n.localePath("/tools/" + row.tool + "/");
     const timestamp = new Date(row.updated_at);
-    return uiHtml`<div class="saved-row"><div>
+    const saveLabels = {
+      device: uiMsg("Saved locally"),
+      synced: uiMsg("Synced"),
+      pending: uiMsg("Pending sync"),
+      syncing: uiMsg("Syncing"),
+      failed: uiMsg("Sync failed"),
+    };
+    const saveLabel =
+      saveLabels[row.save_status || (owner ? "synced" : "device")];
+    return uiHtml`<div class="saved-row"><span class="workspace-record-icon" data-tool-category="${esc(tools[row.tool].category)}">${tools[row.tool].icon || ""}</span><div>
       <strong>${row.name ? esc(row.name) : uiMsg("Untitled record")}</strong>
       <p>${uiFrom(label)} · ${uiFrom(tools[row.tool].name)}
       ${Number.isFinite(+timestamp) ? uiDate(timestamp, { dateStyle: "medium", timeStyle: "short" }) : ""}
-      ${owner && row.pending ? uiMsg("Pending sync") : ""}</p></div>
+      <span class="workspace-save-state">${saveLabel}</span></p></div>
       <a class="text-link" data-record="${esc(key(row))}" href="${path}?${param}=${encodeURIComponent(row.id)}">${isRecent ? uiMsg("Continue editing") : uiMsg("Open")}</a>
     </div>`;
   }
@@ -105,7 +121,16 @@ export function mountWorkspaceIndex(root) {
     const online = owner && !failed && navigator.onLine;
     const term = query.value.trim().toLowerCase();
     const matches = new Set(toolMatches());
-    const rows = new Map(online ? remote.map((row) => [key(row), row]) : []);
+    const cached = owner
+      ? remote.filter(
+          (row) =>
+            (!kind.value || row.kind === kind.value) &&
+            (!term ||
+              matches.has(row.tool) ||
+              row.name?.toLowerCase().includes(term)),
+        )
+      : [];
+    const rows = new Map(cached.map((row) => [key(row), row]));
     const { rows: local, cleared } = localRecords();
     for (const [id, row] of rows) if (cleared.has(row.kind)) rows.delete(id);
     for (const row of local) {
@@ -146,7 +171,7 @@ export function mountWorkspaceIndex(root) {
       ? document.activeElement.dataset.record
       : null;
     list.innerHTML = visible
-      .slice(0, limit)
+      .slice(showRecent ? 4 : 0, limit)
       .map((row) => recordRow(row))
       .join("");
     if (focusKey)
@@ -170,12 +195,15 @@ export function mountWorkspaceIndex(root) {
 
   async function refresh(append = false) {
     const nextOwner = api.user?.id;
-    if (owner !== nextOwner || !append) {
+    if (owner !== nextOwner) {
       owner = nextOwner;
       request = null;
       remote = [];
       failed = more = false;
-      if (!append) limit = pageSize;
+      limit = pageSize;
+    } else if (!append) {
+      request = null;
+      limit = pageSize;
     }
     if (!owner || !navigator.onLine || !api.client || (append && !more)) {
       paint();
@@ -183,7 +211,7 @@ export function mountWorkspaceIndex(root) {
     }
     const ticket = {};
     request = ticket;
-    const last = remote.at(-1);
+    const last = append ? remote.at(-1) : null;
     paint();
     try {
       const rpc = api.client.rpc("get_workspace_index", {
@@ -201,7 +229,10 @@ export function mountWorkspaceIndex(root) {
       if (error || !Array.isArray(data))
         throw error || Error("Invalid workspace index");
       more = data.length > pageSize;
-      remote.push(...data.slice(0, pageSize));
+      remote = append
+        ? [...remote, ...data.slice(0, pageSize)]
+        : data.slice(0, pageSize);
+      failed = false;
     } catch {
       if (request === ticket) failed = true;
     } finally {

@@ -260,6 +260,9 @@
     return icon;
   }
   window.KenseiNoticeSettings = {
+    preview() {
+      void sound("success", "preview:" + crypto.randomUUID(), [], null);
+    },
     get volume() {
       return volume;
     },
@@ -273,7 +276,7 @@
     },
   };
   function categoryOf(message) {
-    const source = String(message || "");
+    const source = String(message?.source || message || "");
     if (
       /could not|failed|unable to|unavailable|permission denied|not supported/i.test(
         source,

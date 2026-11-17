@@ -3,6 +3,11 @@ import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
 import { uiFrom, uiMsg, uiText } from "./ui.js";
 import { paintFriendActions } from "./friend-actions.js";
 import {
+  presenceText,
+  socialVisible,
+  setSocialVisibility,
+} from "./social-presence.js";
+import {
   profileId,
   SOCIAL_GAMES,
   socialPath,
@@ -47,7 +52,8 @@ function row(person) {
     identity = document.createElement("a"),
     avatar = document.createElement("span"),
     name = document.createElement("strong"),
-    buttons = document.createElement("div");
+    buttons = document.createElement("div"),
+    activity = document.createElement("span");
   wrapper.className = "friend-row";
   wrapper.dataset.friendId = person.public_id;
   identity.className = "friend-identity";
@@ -59,6 +65,12 @@ function row(person) {
   paintAvatar(avatar, person);
   uiText(name, person.nickname);
   identity.append(avatar, name);
+  if (person.state === "friend") {
+    activity.className = "friend-presence";
+    activity.dataset.presence = person.presence?.status || "offline";
+    uiText(activity, presenceText(person.presence));
+    identity.append(activity);
+  }
   buttons.className = "friend-actions";
   wrapper.append(identity, buttons);
   paintFriendActions(buttons, person, (next) => {
@@ -84,10 +96,20 @@ function row(person) {
 }
 function paint(focused = document.activeElement) {
   const from = focused?.closest("[data-friend-id]");
+  const action = focused?.dataset.friendAction;
+  uiText(
+    $("[data-friend-count]"),
+    records.filter((p) => p.state === "friend").length,
+  );
+  const term = $("[data-friend-filter]").value.trim().toLowerCase();
   results.replaceChildren(...matches.map(row));
   for (const list of root.querySelectorAll("[data-friend-list]")) {
     const people = records.filter(
-      (peer) => peer.state === list.dataset.friendList,
+      (peer) =>
+        peer.state === list.dataset.friendList &&
+        (list.dataset.friendList !== "friend" ||
+          !term ||
+          peer.nickname.toLowerCase().includes(term)),
     );
     list.replaceChildren(...people.map(row));
     if (!people.length) {
@@ -106,13 +128,20 @@ function paint(focused = document.activeElement) {
     const target = [...root.querySelectorAll("[data-friend-id]")].find(
       (node) => node.dataset.friendId === from.dataset.friendId,
     );
-    (target?.querySelector("a[href]") || query).focus({ preventScroll: true });
+    (
+      target?.querySelector(
+        action ? '[data-friend-action="' + action + '"]' : "a[href]",
+      ) ||
+      target?.querySelector("a[href]") ||
+      query
+    ).focus({ preventScroll: true });
   }
 }
 function reset() {
   records = [];
   matches = [];
   query.value = "";
+  $("[data-friend-filter]").value = "";
   loadToken++;
   searchToken++;
   clearTimeout(delay);
@@ -134,13 +163,16 @@ async function load() {
     return;
   }
   const token = ++loadToken;
-  uiText(status, uiMsg("Loading friends…"));
+  if (!records.length) uiText(status, uiMsg("Loading friends…"));
   try {
     await ensureProfile();
     const data = await socialRPC("list_friendships", {}, owner);
     if (token !== loadToken || account !== api.user?.id) return;
-    records = Array.isArray(data) ? data : [];
-    paint();
+    const next = Array.isArray(data) ? data : [];
+    if (JSON.stringify(next) !== JSON.stringify(records)) {
+      records = next;
+      paint();
+    }
     uiText(status, "");
   } catch {
     if (token !== loadToken || account !== api.user?.id) return;
@@ -194,7 +226,52 @@ $("[data-close-friend-game]").onclick = () => chooser.close();
 chooser.onclose = () => {
   if (searchTrigger?.isConnected) searchTrigger.focus({ preventScroll: true });
 };
-for (const event of ["workspace-ready", "auth-identity-change", "focus"])
+for (const event of [
+  "workspace-ready",
+  "auth-identity-change",
+  "focus",
+  "online",
+  "social-remote-change",
+])
   window.addEventListener(event, load);
-window.addEventListener("locale-change", paint);
+window.addEventListener("locale-change", () => paint());
+$("[data-friend-filter]").oninput = (event) => {
+  if (!event.isComposing) paint();
+};
+$("[data-friend-filter]").addEventListener("compositionend", () => paint());
+const visibility = $("[data-social-visibility]");
+function paintVisibility() {
+  visibility.value = socialVisible() ? "visible" : "hidden";
+}
+window.addEventListener("social-preferences-change", paintVisibility);
+visibility.onchange = async () => {
+  visibility.disabled = true;
+  const account = api.user?.id;
+  try {
+    await setSocialVisibility(visibility.value === "visible");
+    if (account !== api.user?.id) return;
+    uiText(
+      $("[data-social-visibility-status]"),
+      socialVisible()
+        ? uiMsg("Your status is visible to friends.")
+        : uiMsg("You appear offline to friends."),
+    );
+  } catch {
+    if (account === api.user?.id)
+      uiText(
+        $("[data-social-visibility-status]"),
+        uiMsg("Visibility could not save. Try again."),
+      );
+    paintVisibility();
+  } finally {
+    visibility.disabled = false;
+  }
+};
+setInterval(() => {
+  if (!document.hidden && api.user) void load();
+}, 30000);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) void load();
+});
+paintVisibility();
 load();

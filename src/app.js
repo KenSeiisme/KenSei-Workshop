@@ -1605,6 +1605,7 @@
       toast(uiMsg("Saved history could not load. Reload to retry.")),
     );
   import("/site/notification-center.js").catch(() => {});
+  import("/site/social-presence.js").catch(() => {});
   if (document.querySelector("[data-friends-page]"))
     import("/site/friends.js").catch(() =>
       toast(uiMsg("Friends could not load. Try again."), "error"),

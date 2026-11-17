@@ -322,6 +322,11 @@ def source_files(route):
         "src/site/theme.js",
         "src/site/notices.js",
         "src/site/notification-center.js",
+        "src/site/social-presence.js",
+        "src/site/friend-actions.js",
+        "src/site/social-api.js",
+        "src/games/achievement-catalog.js",
+        "src/site/profile-appearance.js",
     }
     if route == "friends":
         files.add("src/site/friends.js")

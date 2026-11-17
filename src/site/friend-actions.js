@@ -1,6 +1,8 @@
 import { api } from "/tool-scripts/common.js";
 import { uiAttr, uiConfirm, uiMsg, uiText } from "./ui.js";
-import { socialRPC } from "./social-api.js";
+import { socialRPC, SOCIAL_GAMES, socialPath } from "./social-api.js";
+import { presenceText } from "./social-presence.js";
+import { uiFrom } from "./ui.js";
 
 const actions = {
   none: ["request", "block"],
@@ -59,11 +61,29 @@ export function paintFriendActions(root, peer, update) {
               kind: "warning",
               account: owner,
             });
-          } else
-            window.KenseiNotify?.(uiMsg("Friend status updated."), {
-              kind: "success",
-              account: owner,
-            });
+          } else {
+            const expected = {
+              request: "outgoing",
+              accept: "friend",
+              decline: "none",
+              cancel: "none",
+              remove: "none",
+              block: "blocked",
+              unblock: "none",
+            }[action];
+            const changed = next?.state === expected;
+            window.KenseiNotify?.(
+              changed
+                ? uiMsg("Friend status updated.")
+                : uiMsg(
+                    "This request has changed. The current status is shown.",
+                  ),
+              {
+                kind: changed ? "success" : "warning",
+                account: owner,
+              },
+            );
+          }
           update(next || { state: "unavailable" });
           window.dispatchEvent(new Event("social-change"));
         } catch {
@@ -89,6 +109,41 @@ export function paintFriendActions(root, peer, update) {
   }
 }
 
+export function openFriendGameChoice(person, trigger) {
+  let dialog = document.querySelector("#public-friend-game-choice");
+  if (!dialog) {
+    dialog = document.createElement("dialog");
+    dialog.id = "public-friend-game-choice";
+    dialog.className = "friend-invite-dialog";
+    document.querySelector("#main").append(dialog);
+  }
+  dialog.replaceChildren();
+  const title = document.createElement("h2"),
+    links = document.createElement("div");
+  title.id = "public-friend-game-heading";
+  uiText(title, uiMsg("Invite {0}", [person.nickname]));
+  dialog.setAttribute("aria-labelledby", title.id);
+  links.className = "friend-game-links";
+  for (const [game, name] of Object.entries(SOCIAL_GAMES)) {
+    const link = document.createElement("a");
+    link.className = "button secondary";
+    link.href =
+      socialPath("/games/" + game + "/") +
+      "?friend=" +
+      encodeURIComponent(person.public_id);
+    uiText(link, uiFrom(name));
+    links.append(link);
+  }
+  dialog.append(
+    title,
+    links,
+    button(uiMsg("Close"), () => dialog.close(), false),
+  );
+  dialog.onclose = () => {
+    if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+  };
+  dialog.showModal();
+}
 export async function mountPublicFriendActions(root, person) {
   root.replaceChildren();
   if (!api.user) {
@@ -110,6 +165,17 @@ export async function mountPublicFriendActions(root, person) {
       label.className = "small-tag";
       uiText(label, uiMsg("Friend"));
       root.prepend(label);
+      const presence = document.createElement("span");
+      presence.className = "friend-presence";
+      uiText(presence, presenceText(relation.presence));
+      root.append(
+        presence,
+        button(
+          uiMsg("Invite to game"),
+          (event) => openFriendGameChoice(person, event.currentTarget),
+          false,
+        ),
+      );
     }
   };
   try {
