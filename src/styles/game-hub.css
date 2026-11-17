@@ -958,8 +958,13 @@
     white-space: nowrap;
     font-size: 0.8rem;
   }
-  .hub-bar .hub-wallet > span:last-child {
-    display: none;
+  .hub-wallet-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .hub-shortcuts {
     gap: 0;
@@ -1048,6 +1053,20 @@
   }
 }
 @media (max-width: 370px) {
+  .hub-feature-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+    align-items: center;
+  }
+  .hub-feature-heading .eyebrow {
+    display: none;
+  }
+  .hub-feature-heading h1 {
+    margin: 0;
+    font-size: 1.16rem;
+    line-height: 1.15;
+  }
   .game-hub .hub-slide {
     padding: 10px;
   }
