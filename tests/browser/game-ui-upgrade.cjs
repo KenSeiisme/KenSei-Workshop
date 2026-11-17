@@ -26,19 +26,21 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth + 1,
       );
-    await open("/zh-hant/games/");
-    await page.locator('[data-games-directory][data-ready="true"]').waitFor();
-    for (const selector of [
-      ".hub-library-jump",
-      ".hub-slide:not([hidden]) .hub-feature-actions a.primary",
-    ]) {
-      const box = await page.locator(selector).boundingBox();
-      assert(
-        box && box.y >= 0 && box.y + box.height <= 640,
-        selector + " below fold",
-      );
+    for (const route of ["/games/", "/zh-hant/games/"]) {
+      await open(route);
+      await page.locator('[data-games-directory][data-ready="true"]').waitFor();
+      for (const selector of [
+        ".hub-library-jump",
+        ".hub-slide:not([hidden]) .hub-feature-actions a.primary",
+      ]) {
+        const box = await page.locator(selector).boundingBox();
+        assert(
+          box && box.y >= 0 && box.y + box.height <= 640,
+          route + " " + selector + " below fold",
+        );
+      }
+      assert(await noOverflow());
     }
-    assert(await noOverflow());
     const carousel = page.locator(".hub-feature");
     const first = page.locator("[data-hub-featured]:not([hidden])");
     await carousel.hover();
