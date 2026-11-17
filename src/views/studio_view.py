@@ -9,6 +9,7 @@ import re
 from urllib.parse import urlsplit
 import localization as i18n
 from icons import icon
+from template_renderer import motion_control
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -72,7 +73,7 @@ def view():
     size = round(info["bytes"] / 1048576, 1)
     digest = escape(info["sha256"])
     return f"""<article class="container page-section studio-page">
-<a href="/projects/" class="back-link">{icon("back")} <span>All projects</span></a>
+<div class="workshop-project-toolbar"><a href="/projects/" class="back-link">{icon("back")} <span>All projects</span></a>{motion_control(icon_only=True)}</div>
 <div class="detail-heading glass-surface"><div><div class="eyebrow">WINDOWS / DESKTOP APP</div><h1>KenSei Studio</h1><p>Turn sound into light.</p></div><a class="button primary" href="{url}" download><span>Download for Windows x64</span> {icon("download")}</a></div>
 <p class="studio-meta">Version <strong>{version}</strong> · <time>{info['date']}</time> · {size} MB · Windows 10 / 11</p>
 <div class="studio-preview"><img src="/assets/kensei-studio/preview.png?v={version}" alt="KenSei Studio show editor and LED preview" width="1560" height="1000"></div>

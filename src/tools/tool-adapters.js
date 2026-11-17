@@ -229,6 +229,14 @@ function adapt(tool, root) {
       $(".draft-controls")?.before($("#markdown-md").parentNode);
       break;
     case "text-compare": {
+      tabs(
+        [
+          $("#compare-left")?.closest("section"),
+          $("#compare-right")?.closest("section"),
+        ],
+        ["Original text", "Updated text"],
+        { mobile: true, name: "Text comparison" },
+      );
       const legend = el("div", undefined, "diff-legend");
       legend.append(
         el("span", uiMsg("+ Added"), "diff-added"),
@@ -242,10 +250,17 @@ function adapt(tool, root) {
       break;
     }
     case "data-studio":
-      tabs($$(".studio-grid > section", root), ["JSON", "CSV"], {
-        mobile: true,
-        name: "Data format",
-      });
+      tabs(
+        [
+          $("#data-json")?.closest("section"),
+          $("#data-csv")?.closest("section"),
+        ],
+        ["JSON", "CSV"],
+        {
+          mobile: true,
+          name: "Data format",
+        },
+      );
       $("#data-page")
         ?.closest(".section-heading")
         ?.classList.add("tool-save-status");
@@ -262,7 +277,10 @@ function adapt(tool, root) {
         const row = el("div", undefined, "tool-output-actions");
         video.after(row);
         row.append(format, download);
-        fold(video, "Preview with a local video");
+        tabs([$("#sub-text")?.closest("section"), video], ["Edit", "Preview"], {
+          mobile: true,
+          name: "Subtitle workspace",
+        });
       }
       $("#sub-page")?.parentNode.classList.add("tool-save-status");
       break;
@@ -464,8 +482,7 @@ function adapt(tool, root) {
       break;
     }
     case "audio-studio": {
-      const first = $("#audio-record-start")?.closest("section"),
-        file = $("#audio-file")?.closest("label");
+      const file = $("#audio-file")?.closest("label");
       if (file) step(file, "Import an existing clip");
       $("#audio-record-status")?.classList.add("recording-status");
       step($("#audio-wave")?.closest(".panel"), "Edit & export your selection");

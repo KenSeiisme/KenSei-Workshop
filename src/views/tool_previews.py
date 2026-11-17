@@ -115,9 +115,12 @@ def element(kind, *values):
     return f'<span class="tool-visual-{kind}">{body}</span>'
 
 
-def tool_preview(slug):
+def tool_preview(slug, miniature=False):
     art = "".join(element(*part) for part in PREVIEWS[slug])
+    preview = f'<span class="tool-visual-art">{art}</span>'
+    if miniature:
+        return preview
     return (
         f'<div class="tool-card-preview" data-tool-preview="{slug}" aria-hidden="true">'
-        f'<span class="tool-visual-art">{art}</span><small>Example</small></div>'
+        f"{preview}<small>Example</small></div>"
     )

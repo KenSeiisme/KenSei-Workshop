@@ -1,0 +1,296 @@
+/* The catalogs share their controls; editorial and active surfaces keep separate roles. */
+.workshop-catalog-heading,
+.workshop-project-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 0.75rem;
+}
+.workshop-catalog-heading .page-intro {
+  flex: 1;
+  margin-bottom: clamp(0.85rem, 2vw, 1.4rem);
+}
+.workshop-catalog-heading .workshop-motion-control {
+  margin-top: 0.1rem;
+}
+.workshop-project-toolbar {
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+.workshop-project-toolbar .back-link {
+  margin-block: 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.hub-bar .workshop-motion-control {
+  margin-inline-start: 0.2rem;
+}
+.hub-bar .hub-shortcuts {
+  margin-inline-start: auto;
+}
+.hub-boards-header,
+[data-games-achievements] .hub-boards-header {
+  margin-block: 0 1rem;
+  padding-block: 0.6rem;
+  border-bottom: 1px solid var(--line);
+}
+.hub-boards-header h1 {
+  font-size: clamp(1.65rem, 4vw, 2.5rem);
+}
+.game-hub .game-card .game-card-title,
+.game-hub .game-card h3 {
+  line-height: 1.15;
+}
+.game-hub .game-card .game-card-meta {
+  gap: 0.3rem;
+}
+.tool-favorite-filter {
+  justify-self: start;
+  min-height: 44px;
+}
+.tool-favorite-filter[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--surface2);
+}
+.tools-page .recent-tools {
+  border-top: 1px solid var(--line);
+  margin-top: 1.25rem;
+  padding-top: 0.7rem;
+}
+.tools-page .tools-controls .catalog-feedback {
+  grid-column: 1 / -1;
+  justify-content: flex-start;
+}
+.game-hub .game-card-meta > span {
+  color: var(--text);
+}
+.game-hub .game-library-controls {
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--line));
+}
+
+.projects-page .listing-projects {
+  --project-columns: repeat(3, minmax(0, 1fr));
+  display: grid;
+  grid-template-columns: var(--project-columns);
+  align-items: stretch;
+}
+.listing-projects[data-project-category="all"] > .featured {
+  grid-column: 1 / -1;
+}
+.listing-projects[data-project-category="all"] > .featured .project-card-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: center;
+}
+.listing-projects[data-project-category="all"] > .featured .project-cover {
+  aspect-ratio: 16 / 8;
+}
+.listing-projects[data-project-category="all"] > .featured .project-copy {
+  padding: clamp(1rem, 4vw, 3rem);
+}
+.listing-projects[data-project-category="all"] > .featured h3 {
+  font-size: clamp(1.3rem, 3vw, 2.2rem);
+}
+.listing-projects:not([data-project-category="all"]) .project-card-link {
+  grid-template-columns: minmax(0, 1fr);
+}
+.workshop-scene :is(.project-detail, .studio-page) .detail-heading {
+  margin-bottom: 0.8rem;
+}
+.workshop-scene :is(.project-detail-cover, .studio-preview) {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.workshop-scene :is(.project-detail, .studio-page) .detail-columns {
+  gap: clamp(0.9rem, 3vw, 1.6rem);
+}
+.workshop-scene :is(.project-detail, .studio-page) .detail-columns > * {
+  min-width: 0;
+}
+.workshop-scene :is(.project-detail, .studio-page) .detail-columns h2 {
+  margin-top: 0;
+}
+.workshop-scene .studio-checksum {
+  overflow-wrap: anywhere;
+}
+
+/* The document stays in place. Only the presentation changes across viewports. */
+.tool-page[data-tool]:not(
+    [data-tool="whiteboard"],
+    [data-tool="typing-sprint"]
+  ) {
+  padding-top: clamp(1rem, 2vw, 1.75rem);
+}
+.tool-page .tool-heading.workshop-tool-toolbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: clamp(0.5rem, 2vw, 1.4rem);
+  row-gap: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.55rem;
+  border-block-end: 1px solid var(--line);
+}
+.workshop-tool-toolbar .back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+}
+.tool-page .workshop-tool-toolbar h1 {
+  margin: 0;
+  font-size: clamp(1.22rem, 2.4vw, 2rem);
+  letter-spacing: -0.035em;
+}
+.workshop-tool-toolbar .workshop-tool-title p {
+  margin: 0.25rem 0 0;
+  line-height: 1.4;
+  font-size: 0.88rem;
+}
+.tool-page .tool-heading-actions {
+  margin: 0;
+  flex-wrap: nowrap;
+}
+.workshop-tool-toolbar .tool-heading-actions .button {
+  min-height: 44px;
+}
+.tool-page .tool-feedback {
+  margin-block: 0.35rem 0.7rem;
+  padding-block: 0.45rem;
+}
+.tool-page > :is(.studio-grid, .editor-split, .planner-layout, .pdf-layout),
+.tool-page :is(#image-batch-mode, #qr-generate) > .studio-grid {
+  gap: clamp(0.65rem, 1.7vw, 1.15rem);
+}
+.workshop-scene
+  .tool-page
+  :is(.tool-form, .file-input-panel, .editor-pane, .capture-preview-panel) {
+  min-width: 0;
+}
+.workshop-scene
+  .tool-page
+  :is(.editor-pane, .file-input-panel, .capture-preview-panel) {
+  background: var(--surface);
+}
+.workshop-scene
+  .tool-page
+  :is(.file-input-panel, .capture-preview-panel, .planner-main) {
+  border-top-color: color-mix(in srgb, var(--accent) 33%, var(--line));
+}
+.workshop-scene
+  .tool-page
+  :is(.network-top, .whiteboard-toolbar, .typing-toolbar) {
+  border-bottom-color: color-mix(in srgb, var(--accent) 28%, var(--line));
+}
+.workshop-workbench-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 0.55rem;
+}
+.workshop-workbench-heading h2 {
+  margin: 0;
+}
+#audio-record-controls {
+  scroll-margin-top: 86px;
+}
+
+/* Tone live information to the type of game without changing board geometry. */
+[data-game-workspace="arcade"] .game-primary-metric strong {
+  color: var(--game-accent, var(--accent));
+  font-variant-numeric: tabular-nums;
+}
+[data-game-workspace="puzzle"] .game-metrics > div:nth-child(2) strong {
+  font-variant-numeric: tabular-nums;
+}
+[data-game-workspace="board"]
+  :is(.go-hud, .chess-hud, .xiangqi-hud)
+  > :nth-child(2) {
+  background: var(--surface);
+}
+[data-game-workspace="board"] .game-metrics {
+  border-block-end: 1px solid color-mix(in srgb, var(--accent) 26%, var(--line));
+}
+[data-game-workspace="board"] .game-metrics strong,
+[data-game-workspace="board"] [class$="-clock"] {
+  font-variant-numeric: tabular-nums;
+}
+[data-play-shell] .game-control-deck {
+  background: color-mix(in srgb, var(--surface) 90%, var(--bg));
+}
+[data-play-shell] :is(.game-result, .game-entry-panel, .pong-join-panel) {
+  border-color: color-mix(
+    in srgb,
+    var(--game-accent, var(--accent)) 32%,
+    var(--line)
+  );
+}
+[data-play-shell] [data-match-result] {
+  border-color: color-mix(in srgb, var(--game-accent) 32%, var(--line));
+}
+[data-play-shell] .game-result :is(h2, strong) {
+  line-height: 1.13;
+}
+[data-games-achievements] :is(.achievement-grid, .game-achievement-grid) {
+  gap: 0.6rem;
+}
+
+@media (max-width: 767px) {
+  .projects-page .listing-projects {
+    --project-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tool-page .workshop-tool-toolbar {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    padding-inline: 0;
+  }
+  .workshop-tool-toolbar .back-link > span,
+  .workshop-tool-toolbar .tool-heading-actions .button > span {
+    position: absolute;
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .workshop-tool-toolbar .back-link,
+  .workshop-tool-toolbar .tool-heading-actions .button {
+    min-width: 44px;
+    justify-content: center;
+    padding-inline: 0.45rem;
+  }
+  .workshop-tool-toolbar .workshop-tool-title p {
+    display: none;
+  }
+}
+@media (max-width: 540px) {
+  .projects-page .listing-projects,
+  .listing-projects[data-project-category="all"]
+    > .featured
+    .project-card-link {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .game-hub .hub-bar .workshop-motion-control {
+    min-width: 44px;
+    margin: 0;
+  }
+}
+@media (max-width: 380px) {
+  .game-hub .hub-bar {
+    gap: 4px;
+  }
+  .game-hub .hub-bar .hub-library-jump > span {
+    white-space: nowrap;
+  }
+  .game-hub .hub-shortcuts .hub-profile-jump {
+    display: none;
+  }
+  .game-hub .hub-shortcuts .hub-wallet {
+    min-width: 44px;
+    padding-inline: 5px;
+    gap: 3px;
+  }
+}

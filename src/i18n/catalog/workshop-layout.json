@@ -1,0 +1,26 @@
+{
+  "m_114948a42a96": {
+    "en": "Save a favorite with the star on any tool card.",
+    "zh-Hant": "可點選工具卡片上的星號加入收藏。"
+  },
+  "m_0c63b325cb92": {
+    "en": "Text comparison",
+    "zh-Hant": "文字比對"
+  },
+  "m_dc66022587ec": {
+    "en": "Subtitle workspace",
+    "zh-Hant": "字幕工作區"
+  },
+  "m_5fbfabae3628": {
+    "en": "Recording controls",
+    "zh-Hant": "錄音控制"
+  },
+  "m_ed1c4b823c17": {
+    "en": "Microphone is off. Stop a recording to open it in the editor.",
+    "zh-Hant": "麥克風已關閉。停止錄音後，即可在編輯器中開啟錄音。"
+  },
+  "m_b0ef556fc219": {
+    "en": "Start screen recording",
+    "zh-Hant": "開始螢幕錄影"
+  }
+}

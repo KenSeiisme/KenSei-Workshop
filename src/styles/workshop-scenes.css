@@ -1,0 +1,212 @@
+/* Keep the clipped artwork below every interactive surface without clipping focus. */
+.workshop-scene {
+  position: relative;
+  isolation: isolate;
+}
+
+.workshop-atmosphere {
+  --bubble-color: var(--accent);
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 auto;
+  height: min(19rem, 80vh);
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(black 0%, black 55%, transparent 100%);
+  background:
+    radial-gradient(
+      ellipse at 8% 19%,
+      color-mix(in srgb, var(--bubble-color) 14%, transparent),
+      transparent 47%
+    ),
+    radial-gradient(
+      ellipse at 92% 40%,
+      color-mix(in srgb, var(--pink) 12%, transparent),
+      transparent 45%
+    );
+}
+
+.workshop-atmosphere[data-catalog-scene] {
+  height: min(38rem, 92vh);
+}
+.workshop-atmosphere[data-area="games"] {
+  --bubble-color: #b9a4ee;
+}
+.workshop-atmosphere[data-area="projects"] {
+  --bubble-color: #e1a7ce;
+}
+
+.workshop-bubble-anchor {
+  --rise: -136px;
+  --drift: 16px;
+  --rotation: -9deg;
+  --pace: 12s;
+  --phase: -4s;
+  --bubble-opacity: 0.52;
+  position: absolute;
+  inset: var(--bubble-y, 46%) auto auto var(--bubble-x, 7%);
+  width: clamp(27px, 5vw, 75px);
+  aspect-ratio: 1;
+}
+.workshop-bubble-anchor:nth-child(2n) {
+  --bubble-x: 90%;
+  --bubble-y: 30%;
+  --drift: -15px;
+  --rotation: 10deg;
+  --phase: -6s;
+}
+.workshop-bubble-anchor:nth-child(3) {
+  --bubble-x: 2%;
+  --bubble-y: 63%;
+  --phase: -9s;
+}
+.workshop-bubble-anchor:nth-child(4) {
+  --bubble-x: 95%;
+  --bubble-y: 59%;
+  --phase: -2s;
+}
+.workshop-bubble-anchor:nth-child(5) {
+  --bubble-x: 12%;
+  --bubble-y: 76%;
+  --phase: -5s;
+}
+.workshop-bubble-anchor:nth-child(6) {
+  --bubble-x: 85%;
+  --bubble-y: 80%;
+  --phase: -7s;
+}
+.workshop-bubble-anchor:nth-child(7) {
+  --bubble-x: 5%;
+  --bubble-y: 32%;
+  --phase: -1s;
+}
+.workshop-bubble-anchor:nth-child(8) {
+  --bubble-x: 88%;
+  --bubble-y: 65%;
+  --phase: -10s;
+}
+.workshop-bubble-anchor:is(
+  [data-art="tool"],
+  [data-art="game"],
+  [data-art="project"]
+) {
+  width: clamp(44px, 7vw, 103px);
+  aspect-ratio: 4 / 3;
+}
+.workshop-bubble-anchor:is(
+  [data-art="ring"],
+  [data-art="diamond"],
+  [data-art="spark"],
+  [data-art="orb"]
+) {
+  width: clamp(17px, 3.2vw, 43px);
+}
+.workshop-bubble-anchor:is(
+    [data-art="tool"],
+    [data-art="game"],
+    [data-art="project"],
+    [data-art="diamond"]
+  )
+  > .workshop-bubble {
+  overflow: hidden;
+  border-radius: 24%;
+}
+.workshop-bubble-anchor[data-art="project"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 65% center;
+}
+.workshop-bubble-anchor[data-art="tool"] .tool-visual-art {
+  --preview-ink: var(--bubble-color);
+  --preview-alt: var(--pink);
+  position: absolute;
+  transform: scale(0.43);
+}
+.workshop-bubble-anchor[data-art="game"] .game-art {
+  transform: scale(0.48);
+}
+.workshop-bubble-anchor[data-art="ring"] .workshop-bubble {
+  background: none;
+}
+.workshop-orbs {
+  width: 65%;
+  height: 65%;
+  position: relative;
+}
+.workshop-orbs i {
+  position: absolute;
+  inset: 3% 25% 25% 3%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 28% 26%, var(--pink), transparent 75%);
+}
+.workshop-orbs i:nth-child(2) {
+  inset: 22% 2% 10% 32%;
+}
+.workshop-orbs i:nth-child(3) {
+  inset: 48% 30% 1% 18%;
+  background: radial-gradient(
+    circle at 28% 26%,
+    var(--accent),
+    transparent 75%
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .workshop-atmosphere[data-motion-enabled] .workshop-bubble {
+    animation: home-bubble-rise var(--pace) var(--phase) linear infinite paused;
+  }
+  .workshop-atmosphere[data-motion-running][data-scene-visible]
+    .workshop-bubble {
+    animation-play-state: running;
+  }
+}
+@media (max-width: 767px), (max-height: 540px) {
+  .workshop-bubble-anchor {
+    --rise: -76px;
+    --drift: 7px;
+    --bubble-opacity: 0.4;
+  }
+  .workshop-atmosphere[data-catalog-scene]
+    .workshop-bubble-anchor:nth-child(n + 5) {
+    display: none;
+  }
+  .workshop-bubble-anchor:nth-child(2n) {
+    --bubble-x: 83%;
+  }
+  .workshop-bubble-anchor:nth-child(4) {
+    --bubble-x: 91%;
+  }
+}
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .workshop-atmosphere {
+    display: none;
+  }
+}
+body:is(.game-is-focused, .whiteboard-focus, .typing-is-focused)
+  .workshop-atmosphere,
+.workshop-scene:has(
+    :fullscreen,
+    [data-play-shell]:is(
+      [data-shell-state="playing"],
+      [data-shell-state="paused"]
+    )
+  )
+  .workshop-atmosphere {
+  display: none;
+}
+
+.workshop-motion-control {
+  flex: none;
+  min-height: 44px;
+}
+.workshop-motion-control.icon-button {
+  min-width: 44px;
+}
+.workshop-motion-control[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.workshop-motion-control[aria-disabled="true"] {
+  opacity: 0.58;
+}

@@ -510,6 +510,7 @@ def game_page(game):
         slug=slug,
         number=number,
         category=game["category"].upper(),
+        workspace=game["category"].lower(),
         name=name,
         tagline=tagline,
         description=game["description"],

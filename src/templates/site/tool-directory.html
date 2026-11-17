@@ -27,6 +27,14 @@
       Audio
     </button>
   </div>
+  <button
+    type="button"
+    class="button secondary tool-favorite-filter"
+    id="tool-favorite-filter"
+    aria-pressed="false"
+  >
+    ${svg_star} <span>Favorites only</span>
+  </button>
   <div class="catalog-feedback">
     <p id="tool-result-count" class="muted small" role="status"></p>
     <button type="button" id="tool-search-clear" class="text-link" hidden>
@@ -34,6 +42,13 @@
     </button>
   </div>
 </div>
+<div class="tools-grid">${tool_cards}</div>
+<div id="search-empty" class="empty-state" hidden>
+  <p>No tools found. Try another search.</p>
+</div>
+<p id="tool-no-favorites" class="empty-state" hidden>
+  Save a favorite with the star on any tool card.
+</p>
 <section
   id="recent-tools"
   class="recent-tools"
@@ -48,10 +63,6 @@
   </div>
   <ul id="recent-tool-links"></ul>
 </section>
-<div class="tools-grid">${tool_cards}</div>
-<div id="search-empty" class="empty-state" hidden>
-  <p>No tools found. Try another search.</p>
-</div>
 <div class="privacy-line">
   <span aria-hidden="true">◈</span> File processing stays on your device.
   Network Test connects to Cloudflare; Public typing verifies input with
