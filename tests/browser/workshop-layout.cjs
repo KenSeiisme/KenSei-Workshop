@@ -101,8 +101,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
       ),
     );
     await page.locator(".workshop-tool-toolbar .back-link").click();
+    await page.waitForURL("**/tools/");
     await page.waitForFunction(
-      () => document.querySelector("#tool-search").value === "Image Studio",
+      () => document.querySelector("#tool-search")?.value === "Image Studio",
     );
     assert.equal(
       await page.locator("#tool-search").inputValue(),
