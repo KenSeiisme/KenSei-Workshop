@@ -139,6 +139,14 @@
   margin-top: 0.4rem;
   overflow-wrap: anywhere;
 }
+.workspace-sync-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding-block: 0.5rem;
+}
 .workspace-record-icon {
   display: grid;
   place-items: center;

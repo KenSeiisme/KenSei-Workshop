@@ -78,6 +78,11 @@ export function mountWorkspaceIndex(root) {
   const status = $("[data-workspace-index-status]");
   const moreButton = $("[data-workspace-index-more]");
   const retry = $("[data-workspace-index-retry]");
+  const syncBox = document.querySelector("[data-workspace-sync-summary]"),
+    syncNote = document.querySelector("[data-workspace-sync-status]"),
+    syncAll = document.querySelector("[data-workspace-sync-all]");
+  let syncBusy = false,
+    syncTicket = null;
   const names = new Map();
   let owner,
     remote = [],
@@ -117,7 +122,46 @@ export function mountWorkspaceIndex(root) {
     </div>`;
   }
 
+  function pendingChanges() {
+    return (
+      personal.exportPersonal().queue.length +
+      (decks.workspaceState()?.queue.length || 0) +
+      [...workspaceStores.values()].reduce(
+        (total, store) => total + (store.workspaceState()?.queue.length || 0),
+        0,
+      )
+    );
+  }
+  if (syncAll)
+    syncAll.onclick = async () => {
+      const account = api.user?.id;
+      if (!account || syncBusy) return;
+      const ticket = {};
+      syncTicket = ticket;
+      syncBusy = true;
+      paint();
+      await Promise.allSettled([
+        api.sync?.(),
+        personal.flush(),
+        decks.flush(),
+        ...[...workspaceStores.values()].map((store) => store.flush()),
+      ]);
+      if (account !== api.user?.id || syncTicket !== ticket) return;
+      syncBusy = false;
+      await refresh();
+    };
   function paint() {
+    const pending = pendingChanges();
+    if (syncBox) {
+      syncBox.hidden = !owner || (!pending && !syncBusy);
+      syncAll.disabled = syncBusy || !navigator.onLine;
+      uiText(
+        syncNote,
+        syncBusy
+          ? uiMsg("Syncing saved work…")
+          : uiMsg("{0} changes pending sync", [pending]),
+      );
+    }
     const online = owner && !failed && navigator.onLine;
     const term = query.value.trim().toLowerCase();
     const matches = new Set(toolMatches());
@@ -197,6 +241,8 @@ export function mountWorkspaceIndex(root) {
     const nextOwner = api.user?.id;
     if (owner !== nextOwner) {
       owner = nextOwner;
+      syncBusy = false;
+      syncTicket = null;
       request = null;
       remote = [];
       failed = more = false;
