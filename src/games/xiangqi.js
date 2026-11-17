@@ -1,3 +1,4 @@
+import { mountFriendInvites } from "../site/friend-invites.js";
 import { copyRoomInvite, mountBoardLobby, readyLabel } from "./room-lobby.js";
 import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, downloadText } from "/tool-scripts/common.js";
@@ -360,7 +361,9 @@ function renderClock() {
 }
 const activity = trackBoardGame("xiangqi", $("#xiangqi-result"));
 let newActivity = false;
+const friendInvites = mountFriendInvites("xiangqi", () => room);
 function render() {
+  friendInvites.paint();
   activity({
     state,
     room,
@@ -581,6 +584,11 @@ async function guarded(fn) {
     if (e.staleBoardRequest) return;
     failed = true;
     say(uiError(e));
+    window.KenseiNotify?.(uiError(e), {
+      kind: "error",
+      announced: true,
+      account: api.user?.id,
+    });
     tx("#xiangqi-entry-status", uiError(e));
     if ($("#xiangqi-draw-dialog").open) tx("#xiangqi-draw-status", uiError(e));
   } finally {
@@ -914,6 +922,7 @@ async function onlineStart(action, settings) {
     room = null;
     say("");
   } else await acceptRoom(data);
+  if (action === "create" && room?.id === data.id) friendInvites.created();
   render();
 }
 async function poll() {

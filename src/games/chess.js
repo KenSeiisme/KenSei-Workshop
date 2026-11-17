@@ -1,3 +1,4 @@
+import { mountFriendInvites } from "../site/friend-invites.js";
 import { copyRoomInvite, mountBoardLobby, readyLabel } from "./room-lobby.js";
 import { MATCH_ID, mountMatchLink, requestedMatch } from "./match-link.js";
 import { api, downloadText } from "/tool-scripts/common.js";
@@ -352,7 +353,9 @@ function renderClock() {
 }
 const activity = trackBoardGame("chess", $("#chess-result"));
 let newActivity = false;
+const friendInvites = mountFriendInvites("chess", () => room);
 function render() {
+  friendInvites.paint();
   activity({
     state,
     room,
@@ -564,6 +567,11 @@ async function guarded(fn) {
     if (e.staleBoardRequest) return;
     failed = true;
     say(uiError(e));
+    window.KenseiNotify?.(uiError(e), {
+      kind: "error",
+      announced: true,
+      account: api.user?.id,
+    });
     tx("#chess-entry-status", uiError(e));
     if ($("#chess-draw-dialog").open) tx("#chess-draw-status", uiError(e));
   } finally {
@@ -898,6 +906,7 @@ async function onlineStart(action, settings) {
     room = null;
     say("");
   } else await acceptRoom(data);
+  if (action === "create" && room?.id === data.id) friendInvites.created();
   render();
 }
 async function poll() {

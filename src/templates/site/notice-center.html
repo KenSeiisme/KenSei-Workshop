@@ -1,0 +1,48 @@
+<dialog
+  class="notice-center"
+  id="notice-center"
+  aria-labelledby="notice-center-title"
+>
+  <div class="notice-center-heading">
+    <h2 id="notice-center-title">Notifications</h2>
+    <button
+      class="icon-button dialog-close"
+      type="button"
+      data-close-notices
+      aria-label="Close notifications"
+    >
+      ${svg_close}
+    </button>
+  </div>
+  <details class="notice-settings">
+    <summary>${svg_sound} <span>Notification sound</span></summary>
+    <label class="field"
+      >Notification volume
+      <input type="range" min="0" max="100" value="25" data-notice-volume />
+    </label>
+    <div class="notice-settings-actions">
+      <output data-notice-volume-value>25%</output>
+      <button class="button secondary" type="button" data-mute-notices>
+        Mute notifications
+      </button>
+    </div>
+  </details>
+  <div class="notice-center-actions">
+    <button class="button secondary" type="button" data-notice-sign-in hidden>
+      Sign in with Google
+    </button>
+    <button class="text-link" type="button" data-notice-read-all hidden>
+      Mark all as read
+    </button>
+  </div>
+  <p class="muted small" role="status" data-notice-status></p>
+  <ol class="notice-list" data-notice-list></ol>
+  <div class="notice-center-actions">
+    <button class="button secondary" type="button" data-notice-more hidden>
+      Load more
+    </button>
+    <button class="button secondary" type="button" data-notice-retry hidden>
+      Retry
+    </button>
+  </div>
+</dialog>

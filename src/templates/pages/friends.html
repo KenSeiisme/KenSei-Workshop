@@ -1,0 +1,74 @@
+<section
+  class="container page-section account-dashboard friends-page"
+  data-friends-page
+>
+  <header class="account-hero glass-surface">
+    <div>
+      ${svg_profile}
+      <h1>Friends</h1>
+      <p>Find a player, manage requests, or invite someone to a game.</p>
+    </div>
+    <a class="button secondary" href="/profile/">My Profile</a>
+  </header>
+  <section class="panel friends-login" data-friends-login hidden>
+    <h2>Sign in to add friends</h2>
+    <button class="button primary" type="button" data-friends-sign-in>
+      Continue with Google
+    </button>
+  </section>
+  <p class="muted" data-friends-status role="status">Connecting to sign-in…</p>
+  <button class="button secondary" type="button" data-friends-retry hidden>
+    Retry
+  </button>
+  <div class="friends-grid" data-friends-content hidden>
+    <section class="panel" aria-labelledby="friend-search-title">
+      <h2 id="friend-search-title">Find friends</h2>
+      <label class="field"
+        >Public nickname
+        <input
+          type="search"
+          maxlength="32"
+          autocomplete="off"
+          data-friends-query
+          placeholder="Search public names"
+        />
+      </label>
+      <p class="muted small" data-friends-search-status role="status">
+        Enter at least two characters.
+      </p>
+      <div class="friend-rows" data-friends-results></div>
+    </section>
+    <section class="panel" aria-labelledby="friend-list-title">
+      <h2 id="friend-list-title">Your friends</h2>
+      <div class="friend-rows" data-friend-list="friend"></div>
+      <details open>
+        <summary>Incoming requests</summary>
+        <div class="friend-rows" data-friend-list="incoming"></div>
+      </details>
+      <details>
+        <summary>Sent requests</summary>
+        <div class="friend-rows" data-friend-list="outgoing"></div>
+      </details>
+      <details>
+        <summary>Blocked players</summary>
+        <div class="friend-rows" data-friend-list="blocked"></div>
+      </details>
+    </section>
+  </div>
+  <dialog
+    class="friend-invite-dialog"
+    id="friend-game-choice"
+    aria-labelledby="friend-game-title"
+  >
+    <button
+      type="button"
+      class="icon-button dialog-close"
+      data-close-friend-game
+      aria-label="Close game choice"
+    >
+      ${svg_close}
+    </button>
+    <h2 id="friend-game-title">Choose an online game</h2>
+    <div class="friend-game-links" data-friend-game-links></div>
+  </dialog>
+</section>

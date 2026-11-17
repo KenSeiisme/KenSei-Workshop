@@ -81,6 +81,13 @@ COMMON = {
             "zh-Hant": "探索 KenSei 的網站、軟體與創意作品。",
         },
     ),
+    "friends": (
+        {"en": "Friends", "zh-Hant": "好友"},
+        {
+            "en": "Manage friends and game invitations.",
+            "zh-Hant": "管理好友與遊戲邀請。",
+        },
+    ),
     "workspace": (
         {"en": "Your workspace", "zh-Hant": "你的工作區"},
         {
@@ -219,7 +226,7 @@ class Annotator(HTMLParser):
 
 
 def is_public(route):
-    return route.split("/")[0] not in {"auth", "workspace", "profile", "404"}
+    return route.split("/")[0] not in {"auth", "workspace", "profile", "friends", "404"}
 
 
 def page_path(route, locale="en"):
@@ -309,7 +316,15 @@ def styles(route):
 
 
 def source_files(route):
-    files = {"src/app.js", "src/site/shell.js", "src/site/theme.js"}
+    files = {
+        "src/app.js",
+        "src/site/shell.js",
+        "src/site/theme.js",
+        "src/site/notices.js",
+        "src/site/notification-center.js",
+    }
+    if route == "friends":
+        files.add("src/site/friends.js")
     if route.startswith("tools/"):
         slug = route.split("/")[-1]
         files.add("src/tools/" + slug + ".js")
@@ -327,6 +342,7 @@ def source_files(route):
             "src/tools/" + name
             for name in [
                 "private-workspace.js",
+                "workspace-index.js",
                 "record-workspace.js",
                 "record-store.js",
                 "flashcard-store.js",
@@ -596,6 +612,9 @@ def head(route, locale, site_url):
         '<link rel="stylesheet" href="/' + name + '">'
         for name in [*styles(route), "theme.css", "interface.css"]
     )
+    lines.append('<link rel="stylesheet" href="/notifications.css">')
+    if route in {"profile", "workspace", "friends"}:
+        lines.append('<link rel="stylesheet" href="/account-dashboard.css">')
     if route in {"", "tools"}:
         lines.append('<link rel="stylesheet" href="/tool-previews.css">')
     workshop_section = route.split("/", 1)[0] in {"tools", "games", "projects"}

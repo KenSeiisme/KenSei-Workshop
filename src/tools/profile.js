@@ -1,3 +1,5 @@
+import { mountPublicFriendActions } from "../site/friend-actions.js";
+import { socialPath } from "../site/social-api.js";
 import { patchMarkup } from "/game-scripts/dom.js";
 import { mountEffects, revealGameCards } from "/game-scripts/effects.js";
 import { renderPublicAchievements } from "/game-scripts/achievements.js";
@@ -30,10 +32,33 @@ function markDirty() {
   dirty = true;
   message(uiMsg("Unsaved changes. Save when you are ready."));
   uiText($("#profile-bio-count"), Array.from($("#profile-bio").value).length);
+  paintPreview();
 }
 function releasePreview() {
   if (previewURL) URL.revokeObjectURL(previewURL);
   previewURL = "";
+}
+let previewAvatar = "";
+function paintPreview() {
+  const nickname = $("#profile-name").value.trim();
+  const bio = $("#profile-bio").value;
+  uiText($("#profile-preview-name"), nickname || uiMsg("Public name"));
+  uiText($("#profile-preview-bio"), bio);
+  const key = [
+    nickname[0],
+    avatarKind,
+    previewURL,
+    original?.avatar_path,
+    original?.google_avatar_url,
+  ].join(":");
+  if (key !== previewAvatar) {
+    previewAvatar = key;
+    paintAvatar(
+      $("#profile-preview-avatar"),
+      { ...original, nickname, avatar_kind: avatarKind },
+      previewURL,
+    );
+  }
 }
 function fill(profile) {
   original = profile;
@@ -42,11 +67,17 @@ function fill(profile) {
   $("#profile-bio").value = profile.bio;
   uiText($("#profile-bio-count"), Array.from(profile.bio).length);
   $("#profile-view-public").href =
-    "/profile/?id=" + encodeURIComponent(profile.public_id);
+    socialPath("/profile/") + "?id=" + encodeURIComponent(profile.public_id);
   avatarKind = profile.avatar_kind;
   paintAvatar($("#profile-avatar"), profile);
+  $("#profile-preview").hidden = false;
+  paintPreview();
 }
 function renderPublicScores(profile) {
+  uiText(
+    $("#public-milestone-total"),
+    (profile.game_achievements || []).length,
+  );
   renderPublicAchievements(
     $("#public-game-achievements"),
     profile.game_achievements || [],
@@ -272,6 +303,7 @@ async function load() {
       );
       paintAvatar($("#public-avatar"), p);
       renderPublicScores(p);
+      void mountPublicFriendActions($("#public-friend-actions"), p);
       $("#profile-page").classList.add("is-public-profile");
       $("#profile-heading").closest(".page-intro").hidden = true;
       if (api.user) {
@@ -304,6 +336,23 @@ $("#profile-sign-in").addEventListener("click", () =>
   api.openAuth("/profile/"),
 );
 $("#profile-retry").addEventListener("click", load);
+$("#copy-profile-link").onclick = async () => {
+  const link = $("#profile-view-public").href;
+  try {
+    await navigator.clipboard.writeText(link);
+    $("#profile-link-fallback").hidden = true;
+    window.KenseiNotify?.(uiMsg("Public profile link copied."), {
+      kind: "success",
+    });
+  } catch {
+    $("#profile-link-fallback").hidden = false;
+    $("#profile-link-text").value = link;
+    $("#profile-link-text").select();
+    window.KenseiNotify?.(uiMsg("Copy the selected link manually."), {
+      kind: "warning",
+    });
+  }
+};
 $("#profile-name").addEventListener("input", markDirty);
 $("#profile-bio").addEventListener("input", markDirty);
 $("#profile-avatar-file").addEventListener("change", async (e) => {
@@ -452,6 +501,10 @@ $("#profile-form").addEventListener("submit", async (e) => {
         "Profile saved. Your public name and leaderboard links are up to date.",
       ),
     );
+    window.KenseiNotify?.(uiMsg("Profile saved."), {
+      kind: "success",
+      account: owner,
+    });
     // 先更新资料，再尽力清理本人目录下已不再使用的头像。
     try {
       if (
@@ -462,6 +515,10 @@ $("#profile-form").addEventListener("submit", async (e) => {
         await api.client.storage.from("avatars").remove([snapshot.avatar_path]);
     } catch {}
   } catch (error) {
+    window.KenseiNotify?.(uiMsg("Could not save your profile. Try again."), {
+      kind: "error",
+      account: owner,
+    });
     message(
       uiJoin([
         uiMsg("Save failed. Your changes are still here. "),

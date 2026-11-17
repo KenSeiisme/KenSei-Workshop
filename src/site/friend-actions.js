@@ -1,0 +1,133 @@
+import { api } from "/tool-scripts/common.js";
+import { uiAttr, uiConfirm, uiMsg, uiText } from "./ui.js";
+import { socialRPC } from "./social-api.js";
+
+const actions = {
+  none: ["request", "block"],
+  outgoing: ["cancel", "block"],
+  incoming: ["accept", "decline", "block"],
+  friend: ["remove", "block"],
+  blocked: ["unblock"],
+};
+const text = {
+  request: "Add friend",
+  block: "Block player",
+  cancel: "Cancel request",
+  accept: "Accept request",
+  decline: "Decline request",
+  remove: "Remove friend",
+  unblock: "Unblock player",
+};
+const confirmations = {
+  block:
+    "Block this player and cancel pending friend requests and invitations?",
+  remove: "Remove this friend?",
+};
+function button(label, handler, primary) {
+  const node = document.createElement("button");
+  node.type = "button";
+  node.className = "button " + (primary ? "primary" : "secondary");
+  uiText(node, label);
+  node.onclick = handler;
+  return node;
+}
+export function paintFriendActions(root, peer, update) {
+  const { public_id, nickname, state, id } = peer;
+  const owner = api.user?.id;
+  root.replaceChildren();
+  for (const action of actions[state] || []) {
+    const node = button(
+      uiMsg(text[action]),
+      async () => {
+        if (confirmations[action] && !uiConfirm(uiMsg(confirmations[action])))
+          return;
+        const buttons = [...root.querySelectorAll("button")];
+        buttons.forEach((item) => (item.disabled = true));
+        try {
+          const next = await socialRPC(
+            "change_friendship",
+            {
+              target_profile: public_id,
+              action,
+              request: id || null,
+            },
+            owner,
+          );
+          if (owner !== api.user?.id) return;
+          if (next?.state === "unavailable") {
+            window.KenseiNotify?.(uiMsg("This player is unavailable."), {
+              kind: "warning",
+              account: owner,
+            });
+          } else
+            window.KenseiNotify?.(uiMsg("Friend status updated."), {
+              kind: "success",
+              account: owner,
+            });
+          update(next || { state: "unavailable" });
+          window.dispatchEvent(new Event("social-change"));
+        } catch {
+          if (owner === api.user?.id)
+            window.KenseiNotify?.(
+              uiMsg("Could not update this friendship. Try again."),
+              { kind: "error", account: owner },
+            );
+        } finally {
+          buttons.forEach((item) => (item.disabled = false));
+        }
+      },
+      action === "request" || action === "accept",
+    );
+    node.dataset.friendAction = action;
+    if (nickname)
+      uiAttr(
+        node,
+        "aria-label",
+        uiMsg("{0} · {1}", [uiMsg(text[action]), nickname]),
+      );
+    root.append(node);
+  }
+}
+
+export async function mountPublicFriendActions(root, person) {
+  root.replaceChildren();
+  if (!api.user) {
+    root.append(
+      button(
+        uiMsg("Sign in to add a friend"),
+        () => api.openAuth(location.pathname + location.search),
+        false,
+      ),
+    );
+    return;
+  }
+  const owner = api.user.id;
+  const show = (relation) => {
+    if (api.user?.id !== owner) return;
+    paintFriendActions(root, { ...person, ...relation }, show);
+    if (relation.state === "friend") {
+      const label = document.createElement("span");
+      label.className = "small-tag";
+      uiText(label, uiMsg("Friend"));
+      root.prepend(label);
+    }
+  };
+  try {
+    show(
+      await socialRPC(
+        "get_friendship",
+        { target_profile: person.public_id },
+        owner,
+      ),
+    );
+  } catch {
+    if (api.user?.id === owner)
+      root.append(
+        button(
+          uiMsg("Retry friend status"),
+          () => mountPublicFriendActions(root, person),
+          false,
+        ),
+      );
+  }
+}

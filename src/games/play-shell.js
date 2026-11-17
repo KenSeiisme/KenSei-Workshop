@@ -294,6 +294,11 @@ export function mountPlayShell(root, { beforeCover = () => true } = {}) {
         const result = $(
           "#game-result:not([hidden]), [data-match-result]:not([hidden])",
         );
+        if (result && oldState !== "ready")
+          window.KenseiNotify?.(uiMsg("Game complete."), {
+            kind: "success",
+            announced: true,
+          });
         animateElement(
           result,
           [

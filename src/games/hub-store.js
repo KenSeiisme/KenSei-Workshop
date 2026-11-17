@@ -146,7 +146,12 @@ function notifyLobbyBadges(owner, ids) {
     if (ids.includes(id))
       window.KenseiNotify?.(
         uiMsg("Achievement unlocked · {0}", [uiFrom(name)]),
-        { kind: "achievement", key: id },
+        {
+          kind: "achievement",
+          key: id,
+          account: owner === "guest" ? undefined : owner,
+          events: [owner + ":reward:badge:" + id],
+        },
       );
 }
 export function syncHub(owner = hubOwner(), refresh = false) {
@@ -277,6 +282,10 @@ export async function claimDailyReward(owner, day, task) {
       if (owner !== hubOwner()) throw Error("Account changed. Try again.");
       claimGuestDaily(data, day, task);
     });
+    window.KenseiNotify?.(uiMsg("Daily reward claimed · +{0} coins", [10]), {
+      kind: "reward",
+      events: [owner + ":reward:day:" + day + ":" + task],
+    });
     return;
   }
   const snapshot = await rpc(owner, "claim_game_hub_reward", {
@@ -285,6 +294,12 @@ export async function claimDailyReward(owner, day, task) {
     task_id: task,
   });
   await transact(owner, (data) => updateSnapshot(data, snapshot));
+  if (snapshot.claimedTasks?.includes(task) && owner === hubOwner())
+    window.KenseiNotify?.(uiMsg("Daily reward claimed · +{0} coins", [10]), {
+      kind: "reward",
+      account: owner,
+      events: [owner + ":reward:day:" + day + ":" + task],
+    });
 }
 export async function saveLocalScore(owner, run, nickname, score) {
   const name = nickname.trim().normalize("NFC");

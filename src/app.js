@@ -50,15 +50,16 @@
           uiMsg(
             "Browser storage is unavailable or full. Export your work before leaving.",
           ),
+          "warning",
         );
         storageWarning = true;
       }
       return false;
     }
   }
-  function toast(message) {
+  function toast(message, kind) {
     window.dispatchEvent(new CustomEvent("tool-toast", { detail: message }));
-    window.KenseiNotify(uiFrom(message));
+    window.KenseiNotify(uiFrom(message), { kind });
   }
   const escape = (s) =>
     String(s ?? "").replace(
@@ -436,6 +437,7 @@
       if (session?.user && session.user.id !== user?.id) {
         profile = null;
         user = session.user;
+        window.dispatchEvent(new Event("auth-identity-change"));
         location.replace(location.pathname + location.search);
         return;
       }
@@ -447,6 +449,7 @@
         } catch {}
         user = null;
         profile = null;
+        window.dispatchEvent(new Event("auth-identity-change"));
         location.replace(window.KenseiI18n.localePath("/workspace/"));
       }
     });
@@ -1346,7 +1349,7 @@
     if (!$("#favorite-tools")) return;
     const banner = $("#workspace-account");
     if (user)
-      banner.innerHTML = uiHtml`<div><strong>Your connected workspace</strong><p>${escape(user.email)} · ${cloudError ? "Cloud data could not be loaded." : "Cloud saves enabled"}</p></div><span class="small-tag">${cloudError ? "Sync unavailable" : "Connected"}</span>`;
+      banner.innerHTML = uiHtml`<div><strong>Your connected workspace</strong><p>${escape(profile?.nickname || user.email || "")} · ${cloudPending ? uiMsg("Syncing…") : cloudError ? uiMsg("Cloud data could not be loaded.") : uiMsg("Cloud saves enabled")}</p></div><span class="small-tag">${cloudPending ? uiMsg("Syncing") : cloudError ? uiMsg("Sync unavailable") : uiMsg("Connected")}</span>`;
     else
       banner.innerHTML = uiHtml(
         '<div><strong>On this device</strong><p>Your local saves stay on this device. Sign in with Google to sync new saves across devices.</p></div><button class="button secondary" id="workspace-login">Sign in with Google ↗</button>',
@@ -1356,7 +1359,17 @@
       retry.className = "button secondary";
       retry.disabled = !!cloudPending;
       uiText(retry, uiMsg("Retry sync"));
-      retry.onclick = syncWorkspace;
+      retry.onclick = async () => {
+        const owner = user?.id;
+        await syncWorkspace();
+        if (owner !== user?.id) return;
+        toast(
+          cloudError
+            ? uiMsg("Workspace sync failed. Try again.")
+            : uiMsg("Workspace synced."),
+          cloudError ? "error" : "success",
+        );
+      };
       banner.append(retry);
     }
     $("#workspace-login")?.addEventListener("click", openAuth);
@@ -1531,6 +1544,7 @@
       if (user?.id !== owner) return;
       profile = value;
       renderAccount();
+      renderWorkspace();
       window.dispatchEvent(
         new CustomEvent("profile-updated", { detail: value }),
       );
@@ -1589,6 +1603,11 @@
   if (document.querySelector("#private-workspace"))
     import("/tool-scripts/private-workspace.js").catch(() =>
       toast(uiMsg("Saved history could not load. Reload to retry.")),
+    );
+  import("/site/notification-center.js").catch(() => {});
+  if (document.querySelector("[data-friends-page]"))
+    import("/site/friends.js").catch(() =>
+      toast(uiMsg("Friends could not load. Try again."), "error"),
     );
   if (document.querySelector("#profile-page"))
     import("/tool-scripts/profile.js").catch(() =>

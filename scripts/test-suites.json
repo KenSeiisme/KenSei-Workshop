@@ -11,7 +11,8 @@
     ["tests/browser/auth.cjs"],
     ["tests/browser/workspace-match-review.cjs"],
     ["tests/browser/game-ui-upgrade.cjs"],
-    ["tests/browser/workshop-layout.cjs"]
+    ["tests/browser/workshop-layout.cjs"],
+    ["tests/browser/social-account.cjs"]
   ],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],

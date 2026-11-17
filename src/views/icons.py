@@ -45,6 +45,7 @@ ICONS = {
     "upload": '<path d="M12 16V4m-4 4 4-4 4 4M4 16v4h16v-4"/>',
     "play": '<path d="m8 5 11 7-11 7Z"/>',
     "pause": '<path d="M9 5v14m6-14v14"/>',
+    "bell": '<path d="M18 8a6 6 0 0 0-12 0c0 6-3 7-3 9h18c0-2-3-3-3-9M10 21h4"/>',
     "motion": '<path d="M3 17h6m-4-5h7M7 7h4"/><circle cx="17" cy="8" r="3"/><circle cx="16" cy="17" r="2"/>',
     "coin": '<circle cx="12" cy="12" r="8"/><path d="M12 8v8m2-7h-3a1.5 1.5 0 1 0 0 3h2a1.5 1.5 0 1 1 0 3h-3"/>',
     "unfocus": '<path d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"/>',
