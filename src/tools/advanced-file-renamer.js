@@ -10,7 +10,7 @@ import {
   csvText,
   fileInput,
 } from "./advanced-ui.js";
-import { receiveHandoff } from "./handoff.js";
+import { receiveHandoff, sendControl } from "./handoff.js";
 export function init() {
   const ctx = window.KenseiAdvancedContexts["file-renamer"],
     p = panel("Ordered rename rules", $("#rename-preview").closest("section")),
@@ -28,6 +28,13 @@ export function init() {
     }),
     list = el("div"),
     rules = (window.KenseiRenameRules = []);
+  const folder = el("input", "", { type: "file", multiple: true });
+  folder.setAttribute("webkitdirectory", "");
+  $("#rename-files").closest("label").after(field("Choose a folder", folder));
+  folder.onchange = () => {
+    $("#rename-files").files = folder.files;
+    $("#rename-files").dispatchEvent(new Event("change"));
+  };
   p.append(
     row(field("Rule", type), field("Find", find), field("Value", value)),
     button("Add rule", () => {
@@ -45,13 +52,19 @@ export function init() {
       downloadText(
         csvText([
           ["Before", "After"],
-          ...ctx.preview.map((r) => [r.original, r.name]),
+          ...ctx.preview.map((r) => [
+            r.directory + r.original,
+            r.directory + r.name,
+          ]),
         ]),
         "kensei-name-map.csv",
         "text/csv",
       ),
     ),
   );
+  const handoff = el("div");
+  $("#rename-download").after(handoff);
+  sendControl(handoff, () => ctx.package(), ["zip-studio"]);
   function render() {
     list.replaceChildren();
     rules.forEach((r, i) => {

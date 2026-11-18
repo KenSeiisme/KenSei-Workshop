@@ -1,3 +1,4 @@
+import { plannedPackage } from "./archive-package.js";
 import { api, status } from "./common.js";
 import { el, button, row, setValue } from "./advanced-ui.js";
 import { uiError, uiMsg, uiText } from "../site/ui.js";
@@ -30,6 +31,12 @@ export const targets = {
   },
   "file-renamer": {
     label: "File Renamer",
+    kind: "files",
+    count: 100,
+    bytes: 100000000,
+  },
+  "zip-studio": {
+    label: "ZIP Studio",
     kind: "files",
     count: 100,
     bytes: 100000000,
@@ -103,6 +110,7 @@ export function validateHandoff(target, payload) {
           (!/\.(srt|vtt)$/i.test(fs[1].name || "") || fs[1].size > 5000000)))
     )
       throw Error("Send one MP4 or WebM video with an optional SRT or VTT.");
+    if (target === "zip-studio") plannedPackage(fs, payload.paths);
     if (rule.mimes && fs.some((f) => !rule.mimes.includes(f.type)))
       throw Error("This file format is not supported by the receiving tool.");
     if (rule.video && fs.some((f) => !f.type.startsWith("video/")))

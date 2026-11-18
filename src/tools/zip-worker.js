@@ -173,7 +173,15 @@ async function decode(entry, collect, onBytes) {
 }
 onmessage = async (event) => {
   try {
-    const { action, file, files, index } = event.data;
+    const {
+      action,
+      file,
+      files,
+      index,
+      paths,
+      checksum,
+      manifest: external,
+    } = event.data;
     if (action === "pack") {
       if (
         !files.length ||
@@ -181,6 +189,11 @@ onmessage = async (event) => {
         files.reduce((n, f) => n + f.size, 0) > MAX_INPUT
       )
         fail("Choose 1–100 files totaling at most 100 MB.");
+      const { plannedPackage, digest, checksumFilename } = checksum
+        ? await import("./archive-package.js")
+        : {};
+      const names = checksum ? plannedPackage(files, paths) : paths;
+      const sums = [];
       const chunks = [],
         used = new Set(),
         total = files.reduce((n, f) => n + f.size, 0);
@@ -192,13 +205,26 @@ onmessage = async (event) => {
           return;
         }
         chunks.push(data);
-        if (final)
-          send("packed", {
-            blob: new Blob(chunks, { type: "application/zip" }),
+        if (!final) return;
+        const blob = new Blob(chunks, { type: "application/zip" });
+        if (checksum && blob.size > MAX_INPUT) {
+          send("error", {
+            message:
+              "The package exceeds 100 MB after compression. Remove some files and retry.",
           });
+          return;
+        }
+        send("packed", {
+          blob,
+          manifest: checksum
+            ? new Blob([sums.join("\n") + "\n"], { type: "text/plain" })
+            : null,
+        });
       });
-      for (const source of files) {
-        let name = safeName(source.webkitRelativePath || source.name),
+      for (const [i, source] of files.entries()) {
+        let name = safeName(
+            names?.[i] || source.webkitRelativePath || source.name,
+          ),
           base = name,
           suffix = 2;
         while (used.has(name))
@@ -207,6 +233,13 @@ onmessage = async (event) => {
             (match) => " (" + suffix++ + ")" + match,
           );
         used.add(name);
+        if (checksum) {
+          send("progress", {
+            value: total ? (done / total) * 100 : 0,
+            message: "Hashing " + name,
+          });
+          sums.push((await digest(await source.arrayBuffer())) + "  " + name);
+        }
         const entry = new fflate.ZipDeflate(name, { level: 6 });
         zip.add(entry);
         for (
@@ -227,7 +260,72 @@ onmessage = async (event) => {
           await new Promise((r) => setTimeout(r, 0));
         }
       }
+      if (checksum) {
+        const manifestEntry = new fflate.ZipDeflate(checksumFilename, {
+          level: 6,
+        });
+        zip.add(manifestEntry);
+        manifestEntry.push(
+          new TextEncoder().encode(sums.join("\n") + "\n"),
+          true,
+        );
+      }
       zip.end();
+    } else if (action === "verify") {
+      const {
+        archivePath,
+        portableKey,
+        packageLimits,
+        checksumFilename,
+        digest,
+        verificationRows,
+      } = await import("./archive-package.js");
+      const { parseManifest } = await import("./check-manifest.js");
+      if (file.size > MAX_INPUT)
+        fail("Choose a ZIP archive no larger than 100 MB.");
+      archive = new Uint8Array(await file.arrayBuffer());
+      const rows = directory(archive).filter(
+        (entry) => !entry.name.endsWith("/"),
+      );
+      const contents = rows.filter((entry) => entry.name !== checksumFilename);
+      if (
+        contents.reduce((n, entry) => n + entry.expanded, 0) >
+        packageLimits.bytes
+      )
+        fail("This package exceeds 100 MB of expanded file content.");
+      const embedded = rows.filter((entry) => entry.name === checksumFilename);
+      if (external && embedded.length > 1) contents.push(...embedded);
+      if (!external && embedded.length !== 1)
+        fail(
+          "Choose an external manifest when the ZIP has no unique root SHA256SUMS.",
+        );
+      if ((external?.size ?? embedded[0]?.expanded) > packageLimits.manifest)
+        fail("Use a checksum manifest up to 1 MB.");
+      const embeddedBytes =
+        !external && (await decode(embedded[0], true, () => {}));
+      const expected = parseManifest(
+        await (external || embeddedBytes).text(),
+      ).map((row) => ({ ...row, name: archivePath(row.name) }));
+      if (!expected.length) fail("The manifest does not list any files.");
+      const wanted = new Map(expected.map((row) => [row.name, row]));
+      const hashes = new Map();
+      let done = 0;
+      for (const entry of rows) {
+        const target = wanted.get(entry.name);
+        const blob = await decode(entry, Boolean(target), () => {});
+        if (target) {
+          const data = await blob.arrayBuffer();
+          hashes.set(entry.index, {
+            sha256: target.sha256 && (await digest(data)),
+            sha512: target.sha512 && (await digest(data, "SHA-512")),
+          });
+        }
+        send("progress", {
+          value: (++done / rows.length) * 100,
+          message: "Checking " + entry.name,
+        });
+      }
+      send("verified", { rows: verificationRows(expected, contents, hashes) });
     } else if (action === "open") {
       if (file.size > MAX_INPUT)
         fail("Choose a ZIP archive no larger than 100 MB.");

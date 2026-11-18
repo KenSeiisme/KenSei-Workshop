@@ -37,18 +37,22 @@ export function renamed(files, options) {
       /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(name)
         ? "Choose a portable file name (no reserved characters or names)."
         : null;
-    return { original, name, error };
+    return { original, name, directory: file.directory || "", error };
   });
   const counts = new Map();
   for (const row of names) {
-    const key = row.name.normalize("NFC").toLocaleLowerCase("en");
+    const key = (row.directory + row.name)
+      .normalize("NFC")
+      .toLocaleLowerCase("en");
     counts.set(key, (counts.get(key) || 0) + 1);
   }
   return names.map((row) => ({
     ...row,
     error:
       row.error ||
-      (counts.get(row.name.normalize("NFC").toLocaleLowerCase("en")) > 1
+      (counts.get(
+        (row.directory + row.name).normalize("NFC").toLocaleLowerCase("en"),
+      ) > 1
         ? "This name conflicts with another file."
         : null),
   }));

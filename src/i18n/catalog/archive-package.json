@@ -1,0 +1,94 @@
+{
+  "m_bd7cdea5c391": {
+    "en": "Package verification progress",
+    "zh-Hant": "壓縮包驗證進度"
+  },
+  "m_d371e04dcd26": {
+    "en": "Matched {0} of {1} package paths.",
+    "zh-Hant": "{1} 條包內路徑中有 {0} 條相符。"
+  },
+  "m_61890a76f0e0": {
+    "en": "Check the selected ZIP to see its verification results.",
+    "zh-Hant": "驗證所選 ZIP 即可查看結果。"
+  },
+  "m_14edd384a232": {
+    "en": "Verification cancelled. Your files are still selected.",
+    "zh-Hant": "驗證已取消，所選檔案仍保留。"
+  },
+  "m_9db13abe9962": {
+    "en": "Choose a ZIP to verify.",
+    "zh-Hant": "請選擇要驗證的 ZIP。"
+  },
+  "m_3e2e01daecdc": {
+    "en": "Verifying package…",
+    "zh-Hant": "正在驗證壓縮包…"
+  },
+  "m_c996590a501b": {
+    "en": "Package with checksums",
+    "zh-Hant": "打包並加入校驗清單"
+  },
+  "m_4adfa5b48c00": {
+    "en": "Download SHA256SUMS",
+    "zh-Hant": "下載 SHA256SUMS"
+  },
+  "m_05feab5a3ff0": {
+    "en": "Verify package",
+    "zh-Hant": "驗證壓縮包"
+  },
+  "m_935645aaa54a": {
+    "en": "Check package",
+    "zh-Hant": "核對壓縮包"
+  },
+  "m_fb8b9c5254c7": {
+    "en": "ZIP to verify",
+    "zh-Hant": "要驗證的 ZIP"
+  },
+  "m_e45881c89646": {
+    "en": "Separate manifest (optional)",
+    "zh-Hant": "獨立校驗清單（選填）"
+  },
+  "m_2c7be02828a9": {
+    "en": "Checks the ZIP against its root SHA256SUMS or a separate checksum manifest. Limit: 100 MB archive and 100 MB expanded files.",
+    "zh-Hant": "依 ZIP 根目錄的 SHA256SUMS 或獨立清單驗證。ZIP 與解壓後的檔案上限各為 100 MB。"
+  },
+  "m_96013049d4e5": {
+    "en": "Choose a valid archive path.",
+    "zh-Hant": "請選擇有效的壓縮包路徑。"
+  },
+  "m_32c268b98512": {
+    "en": "Each transferred file needs one archive path.",
+    "zh-Hant": "每個傳入檔案都需要一條壓縮包路徑。"
+  },
+  "m_39f489a04518": {
+    "en": "Use archive paths up to 512 characters without empty segments or trailing dots or spaces.",
+    "zh-Hant": "路徑最多 512 字元，每一段都不得留空，也不能以句號或空格結尾。"
+  },
+  "m_0a25d94399f7": {
+    "en": "Use unique paths and reserve the root name SHA256SUMS.",
+    "zh-Hant": "請使用不重複的路徑，並保留根目錄的 SHA256SUMS 檔名。"
+  },
+  "m_d47248439a92": {
+    "en": "A file path conflicts with a folder path.",
+    "zh-Hant": "檔案與資料夾的路徑衝突。"
+  },
+  "m_5f28b5dc1fcf": {
+    "en": "Confirm valid renamed files first.",
+    "zh-Hant": "請先確認更名後的檔案。"
+  },
+  "m_b5d87d1e3a82": {
+    "en": "This package exceeds 100 MB of expanded file content.",
+    "zh-Hant": "此壓縮包解壓後的檔案超過 100 MB。"
+  },
+  "m_cea3017f220a": {
+    "en": "Choose an external manifest when the ZIP has no unique root SHA256SUMS.",
+    "zh-Hant": "ZIP 的根目錄沒有唯一的 SHA256SUMS，請選擇外部校驗清單。"
+  },
+  "m_814fe5647723": {
+    "en": "The manifest does not list any files.",
+    "zh-Hant": "校驗清單未列出任何檔案。"
+  },
+  "m_916bc78511d7": {
+    "en": "The package exceeds 100 MB after compression. Remove some files and retry.",
+    "zh-Hant": "壓縮包仍超過 100 MB。請移除部分檔案後重試。"
+  }
+}

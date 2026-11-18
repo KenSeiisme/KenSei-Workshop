@@ -1,16 +1,24 @@
 import { $, zip, status } from "./common.js";
 import { el, field, row, button, panel } from "./advanced-ui.js";
-import { sendControl } from "./handoff.js";
+import { mountPackageVerifier } from "./package-verifier.js";
+import { receiveHandoff, sendControl } from "./handoff.js";
 import { uiMsg } from "../site/ui.js";
 export function init() {
   const ctx = window.KenseiAdvancedContexts["zip-studio"],
     folder = el("input", "", { type: "file", multiple: true });
   folder.setAttribute("webkitdirectory", "");
-  $("#zip-files").after(field("Choose a folder", folder));
+  $("#zip-files").closest("label").after(field("Choose a folder", folder));
   folder.onchange = () => {
     $("#zip-files").files = folder.files;
     $("#zip-files").dispatchEvent(new Event("change"));
   };
+  receiveHandoff(
+    "zip-studio",
+    (payload) => ctx.receivePack(payload.files, payload.paths),
+    () => ctx.packCount > 0,
+  );
+  const inspect = $("#zip-entries").closest("section");
+  mountPackageVerifier(inspect, () => ctx.archive);
   const p = panel("Archive selection", $("#zip-entries").closest("section")),
     query = el("input", "", { type: "search", placeholder: "Search paths" }),
     tree = el("div", "", { class: "advanced-list" }),

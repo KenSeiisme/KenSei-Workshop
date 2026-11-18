@@ -9,6 +9,7 @@ import {
   renderTable,
   csvText,
 } from "./advanced-ui.js";
+import { mountPackageVerifier } from "./package-verifier.js";
 import { parseManifest, compareManifest } from "./check-manifest.js";
 export function init() {
   const ctx = window.KenseiAdvancedContexts["file-check"],
@@ -19,6 +20,7 @@ export function init() {
     }),
     duplicates = el("input", "", { type: "checkbox" }),
     out = el("div");
+  mountPackageVerifier(p);
   let expected = [],
     report = [];
   p.append(
