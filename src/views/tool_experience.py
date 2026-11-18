@@ -4,6 +4,11 @@ from template_renderer import render_template
 from html import escape
 
 HELP = {
+    "document-scanner": (
+        "JPG, PNG and WebP · 20 pages · 20 MB per photo · 100 MB total.",
+        "Confirm the suggested corners or adjust them before exporting. Arrow keys nudge the selected corner.",
+        "Photos and scans stay in this tab until you download or send them.",
+    ),
     "image-studio": (
         "JPG, PNG and WebP · 20 files · 20 MB each · 100 MB total · 40 megapixels per image.",
         (

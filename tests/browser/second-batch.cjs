@@ -84,11 +84,11 @@ const sdk = `export function createClient(){const id=window.__testUser;return {a
   try {
     const guest = await context();
     await check(
-      "28 tools, filters, favorites and responsive layouts",
+      "29 tools, filters, favorites and responsive layouts",
       async () => {
         const p = await guest.newPage();
         await p.goto(base + "/tools/", { waitUntil: "domcontentloaded" });
-        assert.equal(await p.locator("[data-tool-card]").count(), 28);
+        assert.equal(await p.locator("[data-tool-card]").count(), 29);
         for (const [cat, count] of [
           ["utilities", 10],
           ["testing", 2],

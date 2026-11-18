@@ -1064,6 +1064,26 @@
       "bytes": 254544,
       "sha256": "68c938564a0dfe9af521fb4c64a8fb99e0c2d56106a4e9ed8b0abe95976a626f",
       "sourceHash": "a94672900769e4e51261cdaf5a1c2cdd6548fd291169234193dade63d6b2e39b"
+    },
+    {
+      "route": "tools/document-scanner",
+      "locale": "en",
+      "file": "en/tools-document-scanner.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 270557,
+      "sha256": "3cb2497e1712561b19086d412786fc53aa99c00ebc2f72b5db9c2005e0a16370",
+      "sourceHash": "5cb0bea8841342e3890d457ca6ebbafcc76106fbb60c6a276c913e29e161b303"
+    },
+    {
+      "route": "tools/document-scanner",
+      "locale": "zh-Hant",
+      "file": "zh-hant/tools-document-scanner.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 253601,
+      "sha256": "2c48cc43f4e3ee56b2c83c746034c42ed01c044dafa0a37b1d19f0880b787141",
+      "sourceHash": "3b54f97608d4de1cbb5092bc56a30856e9e3944e8237f65224a37f9c6632c198"
     }
   ]
 }

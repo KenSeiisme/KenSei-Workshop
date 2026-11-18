@@ -1,5 +1,6 @@
 {
   "browser-smoke": [
+    ["tests/browser/document-scanner.cjs"],
     ["tests/browser/localization.cjs"],
     ["tests/browser/tools-workflows.cjs"],
     ["tests/browser/sixth-media.cjs"],
@@ -15,6 +16,10 @@
     ["tests/browser/social-account.cjs"],
     ["tests/browser/notice-audio.cjs"],
     ["tests/browser/account-content.cjs"]
+  ],
+  "document-scanner": [
+    ["tests/unit/scan-geometry.mjs"],
+    ["tests/browser/document-scanner.cjs"]
   ],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],

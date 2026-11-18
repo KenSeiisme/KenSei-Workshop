@@ -24,6 +24,14 @@
     "Documents"
   ],
   [
+    "document-scanner",
+    "ocr",
+    "Document Scanner",
+    "Turn paper photos into straight, readable pages.",
+    "Correct perspective, adjust contrast and export paper photos as an ordered PDF on your device.",
+    "Documents"
+  ],
+  [
     "text-toolkit",
     "text",
     "Text Toolkit",

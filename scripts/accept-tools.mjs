@@ -19,11 +19,10 @@ process.chdir(root);
 if (!["smoke", "acceptance", "live"].includes(mode))
   throw Error("Choose smoke, acceptance or live.");
 if (
-  manifest.tools.length !== 28 ||
-  catalog.length !== 28 ||
+  manifest.tools.length !== catalog.length ||
   catalog.some(([slug]) => !manifest.tools.some((t) => t.slug === slug))
 )
-  throw Error("Acceptance inventory must match all 28 catalog tools.");
+  throw Error("Acceptance inventory must match all catalog tools.");
 
 const base = new URL(
     process.env.TEST_BASE_URL ||

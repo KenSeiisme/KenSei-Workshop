@@ -981,5 +981,28 @@
       "中国象棋对战",
       "中國象棋對戰"
     ]
+  },
+  "tools/document-scanner": {
+    "name": {
+      "en": "Document Scanner",
+      "zh-Hant": "文件掃描"
+    },
+    "description": {
+      "en": "Correct perspective, adjust contrast and export paper photos as an ordered PDF on your device.",
+      "zh-Hant": "在裝置上校正文件透視、調整對比，依頁序匯出 PDF。"
+    },
+    "aliases": [
+      "scan",
+      "scanner",
+      "document scan",
+      "receipt",
+      "deskew",
+      "扫描",
+      "掃描",
+      "扫描文件",
+      "掃描文件",
+      "拍照转PDF",
+      "拍照轉PDF"
+    ]
   }
 }

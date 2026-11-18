@@ -2,6 +2,11 @@
   "version": 1,
   "tools": [
     {
+      "slug": "document-scanner",
+      "task": "Correct a photographed page, arrange the pages and download or transfer the PDF.",
+      "groups": ["document-scanner"]
+    },
+    {
       "slug": "image-studio",
       "task": "Compress two images, compare them and download the ZIP.",
       "groups": ["base", "advanced-p1", "studios"]

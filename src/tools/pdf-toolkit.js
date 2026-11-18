@@ -11,6 +11,7 @@ import {
   download,
   zip,
 } from "./common.js";
+import { addFittedImage } from "./image-pdf.js";
 import { metadata, enhancedPdf } from "./pdf-enhancements.js";
 import { uiMsg, uiJoin, uiError, uiText, uiAttr, uiHtml } from "../site/ui.js";
 
@@ -349,21 +350,7 @@ $("#pdf-run").onclick = async () => {
         c.getContext("2d").drawImage(img, 0, 0);
         const b = await canvasBlob(c);
         c.width = c.height = 0;
-        const embedded = await out.embedPng(await b.arrayBuffer()),
-          landscape = img.width > img.height,
-          p = out.addPage(landscape ? [842, 595] : [595, 842]),
-          scale = Math.min(
-            (p.getWidth() - 36) / img.width,
-            (p.getHeight() - 36) / img.height,
-          ),
-          width = img.width * scale,
-          height = img.height * scale;
-        p.drawImage(embedded, {
-          x: (p.getWidth() - width) / 2,
-          y: (p.getHeight() - height) / 2,
-          width,
-          height,
-        });
+        addFittedImage(out, await out.embedPng(await b.arrayBuffer()));
         status(uiMsg("Adding image {0} of {1}…", [i + 1, images.length]));
         await new Promise((r) => setTimeout(r, 0));
       }
