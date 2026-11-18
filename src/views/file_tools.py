@@ -14,7 +14,9 @@ def job_status():
 
 
 VIEWS = {
-    "document-scanner": render_template("tools/document-scanner.html", job_status=job_status()),
+    "document-scanner": render_template(
+        "tools/document-scanner.html", job_status=job_status()
+    ),
     "qr-studio": render_template("tools/qr-studio.html", job_status=job_status()),
     "markdown-studio": render_template(
         "tools/markdown-studio.html",
