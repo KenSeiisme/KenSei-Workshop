@@ -4,6 +4,11 @@ from template_renderer import render_template
 from html import escape
 
 HELP = {
+    "video-studio": (
+        "Up to 6 MP4 or WebM sources, 250 MB and 10 minutes each, 500 MB combined.",
+        "Keep up to 12 clips and 5 minutes of output. Export support depends on browser codecs.",
+        "Video and subtitles stay in this tab until you download or send them.",
+    ),
     "document-scanner": (
         "JPG, PNG and WebP · 20 pages · 20 MB per photo · 100 MB total.",
         "Confirm the suggested corners or adjust them before exporting. Arrow keys nudge the selected corner.",

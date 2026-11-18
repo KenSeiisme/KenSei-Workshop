@@ -18,6 +18,7 @@
     "markdown-it-footnote": "4.0.0",
     "mathjs": "15.2.0",
     "mediabunny": "1.61.6",
+    "mediabunny-video": "npm:mediabunny@1.66.1",
     "mermaid": "12.2.0",
     "papaparse": "5.7.0",
     "pdf-lib": "1.17.1",

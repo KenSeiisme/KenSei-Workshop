@@ -49,7 +49,7 @@ const pass = (s) => {
     for (const width of [360, 768, 1440]) {
       await p.setViewportSize({ width, height: 1000 });
       await p.goto(base + "/tools/");
-      assert.equal(await p.locator("[data-tool-card]").count(), 29);
+      assert.equal(await p.locator("[data-tool-card]").count(), 30);
       assert.equal(await p.locator('[data-filter="fun"]').count(), 0);
       assert.equal(await p.locator('#navigation a[href="/games/"]').count(), 1);
       for (const slug of slugs) {

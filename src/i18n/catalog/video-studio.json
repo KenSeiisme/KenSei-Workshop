@@ -1,0 +1,238 @@
+{
+  "m_095321ec675b": {
+    "en": "Video Studio",
+    "zh-Hant": "影片工作室"
+  },
+  "m_24c9720bb9bb": {
+    "en": "Cut, join and share local videos.",
+    "zh-Hant": "在本機裁剪、拼接並分享影片。"
+  },
+  "m_9d948e0d463c": {
+    "en": "Trim and join multiple videos, add captions and export MP4 or WebM on your device.",
+    "zh-Hant": "在本機剪接多支影片、加上字幕並匯出 MP4 或 WebM。"
+  },
+  "m_9a4de0cdc505": {
+    "en": "Video sources",
+    "zh-Hant": "影片來源"
+  },
+  "m_e4d351ccafec": {
+    "en": "Add MP4 or WebM files",
+    "zh-Hant": "加入 MP4 或 WebM 檔案"
+  },
+  "m_8bfb003d710f": {
+    "en": "Clip order",
+    "zh-Hant": "片段順序"
+  },
+  "m_1ec05d9dc7e5": {
+    "en": "Play in sequence",
+    "zh-Hant": "依序播放"
+  },
+  "m_178940d0698c": {
+    "en": "Stop preview",
+    "zh-Hant": "停止預覽"
+  },
+  "m_a3463999fc0a": {
+    "en": "Export video",
+    "zh-Hant": "匯出影片"
+  },
+  "m_cb5aba85e6ac": {
+    "en": "720p · 30 fps",
+    "zh-Hant": "720p · 每秒 30 格"
+  },
+  "m_938c7534b6eb": {
+    "en": "1080p · 30 fps",
+    "zh-Hant": "1080p · 每秒 30 格"
+  },
+  "m_e3d11242200f": {
+    "en": "Orientation",
+    "zh-Hant": "方向"
+  },
+  "m_f28665019128": {
+    "en": "Landscape (16:9)",
+    "zh-Hant": "橫向（16:9）"
+  },
+  "m_99e5a664f4a4": {
+    "en": "Portrait (9:16)",
+    "zh-Hant": "直向（9:16）"
+  },
+  "m_b8c237eb0d10": {
+    "en": "Video quality",
+    "zh-Hant": "影片畫質"
+  },
+  "m_f793de205ead": {
+    "en": "Low",
+    "zh-Hant": "低"
+  },
+  "m_ef6691545d2c": {
+    "en": "Standard",
+    "zh-Hant": "標準"
+  },
+  "m_c4ebc6d4a583": {
+    "en": "High",
+    "zh-Hant": "高"
+  },
+  "m_df339cb8da14": {
+    "en": "Export format",
+    "zh-Hant": "匯出格式"
+  },
+  "m_64d3515b5be4": {
+    "en": "Burn subtitles into video",
+    "zh-Hant": "將字幕燒錄到畫面"
+  },
+  "m_98dc60430816": {
+    "en": "Prepare video",
+    "zh-Hant": "產生影片"
+  },
+  "m_769a146cf6a4": {
+    "en": "Download SRT",
+    "zh-Hant": "下載 SRT"
+  },
+  "m_c08d21ca7184": {
+    "en": "Download VTT",
+    "zh-Hant": "下載 VTT"
+  },
+  "m_9e6a91c146c1": {
+    "en": "Download video",
+    "zh-Hant": "下載影片"
+  },
+  "m_f86478105b1a": {
+    "en": "Keep between one and twelve video clips.",
+    "zh-Hant": "請保留一至十二個影片片段。"
+  },
+  "m_d9b13261a296": {
+    "en": "Each clip needs a valid start and end within its video.",
+    "zh-Hant": "每個片段須有位於原影片內的有效起止時間。"
+  },
+  "m_70586594fdd1": {
+    "en": "Keep the finished video to five minutes.",
+    "zh-Hant": "成片長度上限為五分鐘。"
+  },
+  "m_463ec0e3bdf7": {
+    "en": "Choose an MP4 or WebM file with a video track.",
+    "zh-Hant": "請選擇含有視訊軌的 MP4 或 WebM。"
+  },
+  "m_1bcabdf61c1e": {
+    "en": "Each source must be ten minutes or shorter.",
+    "zh-Hant": "每支影片長度上限為十分鐘。"
+  },
+  "m_435d215cf700": {
+    "en": "A source contains video or audio this browser cannot decode.",
+    "zh-Hant": "有素材的視訊或音訊無法在此瀏覽器解碼。"
+  },
+  "m_1a1583d76a3e": {
+    "en": "This browser cannot encode the chosen video format.",
+    "zh-Hant": "此瀏覽器無法編碼所選影片格式。"
+  },
+  "m_a4347753607b": {
+    "en": "Video canvas is unavailable in this browser.",
+    "zh-Hant": "此瀏覽器無法使用影片畫布。"
+  },
+  "m_64cced777ea6": {
+    "en": "The video engine could not start. Reload to retry.",
+    "zh-Hant": "影片引擎無法啟動，請重新載入後再試。"
+  },
+  "m_8697bbd5460e": {
+    "en": "Choose up to six MP4 or WebM files, 250 MB each and 500 MB in total.",
+    "zh-Hant": "最多選擇六個 MP4 或 WebM，每個 250 MB，合計 500 MB。"
+  },
+  "m_f5d364f38a89": {
+    "en": "Reading {0}…",
+    "zh-Hant": "正在讀取 {0}…"
+  },
+  "m_f99587e17200": {
+    "en": "Videos ready. Set the clips you want to keep.",
+    "zh-Hant": "影片已備妥。請設定要保留的片段。"
+  },
+  "m_4e29f367082f": {
+    "en": "{0} clips · {1} seconds · estimated {2}",
+    "zh-Hant": "{0} 個片段 · {1} 秒 · 預估 {2}"
+  },
+  "m_e2bd5f9ea962": {
+    "en": "Add a clip to begin.",
+    "zh-Hant": "加入片段以開始。"
+  },
+  "m_749e29754d88": {
+    "en": "Check the clip times and five-minute limit.",
+    "zh-Hant": "請檢查片段時間與五分鐘上限。"
+  },
+  "m_aa38c27681de": {
+    "en": "Checking video encoders…",
+    "zh-Hant": "正在檢查影片編碼器…"
+  },
+  "m_df7d172ee167": {
+    "en": "MP4 (H.264)",
+    "zh-Hant": "MP4（H.264）"
+  },
+  "m_68644d198b22": {
+    "en": "WebM (VP8)",
+    "zh-Hant": "WebM（VP8）"
+  },
+  "m_df1fb179367b": {
+    "en": "This browser cannot export this video. Preview and subtitle downloads are available.",
+    "zh-Hant": "此瀏覽器無法匯出影片。你仍可預覽與下載字幕。"
+  },
+  "m_9f6616a8b3af": {
+    "en": "{0} subtitle cues",
+    "zh-Hant": "{0} 則字幕"
+  },
+  "m_e235f1037ef1": {
+    "en": "Add clip",
+    "zh-Hant": "加入片段"
+  },
+  "m_f55296180370": {
+    "en": "Remove source",
+    "zh-Hant": "移除來源"
+  },
+  "m_fbc5aa14f60f": {
+    "en": "Source subtitles (SRT or VTT)",
+    "zh-Hant": "來源字幕（SRT 或 VTT）"
+  },
+  "m_b5e749ac5d9a": {
+    "en": "Clip {0}: {1}",
+    "zh-Hant": "片段 {0}：{1}"
+  },
+  "m_7712611754e2": {
+    "en": "Clip start (seconds)",
+    "zh-Hant": "片段起點（秒）"
+  },
+  "m_13bbf858590c": {
+    "en": "Clip end (seconds)",
+    "zh-Hant": "片段終點（秒）"
+  },
+  "m_47f8b7d82668": {
+    "en": "Remove clip",
+    "zh-Hant": "移除片段"
+  },
+  "m_91e81dccfa58": {
+    "en": "The source video could not be previewed.",
+    "zh-Hant": "無法預覽此來源影片。"
+  },
+  "m_4472636738eb": {
+    "en": "Encoding video on this device…",
+    "zh-Hant": "正在此裝置編碼影片…"
+  },
+  "m_21cf5301f4ba": {
+    "en": "Finished video: {0}",
+    "zh-Hant": "影片成品：{0}"
+  },
+  "m_b79b9b338492": {
+    "en": "Video ready to download.",
+    "zh-Hant": "影片可以下載了。"
+  },
+  "m_ebbeb341781b": {
+    "en": "Send one MP4 or WebM video with an optional SRT or VTT.",
+    "zh-Hant": "請傳送一部 MP4 或 WebM，可搭配一份 SRT 或 VTT。"
+  },
+  "m_150b12fa78e9": {
+    "en": "Up to 6 MP4 or WebM sources, 250 MB and 10 minutes each, 500 MB combined.",
+    "zh-Hant": "最多六支 MP4 或 WebM，每支 250 MB、十分鐘，合計 500 MB。"
+  },
+  "m_1d0997beddcc": {
+    "en": "Keep up to 12 clips and 5 minutes of output. Export support depends on browser codecs.",
+    "zh-Hant": "最多保留十二個片段，成片上限五分鐘。匯出功能取決於瀏覽器支援的編碼。"
+  },
+  "m_d50258b64fa9": {
+    "en": "Video and subtitles stay in this tab until you download or send them.",
+    "zh-Hant": "影片及字幕會保留在此分頁，直到你下載或傳送。"
+  }
+}

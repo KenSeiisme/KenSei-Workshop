@@ -227,6 +227,9 @@ importers:
       mediabunny:
         specifier: 1.61.6
         version: 1.61.6
+      mediabunny-video:
+        specifier: npm:mediabunny@1.66.1
+        version: mediabunny@1.66.1
       mermaid:
         specifier: 12.2.0
         version: 12.2.0
@@ -1673,6 +1676,9 @@ packages:
 
   mediabunny@1.61.6:
     resolution: {integrity: sha512-VHEZ53/7jGl4dQ+uOdndsZufFYwEUFWv9UXgvrGun3OapyzoqI9iaPOD7z3xxY/nAttLZBNwswgJzMtGJAquOQ==}
+
+  mediabunny@1.66.1:
+    resolution: {integrity: sha512-Jl+EfJbUASHtWVtOAGX8AK5WyNNG1RNJGjccAXcI2R6wQmIkdAzpyVgyCxvc5DXGSSRAuhGIevCPs43mXDq2ug==}
 
   mermaid@11.17.2:
     resolution: {integrity: sha512-V6K3C8EBdEsPFZXSKMJe6ppQOENxuHARr9GvHX4hh47lAbhMRD9qf4oEK7LoaRQxULMa80/qt5gHO73aCleBBg==}
@@ -3444,6 +3450,11 @@ snapshots:
   mdurl@2.1.0: {}
 
   mediabunny@1.61.6:
+    dependencies:
+      '@types/dom-mediacapture-transform': 0.1.12
+      '@types/dom-webcodecs': 0.1.13
+
+  mediabunny@1.66.1:
     dependencies:
       '@types/dom-mediacapture-transform': 0.1.12
       '@types/dom-webcodecs': 0.1.13

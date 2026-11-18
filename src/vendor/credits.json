@@ -118,5 +118,10 @@
     "name": "Space-Grotesk",
     "version": "Google Fonts v22",
     "license": "OFL-1.1"
+  },
+  {
+    "name": "mediabunny-video",
+    "version": "1.66.1",
+    "license": "MPL-2.0"
   }
 ]

@@ -26,6 +26,6 @@ export function init() {
             ],
           }
         : null,
-    ["subtitle-studio"],
+    ["subtitle-studio", "video-studio"],
   );
 }

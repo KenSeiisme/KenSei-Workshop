@@ -92,7 +92,7 @@ const pass = (x) => {
       }
     }
     await p.goto(base + "/tools/");
-    assert.equal(await p.locator("[data-tool-card]").count(), 29);
+    assert.equal(await p.locator("[data-tool-card]").count(), 30);
     await p.locator('[data-filter="audio"]').click();
     assert.equal(await p.locator("[data-tool-card]:visible").count(), 1);
     await p.fill("#tool-search", "audio");
