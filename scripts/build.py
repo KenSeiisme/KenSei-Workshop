@@ -324,14 +324,7 @@ timer_ui = render_template("tools/focus-timer.html")
 
 
 image_ui += f'<button id="cancel-job" class="button secondary" hidden>Cancel</button><button id="image-zip" class="button secondary" hidden>Download all as ZIP {icon("download")}</button><div id="batch-results" class="batch-results" aria-live="polite"></div>'
-image_ui = (
-    EDITOR
-    + '<div id="image-batch-mode">'
-    + image_ui
-    + "</div>"
-    + PANEL
-    + render_template("tools/image-studio/steps.html")
-)
+image_ui = EDITOR + '<div id="image-batch-mode">' + image_ui + "</div>" + PANEL
 
 interfaces = {
     "image-studio": image_ui,
