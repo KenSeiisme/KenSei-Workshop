@@ -263,3 +263,18 @@
     min-width: 910px;
   }
 }
+
+.review-today-row {
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.review-today-row div {
+  display: grid;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.review-today-row small {
+  color: var(--muted);
+}

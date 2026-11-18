@@ -27,6 +27,15 @@ export function init() {
       done.hidden = true;
       await refresh();
     });
+  const query = new URLSearchParams(location.search);
+  const planId = query.get("plan"),
+    taskId = query.get("task");
+  let preselect =
+    planId &&
+    taskId &&
+    [planId, taskId].every((id) => /^[0-9a-f-]{36}$/i.test(id))
+      ? { planId, taskId }
+      : null;
   let completedTag = null,
     available = new Map(),
     gen = 0;
@@ -38,6 +47,7 @@ export function init() {
     button("Refresh plans", () => refresh()),
   );
   task.onchange = () => {
+    preselect = null;
     window.KenseiFocusTag = available.get(task.value) || null;
   };
   async function refresh() {
@@ -47,7 +57,17 @@ export function init() {
     await store.load(true);
     if (token !== gen || owner !== (api.user?.id || "guest")) return;
     available.clear();
-    const prev = task.value;
+    let prev = task.value;
+    if (preselect) {
+      const requested = await store.get(preselect.planId);
+      if (token !== gen || owner !== (api.user?.id || "guest")) return;
+      if (
+        requested?.data.tasks.some((t) => t.id === preselect.taskId && !t.done)
+      ) {
+        prev = preselect.planId + ":" + preselect.taskId;
+      }
+      preselect = null;
+    }
     task.replaceChildren(uiOption(uiMsg("No task label"), ""));
     for (const plan of store.rows())
       for (const t of plan.data.tasks.filter((t) => !t.done)) {

@@ -2,6 +2,7 @@ import { uiMsg, uiText, uiOption, uiJoin } from "../site/ui.js";
 import { $, downloadText } from "./common.js";
 import { el, panel, row, button, field, select } from "./advanced-ui.js";
 import { calendar, plannerEvents } from "./calendar-export.js";
+import { initReview } from "./study-review.js";
 import { dueEpoch, today, addDays } from "./planner-core.js";
 export function init() {
   const ctx = window.KenseiAdvancedContexts["study-planner"],
@@ -68,4 +69,5 @@ export function init() {
   ctx.store.subscribe(render);
   window.addEventListener("workspace-ready", render);
   render();
+  initReview(ctx);
 }

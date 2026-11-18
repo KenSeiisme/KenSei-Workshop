@@ -314,6 +314,10 @@ function adapt(tool, root) {
           mobile: true,
           name: "Flashcard workspace",
         });
+        if ($("#study-start").hasAttribute("data-due-link")) {
+          show(2);
+          $("#study-start").focus({ preventScroll: true });
+        }
         root.addEventListener("click", (e) => {
           if (
             e.target.closest(

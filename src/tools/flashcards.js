@@ -458,6 +458,20 @@ async function initialize() {
       const id = requested;
       requested = null;
       await open(id);
+      if (
+        deck?.id === id &&
+        new URLSearchParams(location.search).get("review") === "due"
+      ) {
+        $("#study-unknown").checked = true;
+        const start = $("#study-start");
+        start.dataset.dueLink = "";
+        window.dispatchEvent(
+          new CustomEvent("tool-show-tab", {
+            detail: { selector: "#study-start" },
+          }),
+        );
+        if (!start.closest("[hidden]")) start.focus({ preventScroll: true });
+      }
     }
   } catch (e) {
     status(uiError(e), true);

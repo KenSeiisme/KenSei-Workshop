@@ -1,6 +1,7 @@
 {
   "browser-smoke": [
     ["tests/browser/document-scanner.cjs"],
+    ["tests/browser/study-review.cjs"],
     ["tests/browser/localization.cjs"],
     ["tests/browser/tools-workflows.cjs"],
     ["tests/browser/sixth-media.cjs"],
