@@ -1,6 +1,6 @@
 import { $, api, downloadText, status } from "./common.js";
 import { button, el, field, row } from "./advanced-ui.js";
-import { createRecordStore } from "./record-store.js";
+import { createRecordStore, recordSignature } from "./record-store.js";
 import { validatePlanner } from "./planner-core.js";
 import {
   courseGoal,
@@ -332,9 +332,16 @@ function run(selector, handler) {
   $(selector).onclick = () => Promise.resolve().then(handler).catch(report);
 }
 function listRecords() {
+  const records = store.rows();
+  const latest = records.find((record) => record.id === opened?.id);
+  if (!saving && opened && draft && latest?.revision > opened.revision) {
+    if (recordSignature(latest.data) === recordSignature(opened.data))
+      opened = latest;
+    else if (!dirty) open(latest);
+  }
   const list = $("#grade-saved");
   list.replaceChildren();
-  for (const record of store.rows()) {
+  for (const record of records) {
     const b = button("", () => {
       if (canReplace()) open(record);
     });

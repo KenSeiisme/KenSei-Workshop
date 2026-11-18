@@ -166,6 +166,10 @@ const url = base + "/tools/grade-planner/";
       ),
     });
     await page.waitForURL(/\?id=/);
+    await page
+      .getByText("Imported as a new plan.", { exact: true })
+      .first()
+      .waitFor();
     await page.goto(url + "?id=" + id);
     await page.waitForFunction(
       () => document.querySelector("#grade-name").value === "Semester test",
