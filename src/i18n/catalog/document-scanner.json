@@ -1,0 +1,162 @@
+{
+  "m_21c2782fb250": {
+    "en": "Document Scanner",
+    "zh-Hant": "文件掃描"
+  },
+  "m_5874c487f2ec": {
+    "en": "Turn paper photos into straight, readable pages.",
+    "zh-Hant": "將紙張照片校正成易讀的頁面。"
+  },
+  "m_21b09c0ca852": {
+    "en": "Correct perspective, adjust contrast and export paper photos as an ordered PDF on your device.",
+    "zh-Hant": "在裝置上校正文件透視、調整對比，依頁序匯出 PDF。"
+  },
+  "m_996e6a73eaeb": {
+    "en": "Take a photo",
+    "zh-Hant": "拍攝一頁"
+  },
+  "m_6b071abc6cf0": {
+    "en": "Import photos",
+    "zh-Hant": "匯入照片"
+  },
+  "m_b8d67d6ea260": {
+    "en": "Replace page",
+    "zh-Hant": "替換頁面"
+  },
+  "m_ab0e9554abf0": {
+    "en": "Retake page",
+    "zh-Hant": "重拍頁面"
+  },
+  "m_c19e29639fe7": {
+    "en": "Photo with adjustable page corners",
+    "zh-Hant": "可調整四角的頁面照片"
+  },
+  "m_6d3e61ad141e": {
+    "en": "Top left corner",
+    "zh-Hant": "左上角"
+  },
+  "m_596a26ae32b1": {
+    "en": "Top right corner",
+    "zh-Hant": "右上角"
+  },
+  "m_85004d7a75ec": {
+    "en": "Bottom right corner",
+    "zh-Hant": "右下角"
+  },
+  "m_4fd7d6eccb64": {
+    "en": "Bottom left corner",
+    "zh-Hant": "左下角"
+  },
+  "m_cceff97e176e": {
+    "en": "Reset to full photo",
+    "zh-Hant": "還原至完整照片"
+  },
+  "m_aa815541be56": {
+    "en": "Compare original",
+    "zh-Hant": "比較原圖"
+  },
+  "m_21383adb1cd8": {
+    "en": "Page color",
+    "zh-Hant": "頁面色彩"
+  },
+  "m_b5ec2e60c1a1": {
+    "en": "Original color",
+    "zh-Hant": "原彩"
+  },
+  "m_4c05407a1cdc": {
+    "en": "Download page as JPG",
+    "zh-Hant": "下載此頁 JPG"
+  },
+  "m_e4daeb05194d": {
+    "en": "Prepare pages for OCR",
+    "zh-Hant": "準備頁面供文字辨識"
+  },
+  "m_736612d4d0a9": {
+    "en": "Move earlier",
+    "zh-Hant": "往前移一頁"
+  },
+  "m_d6e856081ebe": {
+    "en": "Move later",
+    "zh-Hant": "往後移一頁"
+  },
+  "m_5c9f97796d9c": {
+    "en": "Remove page",
+    "zh-Hant": "移除此頁"
+  },
+  "m_fb594c58c73d": {
+    "en": "Rotate clockwise",
+    "zh-Hant": "順時針旋轉"
+  },
+  "m_93638ea9e0b0": {
+    "en": "Grayscale",
+    "zh-Hant": "灰階"
+  },
+  "m_2944c285ca65": {
+    "en": "Black and white",
+    "zh-Hant": "黑白"
+  },
+  "m_6183be0883d2": {
+    "en": "Download PDF",
+    "zh-Hant": "下載 PDF"
+  },
+  "m_5b9fea3b0efc": {
+    "en": "Horizontal {0}%, vertical {1}%",
+    "zh-Hant": "水平 {0}%，垂直 {1}%"
+  },
+  "m_f58c8e14bdda": {
+    "en": "Page {0}: {1}",
+    "zh-Hant": "第 {0} 頁：{1}"
+  },
+  "m_237f0c41e198": {
+    "en": "No new pages could be opened.",
+    "zh-Hant": "無法開啟新頁面。"
+  },
+  "m_deac81e4a983": {
+    "en": "Check the suggested corners before exporting.",
+    "zh-Hant": "請確認建議的四角後再匯出。"
+  },
+  "m_69c4f53c923b": {
+    "en": "Paper edges could not be detected. Adjust the corners or keep the full photo.",
+    "zh-Hant": "未能辨識紙張邊緣。你可以調整四角或保留完整照片。"
+  },
+  "m_e937fa0360a0": {
+    "en": "Showing the corrected page. Compare original to return to the corners.",
+    "zh-Hant": "目前顯示校正後的頁面。選擇比較原圖可返回調整四角。"
+  },
+  "m_3eaa9ea5b812": {
+    "en": "PDF downloaded. Use fewer pages to send it to PDF Toolkit.",
+    "zh-Hant": "已下載 PDF。減少頁數後即可傳送至 PDF 工具箱。"
+  },
+  "m_f5749307b76a": {
+    "en": "PDF downloaded. You can also send it to PDF Toolkit.",
+    "zh-Hant": "已下載 PDF，也可以傳送至 PDF 工具箱。"
+  },
+  "m_88b721714e4f": {
+    "en": "Page downloaded.",
+    "zh-Hant": "已下載頁面。"
+  },
+  "m_3ccba3e5be3a": {
+    "en": "Pages ready. Send them to Image to Text to start OCR.",
+    "zh-Hant": "頁面已備妥。傳送到圖片轉文字，接著開始辨識。"
+  },
+  "m_5821bbfb607b": {
+    "en": "JPG, PNG and WebP · 20 pages · 20 MB per photo · 100 MB total.",
+    "zh-Hant": "JPG、PNG 和 WebP · 最多 20 頁 · 每張 20 MB · 合計 100 MB。"
+  },
+  "m_d8e7836a6e89": {
+    "en": "Confirm the suggested corners or adjust them before exporting. Arrow keys nudge the selected corner.",
+    "zh-Hant": "匯出前確認或調整四角。可使用方向鍵微調選取的角點。"
+  },
+  "m_a26d48a3eeb2": {
+    "en": "Photos and scans stay in this tab until you download or send them.",
+    "zh-Hant": "照片與掃描結果保留在此分頁，直到你下載或傳送。"
+  },
+  "m_cde13b68aa96": {
+    "en": "Find 29 browser tools for files, images, text, learning and everyday tasks.",
+    "zh-Hant": "探索 29 個瀏覽器工具，輕鬆處理檔案、圖片、文字、學習與日常工作。"
+  },
+  "m_502a79508657": {
+    "en": "Page {0}",
+    "zh-Hant": "第 {0} 頁"
+  }
+}

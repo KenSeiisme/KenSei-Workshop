@@ -1,6 +1,6 @@
 # KenSei Workshop
 
-KenSei Workshop 提供 **28 個瀏覽器工具**與 **15 款遊戲**。九款單人遊戲支援已驗證排行榜及 30 項里程碑。圍棋、西洋棋和中國象棋各有線上戰績，四子棋和黑白棋支援私人遊玩，Pong 提供好友邀請房。
+KenSei Workshop 提供 **29 個瀏覽器工具**與 **15 款遊戲**。九款單人遊戲支援已驗證排行榜及 30 項里程碑。圍棋、西洋棋和中國象棋各有線上戰績，四子棋和黑白棋支援私人遊玩，Pong 提供好友邀請房。
 
 - 正式网站：https://kensei-workshop.vercel.app/
 - GitHub 分支：`KenSei-Workshop`

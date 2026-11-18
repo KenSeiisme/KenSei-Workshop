@@ -1,0 +1,121 @@
+<section class="panel tool-form scan-tool">
+  <div class="action-row">
+    <button class="button primary" id="scan-camera-button" data-lock>
+      Take a photo
+    </button>
+    <button class="button secondary" id="scan-import-button" data-lock>
+      Import photos
+    </button>
+    <input
+      type="file"
+      id="scan-camera"
+      accept="image/*"
+      capture="environment"
+      hidden
+    />
+    <input
+      type="file"
+      id="scan-import"
+      accept="image/jpeg,image/png,image/webp"
+      multiple
+      hidden
+    />
+  </div>
+  <ul id="scan-failures" class="error-text small" hidden></ul>
+  <ol id="scan-pages" class="scan-pages"></ol>
+  <div id="scan-editor" hidden>
+    <div class="action-row">
+      <button class="button secondary" id="scan-earlier" data-lock>
+        Move earlier
+      </button>
+      <button class="button secondary" id="scan-later" data-lock>
+        Move later
+      </button>
+      <button class="button secondary" id="scan-retake-camera" data-lock>
+        Retake page
+      </button>
+      <button class="button secondary" id="scan-retake" data-lock>
+        Replace page
+      </button>
+      <button class="button secondary" id="scan-remove" data-lock>
+        Remove page
+      </button>
+    </div>
+    <div class="scan-frame" id="scan-frame">
+      <canvas
+        id="scan-source"
+        aria-label="Photo with adjustable page corners"
+      ></canvas>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <polygon id="scan-outline" />
+      </svg>
+      <button
+        type="button"
+        class="scan-corner"
+        aria-label="Top left corner"
+        data-corner="0"
+        data-lock
+      ></button>
+      <button
+        type="button"
+        class="scan-corner"
+        aria-label="Top right corner"
+        data-corner="1"
+        data-lock
+      ></button>
+      <button
+        type="button"
+        class="scan-corner"
+        aria-label="Bottom right corner"
+        data-corner="2"
+        data-lock
+      ></button>
+      <button
+        type="button"
+        class="scan-corner"
+        aria-label="Bottom left corner"
+        data-corner="3"
+        data-lock
+      ></button>
+    </div>
+    <div class="action-row">
+      <button class="button secondary" id="scan-rotate" data-lock>
+        Rotate clockwise
+      </button>
+      <button class="button secondary" id="scan-reset" data-lock>
+        Reset to full photo
+      </button>
+      <button
+        class="button secondary"
+        id="scan-compare"
+        aria-pressed="false"
+        data-lock
+      >
+        Compare original
+      </button>
+      <label
+        >Page color
+        <select id="scan-color" data-lock>
+          <option value="color">Original color</option>
+          <option value="gray">Grayscale</option>
+          <option value="bw">Black and white</option>
+        </select>
+      </label>
+    </div>
+  </div>
+  ${job_status}
+  <div id="scan-output" hidden>
+    <div class="action-row">
+      <button class="button primary" id="scan-pdf" data-lock>
+        Download PDF
+      </button>
+      <button class="button secondary" id="scan-jpg" data-lock>
+        Download page as JPG
+      </button>
+      <button class="button secondary" id="scan-ocr" data-lock>
+        Prepare pages for OCR
+      </button>
+    </div>
+    <div id="scan-transfer"></div>
+  </div>
+</section>

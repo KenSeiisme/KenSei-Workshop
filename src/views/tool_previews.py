@@ -5,6 +5,7 @@ from icons import icon
 # Each tool gets a small, synthetic example in the catalog.
 # Rows contain a visual type and its sample values. No tool script runs here.
 PREVIEWS = {
+    "document-scanner": (("ocr", "A4"), ("arrow",), ("page", "PDF", "pdf")),
     "image-studio": (
         ("picture", "2.4 MB", "image"),
         ("arrow",),
