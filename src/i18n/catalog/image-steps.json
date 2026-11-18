@@ -1,0 +1,170 @@
+{
+  "m_1de3df70ddf4": {
+    "en": "Steps",
+    "zh-Hant": "步驟圖"
+  },
+  "m_067348ce6894": {
+    "en": "Screenshots",
+    "zh-Hant": "螢幕截圖"
+  },
+  "m_a511909161e1": {
+    "en": "Layout",
+    "zh-Hant": "版面"
+  },
+  "m_d91c6178c745": {
+    "en": "Vertical steps",
+    "zh-Hant": "直向步驟圖"
+  },
+  "m_5ef090f5e2d4": {
+    "en": "Two-column comparison",
+    "zh-Hant": "雙欄對照"
+  },
+  "m_154f917df329": {
+    "en": "Output width (px)",
+    "zh-Hant": "輸出寬度（像素）"
+  },
+  "m_75fa167fa21f": {
+    "en": "Choose up to six screenshots. Screenshots and annotations stay in this tab.",
+    "zh-Hant": "最多選擇六張截圖。截圖與標註保留在此分頁。"
+  },
+  "m_dda25feafea3": {
+    "en": "Undo annotation",
+    "zh-Hant": "復原標註"
+  },
+  "m_ed14fa724539": {
+    "en": "Remove screenshot",
+    "zh-Hant": "移除截圖"
+  },
+  "m_c7023e8a9ed1": {
+    "en": "Annotation",
+    "zh-Hant": "標註"
+  },
+  "m_bd82cf16699b": {
+    "en": "Number",
+    "zh-Hant": "編號"
+  },
+  "m_05800e70aa10": {
+    "en": "Arrow",
+    "zh-Hant": "箭頭"
+  },
+  "m_38a11505fddd": {
+    "en": "Short text",
+    "zh-Hant": "短文字"
+  },
+  "m_7f9da8879d04": {
+    "en": "Solid cover",
+    "zh-Hant": "實色遮擋"
+  },
+  "m_3c34efaed8c6": {
+    "en": "Number or text",
+    "zh-Hant": "編號或文字"
+  },
+  "m_8fadef6b49a5": {
+    "en": "Screenshot annotation preview",
+    "zh-Hant": "截圖標註預覽"
+  },
+  "m_91a715775e61": {
+    "en": "Place using coordinates",
+    "zh-Hant": "以座標放置"
+  },
+  "m_ad1f7d8afd03": {
+    "en": "Start X (%)",
+    "zh-Hant": "起點 X（%）"
+  },
+  "m_5f571b8acaf4": {
+    "en": "Start Y (%)",
+    "zh-Hant": "起點 Y（%）"
+  },
+  "m_07c559698932": {
+    "en": "End X (%)",
+    "zh-Hant": "終點 X（%）"
+  },
+  "m_bc496152a0ef": {
+    "en": "End Y (%)",
+    "zh-Hant": "終點 Y（%）"
+  },
+  "m_699d9a6d2e16": {
+    "en": "Place annotation",
+    "zh-Hant": "放置標註"
+  },
+  "m_eaf35f31f4f6": {
+    "en": "Prepare preview",
+    "zh-Hant": "準備預覽"
+  },
+  "m_9db5236e4c8f": {
+    "en": "Final screenshot composition",
+    "zh-Hant": "最終截圖組合"
+  },
+  "m_4f219e72ce39": {
+    "en": "Step {0}",
+    "zh-Hant": "步驟 {0}"
+  },
+  "m_2f91f5e49049": {
+    "en": "Step {0}: {1}",
+    "zh-Hant": "步驟 {0}：{1}"
+  },
+  "m_1fc2874b802f": {
+    "en": "Composition changed. Prepare a new preview.",
+    "zh-Hant": "組合已變更，請重新準備預覽。"
+  },
+  "m_d55fa66762e8": {
+    "en": "Drag on the screenshot, or enter two points below.",
+    "zh-Hant": "在截圖上拖曳，或在下方輸入兩點座標。"
+  },
+  "m_9564116f12bd": {
+    "en": "Click a spot on the screenshot, or enter its coordinates below.",
+    "zh-Hant": "點選截圖中的位置，或在下方輸入座標。"
+  },
+  "m_0c3dbaddf791": {
+    "en": "Choose up to six screenshots totaling no more than 100 MB.",
+    "zh-Hant": "請選擇最多六張截圖，合計不超過 100 MB。"
+  },
+  "m_61f906807c6d": {
+    "en": "Opening screenshots…",
+    "zh-Hant": "正在開啟截圖…"
+  },
+  "m_82755fb8db65": {
+    "en": "Screenshots ready for annotations.",
+    "zh-Hant": "截圖已備妥，可以加入標註。"
+  },
+  "m_5d52143a5fa5": {
+    "en": "Use up to 50 annotations per screenshot.",
+    "zh-Hant": "每張截圖最多使用 50 個標註。"
+  },
+  "m_b16034023b3c": {
+    "en": "Enter a number from 0 to 999.",
+    "zh-Hant": "輸入 0 至 999 的編號。"
+  },
+  "m_21eff66fba27": {
+    "en": "Enter short annotation text.",
+    "zh-Hant": "輸入標註短文字。"
+  },
+  "m_c2db13fb05e0": {
+    "en": "Choose two distinct points for this annotation.",
+    "zh-Hant": "請為這個標註選擇兩個不同的點。"
+  },
+  "m_b74d4de11e24": {
+    "en": "Enter coordinates from 0 to 100%.",
+    "zh-Hant": "輸入 0% 至 100% 的座標。"
+  },
+  "m_7129d10a73cf": {
+    "en": "Use a whole output width from 320 to 2400 pixels.",
+    "zh-Hant": "輸出寬度須為 320 至 2400 像素的整數。"
+  },
+  "m_70355dca8181": {
+    "en": "The composition needs {0} × {1} px. Reduce the width or split it into two images.",
+    "zh-Hant": "組合需要 {0} × {1} 像素。請縮小寬度或拆成兩張圖片。"
+  },
+  "m_a42a0d016047": {
+    "en": "Preparing screenshot {0} of {1}…",
+    "zh-Hant": "正在準備第 {0}／{1} 張截圖…"
+  },
+  "m_95651105da32": {
+    "en": "Preview ready. Use a smaller width to send this image to PDF Toolkit.",
+    "zh-Hant": "預覽已備妥。縮小寬度後可將圖片傳送至 PDF 工具箱。"
+  },
+  "m_761bce84dad6": {
+    "en": "Preview ready. Check your annotations before downloading.",
+    "zh-Hant": "預覽已備妥。下載前請確認標註。"
+  }
+}
