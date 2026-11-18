@@ -1,3 +1,4 @@
+import { iconMarkup } from "../site/content-visuals.js";
 import { api, esc } from "./common.js";
 import * as personal from "./personal-store.js";
 import * as decks from "./flashcard-store.js";
@@ -88,6 +89,7 @@ export function mountWorkspaceIndex(root) {
     remote = [],
     request,
     timer,
+    currentQuery = null,
     failed = false,
     more = false,
     limit = pageSize;
@@ -113,11 +115,28 @@ export function mountWorkspaceIndex(root) {
     };
     const saveLabel =
       saveLabels[row.save_status || (owner ? "synced" : "device")];
-    return uiHtml`<div class="saved-row"><span class="workspace-record-icon" data-tool-category="${esc(tools[row.tool].category)}">${tools[row.tool].icon || ""}</span><div>
+    const state = row.save_status || (owner ? "synced" : "device");
+    const stateIcon =
+      {
+        device: "device",
+        synced: "cloud",
+        pending: "sync",
+        syncing: "sync",
+        failed: "warning",
+      }[state] || "device";
+    const typeIcon = {
+      draft: "draft",
+      preset: "preset",
+      decision: "wheel",
+      deck: "cards",
+      planner: "book",
+      whiteboard: "grid",
+    }[row.kind];
+    return uiHtml`<div class="saved-row" data-record-type="${esc(row.kind)}"><span class="workspace-record-icon" data-tool-category="${esc(tools[row.tool].category)}">${tools[row.tool].icon || ""}</span><div>
       <strong>${row.name ? esc(row.name) : uiMsg("Untitled record")}</strong>
-      <p>${uiFrom(label)} · ${uiFrom(tools[row.tool].name)}
+      <p><span class="workspace-type-label">${iconMarkup(typeIcon)}${uiFrom(label)}</span> · ${uiFrom(tools[row.tool].name)}
       ${Number.isFinite(+timestamp) ? uiDate(timestamp, { dateStyle: "medium", timeStyle: "short" }) : ""}
-      <span class="workspace-save-state">${saveLabel}</span></p></div>
+      <span class="workspace-save-state" data-state="${state}">${iconMarkup(stateIcon)}${saveLabel}</span></p></div>
       <a class="text-link" data-record="${esc(key(row))}" href="${path}?${param}=${encodeURIComponent(row.id)}">${isRecent ? uiMsg("Continue editing") : uiMsg("Open")}</a>
     </div>`;
   }
@@ -247,9 +266,18 @@ export function mountWorkspaceIndex(root) {
       remote = [];
       failed = more = false;
       limit = pageSize;
-    } else if (!append) {
-      request = null;
+      currentQuery = null;
+    }
+    const filterKey = JSON.stringify([
+      query.value.trim(),
+      kind.value,
+      toolMatches(),
+    ]);
+    if (filterKey !== currentQuery) {
+      currentQuery = filterKey;
+      remote = [];
       limit = pageSize;
+      append = false;
     }
     if (!owner || !navigator.onLine || !api.client || (append && !more)) {
       paint();
@@ -257,27 +285,36 @@ export function mountWorkspaceIndex(root) {
     }
     const ticket = {};
     request = ticket;
-    const last = append ? remote.at(-1) : null;
+    let last = append ? remote.at(-1) : null;
     paint();
     try {
-      const rpc = api.client.rpc("get_workspace_index", {
-        search_text: query.value.trim(),
-        tool_ids: toolMatches(),
-        record_kind: kind.value || null,
-        before_time: last?.updated_at ?? null,
-        before_kind: last?.kind ?? null,
-        before_id: last?.id ?? null,
-      });
-      const { data, error } = await (rpc.abortSignal?.(
-        AbortSignal.timeout(9000),
-      ) ?? rpc);
-      if (request !== ticket || owner !== api.user?.id) return;
-      if (error || !Array.isArray(data))
-        throw error || Error("Invalid workspace index");
-      more = data.length > pageSize;
-      remote = append
-        ? [...remote, ...data.slice(0, pageSize)]
-        : data.slice(0, pageSize);
+      const received = [];
+      let hasMore = false;
+      // 同一篩選的背景刷新重新讀取已展開的頁數，完整完成後才換列表。
+      do {
+        const rpc = api.client.rpc("get_workspace_index", {
+          search_text: query.value.trim(),
+          tool_ids: toolMatches(),
+          record_kind: kind.value || null,
+          before_time: last?.updated_at ?? null,
+          before_kind: last?.kind ?? null,
+          before_id: last?.id ?? null,
+        });
+        const { data, error } = await (rpc.abortSignal?.(
+          AbortSignal.timeout(9000),
+        ) ?? rpc);
+        if (request !== ticket || owner !== api.user?.id) return;
+        if (error || !Array.isArray(data))
+          throw error || Error("Invalid workspace index");
+        received.push(...data.slice(0, pageSize));
+        hasMore = data.length > pageSize;
+        const next = received.at(-1);
+        if (hasMore && last && key(next) === key(last))
+          throw Error("Workspace pagination did not advance");
+        last = next;
+      } while (!append && hasMore && received.length < limit);
+      more = hasMore;
+      remote = append ? [...remote, ...received] : received;
       failed = false;
     } catch {
       if (request === ticket) failed = true;

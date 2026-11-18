@@ -1,3 +1,4 @@
+import { contentIcon, gameArtwork, medal } from "./content-visuals.js";
 import { api } from "/tool-scripts/common.js";
 import { paintAvatar } from "/tool-scripts/profile-service.js";
 import { ACHIEVEMENTS } from "/game-scripts/achievement-catalog.js";
@@ -36,7 +37,6 @@ let pending,
   failed = false,
   ready = false,
   watermark = null,
-  soundVolume = 25,
   lastCheck = -Infinity,
   quietReturn = false;
 const badges = {
@@ -137,21 +137,47 @@ function paint() {
       item.className = "notice-row";
       item.dataset.id = row.id;
       item.dataset.unread = String(!row.read_at);
+      const payload = row.payload || {};
+      const daily = payload.type === "daily";
+      item.dataset.kind = row.kind;
+      item.dataset.reward = daily ? "daily" : payload.type || "";
       icon.className = "notice-marker";
-      if (row.actor) {
-        icon.classList.add("avatar-badge");
-        paintAvatar(icon, row.actor);
-        icon.setAttribute("aria-hidden", "true");
+      icon.setAttribute("aria-hidden", "true");
+      if (row.kind === "game_invite") {
+        icon.append(gameArtwork(payload.game));
+        if (row.actor) {
+          const sender = document.createElement("span");
+          sender.className = "avatar-badge notice-sender";
+          paintAvatar(sender, row.actor);
+          icon.append(sender);
+        }
+      } else if (row.actor) {
+        const avatar = document.createElement("span");
+        avatar.className = "avatar-badge notice-actor";
+        paintAvatar(avatar, row.actor);
+        icon.append(
+          avatar,
+          contentIcon(row.kind === "friend_accepted" ? "tick" : "request"),
+        );
+      } else if (daily) {
+        icon.append(contentIcon("coin"));
       } else {
-        icon.textContent = "✦";
-        icon.setAttribute("aria-hidden", "true");
+        icon.append(medal(ACHIEVEMENTS.find((a) => a.id === payload.id)));
       }
       when.dateTime = row.created_at;
       uiText(
         when,
         uiDate(row.created_at, { dateStyle: "medium", timeStyle: "short" }),
       );
-      uiText(body, noticeText(row));
+      const message = document.createElement("span");
+      uiText(message, daily ? uiMsg("Daily reward") : noticeText(row));
+      body.append(message);
+      if (daily) {
+        const amount = document.createElement("strong");
+        amount.className = "notice-reward-amount";
+        uiText(amount, uiMsg("+{0} coins", [Number(payload.amount) || 0]));
+        body.prepend(amount);
+      }
       actions.className = "notice-row-actions";
       item.append(icon, body, when);
       if (row.payload?.type === "daily" && row.payload.task_day) {
@@ -505,21 +531,76 @@ const volume = $("[data-notice-volume]"),
 function paintSound() {
   const current = window.KenseiNoticeSettings.volume;
   volume.value = current;
+  volume.style.setProperty("--notice-volume", current + "%");
   uiText(volumeValue, current + "%");
+  $("[data-notice-volume-icon]").replaceChildren(
+    contentIcon(current ? "sound" : "mute"),
+  );
   uiText(
     mute,
     current ? uiMsg("Mute notifications") : uiMsg("Unmute notifications"),
   );
 }
-volume.oninput = () => uiText(volumeValue, volume.value + "%");
-volume.onchange = () => window.KenseiNoticeSettings.set(Number(volume.value));
-mute.onclick = () => {
-  const value = window.KenseiNoticeSettings.volume;
-  if (value) soundVolume = value;
-  window.KenseiNoticeSettings.set(value ? 0 : soundVolume);
+const audioSettings = window.KenseiNoticeSettings;
+let volumeGesture = null;
+function commitVolume() {
+  volumeGesture = null;
+  audioSettings.commit();
+}
+volume.onpointerdown = () => {
+  volumeGesture = "pointer";
+  audioSettings.begin();
 };
-$("[data-test-notice-sound]").onclick = () =>
-  window.KenseiNoticeSettings.preview();
+volume.oninput = () => audioSettings.adjust(Number(volume.value));
+volume.onchange = () => {
+  if (volumeGesture !== "keyboard") commitVolume();
+};
+volume.onpointerup = volume.onpointercancel = volume.onblur = commitVolume;
+volume.onkeydown = (event) => {
+  if (
+    [
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowUp",
+      "ArrowDown",
+      "Home",
+      "End",
+      "PageUp",
+      "PageDown",
+    ].includes(event.key)
+  ) {
+    volumeGesture = "keyboard";
+    audioSettings.begin();
+  }
+};
+volume.onkeyup = () => {
+  if (volumeGesture === "keyboard") commitVolume();
+};
+mute.onclick = () => {
+  audioSettings.toggleMute();
+  uiText(
+    $("[data-notice-sound-status]"),
+    audioSettings.volume ? "" : uiMsg("Notification sound is muted."),
+  );
+};
+let previewAttempt = 0;
+$("[data-test-notice-sound]").onclick = async () => {
+  const attempt = ++previewAttempt;
+  const result = await audioSettings.preview();
+  if (attempt !== previewAttempt) return;
+  uiText(
+    $("[data-notice-sound-status]"),
+    result.ok
+      ? uiMsg("Playing test sound.")
+      : result.reason === "muted"
+        ? uiMsg("Unmute notifications to test the sound.")
+        : result.reason === "unsupported"
+          ? uiMsg("This browser does not support notification sound.")
+          : result.reason === "cancelled" || result.reason === "hidden"
+            ? ""
+            : uiMsg("Sound could not start. Tap Test sound to retry."),
+  );
+};
 filter.onchange = () => {
   category = filter.value;
   revision++;

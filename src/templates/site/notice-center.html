@@ -24,12 +24,22 @@
   </label>
   <details class="notice-settings">
     <summary>${svg_sound} <span>Notification sound</span></summary>
-    <label class="field"
-      >Notification volume
-      <input type="range" min="0" max="100" value="25" data-notice-volume />
-    </label>
+    <label for="notice-volume">Notification volume</label>
+    <div class="notice-volume-row">
+      <span data-notice-volume-icon aria-hidden="true">${svg_sound}</span>
+      <input
+        id="notice-volume"
+        aria-label="Notification volume"
+        type="range"
+        min="0"
+        max="100"
+        step="1"
+        value="25"
+        data-notice-volume
+      />
+      <output for="notice-volume" data-notice-volume-value>25%</output>
+    </div>
     <div class="notice-settings-actions">
-      <output data-notice-volume-value>25%</output>
       <button class="button secondary" type="button" data-test-notice-sound>
         Test sound
       </button>
@@ -37,6 +47,11 @@
         Mute notifications
       </button>
     </div>
+    <p
+      class="muted small notice-audio-status"
+      role="status"
+      data-notice-sound-status
+    ></p>
   </details>
   <div class="notice-center-actions">
     <button class="button secondary" type="button" data-notice-sign-in hidden>

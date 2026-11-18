@@ -1,8 +1,8 @@
+import { gameChoiceLinks, contentIcon, gameEmblem } from "./content-visuals.js";
 import { api } from "/tool-scripts/common.js";
 import { uiAttr, uiConfirm, uiMsg, uiText } from "./ui.js";
-import { socialRPC, SOCIAL_GAMES, socialPath } from "./social-api.js";
+import { socialRPC, socialPath } from "./social-api.js";
 import { presenceText } from "./social-presence.js";
-import { uiFrom } from "./ui.js";
 
 const actions = {
   none: ["request", "block"],
@@ -124,16 +124,7 @@ export function openFriendGameChoice(person, trigger) {
   uiText(title, uiMsg("Invite {0}", [person.nickname]));
   dialog.setAttribute("aria-labelledby", title.id);
   links.className = "friend-game-links";
-  for (const [game, name] of Object.entries(SOCIAL_GAMES)) {
-    const link = document.createElement("a");
-    link.className = "button secondary";
-    link.href =
-      socialPath("/games/" + game + "/") +
-      "?friend=" +
-      encodeURIComponent(person.public_id);
-    uiText(link, uiFrom(name));
-    links.append(link);
-  }
+  gameChoiceLinks(links, person, socialPath);
   dialog.append(
     title,
     links,
@@ -167,7 +158,21 @@ export async function mountPublicFriendActions(root, person) {
       root.prepend(label);
       const presence = document.createElement("span");
       presence.className = "friend-presence";
-      uiText(presence, presenceText(relation.presence));
+      const activityLabel = document.createElement("span");
+      uiText(activityLabel, presenceText(relation.presence));
+      presence.dataset.presence = relation.presence?.status || "offline";
+      presence.append(
+        contentIcon(
+          relation.presence?.status === "playing"
+            ? "play"
+            : relation.presence?.status === "online"
+              ? "online"
+              : "offline",
+        ),
+        activityLabel,
+      );
+      if (relation.presence?.status === "playing")
+        presence.append(gameEmblem(relation.presence.game));
       root.append(
         presence,
         button(

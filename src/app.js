@@ -1405,6 +1405,11 @@
       ]),
     );
     uiText($("#draft-count"), drafts.length);
+    if ($("[data-workspace-favorite-count]"))
+      uiText(
+        $("[data-workspace-favorite-count]"),
+        items("favorite").filter((x) => tools[x.data.slug]).length,
+      );
     $("#favorite-tools").innerHTML =
       items("favorite")
         .filter((x) => tools[x.data.slug])

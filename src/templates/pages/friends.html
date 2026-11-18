@@ -22,7 +22,7 @@
   </button>
   <div class="friends-grid" data-friends-content hidden>
     <section class="panel" aria-labelledby="friend-search-title">
-      <h2 id="friend-search-title">Find friends</h2>
+      <h2 id="friend-search-title">${svg_search} Find friends</h2>
       <label class="field"
         >Public nickname
         <input
@@ -40,7 +40,7 @@
     </section>
     <section class="panel" aria-labelledby="friend-list-title">
       <h2 id="friend-list-title">
-        Your friends <output data-friend-count>0</output>
+        ${svg_friends} Your friends <output data-friend-count>0</output>
       </h2>
       <label class="field"
         >Find in your friends<input
@@ -58,15 +58,24 @@
       <p data-social-visibility-status class="muted small" role="status"></p>
       <div class="friend-rows" data-friend-list="friend"></div>
       <details open>
-        <summary>Incoming requests</summary>
+        <summary>
+          ${svg_request} <span>Incoming requests</span
+          ><output data-friend-section-count="incoming">0</output>
+        </summary>
         <div class="friend-rows" data-friend-list="incoming"></div>
       </details>
       <details>
-        <summary>Sent requests</summary>
+        <summary>
+          ${svg_sent} <span>Sent requests</span
+          ><output data-friend-section-count="outgoing">0</output>
+        </summary>
         <div class="friend-rows" data-friend-list="outgoing"></div>
       </details>
       <details>
-        <summary>Blocked players</summary>
+        <summary>
+          ${svg_blocked} <span>Blocked players</span
+          ><output data-friend-section-count="blocked">0</output>
+        </summary>
         <div class="friend-rows" data-friend-list="blocked"></div>
       </details>
     </section>

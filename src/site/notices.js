@@ -5,64 +5,108 @@
   if (!stack || !ui) return;
 
   const kinds = {
-    info: [
-      "Information",
-      "M12 11v6m0-10h.01 M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z",
-      4000,
-      0,
-    ],
-    success: ["Success", "m4 12 5 5L20 6", 4000, 0],
-    warning: ["Warning", "M12 8v5m0 3h.01M12 3 2 21h20L12 3Z", 10000, 1],
-    error: [
-      "Error",
-      "m8 8 8 8m0-8-8 8 M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z",
-      10000,
-      2,
-    ],
-    reward: [
-      "Reward",
-      "m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6Z",
-      6000,
-      2,
-    ],
-    social: [
-      "Social",
-      "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m18-14v6m-3-3h6 M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z",
-      4000,
-      1,
-    ],
+    info: ["Information", 4000, 0],
+    success: ["Success", 4000, 0],
+    warning: ["Warning", 10000, 1],
+    error: ["Error", 10000, 2],
+    reward: ["Reward", 6000, 2],
+    social: ["Social", 4000, 1],
   };
   const aliases = { notice: "info", setting: "success", achievement: "reward" };
   const entries = new Map(),
     shown = new Set();
   const volumeKey = "kensei-notice-volume-v1";
+  const lastVolumeKey = "kensei-notice-last-volume-v1";
   let volume = 25,
+    lastVolume = 25,
+    editingVolume = false,
     context,
+    output,
+    previewTicket = 0,
     lastSound = -Infinity,
     soundDb;
+  const voices = new Set();
+  const level = () => 0.3 * (volume / 100) ** 1.3;
   function readVolume() {
     try {
       const value = localStorage.getItem(volumeKey);
       if (value !== null && Number.isFinite(Number(value)))
         volume = Math.max(0, Math.min(100, Number(value)));
+      const previous = Number(localStorage.getItem(lastVolumeKey));
+      if (previous > 0 && previous <= 100) lastVolume = previous;
+      if (volume) lastVolume = volume;
     } catch {}
   }
   readVolume();
+  let savedSettings = volume + ":" + lastVolume;
   window.addEventListener("storage", (event) => {
-    if (event.key === volumeKey || event.key === null) {
-      if (event.newValue === null) volume = 25;
-      else readVolume();
+    if (
+      event.key === volumeKey ||
+      event.key === lastVolumeKey ||
+      event.key === null
+    ) {
+      if (editingVolume) return; // 本次手勢結束時提交本機值，不被其他分頁打斷。
+      if (
+        (event.key === volumeKey || event.key === null) &&
+        event.newValue === null
+      ) {
+        volume = 25;
+        lastVolume = 25;
+      } else readVolume();
+      savedSettings = volume + ":" + lastVolume;
+      updateOutput();
       window.dispatchEvent(new Event("notice-volume-change"));
     }
   });
 
+  function updateOutput() {
+    if (!output) return;
+    const now = context.currentTime;
+    output.gain.cancelScheduledValues(now);
+    output.gain.setTargetAtTime(level(), now, 0.012);
+  }
+  async function resumeAudio() {
+    if (document.hidden) return { ok: false, reason: "hidden" };
+    const Audio = window.AudioContext || window.webkitAudioContext;
+    if (!Audio) return { ok: false, reason: "unsupported" };
+    try {
+      if (!context) {
+        context = new Audio();
+        output = context.createGain();
+        output.gain.value = level();
+        const filter = context.createBiquadFilter();
+        filter.type = "lowpass";
+        filter.frequency.value = 2400;
+        filter.Q.value = 0.5;
+        const limiter = context.createDynamicsCompressor();
+        limiter.threshold.value = -6;
+        limiter.knee.value = 12;
+        limiter.ratio.value = 12;
+        limiter.attack.value = 0.003;
+        limiter.release.value = 0.15;
+        output.connect(filter).connect(limiter).connect(context.destination);
+      }
+      if (context.state !== "running") {
+        // 每次新的使用者操作都可再次呼叫 resume，避免沿用遭攔截的等待。
+        const resumePromise = context.resume();
+        // 被瀏覽器攔截時 resume 可能一直等待，讓設定區能顯示重試。
+        let timer;
+        await Promise.race([
+          resumePromise,
+          new Promise((_, reject) => {
+            timer = setTimeout(() => reject(new Error("blocked")), 1800);
+          }),
+        ]).finally(() => clearTimeout(timer));
+      }
+      return { ok: context.state === "running", reason: "blocked" };
+    } catch {
+      return { ok: false, reason: "blocked" };
+    }
+  }
+
   function unlock(event) {
     if (!event.isTrusted || !volume || document.hidden) return;
-    try {
-      const Audio = window.AudioContext || window.webkitAudioContext;
-      if (Audio && !context) context = new Audio();
-      if (context?.state !== "running") context?.resume().catch(() => {});
-    } catch {}
+    void resumeAudio();
   }
   document.addEventListener("pointerdown", unlock, {
     capture: true,
@@ -70,8 +114,11 @@
   });
   document.addEventListener("keydown", unlock, { capture: true });
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) context?.suspend().catch(() => {});
-    else if (volume) context?.resume().catch(() => {});
+    if (document.hidden) {
+      previewTicket++;
+      for (const voice of voices) voice.stop();
+      context?.suspend().catch(() => {});
+    } else if (volume) context?.resume().catch(() => {});
   });
 
   function soundClaim(keys, expiry) {
@@ -116,13 +163,57 @@
       .catch(() => false);
   }
   const tones = {
-    info: [520],
-    success: [500, 660],
-    warning: [360, 360],
-    error: [340, 280],
-    reward: [470, 620, 780],
-    social: [510, 570],
+    info: [440],
+    success: [392, 523],
+    warning: [294, 277],
+    error: [262, 220],
+    reward: [392, 494, 587],
+    social: [370, 440],
   };
+  function playTones(kind, preview = false) {
+    // 所有聲音共用平滑音量和限幅；只保留兩組，避免連續提示堆積。
+    if (voices.size >= 2) voices.values().next().value.stop();
+    const nodes = [];
+    let stopped = false;
+    const voice = {
+      preview,
+      stop() {
+        if (stopped) return;
+        stopped = true;
+        for (const [oscillator, envelope] of nodes) {
+          const now = context.currentTime;
+          envelope.gain.cancelScheduledValues(now);
+          envelope.gain.setTargetAtTime(0, now, 0.005);
+          try {
+            oscillator.stop(now + 0.025);
+          } catch {}
+        }
+        voices.delete(voice);
+      },
+    };
+    voices.add(voice);
+    const frequencies = tones[kind] || tones.info;
+    frequencies.forEach((frequency, index) => {
+      const start = context.currentTime + index * 0.105;
+      const oscillator = context.createOscillator();
+      const envelope = context.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(frequency, start);
+      envelope.gain.setValueAtTime(0, start);
+      envelope.gain.linearRampToValueAtTime(0.65, start + 0.035);
+      envelope.gain.exponentialRampToValueAtTime(0.001, start + 0.21);
+      envelope.gain.linearRampToValueAtTime(0, start + 0.235);
+      oscillator.connect(envelope).connect(output);
+      nodes.push([oscillator, envelope]);
+      oscillator.onended = () => {
+        oscillator.disconnect();
+        envelope.disconnect();
+        if (index === frequencies.length - 1) voices.delete(voice);
+      };
+      oscillator.start(start);
+      oscillator.stop(start + 0.24);
+    });
+  }
   async function sound(kind, key, events, account) {
     if (!volume || !context || context.state !== "running" || document.hidden)
       return;
@@ -141,27 +232,7 @@
     )
       return;
     lastSound = performance.now();
-    tones[kind].forEach((frequency, index) => {
-      const start = context.currentTime + index * 0.09;
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.type = "sine";
-      oscillator.frequency.value = frequency;
-      gain.gain.setValueAtTime(0.001, start);
-      gain.gain.exponentialRampToValueAtTime(
-        Math.max(0.002, volume * 0.0004),
-        start + 0.023,
-      );
-      gain.gain.exponentialRampToValueAtTime(0.001, start + 0.12);
-      oscillator.connect(gain);
-      gain.connect(context.destination);
-      oscillator.onended = () => {
-        oscillator.disconnect();
-        gain.disconnect();
-      };
-      oscillator.start(start);
-      oscillator.stop(start + 0.13);
-    });
+    playTones(kind);
   }
 
   function place() {
@@ -248,31 +319,68 @@
   });
   document.addEventListener("fullscreenchange", place);
 
-  function glyph(path) {
+  function glyph(name) {
     const ns = "http://www.w3.org/2000/svg";
     const icon = document.createElementNS(ns, "svg");
     icon.setAttribute("viewBox", "0 0 24 24");
     icon.setAttribute("class", "toast-icon");
     icon.setAttribute("aria-hidden", "true");
-    const shape = document.createElementNS(ns, "path");
-    shape.setAttribute("d", path);
+    const shape = document.createElementNS(ns, "use");
+    shape.setAttribute("href", "/assets/ui-icons.svg#" + name);
     icon.append(shape);
     return icon;
   }
+  function setVolume(value, save) {
+    if (!Number.isFinite(value)) return;
+    volume = Math.max(0, Math.min(100, value));
+    if (volume) lastVolume = volume;
+    updateOutput();
+    if (save) {
+      editingVolume = false;
+      const signature = volume + ":" + lastVolume;
+      if (signature !== savedSettings) {
+        try {
+          localStorage.setItem(volumeKey, String(volume));
+          localStorage.setItem(lastVolumeKey, String(lastVolume));
+          savedSettings = signature;
+        } catch {}
+      }
+    }
+    window.dispatchEvent(new Event("notice-volume-change"));
+  }
   window.KenseiNoticeSettings = {
-    preview() {
-      void sound("success", "preview:" + crypto.randomUUID(), [], null);
+    async preview(kind = "success") {
+      const ticket = ++previewTicket;
+      for (const voice of voices) if (voice.preview) voice.stop();
+      if (!volume) return { ok: false, reason: "muted" };
+      const result = await resumeAudio();
+      if (ticket !== previewTicket || document.hidden)
+        return { ok: false, reason: "cancelled" };
+      if (!result.ok) return result;
+      playTones(kind, true);
+      return { ok: true };
     },
     get volume() {
       return volume;
     },
+    get lastVolume() {
+      return lastVolume;
+    },
+    begin() {
+      editingVolume = true;
+    },
+    adjust(value) {
+      editingVolume = true;
+      setVolume(value, false);
+    },
+    commit() {
+      setVolume(volume, true);
+    },
     set(value) {
-      if (!Number.isFinite(value)) return;
-      volume = Math.max(0, Math.min(100, value));
-      try {
-        localStorage.setItem(volumeKey, String(volume));
-      } catch {}
-      window.dispatchEvent(new Event("notice-volume-change"));
+      setVolume(value, true);
+    },
+    toggleMute() {
+      setVolume(volume ? 0 : lastVolume, true);
     },
   };
   function categoryOf(message) {
@@ -301,7 +409,7 @@
     const input = options.kind || categoryOf(message);
     const category =
       aliases[input] || (Object.hasOwn(kinds, input) ? input : "info");
-    const [label, path, duration, priority] = kinds[category];
+    const [label, duration, priority] = kinds[category];
     const key = options.key || category + ":" + ui.render(message);
     const events = options.events || [];
     if (events.length && events.every((id) => shown.has(id))) return;
@@ -338,9 +446,21 @@
     close.className = "toast-close icon-button";
     close.type = "button";
     ui.attr(close, "aria-label", ui.msg("Dismiss notice"));
-    close.append(glyph("m6 6 12 12m0-12L6 18"));
+    close.append(glyph("close"));
     copy.append(heading, content);
-    node.append(glyph(path), copy, close);
+    node.append(
+      glyph(
+        category === "success"
+          ? "tick"
+          : category === "reward"
+            ? "achievement"
+            : category === "social"
+              ? "request"
+              : category,
+      ),
+      copy,
+      close,
+    );
     stack.append(node);
     ui.text(heading, ui.from(label));
     ui.text(content, message);
