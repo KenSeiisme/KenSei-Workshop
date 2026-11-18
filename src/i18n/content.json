@@ -1028,5 +1028,27 @@
       "影片剪接",
       "錄屏剪輯"
     ]
+  },
+  "tools/grade-planner": {
+    "name": {
+      "en": "Grade Planner",
+      "zh-Hant": "成績規劃"
+    },
+    "description": {
+      "en": "Calculate assessment targets, term GPA and cumulative CGPA across your courses.",
+      "zh-Hant": "試算各科考核目標、學期 GPA 與跨學期累計 CGPA。"
+    },
+    "aliases": [
+      "grades",
+      "gpa",
+      "cgpa",
+      "target grade",
+      "绩点",
+      "績點",
+      "成绩",
+      "成績",
+      "期末分数",
+      "學分"
+    ]
   }
 }

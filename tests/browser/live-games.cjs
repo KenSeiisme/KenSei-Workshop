@@ -205,11 +205,11 @@ const base = process.env.TEST_BASE_URL || "https://kensei-workshop.vercel.app";
       );
     }
     await p.goto(base + "/tools/");
-    assert.equal(await p.locator("[data-tool-card]").count(), 30);
+    assert.equal(await p.locator("[data-tool-card]").count(), 31);
     await p.fill("#tool-search", "2048");
     assert.equal(await p.locator("[data-tool-card]:visible").count(), 0);
     await p.goto(base + "/");
-    assert.equal(await p.locator("[data-tool-card]").count(), 30);
+    assert.equal(await p.locator("[data-tool-card]").count(), 31);
     assert.equal(await p.locator(".game-card").count(), 0);
     assert.deepEqual(await p.locator("#navigation a").allTextContents(), [
       "Home",

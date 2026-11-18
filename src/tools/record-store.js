@@ -1,6 +1,6 @@
 import { api } from "./common.js";
 export function createRecordStore(kind, validate, { syncDelay = 0 } = {}) {
-  if (!["planner", "whiteboard", "game"].includes(kind))
+  if (!["planner", "whiteboard", "game", "grade"].includes(kind))
     throw Error("Unknown private record kind.");
   const sessions = new Map(),
     listeners = new Set(),

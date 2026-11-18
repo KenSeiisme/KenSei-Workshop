@@ -2,6 +2,11 @@
   "version": 1,
   "tools": [
     {
+      "slug": "grade-planner",
+      "task": "Calculate assessment targets, term GPA and cumulative CGPA across your courses.",
+      "groups": ["grade-planner"]
+    },
+    {
       "slug": "video-studio",
       "task": "Trim and join multiple videos, add captions and export MP4 or WebM on your device.",
       "groups": ["video-studio"]

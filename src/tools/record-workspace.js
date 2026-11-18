@@ -1,5 +1,6 @@
 import { $, api, downloadText } from "./common.js";
 import { createRecordStore } from "./record-store.js";
+import { validateGradePlan } from "./grade-planner-core.js";
 import { validatePlanner } from "./planner-core.js";
 import { validateWhiteboard } from "./whiteboard-core.js";
 import {
@@ -14,6 +15,7 @@ import {
 export const workspaceStores = new Map();
 for (const [kind, slug, validate] of [
   ["planner", "study-planner", validatePlanner],
+  ["grade", "grade-planner", validateGradePlan],
   ["whiteboard", "whiteboard", validateWhiteboard],
 ]) {
   const store = createRecordStore(kind, validate),

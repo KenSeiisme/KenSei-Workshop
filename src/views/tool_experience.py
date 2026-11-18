@@ -4,6 +4,11 @@ from template_renderer import render_template
 from html import escape
 
 HELP = {
+    "grade-planner": (
+        "Calculate course targets and credit-weighted GPA and CGPA.",
+        "Use the grading scale from your institution. The built-in 4.0 table is an example.",
+        "Signed-in plans sync privately. You can export or import a JSON backup.",
+    ),
     "video-studio": (
         "Up to 6 MP4 or WebM sources, 250 MB and 10 minutes each, 500 MB combined.",
         "Keep up to 12 clips and 5 minutes of output. Export support depends on browser codecs.",

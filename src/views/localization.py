@@ -63,8 +63,8 @@ COMMON = {
     "tools": (
         {"en": "Tools", "zh-Hant": "工具"},
         {
-            "en": "Find 30 browser tools for files, images, text, learning and everyday tasks.",
-            "zh-Hant": "探索 30 個瀏覽器工具，輕鬆處理檔案、圖片、文字、學習與日常工作。",
+            "en": "Find 31 browser tools for files, images, text, learning and everyday tasks.",
+            "zh-Hant": "探索 31 個瀏覽器工具，輕鬆處理檔案、圖片、文字、學習與日常工作。",
         },
     ),
     "games": (
@@ -275,6 +275,8 @@ def styles(route):
             files.append("image-steps.css")
         if slug == "video-studio":
             files.append("video-studio.css")
+        if slug == "grade-planner":
+            files.append("grade-planner.css")
         if slug == "document-scanner":
             files.append("document-scanner.css")
         if slug == "study-planner":

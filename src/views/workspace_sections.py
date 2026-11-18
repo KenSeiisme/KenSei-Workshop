@@ -17,6 +17,8 @@ def workspace_section(kind, title, slug):
     )
 
 
-WORKSPACE = workspace_section(
-    "planner", "Study plans", "study-planner"
-) + workspace_section("whiteboard", "Whiteboards", "whiteboard")
+WORKSPACE = (
+    workspace_section("planner", "Study plans", "study-planner")
+    + workspace_section("whiteboard", "Whiteboards", "whiteboard")
+    + workspace_section("grade", "Grade plans", "grade-planner")
+)

@@ -1,0 +1,58 @@
+<div class="grade-grid">
+  <section class="panel tool-form">
+    <h2>Grade plans</h2>
+    <div class="action-row">
+      <button id="grade-new" class="button primary">New grade plan</button>
+      <button id="grade-retry" class="button secondary">
+        Refresh saved plans
+      </button>
+    </div>
+    <label
+      >Import grade backup
+      <input id="grade-import" type="file" accept=".json,application/json" />
+    </label>
+    <div id="grade-saved"></div>
+    <button id="grade-more" class="button secondary" hidden>Load more</button>
+    <details id="grade-copy" hidden>
+      <summary>Copy guest grade plan to account</summary>
+      <div id="grade-guest-list"></div>
+    </details>
+    <div id="grade-sync" class="muted small" role="status"></div>
+    ${job_status}
+  </section>
+  <section class="panel tool-form" id="grade-editor" hidden>
+    <label>Plan name <input id="grade-name" maxlength="100" /></label>
+    <div id="grade-summary" class="grade-summary" role="status"></div>
+    <div class="action-row">
+      <button id="grade-save" class="button primary">Save grade plan</button>
+      <button id="grade-export" class="button secondary">Download JSON</button>
+      <button id="grade-delete" class="button secondary">
+        Delete grade plan
+      </button>
+    </div>
+    <details id="grade-scale-panel">
+      <summary>Grading scale</summary>
+      <p class="muted small">
+        The built-in 4.0 table is an example. Use your institution's grading
+        scale.
+      </p>
+      <div id="grade-scale"></div>
+      <button id="grade-scale-add" class="button secondary">
+        Add grade band
+      </button>
+    </details>
+    <div class="grade-toolbar">
+      <label
+        >Semester
+        <select id="grade-term"></select
+      ></label>
+      <button id="grade-term-add" class="button secondary">Add semester</button>
+    </div>
+    <div id="grade-term-editor"></div>
+    <details id="grade-study-panel">
+      <summary>Copy from Study Planner</summary>
+      <div id="grade-study"></div>
+    </details>
+    <div id="grade-course-editor"></div>
+  </section>
+</div>
