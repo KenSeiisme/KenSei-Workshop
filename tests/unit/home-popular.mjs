@@ -2,6 +2,8 @@ import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import handler from "../../api/home-popular.mjs";
 import featured from "../../data/home-featured.json" with { type: "json" };
+import tools from "../../data/tools.json" with { type: "json" };
+import games from "../../data/games.json" with { type: "json" };
 
 const url = "https://kensei-workshop.vercel.app/api/home-popular";
 
@@ -68,7 +70,13 @@ test("home popularity merges languages and keeps the catalog tie order", async (
       },
       games: { source: "featured", slugs: featured.games },
     });
-    assert.equal(fetch.mock.callCount(), 8);
+    // Every catalog entry contributes two languages with and without a trailing slash.
+    const entriesPerBatch = 24 / 4;
+    assert.equal(
+      fetch.mock.callCount(),
+      Math.ceil(tools.length / entriesPerBatch) +
+        Math.ceil(games.length / entriesPerBatch),
+    );
 
     fetch.mock.mockImplementation(async (query) => {
       const filter = query.searchParams.get("filter");
