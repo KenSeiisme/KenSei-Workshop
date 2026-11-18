@@ -1,5 +1,6 @@
 {
   "browser-smoke": [
+    ["tests/browser/grade-planner.cjs"],
     ["tests/browser/video-studio.cjs"],
     ["tests/browser/document-scanner.cjs"],
     ["tests/browser/study-review.cjs"],
@@ -25,6 +26,7 @@
     ["tests/browser/document-scanner.cjs"]
   ],
   "video-studio": [["tests/browser/video-studio.cjs"]],
+  "grade-planner": [["tests/browser/grade-planner.cjs"]],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],
     ["tests/database/game-hub.mjs"],

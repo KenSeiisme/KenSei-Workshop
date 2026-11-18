@@ -10,6 +10,7 @@ const kinds = {
   preset: ["Preset or recipe", "preset"],
   decision: ["Decision scheme", "scheme", "decision-studio"],
   deck: ["Card deck", "deck", "flashcards"],
+  grade: ["Grade plan", "id", "grade-planner"],
   planner: ["Study plan", "id", "study-planner"],
   whiteboard: ["Personal whiteboard", "id", "whiteboard"],
 };
@@ -129,6 +130,7 @@ export function mountWorkspaceIndex(root) {
       preset: "preset",
       decision: "wheel",
       deck: "cards",
+      grade: "calculator",
       planner: "book",
       whiteboard: "grid",
     }[row.kind];

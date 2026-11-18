@@ -116,14 +116,14 @@ const sdk = `export function createClient(){return {
         await noOverflow();
         await open(prefix, "/tools/");
         const previews = page.locator(".tool-card-preview");
-        assert.equal(await previews.count(), 30);
+        assert.equal(await previews.count(), 31);
         assert.equal(
           new Set(
             await previews.evaluateAll((nodes) =>
               nodes.map((node) => node.dataset.toolPreview),
             ),
           ).size,
-          30,
+          31,
         );
         assert(
           (await page.locator(".tool-card").first().boundingBox()).y <= 420,
@@ -138,7 +138,7 @@ const sdk = `export function createClient(){return {
         await page.click("#tool-search-clear");
         assert.equal(
           await page.locator("[data-tool-card]:visible").count(),
-          30,
+          31,
         );
         assert(
           await page

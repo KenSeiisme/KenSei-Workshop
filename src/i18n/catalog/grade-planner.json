@@ -1,0 +1,274 @@
+{
+  "m_aff05cf70bc1": {
+    "en": "Semester GPA: {0}",
+    "zh-Hant": "學期 GPA：{0}"
+  },
+  "m_bdd4fd5a6450": {
+    "en": "Cumulative CGPA: {0}",
+    "zh-Hant": "累計 CGPA：{0}"
+  },
+  "m_7ebebfcb83ad": {
+    "en": "Projected semester GPA: {0}",
+    "zh-Hant": "預估學期 GPA：{0}"
+  },
+  "m_95edd1f1a32e": {
+    "en": "Projected CGPA: {0}",
+    "zh-Hant": "預估 CGPA：{0}"
+  },
+  "m_411f16ebeda5": {
+    "en": "Earned {0} weighted points · {1}% still available · {2}% allocated",
+    "zh-Hant": "已獲 {0} 加權分 · 剩餘 {1}% · 已分配 {2}%"
+  },
+  "m_0814b0c377bd": {
+    "en": "Total assessment weights exceed 100%.",
+    "zh-Hant": "考核權重總和超過 100%。"
+  },
+  "m_104c67c50d38": {
+    "en": "Allocate assessment weights to 100% to calculate the target.",
+    "zh-Hant": "請將考核權重分配至 100% 以計算目標。"
+  },
+  "m_1ccf12de5dd2": {
+    "en": "The target is already reached.",
+    "zh-Hant": "已達成目標。"
+  },
+  "m_43fe1440747d": {
+    "en": "This target cannot be reached with the remaining weight.",
+    "zh-Hant": "以剩餘的權重無法達成目標。"
+  },
+  "m_d472713baa1e": {
+    "en": "Average needed on remaining assessments: {0}%",
+    "zh-Hant": "剩餘考核所需平均分：{0}%"
+  },
+  "m_f4c1def81694": {
+    "en": "Discard unsaved grade changes?",
+    "zh-Hant": "要放棄未儲存的成績修改嗎？"
+  },
+  "m_c94915935e18": {
+    "en": "Grade plan saved.",
+    "zh-Hant": "成績方案已儲存。"
+  },
+  "m_21c3fefc04c3": {
+    "en": "Copy {0} to your account?",
+    "zh-Hant": "要將 {0} 複製至你的帳號嗎？"
+  },
+  "m_53ee1e08d2a7": {
+    "en": "No guest grade plans.",
+    "zh-Hant": "目前沒有訪客成績方案。"
+  },
+  "m_57e75b0cc8fc": {
+    "en": "Loading study plans…",
+    "zh-Hant": "正在載入學習計畫…"
+  },
+  "m_97b8fccee934": {
+    "en": "Copy {0} and {1} assessments?",
+    "zh-Hant": "要複製 {0} 和 {1} 個考核項目嗎？"
+  },
+  "m_8e93dc1a90cd": {
+    "en": "No study plans are available.",
+    "zh-Hant": "目前沒有可用的學習計畫。"
+  },
+  "m_c0b9c61671a8": {
+    "en": "A conflicting edit was kept as a separate grade plan.",
+    "zh-Hant": "衝突的修改已另存為成績方案。"
+  },
+  "m_f375d37c2393": {
+    "en": "Grade plans",
+    "zh-Hant": "成績方案"
+  },
+  "m_87bfda591f12": {
+    "en": "New grade plan",
+    "zh-Hant": "新增成績方案"
+  },
+  "m_3f02be7fa488": {
+    "en": "Refresh saved plans",
+    "zh-Hant": "重新整理已儲存方案"
+  },
+  "m_04dd651a6825": {
+    "en": "Import grade backup",
+    "zh-Hant": "匯入成績備份"
+  },
+  "m_8c7eb55beb0c": {
+    "en": "Copy guest grade plan to account",
+    "zh-Hant": "複製訪客成績方案至帳號"
+  },
+  "m_c0657726a594": {
+    "en": "Plan name",
+    "zh-Hant": "方案名稱"
+  },
+  "m_1a20147df7c8": {
+    "en": "Save grade plan",
+    "zh-Hant": "儲存成績方案"
+  },
+  "m_1204de7232ab": {
+    "en": "Delete grade plan",
+    "zh-Hant": "刪除成績方案"
+  },
+  "m_0f5d6a67b13b": {
+    "en": "Grading scale",
+    "zh-Hant": "績點對照表"
+  },
+  "m_1297e0a344d4": {
+    "en": "The built-in 4.0 table is an example. Use your institution's grading scale.",
+    "zh-Hant": "內建的 4.0 對照表僅供參考。請使用你所屬院校的績點規則。"
+  },
+  "m_607def9a8c7a": {
+    "en": "Add grade band",
+    "zh-Hant": "新增分數區間"
+  },
+  "m_a83ef1c105f7": {
+    "en": "Semester",
+    "zh-Hant": "學期"
+  },
+  "m_957980ad5a5d": {
+    "en": "Add semester",
+    "zh-Hant": "新增學期"
+  },
+  "m_55cfd4f31236": {
+    "en": "Copy from Study Planner",
+    "zh-Hant": "從學習計畫複製"
+  },
+  "m_aa7f5b088b83": {
+    "en": "Minimum score (%)",
+    "zh-Hant": "最低分數 (%)"
+  },
+  "m_89b474649b83": {
+    "en": "Grade points",
+    "zh-Hant": "績點"
+  },
+  "m_0621cb7e57ac": {
+    "en": "Remove grade band",
+    "zh-Hant": "移除分數區間"
+  },
+  "m_1b40a15f07e4": {
+    "en": "Course name",
+    "zh-Hant": "課程名稱"
+  },
+  "m_2a6b24ad2872": {
+    "en": "Credits",
+    "zh-Hant": "學分"
+  },
+  "m_59688fa2b912": {
+    "en": "Target score (%)",
+    "zh-Hant": "目標分數 (%)"
+  },
+  "m_0c76f042c0b9": {
+    "en": "Confirmed final score (%)",
+    "zh-Hant": "確認總成績 (%)"
+  },
+  "m_900899508792": {
+    "en": "Projected final score (%)",
+    "zh-Hant": "預估總成績 (%)"
+  },
+  "m_77fafed0ccb0": {
+    "en": "Exclude this course from GPA and CGPA",
+    "zh-Hant": "此課程不計入 GPA 與 CGPA"
+  },
+  "m_65ca553a1372": {
+    "en": "Assessment name",
+    "zh-Hant": "考核名稱"
+  },
+  "m_b3a16cad1b51": {
+    "en": "Weight (%)",
+    "zh-Hant": "權重 (%)"
+  },
+  "m_eb4a946baaca": {
+    "en": "Maximum score",
+    "zh-Hant": "滿分"
+  },
+  "m_40887b05c09a": {
+    "en": "Score earned",
+    "zh-Hant": "實得分數"
+  },
+  "m_a744d6262558": {
+    "en": "Absent (counts as zero)",
+    "zh-Hant": "缺考（計零分）"
+  },
+  "m_ab39c786d5cc": {
+    "en": "Remove assessment",
+    "zh-Hant": "移除考核"
+  },
+  "m_d8ea066fa1ea": {
+    "en": "Add assessment",
+    "zh-Hant": "新增考核"
+  },
+  "m_74e604daffaf": {
+    "en": "Remove course",
+    "zh-Hant": "移除課程"
+  },
+  "m_2ba92c3a569a": {
+    "en": "Semester name",
+    "zh-Hant": "學期名稱"
+  },
+  "m_458c5a9d57e5": {
+    "en": "Add course",
+    "zh-Hant": "新增課程"
+  },
+  "m_f3c84775cb6a": {
+    "en": "Remove semester",
+    "zh-Hant": "移除學期"
+  },
+  "m_abd663c8bf4a": {
+    "en": "Course to copy",
+    "zh-Hant": "要複製的課程"
+  },
+  "m_c5c2d055d306": {
+    "en": "Copy selected course and assessments",
+    "zh-Hant": "複製所選課程及考核"
+  },
+  "m_9c3f2d081bb7": {
+    "en": "Load more study plans",
+    "zh-Hant": "載入更多學習計畫"
+  },
+  "m_d74638b4a1c9": {
+    "en": "Keep up to 30 assessments per course.",
+    "zh-Hant": "每門課程最多 30 項考核。"
+  },
+  "m_38becae18491": {
+    "en": "Keep up to 40 courses per semester.",
+    "zh-Hant": "每學期最多 40 門課程。"
+  },
+  "m_14a8822287cc": {
+    "en": "Keep up to 24 semesters in a grade plan.",
+    "zh-Hant": "每份成績方案最多 24 個學期。"
+  },
+  "m_dec34712e64c": {
+    "en": "Keep up to 30 grade bands.",
+    "zh-Hant": "最多 30 個分數區間。"
+  },
+  "m_8e05280148d3": {
+    "en": "Grade plans may use up to 500 KB.",
+    "zh-Hant": "成績方案上限為 500 KB。"
+  },
+  "m_c730d19d38d9": {
+    "en": "Copy into a semester with room for the course and up to 30 assessments.",
+    "zh-Hant": "請選擇仍可新增課程且考核項目不超過 30 個的學期。"
+  },
+  "m_761456db6ff5": {
+    "en": "Assessments",
+    "zh-Hant": "考核項目"
+  },
+  "m_0d3c48f4a823": {
+    "en": "Choose a valid grade plan and name.",
+    "zh-Hant": "請選擇有效的成績方案和名稱。"
+  },
+  "m_470bd5fa2f2b": {
+    "en": "Invalid grade plan size.",
+    "zh-Hant": "成績方案大小無效。"
+  },
+  "m_44aed9f47d31": {
+    "en": "The grading scale needs unique thresholds, including 0%, and points from 0 to 10.",
+    "zh-Hant": "分數區間的下限不可重複，必須包含 0%，績點範圍為 0 至 10。"
+  },
+  "m_8b4d6337ef93": {
+    "en": "Use a valid semester name and up to 40 courses.",
+    "zh-Hant": "請使用有效的學期名稱，每學期最多 40 門課程。"
+  },
+  "m_4514b7c67137": {
+    "en": "Check course credits, scores and settings.",
+    "zh-Hant": "請檢查課程學分、分數與設定。"
+  },
+  "m_5e8427f28c4f": {
+    "en": "Check each assessment name, weight, score and maximum.",
+    "zh-Hant": "請檢查各項考核的名稱、權重、得分與滿分。"
+  }
+}

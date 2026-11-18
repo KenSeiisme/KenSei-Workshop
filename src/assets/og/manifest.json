@@ -1104,6 +1104,26 @@
       "bytes": 255370,
       "sha256": "eb6d851fc03ab2d4086bac411b328ee9806152cde7e8b72bcf2cc84144a33c55",
       "sourceHash": "70e35d5c7c0b8087ae2a7d57694bc1c12535f4ba99b1404f6a3b9bec6e2a263e"
+    },
+    {
+      "route": "tools/grade-planner",
+      "locale": "en",
+      "file": "en/tools-grade-planner.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 267403,
+      "sha256": "4a8ef361555c76e21a683e4c947e208af50a5bd1ea5b111b5614bfbb7e1c83fd",
+      "sourceHash": "83eed4a9919b9ca92148e79282e15ca4290ac405f68856c043d9e14ea1ec58ac"
+    },
+    {
+      "route": "tools/grade-planner",
+      "locale": "zh-Hant",
+      "file": "zh-hant/tools-grade-planner.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 257263,
+      "sha256": "3fdfc3c8e1799f7e340661b31c4dc045e86f8ce456b63d0b8a396d9a7a21f75d",
+      "sourceHash": "b65c2caf4b5737e8d2612abd492afe0f0d07fa0865b6980ef4f657c6f6972d3c"
     }
   ]
 }

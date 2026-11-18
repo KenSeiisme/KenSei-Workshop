@@ -1,0 +1,60 @@
+.grade-grid {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.85fr) minmax(0, 2.15fr);
+  gap: 16px;
+  align-items: start;
+}
+.grade-grid .tool-form,
+#grade-term-editor,
+#grade-course-editor,
+#grade-scale,
+#grade-study {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.grade-grid details {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 10px;
+}
+.grade-grid label:has(input[type="checkbox"]) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+.grade-grid .grade-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.grade-summary p,
+.grade-assessment {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px;
+  margin: 0;
+}
+.grade-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+.grade-assessment {
+  display: grid;
+  gap: 8px;
+}
+.grade-grid [role="status"] {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 820px) {
+  .grade-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .grade-grid .button {
+    min-height: 44px;
+  }
+}

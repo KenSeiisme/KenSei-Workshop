@@ -14,6 +14,9 @@ def job_status():
 
 
 VIEWS = {
+    "grade-planner": render_template(
+        "tools/grade-planner.html", job_status=job_status()
+    ),
     "video-studio": render_template("tools/video-studio.html", job_status=job_status()),
     "document-scanner": render_template(
         "tools/document-scanner.html", job_status=job_status()
