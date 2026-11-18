@@ -1,6 +1,6 @@
 import { sendControl } from "./handoff.js";
-import { $, image, canvasBlob, download } from "./common.js";
-import { uiText } from "../site/ui.js";
+import { $, image, canvasBlob, download, status } from "./common.js";
+import { uiText, uiError } from "../site/ui.js";
 
 let cropper = null,
   selection = null,
@@ -52,15 +52,22 @@ function clear() {
   $("#edit-preview").hidden = true;
   $("#edit-download").disabled = true;
 }
-for (const mode of ["batch", "edit"])
-  $("#image-mode-" + mode).onclick = () => {
-    $("#image-batch-mode").hidden = mode !== "batch";
-    $("#image-edit-mode").hidden = mode !== "edit";
-    $("#image-mode-batch").setAttribute(
-      "aria-pressed",
-      String(mode === "batch"),
-    );
-    $("#image-mode-edit").setAttribute("aria-pressed", String(mode === "edit"));
+const modes = ["batch", "edit", "steps"];
+for (const mode of modes)
+  $("#image-mode-" + mode).onclick = async () => {
+    for (const name of modes) {
+      $("#image-" + name + "-mode").hidden = name !== mode;
+      $("#image-mode-" + name).setAttribute(
+        "aria-pressed",
+        String(name === mode),
+      );
+    }
+    if (mode === "steps")
+      try {
+        await import("./image-steps.js");
+      } catch (error) {
+        status(uiError(error), true);
+      }
   };
 function dimensions() {
   if (!selection || !cropper) return;
