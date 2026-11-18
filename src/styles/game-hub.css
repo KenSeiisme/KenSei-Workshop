@@ -3,10 +3,10 @@
   --hub-panel: #1c1727;
   --hub-edge: #443650;
   --hub-soft: #292035;
-  padding-block: 26px 55px;
+  padding-block: 18px 55px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 24px;
+  gap: clamp(14px, 1.65vw, 22px);
 }
 
 :root[data-site-theme="light"] .game-hub {
@@ -142,8 +142,9 @@
 }
 
 .hub-feature h1 {
-  font-size: clamp(1.5rem, 4vw, 2.6rem);
-  margin: 2px 0 0;
+  font-size: clamp(1.35rem, 2.7vw, 2.15rem);
+  line-height: 1.12;
+  margin: 0;
 }
 
 .hub-slides {
@@ -952,6 +953,14 @@
   .game-hub .hub-feature {
     padding: 12px;
   }
+  .hub-feature-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px;
+  }
+  .hub-library-jump > span {
+    white-space: nowrap;
+  }
   .hub-library-jump {
     padding-inline: 8px;
     gap: 4px;
@@ -1021,7 +1030,6 @@
   .game-hub .game-card-copy > p:not(.hub-card-stats) {
     -webkit-line-clamp: 1;
   }
-  .game-hub .game-card-copy .hub-card-stats,
   .game-hub .game-card-play > span {
     display: none;
   }

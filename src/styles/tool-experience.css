@@ -1,6 +1,6 @@
 /* Tool-only surfaces: the homepage, account and project layouts stay independent. */
 .tool-page {
-  --tool-gap: 20px;
+  --tool-gap: 18px;
   padding-top: 28px;
 }
 .tool-page .tool-heading {
@@ -32,8 +32,124 @@
 .tool-page select {
   min-height: 44px;
 }
-.tool-page label {
-  font-size: 13px;
+.tool-page
+  :is(.tool-form, .settings-panel, .editor-pane, .advanced-panel)
+  label {
+  color: var(--text);
+  font-size: var(--ui-help-size);
+}
+.tool-page :is(.tool-form, .settings-panel, .studio-properties) .check-label,
+.tool-page
+  :is(.tool-form, .settings-panel, .studio-properties)
+  label:has(> input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.55rem;
+  min-height: 44px;
+  margin-block: 0;
+  cursor: pointer;
+}
+.tool-page
+  :is(.tool-form, .settings-panel, .studio-properties)
+  label
+  > input[type="checkbox"] {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  min-height: 0;
+  margin: 0;
+}
+.tool-page :is(.tool-form, .settings-panel) label > input[type="color"] {
+  width: min(100%, 8rem);
+  min-height: 44px;
+  padding: 5px;
+}
+.tool-page
+  :is(.tool-form, .settings-panel, .studio-properties)
+  input[type="range"] {
+  min-height: 44px;
+  margin-block: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
+.tool-page :is(.tool-form, .settings-panel, .editor-pane) > h2 {
+  margin-block: 0 0.7rem;
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+}
+.tool-page
+  :is(.file-input-panel, .settings-panel, .editor-pane, .capture-preview-panel)
+  .small,
+.tool-feedback p {
+  font-size: var(--ui-help-size);
+}
+.tool-page #image-batch-mode > .studio-grid {
+  align-items: start;
+}
+.tool-page .settings-panel .image-size-fields {
+  gap: 0.65rem;
+}
+.tool-page .settings-panel .image-size-fields + p {
+  margin-block: 0.4rem 0;
+}
+.tool-page .action-row > button {
+  max-width: 100%;
+}
+.tool-advanced-settings,
+.tool-page .image-pipeline {
+  min-width: 0;
+  margin-block: 0.9rem;
+  padding: 0.15rem 0.75rem 0.45rem;
+  background: var(--surface2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.tool-advanced-settings > summary,
+.tool-page .image-pipeline > summary {
+  min-height: 44px;
+  align-content: center;
+  margin: 0;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.tool-page .image-pipeline-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: 8px 14px;
+}
+.tool-page .image-pipeline .image-recipe-scope {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  align-items: end;
+}
+.tool-page .image-pipeline label {
+  margin-top: 0;
+}
+.tool-page .image-pipeline label > input[type="checkbox"] {
+  order: -1;
+}
+.tool-page [data-stale="true"] {
+  border-color: color-mix(in srgb, var(--pink) 48%, var(--line));
+}
+@media (max-width: 767px) {
+  .tool-page .image-input .dropzone {
+    height: auto;
+    min-height: 172px;
+    padding: 12px;
+  }
+  .tool-page
+    :is(
+      input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="color"]
+      ),
+      select,
+      textarea
+    ):not(.excalidraw *) {
+    font-size: 16px;
+  }
 }
 .tool-page .button:hover {
   transform: none;

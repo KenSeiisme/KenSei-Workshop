@@ -127,7 +127,6 @@ function adapt(tool, root) {
         "Watermark settings",
       );
       step($(".image-input"), "1 · Select images");
-      step($(".settings-panel"), "2 · Output settings");
       const result = summary($("#batch-results"), "image-batch-summary");
       observeText($("#batch-results"), () => {
         if (result.dataset.measured) return;

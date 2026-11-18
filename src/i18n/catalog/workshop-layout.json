@@ -22,5 +22,57 @@
   "m_b0ef556fc219": {
     "en": "Start screen recording",
     "zh-Hant": "開始螢幕錄影"
+  },
+  "m_15fac8be11e5": {
+    "en": "Batch recipe",
+    "zh-Hant": "批次配方"
+  },
+  "m_3d17fc45517e": {
+    "en": "Batch recipe · {0}",
+    "zh-Hant": "批次配方 · {0}"
+  },
+  "m_e3d11242200f": {
+    "en": "Orientation",
+    "zh-Hant": "方向"
+  },
+  "m_edf29309bc82": {
+    "en": "Centered crop",
+    "zh-Hant": "置中裁切"
+  },
+  "m_097c5b7689bb": {
+    "en": "Original size",
+    "zh-Hant": "原始尺寸"
+  },
+  "m_bc14a301d0c3": {
+    "en": "Original format",
+    "zh-Hant": "原始格式"
+  },
+  "m_4e02525085c6": {
+    "en": "Watermark appearance",
+    "zh-Hant": "浮水印外觀"
+  },
+  "m_47e9373e8e60": {
+    "en": "Check the page number and watermark settings.",
+    "zh-Hant": "請檢查頁碼與浮水印設定。"
+  },
+  "m_36741155a7e3": {
+    "en": "Choose logo",
+    "zh-Hant": "選擇標誌"
+  },
+  "m_3b78c717044a": {
+    "en": "About the Workshop",
+    "zh-Hant": "關於工作坊"
+  },
+  "m_ce85b0dfce73": {
+    "en": "Games without a ranked result · {0}",
+    "zh-Hant": "尚無排名成績的遊戲 · {0}"
+  },
+  "m_97b31c206a38": {
+    "en": "Uploading avatar…",
+    "zh-Hant": "正在上傳頭像…"
+  },
+  "m_e2a48d3325dd": {
+    "en": "Each image keeps its own aspect ratio.",
+    "zh-Hant": "每張圖片都會保留原有的長寬比例。"
   }
 }

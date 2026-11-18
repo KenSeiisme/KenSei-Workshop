@@ -29,6 +29,9 @@
 .workshop-atmosphere[data-catalog-scene] {
   height: min(38rem, 92vh);
 }
+.workshop-atmosphere[data-catalog-scene] .workshop-bubble-anchor {
+  --bubble-opacity: 0.52;
+}
 .workshop-atmosphere[data-area="games"] {
   --bubble-color: #b9a4ee;
 }
@@ -42,7 +45,7 @@
   --rotation: -9deg;
   --pace: 12s;
   --phase: -4s;
-  --bubble-opacity: 0.52;
+  --bubble-opacity: 0.28;
   position: absolute;
   inset: var(--bubble-y, 46%) auto auto var(--bubble-x, 7%);
   width: clamp(27px, 5vw, 75px);

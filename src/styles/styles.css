@@ -10,6 +10,10 @@
   --pink: #efbdd9;
   --font: "DM Sans", system-ui, sans-serif;
   --display: "Space Grotesk", system-ui, sans-serif;
+  --radius-card: 14px;
+  --radius-dialog: 18px;
+  --ui-transition: 150ms ease;
+  --ui-help-size: 0.875rem;
 }
 * {
   box-sizing: border-box;
@@ -958,27 +962,8 @@ pre {
   border-top: 1px solid var(--line);
   padding-block: 28px;
 }
-.footer-inner {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-}
 .footer .brand {
   font-size: 20px;
-}
-.footer p {
-  font-size: 9px;
-  color: #6e6578;
-  flex: 1;
-}
-.footer-inner > div {
-  display: flex;
-  gap: 20px;
-  font-size: 9px;
-  color: #887c94;
-}
-.footer-inner > div span {
-  color: #5f5768;
 }
 .page-section {
   padding-block: 65px 90px;
@@ -1182,17 +1167,20 @@ textarea::placeholder {
 }
 .settings-panel label {
   display: block;
-  font-size: 12px;
-  margin-top: 16px;
-  color: #d7cddd;
+  font-size: var(--ui-help-size);
+  margin-top: 12px;
+  color: var(--text);
 }
 .settings-panel label > span,
 .settings-panel output {
-  float: right;
   color: var(--muted);
-  font-size: 11px;
+  font-size: var(--ui-help-size);
 }
-.settings-panel input:not([type="range"]),
+.settings-panel output {
+  margin-inline-start: 0.35rem;
+}
+.settings-panel
+  input:not([type="range"], [type="checkbox"], [type="radio"], [type="color"]),
 .settings-panel select {
   display: block;
   width: 100%;
@@ -1803,12 +1791,6 @@ body:has(dialog[open]) {
   .tool-card {
     padding: 20px;
   }
-  .footer-inner {
-    flex-wrap: wrap;
-  }
-  .footer-inner > div {
-    margin-left: auto;
-  }
   .listing-projects .project-art {
     height: 205px;
   }
@@ -2020,18 +2002,6 @@ body:has(dialog[open]) {
   }
   .workspace-promo h2 {
     font-size: 26px;
-  }
-  .footer-inner {
-    gap: 15px;
-  }
-  .footer p {
-    flex-basis: 70%;
-  }
-  .footer-inner > div {
-    margin-left: 0;
-    justify-content: space-between;
-    width: 100%;
-    gap: 13px;
   }
   .page-section {
     padding-block: 38px 60px;
@@ -2504,9 +2474,6 @@ body:has(dialog[open]) {
 .home-toolbox .section-heading {
   margin-bottom: 28px;
 }
-.footer-inner > div {
-  flex-wrap: wrap;
-}
 @media (min-width: 761px) and (max-width: 1050px) {
   .tools-hero {
     gap: 35px;
@@ -2651,13 +2618,6 @@ body:has(dialog[open]) {
   }
   .home-toolbox .section-heading h2 {
     font-size: 27px;
-  }
-  .footer-inner > div {
-    justify-content: flex-start;
-    gap: 15px;
-  }
-  .footer-inner > div span {
-    margin-left: auto;
   }
 }
 @media (prefers-reduced-motion: reduce) {

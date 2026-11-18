@@ -322,6 +322,7 @@ $("#cancel-job").onclick = () => {
   status(uiMsg("Cancelled. Choose files again if loading was interrupted."));
 };
 $("#pdf-run").onclick = async () => {
+  if (!validateStampSettings()) return;
   const token = ++revision;
   busy(true);
   status(uiMsg("Preparing output…"));
@@ -468,6 +469,19 @@ for (const id of [
   "pdf-watermark-color",
 ])
   $("#" + id).addEventListener("input", clearEnhanced);
+function validateStampSettings() {
+  if (operation.value !== "stamp") return true;
+  const fields = [];
+  if ($("#pdf-add-numbers").checked) fields.push($("#pdf-number-start"));
+  if ($("#pdf-watermark").value.trim()) fields.push($("#pdf-watermark-size"));
+  const invalid = fields.find((input) => !input.validity.valid);
+  if (!invalid) return true;
+  const details = invalid.closest("details");
+  if (details) details.open = true;
+  invalid.reportValidity();
+  status(uiMsg("Check the page number and watermark settings."), true);
+  return false;
+}
 async function prepareEnhanced(token, show) {
   if (sources.length !== 1 || !pages.length)
     throw Error("Choose one PDF first.");
@@ -538,6 +552,7 @@ async function prepareEnhanced(token, show) {
   );
 }
 $("#pdf-output-preview").onclick = async () => {
+  if (!validateStampSettings()) return;
   const token = ++revision;
   busy(true);
   try {

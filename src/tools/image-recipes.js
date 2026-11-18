@@ -5,29 +5,46 @@ import {
   orientedCrop,
   drawWatermark,
 } from "./image-recipe-core.js";
-import { image, canvasBlob } from "./common.js";
-import { uiMsg, uiText } from "../site/ui.js";
+import { image, canvasBlob, status } from "./common.js";
+import { uiJoin, uiMsg, uiText } from "../site/ui.js";
 export function imageRecipes(context) {
   const parent = document.querySelector(".settings-panel"),
     controls = {};
   const options = el("details", "", { class: "image-pipeline" });
-  options.open = true;
-  options.append(
-    el(
-      "summary",
-      "Batch recipe · orientation → crop → resize → watermark → encode",
-    ),
-  );
+  const summary = el("summary");
+  const recipeBody = el("div", "", { class: "image-pipeline-fields" });
+  options.append(summary, recipeBody);
+  const enabledSteps = {
+    orientation: "Orientation",
+    crop: "Centered crop",
+    watermark: "Watermark",
+  };
+  function paintSummary() {
+    const steps = Object.entries(enabledSteps)
+      .filter(([key]) => controls[key].checked)
+      .map(([, label]) => uiMsg(label));
+    if (enable.checked) steps.push(uiMsg("Override this image"));
+    if (!controls.resize.checked) steps.push(uiMsg("Original size"));
+    if (!controls.encode.checked) steps.push(uiMsg("Original format"));
+    uiText(
+      summary,
+      steps.length
+        ? uiMsg("Batch recipe · {0}", [
+            uiJoin(steps.flatMap((step, i) => (i ? [" · ", step] : [step]))),
+          ])
+        : uiMsg("Batch recipe"),
+    );
+  }
   const check = (key, text, value = false) => {
     const n = el("input", "", { type: "checkbox", checked: value });
     controls[key] = n;
-    options.append(field(text, n));
+    recipeBody.append(field(text, n));
     return n;
   };
   const input = (key, text, attrs) => {
     const n = el("input", "", attrs);
     controls[key] = n;
-    options.append(field(text, n));
+    recipeBody.append(field(text, n));
     return n;
   };
   check("orientation", "Enable orientation");
@@ -37,7 +54,7 @@ export function imageRecipes(context) {
     ["180", "180°"],
     ["270", "270°"],
   ]);
-  options.append(field("Rotation", controls.rotation));
+  recipeBody.append(field("Rotation", controls.rotation));
   check("flipX", "Flip horizontal");
   check("flipY", "Flip vertical");
   check("crop", "Enable centered crop");
@@ -47,7 +64,7 @@ export function imageRecipes(context) {
     ["1.777777777778", "16:9"],
     [".5625", "9:16"],
   ]);
-  options.append(field("Crop ratio", controls.ratio));
+  recipeBody.append(field("Crop ratio", controls.ratio));
   check("resize", "Enable resize", true);
   check("watermark", "Enable watermark");
   input("text", "Watermark text", { maxLength: 100 });
@@ -70,9 +87,9 @@ export function imageRecipes(context) {
     ["center", "Center"],
     ["top-left", "Top left"],
   ]);
-  options.append(field("Watermark position", controls.position));
+  recipeBody.append(field("Watermark position", controls.position));
   check("encode", "Enable output encoding", true);
-  parent.querySelector("h2").after(options);
+  parent.querySelector("#image-process").before(options);
   const overrideList = el("select", "", {
       "aria-label": "Image settings scope",
     }),
@@ -88,7 +105,9 @@ export function imageRecipes(context) {
     field("Settings scope", overrideList),
     field("Override this image", enable),
   );
-  options.prepend(scope, info);
+  scope.classList.add("image-recipe-scope");
+  summary.after(scope, info);
+  paintSummary();
   const overrides = new Map();
   let selected = -1,
     loading = false;
@@ -124,17 +143,31 @@ export function imageRecipes(context) {
     base.targetKiB.value = s.targetKiB || "";
     document.querySelector("#quality-value").value = s.quality * 100 + "%";
     loading = false;
+    base.format.dispatchEvent(new Event("change"));
+    paintSummary();
+  }
+  function invalidSetting() {
+    return [...Object.values(controls), ...Object.values(base)].find(
+      (input) => input.willValidate && !input.validity.valid,
+    );
+  }
+  function validate() {
+    const invalid = invalidSetting();
+    if (!invalid) return true;
+    if (options.contains(invalid)) options.open = true;
+    invalid.reportValidity();
+    status(uiMsg("Image recipe contains an invalid value."), true);
+    return false;
   }
   function flush() {
-    if (loading) return;
+    if (loading || invalidSetting()) return;
     if (selected < 0) global = read();
     else if (enable.checked) overrides.set(selected, read());
   }
-  options.addEventListener("input", (e) => {
-    if (e.target !== enable) {
-      flush();
-      context.stale();
-    }
+  recipeBody.addEventListener("input", () => {
+    paintSummary();
+    flush();
+    context.stale();
   });
   Object.values(base).forEach((n) =>
     n.addEventListener("input", () => {
@@ -147,11 +180,17 @@ export function imageRecipes(context) {
       enable.checked = false;
       return;
     }
-    if (enable.checked) overrides.set(selected, read());
-    else {
+    if (enable.checked) {
+      if (!validate()) {
+        enable.checked = false;
+        return;
+      }
+      overrides.set(selected, read());
+    } else {
       overrides.delete(selected);
       write(global);
     }
+    paintSummary();
     context.stale();
   };
   function scopes(previous) {
@@ -176,8 +215,13 @@ export function imageRecipes(context) {
     });
     enable.checked = false;
     enable.disabled = true;
+    paintSummary();
   }
   overrideList.onchange = () => {
+    if (!validate()) {
+      overrideList.value = String(selected);
+      return;
+    }
     flush();
     selected = +overrideList.value;
     enable.disabled = selected < 0;
@@ -194,6 +238,7 @@ export function imageRecipes(context) {
     });
   options.append(
     button("Preview selected image", async () => {
+      if (!validate()) return;
       flush();
       const i = Math.max(0, selected),
         file = context.files[i];
@@ -243,6 +288,8 @@ export function imageRecipes(context) {
       selected = -1;
       overrideList.value = "-1";
       overrides.clear();
+      enable.checked = false;
+      enable.disabled = true;
       global = s;
       write(s);
       context.stale();
@@ -251,6 +298,7 @@ export function imageRecipes(context) {
     (s) => ({ width: s.width, format: s.format, quality: s.quality * 100 }),
   );
   return {
+    validate,
     get(i) {
       flush();
       return overrides.get(i) || global;

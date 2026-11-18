@@ -121,8 +121,8 @@ body.game-is-focused > .footer {
   white-space: nowrap;
 }
 [data-play-shell] .game-metrics span {
-  letter-spacing: 0.03em;
-  font-size: 10px;
+  letter-spacing: 0.02em;
+  font-size: 0.75rem;
 }
 [data-play-shell] .game-metrics .game-run-label {
   margin-left: auto;
@@ -714,6 +714,7 @@ body.game-is-focused > .footer {
 }
 [data-play-shell] .game-metrics .game-run-label {
   max-width: none;
+  border-radius: 999px;
   text-transform: none;
   padding: 6px 8px;
 }
@@ -778,7 +779,7 @@ body.game-is-focused > .footer {
     font-size: 17px;
   }
   [data-play-shell] .game-metrics span {
-    font-size: 9px;
+    font-size: 0.69rem;
   }
   [data-play-shell] .game-metrics .game-run-label {
     font-size: 9px;
@@ -1324,10 +1325,16 @@ body.game-is-focused > .footer {
 [data-play-shell] [data-game-lobby],
 [data-play-shell] [data-match-result],
 [data-play-shell] #game-result {
-  border-color: color-mix(in srgb, var(--game-accent) 55%, var(--line));
+  border-radius: var(--radius-dialog);
+  border-color: color-mix(in srgb, var(--game-accent) 45%, var(--line));
   box-shadow:
-    0 12px 40px #08060c64,
+    0 12px 40px #08060c40,
     0 0 26px color-mix(in srgb, var(--game-accent) 14%, transparent);
+}
+[data-play-shell]
+  :is([data-game-launch], [data-game-lobby], [data-match-result], #game-result)
+  :is(label, .muted, .small) {
+  font-size: var(--ui-help-size);
 }
 [data-play-shell] [data-game-launch] {
   background: color-mix(in srgb, var(--surface) 94%, var(--game-accent));

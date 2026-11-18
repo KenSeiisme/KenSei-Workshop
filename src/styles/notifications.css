@@ -162,7 +162,8 @@ body:is(.game-is-focused, .whiteboard-focus, .typing-is-focused)
   background: var(--surface2);
 }
 .notice-settings summary {
-  min-height: 36px;
+  min-height: 44px;
+  align-content: center;
   padding-block: 6px;
   cursor: pointer;
 }
@@ -195,7 +196,7 @@ body:is(.game-is-focused, .whiteboard-focus, .typing-is-focused)
 }
 .notice-row time {
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: var(--ui-help-size);
 }
 .notice-row-actions {
   display: flex;

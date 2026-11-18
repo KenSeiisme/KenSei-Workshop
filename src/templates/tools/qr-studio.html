@@ -58,16 +58,19 @@
         <option value="1024">1024 × 1024</option>
       </select></label
     >
-    <label
-      >Logo (optional)<input
-        id="qr-logo"
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-    /></label>
-    <button id="qr-remove-logo" class="text-link">Remove logo</button>
-    <p class="muted small">
-      Use strong contrast and a small logo so your code stays easy to scan.
-    </p>
+    <details class="tool-advanced-settings">
+      <summary>Logo (optional)</summary>
+      <label
+        >Choose logo<input
+          id="qr-logo"
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+      /></label>
+      <button id="qr-remove-logo" class="text-link">Remove logo</button>
+      <p class="muted small">
+        Use strong contrast and a small logo so your code stays easy to scan.
+      </p>
+    </details>
     <div class="action-row">
       <button id="qr-generate" class="button primary">Generate QR code →</button
       ><button id="save-qr-preset" class="button secondary">

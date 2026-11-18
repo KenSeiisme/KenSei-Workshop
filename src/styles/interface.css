@@ -67,8 +67,146 @@
 
 .glass-surface {
   border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--accent) 13%, transparent);
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.button,
+.icon-button,
+.filter {
+  transition:
+    background-color var(--ui-transition),
+    border-color var(--ui-transition),
+    color var(--ui-transition),
+    box-shadow var(--ui-transition);
+}
+:where(.button, .icon-button, .filter):not(:disabled):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+:where(.button, .icon-button, .filter)[aria-pressed="true"] {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--line));
+}
+.footer .footer-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px 32px;
+}
+.footer .footer-links,
+.footer .footer-links nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 18px;
+  font-size: var(--ui-help-size);
+  color: var(--muted);
+}
+.footer .footer-links nav + nav {
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 18px;
+}
+.footer .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+}
+.footer .footer-inner > small {
+  color: var(--muted);
+  font-size: var(--ui-help-size);
+}
+.prose {
+  width: min(100% - 40px, 76ch);
+}
+.prose h1 {
+  text-wrap: balance;
+}
+.prose-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-bottom: 0.75rem;
+}
+.error-page {
+  min-height: 56svh;
+}
+.dialog-emblem {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--surface2);
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+#auth-dialog,
+.site-search,
+.site-drawer,
+.tool-help-dialog {
+  border-radius: var(--radius-dialog);
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is(
+    #auth-dialog,
+    .site-search,
+    .site-drawer,
+    .tool-help-dialog,
+    .notice-center
+  )[open] {
+    animation: workshop-dialog-in 200ms ease-out both;
+  }
+}
+@keyframes workshop-dialog-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+:is(.tools-page, .games-page) .empty-state:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+:is(.tools-page, .games-page) .empty-state p {
+  margin: 0;
+}
+:is(.tools-page, .games-page) .empty-state > .ui-icon {
+  color: var(--accent);
+}
+@media (max-width: 767px) {
+  .footer .footer-inner {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+  .footer .footer-links {
+    display: grid;
+  }
+  .footer .footer-links nav + nav {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+  :is(dialog, .account-dashboard, .tools-controls, .game-library-controls)
+    :is(
+      input:not(
+        [type="range"],
+        [type="checkbox"],
+        [type="radio"],
+        [type="color"]
+      ),
+      select,
+      textarea
+    ) {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.button, .icon-button, .filter) {
+    transition: none;
+  }
 }
 
 .header .icon-button,
@@ -124,13 +262,17 @@ dialog .dialog-close:hover {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px 16px;
-  padding: 12px 16px;
-  margin-bottom: 22px;
+  gap: 5px 14px;
+  padding: 9px 12px;
+  margin-bottom: 16px;
 }
 
 .tools-controls .tool-search-control {
+  min-width: 0;
+}
+.tools-controls .filter-bar {
   grid-column: 1 / -1;
+  grid-row: 2;
 }
 
 .tools-controls .search-box {
@@ -153,6 +295,10 @@ dialog .dialog-close:hover {
   background: var(--surface2);
 }
 
+.tools-controls .catalog-feedback {
+  grid-column: 2;
+  grid-row: 1;
+}
 .catalog-feedback {
   display: flex;
   flex-wrap: wrap;
@@ -496,6 +642,10 @@ dialog .dialog-close:hover {
     margin-bottom: 16px;
   }
 
+  .tools-controls .catalog-feedback {
+    grid-column: 1;
+    grid-row: 3;
+  }
   .catalog-feedback {
     justify-content: space-between;
     min-height: 36px;
