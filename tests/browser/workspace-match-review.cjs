@@ -130,9 +130,11 @@ export function createClient() {
           .length === 1,
     );
     await results.getByRole("link", { name: "Open" }).click();
+    await page.waitForURL("**/tools/text-toolkit/?draft=old-draft");
     await page.waitForFunction(
       () =>
-        document.querySelector("#text-input").value === "An older saved draft.",
+        document.querySelector("#text-input")?.value ===
+        "An older saved draft.",
     );
 
     await page.goto(base + "/zh-hant/games/");
