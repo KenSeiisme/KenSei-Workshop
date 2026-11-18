@@ -271,6 +271,8 @@ def styles(route):
     if route.startswith("tools/"):
         files.append("tool-experience.css")
         slug = route.split("/")[-1]
+        if slug == "image-studio":
+            files.append("image-steps.css")
         if slug == "document-scanner":
             files.append("document-scanner.css")
         if slug == "study-planner":
