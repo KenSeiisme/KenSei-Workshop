@@ -1,4 +1,5 @@
 import { $, api, status, downloadText } from "./common.js";
+import { checkReviewDates } from "./review-plan-core.js";
 import { createRecordStore, recordSignature } from "./record-store.js";
 import {
   validatePlanner,
@@ -1190,5 +1191,45 @@ window.KenseiAdvancedContexts["study-planner"] = {
     return plan;
   },
   saveEdits,
+  async addReviewTasks(batch, entries) {
+    const checkPlan = () =>
+      owner() === batch.owner &&
+      scope === batch.owner &&
+      plan?.id === batch.planId;
+    if (!checkPlan() || !(await saveEdits()) || !checkPlan())
+      throw Error("The study plan changed. Preview the schedule again.");
+    const data = readEdits();
+    const exam = data.tasks.find(
+      (task) => task.id === batch.examId && task.type === "exam" && !task.done,
+    );
+    if (!exam || exam.due !== batch.examDue || data.timeZone !== batch.zone)
+      throw Error("The exam or time zone changed. Preview the schedule again.");
+    const ids = new Set(data.tasks.map((task) => task.id));
+    const missing = entries.filter((entry) => !ids.has(entry.id));
+    if (!missing.length) return;
+    const now = Date.now();
+    checkReviewDates(entries, {
+      start: today(data.timeZone, now),
+      exam,
+      zone: data.timeZone,
+      weekdays: batch.weekdays,
+      limit: batch.limit,
+      now,
+    });
+    data.tasks.push(
+      ...missing.map((entry) => ({
+        ...entry,
+        type: "assignment",
+        courseId: exam.courseId,
+        done: false,
+      })),
+    );
+    plan.data = validatePlanner(data);
+    change({ schedule: false });
+    renderItems();
+    renderCalendar();
+    if (!(await saveEdits()))
+      throw Error("Review sessions are still pending. Retry saving the plan.");
+  },
   store,
 };

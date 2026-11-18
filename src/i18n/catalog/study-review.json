@@ -1,0 +1,118 @@
+{
+  "m_fb475a07ffcb": {
+    "en": "Review today",
+    "zh-Hant": "今日複習"
+  },
+  "m_dbe7415506a3": {
+    "en": "Schedule revision",
+    "zh-Hant": "安排複習"
+  },
+  "m_5563d6df7016": {
+    "en": "Exam to prepare for",
+    "zh-Hant": "要準備的考試"
+  },
+  "m_33301d37a73a": {
+    "en": "Review topics, one per line",
+    "zh-Hant": "複習主題，每行一項"
+  },
+  "m_740bf5539079": {
+    "en": "Maximum sessions per day",
+    "zh-Hant": "每天最多幾節"
+  },
+  "m_fdc0c4d20a40": {
+    "en": "Available weekdays",
+    "zh-Hant": "可用星期"
+  },
+  "m_bfe6c3f201dd": {
+    "en": "Preview schedule",
+    "zh-Hant": "預覽複習安排"
+  },
+  "m_a185bffc501e": {
+    "en": "Add review sessions",
+    "zh-Hant": "加入複習節次"
+  },
+  "m_b77ee2e5be53": {
+    "en": "Choose an exam",
+    "zh-Hant": "選擇考試"
+  },
+  "m_4b644fc0d159": {
+    "en": "Choose an unfinished exam.",
+    "zh-Hant": "請選擇尚未完成的考試。"
+  },
+  "m_d1dfd0340a70": {
+    "en": "Choose an exam within the next 366 days.",
+    "zh-Hant": "請選擇未來 366 天內的考試。"
+  },
+  "m_2b34cfb3fabd": {
+    "en": "Select available weekdays and use 1 to 6 sessions per day.",
+    "zh-Hant": "請選擇可用星期，每天安排 1 至 6 節。"
+  },
+  "m_5a13bd26146a": {
+    "en": "Enter 1 to 60 topics, up to 200 characters each.",
+    "zh-Hant": "請輸入 1 至 60 個主題，每項最多 200 字元。"
+  },
+  "m_ecf8fda8a4bb": {
+    "en": "Topics without an available session",
+    "zh-Hant": "尚未排入的主題"
+  },
+  "m_90ede61b6208": {
+    "en": "{0} scheduled · {1} unscheduled · {2}",
+    "zh-Hant": "{0} 節已安排 · {1} 節未安排 · {2}"
+  },
+  "m_fbff4d4af112": {
+    "en": "{0} review sessions added.",
+    "zh-Hant": "已加入 {0} 節複習。"
+  },
+  "m_1e120ab4e876": {
+    "en": "Due and overdue tasks",
+    "zh-Hant": "今日到期與逾期待辦"
+  },
+  "m_119e1573d73d": {
+    "en": "Open Focus Timer",
+    "zh-Hant": "開啟專注計時器"
+  },
+  "m_cd8a3b7521a0": {
+    "en": "Flashcards due",
+    "zh-Hant": "待複習閃卡"
+  },
+  "m_0a844f12688b": {
+    "en": "{0} cards due",
+    "zh-Hant": "有 {0} 張待複習"
+  },
+  "m_1ea5d41a07cd": {
+    "en": "Open review queue",
+    "zh-Hant": "開啟複習佇列"
+  },
+  "m_871134835a36": {
+    "en": "No tasks or flashcards are due.",
+    "zh-Hant": "目前沒有到期待辦或待複習閃卡。"
+  },
+  "m_d2d61d0e0a76": {
+    "en": "Loading today’s review…",
+    "zh-Hant": "正在載入今日複習…"
+  },
+  "m_1d8efc11ac9b": {
+    "en": "Showing records available on this device.",
+    "zh-Hant": "正在顯示此裝置可用的記錄。"
+  },
+  "m_845a0cb24dd3": {
+    "en": "Choose a future review time on an available day before the exam.",
+    "zh-Hant": "請在考試前選擇可用日期與尚未到達的時間。"
+  },
+  "m_81b133807641": {
+    "en": "A review day exceeds the daily session limit.",
+    "zh-Hant": "有一天超過每日複習節次上限。"
+  },
+  "m_9d681d340734": {
+    "en": "The study plan changed. Preview the schedule again.",
+    "zh-Hant": "學習計畫已變更，請重新預覽安排。"
+  },
+  "m_36f76ce19b2f": {
+    "en": "The exam or time zone changed. Preview the schedule again.",
+    "zh-Hant": "考試或時區已變更，請重新預覽安排。"
+  },
+  "m_18563e0804b1": {
+    "en": "Review sessions are still pending. Retry saving the plan.",
+    "zh-Hant": "複習節次等待儲存，請重試儲存計畫。"
+  }
+}
