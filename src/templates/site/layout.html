@@ -13,29 +13,34 @@
     <footer class="footer">
       <div class="container footer-inner">
         <a class="brand" href="/">KenSei<span class="brand-dot">.</span></a>
-        <p>A small corner of the internet, made with care.</p>
-        <div>
-          <a href="/tools/">Tools</a><a href="/games/">Games</a
-          ><a href="/projects/">Projects</a><a href="/privacy/">Privacy</a
-          ><a href="/credits/">Open-source credits</a
-          ><a
-            data-personal
-            href="https://kensei-eta.vercel.app/"
-            target="_blank"
-            rel="noopener"
-            >About Me ${svg_external}</a
-          ><span>© 2026 KenSei</span>
+        <div class="footer-links">
+          <nav aria-label="Explore the Workshop">
+            <a href="/tools/">Tools</a><a href="/games/">Games</a
+            ><a href="/projects/">Projects</a>
+          </nav>
+          <nav aria-label="About the Workshop">
+            <a href="/privacy/">Privacy</a
+            ><a href="/credits/">Open-source credits</a
+            ><a
+              data-personal
+              href="https://kensei-eta.vercel.app/"
+              target="_blank"
+              rel="noopener"
+              >About Me ${svg_external}</a
+            >
+          </nav>
         </div>
+        <small>© 2026 KenSei</small>
       </div>
     </footer>
     <div class="toast-stack" data-site-notices></div>
     ${notice_center}
-    <dialog id="auth-dialog">
+    <dialog id="auth-dialog" aria-labelledby="auth-title">
       <button class="dialog-close icon-button" aria-label="Close dialog">
         ${svg_close}
       </button>
-      <div class="eyebrow">YOUR SPACE, EVERYWHERE</div>
-      <h2>A little more personal.</h2>
+      <span class="dialog-emblem">${svg_profile}</span>
+      <h2 id="auth-title">Sign in</h2>
       <p>
         Sign in to keep your workspace together and join Public typing and
         games. Your Google name and avatar initialize your public profile, which

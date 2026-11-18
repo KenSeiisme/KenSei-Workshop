@@ -44,11 +44,13 @@
 </div>
 <div class="tools-grid">${tool_cards}</div>
 <div id="search-empty" class="empty-state" hidden>
+  ${svg_search}
   <p>No tools found. Try another search.</p>
 </div>
-<p id="tool-no-favorites" class="empty-state" hidden>
-  Save a favorite with the star on any tool card.
-</p>
+<div id="tool-no-favorites" class="empty-state" hidden>
+  ${svg_star}
+  <p>Save a favorite with the star on any tool card.</p>
+</div>
 <section
   id="recent-tools"
   class="recent-tools"

@@ -189,6 +189,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
     });
     await go("/profile/?id=" + publicId);
     assert.equal(await page.locator(".board-stat-cards").count(), 3);
+    const unranked = page.locator(".profile-unranked");
+    assert.equal(await page.locator(".profile-empty-records").count(), 1);
+    assert.equal(await unranked.locator("a:visible").count(), 0);
+    await unranked.locator("summary").click();
+    assert.equal(await unranked.locator("a:visible").count(), 9);
     assert.equal(
       await page
         .locator('#public-chess-records [data-stat="win"] strong')

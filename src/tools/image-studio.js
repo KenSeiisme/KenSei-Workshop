@@ -52,7 +52,7 @@ const targetSize = el("input", "", {
 });
 targetSize.dataset.lock = "";
 const targetField = field("Target size per image (KiB)", targetSize);
-document.querySelector("#format-note").after(targetField);
+document.querySelector(".image-size-fields").before(targetField);
 const retryFailed = button("Retry failed images", () => {
   retryOnly = true;
   document.querySelector("#image-process").click();
@@ -342,9 +342,7 @@ $("#cancel-job").onclick = () => {
   );
 };
 process.onclick = async () => {
-  if (selecting || !files.length) return;
-  if (!targetSize.disabled && !targetSize.checkValidity())
-    return toast(uiMsg("Choose a target from 1 to 20,480 KiB."));
+  if (selecting || !files.length || !recipe.validate()) return;
   const width = +w.value,
     height = +h.value;
   if (

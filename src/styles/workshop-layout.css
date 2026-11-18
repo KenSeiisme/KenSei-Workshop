@@ -60,11 +60,18 @@
   padding-top: 0.7rem;
 }
 .tools-page .tools-controls .catalog-feedback {
-  grid-column: 1 / -1;
-  justify-content: flex-start;
+  justify-content: flex-end;
 }
-.tool-favorite-filter {
-  margin-inline-start: auto;
+@media (max-width: 700px) {
+  .tools-page .tools-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tools-page .tools-controls .catalog-feedback {
+    grid-column: 1;
+    grid-row: 3;
+    justify-content: space-between;
+    gap: 0 8px;
+  }
 }
 .game-hub .game-card-meta > span {
   color: var(--text);
@@ -91,7 +98,47 @@
   aspect-ratio: 16 / 8;
 }
 .listing-projects[data-project-category="all"] > .featured .project-copy {
-  padding: clamp(1rem, 4vw, 3rem);
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+.listing-projects[data-project-category="all"] > .featured .studio-card-cover {
+  padding: clamp(0.35rem, 1.4vw, 1.15rem);
+}
+.project-copy > p,
+.project-detail .detail-heading p {
+  max-width: 56ch;
+}
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0.8rem 0 0;
+  list-style: none;
+}
+.project-tech li {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--surface2);
+  color: var(--text);
+  font-size: var(--ui-help-size);
+}
+.project-detail .cover-note {
+  padding: 0.65rem 0.85rem;
+  font-size: var(--ui-help-size);
+}
+.hub-boards-header {
+  padding: 0.75rem 0 1rem;
+}
+.hub-boards-header p {
+  margin: 0.3rem 0 0;
+}
+@media (max-width: 540px) {
+  .tools-grid > [data-tool-card] > p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
 }
 .listing-projects[data-project-category="all"] > .featured h3 {
   font-size: clamp(1.3rem, 3vw, 2.2rem);
@@ -132,7 +179,7 @@
   align-items: center;
   column-gap: clamp(0.5rem, 2vw, 1.4rem);
   row-gap: 0.35rem;
-  padding: 0.5rem 0.7rem;
+  padding: 0.35rem 0 0.6rem;
   margin-bottom: 0.55rem;
   border-block-end: 1px solid var(--line);
 }

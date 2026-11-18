@@ -25,32 +25,35 @@
       maxlength="100"
       data-lock
   /></label>
-  <div class="form-row">
+  <details class="tool-advanced-settings">
+    <summary>Watermark appearance</summary>
+    <div class="form-row">
+      <label
+        >Text size · points<input
+          id="pdf-watermark-size"
+          type="number"
+          min="8"
+          max="120"
+          value="36"
+          data-lock /></label
+      ><label
+        >Opacity<input
+          id="pdf-watermark-opacity"
+          type="range"
+          min="5"
+          max="100"
+          value="30"
+          data-lock
+      /></label>
+    </div>
     <label
-      >Text size · points<input
-        id="pdf-watermark-size"
-        type="number"
-        min="8"
-        max="120"
-        value="36"
-        data-lock /></label
-    ><label
-      >Opacity<input
-        id="pdf-watermark-opacity"
-        type="range"
-        min="5"
-        max="100"
-        value="30"
+      >Watermark color<input
+        type="color"
+        id="pdf-watermark-color"
+        value="#756080"
         data-lock
     /></label>
-  </div>
-  <label
-    >Watermark color<input
-      type="color"
-      id="pdf-watermark-color"
-      value="#756080"
-      data-lock
-  /></label>
+  </details>
   <p class="muted small">
     Stamps apply to selected pages in their displayed order. Create a preview,
     then download the resulting PDF.

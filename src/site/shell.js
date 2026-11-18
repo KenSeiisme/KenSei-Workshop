@@ -12,10 +12,9 @@
   const label = (n, key) => I.text(n, I.msg(key));
   const header = $(".nav-wrap");
   if (!header) return;
-  const language = node("label", "site-language"),
-    languageCaption = node("span");
-  label(languageCaption, "site.language");
-  language.append(languageCaption);
+  const language = node("label", "site-language");
+  const languageIcon = $("[data-language-icon]");
+  if (languageIcon) language.append(languageIcon.content.cloneNode(true));
   const select = node("select");
   select.dataset.languageSelect = "";
   I.attr(select, "aria-label", I.msg("site.language"));

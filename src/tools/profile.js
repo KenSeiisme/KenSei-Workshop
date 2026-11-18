@@ -1,5 +1,6 @@
 import {
   contentIcon,
+  iconMarkup,
   gameEmblem,
   medal,
   boardStatCards,
@@ -43,7 +44,11 @@ let profileLoad = 0,
   milestoneLoad = 0,
   ownMilestones = [],
   featured = [];
-const message = (text) => uiText($("#profile-status"), text);
+function message(text, state = "info") {
+  const status = $("#profile-status");
+  status.dataset.state = state;
+  uiText(status, text);
+}
 function paintSelections() {
   for (const [id, selector] of [
     ["profile-cover", "[data-cover-choices]"],
@@ -100,7 +105,7 @@ mountAppearanceChoices("profile-cover", "[data-cover-choices]", "cover");
 mountAppearanceChoices("profile-accent", "[data-accent-choices]", "accent");
 function markDirty() {
   dirty = true;
-  message(uiMsg("Unsaved changes. Save when you are ready."));
+  message(uiMsg("Unsaved changes. Save when you are ready."), "pending");
   uiText($("#profile-bio-count"), Array.from($("#profile-bio").value).length);
   paintPreview();
 }
@@ -257,37 +262,50 @@ function renderPublicScores(profile) {
     $("#public-typing-count"),
     `${["en", "zh"].filter((lang) => profile.best_scores?.some((r) => r.language === lang)).length} / 2`,
   );
-  // 固定容器每次替换，重试不会重复追加成绩；不同难度各自展示。
+  const scored = new Set([...games, ...legacy].map((row) => row.game));
+  const cards = Object.entries(GAMES)
+    .filter(([, game]) => game.ranked)
+    .map(([slug, game]) => {
+      if (!scored.has(slug))
+        return {
+          empty: true,
+          markup: uiHtml`<article class="profile-game-card no-score profile-game-compact" data-game-theme="${slug}"><a href="/games/${slug}/"><span class="profile-game-icon">${gameIcon(slug)}</span><strong>${uiFrom(game.name)}</strong>${iconMarkup("arrow")}</a></article>`,
+        };
+      const rows = Object.keys(game.modes)
+        .map((d) => games.find((r) => r.game === slug && r.difficulty === d))
+        .filter(Boolean);
+      const featured =
+        rows.find((r) => r.difficulty === game.default) || rows[0];
+      const result = featured && scoreParts(featured, slug);
+      const previous = legacy.filter((r) => r.game === slug);
+      const archive = previous.length
+        ? uiHtml`<details class="profile-legacy-scores" data-preserve-open><summary>Previous rules · ${previous.length}</summary>${previous
+            .map((r) => {
+              const p = scoreParts(r, slug);
+              return uiHtml`<p><strong>${esc(p.value)} ${esc(p.unit)}</strong> · ${esc(game.modes[r.difficulty].label)} · v${Number(r.version)}<br><time datetime="${esc(r.achieved_at)}">${scoreDate(r.achieved_at)}</time></p>`;
+            })
+            .join("")}</details>`
+        : "";
+      const extra = rows
+        .filter((r) => r !== featured)
+        .map((r) => {
+          const parts = scoreParts(r, slug);
+          return uiHtml`<div class="profile-game-extra"><div><span>${esc(game.modes[r.difficulty].label)}</span><small>${esc(scoreDetail(r, slug))} · ${scoreDate(r.achieved_at)}</small></div><strong>${esc(parts.value)} <span>${parts.unit}</span></strong></div>`;
+        })
+        .join("");
+      return {
+        empty: false,
+        markup: uiHtml`<article class="profile-game-card ${featured ? "has-score" : "no-score"}" data-game-theme="${slug}"><header><span class="profile-game-icon">${gameIcon(slug)}</span><div><span class="eyebrow">${uiFrom(game.category)}</span><h3>${uiFrom(game.name)}</h3></div><span class="profile-record-mark">${featured ? uiMsg("Verified best") : uiMsg("No ranked result")}</span></header>${featured ? uiHtml`<div class="profile-featured-score"><div class="profile-game-emblem" aria-hidden="true">${gameIcon(slug)}</div><span class="profile-difficulty">${uiFrom(game.modes[featured.difficulty].label)}</span><div class="profile-score-value"><strong>${esc(result.value)}</strong><span>${uiFrom(result.unit)}</span></div><p>${uiFrom(scoreDetail(featured, slug))}</p><time datetime="${esc(featured.achieved_at)}">${scoreDate(featured.achieved_at)}</time></div>${extra ? uiHtml`<details class="profile-game-modes" data-preserve-open><summary>Other modes · ${rows.length - 1}<span aria-hidden="true">⌄</span></summary><div class="profile-game-other-scores">${extra}</div></details>` : ""}` : uiHtml`<div class="profile-score-empty"><span aria-hidden="true">—</span><strong>Your next high score starts here.</strong><p>No qualifying Public result yet.</p></div>`}${archive}<footer><span>${featured ? uiMsg("{0} ranked {1} · rules v{2}", [rows.length, uiFrom(rows.length === 1 ? "mode" : "modes"), Number(featured.version)]) : uiMsg("A new challenge is waiting")}</span><a href="/games/${slug}/" aria-label="Play ${uiFrom(game.name)}">Play game <span aria-hidden="true">↗</span></a></footer></article>`,
+      };
+    });
+  const records = cards
+    .filter((card) => !card.empty)
+    .map((card) => card.markup)
+    .join("");
+  const untouched = cards.filter((card) => card.empty);
   patchMarkup(
     $("#public-game-scores"),
-    Object.entries(GAMES)
-      .filter(([, game]) => game.ranked)
-      .map(([slug, game]) => {
-        const rows = Object.keys(game.modes)
-          .map((d) => games.find((r) => r.game === slug && r.difficulty === d))
-          .filter(Boolean);
-        const featured =
-          rows.find((r) => r.difficulty === game.default) || rows[0];
-        const result = featured && scoreParts(featured, slug);
-        const previous = legacy.filter((r) => r.game === slug);
-        const archive = previous.length
-          ? uiHtml`<details class="profile-legacy-scores" data-preserve-open><summary>Previous rules · ${previous.length}</summary>${previous
-              .map((r) => {
-                const p = scoreParts(r, slug);
-                return uiHtml`<p><strong>${esc(p.value)} ${esc(p.unit)}</strong> · ${esc(game.modes[r.difficulty].label)} · v${Number(r.version)}<br><time datetime="${esc(r.achieved_at)}">${scoreDate(r.achieved_at)}</time></p>`;
-              })
-              .join("")}</details>`
-          : "";
-        const extra = rows
-          .filter((r) => r !== featured)
-          .map((r) => {
-            const parts = scoreParts(r, slug);
-            return uiHtml`<div class="profile-game-extra"><div><span>${esc(game.modes[r.difficulty].label)}</span><small>${esc(scoreDetail(r, slug))} · ${scoreDate(r.achieved_at)}</small></div><strong>${esc(parts.value)} <span>${parts.unit}</span></strong></div>`;
-          })
-          .join("");
-        return uiHtml`<article class="profile-game-card ${featured ? "has-score" : "no-score"}" data-game-theme="${slug}"><header><span class="profile-game-icon">${gameIcon(slug)}</span><div><span class="eyebrow">${uiFrom(game.category)}</span><h3>${uiFrom(game.name)}</h3></div><span class="profile-record-mark">${featured ? uiMsg("Verified best") : uiMsg("No ranked result")}</span></header>${featured ? uiHtml`<div class="profile-featured-score"><div class="profile-game-emblem" aria-hidden="true">${gameIcon(slug)}</div><span class="profile-difficulty">${uiFrom(game.modes[featured.difficulty].label)}</span><div class="profile-score-value"><strong>${esc(result.value)}</strong><span>${uiFrom(result.unit)}</span></div><p>${uiFrom(scoreDetail(featured, slug))}</p><time datetime="${esc(featured.achieved_at)}">${scoreDate(featured.achieved_at)}</time></div>${extra ? uiHtml`<details class="profile-game-modes" data-preserve-open><summary>Other modes · ${rows.length - 1}<span aria-hidden="true">⌄</span></summary><div class="profile-game-other-scores">${extra}</div></details>` : ""}` : uiHtml`<div class="profile-score-empty"><span aria-hidden="true">—</span><strong>Your next high score starts here.</strong><p>No qualifying Public result yet.</p></div>`}${archive}<footer><span>${featured ? uiMsg("{0} ranked {1} · rules v{2}", [rows.length, uiFrom(rows.length === 1 ? "mode" : "modes"), Number(featured.version)]) : uiMsg("A new challenge is waiting")}</span><a href="/games/${slug}/" aria-label="Play ${uiFrom(game.name)}">Play game <span aria-hidden="true">↗</span></a></footer></article>`;
-      })
-      .join(""),
+    uiHtml`${records || uiHtml`<div class="profile-empty-records">${iconMarkup("rank")}<p>No qualifying Public result yet.</p></div>`}${untouched.length ? uiHtml`<details class="profile-unranked" data-preserve-open><summary>${uiMsg("Games without a ranked result · {0}", [untouched.length])}</summary><div>${untouched.map((card) => card.markup).join("")}</div></details>` : ""}`,
   );
   revealGameCards($("#public-game-scores"));
   renderGoStats(profile.board_game_stats || []);
@@ -615,10 +633,11 @@ $("#profile-form").addEventListener("submit", async (e) => {
     .querySelectorAll("input,textarea,button,select")
     .forEach((node) => (node.disabled = true));
   $("#profile-form").setAttribute("aria-busy", "true");
-  message(uiMsg("Saving your profile…"));
+  message(uiMsg("Saving your profile…"), "working");
   const snapshot = { ...original };
   try {
     if (avatarBlob && !uploadedPath) {
+      message(uiMsg("Uploading avatar…"), "working");
       const path = original.public_id + "/" + crypto.randomUUID() + ".webp";
       const { error } = await api.client.storage
         .from("avatars")
@@ -626,6 +645,7 @@ $("#profile-form").addEventListener("submit", async (e) => {
       if (error) throw error;
       if (saveOwner !== api.user?.id || saveEpoch !== profileLoad) return;
       uploadedPath = path;
+      message(uiMsg("Saving your profile…"), "working");
     }
     if (avatarKind !== original.avatar_kind || avatarBlob) {
       patch.avatar_kind = avatarKind;
@@ -647,6 +667,7 @@ $("#profile-form").addEventListener("submit", async (e) => {
       uiMsg(
         "Profile saved. Your public name and leaderboard links are up to date.",
       ),
+      "success",
     );
     window.KenseiNotify?.(uiMsg("Profile saved."), {
       kind: "success",
@@ -672,6 +693,7 @@ $("#profile-form").addEventListener("submit", async (e) => {
         uiMsg("Save failed. Your changes are still here. "),
         uiError(error) || uiMsg("Please retry."),
       ]),
+      "error",
     );
   } finally {
     if (saveOwner !== api.user?.id || saveEpoch !== profileLoad) return;

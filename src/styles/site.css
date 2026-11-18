@@ -85,9 +85,13 @@
 .site-language {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 5px;
+  font-size: 13px;
   color: var(--muted);
+}
+.site-language > .ui-icon {
+  width: 17px;
+  height: 17px;
 }
 .site-language select {
   width: auto;
@@ -316,10 +320,6 @@
   margin: 12px 0;
 }
 
-/* Catalog/footer rules remain available without loading tool editor styles. */
-.footer-inner > div {
-  flex-wrap: wrap;
-}
 .credits-list li {
   margin-block: 10px;
 }
@@ -347,9 +347,6 @@
   max-width: 180px;
 }
 @media (min-width: 1024px) and (max-width: 1199px) {
-  .site-language > span {
-    display: none;
-  }
   .site-search-wide {
     display: none;
   }

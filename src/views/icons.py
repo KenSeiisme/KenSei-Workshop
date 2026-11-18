@@ -1,6 +1,7 @@
 """Shared line icons for static templates and runtime controls."""
 
 ICONS = {
+    "globe": '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
     "info": '<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10h.01"/>',
     "warning": '<path d="m12 3 10 18H2ZM12 9v4m0 4h.01"/>',
     "error": '<circle cx="12" cy="12" r="9"/><path d="m8 8 8 8m0-8-8 8"/>',

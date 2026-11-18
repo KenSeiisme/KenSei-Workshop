@@ -28,14 +28,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: calc(100svh - var(--home-header) + 1px);
-  padding-block: clamp(34px, 8vh, 110px);
+  min-height: min(720px, calc(100svh - var(--home-header)));
+  padding-block: clamp(32px, 6.4vh, 78px);
 }
 .home-intro h1 {
   margin: 0;
-  font-size: clamp(53px, 8vw, 116px);
-  line-height: 0.98;
-  letter-spacing: -0.078em;
+  font-size: clamp(50px, 7.4vw, 108px);
+  line-height: 1.01;
+  letter-spacing: -0.065em;
   text-wrap: balance;
 }
 .home-intro h1 em {
@@ -54,7 +54,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
-  margin: clamp(27px, 5.6vh, 62px) 0 0;
+  margin: clamp(22px, 4.4vh, 46px) 0 0;
   padding: 0;
 }
 .home-portal {
@@ -76,7 +76,7 @@
   grid-column: 1 / -1;
   display: grid;
   place-items: center;
-  height: 112px;
+  height: clamp(104px, 9.4vw, 136px);
   overflow: hidden;
   border-radius: 11px;
   color: var(--home-color);
@@ -96,7 +96,7 @@
   display: none;
 }
 .home-portal-art .mini-tiles {
-  transform: rotate(-9deg) scale(0.62);
+  transform: rotate(-9deg) scale(0.56);
 }
 .home-portal-art > .ui-icon {
   width: 54px;
@@ -426,9 +426,6 @@
   .home-portal-art > .ui-icon {
     width: 25px;
     height: 25px;
-  }
-  .home-portal-copy small {
-    font-size: 12px;
   }
   .home-cards {
     grid-template-columns: minmax(0, 1fr);

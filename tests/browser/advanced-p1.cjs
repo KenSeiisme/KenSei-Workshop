@@ -59,6 +59,22 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8771";
       mimeType: "image/png",
       buffer: png,
     });
+    const recipe = p.locator(".image-pipeline");
+    assert.equal(await recipe.getAttribute("open"), null);
+    await recipe.locator("summary").click();
+    await recipe.getByLabel("Enable watermark").check();
+    assert.match(await recipe.locator("summary").innerText(), /Watermark/);
+    await recipe.getByLabel("Watermark opacity").fill("2");
+    await recipe.locator("summary").click();
+    await p.click("#image-process");
+    assert.equal(await recipe.evaluate((details) => details.open), true);
+    assert.equal(
+      await recipe.getByLabel("Watermark opacity").inputValue(),
+      "2",
+    );
+    await recipe.getByLabel("Watermark opacity").fill("0.7");
+    await recipe.getByLabel("Enable watermark").uncheck();
+    await recipe.locator("summary").click();
     await p.fill("#image-target-kib", "20");
     await p.click("#image-process");
     await p.waitForFunction(() =>

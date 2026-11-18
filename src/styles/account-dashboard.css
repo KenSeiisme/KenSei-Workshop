@@ -242,6 +242,92 @@
   max-width: none;
   margin: 0;
 }
+@media (min-width: 761px) {
+  .profile-edit-layout .profile-preview {
+    position: sticky;
+    top: calc(var(--site-header-height, 88px) + 16px);
+  }
+}
+.account-dashboard #profile-status:not(:empty) {
+  border-inline-start: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+  font-size: var(--ui-help-size);
+  overflow-wrap: anywhere;
+}
+.account-dashboard #profile-status[data-state="pending"] {
+  border-inline-start-color: #d9bc93;
+}
+.account-dashboard #profile-status[data-state="error"] {
+  border-inline-start-color: var(--pink);
+}
+.account-dashboard #profile-status[data-state="success"] {
+  border-inline-start-color: #9dc9b8;
+}
+.profile-empty-records,
+.profile-unranked {
+  grid-column: 1 / -1;
+  padding: 0.65rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  color: var(--text);
+}
+.profile-empty-records {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.profile-empty-records p {
+  margin: 0;
+}
+.profile-empty-records > svg {
+  color: var(--accent);
+}
+.profile-unranked > summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+}
+.profile-unranked > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: 0.5rem;
+  padding-block: 0.5rem;
+}
+.profile-unranked .profile-game-compact {
+  border-radius: 10px;
+  border-color: var(--line);
+  background: var(--surface2);
+}
+.profile-game-compact > a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.4rem 0.65rem;
+  min-height: 48px;
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+.profile-game-compact .profile-game-icon {
+  width: 32px;
+  height: 32px;
+}
+.profile-game-compact .profile-game-icon svg {
+  width: 18px;
+  height: 18px;
+}
+.account-dashboard .workspace-section .saved-row {
+  gap: 0.75rem;
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+}
+.account-dashboard .workspace-section .saved-row p,
+.friend-presence {
+  font-size: var(--ui-help-size);
+}
 .profile-edit-layout .profile-editor {
   display: grid;
   gap: 0.6rem;

@@ -1,6 +1,7 @@
 """Build only this independent project's dist directory."""
 
 from pathlib import Path
+from html import escape
 import json
 import shutil
 import sys
@@ -197,6 +198,10 @@ def project_art(slug):
     return render_template("projects/art-ai.html")
 
 
+def technology_tags(stack):
+    return "".join(f"<li>{escape(item)}</li>" for item in stack.split(" / "))
+
+
 def project_card(p, featured=False):
     slug, name, title, desc, cat, stack = p
     return render_template(
@@ -208,7 +213,7 @@ def project_card(p, featured=False):
         project_art=project_art(slug),
         cat=cat,
         desc=desc,
-        stack=stack,
+        stack=technology_tags(stack),
     )
 
 
@@ -410,6 +415,7 @@ for p in PROJECTS:
             overview=overview,
             highlights="".join(("<li>" + x + "</li>" for x in highlights)),
             tech=tech,
+            technology=technology_tags(stack),
         ),
         "Projects",
     )
