@@ -1,5 +1,6 @@
 {
   "browser-smoke": [
+    ["tests/browser/video-studio.cjs"],
     ["tests/browser/document-scanner.cjs"],
     ["tests/browser/study-review.cjs"],
     ["tests/browser/image-steps.cjs"],
@@ -23,6 +24,7 @@
     ["tests/unit/scan-geometry.mjs"],
     ["tests/browser/document-scanner.cjs"]
   ],
+  "video-studio": [["tests/browser/video-studio.cjs"]],
   "game-hub": [
     ["tests/unit/game-hub-arcade.mjs"],
     ["tests/database/game-hub.mjs"],

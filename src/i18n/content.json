@@ -1008,5 +1008,25 @@
       "拍照转PDF",
       "拍照轉PDF"
     ]
+  },
+  "tools/video-studio": {
+    "name": {
+      "en": "Video Studio",
+      "zh-Hant": "影片工作室"
+    },
+    "description": {
+      "en": "Trim and join multiple videos, add captions and export MP4 or WebM on your device.",
+      "zh-Hant": "在本機剪接多支影片、加上字幕並匯出 MP4 或 WebM。"
+    },
+    "aliases": [
+      "video editor",
+      "trim video",
+      "video compression",
+      "剪视频",
+      "剪影片",
+      "视频合并",
+      "影片剪接",
+      "錄屏剪輯"
+    ]
   }
 }

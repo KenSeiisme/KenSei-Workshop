@@ -179,7 +179,10 @@ $("#sub-next").onclick = () => {
   page++;
   draw();
 };
+let videoFile = null;
 function showVideo(file, nextUrl = URL.createObjectURL(file)) {
+  videoFile = file;
+  window.dispatchEvent(new Event("tool-content-changed"));
   if (url) URL.revokeObjectURL(url);
   url = nextUrl;
   video.src = url;
@@ -259,6 +262,9 @@ export function restoreRecovery(text) {
 window.KenseiAdvancedContexts ||= {};
 window.KenseiAdvancedContexts["subtitle-studio"] = {
   receiveVideo,
+  get videoFile() {
+    return videoFile;
+  },
   get cues() {
     return cues;
   },

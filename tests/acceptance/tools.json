@@ -2,6 +2,11 @@
   "version": 1,
   "tools": [
     {
+      "slug": "video-studio",
+      "task": "Trim and join multiple videos, add captions and export MP4 or WebM on your device.",
+      "groups": ["video-studio"]
+    },
+    {
       "slug": "document-scanner",
       "task": "Correct a photographed page, arrange the pages and download or transfer the PDF.",
       "groups": ["document-scanner"]

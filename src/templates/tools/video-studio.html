@@ -1,0 +1,90 @@
+<div class="video-studio-grid">
+  <section class="panel tool-form">
+    <h2>Video sources</h2>
+    <label
+      >Add MP4 or WebM files
+      <input
+        id="video-sources"
+        type="file"
+        accept="video/mp4,video/webm,.mp4,.webm"
+        multiple
+        data-lock
+      />
+    </label>
+    <div id="video-source-list"></div>
+    <h2>Clip order</h2>
+    <div id="video-clips"></div>
+    <p id="video-duration" class="muted small" role="status"></p>
+  </section>
+  <section class="panel tool-form">
+    <h2>Preview</h2>
+    <video
+      id="video-preview"
+      class="studio-video"
+      controls
+      playsinline
+      hidden
+    ></video>
+    <p id="video-caption" class="video-caption" hidden></p>
+    <div class="action-row">
+      <button id="video-play" class="button secondary" data-lock disabled>
+        Play in sequence
+      </button>
+      <button id="video-stop" class="button secondary" data-lock disabled>
+        Stop preview
+      </button>
+    </div>
+    <h2>Export video</h2>
+    <div class="form-row">
+      <label
+        >Resolution<select id="video-resolution" data-lock>
+          <option value="720">720p · 30 fps</option>
+          <option value="1080">1080p · 30 fps</option>
+        </select></label
+      >
+      <label
+        >Orientation<select id="video-orientation" data-lock>
+          <option value="landscape">Landscape (16:9)</option>
+          <option value="portrait">Portrait (9:16)</option>
+        </select></label
+      >
+      <label
+        >Video quality<select id="video-quality" data-lock>
+          <option value="low">Low</option>
+          <option value="standard" selected>Standard</option>
+          <option value="high">High</option>
+        </select></label
+      >
+      <label>Export format<select id="video-format" data-lock></select></label>
+    </div>
+    <label class="check-label"
+      ><input id="video-burn" type="checkbox" data-lock />Burn subtitles into
+      video</label
+    >
+    <p id="video-availability" class="muted small" role="status"></p>
+    <div class="action-row">
+      <button id="video-encode" class="button primary" data-lock disabled>
+        Prepare video
+      </button>
+      <button id="video-srt" class="button secondary" data-lock disabled>
+        Download SRT
+      </button>
+      <button id="video-vtt" class="button secondary" data-lock disabled>
+        Download VTT
+      </button>
+    </div>
+    <progress id="video-progress" value="0" max="100" hidden></progress>
+    <div class="action-row" id="video-result" hidden>
+      <a id="video-download" class="button primary" download>Download video</a>
+      <p id="video-result-size" class="muted small"></p>
+    </div>
+    <video
+      id="video-result-player"
+      class="studio-video"
+      controls
+      playsinline
+      hidden
+    ></video>
+    ${job_status}
+  </section>
+</div>

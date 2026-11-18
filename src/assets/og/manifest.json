@@ -1084,6 +1084,26 @@
       "bytes": 253601,
       "sha256": "2c48cc43f4e3ee56b2c83c746034c42ed01c044dafa0a37b1d19f0880b787141",
       "sourceHash": "3b54f97608d4de1cbb5092bc56a30856e9e3944e8237f65224a37f9c6632c198"
+    },
+    {
+      "route": "tools/video-studio",
+      "locale": "en",
+      "file": "en/tools-video-studio.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 267812,
+      "sha256": "652f0a14e3440d404496c7f43b763660f54d1db2f6c2b1f2b6cc512096f2b26f",
+      "sourceHash": "83f18463db3d33bcbb48a20258ea2a1c5fa69f4fec3ecf2ff6595e34b29e2d88"
+    },
+    {
+      "route": "tools/video-studio",
+      "locale": "zh-Hant",
+      "file": "zh-hant/tools-video-studio.png",
+      "width": 1200,
+      "height": 630,
+      "bytes": 255370,
+      "sha256": "eb6d851fc03ab2d4086bac411b328ee9806152cde7e8b72bcf2cc84144a33c55",
+      "sourceHash": "70e35d5c7c0b8087ae2a7d57694bc1c12535f4ba99b1404f6a3b9bec6e2a263e"
     }
   ]
 }

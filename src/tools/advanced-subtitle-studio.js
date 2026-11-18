@@ -10,7 +10,7 @@ import {
   renderTable,
 } from "./advanced-ui.js";
 import { validateCue, serialize } from "./subtitle-core.js";
-import { receiveHandoff } from "./handoff.js";
+import { receiveHandoff, sendControl } from "./handoff.js";
 export function retimeCues(cues, a, b, c, d) {
   if (![a, b, c, d].every(Number.isFinite) || c <= a || d <= b)
     throw Error("Use two increasing source and target anchors.");
@@ -157,6 +157,18 @@ export function init() {
   for (const input of [sa, ta, sb, tb]) input.oninput = () => (proposed = null);
   new MutationObserver(refresh).observe($("#sub-list"), { childList: true });
   refresh();
+  sendControl(
+    $("#sub-video").parentElement,
+    () => {
+      const video = ctx.videoFile;
+      if (!video || !ctx.cues.length) return null;
+      const subtitles = new File([serialize(ctx.cues, "srt")], "captions.srt", {
+        type: "application/x-subrip",
+      });
+      return { kind: "files", files: [video, subtitles] };
+    },
+    ["video-studio"],
+  );
   receiveHandoff(
     "subtitle-studio",
     (payload, current) => ctx.receiveVideo(payload.files[0], current),

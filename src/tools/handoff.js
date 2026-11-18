@@ -54,6 +54,12 @@ export const targets = {
     bytes: 1000000,
     mimes: ["text/csv"],
   },
+  "video-studio": {
+    label: "Video Studio",
+    kind: "files",
+    count: 2,
+    bytes: 255000000,
+  },
   "subtitle-studio": {
     label: "Subtitle Studio",
     kind: "files",
@@ -89,6 +95,14 @@ export function validateHandoff(target, payload) {
       throw Error(
         "These files exceed the receiving tool limits. Choose fewer or smaller files.",
       );
+    if (
+      target === "video-studio" &&
+      (!/\.(mp4|webm)$/i.test(fs[0].name || "") ||
+        fs[0].size > 250000000 ||
+        (fs[1] &&
+          (!/\.(srt|vtt)$/i.test(fs[1].name || "") || fs[1].size > 5000000)))
+    )
+      throw Error("Send one MP4 or WebM video with an optional SRT or VTT.");
     if (rule.mimes && fs.some((f) => !rule.mimes.includes(f.type)))
       throw Error("This file format is not supported by the receiving tool.");
     if (rule.video && fs.some((f) => !f.type.startsWith("video/")))
