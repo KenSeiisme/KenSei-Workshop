@@ -1,5 +1,6 @@
 import { $, download, busy, status, size } from "./common.js";
 import { renamed } from "./rename-core.js";
+import { filePath } from "./archive-package.js";
 import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiAttr } from "../site/ui.js";
 
 let files = [],
@@ -26,6 +27,7 @@ function render() {
     preview = renamed(
       files.map((file) => ({
         name: file.name,
+        directory: filePath(file).slice(0, -file.name.length),
         lastModified: file.lastModified,
       })),
       { ...options() },
@@ -37,7 +39,7 @@ function render() {
         name = document.createElement("input"),
         error = document.createElement("small"),
         actions = document.createElement("div");
-      uiText(original, file.name + " · " + size(file.size));
+      uiText(original, filePath(file) + " · " + size(file.size));
       name.value = preview[i].name;
       name.dataset.lock = "";
       uiAttr(name, "aria-label", uiJoin([uiMsg("New name for "), file.name]));
@@ -73,7 +75,7 @@ function render() {
       out.append(row);
     });
     const checked = renamed(
-      preview.map((x) => ({ name: x.name })),
+      preview.map((x) => ({ name: x.name, directory: x.directory })),
       { case: "keep", number: false },
     );
     preview.forEach((row, i) => {
@@ -134,6 +136,19 @@ $("#rename-order").onchange = () => {
   manual.clear();
   render();
 };
+function renamedCopies() {
+  return {
+    kind: "files",
+    files: files.map(
+      (file, i) =>
+        new File([file], preview[i].name, {
+          type: file.type,
+          lastModified: file.lastModified,
+        }),
+    ),
+    paths: preview.map((row) => row.directory + row.name),
+  };
+}
 function finish(message) {
   worker?.terminate();
   worker = null;
@@ -143,17 +158,11 @@ function finish(message) {
   if (message) status(uiFrom(message));
 }
 $("#rename-download").onclick = () => {
-  if (!files.length || preview.some((x) => x.error)) return;
+  if ($("#rename-download").disabled) return;
   active = true;
   busy(true);
   status(uiMsg("Packing renamed copies…"));
-  const renamedFiles = files.map(
-    (file, i) =>
-      new File([file], preview[i].name, {
-        type: file.type,
-        lastModified: file.lastModified,
-      }),
-  );
+  const copies = renamedCopies();
   worker = new Worker("/tool-scripts/zip-worker.js");
   worker.onmessage = ({ data }) => {
     if (data.type === "progress") {
@@ -170,7 +179,7 @@ $("#rename-download").onclick = () => {
     e.preventDefault();
     finish("Could not create this ZIP. Retry or select fewer files.");
   };
-  worker.postMessage({ action: "pack", files: renamedFiles });
+  worker.postMessage({ action: "pack", ...copies });
 };
 $("#cancel-job").onclick = () =>
   finish("Cancelled. Your preview is still here.");
@@ -180,6 +189,11 @@ window.KenseiAdvancedContexts ||= {};
 window.KenseiAdvancedContexts["file-renamer"] = {
   get preview() {
     return preview;
+  },
+  package() {
+    if (active || $("#rename-download").disabled)
+      throw Error("Confirm valid renamed files first.");
+    return renamedCopies();
   },
   get files() {
     return files;

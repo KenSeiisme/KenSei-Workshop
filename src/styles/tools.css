@@ -773,6 +773,8 @@ progress {
   border-bottom: 1px solid #36313d;
 }
 .zip-row > span,
+#zip-pack-paths,
+.package-verifier td,
 .file-summary,
 .saved-row > span {
   overflow-wrap: anywhere;

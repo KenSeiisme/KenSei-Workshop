@@ -1,5 +1,6 @@
 {
   "browser-smoke": [
+    ["tests/browser/archive-package.cjs"],
     ["tests/browser/grade-planner.cjs"],
     ["tests/browser/video-studio.cjs"],
     ["tests/browser/document-scanner.cjs"],
@@ -218,5 +219,9 @@
     ["tests/browser/xiangqi.cjs"],
     ["tests/browser/xiangqi-ai.cjs"],
     ["tests/browser/xiangqi-profile.cjs"]
+  ],
+  "archive-package": [
+    ["tests/unit/archive-package.mjs"],
+    ["tests/browser/archive-package.cjs"]
   ]
 }

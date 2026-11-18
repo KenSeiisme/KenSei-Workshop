@@ -1,10 +1,14 @@
-import { $, $$, size, download, status, busy } from "./common.js";
+import { plannedPackage } from "./archive-package.js";
+import { $, size, download, status, busy } from "./common.js";
 import { uiMsg, uiJoin, uiFrom, uiError, uiText, uiAttr } from "../site/ui.js";
 
 let worker = null,
   active = false,
   opened = false,
-  archiveEntries = [];
+  archiveEntries = [],
+  packFiles = [],
+  packPaths = null,
+  manifest = null;
 function stop(message) {
   worker?.terminate();
   worker = null;
@@ -30,6 +34,8 @@ function create() {
       stop(data.message);
       $("#tool-status").classList.add("error-text");
     } else if (data.type === "packed") {
+      manifest = data.manifest;
+      $("#zip-manifest").hidden = !manifest;
       download(
         data.blob,
         ($("#zip-name").value.trim() || "kensei-files").replace(
@@ -101,9 +107,14 @@ function create() {
   busy(true);
   $("#zip-progress").value = 0;
 }
-$("#zip-files").onchange = () => {
-  const files = [...$("#zip-files").files],
-    total = files.reduce((n, f) => n + f.size, 0);
+function updatePack() {
+  manifest = null;
+  $("#zip-manifest").hidden = true;
+  const files = packFiles;
+  const total = files.reduce((n, f) => n + f.size, 0);
+  const paths = $("#zip-pack-paths");
+  paths.replaceChildren();
+  paths.hidden = true;
   uiText(
     $("#zip-selected"),
     uiJoin([files.length, uiMsg(" files · "), size(total)]),
@@ -112,14 +123,42 @@ $("#zip-files").onchange = () => {
     !files.length || files.length > 100 || total > 100000000;
   if ($("#zip-pack").disabled && files.length)
     status(uiMsg("Choose at most 100 files totaling 100 MB."), true);
+  if (!$("#zip-pack").disabled && ($("#zip-checksum").checked || packPaths)) {
+    try {
+      for (const name of plannedPackage(files, packPaths)) {
+        const item = document.createElement("li");
+        item.textContent = name;
+        paths.append(item);
+      }
+      paths.hidden = false;
+    } catch (error) {
+      $("#zip-pack").disabled = true;
+      status(uiError(error), true);
+    }
+  }
+}
+$("#zip-files").onchange = () => {
+  packPaths = null;
+  packFiles = [...$("#zip-files").files];
+  updatePack();
+};
+$("#zip-checksum").onchange = updatePack;
+$("#zip-manifest").onclick = () => {
+  if (manifest) download(manifest, "SHA256SUMS");
 };
 $("#zip-pack").disabled = true;
 $("#zip-pack").onclick = () => {
-  const files = [...$("#zip-files").files];
-  if (!files.length) return;
+  if (!packFiles.length || $("#zip-pack").disabled) return;
+  manifest = null;
+  $("#zip-manifest").hidden = true;
   create();
   status(uiMsg("Preparing files…"));
-  worker.postMessage({ action: "pack", files });
+  worker.postMessage({
+    action: "pack",
+    files: packFiles,
+    paths: packPaths,
+    checksum: $("#zip-checksum").checked,
+  });
 };
 $("#zip-open").onchange = () => {
   const file = $("#zip-open").files[0];
@@ -137,6 +176,19 @@ window.addEventListener("pagehide", () => stop());
 
 window.KenseiAdvancedContexts ||= {};
 window.KenseiAdvancedContexts["zip-studio"] = {
+  get packCount() {
+    return packFiles.length;
+  },
+  get archive() {
+    return $("#zip-open").files[0];
+  },
+  receivePack(files, paths) {
+    plannedPackage(files, paths);
+    packFiles = files;
+    packPaths = paths;
+    $("#zip-files").value = "";
+    updatePack();
+  },
   get entries() {
     return archiveEntries;
   },
