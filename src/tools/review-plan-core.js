@@ -18,12 +18,10 @@ export function distributeReview(topics, start, examDay, weekdays, dailyLimit) {
     return days[index];
   });
   return {
-    scheduled: topics
-      .slice(0, count)
-      .map((title, i) => ({
-        title,
-        day: slots[Math.floor((i * usedDays) / count)],
-      })),
+    scheduled: topics.slice(0, count).map((title, i) => ({
+      title,
+      day: slots[Math.floor((i * usedDays) / count)],
+    })),
     unscheduled: topics.slice(count),
   };
 }
