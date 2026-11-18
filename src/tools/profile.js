@@ -1,3 +1,9 @@
+import {
+  contentIcon,
+  gameEmblem,
+  medal,
+  boardStatCards,
+} from "../site/content-visuals.js";
 import { mountPublicFriendActions } from "../site/friend-actions.js";
 import { socialPath } from "../site/social-api.js";
 import {
@@ -38,6 +44,60 @@ let profileLoad = 0,
   ownMilestones = [],
   featured = [];
 const message = (text) => uiText($("#profile-status"), text);
+function paintSelections() {
+  for (const [id, selector] of [
+    ["profile-cover", "[data-cover-choices]"],
+    ["profile-accent", "[data-accent-choices]"],
+  ]) {
+    for (const input of $(selector).querySelectorAll("input"))
+      input.checked = input.value === $("#" + id).value;
+  }
+  uiText(
+    $("[data-featured-count]"),
+    uiMsg("{0} / 3 selected", [featured.length]),
+  );
+}
+function mountAppearanceChoices(id, selector, type) {
+  const select = $("#" + id),
+    root = $(selector);
+  for (const option of select.options) {
+    const label = document.createElement("label"),
+      input = document.createElement("input"),
+      sample = document.createElement("span"),
+      name = document.createElement("span");
+    input.type = "radio";
+    input.name = id + "-visual";
+    input.value = option.value;
+    label.className = "profile-choice";
+    label.dataset[type === "cover" ? "profileCover" : "profileAccent"] =
+      option.value;
+    sample.className = "profile-choice-sample";
+    sample.setAttribute("aria-hidden", "true");
+    const names = {
+      orchid: "Orchid",
+      rose: "Rose",
+      mist: "Mist",
+      mint: "Mint",
+      dusk: "Dusk",
+      aurora: "Aurora",
+      lavender: "Lavender",
+      ice: "Ice blue",
+      amber: "Amber",
+    };
+    uiText(name, uiFrom(names[option.value]));
+    input.onchange = () => {
+      if (input.checked) {
+        select.value = input.value;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    };
+    label.append(input, sample, name, contentIcon("tick"));
+    root.append(label);
+  }
+  select.hidden = true;
+}
+mountAppearanceChoices("profile-cover", "[data-cover-choices]", "cover");
+mountAppearanceChoices("profile-accent", "[data-accent-choices]", "accent");
 function markDirty() {
   dirty = true;
   message(uiMsg("Unsaved changes. Save when you are ready."));
@@ -57,6 +117,7 @@ function paintPreview() {
   paintAppearance($(".profile-preview-card"), editedAppearance());
   paintAppearance($("#profile-preview"), editedAppearance());
   paintFeatured($("[data-preview-featured]"), featured, ownMilestones);
+  paintSelections();
   const key = [
     nickname[0],
     avatarKind,
@@ -121,7 +182,8 @@ async function loadMilestoneChoices() {
         uiText(note, "");
         markDirty();
       };
-      label.append(checkbox, text);
+      label.className = "profile-milestone-choice";
+      label.append(checkbox, medal(def), text, contentIcon("tick"));
       root.append(label);
     }
     uiText(
@@ -268,9 +330,8 @@ function renderClockBoardStats(stats, game) {
     section.append(empty);
   }
   for (const r of stats) {
-    const row = document.createElement("p"),
-      name = document.createElement("strong"),
-      detail = document.createElement("span");
+    const row = document.createElement("article"),
+      name = document.createElement("strong");
     row.className = "profile-go-stat";
     uiText(
       name,
@@ -281,17 +342,7 @@ function renderClockBoardStats(stats, game) {
         [Number(r.rules_version), r.time_control],
       ),
     );
-    uiText(
-      detail,
-      uiMsg("{0} games · {1} wins · {2} losses · {3} draws · {4}", [
-        Number(r.played),
-        Number(r.wins),
-        Number(r.losses),
-        Number(r.draws),
-        r.played ? `${(Number(r.win_rate) * 100).toFixed(1)}%` : "—",
-      ]),
-    );
-    row.append(name, document.createElement("br"), detail);
+    row.append(gameEmblem(game), name, boardStatCards(r));
     section.append(row);
   }
   const link = document.createElement("a");
@@ -326,7 +377,7 @@ function renderGoStats(stats) {
     section.append(empty);
   }
   for (const r of stats) {
-    const row = document.createElement("p");
+    const row = document.createElement("article");
     row.className = "profile-go-stat";
     const name = document.createElement("strong");
     uiText(
@@ -340,18 +391,7 @@ function renderGoStats(stats) {
         Number(r.size),
       ]),
     );
-    const detail = document.createElement("span");
-    uiText(
-      detail,
-      uiMsg("{0} games · {1} wins · {2} losses · {3} draws · {4}", [
-        Number(r.played),
-        Number(r.wins),
-        Number(r.losses),
-        Number(r.draws),
-        r.played ? `${(Number(r.win_rate) * 100).toFixed(1)}%` : "—",
-      ]),
-    );
-    row.append(name, document.createElement("br"), detail);
+    row.append(gameEmblem("go"), name, boardStatCards(r));
     section.append(row);
   }
   const link = document.createElement("a");

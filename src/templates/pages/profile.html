@@ -63,9 +63,9 @@
       </p>
       <fieldset class="profile-personalization">
         <legend>Profile appearance</legend>
-        <label class="field"
-          >Cover
-          <select id="profile-cover">
+        <div class="field">
+          <span>Cover</span>
+          <select id="profile-cover" aria-label="Cover">
             <option value="orchid">Orchid</option>
             <option value="rose">Rose</option>
             <option value="mist">Mist</option>
@@ -73,19 +73,32 @@
             <option value="dusk">Dusk</option>
             <option value="aurora">Aurora</option>
           </select>
-        </label>
-        <label class="field"
-          >Accent
-          <select id="profile-accent">
+          <div
+            class="profile-cover-choices"
+            data-cover-choices
+            role="group"
+            aria-label="Cover"
+          ></div>
+        </div>
+        <div class="field">
+          <span>Accent</span>
+          <select id="profile-accent" aria-label="Accent">
             <option value="lavender">Lavender</option>
             <option value="rose">Rose</option>
             <option value="ice">Ice blue</option>
             <option value="mint">Mint</option>
             <option value="amber">Amber</option>
           </select>
-        </label>
+          <div
+            class="profile-accent-choices"
+            data-accent-choices
+            role="group"
+            aria-label="Accent"
+          ></div>
+        </div>
         <fieldset id="profile-featured">
           <legend>Featured milestones · up to 3</legend>
+          <p class="muted small" data-featured-count role="status"></p>
           <div data-profile-milestone-options></div>
         </fieldset>
         <p class="muted small" data-profile-milestone-status role="status"></p>
@@ -166,15 +179,15 @@
       >
       <div class="public-profile-summary" aria-label="Public record summary">
         <div>
-          <strong id="public-game-count">—</strong
+          ${svg_grid}<strong id="public-game-count">—</strong
           ><span>games with a ranked best</span>
         </div>
         <div>
-          <strong id="public-milestone-total">—</strong
+          ${svg_achievement}<strong id="public-milestone-total">—</strong
           ><span>verified milestones</span>
         </div>
         <div>
-          <strong id="public-typing-count">0 / 2</strong
+          ${svg_keyboard}<strong id="public-typing-count">0 / 2</strong
           ><span>typing languages ranked</span>
         </div>
       </div>

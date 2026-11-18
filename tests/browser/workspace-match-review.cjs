@@ -105,6 +105,24 @@ export function createClient() {
     );
     await page.locator("[data-workspace-index-more]").click();
     await results.getByText("Old draft").waitFor();
+    const requestsBeforeRefresh = await page.evaluate(
+      () => __rpc.filter((name) => name === "get_workspace_index").length,
+    );
+    await page.evaluate(() =>
+      window.dispatchEvent(new Event("workspace-ready")),
+    );
+    await page.waitForFunction(
+      (count) =>
+        __rpc.filter((name) => name === "get_workspace_index").length >=
+        count + 2,
+      requestsBeforeRefresh,
+    );
+    await results.getByText("Old draft").waitFor();
+    assert.equal(
+      await results.locator(".saved-row").count(),
+      17,
+      "Background refresh retains the expanded record range",
+    );
     await page.locator("[data-workspace-query]").fill("文字");
     await page.waitForFunction(
       () =>

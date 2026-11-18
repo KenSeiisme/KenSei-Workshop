@@ -14,6 +14,7 @@
     <button class="button secondary" data-sign-in>Sign in with Google ↗</button>
   </div>
   <div class="workspace-sync-summary" data-workspace-sync-summary hidden>
+    ${svg_sync}
     <p data-workspace-sync-status role="status"></p>
     <button class="button secondary" type="button" data-workspace-sync-all>
       Retry all sync
@@ -24,7 +25,7 @@
     aria-labelledby="workspace-index-title"
     data-workspace-index
   >
-    <h2 id="workspace-index-title">Find saved work</h2>
+    <h2 id="workspace-index-title">${svg_search} Find saved work</h2>
     <div class="action-row">
       <label class="field"
         >Search saved work
@@ -53,7 +54,7 @@
       data-workspace-recent
       aria-labelledby="workspace-recent-title"
     >
-      <h3 id="workspace-recent-title">Continue editing</h3>
+      <h3 id="workspace-recent-title">${svg_draft} Continue editing</h3>
       <div class="saved-list" data-workspace-recent-list></div>
     </section>
     <p data-workspace-index-status class="muted small" role="status"></p>
@@ -77,13 +78,18 @@
   </section>
   <div class="workspace-stats">
     <div class="panel">
-      <span>Focused today</span><strong id="today-focus">0 min</strong>
+      ${svg_timer}<span>Focused today</span
+      ><strong id="today-focus">0 min</strong>
     </div>
     <div class="panel">
-      <span>Last 7 days</span><strong id="week-focus">0 min</strong>
+      ${svg_stats}<span>Last 7 days</span><strong id="week-focus">0 min</strong>
     </div>
     <div class="panel">
-      <span>Saved drafts</span><strong id="draft-count">0</strong>
+      ${svg_draft}<span>Saved drafts</span><strong id="draft-count">0</strong>
+    </div>
+    <div class="panel">
+      ${svg_star}<span>Favorite tools</span
+      ><strong data-workspace-favorite-count>0</strong>
     </div>
   </div>
   <nav class="workspace-jumps" aria-label="Workspace sections">
@@ -92,16 +98,16 @@
     <a class="button secondary" href="#workspace-records">Tool records</a>
   </nav>
   <section class="workspace-section" id="workspace-favorites" tabindex="-1">
-    <h2>Favorite tools</h2>
+    <h2>${svg_star} Favorite tools</h2>
     <div class="tools-grid" id="favorite-tools"></div>
   </section>
   <section class="workspace-section" id="workspace-drafts" tabindex="-1">
-    <h2>Saved drafts</h2>
+    <h2>${svg_draft} Saved drafts</h2>
     <div id="saved-drafts" class="saved-list"></div>
   </section>
   <div id="workspace-records" tabindex="-1">
     <section class="workspace-section">
-      <h2>Saved tool presets</h2>
+      <h2>${svg_preset} Saved tool presets</h2>
       <div id="saved-presets" class="saved-list"></div>
     </section>
     <section class="workspace-section">

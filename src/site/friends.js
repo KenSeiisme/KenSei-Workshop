@@ -1,18 +1,14 @@
+import { contentIcon, gameEmblem, gameChoiceLinks } from "./content-visuals.js";
 import { api } from "/tool-scripts/common.js";
 import { ensureProfile, paintAvatar } from "/tool-scripts/profile-service.js";
-import { uiFrom, uiMsg, uiText } from "./ui.js";
+import { uiMsg, uiText } from "./ui.js";
 import { paintFriendActions } from "./friend-actions.js";
 import {
   presenceText,
   socialVisible,
   setSocialVisibility,
 } from "./social-presence.js";
-import {
-  profileId,
-  SOCIAL_GAMES,
-  socialPath,
-  socialRPC,
-} from "./social-api.js";
+import { profileId, socialPath, socialRPC } from "./social-api.js";
 
 const root = document.querySelector("[data-friends-page]");
 const $ = (selector) => root.querySelector(selector);
@@ -32,18 +28,7 @@ let owner,
 function chooseGame(person, trigger) {
   searchTrigger = trigger;
   const links = $("[data-friend-game-links]");
-  links.replaceChildren(
-    ...Object.entries(SOCIAL_GAMES).map(([game, name]) => {
-      const link = document.createElement("a");
-      link.className = "button secondary";
-      link.href =
-        socialPath("/games/" + game + "/") +
-        "?friend=" +
-        encodeURIComponent(person.public_id);
-      uiText(link, uiFrom(name));
-      return link;
-    }),
-  );
+  gameChoiceLinks(links, person, socialPath);
   chooser.showModal();
 }
 
@@ -68,7 +53,20 @@ function row(person) {
   if (person.state === "friend") {
     activity.className = "friend-presence";
     activity.dataset.presence = person.presence?.status || "offline";
-    uiText(activity, presenceText(person.presence));
+    const statusLabel = document.createElement("span");
+    uiText(statusLabel, presenceText(person.presence));
+    activity.append(
+      contentIcon(
+        person.presence?.status === "playing"
+          ? "play"
+          : person.presence?.status === "online"
+            ? "online"
+            : "offline",
+      ),
+      statusLabel,
+    );
+    if (person.presence?.status === "playing")
+      activity.append(gameEmblem(person.presence.game));
     identity.append(activity);
   }
   buttons.className = "friend-actions";
@@ -101,6 +99,13 @@ function paint(focused = document.activeElement) {
     $("[data-friend-count]"),
     records.filter((p) => p.state === "friend").length,
   );
+  for (const count of root.querySelectorAll("[data-friend-section-count]")) {
+    uiText(
+      count,
+      records.filter((p) => p.state === count.dataset.friendSectionCount)
+        .length,
+    );
+  }
   const term = $("[data-friend-filter]").value.trim().toLowerCase();
   results.replaceChildren(...matches.map(row));
   for (const list of root.querySelectorAll("[data-friend-list]")) {

@@ -16,7 +16,8 @@ SITE = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(SOURCE / "views"))
 from template_renderer import motion_control, render_template
-from icons import icon
+from icons import ICONS, icon
+from account_visuals import account_game_art
 from tool_previews import tool_preview
 from studio_view import view as studio_view, copy_update_feed
 import localization as i18n
@@ -106,6 +107,25 @@ if not arguments.pages_only:
             )
         (OUT / "vendor/sources").mkdir(parents=True, exist_ok=True)
         shutil.copy2(archive, OUT / "vendor/sources" / archive.name)
+
+
+# 靜態模板與動態內容共用一份 SVG 圖示定義。
+(OUT / "assets").mkdir(parents=True, exist_ok=True)
+(OUT / "assets/ui-icons.svg").write_text(
+    '<svg xmlns="http://www.w3.org/2000/svg">'
+    + "".join(
+        f'<symbol id="{name}" viewBox="0 0 24 24">{body}</symbol>'
+        for name, body in ICONS.items()
+    )
+    + "</svg>",
+    encoding="utf-8",
+)
+(OUT / "assets/account-games").mkdir(parents=True, exist_ok=True)
+for game in ("go", "chess", "xiangqi", "pong"):
+    (OUT / f"assets/account-games/{game}.svg").write_text(
+        account_game_art(game),
+        encoding="utf-8",
+    )
 
 TOOLS = json.loads((ROOT / "data/tools.json").read_text(encoding="utf-8"))
 GAMES = json.loads((ROOT / "data/games.json").read_text(encoding="utf-8"))

@@ -602,5 +602,45 @@
   "m_ae8c2b483f08": {
     "en": "{0} changes pending sync",
     "zh-Hant": "{0} 項變更待同步"
+  },
+  "m_41da8b729fc1": {
+    "en": "Wins",
+    "zh-Hant": "勝場"
+  },
+  "m_5bf03f14da68": {
+    "en": "Losses",
+    "zh-Hant": "負場"
+  },
+  "m_e0b3a2a5d741": {
+    "en": "Draws",
+    "zh-Hant": "和棋"
+  },
+  "m_4be254722584": {
+    "en": "Win rate",
+    "zh-Hant": "勝率"
+  },
+  "m_becbe72642e8": {
+    "en": "Notification sound is muted.",
+    "zh-Hant": "通知音效已靜音。"
+  },
+  "m_93966a158a1b": {
+    "en": "Playing test sound.",
+    "zh-Hant": "正在播放試聽音效。"
+  },
+  "m_9c588c0758fc": {
+    "en": "Unmute notifications to test the sound.",
+    "zh-Hant": "請先取消靜音，再試聽通知音效。"
+  },
+  "m_dc66898455a9": {
+    "en": "This browser does not support notification sound.",
+    "zh-Hant": "此瀏覽器不支援通知音效。"
+  },
+  "m_761874ba3468": {
+    "en": "Sound could not start. Tap Test sound to retry.",
+    "zh-Hant": "無法播放音效。請點選「試聽音效」重試。"
+  },
+  "m_bda72e79b370": {
+    "en": "{0} / 3 selected",
+    "zh-Hant": "已選 {0} / 3 枚"
   }
 }

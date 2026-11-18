@@ -1,0 +1,43 @@
+import { uiHtml } from "../site/ui.js";
+
+const paths = {
+  "connect-four":
+    '<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M7 16h.01M10.3 13h.01M13.6 10h.01M17 7h.01" stroke-width="3"/>',
+  reversi:
+    '<ellipse cx="12" cy="12" rx="9" ry="7"/><path d="M3 12v3c0 4 4 7 9 7s9-3 9-7v-3M7 10c1-2 3-3 5-3"/>',
+  chess: '<path d="M10 2h4v4h4v4h-4v4h-4v-4H6V6h4zM7 15h10l-2 5H9zM5 22h14"/>',
+  xiangqi:
+    '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="6"/><path d="M8 9h8M8 12h8M12 7v10M8 16h8"/>',
+  go: '<path d="M4 4h16v16H4zM4 9h16M4 15h16M9 4v16M15 4v16"/><circle cx="9" cy="9" r="3" fill="currentColor"/><circle cx="15" cy="15" r="3"/>',
+  "block-drop": uiHtml(
+    '<path d="M9 3h6v6H9zM3 9h6v6H3zM9 9h6v6H9zM15 9h6v6h-6zM3 20h18"/><path d="m11 17 1 2 1-2"/>',
+  ),
+  pong: uiHtml(
+    '<path d="M3 7v10M21 7v10M12 3v3m0 3v3m0 3v3m0 3v1"/><circle cx="16" cy="10" r="2"/>',
+  ),
+  sudoku: uiHtml(
+    '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18M6 5v2m6 4v2m6 4v2"/>',
+  ),
+  nonogram: uiHtml(
+    '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 3v18M3 8h18M12 11h4v4h-4zM16 15h4v5h-4z"/>',
+  ),
+  "block-puzzle": uiHtml(
+    '<path d="M3 3h6v6H3zM3 9h6v6H3zM9 9h6v6H9zM15 9h6v6h-6zM15 15h6v6h-6z"/>',
+  ),
+  "brick-breaker": uiHtml(
+    '<path d="M3 4h5v4H3zM10 4h5v4h-5zM17 4h4v4h-4zM5 20h14"/><circle cx="13" cy="14" r="2"/><path d="m11 11-2-2"/>',
+  ),
+  2048: uiHtml(
+    '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7m-3.5-3.5v7"/>',
+  ),
+  minesweeper: uiHtml('<path d="M6 21V3m0 1h12l-3 4 3 4H6M3 21h7"/>'),
+  snake: uiHtml(
+    '<path d="M4 19V9a4 4 0 0 1 8 0v6a4 4 0 0 0 8 0V6"/><circle cx="20" cy="4" r="1.5"/>',
+  ),
+  "memory-match": uiHtml(
+    '<rect x="3" y="5" width="8" height="14" rx="2"/><rect x="13" y="5" width="8" height="14" rx="2"/><path d="m7 9 2 3-2 3-2-3zM15 12h4m-2-2v4"/>',
+  ),
+};
+export function gameIcon(game) {
+  return uiHtml`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[game] || paths["2048"]}</svg>`;
+}

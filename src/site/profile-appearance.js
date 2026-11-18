@@ -1,3 +1,4 @@
+import { medal } from "./content-visuals.js";
 import { ACHIEVEMENTS } from "/game-scripts/achievement-catalog.js";
 import { uiFrom, uiText } from "./ui.js";
 export const COVERS = ["orchid", "rose", "mist", "mint", "dusk", "aurora"];
@@ -25,7 +26,9 @@ export function paintFeatured(node, ids, unlocks) {
     if (!def || !earned) continue;
     const badge = document.createElement("span");
     badge.className = "profile-featured-badge";
-    uiText(badge, uiFrom(def.name));
+    const label = document.createElement("span");
+    uiText(label, uiFrom(def.name));
+    badge.append(medal(def), label);
     node.append(badge);
   }
 }
