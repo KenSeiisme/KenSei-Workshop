@@ -1,5 +1,5 @@
 <div class="video-studio-grid">
-  <section class="panel tool-form">
+  <section class="panel tool-form video-sources-panel">
     <h2>Video sources</h2>
     <label
       >Add MP4 or WebM files
@@ -12,28 +12,115 @@
       />
     </label>
     <div id="video-source-list"></div>
-    <h2>Clip order</h2>
-    <div id="video-clips"></div>
-    <p id="video-duration" class="muted small" role="status"></p>
   </section>
-  <section class="panel tool-form">
+  <section class="panel tool-form video-preview-panel">
     <h2>Preview</h2>
-    <video
-      id="video-preview"
-      class="studio-video"
-      controls
-      playsinline
-      hidden
-    ></video>
-    <p id="video-caption" class="video-caption" hidden></p>
-    <div class="action-row">
-      <button id="video-play" class="button secondary" data-lock disabled>
-        Play in sequence
+    <div id="video-stage" class="video-stage">
+      <video
+        id="video-preview"
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+      ></video>
+      <video
+        id="video-preview-next"
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+      ></video>
+      <p id="video-preview-empty">Add a video to preview it here.</p>
+      <p id="video-caption" class="video-caption" hidden></p>
+    </div>
+    <div class="action-row video-transport">
+      <button id="video-play" class="button primary" data-lock disabled>
+        Play preview
       </button>
       <button id="video-stop" class="button secondary" data-lock disabled>
-        Stop preview
+        Pause preview
+      </button>
+      <button id="video-back-frame" class="button secondary" data-lock disabled>
+        Previous frame
+      </button>
+      <button id="video-next-frame" class="button secondary" data-lock disabled>
+        Next frame
+      </button>
+      <span id="video-timecode" class="video-timecode"
+        >00:00.000 / 00:00.000</span
+      >
+    </div>
+    <div id="video-preview-feedback" hidden>
+      <p id="video-preview-status" class="muted small" role="status"></p>
+      <button
+        id="video-retry-preview"
+        class="button secondary"
+        data-lock
+        hidden
+      >
+        Retry preview
       </button>
     </div>
+  </section>
+  <section id="video-editor" class="panel tool-form video-editor">
+    <div class="video-editor-heading">
+      <h2>Timeline</h2>
+      <div class="action-row">
+        <button id="video-fit" class="button secondary" data-lock>Fit</button>
+        <button id="video-zoom-out" class="button secondary" data-lock>
+          Zoom out
+        </button>
+        <button id="video-zoom-in" class="button secondary" data-lock>
+          Zoom in
+        </button>
+      </div>
+    </div>
+    <div id="video-scroll" class="video-scroll">
+      <div id="video-track" class="video-track">
+        <div
+          id="video-ruler"
+          class="video-ruler"
+          role="slider"
+          tabindex="0"
+          aria-label="Playhead"
+          aria-valuemin="0"
+          aria-valuemax="0"
+          aria-valuenow="0"
+          aria-disabled="true"
+        ></div>
+        <div id="video-lane" class="video-lane"></div>
+        <div
+          id="video-needle"
+          class="video-needle"
+          aria-hidden="true"
+          hidden
+        ></div>
+        <div
+          id="video-insert"
+          class="video-insert"
+          aria-hidden="true"
+          hidden
+        ></div>
+      </div>
+    </div>
+    <p id="video-duration" class="muted small" role="status"></p>
+    <div class="action-row video-edit-actions">
+      <button id="video-split" class="button secondary" data-lock disabled>
+        Split at playhead
+      </button>
+      <button id="video-duplicate" class="button secondary" data-lock disabled>
+        Duplicate
+      </button>
+      <button id="video-copy" class="button secondary" data-lock disabled>
+        Copy clip
+      </button>
+      <button id="video-paste" class="button secondary" data-lock disabled>
+        Paste at playhead
+      </button>
+    </div>
+    <div id="video-edit-status" class="muted small" role="status" hidden></div>
+    <h3>Clip settings</h3>
+    <div id="video-clips"></div>
+  </section>
+  <section class="panel tool-form video-export">
     <h2>Export video</h2>
     <div class="form-row">
       <label

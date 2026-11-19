@@ -9,6 +9,9 @@ export const videoLimits = Object.freeze({
 export const frameRate = 30;
 export const frameMs = (index) => Math.round((index * 1000) / frameRate);
 
+const frameCount = (duration) =>
+  Math.max(1, Math.round((duration * frameRate) / 1000));
+
 export function makeTimeline(clips, sources) {
   if (!clips.length || clips.length > videoLimits.clips)
     throw Error("Keep between one and twelve video clips.");
@@ -24,7 +27,7 @@ export function makeTimeline(clips, sources) {
       end <= start
     )
       throw Error("Each clip needs a valid start and end within its video.");
-    const frames = Math.max(1, Math.round(((end - start) * frameRate) / 1000));
+    const frames = frameCount(end - start);
     const item = { source, start, end, firstFrame: cursor, frames };
     cursor += frames;
     return item;
@@ -38,6 +41,61 @@ export function makeTimeline(clips, sources) {
   return { segments, frames: cursor, duration: frameMs(cursor) };
 }
 
+export function timelinePosition(plan, frame) {
+  if (!plan?.frames) return null;
+  frame = Math.max(0, Math.min(plan.frames - 1, Math.round(frame)));
+  const index = plan.segments.findIndex(
+    (segment) => frame < segment.firstFrame + segment.frames,
+  );
+  const segment = plan.segments[index];
+  const sourceMs = Math.min(
+    segment.end - 0.001,
+    segment.start + ((frame - segment.firstFrame) * 1000) / frameRate,
+  );
+  return { index, segment, frame, sourceMs };
+}
+
+export function timelineCut(plan, frame) {
+  if (!plan || frame <= 0 || frame >= plan.frames) return null;
+  const position = timelinePosition(plan, frame);
+  const { segment, sourceMs } = position;
+  const framesBefore = frame - segment.firstFrame;
+  if (!framesBefore || framesBefore >= segment.frames) return null;
+  // Millisecond boundaries can round either way. Preserve both frame counts.
+  const nearest = [
+    Math.round(sourceMs),
+    Math.floor(sourceMs),
+    Math.ceil(sourceMs),
+  ];
+  const at = nearest.find(
+    (ms) =>
+      ms > segment.start &&
+      ms < segment.end &&
+      frameCount(ms - segment.start) === framesBefore &&
+      frameCount(segment.end - ms) === segment.frames - framesBefore,
+  );
+  return at === undefined ? null : { index: position.index, at };
+}
+
+export function cutClips(clips, cut, rightId) {
+  const clip = clips[cut.index];
+  return clips.toSpliced(
+    cut.index,
+    1,
+    { ...clip, end: cut.at },
+    { ...clip, id: rightId, start: cut.at },
+  );
+}
+
+export function insertAtFrame(clips, plan, frame, copy, rightId) {
+  if (!plan || frame >= plan.frames) return [...clips, copy];
+  const { index, segment } = timelinePosition(plan, frame);
+  if (frame <= segment.firstFrame) return clips.toSpliced(index, 0, copy);
+  const cut = timelineCut(plan, frame);
+  if (!cut) throw Error("Choose a frame where the clip can be split.");
+  return cutClips(clips, cut, rightId).toSpliced(index + 1, 0, copy);
+}
+
 export function timelineCues(timeline, sources) {
   return timeline.segments
     .flatMap((segment) => {
@@ -47,7 +105,10 @@ export function timelineCues(timeline, sources) {
         const start = Math.max(segment.start, cue.start);
         const stop = Math.min(segment.end, cue.end);
         const from = begin + start - segment.start;
-        const to = Math.min(end, begin + stop - segment.start);
+        const to =
+          stop === segment.end
+            ? end
+            : Math.min(end, begin + stop - segment.start);
         if (stop <= start || to <= from) return [];
         return [{ start: from, end: to, text: cue.text }];
       });
