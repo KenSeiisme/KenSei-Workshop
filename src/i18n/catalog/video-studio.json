@@ -338,5 +338,169 @@
   "m_d9488782d7d1": {
     "en": "Move clip later",
     "zh-Hant": "將片段往後移"
+  },
+  "m_d357175cfe89": {
+    "en": "Media",
+    "zh-Hant": "素材"
+  },
+  "m_2971de9e2ac4": {
+    "en": "Add MP3, WAV or AAC M4A files",
+    "zh-Hant": "加入 MP3、WAV 或 AAC M4A 音檔"
+  },
+  "m_7a982f93679d": {
+    "en": "Selected clip",
+    "zh-Hant": "所選片段"
+  },
+  "m_d699d7d8a2c8": {
+    "en": "Select a clip to edit it.",
+    "zh-Hant": "選取要編輯的片段。"
+  },
+  "m_ef4d5c4d535a": {
+    "en": "Track mixer",
+    "zh-Hant": "軌道混音器"
+  },
+  "m_853c87830a81": {
+    "en": "Undo edit",
+    "zh-Hant": "復原編輯"
+  },
+  "m_726ee4e1bb2e": {
+    "en": "Redo edit",
+    "zh-Hant": "重做編輯"
+  },
+  "m_555118560812": {
+    "en": "Snap to timeline",
+    "zh-Hant": "吸附時間軸"
+  },
+  "m_a827c5ccd796": {
+    "en": "Mute preview",
+    "zh-Hant": "預覽靜音"
+  },
+  "m_9876dcf5c163": {
+    "en": "Unmute preview",
+    "zh-Hant": "取消預覽靜音"
+  },
+  "m_0c01c83b76ad": {
+    "en": "Mute track",
+    "zh-Hant": "軌道靜音"
+  },
+  "m_bdcb32928952": {
+    "en": "Unmute track",
+    "zh-Hant": "取消軌道靜音"
+  },
+  "m_a45c96f03dca": {
+    "en": "Audio 1",
+    "zh-Hant": "音軌 1"
+  },
+  "m_feda83078c07": {
+    "en": "Audio 2",
+    "zh-Hant": "音軌 2"
+  },
+  "m_4bf9a522a0de": {
+    "en": "Video sound",
+    "zh-Hant": "影片原音"
+  },
+  "m_b6db545f92f6": {
+    "en": "{0} volume",
+    "zh-Hant": "{0}音量"
+  },
+  "m_dca7503ea2a1": {
+    "en": "Audio {0}: {1}",
+    "zh-Hant": "音軌 {0}：{1}"
+  },
+  "m_d87624945216": {
+    "en": "Move audio clip",
+    "zh-Hant": "移動音訊片段"
+  },
+  "m_cd10029f0aa9": {
+    "en": "Audio preview is unavailable. Editing and export are still available.",
+    "zh-Hant": "目前無法監聽音訊，仍可剪輯及匯出。"
+  },
+  "m_92d9be847241": {
+    "en": "Could not preview audio from {0}.",
+    "zh-Hant": "無法監聽 {0} 的音訊。"
+  },
+  "m_9bbdbc21f369": {
+    "en": "Could not decode {0}.",
+    "zh-Hant": "無法解碼 {0}。"
+  },
+  "m_822e4e93ce61": {
+    "en": "Keep audio trims within the source and the five-minute timeline.",
+    "zh-Hant": "請將音訊裁剪範圍限制在來源與五分鐘時間軸內。"
+  },
+  "m_6383ed73955a": {
+    "en": "Keep at most twelve clips on each audio track.",
+    "zh-Hant": "每條音軌最多保留十二個片段。"
+  },
+  "m_c2f9beab3204": {
+    "en": "Clips on the same audio track cannot overlap.",
+    "zh-Hant": "同一音軌上的片段不可重疊。"
+  },
+  "m_abd9431357a5": {
+    "en": "Choose a supported MP3, WAV or AAC M4A audio file.",
+    "zh-Hant": "請選擇可解碼的 MP3、WAV 或 AAC M4A 音檔。"
+  },
+  "m_94c72c9df97e": {
+    "en": "Choose up to six MP3, WAV or AAC M4A files within the shared 500 MB limit.",
+    "zh-Hant": "最多選六個 MP3、WAV 或 AAC M4A 音檔，與影片合計上限為 500 MB。"
+  },
+  "m_0ec72de94009": {
+    "en": "Edit undone.",
+    "zh-Hant": "已復原編輯。"
+  },
+  "m_14f987425bb8": {
+    "en": "Edit redone.",
+    "zh-Hant": "已重做編輯。"
+  },
+  "m_b31ef03f0242": {
+    "en": "Audio added to the timeline.",
+    "zh-Hant": "已將音訊加入時間軸。"
+  },
+  "m_96d9d218fa98": {
+    "en": "Audio imported. Choose a free position on the timeline.",
+    "zh-Hant": "已匯入音訊，請選擇時間軸上的空白位置。"
+  },
+  "m_eb6d57787139": {
+    "en": "Choose a free audio position before the video ends.",
+    "zh-Hant": "請在影片結尾前選擇音軌上的空白位置。"
+  },
+  "m_044fcca5905d": {
+    "en": "Add audio to timeline",
+    "zh-Hant": "將音訊加入時間軸"
+  },
+  "m_d8d054d89b73": {
+    "en": "Select a clip",
+    "zh-Hant": "選擇片段"
+  },
+  "m_e4a847983868": {
+    "en": "Audio track",
+    "zh-Hant": "音軌"
+  },
+  "m_d50139dcd11d": {
+    "en": "Position (seconds)",
+    "zh-Hant": "時間軸位置（秒）"
+  },
+  "m_9a82db9a03c5": {
+    "en": "Clip volume (%)",
+    "zh-Hant": "片段音量（%）"
+  },
+  "m_27355d5c1227": {
+    "en": "Mute {0}",
+    "zh-Hant": "將{0}靜音"
+  },
+  "m_118fa63ae5aa": {
+    "en": "Unmute {0}",
+    "zh-Hant": "取消{0}的靜音"
+  },
+  "m_cddeeb87529e": {
+    "en": "Audio beyond the video end will be left out of export.",
+    "zh-Hant": "超出影片結尾的音訊不會寫入匯出檔。"
+  },
+  "m_3e3409d044df": {
+    "en": "Import video",
+    "zh-Hant": "匯入影片"
+  },
+  "m_f9bace642e6f": {
+    "en": "Video track",
+    "zh-Hant": "影片軌"
   }
 }
