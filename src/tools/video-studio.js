@@ -549,23 +549,26 @@ function renderClips() {
         trimField("end", "Clip end (seconds)"),
       );
       card.append(trim);
+      card.append(
+        row(
+          move(-1, "Move clip earlier"),
+          move(1, "Move clip later"),
+          button("Remove clip", () => {
+            if (
+              commit(
+                clips.toSpliced(i, 1),
+                clips[i + 1]?.id ?? clips[i - 1]?.id,
+              )
+            ) {
+              (
+                list.querySelector("[data-selected] .video-clip-summary") ||
+                $("#video-sources")
+              ).focus();
+            }
+          }),
+        ),
+      );
     }
-    card.append(
-      row(
-        move(-1, "Move earlier"),
-        move(1, "Move later"),
-        button("Remove clip", () => {
-          if (
-            commit(clips.toSpliced(i, 1), clips[i + 1]?.id ?? clips[i - 1]?.id)
-          ) {
-            (
-              list.querySelector("[data-selected] .video-clip-summary") ||
-              $("#video-sources")
-            ).focus();
-          }
-        }),
-      ),
-    );
     list.append(card);
   });
 }

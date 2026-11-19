@@ -330,5 +330,13 @@
   "m_120a847abcbc": {
     "en": "Drag clip to reorder",
     "zh-Hant": "拖曳片段以重新排序"
+  },
+  "m_a382b2a39544": {
+    "en": "Move clip earlier",
+    "zh-Hant": "將片段往前移"
+  },
+  "m_d9488782d7d1": {
+    "en": "Move clip later",
+    "zh-Hant": "將片段往後移"
   }
 }
