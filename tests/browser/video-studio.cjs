@@ -141,7 +141,14 @@ async function verifyMix(page, inputs) {
   await page.selectOption("#video-format", container);
   await page.locator("#video-encode").click();
   const link = page.locator("#video-download");
-  await link.waitFor({ timeout: 90000 });
+  await link.waitFor({ timeout: 90000 }).catch(async (error) => {
+    throw Error(
+      (await page.locator("#job-status").count())
+        ? await page.locator("#job-status").innerText()
+        : await page.locator(".video-export").innerText(),
+      { cause: error },
+    );
+  });
   const download = page.waitForEvent("download");
   await link.click();
   const data = await fs.readFile(await (await download).path());
@@ -235,6 +242,247 @@ async function verifyMix(page, inputs) {
   console.log(
     "PASS two overlapping audio tracks, collision rejection, gain, undo/redo, icon controls and three measured tones in " +
       container,
+  );
+}
+
+async function verifyCustomTracks(page, inputs) {
+  await page.goto(base + "/tools/video-studio/");
+  await page.waitForSelector('[data-ready="true"]');
+  await page.setInputFiles(
+    "#video-sources",
+    inputs.map((bytes, i) => ({
+      name: i ? "foreground.webm" : "background.webm",
+      mimeType: "video/webm",
+      buffer: Buffer.from(bytes),
+    })),
+  );
+  const baseClips = page.locator("#video-lane .video-track-clip");
+  await baseClips.nth(1).locator(".video-clip-body").press("Enter");
+  await page.locator("#video-delete").click();
+  await baseClips.first().locator(".video-clip-body").press("Enter");
+  const end = page
+    .locator("#video-clips [data-selected]")
+    .getByLabel("Clip end (seconds)", { exact: true });
+  await end.fill("1");
+  await end.press("Enter");
+  const ruler = page.locator("#video-ruler");
+  await ruler.press("Home");
+  await page.locator("#video-track-controls summary").click();
+  const management = page.locator("#video-track-management");
+  await management
+    .getByRole("button", { name: "Add video layer", exact: true })
+    .click();
+  await page.locator("[data-add-overlay]").last().click();
+  const overlays = page.locator("#video-video-lane-v1 .video-track-clip");
+  await overlays.waitFor();
+  await page.locator('video[data-layer="v1"][data-front]').waitFor();
+  const width = await page
+    .locator('video[data-layer="v1"][data-front]')
+    .evaluate((v) => v.style.width);
+  assert.equal(width, "31%");
+  const handle = page.locator(".video-layer-outline");
+  await handle.scrollIntoViewIfNeeded();
+  const box = await handle.boundingBox();
+  const x = box.x + box.width / 4,
+    y = box.y + box.height / 4;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x - 36, y - 16, { steps: 4 });
+  await page.mouse.up();
+  await page.waitForFunction(
+    () =>
+      parseFloat(document.querySelector(".video-layer-outline").style.left) <
+      64,
+  );
+  const moved = page
+    .locator("#video-audio-properties")
+    .getByLabel("Horizontal position (%)");
+  assert.ok(Number(await moved.inputValue()) < 64);
+  await page.locator("#video-undo").click();
+  assert.equal(await moved.inputValue(), "65");
+  await page
+    .locator("#video-audio-properties")
+    .getByLabel("Full frame")
+    .check();
+  await page.waitForFunction(
+    () =>
+      document.querySelector('video[data-layer="v1"][data-front]').style
+        .width === "100%",
+  );
+  await page.locator("#video-undo").click();
+  await management
+    .getByRole("button", { name: "Add audio track", exact: true })
+    .click();
+  await page.locator("#video-audio-lane-3").waitFor();
+  await page.locator('[data-track-command="3-remove"]').click();
+  assert.equal(await page.locator("#video-audio-lane-3").count(), 0);
+  await page.locator("#video-undo").click();
+  await page.locator("#video-audio-lane-3").waitFor();
+  const subtitles = () =>
+    management.getByRole("button", { name: "Add subtitle track", exact: true });
+  await subtitles().click();
+  await subtitles().click();
+  const importers = management.getByLabel("Import SRT or VTT");
+  for (let i = 0; i < 2; i++) {
+    await importers.nth(i).setInputFiles({
+      name: "layer.srt",
+      mimeType: "text/plain",
+      buffer: Buffer.from(
+        "1\n00:00:00,000 --> 00:00:00,900\n" +
+          (i ? "雙語字幕" : "English captions") +
+          "\n",
+      ),
+    });
+    await page
+      .locator("#video-captions-lane-s" + (i + 1) + " .video-track-clip")
+      .waitFor();
+  }
+  await page.locator(".video-preview-captions summary").click();
+  await page
+    .locator("#video-caption-preview-options select")
+    .nth(0)
+    .selectOption("s1");
+  await page
+    .locator("#video-caption-preview-options select")
+    .nth(1)
+    .selectOption("s2");
+  await ruler.press("Home");
+  await page.waitForFunction(
+    () =>
+      document.querySelector("#video-caption").textContent ===
+      "English captions\n雙語字幕",
+  );
+  await page.selectOption("#video-caption-download", "s2");
+  const vtt = page.waitForEvent("download");
+  await page.locator("#video-vtt").click();
+  assert.match(await fs.readFile(await (await vtt).path(), "utf8"), /雙語字幕/);
+  await page.locator("#video-burn").check();
+  await page
+    .locator("#video-caption-export-options select")
+    .nth(0)
+    .selectOption("s1");
+  await page
+    .locator("#video-caption-export-options select")
+    .nth(1)
+    .selectOption("s2");
+  await ruler.press("Home");
+  await ruler.press("ArrowRight");
+  assert.equal(Number(await ruler.getAttribute("aria-valuenow")), 1);
+  await page.selectOption("#video-fps", "60");
+  assert.equal(Number(await ruler.getAttribute("aria-valuenow")), 1);
+  await ruler.press("ArrowRight");
+  assert.equal(Number(await ruler.getAttribute("aria-valuenow")), 1.5);
+  const wanted = process.env.WORKSHOP_VIDEO_RESOLUTION || "720";
+  await page.selectOption("#video-resolution", wanted);
+  await page.waitForFunction(
+    () =>
+      document.querySelector("#video-availability").textContent !==
+      "Checking video encoders…",
+  );
+  const available = await page
+    .locator("#video-format option")
+    .evaluateAll((opts) => opts.map((o) => o.value));
+  if (!available.includes(container)) {
+    assert.ok(
+      !process.env.REQUIRE_VIDEO_EXPORT,
+      [container, wanted, available].join(" "),
+    );
+    console.log(
+      "PASS layered editing and bilingual subtitles; " +
+        wanted +
+        "p60 " +
+        container +
+        " unavailable in this browser",
+    );
+    return;
+  }
+  await page.selectOption("#video-format", container);
+  await page.locator("#video-encode").click();
+  const link = page.locator("#video-download");
+  await link.waitFor({ timeout: 90000 }).catch(async (error) => {
+    throw Error(
+      (await page.locator("#job-status").count())
+        ? await page.locator("#job-status").innerText()
+        : await page.locator(".video-export").innerText(),
+      { cause: error },
+    );
+  });
+  const output = page.waitForEvent("download");
+  await link.click();
+  const data = await fs.readFile(await (await output).path());
+  if (process.env.WORKSHOP_LAYERED_OUTPUT)
+    await fs.writeFile(process.env.WORKSHOP_LAYERED_OUTPUT, data);
+  const check = await page.evaluate(
+    async ({ bytes, url }) => {
+      const m = await import(url);
+      const input = new m.Input({
+        formats: [m.MP4, m.WEBM],
+        source: new m.BufferSource(new Uint8Array(bytes)),
+      });
+      try {
+        const video = await input.getPrimaryVideoTrack();
+        const stats = await video.computePacketStats();
+        const width = await video.getDisplayWidth(),
+          height = await video.getDisplayHeight();
+        const sample = await new m.VideoSampleSink(video).getSample(0.4);
+        if (!sample) throw Error("No decoded layered frame");
+        const canvas = new OffscreenCanvas(width, height),
+          ctx = canvas.getContext("2d");
+        sample.draw(ctx, 0, 0, width, height);
+        sample.close();
+        const pixel = (x, y) =>
+          Array.from(
+            ctx.getImageData(
+              Math.floor(x * width),
+              Math.floor(y * height),
+              1,
+              1,
+            ).data,
+          );
+        const brightBetween = (top, bottom) => {
+          const rgba = ctx.getImageData(
+            0,
+            Math.floor(top * height),
+            width,
+            Math.floor((bottom - top) * height),
+          ).data;
+          let total = 0;
+          for (let i = 0; i < rgba.length; i += 4)
+            if (rgba[i] > 225 && rgba[i + 1] > 225 && rgba[i + 2] > 225)
+              total++;
+          return total;
+        };
+        return {
+          width,
+          height,
+          frames: stats.packetCount,
+          rate: stats.averagePacketRate,
+          upper: brightBetween(0.04, 0.22),
+          lower: brightBetween(0.78, 0.96),
+          base: pixel(0.25, 0.4),
+          overlay: pixel(0.805, 0.8),
+        };
+      } finally {
+        input.dispose();
+      }
+    },
+    { bytes: [...data], url: library },
+  );
+  assert.equal(check.height, +wanted, JSON.stringify(check));
+  assert.equal(check.frames, 60, JSON.stringify(check));
+  assert.ok(check.upper > 50 && check.lower > 50, JSON.stringify(check));
+  assert.ok(check.rate > 59.8 && check.rate < 60.2, JSON.stringify(check));
+  assert.ok(
+    check.base[0] > check.base[1] + 60 &&
+      check.overlay[1] > check.overlay[0] + 40,
+    JSON.stringify(check),
+  );
+  console.log(
+    "PASS configurable tracks, PiP, bilingual subtitles, stable 30/60 switching and real " +
+      wanted +
+      "p60 " +
+      container +
+      " export",
   );
 }
 
@@ -530,7 +778,14 @@ async function verifyMix(page, inputs) {
     );
     await page.click("#video-encode");
     const link = page.locator("#video-download");
-    await link.waitFor({ timeout: 90000 });
+    await link.waitFor({ timeout: 90000 }).catch(async (error) => {
+      throw Error(
+        (await page.locator("#job-status").count())
+          ? await page.locator("#job-status").innerText()
+          : await page.locator(".video-export").innerText(),
+        { cause: error },
+      );
+    });
     const download = page.waitForEvent("download");
     await link.click();
     const bytes = await fs.readFile(await (await download).path());
@@ -610,7 +865,11 @@ async function verifyMix(page, inputs) {
       Number(await ruler.getAttribute("aria-valuemax")),
       trimmedFrames + 30,
     );
-    assert.equal(await link.isVisible(), false);
+    assert.equal(await link.isVisible(), true);
+    assert.equal(
+      await page.locator("#video-result-previous").isVisible(),
+      true,
+    );
     const newSidecar = page.waitForEvent("download");
     await page.locator("#video-vtt").click();
     assert.match(
@@ -618,7 +877,17 @@ async function verifyMix(page, inputs) {
       /00:00:01\.500 --> 00:00:02\.000/,
     );
     await page.locator("#video-encode").click();
-    await link.waitFor({ timeout: 90000 });
+    await link.waitFor({ timeout: 90000 }).catch(async (error) => {
+      throw Error(
+        (await page.locator("#job-status").count())
+          ? await page.locator("#job-status").innerText()
+          : await page.locator(".video-export").innerText(),
+        { cause: error },
+      );
+    });
+    await page
+      .locator("#video-result-previous")
+      .waitFor({ state: "hidden", timeout: 90000 });
     const edited = page.waitForEvent("download");
     await link.click();
     const newBytes = await fs.readFile(await (await edited).path());
@@ -658,6 +927,7 @@ async function verifyMix(page, inputs) {
       1280,
     );
     await verifyMix(page, inputs);
+    await verifyCustomTracks(page, inputs);
     if (
       !process.env.WORKSHOP_BROWSER_ENGINE ||
       process.env.WORKSHOP_BROWSER_ENGINE === "chromium"

@@ -502,5 +502,225 @@
   "m_f9bace642e6f": {
     "en": "Video track",
     "zh-Hant": "影片軌"
+  },
+  "m_68e19e4ca3a5": {
+    "en": "Frame rate",
+    "zh-Hant": "幀率"
+  },
+  "m_42408db46dd9": {
+    "en": "1440p",
+    "zh-Hant": "1440p"
+  },
+  "m_5e119b2325ce": {
+    "en": "30 fps",
+    "zh-Hant": "30 fps"
+  },
+  "m_225e1c6af8cb": {
+    "en": "60 fps",
+    "zh-Hant": "60 fps"
+  },
+  "m_56a492850a36": {
+    "en": "Preview subtitles",
+    "zh-Hant": "預覽字幕"
+  },
+  "m_88980154513d": {
+    "en": "Tracks",
+    "zh-Hant": "軌道"
+  },
+  "m_d49be469c11f": {
+    "en": "Download subtitle track",
+    "zh-Hant": "下載字幕軌"
+  },
+  "m_dd2d5132fbbf": {
+    "en": "Lower frame rate sources repeat frames in 60 fps output.",
+    "zh-Hant": "較低幀率的素材在輸出 60 fps 時會重複現有畫格。"
+  },
+  "m_77b8f0306ea4": {
+    "en": "Estimated video exceeds 400 MB. Reduce quality, frame rate or duration.",
+    "zh-Hant": "預計影片超過 400 MB。請降低畫質、幀率或縮短成片。"
+  },
+  "m_afe13d4832ef": {
+    "en": "Video exceeds 400 MB. Reduce quality, frame rate or duration.",
+    "zh-Hant": "影片超過 400 MB。請降低畫質、幀率或縮短成片。"
+  },
+  "m_72a5c69daf48": {
+    "en": "Previous export · Prepare again to include your changes.",
+    "zh-Hant": "上次匯出 · 請重新處理以套用變更。"
+  },
+  "m_20a55d3e90d6": {
+    "en": "Add video layer",
+    "zh-Hant": "新增疊加影片軌"
+  },
+  "m_efdf601979c0": {
+    "en": "Add audio track",
+    "zh-Hant": "新增音訊軌"
+  },
+  "m_55d0d5c33a19": {
+    "en": "Add subtitle track",
+    "zh-Hant": "新增字幕軌"
+  },
+  "m_f036aee105e0": {
+    "en": "Move track up",
+    "zh-Hant": "將軌道上移"
+  },
+  "m_2a0125aa951f": {
+    "en": "Move track down",
+    "zh-Hant": "將軌道下移"
+  },
+  "m_3c99bb0b088a": {
+    "en": "Delete track",
+    "zh-Hant": "刪除軌道"
+  },
+  "m_4894e765e01f": {
+    "en": "Track name",
+    "zh-Hant": "軌道名稱"
+  },
+  "m_070c6fa1b292": {
+    "en": "Show video layer",
+    "zh-Hant": "顯示影片圖層"
+  },
+  "m_100c0c0d50cd": {
+    "en": "Add subtitle at playhead",
+    "zh-Hant": "在時間針新增字幕"
+  },
+  "m_d67647781e97": {
+    "en": "Subtitle language",
+    "zh-Hant": "字幕語言"
+  },
+  "m_04d6d146a697": {
+    "en": "Import SRT or VTT",
+    "zh-Hant": "匯入 SRT 或 VTT"
+  },
+  "m_fff2058dc87b": {
+    "en": "Delete this track and its {0} items?",
+    "zh-Hant": "刪除此軌道及其中的 {0} 個項目？"
+  },
+  "m_06dff63b5321": {
+    "en": "Replace this track's existing subtitles?",
+    "zh-Hant": "取代此軌道的現有字幕？"
+  },
+  "m_c53457dee4c8": {
+    "en": "Source subtitles",
+    "zh-Hant": "來源字幕"
+  },
+  "m_47748fa8bddf": {
+    "en": "Subtitles {0}",
+    "zh-Hant": "字幕 {0}"
+  },
+  "m_361e53d5a1e8": {
+    "en": "Video {0}",
+    "zh-Hant": "影片 {0}"
+  },
+  "m_9d7493d9ce67": {
+    "en": "Subtitle track 1",
+    "zh-Hant": "字幕軌 1"
+  },
+  "m_893e6f275625": {
+    "en": "Subtitle track 2",
+    "zh-Hant": "字幕軌 2"
+  },
+  "m_2d246093a61e": {
+    "en": "Add to selected video layer",
+    "zh-Hant": "加入選取的疊加影片軌"
+  },
+  "m_184d21a9fdc1": {
+    "en": "Move timeline clip",
+    "zh-Hant": "移動時間軸片段"
+  },
+  "m_c82db5bdf1f8": {
+    "en": "Video layer",
+    "zh-Hant": "疊加影片軌"
+  },
+  "m_cde97376ebe6": {
+    "en": "Subtitle track",
+    "zh-Hant": "字幕軌"
+  },
+  "m_2ae7864735a8": {
+    "en": "New subtitle",
+    "zh-Hant": "新字幕"
+  },
+  "m_69f79667781d": {
+    "en": "End time (seconds)",
+    "zh-Hant": "結束時間（秒）"
+  },
+  "m_3c44a9167304": {
+    "en": "Full frame",
+    "zh-Hant": "全畫面"
+  },
+  "m_9dcc67c51fa5": {
+    "en": "Horizontal position (%)",
+    "zh-Hant": "水平位置（%）"
+  },
+  "m_dd4606f2f36e": {
+    "en": "Vertical position (%)",
+    "zh-Hant": "垂直位置（%）"
+  },
+  "m_c1043b330a55": {
+    "en": "Size (%)",
+    "zh-Hant": "大小（%）"
+  },
+  "m_95fdae53e3c8": {
+    "en": "Keep clips within the five-minute timeline.",
+    "zh-Hant": "請把片段放在五分鐘的時間軸範圍內。"
+  },
+  "m_1b4d9386a7fd": {
+    "en": "Keep clip trims within the source.",
+    "zh-Hant": "請把裁剪範圍保留在素材長度內。"
+  },
+  "m_2af605cbb825": {
+    "en": "Keep at most twelve clips per track.",
+    "zh-Hant": "每軌最多保留十二個片段。"
+  },
+  "m_a0a2c2ec0eb7": {
+    "en": "Clips on the same video track cannot overlap.",
+    "zh-Hant": "同一影片軌的片段不能重疊。"
+  },
+  "m_434fac76dc39": {
+    "en": "Estimated recording limit at this quality: {0}",
+    "zh-Hant": "此畫質的預估錄製上限為 {0}"
+  },
+  "m_b6168f2e9274": {
+    "en": "Requested {0} × {1} at {2} fps",
+    "zh-Hant": "要求 {0} × {1}，{2} fps"
+  },
+  "m_8e109533f233": {
+    "en": "Capture track: {0} fps",
+    "zh-Hant": "擷取軌道設定為 {0} fps"
+  },
+  "m_537dc85dde94": {
+    "en": "Recorded file: {0} × {1} · {2} fps average",
+    "zh-Hant": "錄製檔案為 {0} × {1} · 平均 {2} fps"
+  },
+  "m_1029f2c5ec32": {
+    "en": "Recorded file frame rate could not be verified.",
+    "zh-Hant": "無法驗證錄製檔案的幀率。"
+  },
+  "m_ad0af094f3f3": {
+    "en": "Both audio options start off. Choose “Share audio” in the browser picker when available. Actual resolution and frame rate depend on the browser and shared source.",
+    "zh-Hant": "兩個音訊選項預設關閉。瀏覽器選擇器有「分享音訊」時可勾選。實際解析度和幀率取決於瀏覽器及分享來源。"
+  },
+  "m_dc937b598926": {
+    "en": "None",
+    "zh-Hant": "無"
+  },
+  "m_fea7ec1b5440": {
+    "en": "Audio {0}",
+    "zh-Hant": "音訊 {0}"
+  },
+  "m_fb62fe2ae6b2": {
+    "en": "{0}: {1}",
+    "zh-Hant": "{0}：{1}"
+  },
+  "m_4d3099ed7651": {
+    "en": "Move to video layer",
+    "zh-Hant": "移到疊加影片軌"
+  },
+  "m_69a67cafa10f": {
+    "en": "Move clip to layer",
+    "zh-Hant": "移動片段到此軌"
+  },
+  "m_ccf5345be9b2": {
+    "en": "Move to main video track",
+    "zh-Hant": "移到主影片軌"
   }
 }

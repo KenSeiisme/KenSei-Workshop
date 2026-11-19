@@ -69,6 +69,8 @@ ICONS = {
     "coin": '<circle cx="12" cy="12" r="8"/><path d="M12 8v8m2-7h-3a1.5 1.5 0 1 0 0 3h2a1.5 1.5 0 1 1 0 3h-3"/>',
     "unfocus": '<path d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"/>',
     "focus": '<path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/>',
+    "up": '<path d="M12 20V4m-6 6 6-6 6 6"/>',
+    "down": '<path d="M12 4v16m-6-6 6 6 6-6"/>',
     "chevron": '<path d="m7 10 5 5 5-5"/>',
     "frame_previous": '<path d="M5 5v14m14-14L8 12l11 7Z"/>',
     "frame_next": '<path d="M19 5v14M5 5l11 7-11 7Z"/>',

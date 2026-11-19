@@ -20,20 +20,26 @@ import {
 } from "/vendor/mediabunny-video-1.66.1.mjs";
 import {
   containers,
-  frameRate,
-  makeTimeline,
-  timelineCues,
+  exactMs,
   exportSettings,
+  frameRate,
+  outputLimit,
   videoLimits,
 } from "./video-timeline.js";
-
 import {
   defaultLevels,
   framesPerSampleBlock,
   sampleRate,
-  validateAudioClips,
   videoMix,
 } from "./video-mix.js";
+import {
+  makeAssembly,
+  validatePositioned,
+  captionTracks,
+  fitBox,
+  paintCaptions,
+  captionText,
+} from "./video-assembly.js";
 
 const audioBitrate = 128_000;
 const open = (file) =>
@@ -89,7 +95,7 @@ async function audioTrack(input) {
 
 async function formats(settings, audio) {
   if (typeof OffscreenCanvas !== "function") return [];
-  const { width, height, bitrate } = settings;
+  const { width, height, bitrate, fps } = settings;
   const supported = await Promise.all(
     Object.entries(containers).map(async ([name, codec]) => {
       if (
@@ -97,7 +103,8 @@ async function formats(settings, audio) {
           width,
           height,
           bitrate,
-          framerate: frameRate,
+          frameRate: fps,
+          framerate: fps,
         }))
       )
         return null;
@@ -116,93 +123,81 @@ async function formats(settings, audio) {
   return supported.filter(Boolean);
 }
 
-function caption(ctx, text, width, height) {
-  const fontSize = Math.round(Math.min(width, height) * 0.045);
-  ctx.font = "600 " + fontSize + "px sans-serif";
-  const limit = width * 0.86;
-  const lines = [];
-  for (const paragraph of text.split("\n")) {
-    let line = "";
-    for (const character of paragraph) {
-      if (line && ctx.measureText(line + character).width > limit) {
-        lines.push(line);
-        line = "";
-        if (lines.length >= 6) break;
-      }
-      line += character;
-    }
-    if (lines.length >= 6) break;
-    if (line) lines.push(line);
+function* sourceTimes(clip, first, count, fps, offset) {
+  for (let n = 0; n < count; n++) {
+    const timeline = exactMs(((first + n) * frameRate) / fps - clip.at) / 1000;
+    yield offset +
+      Math.min(
+        clip.end / 1000 - 0.000001,
+        clip.start / 1000 + Math.max(0, timeline),
+      );
   }
-  const lineHeight = fontSize * 1.3;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  lines.forEach((line, i) => {
-    const y = height * 0.93 - lineHeight * (lines.length - i - 0.5);
-    const w = ctx.measureText(line).width + fontSize * 0.65;
-    ctx.fillStyle = "#000d";
-    ctx.fillRect((width - w) / 2, y - lineHeight / 2, w, lineHeight);
-    ctx.fillStyle = "#fff";
-    ctx.fillText(line, width / 2, y);
-  });
 }
-
-function* sourceTimes(start, end, total) {
-  for (let i = 0; i < total; i++)
-    yield Math.min(start + i / frameRate, end - 0.000001);
-}
-
-async function exportVideoFrames(
-  source,
-  segment,
-  destination,
-  ctx,
-  cues,
-  total,
-) {
-  const {
-    canvas: { width, height },
-  } = ctx;
-  const first = source.first + segment.start / 1000;
-  const end = source.first + segment.end / 1000;
-  const sink = new VideoSampleSink(source.video);
-  let frame = segment.firstFrame;
-  let cueIndex = 0,
-    active = [];
-  for await (const sample of sink.samplesAtTimestamps(
-    sourceTimes(first, end, segment.frames),
-  )) {
-    try {
-      ctx.fillStyle = "#0e0b12";
-      ctx.fillRect(0, 0, width, height);
-      if (sample) {
-        const fit = Math.min(
-          width / sample.displayWidth,
-          height / sample.displayHeight,
-        );
-        const w = sample.displayWidth * fit,
-          h = sample.displayHeight * fit;
-        sample.draw(ctx, (width - w) / 2, (height - h) / 2, w, h);
+async function* pictures(layer, media, fps) {
+  for (const clip of layer.clips) {
+    const first = Math.ceil((clip.at * fps) / frameRate - 1e-8),
+      last = Math.ceil((clip.stop * fps) / frameRate - 1e-8);
+    if (last <= first) continue;
+    const source = media[clip.source];
+    const sink = new VideoSampleSink(source.video);
+    let frame = first;
+    for await (const sample of sink.samplesAtTimestamps(
+      sourceTimes(clip, first, last - first, fps, source.first),
+    )) {
+      try {
+        yield { frame: frame++, sample, box: clip.box };
+      } finally {
+        sample?.close();
       }
-      if (cues.length) {
-        const ms = (frame * 1000) / frameRate;
-        active = active.filter((cue) => cue.end > ms);
-        while (cueIndex < cues.length && cues[cueIndex].start <= ms) {
-          const cue = cues[cueIndex++];
-          if (cue.end > ms) active.push(cue);
-        }
-        if (active.length)
-          caption(ctx, active.map((cue) => cue.text).join("\n"), width, height);
-      }
-      await destination.add(frame / frameRate, 1 / frameRate, {
-        keyFrame: frame === segment.firstFrame,
-      });
-      frame++;
-      if (frame % 15 === 0 || frame === total)
-        postMessage({ type: "progress", value: (100 * frame) / total });
-    } finally {
-      sample?.close();
     }
+  }
+}
+async function exportPicture(plan, settings, media, destination, ctx, cues) {
+  const { width, height, fps } = settings;
+  const frames = Math.ceil((plan.frames * fps) / frameRate - 1e-8);
+  const readers = plan.layers
+    .filter((layer) => !layer.hidden && layer.clips.length)
+    .map((layer) => pictures(layer, media, fps));
+  try {
+    const heads = await Promise.all(readers.map((reader) => reader.next()));
+    for (let frame = 0; frame < frames; frame++) {
+      ctx.fillStyle = "#131019";
+      ctx.fillRect(0, 0, width, height);
+      for (const head of heads) {
+        if (head.value?.frame !== frame || !head.value.sample) continue;
+        const { sample, box } = head.value;
+        const { x, y, w, h } = fitBox(
+          box,
+          width,
+          height,
+          sample.displayWidth,
+          sample.displayHeight,
+        );
+        ctx.fillRect(
+          box.x * width,
+          box.y * height,
+          box.size * width,
+          box.size * height,
+        );
+        sample.draw(ctx, x, y, w, h);
+      }
+      if (cues.length)
+        paintCaptions(
+          ctx,
+          captionText(cues, (frame * 1000) / fps),
+          width,
+          height,
+        );
+      await destination.add(frame / fps, 1 / fps, {
+        keyFrame: frame % (fps * 2) === 0,
+      });
+      for (let i = 0; i < readers.length; i++)
+        if (heads[i].value?.frame === frame) heads[i] = await readers[i].next();
+      if ((frame + 1) % 15 === 0 || frame + 1 === frames)
+        postMessage({ type: "progress", value: (100 * (frame + 1)) / frames });
+    }
+  } finally {
+    await Promise.allSettled(readers.map((reader) => reader.return()));
   }
 }
 
@@ -211,7 +206,7 @@ async function* audioBlocks(lane, media) {
     if (!clip.gain) continue;
     const source = media[clip.source];
     const start = source.first + clip.start / 1000;
-    const length = (clip.stop - clip.at) * framesPerSampleBlock;
+    const length = Math.round((clip.stop - clip.at) * framesPerSampleBlock);
     const end = Math.min(
       source.first + clip.end / 1000,
       start + length / sampleRate,
@@ -257,7 +252,10 @@ async function* audioBlocks(lane, media) {
           }
           return copy;
         });
-        yield { at: clip.at * framesPerSampleBlock + from, channels };
+        yield {
+          at: Math.round(clip.at * framesPerSampleBlock) + from,
+          channels,
+        };
       } finally {
         sample.close();
       }
@@ -354,11 +352,19 @@ async function encode({
   orientation,
   format,
   burn,
+  tracks: laneDefs = [
+    { id: 1, kind: "audio" },
+    { id: 2, kind: "audio" },
+  ],
+  burnTracks = burn ? ["source"] : [],
+  fps = 30,
 }) {
   const inputs = [];
   let output;
   try {
-    const used = new Set([...clips, ...audioClips].map((clip) => clip.source));
+    const used = new Set(
+      [...clips, ...audioClips].map((clip) => clip.source).filter(Boolean),
+    );
     const media = {};
     for (const [id, asset] of Object.entries(sources)) {
       if (!used.has(id)) continue;
@@ -371,15 +377,30 @@ async function encode({
             ? await audioTrack(input)
             : await tracks(input);
         if (data.video && !(await data.video.canDecode())) throw Error();
-        media[id] = { ...data, hasAudio: !!data.audio, cues: asset.cues };
+        media[id] = {
+          ...data,
+          hasAudio: !!data.audio,
+          kind: asset.kind,
+          cues: asset.cues,
+        };
       } catch {
         throw Error("Could not decode {0}.", { cause: asset.file.name });
       }
     }
-    const settings = exportSettings(quality, resolution, orientation);
-    const timeline = makeTimeline(clips, media);
-    validateAudioClips(audioClips, media);
+    const settings = exportSettings(quality, resolution, orientation, fps);
+    validatePositioned(audioClips, media, laneDefs);
+    const timeline = makeAssembly(clips, media, laneDefs, audioClips);
+    if (!timeline) throw Error("Add a clip to begin.");
     const mix = videoMix(timeline, audioClips, levels, media);
+    if (
+      ((settings.bitrate + (mix.audible ? audioBitrate : 0)) *
+        timeline.duration) /
+        8000 >
+      outputLimit
+    )
+      throw Error(
+        "Estimated video exceeds 400 MB. Reduce quality, frame rate or duration.",
+      );
     for (const clip of mix.lanes.flat()) {
       if (clip.gain && !(await media[clip.source].audio.canDecode()))
         throw Error("Could not decode {0}.", {
@@ -391,13 +412,19 @@ async function encode({
       throw Error("This browser cannot encode the chosen video format.");
     const codec = containers[format];
     const target = new BufferTarget();
+    let overBudget = false;
+    target.onwrite = (_start, end) => {
+      if (end <= outputLimit || overBudget) return;
+      overBudget = true;
+      output.cancel().catch(() => {});
+    };
     const canvas = new OffscreenCanvas(settings.width, settings.height);
     const ctx = canvas.getContext("2d");
     if (!ctx) throw Error("Video canvas is unavailable in this browser.");
     output = new Output({
       format:
         format === "mp4"
-          ? new Mp4OutputFormat({ fastStart: "in-memory" })
+          ? new Mp4OutputFormat({ fastStart: false })
           : new WebMOutputFormat(),
       target,
     });
@@ -405,7 +432,7 @@ async function encode({
       codec: codec.video,
       quality: new Quality({ bitrate: settings.bitrate }),
     });
-    output.addVideoTrack(picture, { frameRate });
+    output.addVideoTrack(picture, { frameRate: settings.fps });
     const sound = hasAudio
       ? new AudioSampleSource({
           codec: codec.audio,
@@ -414,22 +441,28 @@ async function encode({
       : null;
     if (sound) output.addAudioTrack(sound);
     await output.start();
-    const cues = burn ? timelineCues(timeline, media) : [];
-    await Promise.all([
-      (async () => {
-        for (const segment of timeline.segments)
-          await exportVideoFrames(
-            media[segment.source],
-            segment,
-            picture,
-            ctx,
-            cues,
-            timeline.frames,
-          );
-      })(),
-      sound && exportMix(mix, media, timeline.frames, sound),
-    ]);
-    await output.finalize();
+    const captions = captionTracks(timeline, media, laneDefs, audioClips);
+    const cues = burnTracks
+      .slice(0, 2)
+      .map((id) => captions.find((track) => track.id === id)?.cues ?? []);
+    try {
+      const audioFrames =
+        (Math.ceil((timeline.frames * settings.fps) / frameRate - 1e-8) *
+          frameRate) /
+        settings.fps;
+      await Promise.all([
+        exportPicture(timeline, settings, media, picture, ctx, cues),
+        sound && exportMix(mix, media, audioFrames, sound),
+      ]);
+      await output.finalize();
+      if (target.buffer.byteLength > outputLimit) overBudget = true;
+    } catch (error) {
+      if (!overBudget) throw error;
+    }
+    if (overBudget)
+      throw Error(
+        "Video exceeds 400 MB. Reduce quality, frame rate or duration.",
+      );
     const blob = new Blob([target.buffer], { type: codec.mime });
     postMessage({ type: "finished", blob, format });
   } catch (error) {
@@ -443,7 +476,12 @@ onmessage = async ({ data }) => {
   try {
     if (data.action === "formats") {
       const supported = await formats(
-        exportSettings(data.quality, data.resolution, data.orientation),
+        exportSettings(
+          data.quality,
+          data.resolution,
+          data.orientation,
+          data.fps,
+        ),
         data.audio,
       );
       postMessage({ type: "formats", formats: supported });
@@ -455,6 +493,8 @@ onmessage = async ({ data }) => {
           type: "metadata",
           duration,
           hasAudio: !!audio,
+          frameRate: (await video.computePacketStats(90).catch(() => ({})))
+            .averagePacketRate,
           portrait:
             (await video.getDisplayHeight()) > (await video.getDisplayWidth()),
         });

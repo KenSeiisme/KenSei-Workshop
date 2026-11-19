@@ -46,7 +46,7 @@
 }
 .video-track-labels {
   display: grid;
-  grid-template-rows: repeat(3, 62px);
+  grid-auto-rows: 62px;
   align-items: stretch;
   padding-top: 45px;
 }
@@ -194,8 +194,10 @@
 }
 .video-stage video {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   opacity: 0;
+  background: #131019;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -421,4 +423,83 @@
     min-width: 44px;
     min-height: 44px;
   }
+}
+
+.video-caption-canvas,
+#video-layer-handles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+#video-layer-handles {
+  z-index: 6;
+}
+.video-layer-outline {
+  position: absolute;
+  border: 2px solid #e8c9fb;
+  box-shadow: 0 0 0 1px #181121;
+  pointer-events: auto;
+  touch-action: none;
+  cursor: move;
+}
+.video-layer-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 44px;
+  height: 44px;
+  cursor: nwse-resize;
+}
+.video-layer-resize::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  background: #e8c9fb;
+  content: "";
+}
+.video-track-actions,
+#video-caption-preview-options,
+#video-caption-export-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#video-track-management {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 228px), 1fr));
+  gap: 8px;
+  padding: 0 0 10px;
+}
+.video-track-actions {
+  grid-column: 1/-1;
+}
+.video-track-options {
+  border: 1px solid var(--line);
+  padding: 8px;
+  border-radius: 8px;
+  min-width: 0;
+}
+.video-caption-preview-options label {
+  flex: 1 1 130px;
+}
+.video-captions-lane .video-track-clip {
+  background: color-mix(in srgb, var(--accent) 25%, var(--surface, var(--bg)));
+}
+.video-video-lane .video-track-clip {
+  background: color-mix(in srgb, #9cbfdc 34%, var(--surface, var(--bg)));
+}
+.video-lane[data-lane-hidden] .video-track-clip {
+  opacity: 0.55;
+}
+.video-scroll {
+  overflow-y: hidden;
+}
+.video-track-labels button {
+  overflow: hidden;
+  overflow-wrap: anywhere;
 }

@@ -1,4 +1,5 @@
-import { frameMs, frameRate, timelinePosition } from "./video-timeline.js";
+import { exactMs, units } from "./video-timeline.js";
+import { layersAt, captionText, paintCaptions } from "./video-assembly.js";
 
 const epsilon = 0.004;
 
@@ -66,248 +67,276 @@ function loadFrame(slot, asset, sourceMs) {
 }
 
 export function createVideoPreview(
-  elements,
-  { onFrame, onState, onError, onAudioFrame, onSilence },
+  { players, caption, empty, step },
+  { onFrame, onState, onError, onAudioFrame, onSilence, onLayers },
 ) {
-  const { players, caption, empty } = elements;
-  const slots = players.map((video) => ({ video, offset: 0 }));
-  let front = null,
-    presented = null,
-    revision = 0;
-  let animation,
-    videoFrame,
-    framePlayer,
+  const banks = new Map(
+    [...players].map(([id, videos]) => [
+      id,
+      {
+        slots: videos.map((video) => ({ video, offset: 0 })),
+        front: null,
+        clip: null,
+      },
+    ]),
+  );
+  let revision = 0,
+    animation,
     loading,
-    playing = false;
-  let finishSegment;
-
-  function state() {
-    onState(playing);
-  }
-  function cancelLoad(slot) {
+    playing = false,
+    lastCaptions = [];
+  const fronts = new Map();
+  const clear = (slot) => {
     slot.abort?.abort();
     slot.task = null;
-  }
+  };
+  const hide = (slot) => {
+    if (!slot) return;
+    slot.video.pause();
+    delete slot.video.dataset.front;
+  };
+  const paintText = (texts) => {
+    lastCaptions = texts;
+    caption.textContent = texts.filter(Boolean).join("\n");
+    const rect = caption.parentElement.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const scale = Math.min(2, globalThis.devicePixelRatio || 1);
+    const width = Math.round(rect.width * scale),
+      height = Math.round(rect.height * scale);
+    if (caption.width !== width || caption.height !== height) {
+      caption.width = width;
+      caption.height = height;
+    }
+    caption.hidden = !texts.some(Boolean);
+    const ctx = caption.getContext("2d");
+    ctx.clearRect(0, 0, width, height);
+    if (!caption.hidden) paintCaptions(ctx, texts, width, height);
+  };
+  new ResizeObserver(() => paintText(lastCaptions)).observe(
+    caption.parentElement,
+  );
+  const subtitles = (tracks, frame) => {
+    const texts = captionText(tracks, exactMs(frame));
+    if (
+      texts.length !== lastCaptions.length ||
+      texts.some((value, i) => value !== lastCaptions[i])
+    )
+      paintText(texts);
+  };
+
   function pause() {
-    ++revision;
+    revision++;
     clearTimeout(loading);
     cancelAnimationFrame(animation);
-    framePlayer?.cancelVideoFrameCallback?.(videoFrame);
-    framePlayer = null;
-    finishSegment?.();
-    finishSegment = null;
-    for (const slot of slots) {
-      slot.video.pause();
-      cancelLoad(slot);
-    }
+    for (const bank of banks.values())
+      for (const slot of bank.slots) {
+        slot.video.pause();
+        clear(slot);
+      }
     playing = false;
     onSilence();
-    state();
+    onState(false);
   }
-  function unload(slot) {
-    cancelLoad(slot);
-    slot.video.pause();
-    slot.video.removeAttribute("src");
-    slot.video.load();
-    slot.url = null;
-  }
+
   function discard(url) {
     pause();
-    for (const slot of slots) {
-      if (url && slot.url !== url) continue;
-      unload(slot);
-      if (slot === front) {
-        front = null;
-        presented = null;
-        delete slot.video.dataset.front;
-        empty.hidden = false;
-        caption.hidden = true;
+    for (const [id, bank] of banks)
+      for (const slot of bank.slots) {
+        if (url && slot.url !== url) continue;
+        hide(slot);
+        if (bank.front === slot) {
+          bank.front = bank.clip = null;
+          fronts.delete(id);
+        }
+        slot.video.removeAttribute("src");
+        slot.video.load();
+        slot.url = null;
+      }
+    if (!fronts.size) {
+      empty.hidden = false;
+      paintText([]);
+    }
+  }
+
+  async function reveal(plan, sources, tracks, frame, token, play) {
+    const positions = layersAt(plan, frame);
+    const pending = await Promise.all(
+      positions.map(async ({ id, clip, sourceMs }) => {
+        if (!clip) return { id, clip };
+        const bank = banks.get(id);
+        const slot =
+          play && bank.clip === clip
+            ? bank.front
+            : bank.slots.find((slot) => slot !== bank.front);
+        if (
+          slot !== bank.front &&
+          !(await loadFrame(slot, sources[clip.source], sourceMs))
+        )
+          return null;
+        return { id, clip, slot };
+      }),
+    );
+    if (token !== revision || pending.some((slot) => !slot)) return false;
+    for (const [id, bank] of banks) {
+      const next = pending.find((item) => item.id === id);
+      if (!next?.slot) {
+        hide(bank.front);
+        bank.front = bank.clip = null;
+        fronts.delete(id);
+        continue;
+      }
+      const { slot, clip } = next;
+      if (slot !== bank.front) hide(bank.front);
+      bank.front = slot;
+      bank.clip = clip;
+      fronts.set(id, slot.video);
+      const style = slot.video.style;
+      const { x, y, size } = clip.box;
+      style.left = x * 100 + "%";
+      style.top = y * 100 + "%";
+      style.width = size * 100 + "%";
+      style.height = size * 100 + "%";
+      style.zIndex = positions.findIndex((p) => p.id === id) + 1;
+      slot.video.dataset.front = "";
+      slot.video.dataset.layer = id;
+      if (play && slot.video.paused) await slot.video.play();
+      if (token !== revision) return false;
+    }
+    empty.hidden = true;
+    subtitles(tracks, frame);
+    onLayers?.(positions);
+    if (play) {
+      for (const { id, clips } of plan.layers) {
+        const bank = banks.get(id);
+        const next = clips.find(
+          (clip) => clip.at > frame && clip.at - frame < 45,
+        );
+        if (next && bank.front)
+          loadFrame(
+            bank.slots.find((slot) => slot !== bank.front),
+            sources[next.source],
+            next.start,
+          ).catch(() => {});
       }
     }
+    return true;
   }
-  function subtitles(cues, frame) {
-    const ms = frameMs(frame);
-    const text = cues
-      .filter((c) => c.start <= ms && ms < c.end)
-      .map((c) => c.text)
-      .join("\n");
-    if (caption.textContent !== text) caption.textContent = text;
-    caption.hidden = !text;
-  }
-  const standby = () => slots.find((slot) => slot !== front);
-  function reveal(slot, asset, position, cues) {
-    const old = front;
-    if (old && old !== slot) {
-      old.video.pause();
-      delete old.video.dataset.front;
-    }
-    front = slot;
-    front.video.dataset.front = "";
-    empty.hidden = true;
-    presented = { url: asset.url, sourceMs: position.sourceMs };
-    subtitles(cues, position.frame);
-  }
-  async function show(plan, sources, cues, frame) {
+  const sampleFrame = (plan, frame) =>
+    Math.max(
+      0,
+      Math.min(
+        frame,
+        Math.max(0, (Math.ceil(plan.frames / step() - 1e-8) - 1) * step()),
+      ),
+    );
+  async function show(plan, sources, tracks, frame) {
     pause();
+    if (!plan) return;
     const token = revision;
-    const position = timelinePosition(plan, frame);
-    if (!position) return;
-    const asset = sources[position.segment.source];
-    if (
-      presented?.url === asset.url &&
-      presented.sourceMs === position.sourceMs
-    ) {
-      subtitles(cues, position.frame);
-      onError();
-      return;
-    }
-    const slot = standby();
     loading = setTimeout(() => onError(null, true), 180);
     try {
       if (
-        (await loadFrame(slot, asset, position.sourceMs)) &&
-        token === revision
-      ) {
-        reveal(slot, asset, position, cues);
+        await reveal(
+          plan,
+          sources,
+          tracks,
+          sampleFrame(plan, frame),
+          token,
+          false,
+        )
+      )
         onError();
-      }
     } catch (error) {
       if (token === revision) onError(error);
     } finally {
       if (token === revision) clearTimeout(loading);
     }
   }
-
-  function segmentPlayback(slot, position, cues, token) {
-    const video = slot.video;
-    const { segment } = position;
-    const end = Math.min(
-      segment.end,
-      segment.start + (segment.frames * 1000) / frameRate,
-    );
-    const paint = (mediaTime) => {
-      const elapsed = (mediaTime - slot.offset) * 1000 - segment.start;
-      const offset = Math.max(
-        0,
-        Math.min(segment.frames - 1, Math.floor((elapsed * frameRate) / 1000)),
-      );
-      const positionFrame = Math.max(
-        position.frame,
-        segment.firstFrame + offset,
-      );
-      presented = {
-        url: slot.url,
-        sourceMs: (video.currentTime - slot.offset) * 1000,
-      };
-      onFrame(positionFrame);
-      subtitles(cues, positionFrame);
-    };
-    return new Promise((resolve, reject) => {
-      const finish = (error) => {
-        cancelAnimationFrame(animation);
-        video.cancelVideoFrameCallback?.(videoFrame);
-        framePlayer = null;
-        video.removeEventListener("error", fail);
-        finishSegment = null;
-        if (error) reject(error);
-        else resolve();
-      };
-      const fail = () =>
-        finish(Error("The source video could not be previewed."));
-      finishSegment = finish;
-      video.addEventListener("error", fail);
-      if (video.requestVideoFrameCallback) {
-        framePlayer = video;
-        const next = (_, info) => {
-          if (token !== revision) return;
-          paint(info.mediaTime);
-          videoFrame = video.requestVideoFrameCallback(next);
-        };
-        videoFrame = video.requestVideoFrameCallback(next);
-      }
-      // The transport also checks trim boundaries between decoded frames.
-      function tick() {
-        if (
-          token !== revision ||
-          video.ended ||
-          (video.currentTime - slot.offset) * 1000 >= end
-        ) {
-          finish();
-          return;
-        }
-        if (!video.requestVideoFrameCallback) paint(video.currentTime);
-        if (video.readyState < 3 || video.seeking || video.paused) onSilence();
-        else
-          onAudioFrame(
-            segment.firstFrame +
-              Math.max(
-                0,
-                Math.min(
-                  segment.frames,
-                  (((video.currentTime - slot.offset) * 1000 - segment.start) *
-                    frameRate) /
-                    1000,
-                ),
-              ),
-            video,
-          );
-        animation = requestAnimationFrame(tick);
-      }
-      tick();
-    });
-  }
-  async function play(plan, sources, cues, frame) {
+  async function play(plan, sources, tracks, frame) {
     pause();
-    if (!plan?.frames) return;
+    if (!plan) return;
     if (frame >= plan.frames) frame = 0;
     const token = revision;
     playing = true;
-    state();
+    onState(true);
     onError();
+    const fail = (error) => {
+      if (token !== revision) return;
+      pause();
+      onError(error);
+    };
     try {
-      while (frame < plan.frames && token === revision) {
-        const position = timelinePosition(plan, frame);
-        const { segment } = position;
-        const asset = sources[segment.source];
-        const reuse =
-          front &&
-          presented?.url === asset.url &&
-          Math.abs(presented.sourceMs - position.sourceMs) < 1;
-        const slot = reuse ? front : standby();
-        if (!reuse) {
+      if (!(await reveal(plan, sources, tracks, frame, token, true))) return;
+      let origin = performance.now() - exactMs(frame);
+      const tick = async (now) => {
+        if (token !== revision) return;
+        const at = Math.max(0, units(now - origin));
+        if (at >= plan.frames) {
+          onFrame(plan.frames);
+          await show(plan, sources, tracks, plan.frames);
+          return;
+        }
+        const positions = layersAt(plan, at);
+        try {
           if (
-            slot.video.readyState < 2 ||
-            slot.video.seeking ||
-            slot.url !== asset.url
+            positions.some(
+              ({ id, clip }) => (clip || null) !== banks.get(id).clip,
+            )
+          ) {
+            onSilence();
+            for (const bank of banks.values()) bank.front?.video.pause();
+            const changes = positions.filter(
+              ({ id, clip }) => (clip || null) !== banks.get(id).clip,
+            );
+            const bound = Math.max(
+              frame,
+              ...changes.map(
+                ({ id, clip }) => clip?.at ?? banks.get(id).clip?.stop ?? at,
+              ),
+            );
+            if (
+              !(await reveal(
+                plan,
+                sources,
+                tracks,
+                Math.min(at, bound),
+                token,
+                true,
+              ))
+            )
+              return;
+            origin = performance.now() - exactMs(Math.min(at, bound));
+          } else {
+            for (const { id, clip, sourceMs } of positions) {
+              if (!clip) continue;
+              const { video, offset } = banks.get(id).front;
+              const expected = offset + sourceMs / 1000;
+              if (
+                !video.seeking &&
+                Math.abs(video.currentTime - expected) > 0.12
+              )
+                video.currentTime = expected;
+            }
+          }
+          frame =
+            Math.floor(units(performance.now() - origin) / step()) * step();
+          onFrame(Math.min(frame, plan.frames));
+          subtitles(tracks, frame);
+          if (
+            [...fronts.values()].some(
+              (video) => video.readyState < 2 || video.seeking,
+            )
           )
             onSilence();
-          if (!(await loadFrame(slot, asset, position.sourceMs))) return;
+          else onAudioFrame(frame, fronts);
+          animation = requestAnimationFrame(tick);
+        } catch (error) {
+          fail(error);
         }
-        if (token !== revision) return;
-        reveal(slot, asset, position, cues);
-        onFrame(position.frame);
-        const next = plan.segments[position.index + 1];
-        if (next)
-          loadFrame(standby(), sources[next.source], next.start).catch(
-            () => {},
-          );
-        slot.task = null;
-        await slot.video.play();
-        if (token !== revision) return;
-        await segmentPlayback(slot, position, cues, token);
-        if (token !== revision) return;
-        slot.video.pause();
-        frame = segment.firstFrame + segment.frames;
-      }
-      if (token === revision) {
-        onFrame(plan.frames);
-        await show(plan, sources, cues, plan.frames);
-      }
+      };
+      animation = requestAnimationFrame(tick);
     } catch (error) {
-      if (token === revision) {
-        pause();
-        onError(error);
-      }
+      fail(error);
     }
   }
   return {

@@ -7,12 +7,16 @@ export const videoLimits = Object.freeze({
   outputMs: 300_000,
 });
 export const frameRate = 30;
+export const outputLimit = 400_000_000;
+export const units = (ms) => (ms * 3) / 100;
+export const exactMs = (frame) => (frame * 100) / 3;
+export const mediaTick = (frame) => Math.round(frame * 100);
 export const frameMs = (index) => Math.round((index * 1000) / frameRate);
 
 const frameCount = (duration) =>
   Math.max(1, Math.round((duration * frameRate) / 1000));
 
-export function makeTimeline(clips, sources) {
+export function makeTimeline(clips, sources, exact = false) {
   if (!clips.length || clips.length > videoLimits.clips)
     throw Error("Keep between one and twelve video clips.");
   let cursor = 0;
@@ -20,16 +24,18 @@ export function makeTimeline(clips, sources) {
     const duration = sources[source]?.duration;
     if (
       !Number.isFinite(duration) ||
-      !Number.isInteger(start) ||
-      !Number.isInteger(end) ||
+      !Number.isFinite(start) ||
+      !Number.isFinite(end) ||
       start < 0 ||
       end > duration ||
       end <= start
     )
       throw Error("Each clip needs a valid start and end within its video.");
-    const frames = frameCount(end - start);
+    const frames = exact ? units(end - start) : frameCount(end - start);
     const item = { source, start, end, firstFrame: cursor, frames };
-    cursor += frames;
+    cursor = exact
+      ? (mediaTick(cursor) + mediaTick(frames)) / 100
+      : cursor + frames;
     return item;
   });
   if (
@@ -38,12 +44,19 @@ export function makeTimeline(clips, sources) {
       videoLimits.outputMs
   )
     throw Error("Keep the finished video to five minutes.");
-  return { segments, frames: cursor, duration: frameMs(cursor) };
+  return {
+    segments,
+    frames: cursor,
+    duration: frameMs(cursor),
+    ...(exact ? { exact } : {}),
+  };
 }
 
 export function timelinePosition(plan, frame) {
   if (!plan?.frames) return null;
-  frame = Math.max(0, Math.min(plan.frames - 1, Math.round(frame)));
+  frame = plan.exact
+    ? Math.max(0, Math.min(plan.frames - 0.00001, frame))
+    : Math.max(0, Math.min(plan.frames - 1, Math.round(frame)));
   const index = plan.segments.findIndex(
     (segment) => frame < segment.firstFrame + segment.frames,
   );
@@ -62,6 +75,10 @@ export function timelineCut(plan, frame) {
   const framesBefore = frame - segment.firstFrame;
   if (!framesBefore || framesBefore >= segment.frames) return null;
   // Millisecond boundaries can round either way. Preserve both frame counts.
+  if (plan.exact)
+    return framesBefore < 0.49999 || segment.frames - framesBefore < 0.49999
+      ? null
+      : { index: position.index, at: Math.round(sourceMs * 3) / 3 };
   const nearest = [
     Math.round(sourceMs),
     Math.floor(sourceMs),
@@ -99,8 +116,12 @@ export function insertAtFrame(clips, plan, frame, copy, rightId) {
 export function timelineCues(timeline, sources) {
   return timeline.segments
     .flatMap((segment) => {
-      const begin = frameMs(segment.firstFrame);
-      const end = frameMs(segment.firstFrame + segment.frames);
+      const begin = timeline.exact
+        ? exactMs(segment.firstFrame)
+        : frameMs(segment.firstFrame);
+      const end = timeline.exact
+        ? exactMs(segment.firstFrame + segment.frames)
+        : frameMs(segment.firstFrame + segment.frames);
       return (sources[segment.source].cues || []).flatMap((cue) => {
         const start = Math.max(segment.start, cue.start);
         const stop = Math.min(segment.end, cue.end);
@@ -109,8 +130,10 @@ export function timelineCues(timeline, sources) {
           stop === segment.end
             ? end
             : Math.min(end, begin + stop - segment.start);
-        if (stop <= start || to <= from) return [];
-        return [{ start: from, end: to, text: cue.text }];
+        const startMs = Math.round(from),
+          endMs = Math.round(to);
+        if (stop <= start || endMs <= startMs) return [];
+        return [{ start: startMs, end: endMs, text: cue.text }];
       });
     })
     .sort((a, b) => a.start - b.start || a.end - b.end);
@@ -120,13 +143,24 @@ export const containers = Object.freeze({
   mp4: { video: "avc", audio: "aac", mime: "video/mp4" },
   webm: { video: "vp8", audio: "opus", mime: "video/webm" },
 });
-export function exportSettings(quality, resolution, orientation) {
-  const side = resolution === "1080" ? 1080 : 720;
-  const long = side === 1080 ? 1920 : 1280;
+export function exportSettings(quality, resolution, orientation, fps) {
+  const side =
+    Number(resolution) === 1440
+      ? 1440
+      : Number(resolution) === 1080
+        ? 1080
+        : 720;
+  const long = (side * 16) / 9;
   const width = orientation === "portrait" ? side : long;
   const height = orientation === "portrait" ? long : side;
   const bitrate =
     { low: 1_250_000, standard: 2_500_000, high: 5_000_000 }[quality] *
-    (side === 1080 ? 1.8 : 1);
-  return { width, height, bitrate };
+    { 720: 1, 1080: 1.8, 1440: 3.2 }[side] *
+    (Number(fps) === 60 ? 1.6 : 1);
+  return {
+    width,
+    height,
+    bitrate: Math.round(bitrate),
+    ...(fps === undefined ? {} : { fps: Number(fps) === 60 ? 60 : 30 }),
+  };
 }

@@ -1,13 +1,14 @@
 import { $ } from "./common.js";
 import { el } from "./advanced-ui.js";
 import { uiAttr, uiMsg, uiText } from "../site/ui.js";
-import { frameMs, frameRate, makeTimeline } from "./video-timeline.js";
+import { frameMs, makeTimeline, units, exactMs } from "./video-timeline.js";
+import { maxFrames } from "./video-mix.js";
 import {
-  audioLanes,
-  audioLength,
-  maxFrames,
-  validateAudioClips,
-} from "./video-mix.js";
+  clipSpan,
+  clipEnd,
+  kindOf,
+  validatePositioned,
+} from "./video-assembly.js";
 import { videoIcon } from "./video-icons.js";
 
 const zoomLevels = [1, 2, 4, 8];
@@ -28,8 +29,11 @@ export function createVideoTrack({
   select,
   commit,
   commitAudio,
+  transferVideo,
   isBusy,
   snapping,
+  step,
+  captionName,
   message,
 }) {
   const scroll = $("#video-scroll"),
@@ -39,8 +43,10 @@ export function createVideoTrack({
   const needle = $("#video-needle"),
     insert = $("#video-insert"),
     snap = $("#video-snap-line");
-  const endMark = $("#video-video-end"),
-    audioRows = audioLanes.map((id) => $("#video-audio-lane-" + id));
+  const endMark = $("#video-video-end");
+  let trackDefs = [];
+  const rows = new Map();
+  const nudge = (value) => Math.round(value / step()) * step();
   let plan = null,
     clips = [],
     audio = [],
@@ -55,7 +61,7 @@ export function createVideoTrack({
     return Math.max(
       1,
       layout?.frames || 0,
-      ...audio.map((clip) => clip.at + audioLength(clip)),
+      ...audio.map((clip) => clip.at + clipSpan(clip)),
     );
   }
   function percent(value, layout) {
@@ -85,7 +91,7 @@ export function createVideoTrack({
   }
   function paintAudio(clip) {
     const node = clipNodes.get(clip.id);
-    const length = audioLength(clip);
+    const length = clipSpan(clip);
     node.style.left = percent(clip.at, plan);
     node.style.width = percent(length, plan);
     node.style.setProperty(
@@ -112,7 +118,7 @@ export function createVideoTrack({
     for (const [i, s] of (plan?.segments || []).entries())
       if (clips[i].id !== id) edges.push(s.firstFrame, s.firstFrame + s.frames);
     for (const c of audio)
-      if (c.id !== id) edges.push(c.at, c.at + audioLength(c));
+      if (c.id !== id) edges.push(c.at, c.at + clipSpan(c));
     for (const edge of edges) {
       const delta = Math.abs(edge - at);
       if (delta <= distance) {
@@ -175,7 +181,7 @@ export function createVideoTrack({
       Math.max(1, Math.floor(track.clientWidth / 110)),
     );
     for (let i = 0; i <= parts; i++) {
-      const at = Math.round((i * extent()) / parts);
+      const at = nudge((i * extent()) / parts);
       const node = el("span", "", {
         class: "video-tick",
         "aria-hidden": "true",
@@ -210,7 +216,7 @@ export function createVideoTrack({
   function frameAt(clientX, layout = plan) {
     const rect = track.getBoundingClientRect();
     return clamp(
-      Math.round(((clientX - rect.left) / rect.width) * extent(layout)),
+      nudge(((clientX - rect.left) / rect.width) * extent(layout)),
       0,
       extent(layout),
     );
@@ -224,19 +230,49 @@ export function createVideoTrack({
       seek(next);
       return;
     }
+    if (type === "move") {
+      const over = (row) => {
+        const box = row.getBoundingClientRect();
+        return active.y >= box.top && active.y < box.bottom;
+      };
+      const from = active.audio ? audio[active.index] : clips[active.index];
+      const destination =
+        active.audio && kindOf(from.lane) === "video" && over(lane)
+          ? 0
+          : !active.audio
+            ? trackDefs.find(
+                (def) => def.kind === "video" && over(rows.get(def.id)),
+              )?.id
+            : undefined;
+      active.transfer =
+        destination === undefined
+          ? null
+          : { id: from.id, to: destination, at: snapped(frameAt(x), from.id) };
+      if (active.transfer) {
+        insert.hidden = false;
+        insert.style.top =
+          (destination === 0 ? lane : rows.get(destination)).offsetTop + "px";
+        insert.style.left = percent(active.transfer.at, plan);
+        return;
+      }
+      insert.style.top = "";
+    }
     if (active.audio) {
       const clip = audio[active.index];
-      const length = audioLength(clip);
+      const length = clipSpan(clip);
       const change =
         ((x - active.from + scroll.scrollLeft - active.scroll) * active.span) /
         active.width;
-      const delta = Math.round(change);
+      const delta = nudge(change);
       let updated = clip;
       if (type === "move") {
-        const row = audioRows.find((row) => {
-          const box = row.getBoundingClientRect();
-          return active.y >= box.top && active.y < box.bottom;
-        });
+        const target = trackDefs
+          .filter((lane) => lane.kind === kindOf(clip.lane))
+          .find(({ id }) => {
+            const row = rows.get(id);
+            const box = row.getBoundingClientRect();
+            return active.y >= box.top && active.y < box.bottom;
+          });
         const at = clamp(
           snapped(clip.at + delta, clip.id),
           0,
@@ -245,33 +281,44 @@ export function createVideoTrack({
         updated = {
           ...clip,
           at,
-          lane: Number(row?.dataset.audioLane || clip.lane),
+          lane: target?.id ?? clip.lane,
         };
       } else if (type === "start") {
         const shift = snapped(clip.at + delta, clip.id) - clip.at;
-        const start = clamp(clip.start + frameMs(shift), 0, clip.end - 1);
-        updated = {
-          ...clip,
-          start,
-          at: clip.at + length - audioLength({ ...clip, start }),
-        };
+        const min = exactMs(Math.min(step(), length));
+        const low =
+          kindOf(clip.lane) === "captions" ? clip.start - exactMs(clip.at) : 0;
+        const start = clamp(clip.start + exactMs(shift), low, clip.end - min);
+        if (kindOf(clip.lane) === "captions")
+          updated = {
+            ...clip,
+            start: 0,
+            end: clip.end - start,
+            at: clip.at + units(start - clip.start),
+          };
+        else
+          updated = {
+            ...clip,
+            start,
+            at: clip.at + length - clipSpan({ ...clip, start }),
+          };
       } else {
         const stop = snapped(clip.at + length + delta, clip.id);
         const end = clamp(
-          clip.end + frameMs(stop - clip.at - length),
-          clip.start + 1,
-          sources[clip.source].duration,
+          clip.end + exactMs(stop - clip.at - length),
+          clip.start + exactMs(Math.min(step(), length)),
+          sources[clip.source]?.duration ?? exactMs(maxFrames - clip.at),
         );
         updated = { ...clip, end };
       }
       const drafts = audio.with(active.index, updated);
       try {
-        validateAudioClips(drafts, sources);
+        validatePositioned(drafts, sources, trackDefs);
         active.invalid = false;
         active.draft = drafts;
         const node = clipNodes.get(clip.id);
-        const current = audioRows[clip.lane - 1].getBoundingClientRect();
-        const nextRow = audioRows[updated.lane - 1].getBoundingClientRect();
+        const current = rows.get(clip.lane).getBoundingClientRect();
+        const nextRow = rows.get(updated.lane).getBoundingClientRect();
         node.style.transform =
           "translateY(" + (nextRow.top - current.top) + "px)";
         node.toggleAttribute("data-dragging", true);
@@ -297,14 +344,14 @@ export function createVideoTrack({
       }
       active.drop = drop;
       insert.style.left = percent(
-        plan.segments[drop]?.firstFrame ?? plan.frames,
+        plan.segments[drop]?.firstFrame ?? plan.primary?.frames ?? plan.frames,
         plan,
       );
       insert.hidden = false;
       return;
     }
     const clip = clips[active.index];
-    const delta = Math.round(
+    const delta = nudge(
       ((x - active.from + scroll.scrollLeft - active.scroll) * active.span) /
         active.width,
     );
@@ -313,8 +360,8 @@ export function createVideoTrack({
     const direction = type === "start" ? -1 : 1;
     const change =
       (snapped(end + delta * direction, clip.id) - end) * direction;
-    const next = clip[type] + frameMs(change);
-    const minLength = Math.min(frameMs(1), clip.end - clip.start);
+    const next = clip[type] + exactMs(change);
+    const minLength = Math.min(exactMs(step()), clip.end - clip.start);
     const time =
       type === "start"
         ? clamp(next, 0, clip.end - minLength)
@@ -324,7 +371,7 @@ export function createVideoTrack({
     const drafted = clips.with(active.index, { ...clip, [type]: time });
     let layout;
     try {
-      layout = makeTimeline(drafted, sources);
+      layout = makeTimeline(drafted, sources, true);
     } catch {
       active.invalid = true;
       showTrimLimit();
@@ -413,8 +460,18 @@ export function createVideoTrack({
     cancelAnimationFrame(motion);
     motion = 0;
     insert.hidden = snap.hidden = true;
+    insert.style.top = "";
     if (active.target.hasPointerCapture(active.pointer))
       active.target.releasePointerCapture(active.pointer);
+    if (!cancelled && active.moved && active.transfer) {
+      const { id, to, at } = active.transfer;
+      const node = clipNodes.get(id);
+      delete node.dataset.dragging;
+      node.style.transform = "";
+      paintGeometry();
+      transferVideo(id, to, at);
+      return;
+    }
     if (active.audio) {
       const clip = audio[active.index];
       const replacement = active.draft?.[active.index];
@@ -485,10 +542,10 @@ export function createVideoTrack({
   ruler.onkeydown = (event) => {
     if (!plan || isBusy()) return;
     const keys = {
-      ArrowLeft: frame - 1,
-      ArrowDown: frame - 1,
-      ArrowRight: frame + 1,
-      ArrowUp: frame + 1,
+      ArrowLeft: nudge(frame) - step(),
+      ArrowDown: nudge(frame) - step(),
+      ArrowRight: nudge(frame) + step(),
+      ArrowUp: nudge(frame) + step(),
       Home: 0,
       End: plan.frames,
     };
@@ -524,6 +581,7 @@ export function createVideoTrack({
     id,
     nextFrame,
     nextAudio = [],
+    defs = [],
   ) {
     audio = nextAudio;
     clips = nextClips;
@@ -531,7 +589,19 @@ export function createVideoTrack({
     plan = nextPlan;
     clipNodes.clear();
     lane.replaceChildren();
-    audioRows.forEach((row) => row.replaceChildren());
+    trackDefs = defs;
+    for (const node of rows.values()) node.remove();
+    rows.clear();
+    for (const lane of defs) {
+      const node = el("div", "", {
+        class: "video-lane video-" + lane.kind + "-lane",
+      });
+      node.id = "video-" + lane.kind + "-lane-" + lane.id;
+      node.dataset.lane = lane.id;
+      node.toggleAttribute("data-lane-hidden", Boolean(lane.hidden));
+      rows.set(lane.id, node);
+      endMark.before(node);
+    }
     for (const [i, clip, isAudio] of [
       ...clips.map((c, i) => [i, c, false]),
       ...audio.map((c, i) => [i, c, true]),
@@ -541,8 +611,19 @@ export function createVideoTrack({
         class: "video-clip-body",
         type: "button",
       });
+      const type = isAudio ? kindOf(clip.lane) : "video";
       const label = isAudio
-        ? uiMsg("Audio {0}: {1}", [clip.lane, sources[clip.source].file.name])
+        ? type === "captions"
+          ? clip.text
+          : type === "audio"
+            ? uiMsg("Audio {0}: {1}", [
+                clip.lane,
+                sources[clip.source].file.name,
+              ])
+            : uiMsg("{0}: {1}", [
+                captionName(clip.lane),
+                sources[clip.source].file.name,
+              ])
         : uiMsg("Clip {0}: {1}", [i + 1, sources[clip.source].file.name]);
       uiText(body, label);
       uiAttr(body, "aria-label", label);
@@ -558,7 +639,7 @@ export function createVideoTrack({
       const right = control("video-trim", "Trim end", "trim_end", "end");
       const grip = control(
         "video-grip",
-        isAudio ? "Move audio clip" : "Drag clip to reorder",
+        isAudio ? "Move timeline clip" : "Drag clip to reorder",
         "grip",
         "move",
       );
@@ -571,9 +652,9 @@ export function createVideoTrack({
       };
       item.dataset.clipId = clip.id;
       item.append(left, body, grip, right);
-      (isAudio ? audioRows[clip.lane - 1] : lane).append(item);
+      (isAudio ? rows.get(clip.lane) : lane).append(item);
       clipNodes.set(clip.id, item);
-      if (isAudio) {
+      if (isAudio && type === "audio") {
         item.dataset.audioClip = "";
         item.prepend(
           el("canvas", "", { width: 128, height: 24, "aria-hidden": "true" }),

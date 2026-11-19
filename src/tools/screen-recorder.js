@@ -6,7 +6,37 @@ import {
   mediaError,
   clockText,
 } from "./media-capture.js";
+import { exportSettings } from "./video-timeline.js";
 import { uiJoin, uiFrom, uiMsg, uiText, uiConfirm } from "../site/ui.js";
+
+const MAX_BYTES = 250_000_000;
+const MAX_SECONDS = 600;
+const qualityControls = ["resolution", "fps", "quality"].map((key) =>
+  $("#screen-" + key),
+);
+const captureSettings = () =>
+  exportSettings(
+    $("#screen-quality").value,
+    $("#screen-resolution").value,
+    "landscape",
+    $("#screen-fps").value,
+  );
+function estimateDuration() {
+  const { bitrate } = captureSettings();
+  const seconds = Math.min(
+    MAX_SECONDS,
+    Math.floor((MAX_BYTES * 8) / (bitrate + 128000)),
+  );
+  uiText(
+    $("#screen-estimate"),
+    uiMsg("Estimated recording limit at this quality: {0}", [
+      clockText(seconds),
+    ]),
+  );
+}
+for (const input of qualityControls)
+  input.addEventListener("change", estimateDuration);
+estimateDuration();
 
 let attempt = null,
   result = null,
@@ -30,6 +60,7 @@ function metrics(seconds, bytes) {
 }
 function controls() {
   start.disabled = !supported || attempt !== null;
+  for (const control of qualityControls) control.disabled = Boolean(attempt);
   cancel.hidden = !attempt?.phase;
   uiText(
     cancel,
@@ -53,6 +84,43 @@ function showResult() {
   placeholder.hidden = Boolean(result);
   metrics(result?.seconds ?? 0, result?.blob.size ?? 0);
   uiText($("#screen-specs"), result?.specs ?? "");
+}
+async function readFileSpecs(saved) {
+  let input;
+  try {
+    const { Input, BlobSource, MP4, WEBM } =
+      await import("/vendor/mediabunny-video-1.66.1.mjs");
+    if (result !== saved) return;
+    input = new Input({
+      formats: [MP4, WEBM],
+      source: new BlobSource(saved.blob),
+    });
+    const track = await input.getPrimaryVideoTrack();
+    if (!track) throw Error();
+    const [width, height, stats] = await Promise.all([
+      track.getDisplayWidth(),
+      track.getDisplayHeight(),
+      track.computePacketStats(),
+    ]);
+    if (result !== saved) return;
+    const fps = stats.averagePacketRate;
+    if (!width || !height || !Number.isFinite(fps) || fps <= 0) throw Error();
+    saved.specs = uiMsg("Recorded file: {0} × {1} · {2} fps average", [
+      width,
+      height,
+      Math.round(fps * 10) / 10,
+    ]);
+  } catch {
+    if (result !== saved) return;
+    saved.specs = uiJoin([
+      saved.specs,
+      " · ",
+      uiMsg("Recorded file frame rate could not be verified."),
+    ]);
+  } finally {
+    input?.dispose();
+    if (result === saved && !attempt) uiText($("#screen-specs"), saved.specs);
+  }
 }
 function clearResult() {
   if (result) URL.revokeObjectURL(result.url);
@@ -123,13 +191,13 @@ start.onclick = async () => {
   try {
     const includeShared = $("#screen-shared-audio").checked,
       includeMic = $("#screen-microphone").checked,
-      smaller = window.KenseiRecorderPreset === 720;
+      requested = captureSettings();
     // 打开选择器之前不等待异步操作，保留浏览器要求的用户激活。
     const screen = await navigator.mediaDevices.getDisplayMedia({
       video: {
-        width: { ideal: smaller ? 1280 : 1920, max: smaller ? 1280 : 1920 },
-        height: { ideal: smaller ? 720 : 1080, max: smaller ? 720 : 1080 },
-        frameRate: { ideal: 30, max: 30 },
+        width: { ideal: requested.width, max: requested.width },
+        height: { ideal: requested.height, max: requested.height },
+        frameRate: { ideal: requested.fps, max: requested.fps },
       },
       audio: includeShared,
       systemAudio: includeShared ? "include" : "exclude",
@@ -206,17 +274,27 @@ start.onclick = async () => {
     const settings = screenTrack.getSettings?.() || {},
       hasShared = screen.getAudioTracks().length > 0;
     const parts = [
+      uiMsg("Requested {0} × {1} at {2} fps", [
+        requested.width,
+        requested.height,
+        requested.fps,
+      ]),
       settings.width && settings.height
         ? settings.width + " × " + settings.height
         : "Size decided by browser",
       settings.frameRate
-        ? Math.round(settings.frameRate) + " fps"
+        ? uiMsg("Capture track: {0} fps", [
+            Math.round(settings.frameRate * 10) / 10,
+          ])
         : "Frame rate decided by browser",
       hasShared ? "Shared audio on" : "No shared audio",
       current.mic ? "Microphone on" : "Microphone off",
     ];
     const specs = uiJoin(
-      parts.flatMap((part, index) => [...(index ? [" · "] : []), uiFrom(part)]),
+      parts.flatMap((part, index) => [
+        ...(index ? [" · "] : []),
+        typeof part === "string" ? uiFrom(part) : part,
+      ]),
     );
     metrics(0, 0);
     uiText($("#screen-specs"), specs);
@@ -232,8 +310,9 @@ start.onclick = async () => {
     current.phase = null;
     current.recording = makeRecording(current.mixed, {
       types: VIDEO_TYPES,
-      maxSeconds: 600,
-      maxBytes: 250000000,
+      maxSeconds: MAX_SECONDS,
+      maxBytes: MAX_BYTES,
+      videoBitsPerSecond: requested.bitrate,
       onTick({ seconds, bytes }) {
         metrics(seconds, bytes);
       },
@@ -256,6 +335,7 @@ start.onclick = async () => {
         const url = URL.createObjectURL(blob);
         clearResult();
         result = { blob, url, seconds: detail.seconds, specs };
+        readFileSpecs(result);
         video.src = url;
         unsaved = true;
         finish(current);
