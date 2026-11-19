@@ -73,7 +73,11 @@ export function createVideoTrack({ seek, pause, select, commit, isBusy }) {
   function ticks() {
     ruler.replaceChildren();
     if (!plan) return;
-    const parts = Math.min(plan.frames, 3 * zoomLevels[zoom]);
+    const parts = Math.min(
+      plan.frames,
+      3 * zoomLevels[zoom],
+      Math.max(1, Math.floor(track.clientWidth / 110)),
+    );
     for (let i = 0; i <= parts; i++) {
       const at = Math.round((i * plan.frames) / parts);
       const node = el("span", "", {
@@ -291,7 +295,7 @@ export function createVideoTrack({ seek, pause, select, commit, isBusy }) {
       Home: 0,
       End: plan.frames,
     };
-    if (!(event.key in keys)) return;
+    if (!Object.hasOwn(keys, event.key)) return;
     event.preventDefault();
     seek(keys[event.key]);
     paintPosition(frame, plan, true);
@@ -369,12 +373,14 @@ export function createVideoTrack({ seek, pause, select, commit, isBusy }) {
         $("#" + id).disabled = true;
     }
   }
-  new ResizeObserver(() => paintGeometry()).observe(scroll);
+  new ResizeObserver(() => {
+    ticks();
+    paintGeometry();
+  }).observe(scroll);
   return {
     render,
     markSelected,
     paintPosition,
     focus,
-    cancel: () => finish(null, true),
   };
 }

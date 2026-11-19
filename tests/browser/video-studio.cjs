@@ -191,6 +191,18 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
       .first()
       .getByText("Clip 1: tall.webm", { exact: true })
       .waitFor();
+    await cards
+      .first()
+      .getByRole("button", { name: "Move clip later", exact: true })
+      .press("Enter");
+    await cards
+      .last()
+      .getByRole("button", { name: "Move clip earlier", exact: true })
+      .press("Enter");
+    await cards
+      .first()
+      .getByText("Clip 1: tall.webm", { exact: true })
+      .waitFor();
     const trim = blocks.first().locator(".video-trim").first();
     await trim.scrollIntoViewIfNeeded();
     const edge = await trim.boundingBox();

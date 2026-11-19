@@ -231,6 +231,7 @@
   outline-offset: 2px;
 }
 .video-clip-summary {
+  justify-content: flex-start;
   text-align: start;
   height: auto;
   overflow-wrap: anywhere;
