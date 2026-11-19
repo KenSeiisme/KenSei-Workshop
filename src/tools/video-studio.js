@@ -5,9 +5,23 @@ import { uiAttr, uiMsg, uiError, uiText, uiOption } from "../site/ui.js";
 import { parseSubtitles, serialize } from "./subtitle-core.js";
 import { createVideoPreview } from "./video-preview.js";
 import { createVideoTrack } from "./video-track-editor.js";
+import { createVideoMonitor } from "./video-monitor.js";
+import { videoIcon } from "./video-icons.js";
+import {
+  audioCut,
+  audioLanes,
+  audioLength,
+  defaultLevels,
+  editHistory,
+  maxFrames,
+  toFrame,
+  validateAudioClips,
+  videoMix,
+} from "./video-mix.js";
 import {
   containers,
   exportSettings,
+  frameMs,
   cutClips,
   insertAtFrame,
   timelineCut,
@@ -41,6 +55,33 @@ let plan = null,
   selected = null,
   cursor = 0,
   clipboard;
+let audioClips = [],
+  levels = defaultLevels(),
+  mix,
+  activeLane = 0,
+  snapEnabled = true,
+  monitorMuted = false;
+const history = editHistory(),
+  mediaCache = new Map();
+let waveWorker,
+  leaving = false;
+const mobile = matchMedia("(max-width: 768px)");
+if (mobile.matches) $(".video-export").open = false;
+const players = [$("#video-preview"), $("#video-preview-next")];
+const mixerLabels = ["Video sound", "Audio 1", "Audio 2"];
+const monitor = createVideoMonitor(players, (error) => {
+  const node = $("#video-preview-audio-status");
+  uiText(
+    node,
+    error.cause
+      ? uiMsg(error.message, [error.cause])
+      : uiMsg(
+          "Audio preview is unavailable. Editing and export are still available.",
+        ),
+  );
+  node.hidden = false;
+});
+
 const worker = () =>
   new Worker("/tool-scripts/video-export-worker.js", { type: "module" });
 const settings = () => ({
@@ -53,7 +94,7 @@ const newId = () => crypto.randomUUID();
 const makeClip = (source, end) => ({ id: newId(), source, start: 0, end });
 const transport = createVideoPreview(
   {
-    players: [$("#video-preview"), $("#video-preview-next")],
+    players,
     caption: $("#video-caption"),
     empty: $("#video-preview-empty"),
   },
@@ -64,6 +105,10 @@ const transport = createVideoPreview(
       updateControls();
     },
     onState: updateControls,
+    onAudioFrame(frame, video) {
+      if (mix) monitor.update(mix, sources, frame, video);
+    },
+    onSilence: monitor.silence,
     onError(error, loading = false) {
       $("#video-preview-feedback").hidden = !error && !loading;
       $("#video-retry-preview").hidden = !error;
@@ -83,9 +128,236 @@ const track = createVideoTrack({
   pause: transport.pause,
   select: selectClip,
   commit,
+  commitAudio(next, id, focus) {
+    return commitSound(next, id, undefined, focus);
+  },
+  snapping: () => snapEnabled,
+  message(value, error = false) {
+    editStatus(value ? uiMsg(value) : "", error);
+  },
   isBusy,
 });
 
+function snapshot() {
+  return {
+    sources,
+    clips,
+    audioClips,
+    levels,
+    selected,
+    activeLane,
+    cursor,
+    orientation: orientation.value,
+  };
+}
+function collectMedia() {
+  function referenced() {
+    return new Set(
+      [snapshot(), ...history.states()].flatMap((state) =>
+        Object.values(state.sources).map((asset) => asset.url),
+      ),
+    );
+  }
+  let used = referenced();
+  while (
+    [...used].reduce((sum, url) => sum + mediaCache.get(url).file.size, 0) >
+    videoLimits.totalBytes
+  ) {
+    history.trim();
+    used = referenced();
+  }
+  for (const [url, asset] of mediaCache) {
+    if (used.has(url)) continue;
+    monitor.release(url);
+    URL.revokeObjectURL(url);
+    mediaCache.delete(url);
+    if (waveWorker?.asset === asset) waveWorker.cancel();
+  }
+}
+function restore(action) {
+  if (isBusy()) return;
+  const saved = history[action](snapshot());
+  if (!saved) return;
+  transport.pause();
+  ({ sources, clips, audioClips, levels, selected, activeLane, cursor } =
+    saved);
+  orientation.value = saved.orientation;
+  collectMedia();
+  invalidate();
+  renderSources();
+  refreshTimeline();
+  updateFormats();
+  scanWaveforms();
+  editStatus(action === "undo" ? uiMsg("Edit undone.") : uiMsg("Edit redone."));
+}
+function scanWaveforms() {
+  if (waveWorker || isBusy() || leaving) return;
+  const entry = Object.entries(sources).find(
+    ([, asset]) => asset.kind === "audio" && !asset.peaks && !asset.waveFailed,
+  );
+  if (!entry) return;
+  const [id, asset] = entry;
+  const task = request({ action: "waveform", file: asset.file }, "waveform");
+  waveWorker = { ...task, asset };
+  task.promise
+    .then(({ peaks }) => {
+      asset.peaks = peaks;
+      if (sources[id] === asset) track.updateWaveform(id);
+    })
+    .catch((error) => {
+      if (error.name !== "AbortError") asset.waveFailed = true;
+    })
+    .finally(() => {
+      task.job.terminate();
+      waveWorker = null;
+      scanWaveforms();
+    });
+}
+function whichAudio(id = selected) {
+  return audioClips.find((clip) => clip.id === id);
+}
+function audioAtCursor() {
+  return audioClips.find(
+    (clip) =>
+      clip.lane === activeLane &&
+      cursor > clip.at &&
+      cursor < clip.at + audioLength(clip),
+  );
+}
+function currentCut() {
+  if (!activeLane) return timelineCut(plan, cursor);
+  const clip = audioAtCursor();
+  const at = clip && audioCut(clip, cursor);
+  return at == null ? null : { clip, at };
+}
+function findAddedAudio(
+  id,
+  assets = sources,
+  existing = audioClips,
+  length = plan?.frames || 0,
+) {
+  if (cursor >= length) return null;
+  const end = Math.min(assets[id].duration, frameMs(length - cursor));
+  const startLane = activeLane || 1;
+  for (const lane of [startLane, startLane === 1 ? 2 : 1]) {
+    const clip = {
+      id: newId(),
+      source: id,
+      lane,
+      at: cursor,
+      start: 0,
+      end,
+      volume: 100,
+    };
+    try {
+      validateAudioClips([...existing, clip], assets);
+      return clip;
+    } catch {}
+  }
+  return null;
+}
+function commitSound(next, id, frame = cursor, focus) {
+  if (isBusy()) return false;
+  try {
+    validateAudioClips(next, sources);
+  } catch (error) {
+    editStatus(uiError(error), true);
+    return false;
+  }
+  history.push(snapshot());
+  audioClips = next;
+  selected = id;
+  activeLane = whichAudio()?.lane ?? activeLane;
+  invalidate();
+  editStatus("");
+  refreshTimeline(frame);
+  updateFormats();
+  collectMedia();
+  if (focus) track.focus(id, focus);
+  return true;
+}
+function renderTrackLabels() {
+  const labels = $("#video-track-labels");
+  if (!labels.childElementCount)
+    for (const [index, label] of mixerLabels.entries()) {
+      const b = button(index ? label : "Video track", () => {
+        activeLane = index;
+        selected = (
+          index ? audioClips.find((clip) => clip.lane === index) : clips[0]
+        )?.id;
+        renderClips();
+        track.markSelected(selected);
+        paintTrackLabels();
+        updateControls();
+      });
+      b.dataset.videoLane = index;
+      labels.append(b);
+    }
+  paintTrackLabels();
+}
+function paintTrackLabels() {
+  for (const b of $("#video-track-labels").children)
+    b.setAttribute("aria-pressed", Number(b.dataset.videoLane) === activeLane);
+}
+function updateMix(next) {
+  const previous = snapshot();
+  history.push(previous);
+  levels = next;
+  mix = videoMix(plan, audioClips, levels, sources);
+  invalidate();
+  updateSummary();
+  updateFormats();
+  collectMedia();
+}
+function renderMixer() {
+  const mixer = $("#video-track-mixer");
+  mixer.replaceChildren();
+  for (const [index, label] of mixerLabels.entries()) {
+    const level = levels[index];
+    const input = el("input", "", {
+      type: "range",
+      min: 0,
+      max: 100,
+      value: level.volume,
+    });
+    uiAttr(input, "aria-label", uiMsg("{0} volume", [uiMsg(label)]));
+    const percent = el("output");
+    percent.value = level.volume + "%";
+    const b = button("", () => {
+      if (isBusy()) return;
+      updateMix(
+        levels.with(index, { ...levels[index], muted: !levels[index].muted }),
+      );
+      styleMute();
+    });
+    function styleMute() {
+      const muted = levels[index].muted;
+      videoIcon(
+        b,
+        muted ? "mute" : "sound",
+        uiMsg(muted ? "Unmute {0}" : "Mute {0}", [uiMsg(label)]),
+      );
+      b.setAttribute("aria-pressed", muted);
+    }
+    input.oninput = () => {
+      percent.value = input.value + "%";
+      mix = videoMix(
+        plan,
+        audioClips,
+        levels.with(index, { ...levels[index], volume: +input.value }),
+        sources,
+      );
+    };
+    input.onchange = () => {
+      if (!isBusy() && levels[index].volume !== +input.value)
+        updateMix(
+          levels.with(index, { ...levels[index], volume: +input.value }),
+        );
+    };
+    styleMute();
+    mixer.append(row(el("span", label), b, input, percent));
+  }
+}
 function invalidate() {
   if (resultUrl) URL.revokeObjectURL(resultUrl);
   resultUrl = null;
@@ -102,7 +374,7 @@ function request(task, receive) {
     abort = () => reject(new DOMException("Cancelled", "AbortError"));
     job.onmessage = ({ data }) =>
       data.type === "error"
-        ? reject(Error(data.message))
+        ? reject(Error(data.message, { cause: data.file }))
         : data.type === receive && resolve(data);
     job.onerror = (event) => {
       event.preventDefault();
@@ -124,6 +396,7 @@ async function importFiles(
   sidecar,
   current = () => true,
   replace = false,
+  kind = "video",
 ) {
   if (!files.length || isBusy()) return false;
   const prior = replace ? {} : sources;
@@ -131,20 +404,28 @@ async function importFiles(
     files.reduce((sum, file) => sum + file.size, 0) +
     Object.values(prior).reduce((sum, source) => sum + source.file.size, 0);
   if (
-    files.length + Object.keys(prior).length > videoLimits.sources ||
+    files.length +
+      Object.values(prior).filter((asset) => asset.kind === kind).length >
+      videoLimits.sources ||
     total > videoLimits.totalBytes ||
     files.some(
       (file) =>
-        file.size > videoLimits.fileBytes || !/\.(mp4|webm)$/i.test(file.name),
+        file.size > videoLimits.fileBytes ||
+        !(kind === "audio" ? /\.(mp3|wav|m4a)$/i : /\.(mp4|webm)$/i).test(
+          file.name,
+        ),
     )
   ) {
     throw Error(
-      "Choose up to six MP4 or WebM files, 250 MB each and 500 MB in total.",
+      kind === "audio"
+        ? "Choose up to six MP3, WAV or AAC M4A files within the shared 500 MB limit."
+        : "Choose up to six MP4 or WebM files, 250 MB each and 500 MB in total.",
     );
   }
   const imported = {};
   const token = ++generation;
   importing = true;
+  waveWorker?.cancel();
   transport.pause();
   busy(true);
   try {
@@ -153,30 +434,42 @@ async function importFiles(
       if (token !== generation || !current()) return false;
       status(uiMsg("Reading {0}…", [file.name]));
       const { job, promise, cancel } = request(
-        { action: "probe", file },
+        { action: kind === "audio" ? "audio-probe" : "probe", file },
         "metadata",
       );
       probeWorker = { cancel };
       let metadata;
       try {
         metadata = await promise;
+      } catch (error) {
+        if (kind === "audio" && error.name !== "AbortError")
+          throw Error("Could not decode {0}.", { cause: file.name });
+        throw error;
       } finally {
         job.terminate();
       }
       if (token !== generation || !current()) return false;
-      imported[newId()] = { file, ...metadata, cues: subtitles };
+      imported[newId()] = { file, ...metadata, kind, cues: subtitles };
     }
     if (!current()) return false;
+    history.push(snapshot());
     if (replace) {
       transport.discard();
-      Object.values(sources).forEach((asset) => URL.revokeObjectURL(asset.url));
       clipboard = null;
+      audioClips = [];
+      levels = defaultLevels();
+      activeLane = 0;
     }
     const next = replace ? [] : [...clips];
     let nextPlan = replace ? null : plan;
     for (const [id, source] of Object.entries(imported)) {
       source.url = URL.createObjectURL(source.file);
-      if (!Object.keys(prior).length && id === Object.keys(imported)[0])
+      mediaCache.set(source.url, source);
+      if (kind === "audio") continue;
+      if (
+        !Object.values(prior).some((asset) => asset.kind === "video") &&
+        id === Object.keys(imported)[0]
+      )
         orientation.value = source.portrait ? "portrait" : "landscape";
       const used = next.reduce((sum, c) => sum + c.end - c.start, 0);
       const end = Math.min(
@@ -190,10 +483,30 @@ async function importFiles(
       }
     }
     sources = { ...prior, ...imported };
+    if (kind === "audio") {
+      let added = false;
+      for (const id of Object.keys(imported)) {
+        const clip = findAddedAudio(id);
+        if (!clip) continue;
+        audioClips = [...audioClips, clip];
+        selected = clip.id;
+        activeLane = clip.lane;
+        added = true;
+      }
+      if (added) invalidate();
+      status(
+        added
+          ? uiMsg("Audio added to the timeline.")
+          : uiMsg("Audio imported. Choose a free position on the timeline."),
+      );
+    }
     if (replace || next.length !== clips.length) invalidate();
     clips = next;
     if (replace) cursor = 0;
-    status(uiMsg("Videos ready. Set the clips you want to keep."));
+    if (kind === "video")
+      status(uiMsg("Videos ready. Set the clips you want to keep."));
+    if (mobile.matches && clips.length) $(".video-sources-panel").open = false;
+    collectMedia();
     return true;
   } catch (error) {
     if (token !== generation) return false;
@@ -206,21 +519,30 @@ async function importFiles(
       renderSources();
       refreshTimeline();
       updateFormats();
+      scanWaveforms();
     }
   }
 }
 
 function updateControls() {
   const enabled = !!plan && !isBusy();
-  const active = clips.find((clip) => clip.id === selected);
+  const active = clips.find((clip) => clip.id === selected) ?? whichAudio();
   prepare.disabled = !enabled || !available.includes(format.value);
-  $("#video-play").disabled = !enabled || transport.playing;
-  $("#video-stop").disabled = !transport.playing;
+  const play = $("#video-play");
+  play.disabled = !enabled;
+  const key = transport.playing ? "pause" : "play";
+  if (play.dataset.transport !== key) {
+    play.dataset.transport = key;
+    videoIcon(play, key, transport.playing ? "Pause preview" : "Play preview");
+  }
   $("#video-back-frame").disabled = !enabled || cursor === 0;
   $("#video-next-frame").disabled = !enabled || cursor >= plan.frames;
-  $("#video-split").disabled = !enabled || !timelineCut(plan, cursor);
+  $("#video-split").disabled = isBusy() || !currentCut();
+  $("#video-delete").disabled = isBusy() || !active;
+  $("#video-undo").disabled = isBusy() || !history.canUndo;
+  $("#video-redo").disabled = isBusy() || !history.canRedo;
   $("#video-duplicate").disabled = $("#video-copy").disabled =
-    !active || !enabled;
+    !active || isBusy();
   $("#video-paste").disabled = isBusy() || !sources[clipboard?.source];
   $("#video-srt").disabled = $("#video-vtt").disabled =
     !enabled || !cues.length;
@@ -230,7 +552,7 @@ function updateSummary() {
   const bytes = plan
     ? ((exportSettings(quality.value, resolution.value, orientation.value)
         .bitrate +
-        (clips.some((c) => sources[c.source].hasAudio) ? 128000 : 0)) *
+        (mix?.audible ? 128000 : 0)) *
         plan.duration) /
       8000
     : 0;
@@ -247,7 +569,7 @@ function updateSummary() {
 }
 
 async function updateFormats() {
-  const audio = clips.some((c) => sources[c.source].hasAudio);
+  const audio = !!mix?.audible;
   const key = plan ? JSON.stringify([settings(), audio]) : "";
   if (key === formatKey) return;
   formatKey = key;
@@ -324,11 +646,17 @@ function showFrame(frame) {
 function refreshTimeline(frame = cursor, keepFields = false) {
   plan = clips.length ? makeTimeline(clips, sources) : null;
   cues = plan ? timelineCues(plan, sources) : [];
-  if (!clips.some((c) => c.id === selected)) selected = clips[0]?.id;
+  mix = videoMix(plan, audioClips, levels, sources);
+  if (![...clips, ...audioClips].some((c) => c.id === selected))
+    selected = activeLane
+      ? audioClips.find((c) => c.lane === activeLane)?.id
+      : clips[0]?.id;
+  renderTrackLabels();
+  renderMixer();
   cursor = Math.min(frame, plan?.frames || 0);
   $("#video-stage").dataset.orientation = orientation.value;
   if (!keepFields) renderClips();
-  track.render(clips, sources, plan, selected, cursor);
+  track.render(clips, sources, plan, selected, cursor, audioClips);
   updateSummary();
   showFrame(cursor);
 }
@@ -342,31 +670,39 @@ function commit(next, id, frame = cursor, focus, keepFields = false) {
     editStatus(uiError(error), true);
     return false;
   }
+  const changed =
+    clips.length !== next.length || clips.some((clip, i) => clip !== next[i]);
+  if (changed) history.push(snapshot());
   selected = id;
+  activeLane = 0;
   if (frame === null)
     frame =
       nextPlan?.segments[next.findIndex((c) => c.id === id)]?.firstFrame ??
       cursor;
-  if (clips.length !== next.length || clips.some((clip, i) => clip !== next[i]))
-    invalidate();
+  if (changed) invalidate();
   clips = next;
   editStatus("");
   refreshTimeline(frame, keepFields);
   updateFormats();
   if (focus) track.focus(id, focus);
+  collectMedia();
   return true;
 }
 
 function selectClip(id, jump) {
   if (isBusy()) return;
   const index = clips.findIndex((clip) => clip.id === id);
-  if (index < 0) return;
+  const audio = whichAudio(id);
+  if (index < 0 && !audio) return;
+  activeLane = audio?.lane || 0;
+  paintTrackLabels();
   if (id !== selected) {
     selected = id;
     renderClips();
     track.markSelected(id);
   }
-  if (jump) {
+  if (jump && audio) showFrame(audio.at);
+  else if (jump) {
     const segment = plan.segments[index];
     showFrame(
       cursor < segment.firstFrame ||
@@ -384,6 +720,40 @@ function renderSources() {
     const card = el("div", "", { class: "video-item" });
     const title = el("strong");
     title.textContent = asset.file.name;
+    const remove = button("Remove source", () => {
+      if (isBusy()) return;
+      history.push(snapshot());
+      transport.discard(asset.url);
+      monitor.release(asset.url);
+      sources = Object.fromEntries(
+        Object.entries(sources).filter(([key]) => key !== id),
+      );
+      clips = clips.filter((clip) => clip.source !== id);
+      audioClips = audioClips.filter((clip) => clip.source !== id);
+      invalidate();
+      renderSources();
+      refreshTimeline();
+      updateFormats();
+      collectMedia();
+    });
+    videoIcon(remove, "trash", "Remove source");
+    if (asset.kind === "audio") {
+      const add = button("Add audio to timeline", () => {
+        const clip = findAddedAudio(id);
+        if (!clip) {
+          editStatus(
+            uiMsg("Choose a free audio position before the video ends."),
+            true,
+          );
+          return;
+        }
+        commitSound([...audioClips, clip], clip.id, clip.at);
+      });
+      videoIcon(add, "duplicate", "Add audio to timeline");
+      card.append(title, row(add, remove));
+      sourceList.append(card);
+      continue;
+    }
     const captions = el("input", "", { type: "file", accept: ".srt,.vtt" });
     const count = el("small");
     uiText(count, uiMsg("{0} subtitle cues", [asset.cues.length]));
@@ -395,9 +765,13 @@ function renderSources() {
         if (file.size > 5000000) throw Error("Subtitle file exceeds 5 MB.");
         const updated = parseSubtitles(await file.text());
         if (sources[id] !== asset || isBusy()) return;
-        asset.cues = updated;
+        history.push(snapshot());
+        sources = { ...sources, [id]: { ...asset, cues: updated } };
         uiText(count, uiMsg("{0} subtitle cues", [updated.length]));
-        if (!clips.some((clip) => clip.source === id)) return;
+        if (!clips.some((clip) => clip.source === id)) {
+          updateControls();
+          return;
+        }
         cues = plan ? timelineCues(plan, sources) : [];
         invalidate();
         showFrame(cursor);
@@ -419,18 +793,7 @@ function renderSources() {
       const clip = makeClip(id, Math.min(asset.duration, remaining));
       commit([...clips, clip], clip.id, null);
     });
-    const remove = button("Remove source", () => {
-      if (isBusy()) return;
-      transport.discard(asset.url);
-      URL.revokeObjectURL(asset.url);
-      delete sources[id];
-      if (clipboard?.source === id) clipboard = null;
-      commit(
-        clips.filter((c) => c.source !== id),
-        selected,
-      );
-      renderSources();
-    });
+    videoIcon(add, "duplicate", "Add clip");
     card.append(
       title,
       row(add, remove),
@@ -474,6 +837,26 @@ function editTime(index, type, input) {
   }
 }
 function renderClips() {
+  const picker = $("#video-clip-picker");
+  const all = [...clips, ...audioClips];
+  picker.replaceChildren(
+    uiOption(uiMsg("Select a clip"), ""),
+    ...all.map((clip) =>
+      uiOption(
+        clip.lane
+          ? uiMsg("Audio {0}: {1}", [clip.lane, sources[clip.source].file.name])
+          : sources[clip.source].file.name,
+        clip.id,
+      ),
+    ),
+  );
+  picker.value = selected || "";
+  picker.disabled = !all.length;
+  picker.onchange = () => selectClip(picker.value, true);
+  $("#video-inspector-empty").hidden = !!selected;
+  const audio = whichAudio();
+  renderAudioProperties(audio);
+  list.hidden = !!audio;
   list.replaceChildren();
   clips.forEach((clip, i) => {
     const card = el("div", "", { class: "video-item" });
@@ -573,10 +956,81 @@ function renderClips() {
   });
 }
 
+function renderAudioProperties(clip) {
+  const area = $("#video-audio-properties");
+  area.replaceChildren();
+  area.hidden = !clip;
+  if (!clip) return;
+  const edit = (props) => {
+    const next = audioClips.map((item) =>
+      item.id === clip.id ? { ...item, ...props } : item,
+    );
+    return commitSound(next, clip.id);
+  };
+  const numeric = (title, value, min, max, step, make) => {
+    const input = el("input", "", { type: "number", min, max, step, value });
+    input.onchange = () => {
+      if (!edit(make(input.valueAsNumber))) {
+        input.value = value;
+        input.setAttribute("aria-invalid", "true");
+        input.focus();
+      }
+    };
+    return field(title, input);
+  };
+  const lanes = el("select", "", {
+    id: "video-selected-audio-track",
+    "aria-label": "Audio track",
+  });
+  lanes.append(
+    ...audioLanes.map((lane) => uiOption(uiMsg(mixerLabels[lane]), lane)),
+  );
+  lanes.value = clip.lane;
+  lanes.onchange = () => {
+    if (!edit({ lane: +lanes.value })) lanes.value = clip.lane;
+  };
+  area.append(
+    field("Audio track", lanes),
+    numeric(
+      "Position (seconds)",
+      frameMs(clip.at) / 1000,
+      0,
+      300,
+      0.001,
+      (v) => ({ at: toFrame(v * 1000) }),
+    ),
+    numeric(
+      "Clip start (seconds)",
+      clip.start / 1000,
+      0,
+      sources[clip.source].duration / 1000,
+      0.001,
+      (v) => ({ start: Math.round(v * 1000) }),
+    ),
+    numeric(
+      "Clip end (seconds)",
+      clip.end / 1000,
+      0,
+      sources[clip.source].duration / 1000,
+      0.001,
+      (v) => ({ end: Math.round(v * 1000) }),
+    ),
+    numeric("Clip volume (%)", clip.volume, 0, 100, 1, (v) => ({
+      volume: Math.round(v),
+    })),
+  );
+  if (clip.at + audioLength(clip) > (plan?.frames || 0))
+    area.append(
+      el("p", "Audio beyond the video end will be left out of export.", {
+        class: "muted small",
+      }),
+    );
+}
 function copySelected() {
-  const clip = clips.find((c) => c.id === selected);
+  const clip = whichAudio() ?? clips.find((c) => c.id === selected);
   if (!clip || isBusy()) return;
-  clipboard = { source: clip.source, start: clip.start, end: clip.end };
+  const { id, ...copy } = clip;
+  clipboard = copy;
   editStatus(uiMsg("Clip copied."));
   updateControls();
 }
@@ -584,7 +1038,12 @@ function pasteClip() {
   if (isBusy() || !sources[clipboard?.source]) return;
   const copy = { ...clipboard, id: newId() };
   try {
-    if (
+    if (copy.lane) {
+      copy.lane = activeLane || copy.lane;
+      copy.at = cursor;
+      if (commitSound([...audioClips, copy], copy.id))
+        editStatus(uiMsg("Clip pasted."));
+    } else if (
       commit(insertAtFrame(clips, plan, cursor, copy, newId()), copy.id, null)
     )
       editStatus(uiMsg("Clip pasted."));
@@ -592,42 +1051,106 @@ function pasteClip() {
     editStatus(uiError(error), true);
   }
 }
-$("#video-split").onclick = () => {
-  const cut = timelineCut(plan, cursor);
+function splitSelected() {
+  const cut = currentCut();
   if (!cut) return;
   const right = newId();
-  if (commit(cutClips(clips, cut, right), right))
-    editStatus(uiMsg("Clip split."));
+  if (activeLane) {
+    const { clip, at } = cut;
+    const index = audioClips.indexOf(clip);
+    if (
+      !commitSound(
+        audioClips.toSpliced(
+          index,
+          1,
+          { ...clip, end: at },
+          { ...clip, id: right, start: at, at: cursor },
+        ),
+        right,
+      )
+    )
+      return;
+  } else if (!commit(cutClips(clips, cut, right), right)) return;
+  editStatus(uiMsg("Clip split."));
+}
+function duplicateSelected() {
+  const clip = whichAudio();
+  if (clip) {
+    const copy = { ...clip, id: newId(), at: clip.at + audioLength(clip) };
+    if (
+      !commitSound(
+        [...audioClips, copy],
+        copy.id,
+        Math.min(plan?.frames || 0, copy.at),
+      )
+    )
+      return;
+  } else {
+    const index = clips.findIndex((c) => c.id === selected);
+    if (index < 0) return;
+    const copy = { ...clips[index], id: newId() };
+    if (!commit(clips.toSpliced(index + 1, 0, copy), copy.id, null)) return;
+  }
+  editStatus(uiMsg("Clip duplicated."));
+}
+function removeSelected() {
+  const clip = whichAudio();
+  if (clip)
+    commitSound(
+      audioClips.filter((c) => c !== clip),
+      null,
+    );
+  else {
+    const i = clips.findIndex((c) => c.id === selected);
+    if (i >= 0)
+      commit(clips.toSpliced(i, 1), clips[i + 1]?.id ?? clips[i - 1]?.id);
+  }
+}
+$("#video-undo").onclick = () => restore("undo");
+$("#video-redo").onclick = () => restore("redo");
+$("#video-snap").onclick = () => {
+  snapEnabled = !snapEnabled;
+  $("#video-snap").setAttribute("aria-pressed", snapEnabled);
 };
-$("#video-duplicate").onclick = () => {
-  const index = clips.findIndex((c) => c.id === selected);
-  if (index < 0) return;
-  const copy = { ...clips[index], id: newId() };
-  if (commit(clips.toSpliced(index + 1, 0, copy), copy.id, null))
-    editStatus(uiMsg("Clip duplicated."));
-};
+$("#video-delete").onclick = removeSelected;
+$("#video-split").onclick = splitSelected;
+$("#video-duplicate").onclick = duplicateSelected;
 $("#video-copy").onclick = copySelected;
 $("#video-paste").onclick = pasteClip;
-$("#video-editor").onkeydown = (event) => {
+$(".video-studio-grid").onkeydown = (event) => {
   if (
+    event.defaultPrevented ||
     event.isComposing ||
-    !(event.ctrlKey || event.metaKey) ||
+    event.keyCode === 229 ||
     event.altKey ||
+    isBusy() ||
     event.target.closest("input,textarea,select,[contenteditable]") ||
-    !window.getSelection().isCollapsed
+    !window.getSelection()?.isCollapsed
   )
     return;
   const key = event.key.toLowerCase();
-  if (key === "c" && !$("#video-copy").disabled) {
+  const id =
+    event.ctrlKey || event.metaKey
+      ? {
+          c: "video-copy",
+          v: "video-paste",
+          z: event.shiftKey ? "video-redo" : "video-undo",
+        }[key]
+      : {
+          " ": "video-play",
+          arrowleft: "video-back-frame",
+          arrowright: "video-next-frame",
+          s: "video-split",
+          delete: "video-delete",
+        }[key];
+  if (!id || (key === " " && event.target.closest("button,summary,a"))) return;
+  if (!$("#" + id).disabled) {
     event.preventDefault();
-    copySelected();
-  }
-  if (key === "v" && !$("#video-paste").disabled) {
-    event.preventDefault();
-    pasteClip();
+    $("#" + id).click();
   }
 };
 
+$("#video-import").onclick = () => $("#video-sources").click();
 $("#video-sources").onchange = async ({ target }) => {
   const files = [...target.files];
   target.value = "";
@@ -635,6 +1158,18 @@ $("#video-sources").onchange = async ({ target }) => {
     await importFiles(files);
   } catch (error) {
     status(uiError(error), true);
+  }
+};
+$("#video-audio-files").onchange = async ({ target }) => {
+  const files = [...target.files];
+  target.value = "";
+  try {
+    await importFiles(files, null, undefined, false, "audio");
+  } catch (error) {
+    status(
+      error.cause ? uiMsg(error.message, [error.cause]) : uiError(error),
+      true,
+    );
   }
 };
 receiveHandoff(
@@ -645,9 +1180,25 @@ receiveHandoff(
 );
 
 $("#video-play").onclick = () => {
-  if (!isBusy()) transport.play(plan, sources, cues, cursor);
+  if (isBusy()) return;
+  if (transport.playing) showFrame(cursor);
+  else {
+    $("#video-preview-audio-status").hidden = true;
+    monitor.unlock();
+    transport.play(plan, sources, cues, cursor);
+  }
 };
-$("#video-stop").onclick = () => showFrame(cursor);
+$("#video-monitor-mute").onclick = () => {
+  monitorMuted = !monitorMuted;
+  monitor.setMuted(monitorMuted);
+  const b = $("#video-monitor-mute");
+  videoIcon(
+    b,
+    monitorMuted ? "mute" : "sound",
+    monitorMuted ? "Unmute preview" : "Mute preview",
+  );
+  b.setAttribute("aria-pressed", monitorMuted);
+};
 $("#video-back-frame").onclick = () => showFrame(cursor - 1);
 $("#video-next-frame").onclick = () => showFrame(cursor + 1);
 $("#video-retry-preview").onclick = () => showFrame(cursor);
@@ -673,6 +1224,7 @@ prepare.onclick = () => {
   if (isBusy() || !plan || !available.includes(format.value)) return;
   transport.pause();
   const job = (running = worker());
+  waveWorker?.cancel();
   const done = (message, error = false) => {
     if (job !== running) return;
     job.terminate();
@@ -689,7 +1241,8 @@ prepare.onclick = () => {
   job.onmessage = ({ data }) => {
     if (job !== running) return;
     if (data.type === "progress") progress.value = data.value;
-    if (data.type === "error") done(uiError(data), true);
+    if (data.type === "error")
+      done(data.file ? uiMsg(data.message, [data.file]) : uiError(data), true);
     if (data.type === "finished") {
       invalidate();
       resultUrl = URL.createObjectURL(data.blob);
@@ -713,6 +1266,8 @@ prepare.onclick = () => {
     action: "encode",
     sources,
     clips,
+    audioClips,
+    levels,
     ...settings(),
     format: format.value,
     burn: $("#video-burn").checked,
@@ -729,13 +1284,21 @@ $("#cancel-job").onclick = () => {
   busy(false);
   updateSummary();
   status(uiMsg("Cancelled."));
+  scanWaveforms();
 };
-window.addEventListener("pagehide", () => {
+window.addEventListener("pagehide", (event) => {
+  if (event.persisted) {
+    transport.pause();
+    return;
+  }
+  leaving = true;
   transport.discard();
   running?.terminate();
   probeWorker?.cancel();
   formatWorker?.cancel();
-  Object.values(sources).forEach((a) => URL.revokeObjectURL(a.url));
+  waveWorker?.cancel();
+  monitor.release();
+  mediaCache.forEach((asset) => URL.revokeObjectURL(asset.url));
   if (resultUrl) URL.revokeObjectURL(resultUrl);
 });
 renderSources();

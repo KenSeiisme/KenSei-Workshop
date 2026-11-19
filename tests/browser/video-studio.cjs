@@ -6,13 +6,245 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8769";
 const library = "/vendor/mediabunny-video-1.66.1.mjs";
 const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
 
+function tone(name, hz, seconds = 1.5) {
+  const rate = 48000,
+    samples = Math.round(rate * seconds);
+  const wav = Buffer.alloc(44 + samples * 2);
+  wav.write("RIFF");
+  wav.writeUInt32LE(wav.length - 8, 4);
+  wav.write("WAVEfmt ", 8);
+  wav.writeUInt32LE(16, 16);
+  wav.writeUInt16LE(1, 20);
+  wav.writeUInt16LE(1, 22);
+  wav.writeUInt32LE(rate, 24);
+  wav.writeUInt32LE(rate * 2, 28);
+  wav.writeUInt16LE(2, 32);
+  wav.writeUInt16LE(16, 34);
+  wav.write("data", 36);
+  wav.writeUInt32LE(samples * 2, 40);
+  for (let i = 0; i < samples; i++)
+    wav.writeInt16LE(
+      Math.round(9000 * Math.sin((2 * Math.PI * i * hz) / rate)),
+      44 + i * 2,
+    );
+  return { name, mimeType: "audio/wav", buffer: wav };
+}
+async function verifyMix(page, inputs) {
+  await page.goto(base + "/tools/video-studio/");
+  await page.waitForSelector('[data-ready="true"]');
+  await page.setInputFiles(
+    "#video-sources",
+    inputs.map((bytes, i) => ({
+      name: i ? "silent.webm" : "original.webm",
+      mimeType: "video/webm",
+      buffer: Buffer.from(bytes),
+    })),
+  );
+  const videoLane = page.locator("#video-lane .video-track-clip");
+  await videoLane.last().waitFor();
+  assert.equal(await videoLane.count(), 2);
+  await page
+    .locator("#video-audio-files")
+    .setInputFiles([tone("music.wav", 800), tone("voice.wav", 1200)]);
+  const first = page.locator("#video-audio-lane-1 [data-audio-clip]");
+  const second = page.locator("#video-audio-lane-2 [data-audio-clip]");
+  await first.waitFor();
+  await second.waitFor();
+  await page.locator("#video-selected-audio-track").selectOption("1");
+  await page
+    .getByText("Clips on the same audio track cannot overlap.", { exact: true })
+    .waitFor();
+  assert.equal(await second.count(), 1);
+  await page.getByLabel("Position (seconds)", { exact: true }).fill("0.3");
+  await page.getByLabel("Position (seconds)", { exact: true }).press("Tab");
+  assert.equal(
+    await page.getByLabel("Position (seconds)", { exact: true }).inputValue(),
+    "0.3",
+  );
+  await first.locator(".video-clip-body").focus();
+  await first.locator(".video-clip-body").press("Enter");
+  const setEnd = page
+    .locator("#video-audio-properties")
+    .getByLabel("Clip end (seconds)", { exact: true });
+  await setEnd.fill("0.1");
+  await setEnd.press("Tab");
+  const snapRuler = page.locator("#video-ruler");
+  await snapRuler.press("Home");
+  for (let i = 0; i < 9; i++) await snapRuler.press("ArrowRight");
+  const voice = second.locator(".video-grip");
+  await voice.scrollIntoViewIfNeeded();
+  const from = await voice.boundingBox(),
+    to = await page.locator("#video-audio-lane-1").boundingBox();
+  await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(from.x + from.width / 2, to.y + to.height / 2, {
+    steps: 4,
+  });
+  assert.equal(await page.locator("#video-snap-line").isVisible(), true);
+  await page.mouse.up();
+  assert.equal(await first.count(), 2);
+  await page.locator("#video-undo").click();
+  assert.equal(await second.count(), 1);
+  await page.locator("#video-undo").click();
+  await page.getByLabel("Clip volume (%)", { exact: true }).fill("50");
+  await page.getByLabel("Clip volume (%)", { exact: true }).press("Tab");
+  await page.getByRole("button", { name: "Undo edit", exact: true }).click();
+  assert.equal(
+    await page.getByLabel("Clip volume (%)", { exact: true }).inputValue(),
+    "100",
+  );
+  await page.getByRole("button", { name: "Redo edit", exact: true }).click();
+  assert.equal(
+    await page.getByLabel("Clip volume (%)", { exact: true }).inputValue(),
+    "50",
+  );
+  const mixer = page.locator("#video-track-mixer");
+  await page.getByText("Track mixer", { exact: true }).click();
+  await mixer
+    .getByRole("button", { name: "Mute Audio 2", exact: true })
+    .last()
+    .click();
+  assert.equal(
+    await mixer
+      .getByRole("button", { name: "Unmute Audio 2", exact: true })
+      .count(),
+    1,
+  );
+  await page.locator("#video-undo").click();
+  await page.locator("#video-monitor-mute").click();
+  assert.equal(
+    await page.locator("#video-monitor-mute").getAttribute("aria-pressed"),
+    "true",
+  );
+  await page.locator("#video-play").click();
+  const ruler = page.locator("#video-ruler");
+  await page.waitForFunction(
+    () =>
+      Number(
+        document.querySelector("#video-ruler").getAttribute("aria-valuenow"),
+      ) > 15,
+  );
+  await page.locator("#video-play").click();
+  await ruler.press("Home");
+  for (let i = 0; i < 15; i++) await ruler.press("ArrowRight");
+  await ruler.press("s");
+  assert.equal(await first.count(), 2);
+  await ruler.press(process.platform === "darwin" ? "Meta+z" : "Control+z");
+  assert.equal(await first.count(), 1);
+  await page.waitForFunction(
+    (selected) =>
+      [...document.querySelector("#video-format").options].some(
+        (o) => o.value === selected,
+      ),
+    container,
+  );
+  await page.selectOption("#video-format", container);
+  await page.locator("#video-encode").click();
+  const link = page.locator("#video-download");
+  await link.waitFor({ timeout: 90000 });
+  const download = page.waitForEvent("download");
+  await link.click();
+  const data = await fs.readFile(await (await download).path());
+  if (process.env.WORKSHOP_MIX_OUTPUT)
+    await fs.writeFile(process.env.WORKSHOP_MIX_OUTPUT, data);
+  const levels = await page.evaluate(
+    async ({ data, url, container }) => {
+      const m = await import(url);
+      const input = new m.Input({
+        formats: [container === "mp4" ? m.MP4 : m.WEBM],
+        source: new m.BlobSource(new Blob([Uint8Array.from(data)])),
+      });
+      try {
+        const audio = await input.getPrimaryAudioTrack();
+        const powers = [0, 0, 0],
+          pitches = [440, 800, 1200];
+        const sink = new m.AudioSampleSink(audio);
+        const sums = pitches.map(() => [0, 0]);
+        let count = 0;
+        for await (const sample of sink.samples(0.42, 0.62)) {
+          try {
+            const out = new Float32Array(sample.numberOfFrames);
+            sample.copyTo(out, { planeIndex: 0, format: "f32-planar" });
+            for (let i = 0; i < out.length; i++) {
+              const t = sample.timestamp + i / sample.sampleRate;
+              if (t < 0.42 || t >= 0.62) continue;
+              for (const [j, hz] of pitches.entries()) {
+                const a = 2 * Math.PI * t * hz;
+                sums[j][0] += out[i] * Math.sin(a);
+                sums[j][1] += out[i] * Math.cos(a);
+              }
+              count++;
+            }
+          } finally {
+            sample.close();
+          }
+        }
+        for (const [i, [s, c]] of sums.entries())
+          powers[i] = (2 * Math.hypot(s, c)) / count;
+        return { powers, duration: await input.computeDuration() };
+      } finally {
+        input.dispose();
+      }
+    },
+    { data: [...data], url: library, container },
+  );
+  assert.ok(
+    levels.duration > 1.95 && levels.duration < 2.1,
+    JSON.stringify(levels),
+  );
+  assert.ok(
+    levels.powers[0] > 0.07 &&
+      levels.powers[1] > 0.035 &&
+      levels.powers[2] > 0.07,
+    JSON.stringify(levels),
+  );
+  assert.ok(
+    levels.powers[2] / levels.powers[1] > 1.75 &&
+      levels.powers[2] / levels.powers[1] < 2.25,
+    JSON.stringify(levels),
+  );
+  await videoLane.last().locator(".video-clip-body").press("Enter");
+  const trim = page
+    .locator("#video-clips [data-selected]")
+    .getByLabel("Clip end (seconds)", { exact: true });
+  await trim.fill("0.2");
+  await trim.press("Tab");
+  await page.locator("#video-video-end").waitFor();
+  await second.locator(".video-clip-body").press("Enter");
+  await page
+    .getByText("Audio beyond the video end will be left out of export.", {
+      exact: true,
+    })
+    .waitFor();
+  assert.equal(
+    await page.getByLabel("Position (seconds)", { exact: true }).inputValue(),
+    "0.3",
+  );
+  await page.locator("#video-undo").click();
+  assert.equal(await page.locator("#video-video-end").isVisible(), false);
+  await page.locator("#video-audio-files").setInputFiles({
+    name: "broken.wav",
+    mimeType: "audio/wav",
+    buffer: Buffer.from("invalid"),
+  });
+  await page
+    .getByText("Could not decode broken.wav.", { exact: true })
+    .first()
+    .waitFor();
+  assert.equal(await second.count(), 1);
+  console.log(
+    "PASS two overlapping audio tracks, collision rejection, gain, undo/redo, icon controls and three measured tones in " +
+      container,
+  );
+}
+
 (async () => {
   const browser = await chromium.launch({
     channel: process.env.BROWSER_CHANNEL || "chromium",
     headless: true,
   });
   const context = await browser.newContext({
-    viewport: { width: 390, height: 820 },
+    viewport: { width: 1280, height: 920 },
   });
   const page = await context.newPage();
   await context.route("**/config.js", (route) =>
@@ -24,6 +256,14 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
   try {
     await page.goto(base + "/tools/video-studio/");
     await page.waitForSelector('[data-ready="true"]');
+    const chooser = page.waitForEvent("filechooser");
+    await page
+      .getByRole("button", { name: "Import video", exact: true })
+      .click();
+    assert.equal(
+      await (await (await chooser).element()).getAttribute("id"),
+      "video-sources",
+    );
     const inputs = await page.evaluate(async (url) => {
       const m = await import(url);
       if (
@@ -92,12 +332,21 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
           path.join(__dirname, "../support/fixtures/video-timeline.mp4"),
         );
       await page.locator("#video-lane .video-track-clip").waitFor();
+      await page
+        .locator(".video-sources-panel")
+        .evaluate((el) => (el.open = true));
       await page.locator("#video-source-list input[type=file]").setInputFiles({
         name: "fixture.srt",
         mimeType: "application/x-subrip",
         buffer: Buffer.from("1\n00:00:00,000 --> 00:00:00,800\n字幕\n"),
       });
       await page.getByText("1 subtitle cues", { exact: true }).waitFor();
+      await page
+        .locator("#video-audio-files")
+        .setInputFiles([tone("music.wav", 800), tone("voice.wav", 1200)]);
+      await page.locator("#video-audio-lane-1 [data-audio-clip]").waitFor();
+      await page.locator("#video-audio-lane-2 [data-audio-clip]").waitFor();
+      await page.locator('[data-video-lane="0"]').click();
       await page.locator("#video-next-frame").click();
       await page.locator("#video-split").click();
       assert.equal(
@@ -175,7 +424,9 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
     );
     await color("green");
     await page.waitForFunction(
-      () => document.querySelector("#video-stop").disabled,
+      () =>
+        document.querySelector("#video-play").getAttribute("aria-label") ===
+        "Play preview",
     );
 
     const blocks = page.locator("#video-lane .video-track-clip");
@@ -262,6 +513,7 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
     const srt = await fs.readFile(await (await waitSrt).path(), "utf8");
     assert.match(srt, /00:00:00,500 --> 00:00:01,000\nDemo 中文/);
     assert.match(srt, /00:00:01,000 --> 00:00:01,300\nDemo 中文/);
+    await page.locator(".video-export").evaluate((el) => (el.open = true));
     await page.check("#video-burn");
     await page.waitForFunction(
       (selected) =>
@@ -337,7 +589,7 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
     assert.ok(parsed.white > 150, "burned caption visible");
     assert.equal(
       await page.evaluate(() => document.documentElement.scrollWidth),
-      390,
+      1280,
     );
     await cards.first().locator(".video-clip-summary").click();
     const invalid = cards
@@ -403,8 +655,9 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
     assert.equal(await blocks.count(), 12);
     assert.equal(
       await page.evaluate(() => document.documentElement.scrollWidth),
-      390,
+      1280,
     );
+    await verifyMix(page, inputs);
     if (
       !process.env.WORKSHOP_BROWSER_ENGINE ||
       process.env.WORKSHOP_BROWSER_ENGINE === "chromium"
@@ -437,7 +690,7 @@ const container = process.env.WORKSHOP_VIDEO_FORMAT || "webm";
         const trim = phone.getByRole("button", { name: "調整片段起點" });
         await trim.scrollIntoViewIfNeeded();
         const box = await trim.boundingBox();
-        assert.ok(box.width >= 44 && box.height >= 44);
+        assert.ok(box.width >= 44 && box.height >= 44, JSON.stringify(box));
         const touch = await mobile.newCDPSession(phone);
         const x = Math.round(box.x + box.width / 2),
           y = Math.round(box.y + box.height / 2);

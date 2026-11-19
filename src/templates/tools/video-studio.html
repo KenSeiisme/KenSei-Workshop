@@ -1,6 +1,6 @@
 <div class="video-studio-grid">
-  <section class="panel tool-form video-sources-panel">
-    <h2>Video sources</h2>
+  <details class="panel tool-form video-sources-panel" open>
+    <summary>Media</summary>
     <label
       >Add MP4 or WebM files
       <input
@@ -11,8 +11,18 @@
         data-lock
       />
     </label>
+    <label
+      >Add MP3, WAV or AAC M4A files
+      <input
+        id="video-audio-files"
+        type="file"
+        accept=".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/mp4"
+        multiple
+        data-lock
+      />
+    </label>
     <div id="video-source-list"></div>
-  </section>
+  </details>
   <section class="panel tool-form video-preview-panel">
     <h2>Preview</h2>
     <div id="video-stage" class="video-stage">
@@ -28,26 +38,70 @@
         preload="auto"
         aria-hidden="true"
       ></video>
-      <p id="video-preview-empty">Add a video to preview it here.</p>
+      <div id="video-preview-empty">
+        <button
+          id="video-import"
+          class="button primary"
+          type="button"
+          data-lock
+        >
+          ${svg_upload} Import video
+        </button>
+      </div>
       <p id="video-caption" class="video-caption" hidden></p>
     </div>
     <div class="action-row video-transport">
-      <button id="video-play" class="button primary" data-lock disabled>
-        Play preview
+      <button
+        id="video-back-frame"
+        class="button secondary video-icon-button"
+        type="button"
+        data-lock
+        aria-label="Previous frame"
+        title="Previous frame"
+      >
+        ${svg_frame_previous}
       </button>
-      <button id="video-stop" class="button secondary" data-lock disabled>
-        Pause preview
+      <button
+        id="video-play"
+        class="button primary video-icon-button"
+        type="button"
+        data-lock
+        aria-label="Play preview"
+        title="Play preview"
+      >
+        ${svg_play}
       </button>
-      <button id="video-back-frame" class="button secondary" data-lock disabled>
-        Previous frame
+      <button
+        id="video-next-frame"
+        class="button secondary video-icon-button"
+        type="button"
+        data-lock
+        aria-label="Next frame"
+        title="Next frame"
+      >
+        ${svg_frame_next}
       </button>
-      <button id="video-next-frame" class="button secondary" data-lock disabled>
-        Next frame
+      <button
+        id="video-monitor-mute"
+        class="button secondary video-icon-button"
+        type="button"
+        data-lock
+        aria-label="Mute preview"
+        title="Mute preview"
+        aria-pressed="false"
+      >
+        ${svg_sound}
       </button>
       <span id="video-timecode" class="video-timecode"
         >00:00.000 / 00:00.000</span
       >
     </div>
+    <p
+      id="video-preview-audio-status"
+      class="muted small"
+      role="status"
+      hidden
+    ></p>
     <div id="video-preview-feedback" hidden>
       <p id="video-preview-status" class="muted small" role="status"></p>
       <button
@@ -64,64 +118,193 @@
     <div class="video-editor-heading">
       <h2>Timeline</h2>
       <div class="action-row">
-        <button id="video-fit" class="button secondary" data-lock>Fit</button>
-        <button id="video-zoom-out" class="button secondary" data-lock>
-          Zoom out
+        <button
+          id="video-undo"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Undo edit"
+          title="Undo edit"
+        >
+          ${svg_undo}
         </button>
-        <button id="video-zoom-in" class="button secondary" data-lock>
-          Zoom in
+        <button
+          id="video-redo"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Redo edit"
+          title="Redo edit"
+        >
+          ${svg_redo}
+        </button>
+        <button
+          id="video-split"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Split at playhead"
+          title="Split at playhead"
+        >
+          ${svg_scissors}
+        </button>
+        <button
+          id="video-duplicate"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Duplicate"
+          title="Duplicate"
+        >
+          ${svg_duplicate}
+        </button>
+        <button
+          id="video-copy"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Copy clip"
+          title="Copy clip"
+        >
+          ${svg_copy}
+        </button>
+        <button
+          id="video-paste"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Paste at playhead"
+          title="Paste at playhead"
+        >
+          ${svg_paste}
+        </button>
+        <button
+          id="video-delete"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Remove clip"
+          title="Remove clip"
+        >
+          ${svg_trash}
+        </button>
+        <button
+          id="video-snap"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Snap to timeline"
+          title="Snap to timeline"
+          aria-pressed="true"
+        >
+          ${svg_snap}
+        </button>
+        <button
+          id="video-fit"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Fit"
+          title="Fit"
+        >
+          ${svg_focus}
+        </button>
+        <button
+          id="video-zoom-out"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Zoom out"
+          title="Zoom out"
+        >
+          ${svg_zoom_out}
+        </button>
+        <button
+          id="video-zoom-in"
+          class="button secondary video-icon-button"
+          type="button"
+          data-lock
+          aria-label="Zoom in"
+          title="Zoom in"
+        >
+          ${svg_zoom_in}
         </button>
       </div>
     </div>
-    <div id="video-scroll" class="video-scroll">
-      <div id="video-track" class="video-track">
-        <div
-          id="video-ruler"
-          class="video-ruler"
-          role="slider"
-          tabindex="0"
-          aria-label="Playhead"
-          aria-valuemin="0"
-          aria-valuemax="0"
-          aria-valuenow="0"
-          aria-disabled="true"
-        ></div>
-        <div id="video-lane" class="video-lane"></div>
-        <div
-          id="video-needle"
-          class="video-needle"
-          aria-hidden="true"
-          hidden
-        ></div>
-        <div
-          id="video-insert"
-          class="video-insert"
-          aria-hidden="true"
-          hidden
-        ></div>
+    <div class="video-lanes">
+      <div id="video-track-labels" class="video-track-labels"></div>
+      <div id="video-scroll" class="video-scroll">
+        <div id="video-track" class="video-track">
+          <div
+            id="video-ruler"
+            class="video-ruler"
+            role="slider"
+            tabindex="0"
+            aria-label="Playhead"
+            aria-valuemin="0"
+            aria-valuemax="0"
+            aria-valuenow="0"
+            aria-disabled="true"
+          ></div>
+          <div id="video-lane" class="video-lane"></div>
+          <div
+            id="video-audio-lane-1"
+            class="video-lane video-audio-lane"
+            data-audio-lane="1"
+          ></div>
+          <div
+            id="video-audio-lane-2"
+            class="video-lane video-audio-lane"
+            data-audio-lane="2"
+          ></div>
+          <div
+            id="video-video-end"
+            class="video-video-end"
+            aria-hidden="true"
+            hidden
+          ></div>
+          <div
+            id="video-snap-line"
+            class="video-insert"
+            aria-hidden="true"
+            hidden
+          ></div>
+          <div
+            id="video-needle"
+            class="video-needle"
+            aria-hidden="true"
+            hidden
+          ></div>
+          <div
+            id="video-insert"
+            class="video-insert"
+            aria-hidden="true"
+            hidden
+          ></div>
+        </div>
       </div>
     </div>
     <p id="video-duration" class="muted small" role="status"></p>
-    <div class="action-row video-edit-actions">
-      <button id="video-split" class="button secondary" data-lock disabled>
-        Split at playhead
-      </button>
-      <button id="video-duplicate" class="button secondary" data-lock disabled>
-        Duplicate
-      </button>
-      <button id="video-copy" class="button secondary" data-lock disabled>
-        Copy clip
-      </button>
-      <button id="video-paste" class="button secondary" data-lock disabled>
-        Paste at playhead
-      </button>
-    </div>
     <div id="video-edit-status" class="muted small" role="status" hidden></div>
-    <h3>Clip settings</h3>
-    <div id="video-clips"></div>
   </section>
-  <section class="panel tool-form video-export">
-    <h2>Export video</h2>
+  <section class="panel tool-form video-inspector">
+    <h2>Clip settings</h2>
+    <label
+      >Selected clip
+      <select id="video-clip-picker" data-lock></select
+    ></label>
+    <p id="video-inspector-empty" class="muted small">
+      Select a clip to edit it.
+    </p>
+    <div id="video-clips"></div>
+    <div id="video-audio-properties" hidden></div>
+    <details>
+      <summary>Track mixer</summary>
+      <div id="video-track-mixer" class="video-track-mixer"></div>
+    </details>
+  </section>
+  <details class="panel tool-form video-export" open>
+    <summary>${svg_download} <span>Export video</span></summary>
     <div class="form-row">
       <label
         >Resolution<select id="video-resolution" data-lock>
@@ -173,5 +356,5 @@
       hidden
     ></video>
     ${job_status}
-  </section>
+  </details>
 </div>

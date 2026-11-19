@@ -3,6 +3,8 @@ import {
   BlobSource,
   MP4,
   WEBM,
+  MP3,
+  WAVE,
   Output,
   BufferTarget,
   Mp4OutputFormat,
@@ -25,9 +27,15 @@ import {
   videoLimits,
 } from "./video-timeline.js";
 
-const sampleRate = 48000;
+import {
+  defaultLevels,
+  framesPerSampleBlock,
+  sampleRate,
+  validateAudioClips,
+  videoMix,
+} from "./video-mix.js";
+
 const audioBitrate = 128_000;
-const audioFramesPerVideoFrame = sampleRate / frameRate;
 const open = (file) =>
   new Input({ formats: [MP4, WEBM], source: new BlobSource(file) });
 async function tracks(input) {
@@ -47,6 +55,38 @@ async function tracks(input) {
     throw Error("Each source must be ten minutes or shorter.");
   return { video, audio, first, duration };
 }
+const openAudio = (file) =>
+  new Input({
+    formats: [MP3, WAVE, MP4],
+    source: new BlobSource(file),
+  });
+async function audioTrack(input) {
+  const audio = await input.getPrimaryAudioTrack();
+  if (
+    !audio ||
+    (await input.getPrimaryVideoTrack()) ||
+    !(await audio.canDecode())
+  )
+    throw Error("Choose a supported MP3, WAV or AAC M4A audio file.");
+  const codec = await audio.getCodec();
+  if (
+    !codec ||
+    !(codec === "mp3" || codec === "aac" || codec.startsWith("pcm-"))
+  )
+    throw Error("Choose a supported MP3, WAV or AAC M4A audio file.");
+  const first = await input.getFirstTimestamp([audio]);
+  const duration = Math.round(
+    ((await input.computeDuration([audio])) - first) * 1000,
+  );
+  if (
+    !Number.isFinite(duration) ||
+    duration <= 0 ||
+    duration > videoLimits.sourceMs
+  )
+    throw Error("Each source must be ten minutes or shorter.");
+  return { audio, first, duration };
+}
+
 async function formats(settings, audio) {
   if (typeof OffscreenCanvas !== "function") return [];
   const { width, height, bitrate } = settings;
@@ -166,39 +206,22 @@ async function exportVideoFrames(
   }
 }
 
-async function exportAudio(source, segment, destination) {
-  const start = source.first + segment.start / 1000;
-  const end = source.first + segment.end / 1000;
-  const segmentStart = segment.firstFrame * audioFramesPerVideoFrame;
-  const length = segment.frames * audioFramesPerVideoFrame;
-  let cursor = 0;
-  const add = async (data, frames) => {
-    const sample = new AudioSample({
-      data,
-      format: "f32-planar",
-      sampleRate,
-      numberOfChannels: 2,
-      timestamp: (segmentStart + cursor) / sampleRate,
-    });
-    try {
-      await destination.add(sample);
-    } finally {
-      sample.close();
-    }
-    cursor += frames;
-  };
-  async function pad(stop) {
-    while (cursor < stop) {
-      const frames = Math.min(stop - cursor, 4096);
-      await add(new Float32Array(frames * 2), frames);
-    }
-  }
-  if (source.audio) {
+async function* audioBlocks(lane, media) {
+  for (const clip of lane) {
+    if (!clip.gain) continue;
+    const source = media[clip.source];
+    const start = source.first + clip.start / 1000;
+    const length = (clip.stop - clip.at) * framesPerSampleBlock;
+    const end = Math.min(
+      source.first + clip.end / 1000,
+      start + length / sampleRate,
+    );
+    let consumed = 0;
     const sink = new AudioSampleSink(source.audio);
     for await (const sample of sink.samples(start, end)) {
       try {
         const from = Math.max(
-          cursor,
+          consumed,
           Math.round((sample.timestamp - start) * sampleRate),
         );
         const to = Math.min(
@@ -209,16 +232,15 @@ async function exportAudio(source, segment, destination) {
           ),
         );
         if (to <= from) continue;
-        await pad(from);
-        const count = to - from;
-        const data = new Float32Array(count * 2);
-        for (let channel = 0; channel < 2; channel++) {
+        consumed = to;
+        const channels = [0, 1].map((channel) => {
           const decoded = new Float32Array(sample.numberOfFrames);
           sample.copyTo(decoded, {
             planeIndex: Math.min(channel, sample.numberOfChannels - 1),
             format: "f32-planar",
           });
-          for (let i = 0; i < count; i++) {
+          const copy = new Float32Array(to - from);
+          for (let i = 0; i < copy.length; i++) {
             const at = Math.max(
               0,
               Math.min(
@@ -229,22 +251,104 @@ async function exportAudio(source, segment, destination) {
             );
             const left = Math.floor(at),
               right = Math.min(left + 1, decoded.length - 1);
-            data[channel * count + i] =
-              decoded[left] + (decoded[right] - decoded[left]) * (at - left);
+            copy[i] =
+              (decoded[left] + (decoded[right] - decoded[left]) * (at - left)) *
+              clip.gain;
           }
-        }
-        await add(data, count);
+          return copy;
+        });
+        yield { at: clip.at * framesPerSampleBlock + from, channels };
       } finally {
         sample.close();
       }
     }
   }
-  await pad(length);
+}
+
+async function exportMix(mix, media, frames, destination) {
+  const iterators = mix.lanes.map((lane) => audioBlocks(lane, media));
+  try {
+    const heads = await Promise.all(iterators.map((i) => i.next()));
+    for (let at = 0; at < frames * framesPerSampleBlock; at += 4096) {
+      const count = Math.min(4096, frames * framesPerSampleBlock - at);
+      const pcm = new Float32Array(count * 2);
+      for (const [i, iterator] of iterators.entries()) {
+        for (
+          let block = heads[i].value;
+          block && block.at < at + count;
+          block = heads[i].value
+        ) {
+          const stop = block.at + block.channels[0].length;
+          for (
+            let pos = Math.max(at, block.at);
+            pos < Math.min(at + count, stop);
+            pos++
+          ) {
+            pcm[pos - at] += block.channels[0][pos - block.at];
+            pcm[count + pos - at] += block.channels[1][pos - block.at];
+          }
+          if (stop > at + count) break;
+          heads[i] = await iterator.next();
+        }
+      }
+      for (let i = 0; i < pcm.length; i++)
+        pcm[i] = Math.max(-1, Math.min(1, pcm[i] * mix.scale));
+      const sample = new AudioSample({
+        data: pcm,
+        format: "f32-planar",
+        sampleRate,
+        numberOfChannels: 2,
+        timestamp: at / sampleRate,
+      });
+      try {
+        await destination.add(sample);
+      } finally {
+        sample.close();
+      }
+    }
+  } finally {
+    await Promise.allSettled(iterators.map((iterator) => iterator.return()));
+  }
+}
+
+async function waveform({ audio, first, duration }) {
+  const peaks = new Float32Array(512);
+  for await (const sample of new AudioSampleSink(audio).samples()) {
+    try {
+      for (
+        let channel = 0;
+        channel < Math.min(2, sample.numberOfChannels);
+        channel++
+      ) {
+        const pcm = new Float32Array(sample.numberOfFrames);
+        sample.copyTo(pcm, { planeIndex: channel, format: "f32-planar" });
+        for (let i = 0; i < pcm.length; i += 8) {
+          const bin = Math.max(
+            0,
+            Math.min(
+              peaks.length - 1,
+              Math.floor(
+                (((sample.timestamp - first + i / sample.sampleRate) * 1000) /
+                  duration) *
+                  peaks.length,
+              ),
+            ),
+          );
+          peaks[bin] = Math.max(peaks[bin], Math.min(1, Math.abs(pcm[i])));
+        }
+      }
+    } finally {
+      sample.close();
+    }
+  }
+  return peaks;
 }
 
 async function encode({
   sources,
   clips,
+  audioClips = [],
+  levels = defaultLevels(),
   resolution,
   quality,
   orientation,
@@ -254,24 +358,35 @@ async function encode({
   const inputs = [];
   let output;
   try {
-    const used = new Set(clips.map((clip) => clip.source));
+    const used = new Set([...clips, ...audioClips].map((clip) => clip.source));
     const media = {};
     for (const [id, asset] of Object.entries(sources)) {
       if (!used.has(id)) continue;
-      const input = open(asset.file);
+      const input =
+        asset.kind === "audio" ? openAudio(asset.file) : open(asset.file);
       inputs.push(input);
-      media[id] = { ...(await tracks(input)), cues: asset.cues };
-      if (
-        !(await media[id].video.canDecode()) ||
-        (media[id].audio && !(await media[id].audio.canDecode()))
-      )
-        throw Error(
-          "A source contains video or audio this browser cannot decode.",
-        );
+      try {
+        const data =
+          asset.kind === "audio"
+            ? await audioTrack(input)
+            : await tracks(input);
+        if (data.video && !(await data.video.canDecode())) throw Error();
+        media[id] = { ...data, hasAudio: !!data.audio, cues: asset.cues };
+      } catch {
+        throw Error("Could not decode {0}.", { cause: asset.file.name });
+      }
     }
     const settings = exportSettings(quality, resolution, orientation);
     const timeline = makeTimeline(clips, media);
-    const hasAudio = Object.values(media).some((source) => source.audio);
+    validateAudioClips(audioClips, media);
+    const mix = videoMix(timeline, audioClips, levels, media);
+    for (const clip of mix.lanes.flat()) {
+      if (clip.gain && !(await media[clip.source].audio.canDecode()))
+        throw Error("Could not decode {0}.", {
+          cause: sources[clip.source].file.name,
+        });
+    }
+    const hasAudio = mix.audible;
     if (!(await formats(settings, hasAudio)).includes(format))
       throw Error("This browser cannot encode the chosen video format.");
     const codec = containers[format];
@@ -300,13 +415,20 @@ async function encode({
     if (sound) output.addAudioTrack(sound);
     await output.start();
     const cues = burn ? timelineCues(timeline, media) : [];
-    for (const segment of timeline.segments) {
-      const src = media[segment.source];
-      await Promise.all([
-        exportVideoFrames(src, segment, picture, ctx, cues, timeline.frames),
-        sound && exportAudio(src, segment, sound),
-      ]);
-    }
+    await Promise.all([
+      (async () => {
+        for (const segment of timeline.segments)
+          await exportVideoFrames(
+            media[segment.source],
+            segment,
+            picture,
+            ctx,
+            cues,
+            timeline.frames,
+          );
+      })(),
+      sound && exportMix(mix, media, timeline.frames, sound),
+    ]);
     await output.finalize();
     const blob = new Blob([target.buffer], { type: codec.mime });
     postMessage({ type: "finished", blob, format });
@@ -339,8 +461,23 @@ onmessage = async ({ data }) => {
       } finally {
         input.dispose();
       }
+    } else if (data.action === "audio-probe" || data.action === "waveform") {
+      const input = openAudio(data.file);
+      try {
+        const track = await audioTrack(input);
+        if (data.action === "waveform")
+          postMessage({ type: "waveform", peaks: await waveform(track) });
+        else
+          postMessage({
+            type: "metadata",
+            duration: track.duration,
+            hasAudio: true,
+          });
+      } finally {
+        input.dispose();
+      }
     } else if (data.action === "encode") await encode(data);
   } catch (error) {
-    postMessage({ type: "error", message: error.message });
+    postMessage({ type: "error", message: error.message, file: error.cause });
   }
 };

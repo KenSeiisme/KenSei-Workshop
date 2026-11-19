@@ -65,7 +65,10 @@ function loadFrame(slot, asset, sourceMs) {
   return slot.task;
 }
 
-export function createVideoPreview(elements, { onFrame, onState, onError }) {
+export function createVideoPreview(
+  elements,
+  { onFrame, onState, onError, onAudioFrame, onSilence },
+) {
   const { players, caption, empty } = elements;
   const slots = players.map((video) => ({ video, offset: 0 }));
   let front = null,
@@ -98,6 +101,7 @@ export function createVideoPreview(elements, { onFrame, onState, onError }) {
       cancelLoad(slot);
     }
     playing = false;
+    onSilence();
     state();
   }
   function unload(slot) {
@@ -232,6 +236,21 @@ export function createVideoPreview(elements, { onFrame, onState, onError }) {
           return;
         }
         if (!video.requestVideoFrameCallback) paint(video.currentTime);
+        if (video.readyState < 3 || video.seeking || video.paused) onSilence();
+        else
+          onAudioFrame(
+            segment.firstFrame +
+              Math.max(
+                0,
+                Math.min(
+                  segment.frames,
+                  (((video.currentTime - slot.offset) * 1000 - segment.start) *
+                    frameRate) /
+                    1000,
+                ),
+              ),
+            video,
+          );
         animation = requestAnimationFrame(tick);
       }
       tick();
@@ -255,8 +274,15 @@ export function createVideoPreview(elements, { onFrame, onState, onError }) {
           presented?.url === asset.url &&
           Math.abs(presented.sourceMs - position.sourceMs) < 1;
         const slot = reuse ? front : standby();
-        if (!reuse && !(await loadFrame(slot, asset, position.sourceMs)))
-          return;
+        if (!reuse) {
+          if (
+            slot.video.readyState < 2 ||
+            slot.video.seeking ||
+            slot.url !== asset.url
+          )
+            onSilence();
+          if (!(await loadFrame(slot, asset, position.sourceMs))) return;
+        }
         if (token !== revision) return;
         reveal(slot, asset, position, cues);
         onFrame(position.frame);

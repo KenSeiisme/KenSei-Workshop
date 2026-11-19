@@ -70,6 +70,21 @@ ICONS = {
     "unfocus": '<path d="M4 8h4V4m12 4h-4V4M4 16h4v4m12-4h-4v4"/>',
     "focus": '<path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/>',
     "chevron": '<path d="m7 10 5 5 5-5"/>',
+    "frame_previous": '<path d="M5 5v14m14-14L8 12l11 7Z"/>',
+    "frame_next": '<path d="M19 5v14M5 5l11 7-11 7Z"/>',
+    "scissors": '<circle cx="5.5" cy="6" r="3"/><circle cx="5.5" cy="18" r="3"/><path d="m8 8 12 12M8 16 20 4M13 11l2 2"/>',
+    "duplicate": '<rect x="7" y="7" width="14" height="14" rx="2"/><path d="M3 17V3h14m-7 11h8m-4-4v8"/>',
+    "copy": '<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M3 16V3h13"/>',
+    "paste": '<path d="M8 5H4v16h16V5h-4m-8 0V3h8v4H8zm1 7h6m-6 4h6"/>',
+    "trash": '<path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14M10 10v7m4-7v7"/>',
+    "undo": '<path d="M8 5 3 10l5 5m-5-5h12a5 5 0 0 1 0 10h-3"/>',
+    "redo": '<path d="m16 5 5 5-5 5m5-5H9a5 5 0 0 0 0 10h3"/>',
+    "snap": '<path d="M5 3v11a7 7 0 0 0 14 0V3h-4v11a3 3 0 0 1-6 0V3Zm0 5h4m6 0h4"/>',
+    "zoom_in": '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6M7 10h6m-3-3v6"/>',
+    "zoom_out": '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6M7 10h6"/>',
+    "grip": '<path d="M9 5h.01M15 5h.01M9 12h.01M15 12h.01M9 19h.01M15 19h.01" stroke-width="3"/>',
+    "trim_start": '<path d="M15 4H8v16h7M4 12h9"/>',
+    "trim_end": '<path d="M9 4h7v16H9m11-8h-9"/>',
 }
 
 
