@@ -6,7 +6,7 @@ export function createVideoMonitor(videos, report, target = globalThis) {
     master,
     muted = false;
   let disabled = false;
-  const lanes = [new Audio(), new Audio()].map((media) => ({
+  const lanes = Array.from({ length: 6 }, () => new Audio()).map((media) => ({
     media,
     clip: null,
     requested: false,
@@ -54,15 +54,18 @@ export function createVideoMonitor(videos, report, target = globalThis) {
     if (master) master.gain.value = value ? 0 : 1;
     else for (const video of videos) video.muted = value;
   }
-  function update(mix, sources, frame, front) {
+  function update(mix, sources, frame, fronts) {
     if (disabled || !context) return;
     const find = (lane) =>
       lane.find((clip) => clip.gain && clip.at <= frame && frame < clip.stop);
-    const original = find(mix.lanes[0]);
-    for (const video of videos)
-      setGain(video, video === front ? (original?.gain || 0) * mix.scale : 0);
+    const laneFor = (id) => mix.lanes[mix.ids.indexOf(id)] || [];
+    for (const video of videos) setGain(video, 0);
+    for (const [id, video] of fronts) {
+      const clip = find(laneFor(id));
+      setGain(video, (clip?.gain || 0) * mix.scale);
+    }
     for (const [i, lane] of lanes.entries()) {
-      const clip = find(mix.lanes[i + 1]),
+      const clip = find(laneFor(i + 1)),
         media = lane.media;
       if (!clip) {
         media.pause();
@@ -101,6 +104,7 @@ export function createVideoMonitor(videos, report, target = globalThis) {
       if (media.paused && !media.seeking && !lane.requested) {
         lane.requested = true;
         media.play().catch((error) => {
+          lane.requested = false;
           if (error.name !== "AbortError") report(error);
         });
       }

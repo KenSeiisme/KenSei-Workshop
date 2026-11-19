@@ -1,4 +1,10 @@
-import { frameRate, videoLimits, timelineCut } from "./video-timeline.js";
+import { clipSpan, kindOf } from "./video-assembly.js";
+import {
+  exactMs,
+  frameRate,
+  videoLimits,
+  timelineCut,
+} from "./video-timeline.js";
 
 export const audioLanes = [1, 2];
 export const defaultLevels = () =>
@@ -46,7 +52,12 @@ export function validateAudioClips(clips, assets) {
   }
 }
 
-export function audioCut(clip, frame) {
+export function audioCut(clip, frame, step) {
+  if (step)
+    return frame - clip.at >= step - 1e-6 &&
+      clipSpan(clip) - (frame - clip.at) >= step - 1e-6
+      ? Math.round((clip.start + exactMs(frame - clip.at)) * 3) / 3
+      : undefined;
   return timelineCut(
     {
       frames: audioLength(clip) + clip.at,
@@ -58,27 +69,49 @@ export function audioCut(clip, frame) {
 
 export function videoMix(plan, clips, levels, sources) {
   const limit = plan?.frames ?? 0;
-  const lanes = [
-    (plan?.segments ?? [])
-      .filter((segment) => sources[segment.source]?.hasAudio)
-      .map((segment) => ({ ...segment, at: segment.firstFrame, volume: 100 })),
-    ...audioLanes.map((lane) =>
-      clips
-        .filter((clip) => clip.lane === lane)
-        .map((clip) => ({ ...clip, frames: audioLength(clip) })),
-    ),
-  ].map((clips, index) =>
-    clips
+  const ids = plan?.layers
+    ? [
+        ...plan.layers.map((layer) => layer.id),
+        ...new Set(
+          clips.filter((c) => kindOf(c.lane) === "audio").map((c) => c.lane),
+        ),
+      ]
+    : [0, ...audioLanes];
+  const lanes = ids.map((id) => {
+    const layer = plan?.layers?.find((l) => l.id === id);
+    const level = levels[id] ?? {
+      volume: 100,
+      muted: id !== 0 && kindOf(id) === "video",
+    };
+    const spans = layer
+      ? layer.hidden
+        ? []
+        : layer.clips
+            .filter((clip) => sources[clip.source]?.hasAudio)
+            .map((clip) => ({
+              ...clip,
+              frames: clip.stop - clip.at,
+              volume: clip.volume ?? 100,
+            }))
+      : id === 0
+        ? (plan?.segments ?? [])
+            .filter((clip) => sources[clip.source]?.hasAudio)
+            .map((clip) => ({ ...clip, at: clip.firstFrame, volume: 100 }))
+        : clips
+            .filter((c) => c.lane === id)
+            .map((clip) => ({
+              ...clip,
+              frames: plan?.exact ? clipSpan(clip) : audioLength(clip),
+            }));
+    return spans
       .filter((clip) => clip.at < limit)
       .sort((a, b) => a.at - b.at)
       .map((clip) => ({
         ...clip,
         stop: Math.min(limit, clip.at + clip.frames),
-        gain: levels[index].muted
-          ? 0
-          : (levels[index].volume * clip.volume) / 10000,
-      })),
-  );
+        gain: level.muted ? 0 : (level.volume * clip.volume) / 10000,
+      }));
+  });
   const edges = lanes.flatMap((lane) =>
     lane.flatMap(({ at, stop, gain }) => [
       [at, gain],
@@ -94,6 +127,7 @@ export function videoMix(plan, clips, levels, sources) {
   }
   return {
     lanes,
+    ids,
     scale: 1 / peak,
     audible: lanes.some((lane) => lane.some((clip) => clip.gain > 0)),
   };

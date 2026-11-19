@@ -12,6 +12,28 @@
     <label class="check-label"
       ><input id="screen-microphone" type="checkbox" />Include microphone</label
     >
+    <div class="form-row screen-quality">
+      <label
+        >Resolution<select id="screen-resolution">
+          <option value="720">720p</option>
+          <option value="1080" selected>1080p</option>
+          <option value="1440">1440p</option>
+        </select></label
+      >
+      <label
+        >Frame rate<select id="screen-fps">
+          <option value="30">30 fps</option>
+          <option value="60">60 fps</option>
+        </select></label
+      >
+      <label
+        >Video quality<select id="screen-quality">
+          <option value="standard">Standard</option>
+          <option value="high">High</option>
+        </select></label
+      >
+      <output id="screen-estimate" class="muted small"></output>
+    </div>
     <div class="capture-meter-row">
       <span id="screen-time" class="capture-clock">00:00</span
       ><span id="screen-bytes" class="muted small">0 MB</span>
@@ -34,8 +56,8 @@
       <summary>Limits &amp; requirements</summary>
       <p class="muted small">
         Both audio options start off. Choose “Share audio” in the browser picker
-        when available. Requested quality: up to 1080p at 30 fps; the browser
-        decides the actual capture size.
+        when available. Actual resolution and frame rate depend on the browser
+        and shared source.
       </p>
       <p class="muted small">
         Automatically stops after 10 minutes elapsed or at 250 MB. Recording

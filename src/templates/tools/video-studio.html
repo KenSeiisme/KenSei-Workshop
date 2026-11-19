@@ -48,7 +48,13 @@
           ${svg_upload} Import video
         </button>
       </div>
-      <p id="video-caption" class="video-caption" hidden></p>
+      <canvas
+        id="video-caption"
+        class="video-caption-canvas"
+        aria-hidden="true"
+        hidden
+      ></canvas>
+      <div id="video-layer-handles" aria-hidden="true"></div>
     </div>
     <div class="action-row video-transport">
       <button
@@ -96,6 +102,10 @@
         >00:00.000 / 00:00.000</span
       >
     </div>
+    <details class="video-preview-captions">
+      <summary>Preview subtitles</summary>
+      <div id="video-caption-preview-options"></div>
+    </details>
     <p
       id="video-preview-audio-status"
       class="muted small"
@@ -231,6 +241,10 @@
         </button>
       </div>
     </div>
+    <details id="video-track-controls">
+      <summary>Tracks</summary>
+      <div id="video-track-management"></div>
+    </details>
     <div class="video-lanes">
       <div id="video-track-labels" class="video-track-labels"></div>
       <div id="video-scroll" class="video-scroll">
@@ -247,16 +261,6 @@
             aria-disabled="true"
           ></div>
           <div id="video-lane" class="video-lane"></div>
-          <div
-            id="video-audio-lane-1"
-            class="video-lane video-audio-lane"
-            data-audio-lane="1"
-          ></div>
-          <div
-            id="video-audio-lane-2"
-            class="video-lane video-audio-lane"
-            data-audio-lane="2"
-          ></div>
           <div
             id="video-video-end"
             class="video-video-end"
@@ -308,8 +312,15 @@
     <div class="form-row">
       <label
         >Resolution<select id="video-resolution" data-lock>
-          <option value="720">720p · 30 fps</option>
-          <option value="1080">1080p · 30 fps</option>
+          <option value="720">720p</option>
+          <option value="1080">1080p</option>
+          <option value="1440">1440p</option>
+        </select></label
+      >
+      <label
+        >Frame rate<select id="video-fps" data-lock>
+          <option value="30">30 fps</option>
+          <option value="60">60 fps</option>
         </select></label
       >
       <label
@@ -331,6 +342,19 @@
       ><input id="video-burn" type="checkbox" data-lock />Burn subtitles into
       video</label
     >
+    <div id="video-caption-export-options"></div>
+    <label
+      >Download subtitle track<select
+        id="video-caption-download"
+        data-lock
+      ></select
+    ></label>
+    <p id="video-fps-note" class="muted small" hidden>
+      Lower frame rate sources repeat frames in 60 fps output.
+    </p>
+    <p id="video-export-budget" class="error-text small" hidden>
+      Estimated video exceeds 400 MB. Reduce quality, frame rate or duration.
+    </p>
     <p id="video-availability" class="muted small" role="status"></p>
     <div class="action-row">
       <button id="video-encode" class="button primary" data-lock disabled>
@@ -347,6 +371,9 @@
     <div class="action-row" id="video-result" hidden>
       <a id="video-download" class="button primary" download>Download video</a>
       <p id="video-result-size" class="muted small"></p>
+      <p id="video-result-previous" class="muted small" hidden>
+        Previous export · Prepare again to include your changes.
+      </p>
     </div>
     <video
       id="video-result-player"

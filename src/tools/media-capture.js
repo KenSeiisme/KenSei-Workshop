@@ -50,6 +50,7 @@ export function makeRecording(
   stream,
   {
     types = AUDIO_TYPES,
+    videoBitsPerSecond,
     maxSeconds = 300,
     maxBytes = 50000000,
     onTick = () => {},
@@ -61,7 +62,10 @@ export function makeRecording(
   } = {},
 ) {
   const type = recordingType(types, Recorder);
-  const recorder = new Recorder(stream, type ? { mimeType: type } : {});
+  const recorder = new Recorder(stream, {
+    ...(type ? { mimeType: type } : {}),
+    ...(videoBitsPerSecond ? { videoBitsPerSecond } : {}),
+  });
   let chunks = [],
     bytes = 0,
     started = 0,

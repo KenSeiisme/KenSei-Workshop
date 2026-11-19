@@ -145,9 +145,25 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     assert.equal(await page.evaluate(() => __captureCalls.length), 0);
     assert.equal(await page.isChecked("#screen-microphone"), false);
     assert.equal(await page.isChecked("#screen-shared-audio"), false);
+    assert.equal(await page.inputValue("#screen-resolution"), "1080");
+    await page.selectOption("#screen-resolution", "1440");
+    await page.selectOption("#screen-fps", "60");
+    await page.selectOption("#screen-quality", "high");
     await page.click("#screen-start");
     await page.waitForFunction(
       () => !document.querySelector("#screen-stop").disabled,
+    );
+    assert.deepEqual(
+      await page.evaluate(() => __captureCalls[0].settings.video),
+      {
+        width: { ideal: 2560, max: 2560 },
+        height: { ideal: 1440, max: 1440 },
+        frameRate: { ideal: 60, max: 60 },
+      },
+    );
+    assert.match(
+      await page.textContent("#screen-specs"),
+      /Requested 2560 × 1440 at 60 fps.*640 × 360/,
     );
     await page.waitForTimeout(1200);
     await captureLocale();
@@ -178,6 +194,11 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8797";
     const screen = await download(() => page.click("#screen-download"));
     assert.ok(screen.bytes.length > 1000);
     assert.match(screen.name, /\.(webm|mp4)$/);
+    await page.waitForFunction(() =>
+      /Recorded file: 640 × 360 · [0-9.]+ fps average/.test(
+        document.querySelector("#screen-specs").textContent,
+      ),
+    );
     assert.equal(await allStopped(), true);
     assert.equal(
       await page.evaluate(() => {

@@ -1,15 +1,7 @@
 import { $ } from "./common.js";
-import { row, field, select } from "./advanced-ui.js";
 import { sendControl } from "./handoff.js";
 export function init() {
-  const ctx = window.KenseiAdvancedContexts["screen-recorder"],
-    preset = select([
-      ["1080", "1080p · 30fps"],
-      ["720", "720p · 30fps"],
-    ]);
-  window.KenseiRecorderPreset = 1080;
-  preset.onchange = () => (window.KenseiRecorderPreset = +preset.value);
-  $("#screen-start").before(row(field("Recording preset", preset)));
+  const ctx = window.KenseiAdvancedContexts["screen-recorder"];
   sendControl(
     $("#screen-download").parentElement,
     () =>
