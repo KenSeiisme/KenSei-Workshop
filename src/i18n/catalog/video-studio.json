@@ -234,5 +234,101 @@
   "m_d50258b64fa9": {
     "en": "Video and subtitles stay in this tab until you download or send them.",
     "zh-Hant": "影片及字幕會保留在此分頁，直到你下載或傳送。"
+  },
+  "m_452e5a00af17": {
+    "en": "Add a video to preview it here.",
+    "zh-Hant": "加入影片即可在這裡預覽。"
+  },
+  "m_a32470324a8b": {
+    "en": "Play preview",
+    "zh-Hant": "播放預覽"
+  },
+  "m_5f457d191b7e": {
+    "en": "Pause preview",
+    "zh-Hant": "暫停預覽"
+  },
+  "m_27060bf3ae13": {
+    "en": "Previous frame",
+    "zh-Hant": "上一影格"
+  },
+  "m_92489d93cdfa": {
+    "en": "Next frame",
+    "zh-Hant": "下一影格"
+  },
+  "m_ceba35272869": {
+    "en": "Retry preview",
+    "zh-Hant": "重試預覽"
+  },
+  "m_9f872ed43d00": {
+    "en": "Fit",
+    "zh-Hant": "符合寬度"
+  },
+  "m_bc7b631a689b": {
+    "en": "Zoom out",
+    "zh-Hant": "縮小"
+  },
+  "m_0e47f09a748f": {
+    "en": "Zoom in",
+    "zh-Hant": "放大"
+  },
+  "m_b3bb7ec92505": {
+    "en": "Playhead",
+    "zh-Hant": "時間針"
+  },
+  "m_c4a4b9c3aaeb": {
+    "en": "Split at playhead",
+    "zh-Hant": "在時間針處分割"
+  },
+  "m_02cdaabfca80": {
+    "en": "Duplicate",
+    "zh-Hant": "複製一份"
+  },
+  "m_61f314e661c4": {
+    "en": "Copy clip",
+    "zh-Hant": "複製片段"
+  },
+  "m_a0dfec15661d": {
+    "en": "Paste at playhead",
+    "zh-Hant": "在時間針處貼上"
+  },
+  "m_a31b34e10d3e": {
+    "en": "Clip settings",
+    "zh-Hant": "片段設定"
+  },
+  "m_b3b258d7641e": {
+    "en": "Seeking preview…",
+    "zh-Hant": "正在定位預覽…"
+  },
+  "m_52658520b051": {
+    "en": "Choose a frame where the clip can be split.",
+    "zh-Hant": "請選擇可分割片段的影格。"
+  },
+  "m_752000837367": {
+    "en": "Clip copied.",
+    "zh-Hant": "已複製片段。"
+  },
+  "m_b322fd9c9b50": {
+    "en": "Clip pasted.",
+    "zh-Hant": "已貼上片段。"
+  },
+  "m_eec5d2da672d": {
+    "en": "Clip split.",
+    "zh-Hant": "已分割片段。"
+  },
+  "m_88b39311f01e": {
+    "en": "Clip duplicated.",
+    "zh-Hant": "已建立片段副本。"
+  },
+  "m_0bf382c2b325": {
+    "en": "Trim start",
+    "zh-Hant": "調整片段起點"
+  },
+  "m_027cb0cc910b": {
+    "en": "Trim end",
+    "zh-Hant": "調整片段終點"
+  },
+  "m_120a847abcbc": {
+    "en": "Drag clip to reorder",
+    "zh-Hant": "拖曳片段以重新排序"
   }
 }
