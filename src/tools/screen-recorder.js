@@ -104,11 +104,25 @@ async function readFileSpecs(saved) {
     ]);
     if (result !== saved) return;
     const fps = stats.averagePacketRate;
-    if (!width || !height || !Number.isFinite(fps) || fps <= 0) throw Error();
-    saved.specs = uiMsg("Recorded file: {0} × {1} · {2} fps average", [
-      width,
-      height,
-      Math.round(fps * 10) / 10,
+    const measuredSeconds = stats.packetCount / fps;
+    if (
+      !width ||
+      !height ||
+      !Number.isFinite(fps) ||
+      fps <= 0 ||
+      stats.packetCount < 2 ||
+      (saved.seconds > 0.5 && measuredSeconds < 0.1) ||
+      fps > 120
+    )
+      throw Error();
+    saved.specs = uiJoin([
+      saved.specs,
+      " · ",
+      uiMsg("Recorded file: {0} × {1} · {2} fps average", [
+        width,
+        height,
+        Math.round(fps * 10) / 10,
+      ]),
     ]);
   } catch {
     if (result !== saved) return;
